@@ -11,7 +11,7 @@
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
         "lib": [ "dom", "es6" ],
-        "module": "commonjs",
+        "module": "es6",
         "newLine": "lf",
         "noEmitOnError": false,
         "noFallthroughCasesInSwitch": true,
@@ -23,6 +23,6 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "target": "es5"
+        "target": "es6"
     }
 }
