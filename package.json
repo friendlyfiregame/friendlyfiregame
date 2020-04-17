@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json.schemastore.org/package",
+  "name": "ludum-dare-46",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iplabs/ludum-dare-46"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "compile": "tsc",
+    "watch": "tsc -w",
+    "prepare": "npm run -s clean && npm run -s compile",
+    "dist": "webpack",
+    "start": "webpack-dev-server -d"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "5.1.1",
+    "rimraf": "3.0.2",
+    "source-map-loader": "0.2.4",
+    "steal": "2.2.4",
+    "typescript": "3.8.3",
+    "webpack": "4.42.1",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.10.3"
+  },
+  "dependencies": {
+    "tslib": "^1.11.1"
+  }
+}
