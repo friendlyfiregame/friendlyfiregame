@@ -29,11 +29,11 @@ export class Game {
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
-        this.player = new Player(this, 5100, 100);
+        this.player = new Player(this, 1120, 290);
         this.world = new World(this);
         this.gameObjects = [
             this.player,
-            new Thing(this, 4550, 50)
+            new Thing(this, 1020, 265)
         ];
     }
 
@@ -83,11 +83,11 @@ export class Game {
         ctx.fillStyle = "blue";
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        ctx.translate(ctx.canvas.width / 2, ctx.canvas.height);
+        ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
         // Draw stuff
         this.world.draw(ctx);
-        ctx.translate(-this.player.x, 0);
+        ctx.translate(-this.player.x, this.player.y);
         for (const obj of this.gameObjects) {
             obj.draw(ctx);
         }
