@@ -29,11 +29,11 @@ export class Game {
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
-        this.player = new Player(this, 5000, 100);
+        this.player = new Player(this, 5100, 100);
         this.world = new World(this);
         this.gameObjects = [
             this.player,
-            new Thing(this, 5050, 50)
+            new Thing(this, 4550, 50)
         ];
     }
 
