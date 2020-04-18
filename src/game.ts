@@ -2,6 +2,7 @@
 interface GameObject {
     draw(dt: number): void;
     update(dt: number): void;
+    load(): Promise<void>;
 }
 
 export class Game {
@@ -20,10 +21,21 @@ export class Game {
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
-        this.lastUpdateTime = Date.now();
         this.boundLoop = this.loop.bind(this);
+        this.gameObjects = [
+            // ...
+        ];
+    }
+
+    private async load() {
+        for (const obj of this.gameObjects) {
+            await obj.load();
+        }
+    }
+
+    private start() {
+        this.lastUpdateTime = Date.now();
         this.loop();
-        this.gameObjects = [];
     }
 
     private loop() {
@@ -58,7 +70,7 @@ export class Game {
         if (this.dt > 0) {
             ctx.fillStyle = "#" + Math.random().toString(16).substr(-6);
         }
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Draw stuff
         for (const obj of this.gameObjects) {
@@ -78,8 +90,16 @@ export class Game {
         this.togglePause(false);
     }
 
+    public static async create(): Promise<Game> {
+        const canvas = document.querySelector<HTMLCanvasElement>("#gameCanvas")!;
+        const game = new Game(canvas);
+        await game.load();
+        game.start();
+        return game;
+    }
+
 }
 
-const canvas = document.querySelector<HTMLCanvasElement>("#gameCanvas")!;
-const game = new Game(canvas);
-(window as any).game = game;
+Game.create().then(game => {
+    (window as any).game = game;
+});
