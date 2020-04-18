@@ -23,7 +23,7 @@ export abstract class Entity implements GameObject {
 
     abstract update(dt: number): void;
 
-    protected distanceTo(entity: Entity) {
+    public distanceTo(entity: Entity) {
         const a = this.x - entity.x;
         const b = this.y - entity.y;
         return Math.sqrt(a*a + b*b);
