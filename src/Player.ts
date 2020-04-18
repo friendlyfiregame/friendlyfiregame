@@ -20,6 +20,7 @@ enum SpriteIndex {
 }
 
 export class Player extends Entity {
+    private flying = false;
     private direction = 1;
     private spriteIndex = SpriteIndex.IDLE0;
     private sprites!: Sprites;
@@ -56,7 +57,7 @@ export class Player extends Entity {
                 this.closestNPC.startDialog();
             }
         }
-        if (event.key === " " && !event.repeat) {
+        if (event.key === " " && !event.repeat && !this.flying) {
             this.moveY += Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
         }
     }
@@ -141,13 +142,17 @@ export class Player extends Entity {
 
         if (this.moveX === 0 && this.moveY === 0) {
             this.spriteIndex = SpriteIndex.IDLE0 + Math.floor((Date.now() % 500 / (500 / 4)));
+            this.flying = false;
         } else {
             if (this.moveY > 0) {
                 this.spriteIndex = SpriteIndex.JUMP;
+                this.flying = true;
             } else if (this.moveY < 0 && this.y - world.getGround(this.x, this.y) > 10) {
                 this.spriteIndex = SpriteIndex.FALL;
+                this.flying = true;
             } else {
                 this.spriteIndex = SpriteIndex.WALK0 + Math.floor((Date.now() % 500 / (500 / 4)));
+                this.flying = false;
             }
         }
     }
