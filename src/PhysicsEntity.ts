@@ -1,5 +1,6 @@
 import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY } from "./constants";
+import { Environment } from "./World";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -77,11 +78,13 @@ export abstract class PhysicsEntity extends Entity {
      */
     private pullOutOfGround(): number {
         let pulled = 0;
-        const world = this.game.world;
-        const height = world.getHeight();
-        while (this.y < height && world.collidesWith(this.x, this.y)) {
-            pulled++;
-            this.y++;
+        if (this.velocityY <= 0) {
+            const world = this.game.world;
+            const height = world.getHeight();
+            while (this.y < height && world.collidesWith(this.x, this.y)) {
+                pulled++;
+                this.y++;
+            }
         }
         return pulled;
     }
@@ -97,7 +100,7 @@ export abstract class PhysicsEntity extends Entity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.game.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height)) {
+        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ Environment.PLATFORM ])) {
             pulled++;
             this.y--;
         }
@@ -108,12 +111,14 @@ export abstract class PhysicsEntity extends Entity {
         let pulled = 0;
         const world = this.game.world;
         if (this.velocityX > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4, this.height / 2)) {
+            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2, [ Environment.PLATFORM ])) {
                 this.x--;
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4, this.height / 2)) {
+            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2, [ Environment.PLATFORM ])) {
                 this.x++;
                 pulled++;
             }
@@ -139,7 +144,7 @@ export abstract class PhysicsEntity extends Entity {
         // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
             this.velocityY -= GRAVITY * dt;
-        } else {
+        } else if (this.velocityY < 0) {
             this.velocityY = 0;
         }
     }

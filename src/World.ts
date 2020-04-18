@@ -1,6 +1,12 @@
 import { loadImage, getImageData } from "./graphics";
 import { GameObject, Game } from "./game";
 
+export enum Environment {
+    AIR = 0,
+    SOLID = 0xff000000,
+    PLATFORM = 0xff7f7f7f
+}
+
 export class World implements GameObject {
     private foreground!: HTMLImageElement;
     private background!: HTMLImageElement;
@@ -46,6 +52,14 @@ export class World implements GameObject {
         ctx.restore();
     }
 
+    public getEnvironment(x: number, y: number): Environment {
+        const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+        if (index < 0 || index >= this.collisionMap.length) {
+            return Environment.AIR;
+        }
+        return this.collisionMap[index];
+    }
+
     /**
      * Checks if the given position collides with the world.
      *
@@ -54,10 +68,14 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
      *         specific meaning which isn't defined yet).
      */
-    public collidesWith(x: number, y: number): number {
+    public collidesWith(x: number, y: number, ignore?: Environment[]): number {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
         if (index < 0 || index >= this.collisionMap.length) {
             return 0;
+        }
+        const environment = this.getEnvironment(x, y);
+        if (ignore && ignore.includes(environment)) {
+            return Environment.AIR;
         }
         return this.collisionMap[index];
     }
@@ -70,9 +88,9 @@ export class World implements GameObject {
      * @param height - The height of the line to check
      * @return 0 if no collision. Type of first collision along the line otherwise.
      */
-    public collidesWithVerticalLine(x: number, y: number, height: number): number {
+    public collidesWithVerticalLine(x: number, y: number, height: number, ignore?: Environment[]): number {
         for (let i = 0; i < height; i++) {
-            const collision = this.collidesWith(x, y - i);
+            const collision = this.collidesWith(x, y - i, ignore);
             if (collision) {
                 return collision;
             }
@@ -87,8 +105,8 @@ export class World implements GameObject {
      * @param y - Y coordinate of current position.
      * @return The Y coordinate of the ground below the given coordinate.
      */
-    public getGround(x: number, y: number): number {
-        while (y > 0 && !this.collidesWith(x, y)) {
+    public getGround(x: number, y: number, ignore?: Environment[]): number {
+        while (y > 0 && !this.collidesWith(x, y, ignore)) {
             y--;
         }
         return y;
