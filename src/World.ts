@@ -12,14 +12,14 @@ export class World implements GameObject {
     }
 
     public async load(): Promise<void> {
-        const worldImage = await loadImage("world.png")
-        const worldCollisionImage = await loadImage("world-collision-map.png");
+        const worldImage = await loadImage("maps/world.png")
+        const worldCollisionImage = await loadImage("maps/world_collision.png");
         if (worldImage.width !== worldCollisionImage.width || worldImage.height !== worldCollisionImage.height) {
             throw new Error("World image must have same size as world collision image");
         }
         this.foreground = worldImage;
         this.collisionMap = new Uint32Array(getImageData(worldCollisionImage).data.buffer);
-        this.visibleHeight = worldImage.height;
+        this.visibleHeight = 256;
     }
 
     public getVisibleHeight(): number {
@@ -43,8 +43,9 @@ export class World implements GameObject {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const playerX = this.game.player.x;
+        const playerY = this.game.player.y;
         ctx.save();
-        ctx.drawImage(this.foreground, -playerX, -this.visibleHeight);
+        ctx.drawImage(this.foreground, -playerX, -this.getHeight() + playerY);
         ctx.restore();
     }
 
