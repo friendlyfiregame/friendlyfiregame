@@ -11,7 +11,7 @@
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
         "lib": [ "dom", "es6" ],
-        "module": "es6",
+        "module": "commonjs",
         "newLine": "lf",
         "noEmitOnError": false,
         "noFallthroughCasesInSwitch": true,
