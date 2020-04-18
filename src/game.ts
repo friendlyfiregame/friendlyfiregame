@@ -9,9 +9,9 @@ export class Game {
 
     private canvas: HTMLCanvasElement;
 
-    private lastUpdateTime: number;
+    private lastUpdateTime = Date.now();
 
-    private dt: number = 0;
+    private dt = 0;
 
     private boundLoop: () => void;
 
