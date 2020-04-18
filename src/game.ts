@@ -35,7 +35,7 @@ export class Game {
         this.gameObjects = [
             this.player,
             new Thing(this, 1020, 265),
-            new DummyNPC(this, 995, 265),
+            new DummyNPC(this, 1090, 290),
         ];
     }
 
