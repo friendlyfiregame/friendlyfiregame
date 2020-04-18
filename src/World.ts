@@ -52,7 +52,7 @@ export class World implements GameObject {
      * @param x - X position within the world.
      * @param y - Y position within the world.
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
-     *         specific meaning).
+     *         specific meaning which isn't defined yet).
      */
     public collidesWith(x: number, y: number): number {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
@@ -62,7 +62,15 @@ export class World implements GameObject {
         return this.collisionMap[index];
     }
 
-    private collidesWithVerticalLine(x: number, y: number, height: number): number {
+    /**
+     * Check collision of a vertical line with the world.
+     *
+     * @param x      - X position within the world.
+     * @param y      - Y start position of the line in the world.
+     * @param height - The height of the line to check
+     * @return 0 if no collision. Type of first collision along the line otherwise.
+     */
+    public collidesWithVerticalLine(x: number, y: number, height: number): number {
         for (let i = 0; i < height; i++) {
             const collision = this.collidesWith(x, y - i);
             if (collision) {
@@ -72,39 +80,17 @@ export class World implements GameObject {
         return 0;
     }
 
+    /**
+     * Returns the Y coordinate of the ground below the given world coordinate.
+     *
+     * @param x - X coordinate of current position.
+     * @param y - Y coordinate of current position.
+     * @return The Y coordinate of the ground below the given coordinate.
+     */
     public getGround(x: number, y: number): number {
         while (y > 0 && !this.collidesWith(x, y)) {
             y--;
         }
         return y;
-    }
-
-    public getTop(x: number, y: number): number {
-        const maxY = this.getHeight();
-        while (y < maxY && this.collidesWith(x, y)) {
-            y++;
-        }
-        return y;
-    }
-
-    public getBottom(x: number, y: number): number {
-        while (y > 0 && this.collidesWith(x, y)) {
-            y--;
-        }
-        return y;
-    }
-
-    public getLeft(x: number, y: number, height: number): number {
-        while (this.collidesWithVerticalLine(x, y, height)) {
-            x--;
-        }
-        return x;
-    }
-
-    public getRight(x: number, y: number, height: number): number {
-        while (this.collidesWithVerticalLine(x, y, height)) {
-            x++;
-        }
-        return x;
     }
 }
