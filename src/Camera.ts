@@ -26,7 +26,7 @@ export class Camera {
         }
         this.interpolationTime = interpolationTime / 2;
         // TODO remove this example camera focus
-        setTimeout(() => this.focusOn(3, 2150,1350, 1.5), 5000);
+        setTimeout(() => this.focusOn(3, 2150,1350, 0.5), 5000);
     }
 
     public update(dt: number, time: number) {

@@ -49,6 +49,9 @@ export class Player extends PhysicsEntity {
     }
 
     private handleKeyDown(event: KeyboardEvent) {
+        if (!this.game.camera.isOnTarget()) {
+            return;
+        }
         if (event.key === "ArrowRight" && !this.isInDialog) {
             this.direction = 1;
             this.moveRight = true;
@@ -111,6 +114,10 @@ export class Player extends PhysicsEntity {
         const world = this.game.world;
 
         // Player movement
+        if (!this.game.camera.isOnTarget()) {
+            this.moveRight = false;
+            this.moveLeft = false;
+        }
         if (this.moveRight) {
             this.accelerateX(PLAYER_ACCELERATION * dt);
         } else if (this.moveLeft) {
