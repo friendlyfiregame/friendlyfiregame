@@ -9,6 +9,7 @@ import { loadImage } from "./graphics";
 import { Sprites } from "./Sprites";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
+import { Environment } from "./World";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -153,6 +154,78 @@ export class Player extends PhysicsEntity {
             this.closestNPC = closestEntity;
         } else {
             this.closestNPC = null;
+        }
+    }
+
+
+    /**
+     * If given coordinate collides with the world then the first free Y coordinate above is returned. This can
+     * be used to unstuck an object after a new position was set.
+     *
+     * @param x - X coordinate of current position.
+     * @param y - Y coordinate of current position.
+     * @return The Y coordinate of the ground below the given coordinate.
+     */
+    private pullOutOfGround(): number {
+        let pulled = 0;
+        if (this.getVelocityY() <= 0) {
+            const world = this.game.world;
+            const height = world.getHeight();
+            while (this.y < height && world.collidesWith(this.x, this.y)) {
+                pulled++;
+                this.y++;
+            }
+        }
+        return pulled;
+    }
+
+    /**
+     * If given coordinate collides with the world then the first free Y coordinate above is returned. This can
+     * be used to unstuck an object after a new position was set.
+     *
+     * @param x - X coordinate of current position.
+     * @param y - Y coordinate of current position.
+     * @return The Y coordinate of the ground below the given coordinate.
+     */
+    private pullOutOfCeiling(): number {
+        let pulled = 0;
+        const world = this.game.world;
+        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ Environment.PLATFORM ])) {
+            pulled++;
+            this.y--;
+        }
+        return pulled;
+    }
+
+    private pullOutOfWall(): number {
+        let pulled = 0;
+        const world = this.game.world;
+        if (this.getVelocityX() > 0) {
+            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2, [ Environment.PLATFORM ])) {
+                this.x--;
+                pulled++;
+            }
+        } else {
+            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2, [ Environment.PLATFORM ])) {
+                this.x++;
+                pulled++;
+            }
+        }
+        return pulled;
+    }
+
+    protected updatePosition(newX: number, newY: number): void {
+        this.x = newX;
+        this.y = newY;
+
+        // Check collision with the environment and correct player position and movement
+        if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
+            this.setVelocityY(0);
+        }
+        if (this.pullOutOfWall() !== 0) {
+            this.setVelocityX(0);
         }
     }
 }

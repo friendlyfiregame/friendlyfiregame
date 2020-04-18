@@ -68,78 +68,43 @@ export abstract class PhysicsEntity extends Entity {
         return this.velocityY;
     }
 
-    /**
-     * If given coordinate collides with the world then the first free Y coordinate above is returned. This can
-     * be used to unstuck an object after a new position was set.
-     *
-     * @param x - X coordinate of current position.
-     * @param y - Y coordinate of current position.
-     * @return The Y coordinate of the ground below the given coordinate.
-     */
-    private pullOutOfGround(): number {
-        let pulled = 0;
-        if (this.velocityY <= 0) {
-            const world = this.game.world;
-            const height = world.getHeight();
-            while (this.y < height && world.collidesWith(this.x, this.y)) {
-                pulled++;
-                this.y++;
-            }
-        }
-        return pulled;
+    private checkCollision(x: number, y: number, ignore?: Environment[]): Environment {
+        return this.game.world.collidesWith(x, y, ignore);
     }
 
-    /**
-     * If given coordinate collides with the world then the first free Y coordinate above is returned. This can
-     * be used to unstuck an object after a new position was set.
-     *
-     * @param x - X coordinate of current position.
-     * @param y - Y coordinate of current position.
-     * @return The Y coordinate of the ground below the given coordinate.
-     */
-    private pullOutOfCeiling(): number {
-        let pulled = 0;
-        const world = this.game.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ Environment.PLATFORM ])) {
-            pulled++;
-            this.y--;
+    private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
+        for (let i = -this.width / 2; i < this.width / 2; i++) {
+            let env = this.checkCollision(x + i, y, ignore);
+            if (env !== Environment.AIR) return env;
+            env = this.checkCollision(x + i, y + this.height, ignore);
+            if (env !== Environment.AIR) return env;
         }
-        return pulled;
+        for (let i = 0; i < this.height; i++) {
+            let env = this.checkCollision(x - this.width / 2, y + i, ignore);
+            if (env !== Environment.AIR) return env;
+            env = this.checkCollision(x + this.width / 2, y + i, ignore);
+            if (env !== Environment.AIR) return env;
+        }
+        return Environment.AIR;
     }
 
-    private pullOutOfWall(): number {
-        let pulled = 0;
-        const world = this.game.world;
-        if (this.velocityX > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ Environment.PLATFORM ])) {
-                this.x--;
-                pulled++;
-            }
+    protected updatePosition(newX: number, newY: number): void {
+        const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
+        if (env === Environment.AIR) {
+            this.x = newX;
+            this.y = newY;
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ Environment.PLATFORM ])) {
-                this.x++;
-                pulled++;
-            }
+            this.setVelocity(0, 0);
         }
-        return pulled;
     }
 
     public update(dt: number): void {
         const world = this.game.world;
 
-        // Move the player
-        this.x += this.velocityX * PIXEL_PER_METER * dt;
-        this.y += this.velocityY * PIXEL_PER_METER * dt;
-
-        // Check collision with the environment and correct player position and movement
-        if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
-            this.velocityY = 0;
-        }
-        if (this.pullOutOfWall() !== 0) {
-            this.velocityX = 0;
-        }
+        this.updatePosition(
+            this.x + this.velocityX * PIXEL_PER_METER * dt,
+            this.y + this.velocityY * PIXEL_PER_METER * dt
+        );
 
         // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
