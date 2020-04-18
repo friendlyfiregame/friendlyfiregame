@@ -4,5 +4,12 @@
         "lib": true,
         "node_modules": true,
         "dist": true
-    }
+    },
+    "cSpell.words": [
+        "Entrypoint",
+        "chunkhash",
+        "devtool",
+        "ludum",
+        "tslib"
+    ]
 }
