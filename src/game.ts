@@ -62,7 +62,7 @@ export class Game {
             particles,
             this.player,
             this.fire,
-            new DummyNPC(this, 1980, 1196),
+            new DummyNPC(this, 2570, 1245),
         ];
     }
 

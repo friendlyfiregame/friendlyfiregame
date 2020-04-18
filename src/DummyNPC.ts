@@ -5,10 +5,10 @@ import { SpeechBubble } from "./SpeechBubble";
 export class DummyNPC extends NPC {
     private activeDialog: Dialog | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;
-    private infoText = "Hi";
-    private infoTextRange = 65;
-    private infoTextActive = false;
-    private infoTextDistance = 15;
+    private greetingText = "Hi";
+    private greetingTextRange = 65;
+    private greetingTextActive = false;
+    private greetingTextOffsetY = 40;
 
     async load(): Promise<void> {
         this.width = 20;
@@ -31,23 +31,38 @@ export class DummyNPC extends NPC {
         ctx.beginPath();
         ctx.strokeStyle = "white";
         if (this.activeSpeechBubble) {
-            return
+            return;
         }
-        ctx.strokeText(this.infoText, this.x - (this.width / 2), -this.y - (this.height + this.infoTextDistance));
-        ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height - this.infoTextDistance - 15, this.width, 20);
+        ctx.strokeText(this.greetingText, this.x - (this.width / 2), -this.y - (this.height + this.greetingTextOffsetY));
+        ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height - this.greetingTextOffsetY - 15, this.width, 20);
         ctx.restore();
     }
 
     update(dt: number): void {
-        const isInRange = this.game.player.distanceTo(this) < this.infoTextRange;
-        if (isInRange && !this.infoTextActive) {
-            this.startDialog();
+        const isInRange = this.game.player.distanceTo(this) < this.greetingTextRange;
+        if (isInRange && !this.greetingTextActive) {
+            this.showGreeting();
         } else if (!isInRange) {
-            this.activeSpeechBubble = null;
-            this.game.player.activeSpeechBubble = null;
-            this.activeDialog = null;
+            this.closeDialog();
         }
-        this.infoTextActive = isInRange;
+        this.greetingTextActive = isInRange;
+    }
+
+    showGreeting() {
+        if (this.activeSpeechBubble) {
+            this.activeSpeechBubble.y = this.y + this.greetingTextOffsetY;
+            this.activeSpeechBubble.message = this.greetingText;
+            this.activeSpeechBubble.actionPaths = null;
+        } else {
+            this.activeSpeechBubble = new SpeechBubble(this.game, this.x, this.y + this.greetingTextOffsetY, "white", false, this.greetingText);
+        }
+    }
+
+    closeDialog() {
+        this.activeDialog = null;
+        this.activeSpeechBubble = null;
+        this.game.player.activeSpeechBubble = null;
+        this.game.player.isInDialog = false;
     }
 
     startDialog(): void {
@@ -86,10 +101,7 @@ export class DummyNPC extends NPC {
             this.game.player.activeSpeechBubble = this.activeDialog.getSpeechBubbleForPlayer();
             this.game.player.isInDialog = true;
         } else {
-            this.activeSpeechBubble = null;
-            this.game.player.activeSpeechBubble = null;
-            this.activeDialog = null;
-            this.game.player.isInDialog = false;
+            this.closeDialog();
         }
     }
 }
