@@ -1,7 +1,7 @@
 import { Entity } from './Entity';
 import { Game } from "./game";
-import { NPC } from './NPC';
 import { PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT } from "./constants";
+import { DummyNPC } from './DummyNPC';
 
 export class Player extends Entity {
     private moveLeft: boolean = false;
@@ -24,7 +24,7 @@ export class Player extends Entity {
         }
         if (event.key === "Enter") {
             const closestEntity = this.getClosestEntityInRange(this.interactionRange);
-            if (closestEntity instanceof NPC) {
+            if (closestEntity instanceof DummyNPC) {
                 closestEntity.enterConversation();
             }
 
