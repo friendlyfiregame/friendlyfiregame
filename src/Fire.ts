@@ -6,9 +6,11 @@ import { particles, ParticleEmitter } from './Particles';
 
 export class Fire extends NPC {
 
-    // private intensity = 5;
+    private intensity = 5;
 
     private growth = 0;
+
+    private averageParticleDelay = 0.1;
 
     private emitter: ParticleEmitter;
 
@@ -17,10 +19,10 @@ export class Fire extends NPC {
         this.emitter = particles.createEmitter(
             this.x, this.y,
             () => ({ x: rnd(-1, 1), y: rnd(-0.5) }),
-            "#401605",
-            4,
+            "#60220c",
+            12,
             {x: 0, y: 7},
-            () => rnd(3, 7),
+            () => rnd(2, 4),
             1,
             "screen"
         );
@@ -42,12 +44,12 @@ export class Fire extends NPC {
 
     update(dt: number): void {
         if (this.growth !== 0) {
-            // this.intensity += this.growth * dt;
+            this.intensity += this.growth * dt;
         }
-        let particleChance = dt - Math.random() * 0.2;
+        let particleChance = dt - Math.random() * this.averageParticleDelay;
         while (particleChance > 0) {
             this.emitParticle();
-            particleChance -= Math.random() * 0.2;
+            particleChance -= Math.random() * this.averageParticleDelay;
         }
     }
 
@@ -55,8 +57,8 @@ export class Fire extends NPC {
     }
 
     private emitParticle() {
-        // const x = this.x + rnd(-1, 1) * this.intensity;
-        // const y = this.y - rnd(0.5) * this.intensity;
-        this.emitter.emit(0, 0);
+        const x = rnd(-1, 1) * 3 * this.intensity;
+        const y = rnd(2) * this.intensity;
+        this.emitter.emit(x, y);
     }
 }
