@@ -72,15 +72,23 @@ export class World implements GameObject {
         return 0;
     }
 
+    public getGround(x: number, y: number): number {
+        while (y > 0 && !this.collidesWith(x, y)) {
+            y--;
+        }
+        return y;
+    }
+
     public getTop(x: number, y: number): number {
-        while (this.collidesWith(x, y)) {
+        const maxY = this.getHeight();
+        while (y < maxY && this.collidesWith(x, y)) {
             y++;
         }
         return y;
     }
 
     public getBottom(x: number, y: number): number {
-        while (this.collidesWith(x, y)) {
+        while (y > 0 && this.collidesWith(x, y)) {
             y--;
         }
         return y;

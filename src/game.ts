@@ -61,8 +61,7 @@ export class Game {
         if (this.paused) {
             this.dt = 0;
         } else {
-            const dt = this.lastUpdateTime - prevTime;
-            this.dt = dt;
+            this.dt = (this.lastUpdateTime - prevTime) / 1000;
         }
         // Update all game classes
         this.world.update(this.dt);

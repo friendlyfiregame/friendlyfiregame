@@ -57,7 +57,7 @@ export class Player extends Entity {
             }
         }
         if (event.key === " " && !event.repeat) {
-            this.moveY = Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
+            this.moveY += Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
         }
     }
 
@@ -100,8 +100,8 @@ export class Player extends Entity {
     update(dt: number): void {
         const world = this.game.world;
 
-        this.x += this.moveX * PIXEL_PER_METER * dt / 1000;
-        this.y += this.moveY * PIXEL_PER_METER * dt / 1000;
+        this.x += this.moveX * PIXEL_PER_METER * dt;
+        this.y += this.moveY * PIXEL_PER_METER * dt;
 
         // Make sure player is on top of the ground.
         this.y = world.getTop(this.x, this.y);
@@ -113,21 +113,21 @@ export class Player extends Entity {
 
         // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
-            this.moveY -= GRAVITY * dt / 1000;
+            this.moveY -= GRAVITY * dt;
         } else {
             this.moveY = 0;
         }
 
         // Player moving right
         if (this.moveRight) {
-            this.moveX = Math.min(MAX_PLAYER_SPEED, this.moveX + PLAYER_ACCELERATION * dt / 1000);
+            this.moveX = Math.min(MAX_PLAYER_SPEED, this.moveX + PLAYER_ACCELERATION * dt);
         } else if (this.moveLeft) {
-            this.moveX = Math.max(-MAX_PLAYER_SPEED, this.moveX - PLAYER_ACCELERATION * dt / 1000);
+            this.moveX = Math.max(-MAX_PLAYER_SPEED, this.moveX - PLAYER_ACCELERATION * dt);
         } else {
             if (this.moveX > 0) {
-                this.moveX = Math.max(0, this.moveX - PLAYER_ACCELERATION * dt / 1000);
+                this.moveX = Math.max(0, this.moveX - PLAYER_ACCELERATION * dt);
             } else {
-                this.moveX = Math.min(0, this.moveX + PLAYER_ACCELERATION * dt / 1000);
+                this.moveX = Math.min(0, this.moveX + PLAYER_ACCELERATION * dt);
             }
         }
 
@@ -144,7 +144,7 @@ export class Player extends Entity {
         } else {
             if (this.moveY > 0) {
                 this.spriteIndex = SpriteIndex.JUMP;
-            } else if (this.moveY < 0) {
+            } else if (this.moveY < 0 && this.y - world.getGround(this.x, this.y) > 10) {
                 this.spriteIndex = SpriteIndex.FALL;
             } else {
                 this.spriteIndex = SpriteIndex.WALK0 + Math.floor((Date.now() % 500 / (500 / 4)));

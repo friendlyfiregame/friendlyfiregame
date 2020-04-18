@@ -5,7 +5,7 @@
 export const PIXEL_PER_METER = 20;
 
 /** Gravity in m/s² */
-export const GRAVITY = 40;
+export const GRAVITY = 35;
 
 /** Maximum movement speed of the player in m/s */
 export const MAX_PLAYER_SPEED = 5;
@@ -14,4 +14,4 @@ export const MAX_PLAYER_SPEED = 5;
 export const PLAYER_ACCELERATION = 15;
 
 /** Player jump height in meters. */
-export const PLAYER_JUMP_HEIGHT = 2;
+export const PLAYER_JUMP_HEIGHT = 3.5;
