@@ -12,8 +12,8 @@ export interface GameObject {
     load(): Promise<void>;
 }
 
-// Max time delta. If game freezes for a few seconds for whatever reason, we don't want updates to jump too much.
-const MAX_DT = 100;
+// Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump too much.
+const MAX_DT = 0.1;
 
 export class Game {
 
@@ -48,7 +48,7 @@ export class Game {
             particles,
             this.player,
             this.fire,
-            new DummyNPC(this, 2580, 1245),
+            new DummyNPC(this, 1980, 1196),
         ];
     }
 

@@ -10,7 +10,7 @@ export enum FaceModes {
 };
 
 export class Face {
-    private static sprites!: Sprites;
+    private static sprites: Sprites;
     private mode = FaceModes.NEUTRAL;
     private direction = 1; // 1 = right, -1 = left
 
