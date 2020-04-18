@@ -83,7 +83,9 @@ export class Game {
         ctx.fillStyle = "blue";
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+        ctx.imageSmoothingEnabled = false;
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+        ctx.scale(3, 3);
 
         // Draw stuff
         this.world.draw(ctx);
