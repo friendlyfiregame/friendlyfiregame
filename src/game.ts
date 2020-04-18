@@ -1,3 +1,6 @@
+import { World } from "./World";
+import { Player } from "./Player";
+import { Thing } from "./Thing";
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -19,15 +22,23 @@ export class Game {
 
     private paused = false;
 
+    public world: World;
+
+    public player: Player;
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
+        this.player = new Player(this, 5000, 50);
+        this.world = new World(this);
         this.gameObjects = [
-            // ...
+            this.player,
+            new Thing(this, 5050, 50)
         ];
     }
 
     private async load() {
+        await this.world.load();
         for (const obj of this.gameObjects) {
             await obj.load();
         }
@@ -54,6 +65,7 @@ export class Game {
             this.dt = dt;
         }
         // Update all game classes
+        this.world.update(this.dt);
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
         }
@@ -64,18 +76,23 @@ export class Game {
         if (!ctx) {
             return;
         }
+        ctx.save();
 
         // Clear
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        if (this.dt > 0) {
-            ctx.fillStyle = "#" + Math.random().toString(16).substr(-6);
-        }
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = "blue";
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+        ctx.translate(ctx.canvas.width / 2, ctx.canvas.height);
+
         // Draw stuff
+        this.world.draw(ctx);
+        ctx.translate(-this.player.x, 0);
         for (const obj of this.gameObjects) {
             obj.draw(ctx);
         }
+
+        ctx.restore();
     }
 
     public togglePause(paused = !this.paused) {
