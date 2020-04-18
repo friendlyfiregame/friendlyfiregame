@@ -36,6 +36,7 @@ export class Player extends Entity {
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;
+    public isInDialog = false;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -48,10 +49,10 @@ export class Player extends Entity {
     }
 
     private handleKeyDown(event: KeyboardEvent) {
-        if (event.key === "ArrowRight") {
+        if (event.key === "ArrowRight" && !this.isInDialog) {
             this.direction = 1;
             this.moveRight = true;
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === "ArrowLeft" && !this.isInDialog) {
             this.direction = -1;
             this.moveLeft = true;
         }
@@ -60,7 +61,7 @@ export class Player extends Entity {
                 this.closestNPC.startDialog();
             }
         }
-        if (event.key === " " && !event.repeat && !this.flying) {
+        if (event.key === " " && !event.repeat && !this.flying && !this.isInDialog) {
             this.moveY = Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
         }
     }

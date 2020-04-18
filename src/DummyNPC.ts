@@ -54,7 +54,18 @@ export class DummyNPC extends NPC {
         if (this.hasDialog && !this.activeDialog) {
             const someConversation: Array<Message> = [
                 { entity: "player", text: "Hello block.\nDo you have a task for me?" },
-                { entity: "other", text: "Sure, Player 1. Just follow me." },
+                {
+                    entity: "other", text: "Sure, Player 1. What do you want to do?",
+                    actionPaths: new Map<string, Array<Message>>()
+                        .set("Epic shit", [
+                            { entity: "other", text: "Hell yeah we will rock this." },
+                            { entity: "player", text: "Then let's get the party started." }
+                        ])
+                        .set("Lame shit", [
+                            { entity: "other", text: "Okay. Yeah. Stop playing this game, bitch." },
+                            { entity: "player", text: "Ok." }
+                        ])
+                },
                 { entity: "player", text: "Sure." },
                 { entity: "other", text: "You ready?" },
                 { entity: "player", text: "Sure." },
@@ -73,10 +84,12 @@ export class DummyNPC extends NPC {
         if (this.activeDialog && this.activeDialog.getNextMessage()) {
             this.activeSpeechBubble = this.activeDialog.getSpeechBubbleForEntity();
             this.game.player.activeSpeechBubble = this.activeDialog.getSpeechBubbleForPlayer();
+            this.game.player.isInDialog = true;
         } else {
             this.activeSpeechBubble = null;
             this.game.player.activeSpeechBubble = null;
             this.activeDialog = null;
+            this.game.player.isInDialog = false;
         }
     }
 }
