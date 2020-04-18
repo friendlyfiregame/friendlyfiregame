@@ -1,7 +1,10 @@
 import { SpeechBubble } from "./SpeechBubble";
 import { Entity } from './Entity';
 import { Game } from "./game";
-import { PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT } from "./constants";
+import {
+    PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION
+} from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
 import { Sprites } from "./Sprites";
@@ -141,7 +144,8 @@ export class Player extends Entity {
         }
 
         if (this.moveX === 0 && this.moveY === 0) {
-            this.spriteIndex = SpriteIndex.IDLE0 + Math.floor((Date.now() % 500 / (500 / 4)));
+            this.spriteIndex = getSpriteIndex(SpriteIndex.IDLE0, PLAYER_IDLE_ANIMATION);
+            console.log(this.spriteIndex);
             this.flying = false;
         } else {
             if (this.moveY > 0) {
@@ -151,9 +155,15 @@ export class Player extends Entity {
                 this.spriteIndex = SpriteIndex.FALL;
                 this.flying = true;
             } else {
-                this.spriteIndex = SpriteIndex.WALK0 + Math.floor((Date.now() % 500 / (500 / 4)));
+                this.spriteIndex = getSpriteIndex(SpriteIndex.WALK0, PLAYER_RUNNING_ANIMATION);
                 this.flying = false;
             }
         }
     }
+}
+
+function getSpriteIndex(startIndex: number, delays: number[]): number {
+    const duration = delays.reduce((duration, delay) => duration + delay, 0);
+    let time = Date.now() % duration;
+    return startIndex + delays.findIndex(value => (time -= value) <= 0);
 }
