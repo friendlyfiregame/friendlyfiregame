@@ -27,7 +27,7 @@ export class Fire extends NPC {
             1,
             "screen"
         );
-        this.face = new Face(this, 1);
+        this.face = new Face(this, 1, 0, 6);
     }
 
 
@@ -36,13 +36,7 @@ export class Fire extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.beginPath();
-        ctx.strokeStyle = "black";
-        ctx.strokeText("NPC", this.x - (this.width / 2), -this.y - this.height);
-        ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height, this.width, this.height);
         this.drawFace(ctx);
-        ctx.restore();
     }
 
     update(dt: number): void {
