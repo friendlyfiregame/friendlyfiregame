@@ -49,6 +49,11 @@ export class Player extends Entity {
         // Make sure player is on top of the ground.
         this.y = world.getTop(this.x, this.y);
 
+        this.y = world.getBottom(this.x, this.y + 30) - 30;
+
+        this.x = world.getLeft(this.x + 10, this.y + 25, 10) - 10;
+        this.x = world.getRight(this.x - 10, this.y + 25, 10) + 10;
+
         // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
             this.moveY -= 250 * dt / 1000;

@@ -64,10 +64,41 @@ export class World implements GameObject {
         return this.collisionMap[index];
     }
 
+    private collidesWithVerticalLine(x: number, y: number, height: number): number {
+        for (let i = 0; i < height; i++) {
+            const collision = this.collidesWith(x, y - i);
+            if (collision) {
+                return collision;
+            }
+        }
+        return 0;
+    }
+
     public getTop(x: number, y: number): number {
         while (this.collidesWith(x, y)) {
             y++;
         }
         return y;
+    }
+
+    public getBottom(x: number, y: number): number {
+        while (this.collidesWith(x, y)) {
+            y--;
+        }
+        return y;
+    }
+
+    public getLeft(x: number, y: number, height: number): number {
+        while (this.collidesWithVerticalLine(x, y, height)) {
+            x--;
+        }
+        return x;
+    }
+
+    public getRight(x: number, y: number, height: number): number {
+        while (this.collidesWithVerticalLine(x, y, height)) {
+            x++;
+        }
+        return x;
     }
 }
