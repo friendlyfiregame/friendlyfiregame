@@ -1,11 +1,13 @@
 import { Entity } from './Entity';
 import { Game } from "./game";
+import { NPC } from './NPC';
 
 export class Player extends Entity {
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     private moveX = 0;
     private moveY = 0;
+    private interactionRange = 40;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y);
@@ -18,6 +20,13 @@ export class Player extends Entity {
             this.moveRight = true;
         } else if (event.key === "ArrowLeft") {
             this.moveLeft = true;
+        }
+        if (event.key === "Enter") {
+            const closestEntity = this.getClosestEntityInRange(this.interactionRange);
+            if (closestEntity instanceof NPC) {
+                closestEntity.enterConversation();
+            }
+
         }
         if (event.key === " " && !event.repeat) {
             this.moveY = 125;

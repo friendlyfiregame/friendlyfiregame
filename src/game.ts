@@ -1,6 +1,7 @@
 import { World } from "./World";
 import { Player } from "./Player";
 import { Thing } from "./Thing";
+import { DummyNPC } from './DummyNPC';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -33,7 +34,8 @@ export class Game {
         this.world = new World(this);
         this.gameObjects = [
             this.player,
-            new Thing(this, 4550, 50)
+            new Thing(this, 5050, 50),
+            new DummyNPC(this, 4950, 90),
         ];
     }
 
