@@ -37,7 +37,6 @@ export class SpeechBubble extends Entity {
         ctx.beginPath();
         ctx.font = this.fontSize + "px Arial";
         const calculatedWidth = ctx.measureText(this.message.split("\n").sort((a, b) => b.length - a.length)[0]).width;
-        console.log(calculatedWidth)
         ctx = roundRect(ctx, x - calculatedWidth / 2, - y - this.height, calculatedWidth + 8, this.height, 5);
         ctx.fillStyle = this.color;
         ctx.fill();
