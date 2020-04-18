@@ -1,6 +1,6 @@
 
 export interface GameObject {
-    draw(dt: number): void;
+    draw(ctx: CanvasRenderingContext2D): void;
     update(dt: number): void;
     load(): Promise<void>;
 }
@@ -74,7 +74,7 @@ export class Game {
 
         // Draw stuff
         for (const obj of this.gameObjects) {
-            obj.draw(this.dt);
+            obj.draw(ctx);
         }
     }
 
