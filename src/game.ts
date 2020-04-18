@@ -1,6 +1,8 @@
 import { World } from "./World";
 import { Player } from "./Player";
 import { DummyNPC } from './DummyNPC';
+import { particles, Particles } from './Particles';
+import { Fire } from './Fire';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -26,14 +28,22 @@ export class Game {
 
     public player: Player;
 
+    public fire: Fire;
+
+    public particles: Particles;
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
         this.player = new Player(this, 2656, 1270);
+        this.fire = new Fire(this, 2450, 1170);
+        this.particles = particles;
         this.gameObjects = [
             this.world = new World(this),
             this.player,
+            this.fire,
             new DummyNPC(this, 2580, 1245),
+            particles,
         ];
     }
 
