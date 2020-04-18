@@ -11,9 +11,7 @@ export class Dialog {
     constructor(private messages: Array<Message>, private player: Player, private entity: DummyNPC) { }
 
     public getNextMessage(): boolean {
-        console.log(this.dialogIndex, this.messages.length);
         if (this.dialogIndex >= 0 && this.dialogIndex < this.messages.length) {
-            console.log("Get next message");
             this.messageToShow =  this.messages[this.dialogIndex];
             this.dialogIndex++;
             return true
@@ -23,7 +21,6 @@ export class Dialog {
     }
 
     public getSpeechBubbleForEntity(): SpeechBubble | null {
-        console.log(this.messageToShow);
         if (this.messageToShow?.entity === "other") {
             return new SpeechBubble(this.entity.game, this.entity.x, this.entity.y + 40, "white", true, this.messageToShow.text);
         }

@@ -5,6 +5,10 @@ import { SpeechBubble } from "./SpeechBubble";
 export class DummyNPC extends NPC {
     private activeDialog: Dialog | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;
+    private infoText = "Hi";
+    private infoTextRange = 65;
+    private infoTextActive = false;
+    private infoTextDistance = 15;
 
     async load(): Promise<void> {
         this.width = 20;
@@ -22,7 +26,28 @@ export class DummyNPC extends NPC {
         this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
     }
 
+    drawTextBox(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        if (this.activeSpeechBubble) {
+            return
+        }
+        ctx.strokeText(this.infoText, this.x - (this.width / 2), -this.y - (this.height + this.infoTextDistance));
+        ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height - this.infoTextDistance - 15, this.width, 20);
+        ctx.restore();
+    }
+
     update(dt: number): void {
+        const isInRange = this.game.player.distanceTo(this) < this.infoTextRange;
+        if (isInRange && !this.infoTextActive) {
+            this.startDialog();
+        } else if (!isInRange) {
+            this.activeSpeechBubble = null;
+            this.game.player.activeSpeechBubble = null;
+            this.activeDialog = null;
+        }
+        this.infoTextActive = isInRange;
     }
 
     startDialog(): void {
@@ -46,7 +71,6 @@ export class DummyNPC extends NPC {
 
     getNextConversationPart(): void {
         if (this.activeDialog && this.activeDialog.getNextMessage()) {
-            console.log(this.activeDialog.getSpeechBubbleForEntity());
             this.activeSpeechBubble = this.activeDialog.getSpeechBubbleForEntity();
             this.game.player.activeSpeechBubble = this.activeDialog.getSpeechBubbleForPlayer();
         } else {
