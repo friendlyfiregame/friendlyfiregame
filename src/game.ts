@@ -5,6 +5,7 @@ import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
 import { clamp } from './util';
 import { Face } from './Face';
+import { Camera } from './Camera';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -31,6 +32,8 @@ export class Game {
 
     public world: World;
 
+    public camera: Camera;
+
     public player: Player;
 
     public fire: Fire;
@@ -43,6 +46,7 @@ export class Game {
         this.player = new Player(this, 2656, 1270);
         this.fire = new Fire(this, 2450, 1170);
         this.particles = particles;
+        this.camera = new Camera(this.player);
         this.gameObjects = [
             this.world = new World(this),
             particles,
@@ -82,6 +86,7 @@ export class Game {
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
         }
+        this.camera.update();
     }
 
     private draw() {
@@ -101,7 +106,7 @@ export class Game {
         ctx.scale(3, 3);
 
         // Draw stuff
-        ctx.translate(-this.player.x, this.player.y);
+        this.camera.applyTransform(ctx);
         for (const obj of this.gameObjects) {
             obj.draw(ctx);
         }

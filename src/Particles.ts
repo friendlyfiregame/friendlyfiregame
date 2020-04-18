@@ -1,8 +1,7 @@
 import { GRAVITY } from './constants';
+import { Vector2 } from './util';
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
-
-type Vector2 = {x: number, y: number};
 
 type NumberGenerator = () => number;
 
