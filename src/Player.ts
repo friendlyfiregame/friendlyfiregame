@@ -2,6 +2,8 @@ import { Entity } from './Entity';
 import { Game } from "./game";
 
 export class Player extends Entity {
+    private moveLeft: boolean = false;
+    private moveRight: boolean = false;
     private moveX = 0;
     private moveY = 0;
 
@@ -13,18 +15,20 @@ export class Player extends Entity {
 
     private handleKeyDown(event: KeyboardEvent) {
         if (event.key === "ArrowRight") {
-            this.moveX = 75;
+            this.moveRight = true;
         } else if (event.key === "ArrowLeft") {
-            this.moveX = -75;
+            this.moveLeft = true;
         }
         if (event.key === " " && !event.repeat) {
-            this.moveY = 100;
+            this.moveY = 125;
         }
     }
 
     private handleKeyUp(event: KeyboardEvent) {
-        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-            this.moveX = 0;
+        if (event.key === "ArrowRight") {
+            this.moveRight = false;
+        } else if (event.key === "ArrowLeft") {
+            this.moveLeft = false;
         }
     }
 
@@ -41,15 +45,28 @@ export class Player extends Entity {
 
         this.x += this.moveX * dt / 1000;
         this.y += this.moveY * dt / 1000;
+
+        // Make sure player is on top of the ground.
         this.y = world.getTop(this.x, this.y);
 
-
-        // Player dropping down
+        // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
             this.moveY -= 250 * dt / 1000;
         } else {
             this.moveY = 0;
         }
 
+        // Player moving right
+        if (this.moveRight) {
+            this.moveX = Math.min(100, this.moveX + 300 * dt / 1000);
+        } else if (this.moveLeft) {
+            this.moveX = Math.max(-100, this.moveX - 300 * dt / 1000);
+        } else {
+            if (this.moveX > 0) {
+                this.moveX = Math.max(0, this.moveX - 300 * dt / 1000);
+            } else {
+                this.moveX = Math.min(0, this.moveX + 300 * dt / 1000);
+            }
+        }
     }
 }
