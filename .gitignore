@@ -12,3 +12,4 @@
 # Crash logs and backups
 /*.log
 *~
+*.psd
