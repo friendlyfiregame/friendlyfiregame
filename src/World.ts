@@ -1,6 +1,5 @@
 import { loadImage, getImageData } from "./graphics";
 import { GameObject, Game } from "./game";
-import { Player } from "./Player";
 
 export class World implements GameObject {
     private foreground!: HTMLImageElement;
