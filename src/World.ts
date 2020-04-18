@@ -36,12 +36,12 @@ export class World implements GameObject {
     public draw(ctx: CanvasRenderingContext2D): void {
         const bgX = this.getWidth() / this.background.width;
         const bgY = this.getHeight() / this.background.height;
-        const playerX = this.game.player.x;
-        const playerY = this.game.player.y;
+        const player = this.game.player;
+        const playerX = player.x;
+        const playerY = player.y;
         ctx.save();
-
+        ctx.translate(playerX, -playerY);
         ctx.drawImage(this.background, -playerX / bgX, (-this.getHeight() + playerY) / bgY);
-
         ctx.drawImage(this.foreground, -playerX, -this.getHeight() + playerY);
         ctx.restore();
     }

@@ -30,15 +30,14 @@ export class Game {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
         this.player = new Player(this, 2656, 1270);
-        this.world = new World(this);
         this.gameObjects = [
+            this.world = new World(this),
             this.player,
             new DummyNPC(this, 2580, 1245),
         ];
     }
 
     private async load() {
-        await this.world.load();
         for (const obj of this.gameObjects) {
             await obj.load();
         }
@@ -64,7 +63,6 @@ export class Game {
             this.dt = (this.lastUpdateTime - prevTime) / 1000;
         }
         // Update all game classes
-        this.world.update(this.dt);
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
         }
@@ -87,7 +85,6 @@ export class Game {
         ctx.scale(3, 3);
 
         // Draw stuff
-        this.world.draw(ctx);
         ctx.translate(-this.player.x, this.player.y);
         for (const obj of this.gameObjects) {
             obj.draw(ctx);
