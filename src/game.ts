@@ -3,12 +3,16 @@ import { Player } from "./Player";
 import { DummyNPC } from './DummyNPC';
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
+import { clamp } from './util';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
     update(dt: number): void;
     load(): Promise<void>;
 }
+
+// Max time delta. If game freezes for a few seconds for whatever reason, we don't want updates to jump too much.
+const MAX_DT = 100;
 
 export class Game {
 
@@ -70,7 +74,7 @@ export class Game {
         if (this.paused) {
             this.dt = 0;
         } else {
-            this.dt = (this.lastUpdateTime - prevTime) / 1000;
+            this.dt = clamp((this.lastUpdateTime - prevTime) / 1000, 0, MAX_DT);
         }
         // Update all game classes
         for (const obj of this.gameObjects) {

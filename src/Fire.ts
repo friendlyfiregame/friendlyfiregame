@@ -19,7 +19,7 @@ export class Fire extends NPC {
         this.emitter = particles.createEmitter(
             this.x, this.y,
             () => ({ x: rnd(-1, 1), y: rnd(-0.5) }),
-            "#60220c",
+            "#603015",
             12,
             {x: 0, y: 7},
             () => rnd(2, 4),
