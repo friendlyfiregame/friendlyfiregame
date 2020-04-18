@@ -1,14 +1,16 @@
 import { Entity } from './Entity';
 import { Game } from "./game";
 import { PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT } from "./constants";
-import { DummyNPC } from './DummyNPC';
+import { NPC } from './NPC';
 
 export class Player extends Entity {
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     private moveX = 0;
     private moveY = 0;
-    private interactionRange = 40;
+
+    private interactionRange = 35;
+    private closestNPC: NPC | null = null;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 1 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -23,11 +25,9 @@ export class Player extends Entity {
             this.moveLeft = true;
         }
         if (event.key === "Enter") {
-            const closestEntity = this.getClosestEntityInRange(this.interactionRange);
-            if (closestEntity instanceof DummyNPC) {
-                closestEntity.enterConversation();
+            if (this.closestNPC && this.closestNPC.hasDialog) {
+                this.closestNPC.startDialog();
             }
-
         }
         if (event.key === " " && !event.repeat) {
             this.moveY = Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
@@ -47,6 +47,17 @@ export class Player extends Entity {
         ctx.beginPath();
         ctx.strokeStyle = "red";
         ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height, this.width, this.height);
+        ctx.restore();
+        if (this.closestNPC && this.closestNPC.hasDialog) {
+            this.drawDialogTip(ctx);
+        }
+    }
+
+    drawDialogTip(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.strokeText("press 'Enter' to talk", this.x - (this.width / 2), -this.y + 20);
         ctx.restore();
     }
 
@@ -82,6 +93,14 @@ export class Player extends Entity {
             } else {
                 this.moveX = Math.min(0, this.moveX + PLAYER_ACCELERATION * dt / 1000);
             }
+        }
+
+        // check for npc in interactionRange
+        const closestEntity = this.getClosestEntityInRange(this.interactionRange);
+        if (closestEntity instanceof NPC) {
+            this.closestNPC = closestEntity;
+        } else {
+            this.closestNPC = null;
         }
     }
 }

@@ -4,13 +4,14 @@ export class DummyNPC extends NPC {
     private dialogText = "Wow";
     private dialogActive = false;
     private infoText = "Hi";
-    private infoTextRange = 50;
+    private infoTextRange = 65;
     private infoTextActive = false;
     private infoTextDistance = 15;
 
     async load(): Promise<void> {
         this.width = 20;
         this.height = 30;
+        this.hasDialog = true;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -43,8 +44,10 @@ export class DummyNPC extends NPC {
         }
     }
 
-    enterConversation(): void {
-        this.dialogActive = true;
+    startDialog(): void {
+        if (this.hasDialog) {
+            this.dialogActive = true;
+        }
     }
 
 }
