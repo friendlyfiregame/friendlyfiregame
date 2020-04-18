@@ -18,7 +18,7 @@ export class Game {
 
     private boundLoop: () => void;
 
-    private gameObjects: GameObject[] = [];
+    public gameObjects: GameObject[] = [];
 
     private paused = false;
 

@@ -28,11 +28,16 @@ export class Player extends Entity {
         }
     }
 
+    async load(): Promise<void> {
+        this.width = 20;
+        this.height = 30;
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = "red";
-        ctx.strokeRect(this.x - 10, -this.y - 30, 20, 30);
+        ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height, this.width, this.height);
         ctx.restore();
     }
 
