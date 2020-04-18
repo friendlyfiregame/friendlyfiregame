@@ -11,17 +11,19 @@ type ParticleAppearanceGenerator = () => ParticleAppearance;
 
 export interface ParticleEmitterArguments {
     position: Vector2;
-    offset?: Vector2 | VectorGenerator | undefined;
-    velocity?: Vector2 | VectorGenerator | undefined;
-    color?: ParticleAppearance | ParticleAppearanceGenerator | undefined;
+    offset?: Vector2 | VectorGenerator;
+    velocity?: Vector2 | VectorGenerator;
+    color?: ParticleAppearance | ParticleAppearanceGenerator;
     alpha?: number | NumberGenerator;
-    size?: number | NumberGenerator | undefined;
-    gravity?: Vector2 | VectorGenerator | undefined;
-    lifetime?: number | NumberGenerator | undefined;
-    breakFactor?: number | undefined;
-    blendMode?: string | undefined;
+    size?: number | NumberGenerator;
+    gravity?: Vector2 | VectorGenerator;
+    lifetime?: number | NumberGenerator;
+    breakFactor?: number;
+    blendMode?: string;
     alphaCurve?: ValueCurve;
     sizeCurve?: ValueCurve;
+    angle?: number | NumberGenerator;
+    angleSpeed?: number | NumberGenerator;
 };
 
 export class Particles {
@@ -75,6 +77,8 @@ export class ParticleEmitter {
     private gravityGenerator: VectorGenerator;
     private lifetimeGenerator: NumberGenerator;
     private alphaGenerator: NumberGenerator;
+    private angleGenerator: NumberGenerator;
+    private angleSpeedGenerator: NumberGenerator;
     public gravity: Vector2;
     public breakFactor: number;
     private blendMode: string;
@@ -91,8 +95,10 @@ export class ParticleEmitter {
         this.alphaGenerator = toGenerator(args.alpha ?? 1);
         this.sizeGenerator = toGenerator(args.size ?? 4);
         this.gravityGenerator = toGenerator(args.gravity ?? {x: 0, y: GRAVITY});
-        this.gravity = this.gravityGenerator();
         this.lifetimeGenerator = toGenerator(args.lifetime ?? 5);
+        this.angleGenerator = toGenerator(args.angle ?? 0);
+        this.angleSpeedGenerator = toGenerator(args.angleSpeed ?? 0);
+        this.gravity = this.gravityGenerator();
         this.breakFactor = args.breakFactor || 1;
         this.blendMode = args.blendMode || "source-over";
         this.alphaCurve = args.alphaCurve || valueCurves.constant;
@@ -116,6 +122,8 @@ export class ParticleEmitter {
             this.y + off.y,
             v.x,
             v.y,
+            this.angleGenerator(),
+            this.angleSpeedGenerator(),
             this.colorGenerator(),
             this.sizeGenerator(),
             this.lifetimeGenerator(),
@@ -154,6 +162,8 @@ export class Particle {
         public y: number,
         public vx = 0,
         public vy = 0,
+        private angle = 0,
+        private angleSpeed = 0,
         private imageOrColor: ParticleAppearance = "white",
         private size = 4,
         private lifetime = 1,
@@ -186,20 +196,27 @@ export class Particle {
         // Movement
         this.x += this.vx * dt;
         this.y += this.vy * dt;
+        this.angle += this.angleSpeed * dt;
 
         return false;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
         ctx.globalAlpha = this.alpha * this.emitter.alphaCurve.get(this.progress);
+        ctx.translate(this.x, -this.y);
+        if (this.angle) {
+            ctx.rotate(this.angle);
+        }
         if (this.imageOrColor instanceof HTMLImageElement) {
             // Image
             // TODO
         } else {
             // Color
             ctx.fillStyle = (this.imageOrColor as string);
-            ctx.fillRect(this.x - this.halfSize, -this.y - this.halfSize, this.size, this.size);
+            ctx.fillRect(-this.halfSize, -this.halfSize, this.size, this.size);
         }
+        ctx.restore();
     }
 }
 

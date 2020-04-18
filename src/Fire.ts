@@ -13,9 +13,9 @@ const fireColors = [
 ];
 
 const smokeColors = [
-    "#777",
     "#555",
-    "#888"
+    "#444",
+    "#333"
 ];
 
 export class Fire extends NPC {
@@ -35,14 +35,16 @@ export class Fire extends NPC {
         this.smokeEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-            velocity: () => ({ x: rnd(-1, 1) * 5, y: 4 + rnd(3) }),
+            velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
             color: () => rndItem(smokeColors),
             size: () => rndInt(14, 24),
-            gravity: {x: 0, y: 7},
+            gravity: {x: 0, y: 10},
             lifetime: () => rnd(5, 8),
             alpha: () => rnd(0.3, 0.7),
+            angleSpeed: () => rnd(-1, 1) * 1.5,
             blendMode: "source-over",
-            alphaCurve: valueCurves.cos(0.1, 0.5)
+            alphaCurve: valueCurves.cos(0.1, 0.5),
+            breakFactor: 0.9
         })
         this.fireEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
