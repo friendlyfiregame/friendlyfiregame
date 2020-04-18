@@ -2,7 +2,7 @@ import { NPC } from './NPC';
 import { Game } from './game';
 import { PIXEL_PER_METER } from './constants';
 import { rnd, rndItem, rndInt } from './util';
-import { particles, ParticleEmitter } from './Particles';
+import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face } from './Face';
 
 const fireColors = [
@@ -35,23 +35,25 @@ export class Fire extends NPC {
         this.smokeEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-            velocity: () => ({ x: rnd(-1, 1) * 5, y: -2 - rnd(3) }),
+            velocity: () => ({ x: rnd(-1, 1) * 5, y: 4 + rnd(3) }),
             color: () => rndItem(smokeColors),
-            size: () => rndInt(14, 18),
+            size: () => rndInt(14, 24),
             gravity: {x: 0, y: 7},
-            lifetime: () => rnd(3, 7),
-            alpha: () => rnd(0.2, 0.5),
-            blendMode: "source-over"
+            lifetime: () => rnd(5, 8),
+            alpha: () => rnd(0.3, 0.7),
+            blendMode: "source-over",
+            alphaCurve: valueCurves.cos(0.1, 0.5)
         })
         this.fireEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-            velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(-3) }),
+            velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(-2, 3) }),
             color: () => rndItem(fireColors),
             size: () => rndInt(10, 15),
             gravity: {x: 0, y: 10},
             lifetime: () => rnd(2, 4),
-            blendMode: "screen"
+            blendMode: "screen",
+            alphaCurve: valueCurves.trapeze(0.05, 0.1)
         });
         this.sparkEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
@@ -60,7 +62,8 @@ export class Fire extends NPC {
             size: 2,
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(1, 1.5),
-            blendMode: "screen"
+            blendMode: "screen",
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.face = new Face(this, 1, 0, 6);
     }
@@ -90,7 +93,7 @@ export class Fire extends NPC {
             if (rnd() < 0.3) {
                 this.sparkEmitter.emit();
             }
-            if (rnd() < 0.5) {
+            if (rnd() < 0.25) {
                 this.smokeEmitter.emit();
             }
             particleChance -= rnd() * this.averageParticleDelay;

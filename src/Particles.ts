@@ -20,6 +20,8 @@ export interface ParticleEmitterArguments {
     lifetime?: number | NumberGenerator | undefined;
     breakFactor?: number | undefined;
     blendMode?: string | undefined;
+    alphaCurve?: ValueCurve;
+    sizeCurve?: ValueCurve;
 };
 
 export class Particles {
@@ -76,6 +78,8 @@ export class ParticleEmitter {
     public gravity: Vector2;
     public breakFactor: number;
     private blendMode: string;
+    public alphaCurve: ValueCurve;
+    public sizeCurve: ValueCurve;
 
     constructor(args: ParticleEmitterArguments) {
         this.particles = [];
@@ -91,6 +95,8 @@ export class ParticleEmitter {
         this.lifetimeGenerator = toGenerator(args.lifetime ?? 5);
         this.breakFactor = args.breakFactor || 1;
         this.blendMode = args.blendMode || "source-over";
+        this.alphaCurve = args.alphaCurve || valueCurves.constant;
+        this.sizeCurve = args.sizeCurve || valueCurves.constant;
 
         function toGenerator<tp>(obj: tp | (() => tp)): (() => tp) {
             if (obj instanceof Function) {
@@ -139,6 +145,8 @@ export class ParticleEmitter {
 export class Particle {
 
     private halfSize: number;
+    private originalLifetime: number;
+    private progress: number = 0;
 
     constructor(
         private emitter: ParticleEmitter,
@@ -152,6 +160,8 @@ export class Particle {
         private alpha = 1
     ) {
         this.halfSize = this.size / 2;
+        this.originalLifetime = this.lifetime;
+        this.progress = 0;
     }
 
     public update(dt: number): boolean {
@@ -160,6 +170,8 @@ export class Particle {
         if (this.lifetime <= 0) {
             // Tell parent that it may eliminate this particle
             return true;
+        } else {
+            this.progress = 1 - (this.lifetime / this.originalLifetime);
         }
 
         // Gravity
@@ -179,7 +191,7 @@ export class Particle {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        ctx.globalAlpha = this.alpha;
+        ctx.globalAlpha = this.alpha * this.emitter.alphaCurve.get(this.progress);
         if (this.imageOrColor instanceof HTMLImageElement) {
             // Image
             // TODO
@@ -189,4 +201,33 @@ export class Particle {
             ctx.fillRect(this.x - this.halfSize, -this.y - this.halfSize, this.size, this.size);
         }
     }
+}
+
+export class ValueCurve {
+    private mapping: number[] = [];
+    constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
+        for (let i = 0; i <= steps; i++) {
+            this.mapping[i] = func(i / steps);
+        }
+    }
+
+    public get(p: number): number {
+        const i = Math.round(p * this.steps);
+        return this.mapping[i < 0 ? 0 : i > this.steps ? this.steps : i];
+    }
+
+    public getExact(p: number): number {
+        return this.func(p);
+    }
+}
+
+function trapezeFunction(v: number, v1: number = v): ((p: number) => number) {
+    return (p: number) => p < v ? p / v : p > 1 - v1 ? (1 - p) / v1 : 1
+}
+export const valueCurves = {
+    constant: new ValueCurve((p) => 1, 1),
+    linear: new ValueCurve((p) => p),
+    trapeze: (v: number = 0.1, v1: number = v) => new ValueCurve(trapezeFunction(v, v1)),
+    cos: (v: number = 0.1, v1: number = v) =>
+            new ValueCurve((p) => 0.5 - 0.5 * Math.cos(Math.PI * trapezeFunction(v, v1)(p)))
 }
