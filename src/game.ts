@@ -22,7 +22,17 @@ export class Game {
 
     private lastUpdateTime = Date.now();
 
-    private dt = 0;
+    /* Time delta in game logic time (0 while game is paused, elapsed seconds since last frame otherwise) */
+    public dt = 0;
+
+    /* Total game time (time passed while game not paused) */
+    public gameTime = 0;
+
+    /* Time delta since last frame */
+    public appDt = 0;
+
+    /* Totale time elapsed since starting the game */
+    public appTime = 0;
 
     private boundLoop: () => void;
 
@@ -77,16 +87,20 @@ export class Game {
     private update() {
         const prevTime = this.lastUpdateTime;
         this.lastUpdateTime = Date.now();
+        const realDt = (this.lastUpdateTime - prevTime) / 1000;
+        this.appDt = realDt;
+        this.appTime += realDt;
         if (this.paused) {
             this.dt = 0;
         } else {
-            this.dt = clamp((this.lastUpdateTime - prevTime) / 1000, 0, MAX_DT);
+            this.dt = clamp(realDt, 0, MAX_DT);
+            this.gameTime += this.dt;
         }
         // Update all game classes
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
         }
-        this.camera.update();
+        this.camera.update(this.dt, this.gameTime);
     }
 
     private draw() {
@@ -110,6 +124,7 @@ export class Game {
         for (const obj of this.gameObjects) {
             obj.draw(ctx);
         }
+        this.camera.renderCinematicBars(ctx);
 
         ctx.restore();
     }
