@@ -1,6 +1,7 @@
 import { Entity } from './Entity';
 import { Game } from "./game";
 import { NPC } from './NPC';
+import { PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT } from "./constants";
 
 export class Player extends Entity {
     private moveLeft: boolean = false;
@@ -10,7 +11,7 @@ export class Player extends Entity {
     private interactionRange = 40;
 
     public constructor(game: Game, x: number, y: number) {
-        super(game, x, y);
+        super(game, x, y, 1 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
     }
@@ -29,7 +30,7 @@ export class Player extends Entity {
 
         }
         if (event.key === " " && !event.repeat) {
-            this.moveY = 125;
+            this.moveY = Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
         }
     }
 
@@ -39,11 +40,6 @@ export class Player extends Entity {
         } else if (event.key === "ArrowLeft") {
             this.moveLeft = false;
         }
-    }
-
-    async load(): Promise<void> {
-        this.width = 20;
-        this.height = 30;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -57,8 +53,8 @@ export class Player extends Entity {
     update(dt: number): void {
         const world = this.game.world;
 
-        this.x += this.moveX * dt / 1000;
-        this.y += this.moveY * dt / 1000;
+        this.x += this.moveX * PIXEL_PER_METER * dt / 1000;
+        this.y += this.moveY * PIXEL_PER_METER * dt / 1000;
 
         // Make sure player is on top of the ground.
         this.y = world.getTop(this.x, this.y);
@@ -70,21 +66,21 @@ export class Player extends Entity {
 
         // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
-            this.moveY -= 250 * dt / 1000;
+            this.moveY -= GRAVITY * dt / 1000;
         } else {
             this.moveY = 0;
         }
 
         // Player moving right
         if (this.moveRight) {
-            this.moveX = Math.min(100, this.moveX + 300 * dt / 1000);
+            this.moveX = Math.min(MAX_PLAYER_SPEED, this.moveX + PLAYER_ACCELERATION * dt / 1000);
         } else if (this.moveLeft) {
-            this.moveX = Math.max(-100, this.moveX - 300 * dt / 1000);
+            this.moveX = Math.max(-MAX_PLAYER_SPEED, this.moveX - PLAYER_ACCELERATION * dt / 1000);
         } else {
             if (this.moveX > 0) {
-                this.moveX = Math.max(0, this.moveX - 300 * dt / 1000);
+                this.moveX = Math.max(0, this.moveX - PLAYER_ACCELERATION * dt / 1000);
             } else {
-                this.moveX = Math.min(0, this.moveX + 300 * dt / 1000);
+                this.moveX = Math.min(0, this.moveX + PLAYER_ACCELERATION * dt / 1000);
             }
         }
     }
