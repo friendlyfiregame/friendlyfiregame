@@ -1,6 +1,5 @@
 import { World } from "./World";
 import { Player } from "./Player";
-import { Thing } from "./Thing";
 import { DummyNPC } from './DummyNPC';
 
 export interface GameObject {
@@ -30,12 +29,11 @@ export class Game {
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
-        this.player = new Player(this, 1120, 290);
+        this.player = new Player(this, 2656, 1270);
         this.world = new World(this);
         this.gameObjects = [
             this.player,
-            new Thing(this, 1020, 265),
-            new DummyNPC(this, 1090, 290),
+            new DummyNPC(this, 2580, 1245),
         ];
     }
 
