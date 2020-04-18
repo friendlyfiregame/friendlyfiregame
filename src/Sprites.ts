@@ -23,7 +23,7 @@ export class Sprites {
         return this.getSpriteWidth() / this.getSpriteHeight();
     }
 
-    public draw(ctx: CanvasRenderingContext2D, index: number, scale: number): void {
+    public draw(ctx: CanvasRenderingContext2D, index: number, scale: number = 1): void {
         const column = index % this.columns;
         const row = Math.floor(index / this.columns);
         const sourceWidth = this.spriteWidth;

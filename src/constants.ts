@@ -2,7 +2,7 @@
  * Number if pixels per meter on the world map. Used to convert from pixel coordinates to meters (for size and
  * physics calculations).
  */
-export const PIXEL_PER_METER = 20;
+export const PIXEL_PER_METER = 18;
 
 /** Gravity in m/s² */
 export const GRAVITY = 35;
