@@ -9,6 +9,7 @@
         "Entrypoint",
         "chunkhash",
         "devtool",
+        "lerping",
         "ludum",
         "tslib"
     ]

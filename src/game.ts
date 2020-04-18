@@ -31,7 +31,7 @@ export class Game {
     /* Time delta since last frame */
     public appDt = 0;
 
-    /* Totale time elapsed since starting the game */
+    /* Total time elapsed since starting the game */
     public appTime = 0;
 
     private boundLoop: () => void;
@@ -112,11 +112,14 @@ export class Game {
 
         // Clear
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        ctx.fillStyle = "blue";
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // Want more pixels!
         ctx.imageSmoothingEnabled = false;
+
+        // Center coordinate system
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+
+        // Scale by three because everything was based on 480x300 canvas and now its three times larger
         ctx.scale(3, 3);
 
         // Draw stuff
