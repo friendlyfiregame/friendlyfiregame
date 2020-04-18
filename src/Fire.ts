@@ -3,6 +3,7 @@ import { Game } from './game';
 import { PIXEL_PER_METER } from './constants';
 import { rnd } from './util';
 import { particles, ParticleEmitter } from './Particles';
+import { Face } from './Face';
 
 export class Fire extends NPC {
 
@@ -26,6 +27,7 @@ export class Fire extends NPC {
             1,
             "screen"
         );
+        this.face = new Face(this, 1);
     }
 
 
@@ -39,6 +41,7 @@ export class Fire extends NPC {
         ctx.strokeStyle = "black";
         ctx.strokeText("NPC", this.x - (this.width / 2), -this.y - this.height);
         ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height, this.width, this.height);
+        this.drawFace(ctx);
         ctx.restore();
     }
 
@@ -46,10 +49,16 @@ export class Fire extends NPC {
         if (this.growth !== 0) {
             this.intensity += this.growth * dt;
         }
-        let particleChance = dt - Math.random() * this.averageParticleDelay;
+        let particleChance = dt - rnd() * this.averageParticleDelay;
         while (particleChance > 0) {
             this.emitParticle();
-            particleChance -= Math.random() * this.averageParticleDelay;
+            if (rnd() < 0.12) {
+                this.face?.toggleDirection();
+            }
+            if (rnd() < 0.05) {
+                this.face?.setMode(Math.floor(Math.random() * 4));
+            }
+            particleChance -= rnd() * this.averageParticleDelay;
         }
     }
 
