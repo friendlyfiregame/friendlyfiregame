@@ -16,6 +16,8 @@ export class Game {
 
     private gameObjects: GameObject[] = [];
 
+    private paused = false;
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.lastUpdateTime = Date.now();
@@ -33,11 +35,15 @@ export class Game {
     private update() {
         const prevTime = this.lastUpdateTime;
         this.lastUpdateTime = Date.now();
-        const dt = this.lastUpdateTime - prevTime;
-        this.dt = dt;
+        if (this.paused) {
+            this.dt = 0;
+        } else {
+            const dt = this.lastUpdateTime - prevTime;
+            this.dt = dt;
+        }
         // Update all game classes
         for (const obj of this.gameObjects) {
-            obj.update(dt);
+            obj.update(this.dt);
         }
     }
 
@@ -49,7 +55,9 @@ export class Game {
 
         // Clear
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = "#" + Math.random().toString(16).substr(-6);
+        if (this.dt > 0) {
+            ctx.fillStyle = "#" + Math.random().toString(16).substr(-6);
+        }
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Draw stuff
@@ -58,6 +66,17 @@ export class Game {
         }
     }
 
+    public togglePause(paused = !this.paused) {
+        this.paused = paused;
+    }
+
+    public pause() {
+        this.togglePause(true);
+    }
+
+    public resume() {
+        this.togglePause(false);
+    }
 
 }
 
