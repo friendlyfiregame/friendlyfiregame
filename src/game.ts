@@ -1,5 +1,5 @@
 
-interface GameObject {
+export interface GameObject {
     draw(dt: number): void;
     update(dt: number): void;
     load(): Promise<void>;
