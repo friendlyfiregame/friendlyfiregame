@@ -36,7 +36,6 @@ export class World implements GameObject {
     public draw(ctx: CanvasRenderingContext2D): void {
         const bgX = this.getWidth() / this.background.width;
         const bgY = this.getHeight() / this.background.height;
-        const player = this.game.player;
         const camX = this.game.camera.x;
         const camY = this.game.camera.y;
         ctx.save();
