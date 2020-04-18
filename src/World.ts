@@ -37,12 +37,12 @@ export class World implements GameObject {
         const bgX = this.getWidth() / this.background.width;
         const bgY = this.getHeight() / this.background.height;
         const player = this.game.player;
-        const playerX = player.x;
-        const playerY = player.y;
+        const camX = this.game.camera.x;
+        const camY = this.game.camera.y;
         ctx.save();
-        ctx.translate(playerX, -playerY);
-        ctx.drawImage(this.background, -playerX / bgX, (-this.getHeight() + playerY) / bgY);
-        ctx.drawImage(this.foreground, -playerX, -this.getHeight() + playerY);
+        ctx.translate(camX, -camY);
+        ctx.drawImage(this.background, -camX / bgX, (-this.getHeight() + camY) / bgY);
+        ctx.drawImage(this.foreground, -camX, -this.getHeight() + camY);
         ctx.restore();
     }
 
