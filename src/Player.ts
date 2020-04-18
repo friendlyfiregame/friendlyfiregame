@@ -1,3 +1,4 @@
+import { SpeechBubble } from "./SpeechBubble";
 import { Entity } from './Entity';
 import { Game } from "./game";
 import { PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT } from "./constants";
@@ -11,6 +12,7 @@ export class Player extends Entity {
 
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
+    public activeSpeechBubble: SpeechBubble | null = null;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 1 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -59,6 +61,7 @@ export class Player extends Entity {
         ctx.strokeStyle = "white";
         ctx.strokeText("press 'Enter' to talk", this.x - (this.width / 2), -this.y + 20);
         ctx.restore();
+        this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
     }
 
     update(dt: number): void {
