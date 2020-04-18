@@ -34,8 +34,7 @@ export class SpeechBubble extends Entity {
     ) {
         super(game, x, y);
         if (this.actionPaths) {
-
-        document.addEventListener("keyup", event => this.handleKeyUp(event));
+            document.addEventListener("keyup", event => this.handleKeyUp(event));
         }
     }
 
