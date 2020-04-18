@@ -9,6 +9,19 @@ type VectorGenerator = () => Vector2;
 
 type ParticleAppearanceGenerator = () => ParticleAppearance;
 
+export interface ParticleEmitterArguments {
+    position: Vector2;
+    offset?: Vector2 | VectorGenerator | undefined;
+    velocity?: Vector2 | VectorGenerator | undefined;
+    color?: ParticleAppearance | ParticleAppearanceGenerator | undefined;
+    alpha?: number | NumberGenerator;
+    size?: number | NumberGenerator | undefined;
+    gravity?: Vector2 | VectorGenerator | undefined;
+    lifetime?: number | NumberGenerator | undefined;
+    breakFactor?: number | undefined;
+    blendMode?: string | undefined;
+};
+
 export class Particles {
     private emitters: ParticleEmitter[] = [];
 
@@ -40,19 +53,8 @@ export class Particles {
         return false;
     }
 
-    public createEmitter(
-        x: number,
-        y: number,
-        velocityGenerator: Vector2 | VectorGenerator = () => ({x: 0, y: 0}),
-        colorGenerator: ParticleAppearance | ParticleAppearanceGenerator = () => "white",
-        sizeGenerator: number | NumberGenerator = () => 4,
-        gravity: Vector2 | VectorGenerator = {x: 0, y: GRAVITY},
-        lifetimeGenerator: number | NumberGenerator = 5,
-        breakFactor = 1,
-        blendMode = "source-over"
-    ) {
-        const emitter = new ParticleEmitter(x, y, velocityGenerator, colorGenerator, sizeGenerator, gravity,
-                lifetimeGenerator, breakFactor, blendMode);
+    public createEmitter(args: ParticleEmitterArguments) {
+        const emitter = new ParticleEmitter(args);
         this.addEmitter(emitter);
         return emitter;
     }
@@ -62,31 +64,33 @@ export const particles = new Particles();
 
 export class ParticleEmitter {
     private particles: Particle[];
+    private x: number;
+    private y: number;
+    private offsetGenerator: VectorGenerator;
     private velocityGenerator: VectorGenerator;
     private colorGenerator: ParticleAppearanceGenerator;
     private sizeGenerator: NumberGenerator;
     private gravityGenerator: VectorGenerator;
     private lifetimeGenerator: NumberGenerator;
+    private alphaGenerator: NumberGenerator;
     public gravity: Vector2;
+    public breakFactor: number;
+    private blendMode: string;
 
-    constructor(
-        public x: number,
-        public y: number,
-        velocityGenerator: Vector2 | VectorGenerator = ({x: 0, y: 0}),
-        colorGenerator: ParticleAppearance | ParticleAppearanceGenerator = "white",
-        sizeGenerator: number | NumberGenerator = 4,
-        gravityGenerator: Vector2 | VectorGenerator = {x: 0, y: GRAVITY},
-        lifetimeGenerator: number | NumberGenerator = 5,
-        public breakFactor = 1,
-        private blendMode = "source-over"
-    ) {
+    constructor(args: ParticleEmitterArguments) {
         this.particles = [];
-        this.velocityGenerator = toGenerator(velocityGenerator);
-        this.colorGenerator = toGenerator(colorGenerator);
-        this.sizeGenerator = toGenerator(sizeGenerator);
-        this.gravityGenerator = toGenerator(gravityGenerator);
+        this.x = args.position.x;
+        this.y = args.position.y;
+        this.offsetGenerator = toGenerator(args.offset ?? ({x: 0, y: 0}));
+        this.velocityGenerator = toGenerator(args.velocity ?? ({x: 0, y: 0}));
+        this.colorGenerator = toGenerator(args.color ?? "white");
+        this.alphaGenerator = toGenerator(args.alpha ?? 1);
+        this.sizeGenerator = toGenerator(args.size ?? 4);
+        this.gravityGenerator = toGenerator(args.gravity ?? {x: 0, y: GRAVITY});
         this.gravity = this.gravityGenerator();
-        this.lifetimeGenerator = toGenerator(lifetimeGenerator);
+        this.lifetimeGenerator = toGenerator(args.lifetime ?? 5);
+        this.breakFactor = args.breakFactor || 1;
+        this.blendMode = args.blendMode || "source-over";
 
         function toGenerator<tp>(obj: tp | (() => tp)): (() => tp) {
             if (obj instanceof Function) {
@@ -97,17 +101,19 @@ export class ParticleEmitter {
         }
     }
 
-    public emit(offX = 0, offY = 0): Particle {
+    public emit(): Particle {
         const v = this.velocityGenerator();
+        const off = this.offsetGenerator();
         const particle = new Particle(
             this,
-            this.x + offX,
-            this.y + offY,
+            this.x + off.x,
+            this.y + off.y,
             v.x,
             v.y,
             this.colorGenerator(),
             this.sizeGenerator(),
-            this.lifetimeGenerator()
+            this.lifetimeGenerator(),
+            this.alphaGenerator()
         );
         this.particles.push(particle);
         return particle;
@@ -123,10 +129,10 @@ export class ParticleEmitter {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        const prevBlendMode = ctx.globalCompositeOperation;
+        ctx.save();
         ctx.globalCompositeOperation = this.blendMode;
         this.particles.forEach(p => p.draw(ctx));
-        ctx.globalCompositeOperation = prevBlendMode;
+        ctx.restore();
     }
 }
 
@@ -142,7 +148,8 @@ export class Particle {
         public vy = 0,
         private imageOrColor: ParticleAppearance = "white",
         private size = 4,
-        private lifetime = 1
+        private lifetime = 1,
+        private alpha = 1
     ) {
         this.halfSize = this.size / 2;
     }
@@ -172,6 +179,7 @@ export class Particle {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
+        ctx.globalAlpha = this.alpha;
         if (this.imageOrColor instanceof HTMLImageElement) {
             // Image
             // TODO
