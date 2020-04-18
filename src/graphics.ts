@@ -24,5 +24,6 @@ export function createContext2D(width: number, height: number): CanvasRenderingC
 
 export function getImageData(image: HTMLImageElement): ImageData {
     const ctx = createContext2D(image.width, image.height);
+    ctx.drawImage(image, 0, 0, image.width, image.height);
     return ctx.getImageData(0, 0, image.width, image.height);
 }

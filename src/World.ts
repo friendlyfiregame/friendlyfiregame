@@ -57,10 +57,17 @@ export class World implements GameObject {
      *         specific meaning).
      */
     public collidesWith(x: number, y: number): number {
-        const index = (this.getHeight() - Math.round(y)) * this.getWidth() + Math.round(x);
+        const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
         if (index < 0 || index >= this.collisionMap.length) {
             return 0;
         }
         return this.collisionMap[index];
+    }
+
+    public getTop(x: number, y: number): number {
+        while (this.collidesWith(x, y)) {
+            y++;
+        }
+        return y;
     }
 }

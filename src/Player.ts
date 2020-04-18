@@ -13,21 +13,18 @@ export class Player extends Entity {
 
     private handleKeyDown(event: KeyboardEvent) {
         if (event.key === "ArrowRight") {
-            this.moveX = 50;
+            this.moveX = 75;
         } else if (event.key === "ArrowLeft") {
-            this.moveX = -50;
+            this.moveX = -75;
         }
-        if (event.key === " ") {
-            this.moveY = 50;
+        if (event.key === " " && !event.repeat) {
+            this.moveY = 100;
         }
     }
 
     private handleKeyUp(event: KeyboardEvent) {
         if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
             this.moveX = 0;
-        }
-        if (event.key === " ") {
-            this.moveY = 0;
         }
     }
 
@@ -40,8 +37,19 @@ export class Player extends Entity {
     }
 
     update(dt: number): void {
+        const world = this.game.world;
+
         this.x += this.moveX * dt / 1000;
         this.y += this.moveY * dt / 1000;
-        console.log(this.x, this.y, this.game.world.collidesWith(this.x, this.y));
+        this.y = world.getTop(this.x, this.y);
+
+
+        // Player dropping down
+        if (world.collidesWith(this.x, this.y - 1) === 0) {
+            this.moveY -= 250 * dt / 1000;
+        } else {
+            this.moveY = 0;
+        }
+
     }
 }
