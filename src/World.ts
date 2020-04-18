@@ -12,8 +12,8 @@ export class World implements GameObject {
     }
 
     public async load(): Promise<void> {
-        const worldImage = await loadImage("maps/world.png");
-        const worldCollisionImage = await loadImage("maps/world_collision.png");
+        const worldImage = await loadImage("maps/debug.png");
+        const worldCollisionImage = await loadImage("maps/debug_collision.png");
         if (worldImage.width !== worldCollisionImage.width || worldImage.height !== worldCollisionImage.height) {
             throw new Error("World image must have same size as world collision image");
         }
@@ -40,9 +40,7 @@ export class World implements GameObject {
         const playerY = this.game.player.y;
         ctx.save();
 
-        ctx.drawImage(this.background, -playerX / bgX, -this.getHeight() + playerY * bgY);
-        ctx.drawImage(this.background, -playerX / bgX - this.background.width, -this.getHeight() + playerY * bgY);
-        ctx.drawImage(this.background, -playerX / bgX + this.background.width, -this.getHeight() + playerY * bgY);
+        ctx.drawImage(this.background, -playerX / bgX, (-this.getHeight() + playerY) / bgY);
 
         ctx.drawImage(this.foreground, -playerX, -this.getHeight() + playerY);
         ctx.restore();
