@@ -58,7 +58,7 @@ export class Player extends Entity {
             }
         }
         if (event.key === " " && !event.repeat && !this.flying) {
-            this.moveY += Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
+            this.moveY = Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY);
         }
     }
 
