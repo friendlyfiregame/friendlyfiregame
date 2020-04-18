@@ -8,6 +8,7 @@ import { NPC } from './NPC';
 import { loadImage } from "./graphics";
 import { Sprites } from "./Sprites";
 import { PhysicsEntity } from "./PhysicsEntity";
+import { Snowball } from "./Snowball";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -63,6 +64,9 @@ export class Player extends PhysicsEntity {
         if (event.key === " " && !event.repeat && !this.flying && !this.isInDialog) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
         }
+        if (event.key === "t") {
+            this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+        }
     }
 
     private handleKeyUp(event: KeyboardEvent) {
@@ -77,14 +81,14 @@ export class Player extends PhysicsEntity {
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = "red";
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.x, -this.y + 1);
         if (this.debug) {
             ctx.strokeRect(-this.width / 2, -this.height, this.width, this.height);
         }
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.sprites.draw(ctx, this.spriteIndex, 1.2);
+        this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
 
         if (this.closestNPC && this.closestNPC.hasDialog) {
