@@ -82,14 +82,14 @@ export class BitmapFont {
         return charIndex;
     }
 
-    drawCharacter(ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: number) {
-        color = this.colorMap[color];
+    drawCharacter(ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string) {
+        const colorIndex = this.colorMap[color];
         const charIndex = (typeof char == "number") ? char : this.getCharIndex(char);
-        const charX = this.charStartPoints[charIndex], charY = color * this.charHeight;
+        const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
         ctx.drawImage(this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight, x, y, this.charWidths[charIndex], this.charHeight);
     };
 
-    drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: number, align = 0) {
+    drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0) {
         text = "" + text;
         let width = 0;
         for (var char of text) {
