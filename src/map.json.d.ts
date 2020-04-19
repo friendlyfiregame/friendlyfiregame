@@ -1,6 +1,7 @@
 declare module "*/map.json" {
     export interface MapObjectJSON {
         name: string;
+        type: string;
         x: number;
         y: number;
     }

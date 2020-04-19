@@ -1,5 +1,6 @@
 import { Vector2, clamp } from './util';
 import { ValueCurve, valueCurves } from './Particles';
+import { Game } from "./game";
 
 interface camFocus {
     x: number;
@@ -25,14 +26,14 @@ export class Camera {
     private time = 0;
     private interpolationTime!: number;
 
-    constructor(private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
+    constructor(private game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
         this.interpolationTime = interpolationTime / 2;
         // TODO remove this example camera focus
         setTimeout(async () => {
-            this.focusOn(4, (window as any).game.fire.x, (window as any).game.fire.y + 20, 4, Math.PI * 2,
+            this.focusOn(4, game.fire.x, game.fire.y + 20, 4, Math.PI * 2,
                 valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
         }, 2000);
     }

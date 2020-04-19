@@ -51,9 +51,9 @@ export class Game {
 
     public player: Player;
 
-    public fire: Fire;
-
     public particles: Particles;
+
+    public fire!: Fire;
 
     private frameCounter = 0;
     private framesPerSecond = 0;
@@ -68,18 +68,22 @@ export class Game {
         window.addEventListener("resize", () => this.updateCanvasSize());
         this.mapInfo = new MapInfo();
         const playerStart = this.mapInfo.getPlayerStart();
-        const mapSize = this.mapInfo.getMapSize();
-        this.player = new Player(this, playerStart.x, mapSize.height - playerStart.y);
+        this.player = new Player(this, playerStart.x, playerStart.y);
         this.boundLoop = this.loop.bind(this);
-        this.fire = new Fire(this, 2548, 864);
         this.particles = particles;
-        this.camera = new Camera(this.player);
+        this.camera = new Camera(this, this.player);
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            this.fire,
             this.player,
-            new DummyNPC(this, 2570, 1245),
+            ...this.mapInfo.getNPCs().map(npc => {
+                switch (npc.name) {
+                    case "fire":
+                        return this.fire = new Fire(this, npc.x, npc.y);
+                    default:
+                        return new DummyNPC(this, npc.x, npc.y);
+                }
+            })
         ];
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
