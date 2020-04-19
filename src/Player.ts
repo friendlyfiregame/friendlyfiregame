@@ -11,7 +11,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, now } from './util';
+import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
 
 enum SpriteIndex {
