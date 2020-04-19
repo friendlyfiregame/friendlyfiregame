@@ -7,6 +7,8 @@ import { Face, EyeType } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
 import { loadImage } from './graphics';
+import dialog  from '../assets/dialog/fire1.dialog.json';
+import { Conversation } from './Conversation';
 
 // const fireColors = [
 //     "#603015",
@@ -40,6 +42,8 @@ export class Fire extends NPC {
     // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
+
+    private conversation: Conversation;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -80,6 +84,8 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.face = new Face(this, EyeType.STANDARD, 1, 0, 6);
+        this.conversation = new Conversation(dialog, this);
+        console.log(this.conversation);
     }
 
 

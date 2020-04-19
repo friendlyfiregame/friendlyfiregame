@@ -34,7 +34,7 @@ export class Campaign {
     constructor(public game: Game) {
     }
 
-    public runAction(action: string) {
+    public runAction(action: string, npc?: NPC, params: string[] = []): void {
         switch(action) {
             case "finishGame":
                 this.addState("finished");
