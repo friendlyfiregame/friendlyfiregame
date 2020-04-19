@@ -3,7 +3,7 @@ import { ScriptedDialogJSON, DialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from './SpeechBubble';
 import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
-import { GameObject } from './game';
+import { GameObject, Game } from './game';
 
 export class ScriptedDialog implements GameObject {
     public get hasPlayerDialog(): boolean {
@@ -24,6 +24,7 @@ export class ScriptedDialog implements GameObject {
     private greetingAlreadyShown = false;
 
     private speechBubble = new SpeechBubble(
+        this.game,
         this.npc.x,
         this.npc.y,
         "white"
@@ -35,7 +36,7 @@ export class ScriptedDialog implements GameObject {
         return this.npc.game.campaign;
     }
 
-    constructor(public npc: NPC, private dialogData: ScriptedDialogJSON) {
+    constructor(private game: Game, public npc: NPC, private dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
         this.campaign.statesChanged$.subscribe(this.updateMatchingData.bind(this))
     }
@@ -98,7 +99,7 @@ export class ScriptedDialog implements GameObject {
             stateSelectors.push(key.split(" "));
         }
         let bestMatchingSelector: string | null = null;
-        // search for highes selector "specifity" first
+        // search for highest selector "specificity" first
         stateSelectors.sort((a, b) => { return b.length - a.length; });
         for (const selector of stateSelectors) {
             if (containsArray(currentCampaignStates, selector)) {

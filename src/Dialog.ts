@@ -2,6 +2,7 @@ import { DummyNPC } from "./DummyNPC";
 import { Player } from "./Player";
 import { SpeechBubble } from "./SpeechBubble";
 import { Subscription } from "rxjs";
+import { Game } from "./game";
 
 export interface Message { entity: "player" | "other", text: string, actionPaths?: Map<string,Array<Message>> };
 
@@ -10,7 +11,7 @@ export class Dialog {
     private messageToShow: Message | null = null;
     private actionPathSubscription: Subscription | null = null;
 
-    constructor(private messages: Array<Message>, private player: Player, private entity: DummyNPC) { }
+    constructor(private game: Game, private messages: Array<Message>, private player: Player, private entity: DummyNPC) { }
 
     public getNextMessage(takenPath?: string): boolean {
         if (takenPath) {
@@ -33,7 +34,7 @@ export class Dialog {
         if (this.messageToShow?.entity === "other") {
             this.actionPathSubscription?.unsubscribe();
             this.actionPathSubscription = null;
-            const speechBubble = new SpeechBubble(this.entity.x, this.entity.y, "white", this.messageToShow.text);
+            const speechBubble = new SpeechBubble(this.game, this.entity.x, this.entity.y, "white", this.messageToShow.text);
             // this.actionPathSubscription = speechBubble.onActionPathTaken.subscribe(actionPaths => {
             //     this.messages = actionPaths;
             //     this.dialogIndex = 0;
@@ -47,7 +48,7 @@ export class Dialog {
 
     public getSpeechBubbleForPlayer(): SpeechBubble | null {
         if (this.messageToShow?.entity === "player") {
-            return new SpeechBubble(this.player.x, this.player.y, "#FFBBBB", this.messageToShow.text);
+            return new SpeechBubble(this.game, this.player.x, this.player.y, "#FFBBBB", this.messageToShow.text);
         }
         return null;
     }

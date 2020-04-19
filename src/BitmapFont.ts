@@ -104,6 +104,15 @@ export class BitmapFont {
         }
     }
 
+    public measureText(text: string): { width: number, height: number } {
+        let width = 0;
+        for (var char of text) {
+            const index = this.getCharIndex(char);
+            width += this.charWidths[index] + 1;
+        }
+        return { width, height: this.charHeight };
+    }
+
     public drawTextWithOutline(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, outlineColor: string, align = 0) {
         const outlineWidth = 1;
 

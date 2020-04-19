@@ -73,7 +73,7 @@ export class Player extends PhysicsEntity {
     public multiJump = false;
     private usedDoubleJump = false;
 
-    public speechBubble = new SpeechBubble(this.x, this.y, "white");
+    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
     public dialogActive = false;
 
     private dialogRange = 50;

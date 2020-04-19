@@ -21,7 +21,7 @@ export class Stone extends NPC {
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/stone.png"), 3, 1);
-        this.scriptedDialog = new ScriptedDialog(this, dialogData);
+        this.scriptedDialog = new ScriptedDialog(this.game, this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

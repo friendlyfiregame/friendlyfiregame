@@ -11,7 +11,7 @@ export class DummyNPC extends NPC {
     }
 
     async load(): Promise<void> {
-        this.scriptedDialog = new ScriptedDialog(this, dialogData);
+        this.scriptedDialog = new ScriptedDialog(this.game, this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
