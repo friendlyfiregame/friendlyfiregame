@@ -10,6 +10,8 @@ export const GRAVITY = 35;
 /** Gravity for short jumps (while flying upwards, after player releases jump key) in m/s² */
 export const SHORT_JUMP_GRAVITY = 70;
 
+/** Drowning velocity in meters per second. */
+export const DROWNING_VELOCITY = -1;
 
 /** Maximum movement speed of the player in m/s */
 export const MAX_PLAYER_SPEED = 5;

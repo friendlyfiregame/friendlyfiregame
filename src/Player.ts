@@ -52,6 +52,9 @@ export class Player extends PhysicsEntity {
     public jumpDown: boolean = false;
     private debug = false;
     private jumpKeyPressed: boolean | null = false;
+    private drowning = 0;
+    private readonly startX: number;
+    private readonly startY: number;
 
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
@@ -62,6 +65,8 @@ export class Player extends PhysicsEntity {
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+        this.startX = x;
+        this.startY = y;
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
         this.setMaxVelocity(MAX_PLAYER_SPEED);
@@ -158,8 +163,26 @@ export class Player extends PhysicsEntity {
         this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
     }
 
+    private respawn() {
+        this.x = this.startX;
+        this.y = this.startY;
+        this.direction = -1;
+        this.setVelocity(0, 0);
+    }
+
     update(dt: number): void {
         super.update(dt);
+
+        const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
+        if (isDrowning) {
+            this.setVelocityX(0);
+            this.drowning += dt;
+            if (this.drowning > 2) {
+                this.respawn();
+            }
+        } else {
+            this.drowning = 0;
+        }
 
         const world = this.game.world;
         const wasFlying = this.flying;
@@ -171,15 +194,17 @@ export class Player extends PhysicsEntity {
             this.moveLeft = false;
         }
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
-        if (this.moveRight) {
-            this.accelerateX(acceleration * dt);
-        } else if (this.moveLeft) {
-            this.accelerateX(-acceleration * dt);
-        } else {
-            if (this.getVelocityX() > 0) {
-                this.decelerateX(acceleration * dt);
+        if (!isDrowning) {
+            if (this.moveRight) {
+                this.accelerateX(acceleration * dt);
+            } else if (this.moveLeft) {
+                this.accelerateX(-acceleration * dt);
             } else {
-                this.decelerateX(-acceleration * dt);
+                if (this.getVelocityX() > 0) {
+                    this.decelerateX(acceleration * dt);
+                } else {
+                    this.decelerateX(-acceleration * dt);
+                }
             }
         }
 
@@ -191,7 +216,7 @@ export class Player extends PhysicsEntity {
             if (this.getVelocityY() > 0) {
                 this.spriteIndex = SpriteIndex.JUMP;
                 this.flying = true;
-            } else if (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10) {
+            } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
                 this.spriteIndex = SpriteIndex.FALL;
                 this.flying = true;
             } else {
@@ -238,7 +263,7 @@ export class Player extends PhysicsEntity {
             const world = this.game.world;
             const height = world.getHeight();
             collidedWith = col = world.collidesWith(this.x, this.y, [ this ],
-                this.jumpDown ? [ Environment.PLATFORM ] : []);
+                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
             while (this.y < height && col) {
                 pulled++;
                 this.y++;
@@ -272,7 +297,8 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.game.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ], [ Environment.PLATFORM ])) {
+        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
+                [ Environment.PLATFORM, Environment.WATER ])) {
             pulled++;
             this.y--;
         }
@@ -284,13 +310,13 @@ export class Player extends PhysicsEntity {
         const world = this.game.world;
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
                 this.x--;
                 pulled++;
             }
         } else {
             while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
                 this.x++;
                 pulled++;
             }
@@ -311,7 +337,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    getGravity() {
+    protected getGravity() {
         if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
             return SHORT_JUMP_GRAVITY;
         } else {
