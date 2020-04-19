@@ -254,7 +254,7 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.game.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ Environment.PLATFORM ])) {
+        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ], [ Environment.PLATFORM ])) {
             pulled++;
             this.y--;
         }
@@ -266,13 +266,13 @@ export class Player extends PhysicsEntity {
         const world = this.game.world;
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
                 this.x--;
                 pulled++;
             }
         } else {
             while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
                 this.x++;
                 pulled++;
             }

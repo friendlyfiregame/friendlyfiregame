@@ -3,13 +3,13 @@ import { PIXEL_PER_METER } from "./constants";
 import { Environment } from "./World";
 import { Entity, entity } from "./Entity";
 import { now } from "./util";
+import { PhysicsEntity } from "./PhysicsEntity";
 
 @entity("cloud")
-export class Cloud extends Entity implements CollidableGameObject {
-    public movement = 0;
-
+export class Cloud extends PhysicsEntity implements CollidableGameObject {
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 5  * PIXEL_PER_METER, 0.75 * PIXEL_PER_METER);
+        this.setFloating(true);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -26,11 +26,14 @@ export class Cloud extends Entity implements CollidableGameObject {
 
     update(dt: number): void {
         if (now() % 5000 > 2500) {
-            this.movement = 75 * dt;
+            // this.movementX = 75 * dt;
+            // this.setVelocityX(2);
+            this.setVelocityY(1);
         } else {
-            this.movement = -75 * dt;
+            // this.setVelocityX(-2);
+            this.setVelocityY(-1);
         }
-        this.x += this.movement;
+        super.update(dt);
     }
 
     collidesWith(x: number, y: number, ignore?: Environment[]): number {

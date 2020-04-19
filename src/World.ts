@@ -68,9 +68,9 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
      *         specific meaning which isn't defined yet).
      */
-    public collidesWith(x: number, y: number, ignore?: Environment[]): number {
+    public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore?: Environment[]): number {
         for (const gameObject of this.game.gameObjects) {
-            if (gameObject !== this && isCollidableGameObject(gameObject)) {
+            if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y, ignore);
                 if (environment !== Environment.AIR) {
                     return environment;
@@ -89,9 +89,10 @@ export class World implements GameObject {
         return this.collisionMap[index];
     }
 
-    public getObjectAt(x: number, y: number, ignore?: Environment[]): GameObject | null {
+    public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore?: Environment[]):
+            GameObject | null {
         for (const gameObject of this.game.gameObjects) {
-            if (gameObject !== this && isCollidableGameObject(gameObject)) {
+            if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y, ignore);
                 if (environment !== Environment.AIR) {
                     return gameObject;
@@ -109,9 +110,10 @@ export class World implements GameObject {
      * @param height - The height of the line to check
      * @return 0 if no collision. Type of first collision along the line otherwise.
      */
-    public collidesWithVerticalLine(x: number, y: number, height: number, ignore?: Environment[]): number {
+    public collidesWithVerticalLine(x: number, y: number, height: number, ignoreObjects?: GameObject[],
+            ignore?: Environment[]): number {
         for (let i = 0; i < height; i++) {
-            const collision = this.collidesWith(x, y - i, ignore);
+            const collision = this.collidesWith(x, y - i, ignoreObjects, ignore);
             if (collision) {
                 return collision;
             }
@@ -126,8 +128,8 @@ export class World implements GameObject {
      * @param y - Y coordinate of current position.
      * @return The Y coordinate of the ground below the given coordinate.
      */
-    public getGround(x: number, y: number, ignore?: Environment[]): number {
-        while (y > 0 && !this.collidesWith(x, y, ignore)) {
+    public getGround(x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]): number {
+        while (y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)) {
             y--;
         }
         return y;
