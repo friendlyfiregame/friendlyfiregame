@@ -23,10 +23,6 @@ body {
     image-rendering: crisp-edges;
 }
 
-#gameCanvas:hover {
-    cursor: none;
-}
-
 #gameCanvas:focus {
     outline: 0;
 }
