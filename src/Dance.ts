@@ -19,6 +19,7 @@ export class Dance {
     private lastSuccess = 0;
     private performance: Record<string, boolean>[] = [];
     private currentIndex = 0;
+    private success = false;
 
     constructor(
         private game: Game,
@@ -46,6 +47,10 @@ export class Dance {
 
     }
 
+    public wasSuccessful(): boolean {
+        return this.success;
+    }
+
     private begin() {
         this.openTime = this.game.gameTime;
         this.startTime = this.openTime + this.warmupBeats;
@@ -56,6 +61,12 @@ export class Dance {
         this.lastSuccess = -Infinity;
         this.currentIndex = 0;
         this.performance = this.performance.map(() => ({}));
+        this.success = false;
+    }
+
+    public setPosition(x: number, y: number) {
+        this.x = x;
+        this.y = y;
     }
 
     // Called by parent
@@ -144,6 +155,7 @@ export class Dance {
         }
         if (this.progress >= this.duration) {
             // Done! Success! Yeah!
+            this.success = true;
             return true;
         }
         if (this.currentKey) {
