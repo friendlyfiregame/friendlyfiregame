@@ -12,10 +12,11 @@ import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd } from './util';
-import { entity, Entity } from "./Entity";
+import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
 import { Stone } from "./Stone";
+import { Cloud } from './Cloud';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -63,10 +64,12 @@ export class Player extends PhysicsEntity {
     private dance: Dance | null = null;
     private carrying: PhysicsEntity | null = null;
 
-    private interactionRange = 35;
+    public speechBubble = new SpeechBubble(this.x, this.y, "white");
+    public dialogActive = false;
+
+    private dialogRange = 50;
+    private dialogTipText = "press 'Enter' or 'e' to talk";
     private closestNPC: NPC | null = null;
-    public activeSpeechBubble: SpeechBubble | null = null;
-    public isInDialog = false;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private drowningSound!: Sound;
@@ -120,27 +123,27 @@ export class Player extends PhysicsEntity {
         if (!this.game.camera.isOnTarget() || event.repeat) {
             return;
         }
-        if ((event.key === "ArrowRight" || event.key === "d") && !this.isInDialog) {
+        if ((event.key === "ArrowRight" || event.key === "d") && !this.dialogActive) {
             this.direction = 1;
             this.moveRight = true;
             this.moveLeft = false;
-        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.isInDialog) {
+        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.dialogActive) {
             this.direction = -1;
             this.moveLeft = true;
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
             if (this.closestNPC && this.closestNPC.hasDialog) {
-                this.closestNPC.startDialog();
+                this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && !this.flying
-                && !this.isInDialog) {
+                && !this.dialogActive) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
             this.jumpKeyPressed = true;
             this.jumpingSound.stop();
             this.jumpingSound.play();
-        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.isInDialog) {
+        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.dialogActive) {
             this.jumpDown = true;
-        } else if (event.key === "t" && !this.isInDialog) {
+        } else if (event.key === "t" && !this.dialogActive) {
             if (this.carrying) {
                 this.carrying.setVelocity(5 * this.direction, 5);
                 this.carrying = null;
@@ -153,7 +156,7 @@ export class Player extends PhysicsEntity {
             if (!this.dance) {
                 this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
             }
-        } else if (event.key === "p" && !this.isInDialog && !this.carrying) {
+        } else if (event.key === "p" && !this.dialogActive && !this.carrying) {
             this.carrying = this.game.stone;
         }
     }
@@ -200,15 +203,20 @@ export class Player extends PhysicsEntity {
         if (this.dance) {
             this.dance.draw(ctx);
         }
+
+        if (this.dialogActive && this.speechBubble.message !== "") {
+            this.speechBubble.draw(ctx);
+        }
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = "white";
-        ctx.strokeText("press 'Enter' to talk", this.x - (this.width / 2), -this.y + 20);
+
+        const textWidth = ctx.measureText(this.dialogTipText).width;
+        ctx.strokeText(this.dialogTipText, this.x - (this.width / 2) - (textWidth / 2), -this.y + 20);
         ctx.restore();
-        this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
     }
 
     private respawn() {
@@ -220,6 +228,7 @@ export class Player extends PhysicsEntity {
 
     update(dt: number): void {
         super.update(dt);
+        this.speechBubble.update(this.x, this.y);
 
         if (this.carrying) {
             this.carrying.x = this.x;
@@ -293,7 +302,7 @@ export class Player extends PhysicsEntity {
         }
 
         // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.interactionRange);
+        const closestEntity = this.getClosestEntityInRange(this.dialogRange);
         if (closestEntity instanceof NPC) {
             this.closestNPC = closestEntity;
         } else {
@@ -316,8 +325,16 @@ export class Player extends PhysicsEntity {
 
         // Dance
         if (this.dance) {
+            this.dance.setPosition(this.x, this.y);
             const done = this.dance.update(dt);
             if (done) {
+                // On cloud -> make it rain
+                if (this.dance.wasSuccessful()) {
+                    const ground = this.getGround();
+                    if (ground && ground instanceof Cloud) {
+                        ground.startRain(15);
+                    }
+                }
                 this.dance = null;
             }
         }

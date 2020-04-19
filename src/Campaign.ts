@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs';
 import { Game } from './game';
+import { NPC } from './NPC';
 
-export type CampaignState = "start" | "finished"
+export type CampaignState = "start" | "finished";
 
 export class Campaign {
     public statesChanged$ = new Subject<CampaignState[]>();
@@ -13,6 +14,7 @@ export class Campaign {
 
     public setStates(states: CampaignState[]) {
         this.states = states;
+        this.statesChanged$.next(this.states);
     }
 
     public addState(state: CampaignState) {
@@ -38,5 +40,13 @@ export class Campaign {
                 this.addState("finished");
                 break;
         }
+    }
+
+    public async startPlayerDialogWithNPC(npc: NPC) {
+        this.game.player.dialogActive = true;
+        this.game.player.speechBubble.setMessage("heeey");
+        // TODO modify focus to stop focus on a callback
+        await this.game.camera.focusOn(10, npc.x, npc.y);
+        this.game.player.dialogActive = false;
     }
 }

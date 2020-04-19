@@ -1,9 +1,9 @@
 {
     "greetings": {
         "start":  [
-            "Hi",
-            "Hoi",
-            "Hey"
+            "Hi?",
+            "Hoi\nWaddup?",
+            "Hey!\nYou!\nOver here..."
         ],
         "finished": [
             "Bye",

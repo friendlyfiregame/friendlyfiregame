@@ -1,20 +1,33 @@
 import { NPC } from './NPC';
-import texts, { ScriptedDialogJSON } from "../assets/dummy.texts.json";
+import { ScriptedDialogJSON, DialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from './SpeechBubble';
-import { Vector2, rndItem } from './util';
+import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
+import { GameObject } from './game';
 
-export class ScriptedDialog {
-    public static Texts = texts;
+export class ScriptedDialog implements GameObject {
+    public get hasPlayerDialog(): boolean {
+        return !!this.currentMatchingDialog;
+    }
+    public currentMatchingDialog: DialogJSON | null = null;
 
     public greetingRange = 120;
-    public greetingOffset: Vector2 = {x: 0, y: 40};
-    private currentGreeting: string = "";
-    private validGreetings: string[] = [];
+    private get currentGreeting () {
+        return this.speechBubble.message;
+    }
+    private set currentGreeting(message: string) {
+        this.speechBubble.setMessage(message);
+    }
+    private currentMatchingGreetings: string[] = [];
     private greetingActive = false;
     /* used to prevent multiple greetings, e.g after a dialog has ended */
     private greetingAlreadyShown = false;
-    private greetingBubble: SpeechBubble;
+
+    private speechBubble = new SpeechBubble(
+        this.npc.x,
+        this.npc.y,
+        "white"
+    );
 
     private dialogActive = false;
 
@@ -23,32 +36,28 @@ export class ScriptedDialog {
     }
 
     constructor(public npc: NPC, private dialogData: ScriptedDialogJSON) {
-        this.updateGreetings(this.campaign.states);
-        this.greetingBubble = new SpeechBubble(
-            this.npc.game,
-            this.npc.x + this.greetingOffset.x,
-            this.npc.y + this.greetingOffset.y,
-            "white",
-            this.currentGreeting
-        );
-        this.campaign.statesChanged$.subscribe(this.updateGreetings.bind(this))
+        this.updateMatchingData(this.campaign.states);
+        this.campaign.statesChanged$.subscribe(this.updateMatchingData.bind(this))
+    }
+
+    async load() {
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
         if (this.greetingActive && this.currentGreeting !== "") {
-            this.greetingBubble.message = this.currentGreeting;
-            this.greetingBubble.draw(ctx, this.npc.x + this.greetingOffset.x, this.npc.y + this.greetingOffset.y);
+            this.speechBubble.draw(ctx);
         }
     }
 
     public update(dt: number) {
+        this.speechBubble.update(this.npc.x, this.npc.y);
         const isInRange = this.npc.game.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
+            this.setRandomGreeting();
             this.greetingActive = this.greetingAlreadyShown = true;
         } else if (!isInRange) {
             this.closeAllSpeechBubbles();
             this.greetingAlreadyShown = false;
-            this.setRandomGreeting();
         }
     }
 
@@ -58,45 +67,50 @@ export class ScriptedDialog {
     }
 
     private setRandomGreeting() {
-        if (this.validGreetings.length > 0) {
-            this.currentGreeting = rndItem(this.validGreetings);
+        if (this.currentMatchingGreetings.length > 0) {
+            this.currentGreeting = rndItem(this.currentMatchingGreetings);
         } else {
             this.currentGreeting = "";
         }
     }
 
-    private updateGreetings(states: CampaignState[]) {
-        const greetingStates: string[][] = [];
-        for (const key in this.dialogData.greetings) {
-            greetingStates.push(key.split(" "));
+    private updateMatchingData(states: CampaignState[]) {
+        const matchingGreetingSelector = this.findMatchingSelectorByStates(this.dialogData.greetings, states);
+        if (matchingGreetingSelector) {
+            this.currentMatchingGreetings = this.dialogData.greetings[matchingGreetingSelector];
+            this.setRandomGreeting();
+        } else {
+            this.greetingActive = false;
+            this.currentMatchingGreetings = [];
         }
+        const matchingDialogSelector = this.findMatchingSelectorByStates(this.dialogData.dialogs, states);
+        if (matchingDialogSelector) {
+            this.currentMatchingDialog = this.dialogData.dialogs[matchingDialogSelector];
+        } else {
+            this.currentMatchingDialog = null
+            this.dialogActive = false;
+        }
+    }
 
-        let validGreetings: string[] = [];
-
-        greetingStates.sort((a, b) => { return b.length - a.length; });
-        for (const greetingState of greetingStates) {
-            if (containsArray(greetingState, states)) {
-                validGreetings = this.dialogData.greetings[greetingState.join(" ")];
+    private findMatchingSelectorByStates(data: {[key: string]: any}, currentCampaignStates: CampaignState[]): string | null {
+        const stateSelectors: string[][] = [];
+        for (const key in data) {
+            stateSelectors.push(key.split(" "));
+        }
+        let bestMatchingSelector: string | null = null;
+        // search for highes selector "specifity" first
+        stateSelectors.sort((a, b) => { return b.length - a.length; });
+        for (const selector of stateSelectors) {
+            if (containsArray(currentCampaignStates, selector)) {
+                bestMatchingSelector = selector.join(" ");
                 break;
             }
         }
-        // when no high specifity state is found, sort by least specifity and use the first found value
-        if (validGreetings.length === 0) {
-            greetingStates.sort((a, b) => { return a.length - b.length; });
-            for (const greetingState of greetingStates) {
-                if (containsArray(greetingStates, states)) {
-                    validGreetings = this.dialogData.greetings[greetingState.join(" ")];
-                    break;
-                }
-            }
-        }
-
-        this.validGreetings = validGreetings;
-        this.setRandomGreeting();
+        return bestMatchingSelector;
     }
 }
 
-/* returns true when arr1 is contained in arr2 */
+/* returns true when arr2 is contained in arr1 */
 function containsArray(arr1: any[], arr2: any[]) {
-    return arr1.every(value => arr2.includes(value));
+    return arr2.every(value => arr1.indexOf(value) !== -1);
 }

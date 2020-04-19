@@ -2,6 +2,7 @@ import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
 import { Environment } from "./World";
 import { Player } from "./Player";
+import { GameObject } from './game';
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -9,6 +10,7 @@ export abstract class PhysicsEntity extends Entity {
     private maxVelocityX = Infinity;
     private maxVelocityY = Infinity;
     private floating = false;
+    private ground: GameObject | null = null;
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
@@ -121,6 +123,7 @@ export abstract class PhysicsEntity extends Entity {
             this.x += ground.getVelocityX() * PIXEL_PER_METER * dt;
             this.y += ground.getVelocityY() * PIXEL_PER_METER * dt;
         }
+        this.ground = ground;
 
         this.updatePosition(
             this.x + this.velocityX * PIXEL_PER_METER * dt,
@@ -145,5 +148,9 @@ export abstract class PhysicsEntity extends Entity {
 
     protected getGravity() {
         return GRAVITY;
+    }
+
+    public getGround(): GameObject | null {
+        return this.ground;
     }
 }

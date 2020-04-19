@@ -3,11 +3,12 @@ import { ScriptedDialog } from './ScriptedDialog';
 import { PhysicsEntity } from "./PhysicsEntity";
 
 export abstract class NPC extends PhysicsEntity {
-    public hasDialog = false;
     public face: Face | null = null;
     public scriptedDialog: ScriptedDialog | null = null;
 
-    abstract startDialog(): void;
+    public get hasDialog(): boolean {
+        return this.scriptedDialog?.hasPlayerDialog ?? false;
+    }
 
     protected drawFace(ctx: CanvasRenderingContext2D): void {
         if (this.face) {

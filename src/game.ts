@@ -105,7 +105,7 @@ export class Game {
         this.stone = this.getGameObject(Stone);
 
         // testing dummy
-        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y),)
+        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y - this.player.height),)
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
