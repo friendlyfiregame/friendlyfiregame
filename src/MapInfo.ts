@@ -1,7 +1,7 @@
 import { Vector2 } from "./util";
 import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/map.json";
 
-export interface NPCInfo {
+export interface GameObjectInfo {
     x: number;
     y: number;
     name: string;
@@ -16,8 +16,8 @@ export class MapInfo {
         return this.getLayer("objectgroup", "objects")?.objects.find(object => object.name === name) ?? null;
     }
 
-    private getObjects(type: string): MapObjectJSON[] {
-        return this.getLayer("objectgroup", "objects")?.objects.filter(object => object.type === type) ?? [];
+    private getObjects(type?: string): MapObjectJSON[] {
+        return this.getLayer("objectgroup", "objects")?.objects.filter(object => !type || object.type === type) ?? [];
     }
 
     public getPlayerStart(): Vector2 {
@@ -30,9 +30,9 @@ export class MapInfo {
         }
     }
 
-    public getNPCs(): NPCInfo[] {
+    public getGameObjectInfos(): GameObjectInfo[] {
         const mapHeight = this.getMapSize().height;
-        return this.getObjects("npc").map(object => ({
+        return this.getObjects().map(object => ({
             name: object.name,
             x: object.x,
             y: mapHeight - object.y

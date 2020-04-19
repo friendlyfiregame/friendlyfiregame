@@ -6,6 +6,24 @@ export interface EntityDistance {
     distance: number;
 }
 
+type EntityConstructor = new (game: Game, x: number, y: number) => Entity;
+
+const entities = new Map<string, EntityConstructor>();
+
+export function entity(name: string): (target: EntityConstructor) => void {
+    return (type: EntityConstructor) => {
+        entities.set(name, type);
+    };
+}
+
+export function createEntity(name: string, game: Game, x: number, y: number): Entity {
+    const constructor = entities.get(name);
+    if (!constructor) {
+        throw new Error("Entity not found: " + name);
+    }
+    return new constructor(game, x, y);
+}
+
 export abstract class Entity implements GameObject {
     constructor(
         public game: Game,

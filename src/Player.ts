@@ -12,6 +12,7 @@ import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd, now } from './util';
+import { entity } from "./Entity";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -33,6 +34,7 @@ const groundColors = [
     "#908784"
 ];
 
+@entity("player")
 export class Player extends PhysicsEntity {
     private flying = false;
     private direction = 1;

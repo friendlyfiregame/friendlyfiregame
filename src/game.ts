@@ -1,6 +1,5 @@
 import { World } from "./World";
 import { Player } from "./Player";
-import { DummyNPC } from './DummyNPC';
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
 import { clamp, now } from './util';
@@ -8,6 +7,8 @@ import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
+import { createEntity } from "./Entity";
+import "./DummyNPC";
 
 const gameWidth = 480;
 const gameHeight = 270;
@@ -67,28 +68,29 @@ export class Game {
         this.updateCanvasSize();
         window.addEventListener("resize", () => this.updateCanvasSize());
         this.mapInfo = new MapInfo();
-        const playerStart = this.mapInfo.getPlayerStart();
-        this.player = new Player(this, playerStart.x, playerStart.y);
         this.boundLoop = this.loop.bind(this);
         this.particles = particles;
-        this.camera = new Camera(this, this.player);
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            ...this.mapInfo.getNPCs().map(npc => {
-                switch (npc.name) {
-                    case "fire":
-                        return this.fire = new Fire(this, npc.x, npc.y);
-                    default:
-                        return new DummyNPC(this, npc.x, npc.y);
-                }
-            }),
-            this.player
+            ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y))
         ];
+        this.player = this.getGameObject(Player);
+        this.fire =this.getGameObject(Fire);
+        this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
+    }
+
+    private getGameObject<T>(type: new (...args: any[]) => T): T {
+        for (const gameObject of this.gameObjects) {
+            if (gameObject instanceof type) {
+                return gameObject;
+            }
+        }
+        throw new Error(`Game object of type ${type.name} not found`);
     }
 
     private async load() {
