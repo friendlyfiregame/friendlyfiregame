@@ -30,18 +30,6 @@
          "objects":[
                 {
                  "height":0,
-                 "id":1,
-                 "name":"player",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1479,
-                 "y":1486
-                }, 
-                {
-                 "height":0,
                  "id":4,
                  "name":"stone",
                  "point":true,
@@ -157,8 +145,20 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":997,
-                 "y":1488
+                 "x":987,
+                 "y":1468
+                }, 
+                {
+                 "height":0,
+                 "id":1,
+                 "name":"player",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1465,
+                 "y":1480
                 }],
          "opacity":1,
          "type":"objectgroup",
