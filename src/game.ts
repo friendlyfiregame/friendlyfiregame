@@ -124,7 +124,7 @@ export class Game {
 
     private async load() {
         this.music = [
-            new Sound("music/music-2.mp3")
+            new Sound("music/theme_01.mp3")
         ];
         await this.loadFonts();
         await Face.load();
