@@ -33,12 +33,12 @@ export class Dialog {
         if (this.messageToShow?.entity === "other") {
             this.actionPathSubscription?.unsubscribe();
             this.actionPathSubscription = null;
-            const speechBubble = new SpeechBubble(this.entity.game, this.entity.x, this.entity.y + 40, "white", true, this.messageToShow.text, this.messageToShow.actionPaths);
-            this.actionPathSubscription = speechBubble.onActionPathTaken.subscribe(actionPaths => {
-                this.messages = actionPaths;
-                this.dialogIndex = 0;
-                this.messageToShow = this.messages[0];
-            });
+            const speechBubble = new SpeechBubble(this.entity.game, this.entity.x, this.entity.y + 40, "white", this.messageToShow.text);
+            // this.actionPathSubscription = speechBubble.onActionPathTaken.subscribe(actionPaths => {
+            //     this.messages = actionPaths;
+            //     this.dialogIndex = 0;
+            //     this.messageToShow = this.messages[0];
+            // });
 
             return speechBubble;
         }
@@ -47,7 +47,7 @@ export class Dialog {
 
     public getSpeechBubbleForPlayer(): SpeechBubble | null {
         if (this.messageToShow?.entity === "player") {
-            return new SpeechBubble(this.player.game, this.player.x, this.player.y + 40, "#FFBBBB", true, this.messageToShow.text);
+            return new SpeechBubble(this.player.game, this.player.x, this.player.y + 40, "#FFBBBB", this.messageToShow.text);
         }
         return null;
     }
