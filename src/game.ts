@@ -129,11 +129,11 @@ export class Game {
         }
     }
 
-    private playMusicTrack() {
+    private async playMusicTrack(): Promise<void> {
         const music = this.music[rndInt(0, 1)];
         this.music.forEach(music => music.stop());
         music.setLoop(true);;
-        music.play();
+        return music.play();
     };
 
     private async loadFonts() {
@@ -149,7 +149,20 @@ export class Game {
 
     private start() {
         this.lastUpdateTime = now();
-        this.playMusicTrack();
+
+        // Start music after pressing a key or mouse button because Chrome doesn't want to autostart music
+        const startMusic = async () => {
+            try {
+                await this.playMusicTrack();
+                document.removeEventListener("keydown", startMusic);
+                document.removeEventListener("mousedown", startMusic);
+            } catch (e) {
+                document.addEventListener("keydown", startMusic);
+                document.addEventListener("mousedown", startMusic);
+            }
+        }
+        startMusic();
+
         this.loop();
     }
 
