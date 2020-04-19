@@ -32,7 +32,6 @@ export class FireGfx {
     public static async load(): Promise<void> {
         const gradientImg = await loadImage("gradients/fire.png");
         this.gradient = ColorGradient.fromImage(gradientImg);
-        console.log(this.gradient);
     }
 
     private init() {
