@@ -6,6 +6,7 @@ import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
+import { loadImage } from './graphics';
 
 // const fireColors = [
 //     "#603015",
@@ -30,6 +31,7 @@ export class Fire extends NPC {
     private averageParticleDelay = 0.1;
 
     private fireGfx!: FireGfx;
+    private smokeImage!: HTMLImageElement;
 
     // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
@@ -41,15 +43,15 @@ export class Fire extends NPC {
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
             velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
-            color: () => rndItem(smokeColors),
-            size: () => rndInt(14, 24),
-            gravity: {x: 0, y: 10},
+            color: () => this.smokeImage,
+            size: () => rndInt(24, 32),
+            gravity: {x: 0, y: 8},
             lifetime: () => rnd(5, 8),
-            alpha: () => rnd(0.3, 0.7),
+            alpha: () => rnd(0.2, 0.45),
             angleSpeed: () => rnd(-1, 1) * 1.5,
             blendMode: "source-over",
             alphaCurve: valueCurves.cos(0.1, 0.5),
-            breakFactor: 0.9
+            breakFactor: 0.85
         })
         // this.fireEmitter = particles.createEmitter({
         //     position: {x: this.x, y: this.y},
@@ -80,6 +82,7 @@ export class Fire extends NPC {
 
     async load(): Promise<void> {
         this.fireGfx = new FireGfx();
+        this.smokeImage = await loadImage("sprites/smoke.png");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -103,7 +106,7 @@ export class Fire extends NPC {
             if (rnd() < 0.5) {
                 this.sparkEmitter.emit();
             }
-            if (rnd() < 0.25) {
+            if (rnd() < 0.32) {
                 this.smokeEmitter.emit();
             }
             particleChance -= rnd() * this.averageParticleDelay;

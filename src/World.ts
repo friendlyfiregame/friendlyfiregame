@@ -4,7 +4,8 @@ import { GameObject, Game, isCollidableGameObject } from "./game";
 export enum Environment {
     AIR = 0,
     SOLID = 0xff000000,
-    PLATFORM = 0xff7f7f7f
+    PLATFORM = 0xff7f7f7f,
+    BOUNCE = 0xffff0000
 }
 
 export class World implements GameObject {

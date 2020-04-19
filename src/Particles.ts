@@ -118,6 +118,10 @@ export class ParticleEmitter {
         this.y = y;
     }
 
+    public clear() {
+        this.particles = [];
+    }
+
     public emit(count = 1): void {
         for (let i = 0; i < count; i++) {
             this.emitSingle();
@@ -221,7 +225,7 @@ export class Particle {
         }
         if (this.imageOrColor instanceof HTMLImageElement) {
             // Image
-            // TODO
+            ctx.drawImage(this.imageOrColor, -this.halfSize, -this.halfSize, this.size, this.size);
         } else {
             // Color
             ctx.fillStyle = (this.imageOrColor as string);
