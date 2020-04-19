@@ -1,0 +1,26 @@
+
+{
+    "entry": [
+        "This is the start of the game! Bla!",
+        ">You are dumb! @dumb !zoomIn !worried",
+        ">End this now! @done !angry !state finish",
+        ">Bye"
+    ],
+    "dumb": [
+        "HOW DARE YOU TALK TO ME LIKE THAT",
+        ">Like that: you dumb @dumber !angry",
+        ">I'm so sorry @ok !amused"
+    ],
+    "dumber": [
+        "I don't talk to you! @grumpyEntry !end"
+    ],
+    "grumpyEntry": [
+        "You again!",
+        "What do you want? !zoomIn",
+        ">I'm sorry, didn't mean it",
+        ">(more mean answers) @meanAnswers"
+    ],
+    "meanAnswers": [
+        ">Screw you!!"
+    ]
+}
