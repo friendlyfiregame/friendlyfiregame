@@ -5,6 +5,8 @@ import { loadImage } from "./graphics";
 import { STONE_ANIMATION } from "./constants";
 import { NPC } from './NPC';
 import { EyeType, Face } from './Face';
+import { ScriptedDialog } from './ScriptedDialog';
+import dialogData from "../assets/stone.texts.json";
 
 @entity("stone")
 export class Stone extends NPC {
@@ -19,6 +21,7 @@ export class Stone extends NPC {
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/stone.png"), 3, 1);
+        this.scriptedDialog = new ScriptedDialog(this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -30,13 +33,12 @@ export class Stone extends NPC {
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
         this.face?.draw(ctx);
+        this.drawDialog(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
         this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
-    }
-
-    startDialog(): void {
+        this.updateDialog(dt);
     }
 }
