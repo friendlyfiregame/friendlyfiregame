@@ -4,6 +4,7 @@ import { PIXEL_PER_METER } from './constants';
 import { rnd, rndItem, rndInt } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face } from './Face';
+import { FireGfx } from './FireGfx';
 
 const fireColors = [
     "#603015",
@@ -26,7 +27,9 @@ export class Fire extends NPC {
 
     private averageParticleDelay = 0.1;
 
-    private fireEmitter: ParticleEmitter;
+    private fireGfx!: FireGfx;
+
+    // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
 
@@ -46,17 +49,17 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.cos(0.1, 0.5),
             breakFactor: 0.9
         })
-        this.fireEmitter = particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-            velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(-2, 3) }),
-            color: () => rndItem(fireColors),
-            size: () => rndInt(10, 15),
-            gravity: {x: 0, y: 10},
-            lifetime: () => rnd(2, 4),
-            blendMode: "screen",
-            alphaCurve: valueCurves.trapeze(0.05, 0.1)
-        });
+        // this.fireEmitter = particles.createEmitter({
+        //     position: {x: this.x, y: this.y},
+        //     offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
+        //     velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(-2, 3) }),
+        //     color: () => rndItem(fireColors),
+        //     size: () => rndInt(10, 15),
+        //     gravity: {x: 0, y: 10},
+        //     lifetime: () => rnd(2, 4),
+        //     blendMode: "screen",
+        //     alphaCurve: valueCurves.trapeze(0.05, 0.1)
+        // });
         this.sparkEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
@@ -73,9 +76,11 @@ export class Fire extends NPC {
 
 
     async load(): Promise<void> {
+        this.fireGfx = new FireGfx();
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        this.fireGfx.draw(ctx, this.x, this.y);
         this.drawFace(ctx);
     }
 
@@ -85,7 +90,7 @@ export class Fire extends NPC {
         }
         let particleChance = dt - rnd() * this.averageParticleDelay;
         while (particleChance > 0) {
-            this.fireEmitter.emit();
+            // this.fireEmitter.emit();
             if (rnd() < 0.12) {
                 this.face?.toggleDirection();
             }
@@ -100,6 +105,7 @@ export class Fire extends NPC {
             }
             particleChance -= rnd() * this.averageParticleDelay;
         }
+        this.fireGfx.update(dt);
     }
 
     startDialog(): void {
