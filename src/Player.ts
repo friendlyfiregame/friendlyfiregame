@@ -29,7 +29,8 @@ enum SpriteIndex {
 const groundColors = [
     "#806057",
     "#504336",
-    "#3C8376"
+    "#3C8376",
+    "#908784"
 ];
 
 export class Player extends PhysicsEntity {
@@ -54,9 +55,9 @@ export class Player extends PhysicsEntity {
         this.setMaxVelocity(MAX_PLAYER_SPEED);
         this.dustEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 10, y: rnd(0.7, 1) * 45 }),
+            velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
-            size: rnd(1, 2),
+            size: rnd(0.5, 1.5),
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
