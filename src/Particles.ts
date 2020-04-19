@@ -225,7 +225,7 @@ export class Particle {
         }
         if (this.imageOrColor instanceof HTMLImageElement) {
             // Image
-            // TODO
+            ctx.drawImage(this.imageOrColor, -this.halfSize, -this.halfSize, this.size, this.size);
         } else {
             // Color
             ctx.fillStyle = (this.imageOrColor as string);
