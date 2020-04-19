@@ -143,8 +143,7 @@ export class Player extends PhysicsEntity {
         }
         if (event.key === "c") {
             if (!this.dance) {
-                this.dance = new Dance(this.game, this.x, this.y - 25, 192,
-                    "1   1   1   2   1   2   1 2 1 2 3   12  12  1221123   3   3   3331212123");
+                this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
             }
         }
     }
@@ -290,7 +289,10 @@ export class Player extends PhysicsEntity {
 
         // Dance
         if (this.dance) {
-            this.dance.update(dt);
+            const done = this.dance.update(dt);
+            if (done) {
+                this.dance = null;
+            }
         }
     }
 

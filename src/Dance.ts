@@ -17,6 +17,8 @@ export class Dance {
     private mistakes = 0;
     private lastMistake = 0;
     private lastSuccess = 0;
+    private performance: Record<string, boolean>[] = [];
+    private currentIndex = 0;
 
     constructor(
         private game: Game,
@@ -26,13 +28,15 @@ export class Dance {
         keys = "", // can contain "1" or "2" for single keys, or "3" for both at once
         private warmupBeats = 2,
         private allowedMistakes = 3,
-        private timeTolerance = 0.5,
+        private timeTolerance = 0.75,
     ){
         this.duration = keys.length;
         this.keys = [];
+        this.performance = [];
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             this.keys[i] = key === " " ? "" : key === "3" ? "12" : key;
+            this.performance[i] = {};
         }
         this.begin();
         this.alphaCurve = valueCurves.cos(0.15);
@@ -50,6 +54,8 @@ export class Dance {
         this.mistakes = 0;
         this.lastMistake = -Infinity;
         this.lastSuccess = -Infinity;
+        this.currentIndex = 0;
+        this.performance = this.performance.map(() => ({}));
     }
 
     // Called by parent
@@ -63,18 +69,27 @@ export class Dance {
                         return;
                     }
                 }
+                const nxt = this.currentIndex + 1;
+                if (this.keys[nxt] && this.keys[nxt].includes(key)) {
+                    if (this.progress - (nxt + 0.5) < this.timeTolerance) {
+                        this.keySuccess(key, nxt);
+                        return
+                    }
+                }
                 this.keyFailure(key);
             }
         }
     }
 
-    private keySuccess(key: string) {
-        this.lastSuccess = this.progress;
-        this.currentKey = this.currentKey.replace(key, "");
-        if (this.currentKey.length === 0) {
-            // Finished key successfully
-            // TODO play sound
-            // TODO particles or something
+    private keySuccess(key: string, index = this.currentIndex) {
+        for (let char of key) {
+            if (index == this.currentIndex) {
+                this.currentKey = this.currentKey.replace(char, "");
+            }
+            this.performance[index][char] = true;
+        }
+        if (index === this.currentIndex && this.currentKey.length === 0 || this.keys[index].length === 0) {
+            this.lastSuccess = this.progress;
         }
     }
 
@@ -85,6 +100,9 @@ export class Dance {
     }
 
     private keyMissed(key: string) {
+        for (let char of key) {
+            this.performance[this.currentIndex][char] = false;
+        }
         this.registerMistake()
     }
 
@@ -103,31 +121,37 @@ export class Dance {
 
 
 
-    public update(dt: number) {
+    public update(dt: number): boolean {
         const time = this.game.gameTime - this.startTime;
-        const prevProgress = this.progress;
         this.progress = time * this.bpm / 60;
+        const prevIndex = this.currentIndex;
+        this.currentIndex = Math.floor(this.progress);
         // Next key?
-        if (Math.floor(this.progress) > Math.floor(prevProgress)) {
+        if (this.currentIndex > prevIndex) {
             // Missed last one?
             if (this.currentKey.length > 0) {
                 this.keyMissed(this.currentKey);
                 this.currentKey = "";
-                return;
+                return false;
             }
             // Proceed
-            this.currentKey = this.keys[Math.floor(this.progress)] || "";
+            this.currentKey = this.keys[this.currentIndex] || "";
+            for (let char of this.currentKey) {
+                if (this.performance[this.currentIndex][char]) {
+                    this.currentKey = this.currentKey.replace(char, "");
+                }
+            }
         }
         if (this.progress >= this.duration) {
-            // Done!
-            // TODO
-            return;
+            // Done! Success! Yeah!
+            return true;
         }
         if (this.currentKey) {
-            this.currentDistanceToIdealTime = Math.abs(this.progress - Math.floor(this.progress) - 0.5);
+            this.currentDistanceToIdealTime = Math.abs(this.progress - (this.currentIndex + 0.5));
         } else {
             this.currentDistanceToIdealTime = 0;
         }
+        return false;
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
@@ -148,13 +172,14 @@ export class Dance {
         }
         if (this.progress - this.lastSuccess < 1) {
             ctx.fillStyle = "green";
-            ctx.globalAlpha = (1 - this.progress + this.lastSuccess) * 0.5;
+            ctx.globalAlpha = (1 - this.progress + this.lastSuccess) * 0.1;
             ctx.fillRect(-w2 + 2, -h2 + 1, w - 4, h);
         }
         // Upcoming keys
         ctx.globalAlpha = 1;
         ctx.textAlign = "center";
         const sweetX = w2 - 16, y1 = -8, y2 = 1;
+        ctx.fillStyle = "black";
         for (let i = Math.floor(this.progress) - 2; i < this.progress + 8; i++) {
             const keys = this.keys[i];
             if (keys) {
@@ -164,12 +189,22 @@ export class Dance {
                 const alpha = this.alphaCurve.get(xp);
                 ctx.globalAlpha = alpha;
                 if (keys.includes("1")) {
-                    ctx.strokeStyle = ctx.fillStyle = "red";
+                    ctx.strokeStyle = "#ff8010";
+                    if (this.performance[i]["1"] != null) {
+                        ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
+                        ctx.fillRect(x - 5, y1, 9, 9);
+                        ctx.fillStyle = "black";
+                    }
                     ctx.strokeRect(x - 5, y1, 9, 9);
                     ctx.fillText("1", x, y1 + 8);
                 }
                 if (keys.includes("2")) {
-                    ctx.strokeStyle = ctx.fillStyle = "blue";
+                    ctx.strokeStyle = "blue";
+                    if (this.performance[i]["2"] != null) {
+                        ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
+                        ctx.fillRect(x - 5, y2, 9, 9);
+                        ctx.fillStyle = "black";
+                    }
                     ctx.strokeRect(x - 5, y2, 9, 9);
                     ctx.fillText("2", x, y2 + 8);
                 }
