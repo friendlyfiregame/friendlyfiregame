@@ -32,6 +32,8 @@ export class Fire extends NPC {
 
     private averageParticleDelay = 0.1;
 
+    private isVisible = true;
+
     private fireGfx!: FireGfx;
     private smokeImage!: HTMLImageElement;
 
@@ -88,6 +90,9 @@ export class Fire extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        if (!this.isVisible) {
+            return;
+        }
         this.fireGfx.draw(ctx, this.x, this.y);
         this.drawFace(ctx);
     }
@@ -96,6 +101,11 @@ export class Fire extends NPC {
         if (this.growth !== 0) {
             this.intensity += this.growth * dt;
         }
+        if (!this.game.camera.isPointVisible(this.x, this.y, 200)) {
+            this.isVisible = false;
+            return;
+        }
+        this.isVisible = true;
         let particleChance = dt - rnd() * this.averageParticleDelay;
         while (particleChance > 0) {
             // this.fireEmitter.emit();
@@ -113,7 +123,9 @@ export class Fire extends NPC {
             }
             particleChance -= rnd() * this.averageParticleDelay;
         }
-        this.fireGfx.update(dt);
+        if (this.isVisible) {
+            this.fireGfx.update(dt);
+        }
     }
 
     startDialog(): void {
