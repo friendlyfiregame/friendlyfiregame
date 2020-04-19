@@ -22,7 +22,7 @@ export class MapInfo {
 
     public getPlayerStart(): Vector2 {
         const mapHeight = this.getMapSize().height;
-        const object = this.getObject("player_start");
+        const object = this.getObject("player");
         if (object) {
             return { x: object.x, y: mapHeight - object.y }
         } else {
