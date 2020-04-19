@@ -2,7 +2,7 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
@@ -50,6 +50,7 @@ export class Player extends PhysicsEntity {
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     private debug = false;
+    private jumpKeyPressed: boolean | null = false;
 
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
@@ -106,6 +107,7 @@ export class Player extends PhysicsEntity {
         }
         if (event.key === " " && !event.repeat && !this.flying && !this.isInDialog) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
+            this.jumpKeyPressed = true;
         }
         if (event.key === "t") {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
@@ -117,6 +119,8 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
         } else if (event.key === "ArrowLeft") {
             this.moveLeft = false;
+        } else if (event.key === " ") {
+            this.jumpKeyPressed = false;
         }
     }
 
@@ -207,6 +211,11 @@ export class Player extends PhysicsEntity {
                 this.dustEmitter.emit(count);
             }
         }
+
+        // Reset jump key state when on ground
+        if (!this.flying && this.jumpKeyPressed != null) {
+            this.jumpKeyPressed = null;
+        }
     }
 
 
@@ -293,6 +302,14 @@ export class Player extends PhysicsEntity {
         }
         if (this.pullOutOfWall() !== 0) {
             this.setVelocityX(0);
+        }
+    }
+
+    getGravity() {
+        if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
+            return SHORT_JUMP_GRAVITY;
+        } else {
+            return GRAVITY;
         }
     }
 }

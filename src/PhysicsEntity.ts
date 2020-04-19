@@ -114,9 +114,13 @@ export abstract class PhysicsEntity extends Entity {
 
         // Player dropping down when there is no ground below
         if (world.collidesWith(this.x, this.y - 1) === 0) {
-            this.velocityY -= GRAVITY * dt;
+            this.velocityY -= this.getGravity() * dt;
         } else if (this.velocityY < 0) {
             this.velocityY = 0;
         }
+    }
+
+    protected getGravity() {
+        return GRAVITY;
     }
 }
