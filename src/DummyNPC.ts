@@ -3,6 +3,8 @@ import { NPC } from './NPC';
 import { SpeechBubble } from "./SpeechBubble";
 import { entity } from "./Entity";
 import { Game } from "./game";
+import { ScriptedDialog } from './ScriptedDialog';
+import dialogData from "../assets/dummy.texts.json";
 
 @entity("stone")
 @entity("tree")
@@ -14,6 +16,7 @@ export class DummyNPC extends NPC {
         super(game, x, y, 20, 30);
         this.hasDialog = true;
         this.greetingText = "Hi";
+        this.scriptedDialog = new ScriptedDialog(this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

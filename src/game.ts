@@ -8,6 +8,8 @@ import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
+import { Campaign } from './Campaign';
+import { DummyNPC } from './DummyNPC';
 import "./DummyNPC";
 import "./Cloud";
 
@@ -61,6 +63,8 @@ export class Game {
 
     public player: Player;
 
+    public campaign: Campaign;
+
     public particles: Particles;
 
     public fire: Fire;
@@ -78,6 +82,7 @@ export class Game {
         window.addEventListener("resize", () => this.updateCanvasSize());
         this.mapInfo = new MapInfo();
         this.boundLoop = this.loop.bind(this);
+        this.campaign = new Campaign(this);
         this.particles = particles;
         this.gameObjects = [
             this.world = new World(this),
@@ -86,6 +91,8 @@ export class Game {
         ];
         this.player = this.getGameObject(Player);
         this.fire =this.getGameObject(Fire);
+        // testing dummy
+        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y),)
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;

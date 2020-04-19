@@ -2,10 +2,13 @@ import { Entity } from './Entity';
 import { Face } from './Face';
 import { SpeechBubble } from './SpeechBubble';
 import { Vector2 } from './util';
+import { Campaign } from './Campaign';
+import { ScriptedDialog } from './ScriptedDialog';
 
 export abstract class NPC extends Entity {
     public hasDialog = false;
     public face: Face | null = null;
+    public scriptedDialog: ScriptedDialog | null = null;
 
     protected greetingText = "";
     protected greetingRange = 65;
@@ -21,6 +24,10 @@ export abstract class NPC extends Entity {
         false,
         this.greetingText
     );
+
+    protected get campaign(): Campaign {
+        return this.game.campaign;
+    }
 
     abstract startDialog(): void;
 
