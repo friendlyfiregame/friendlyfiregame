@@ -15,6 +15,7 @@ import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
+import { Cloud } from './Cloud';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -289,8 +290,16 @@ export class Player extends PhysicsEntity {
 
         // Dance
         if (this.dance) {
+            this.dance.setPosition(this.x, this.y);
             const done = this.dance.update(dt);
             if (done) {
+                // On cloud -> make it rain
+                if (this.dance.wasSuccessful()) {
+                    const ground = this.getGround();
+                    if (ground && ground instanceof Cloud) {
+                        ground.startRain(15);
+                    }
+                }
                 this.dance = null;
             }
         }

@@ -18,6 +18,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private image!: HTMLImageElement;
     private raindrop!: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
+    private raining = 0;
 
     public constructor(game: Game, x: number, y: number, properties: GameObjectProperties) {
         super(game, x, y, 74, 5);
@@ -57,6 +58,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
          this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
+    public startRain(time: number = Infinity) {
+        this.raining = time;
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.drawImage(this.image, this.x - this.width / 2 - 4, -this.y - this.height - 16);
     }
@@ -85,9 +90,16 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.setVelocityX(this.velocity);
             }
         }
-        if (timedRnd(dt, 0.1)) {
-            this.rainEmitter.setPosition(this.x, this.y);
-            this.rainEmitter.emit(rndInt(1, 4));
+        if (this.raining) {
+            this.raining -= dt;
+            if (this.raining <= 0) {
+                this.raining = 0;
+            } else {
+                if (timedRnd(dt, 0.1)) {
+                    this.rainEmitter.setPosition(this.x, this.y);
+                    this.rainEmitter.emit(rndInt(1, 4));
+                }
+            }
         }
     }
 
