@@ -8,6 +8,9 @@ import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
 
+const gameWidth = 480;
+const gameHeight = 300;
+
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
     update(dt: number): void;
@@ -54,9 +57,13 @@ export class Game {
     private frameCounter = 0;
     private framesPerSecond = 0;
     private showFPS = true;
+    private useRealResolution = false;
+    private scale = 1;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
+        this.updateCanvasSize();
+        window.addEventListener("resize", () => this.updateCanvasSize());
         this.boundLoop = this.loop.bind(this);
         this.player = new Player(this, 2656, 1270);
         this.fire = new Fire(this, 2548, 864);
@@ -92,6 +99,24 @@ export class Game {
         this.update();
         this.draw();
         requestAnimationFrame(this.boundLoop);
+    }
+
+    private updateCanvasSize() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const dpr = window.devicePixelRatio;
+        const scale = Math.min(width / gameWidth, height / gameHeight);
+        this.canvas.style.width = gameWidth * scale + "px";
+        this.canvas.style.height = gameHeight * scale + "px";
+        if (this.useRealResolution) {
+            this.canvas.width = gameWidth * scale * dpr;
+            this.canvas.height = gameHeight * scale * dpr;
+            this.scale = scale * dpr;
+        } else {
+            this.canvas.width = gameWidth;
+            this.canvas.height = gameHeight;
+            this.scale = 1;
+        }
     }
 
     private update() {
@@ -130,7 +155,7 @@ export class Game {
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
         // Scale by three because everything was based on 480x300 canvas and now its three times larger
-        ctx.scale(3, 3);
+        ctx.scale(this.scale, this.scale);
 
         // Draw stuff
         this.camera.applyTransform(ctx);
@@ -143,9 +168,11 @@ export class Game {
 
         // Display FPS counter
         if (this.showFPS) {
+            ctx.save();
             ctx.fillStyle = "white";
-            ctx.font = "18px sans-serif";
-            ctx.fillText(`${this.framesPerSecond} FPS`, 5, 20);
+            ctx.font = (10 * this.scale) + "px sans-serif";
+            ctx.fillText(`${this.framesPerSecond} FPS`, 2 * this.scale, 10 * this.scale);
+            ctx.restore();
         }
         this.frameCounter++;
     }
