@@ -85,7 +85,6 @@ export class Game {
             ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y, npc.properties))
         ];
         this.player = this.getGameObject(Player);
-        console.log(this.player.x, this.player.y);
         this.fire =this.getGameObject(Fire);
         this.camera = new Camera(this, this.player);
         setInterval(() => {
