@@ -70,6 +70,7 @@ export class Player extends PhysicsEntity {
     private dance: Dance | null = null;
     private carrying: PhysicsEntity | null = null;
     public doubleJump = false;
+    public multiJump = false;
     private usedDoubleJump = false;
 
     public speechBubble = new SpeechBubble(this.x, this.y, "white");
@@ -178,7 +179,9 @@ export class Player extends PhysicsEntity {
     }
 
     private canJump(): boolean {
-        if (this.doubleJump) {
+        if (this.multiJump) {
+            return true;
+        } else if (this.doubleJump) {
             return !this.usedDoubleJump;
         }
         return !this.flying;
