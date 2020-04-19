@@ -22,6 +22,16 @@ export function rndItem(array: any[] | string) {
     return array[index];
 }
 
+export function timedRnd(dt: number, averageDelay: number): number {
+    let count = 0;
+    let chance = dt - Math.random() * averageDelay;
+    while (chance > 0) {
+        count++;
+        chance -= Math.random() * averageDelay;
+    }
+    return count;
+}
+
 export function clamp(v: number, min: number, max: number): number {
     return v < min ? min : v > max ? max : v;
 }

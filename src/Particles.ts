@@ -113,6 +113,11 @@ export class ParticleEmitter {
         }
     }
 
+    public setPosition(x: number, y: number): void {
+        this.x = x;
+        this.y = y;
+    }
+
     public emit(): Particle {
         const v = this.velocityGenerator();
         const off = this.offsetGenerator();

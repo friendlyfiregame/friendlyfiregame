@@ -10,6 +10,8 @@ import { Sprites } from "./Sprites";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
+import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { rnd, rndItem, timedRnd } from './util';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -24,6 +26,12 @@ enum SpriteIndex {
     FALL = 9
 }
 
+const groundColors = [
+    "#806057",
+    "#504336",
+    "#3C8376"
+];
+
 export class Player extends PhysicsEntity {
     private flying = false;
     private direction = 1;
@@ -37,12 +45,22 @@ export class Player extends PhysicsEntity {
     private closestNPC: NPC | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;
     public isInDialog = false;
+    private dustEmitter: ParticleEmitter;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
         this.setMaxVelocity(MAX_PLAYER_SPEED);
+        this.dustEmitter = particles.createEmitter({
+            position: {x: this.x, y: this.y},
+            velocity: () => ({ x: rnd(-1, 1) * 10, y: rnd(0.7, 1) * 45 }),
+            color: () => rndItem(groundColors),
+            size: rnd(1, 2),
+            gravity: {x: 0, y: -100},
+            lifetime: () => rnd(0.5, 0.8),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        });
     }
 
     public async load(): Promise<void> {
@@ -154,6 +172,14 @@ export class Player extends PhysicsEntity {
             this.closestNPC = closestEntity;
         } else {
             this.closestNPC = null;
+        }
+
+        // Spawn random dust particles while walking
+        if (!this.flying && Math.abs(this.getVelocityX()) > 1) {
+            if (timedRnd(dt, 0.2)) {
+                this.dustEmitter.setPosition(this.x, this.y);
+                this.dustEmitter.emit();
+            }
         }
     }
 
