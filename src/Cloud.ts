@@ -1,7 +1,7 @@
 import { Game, CollidableGameObject } from "./game";
 import { PIXEL_PER_METER } from "./constants";
 import { Environment } from "./World";
-import { Entity, entity } from "./Entity";
+import { entity } from "./Entity";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
 

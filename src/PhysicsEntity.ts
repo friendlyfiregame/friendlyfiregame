@@ -1,7 +1,6 @@
 import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY } from "./constants";
 import { Environment } from "./World";
-import { Cloud } from "./Cloud";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
