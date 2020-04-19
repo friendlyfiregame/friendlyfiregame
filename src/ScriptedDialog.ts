@@ -9,12 +9,22 @@ export class ScriptedDialog {
 
     public greetingRange = 120;
     public greetingOffset: Vector2 = {x: 0, y: 40};
-    private currentGreeting: string = "";
+    private get currentGreeting () {
+        return this.greetingBubble.message;
+    }
+    private set currentGreeting(message: string) {
+        this.greetingBubble.setMessage(message);
+    }
     private validGreetings: string[] = [];
     private greetingActive = false;
     /* used to prevent multiple greetings, e.g after a dialog has ended */
     private greetingAlreadyShown = false;
-    private greetingBubble: SpeechBubble;
+    private greetingBubble = new SpeechBubble(
+        this.npc.game,
+        this.npc.x + this.greetingOffset.x,
+        this.npc.y + this.greetingOffset.y,
+        "white"
+    );
 
     private dialogActive = false;
 
@@ -24,19 +34,11 @@ export class ScriptedDialog {
 
     constructor(public npc: NPC, private dialogData: ScriptedDialogJSON) {
         this.updateGreetings(this.campaign.states);
-        this.greetingBubble = new SpeechBubble(
-            this.npc.game,
-            this.npc.x + this.greetingOffset.x,
-            this.npc.y + this.greetingOffset.y,
-            "white",
-            this.currentGreeting
-        );
         this.campaign.statesChanged$.subscribe(this.updateGreetings.bind(this))
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
         if (this.greetingActive && this.currentGreeting !== "") {
-            this.greetingBubble.message = this.currentGreeting;
             this.greetingBubble.draw(ctx, this.npc.x + this.greetingOffset.x, this.npc.y + this.greetingOffset.y);
         }
     }

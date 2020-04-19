@@ -24,11 +24,15 @@ export class SpeechBubble extends Entity {
         x: number,
         y: number,
         private color = "#FFBBBB",
-        public message: string = "",
+        public message = "",
     ) {
         super(game, x, y);
     }
 
+    setMessage(message: string) {
+        this.message = message;
+        this.height = this.message.split("\n").length * this.lineHeight;
+    }
 
     draw(ctx: CanvasRenderingContext2D, x?: number, y?: number): void {
         x = x ?? this.x;

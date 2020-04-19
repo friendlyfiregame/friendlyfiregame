@@ -13,6 +13,7 @@ export class Campaign {
 
     public setStates(states: CampaignState[]) {
         this.states = states;
+        this.statesChanged$.next(this.states);
     }
 
     public addState(state: CampaignState) {
