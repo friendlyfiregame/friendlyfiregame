@@ -1,7 +1,7 @@
 import { NPC } from './NPC';
 import { ScriptedDialogJSON, DialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from './SpeechBubble';
-import { Vector2, rndItem } from './util';
+import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
 import { GameObject } from './game';
 
@@ -12,20 +12,20 @@ export class ScriptedDialog implements GameObject {
     public currentMatchingDialog: DialogJSON | null = null;
 
     public greetingRange = 120;
-    public greetingOffset: Vector2 = {x: 0, y: 40};
     private get currentGreeting () {
-        return this.greetingBubble.message;
+        return this.speechBubble.message;
     }
     private set currentGreeting(message: string) {
-        this.greetingBubble.setMessage(message);
+        this.speechBubble.setMessage(message);
     }
     private currentMatchingGreetings: string[] = [];
     private greetingActive = false;
     /* used to prevent multiple greetings, e.g after a dialog has ended */
     private greetingAlreadyShown = false;
-    private greetingBubble = new SpeechBubble(
-        this.npc.x + this.greetingOffset.x,
-        this.npc.y + this.greetingOffset.y,
+
+    private speechBubble = new SpeechBubble(
+        this.npc.x,
+        this.npc.y,
         "white"
     );
 
@@ -45,11 +45,12 @@ export class ScriptedDialog implements GameObject {
 
     public draw(ctx: CanvasRenderingContext2D) {
         if (this.greetingActive && this.currentGreeting !== "") {
-            this.greetingBubble.draw(ctx, this.npc.x + this.greetingOffset.x, this.npc.y + this.greetingOffset.y);
+            this.speechBubble.draw(ctx);
         }
     }
 
     public update(dt: number) {
+        this.speechBubble.update(this.npc.x, this.npc.y);
         const isInRange = this.npc.game.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
             this.setRandomGreeting();

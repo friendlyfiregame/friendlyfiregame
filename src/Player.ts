@@ -59,11 +59,12 @@ export class Player extends PhysicsEntity {
     private readonly startY: number;
     private dance: Dance | null = null;
 
-    public isInDialog = false;
+    public speechBubble = new SpeechBubble(this.x, this.y, "white");
+    public dialogActive = false;
+
     private dialogRange = 50;
     private dialogTipText = "press 'Enter' or 'e' to talk";
     private closestNPC: NPC | null = null;
-    public activeSpeechBubble: SpeechBubble | null = null;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private drowningSound!: Sound;
@@ -117,11 +118,11 @@ export class Player extends PhysicsEntity {
         if (!this.game.camera.isOnTarget() || event.repeat) {
             return;
         }
-        if ((event.key === "ArrowRight" || event.key === "d") && !this.isInDialog) {
+        if ((event.key === "ArrowRight" || event.key === "d") && !this.dialogActive) {
             this.direction = 1;
             this.moveRight = true;
             this.moveLeft = false;
-        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.isInDialog) {
+        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.dialogActive) {
             this.direction = -1;
             this.moveLeft = true;
             this.moveRight = false;
@@ -130,14 +131,14 @@ export class Player extends PhysicsEntity {
                 this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && !this.flying
-                && !this.isInDialog) {
+                && !this.dialogActive) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
             this.jumpKeyPressed = true;
             this.jumpingSound.stop();
             this.jumpingSound.play();
-        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.isInDialog) {
+        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.dialogActive) {
             this.jumpDown = true;
-        } else if (event.key === "t" && !this.isInDialog) {
+        } else if (event.key === "t" && !this.dialogActive) {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
             this.throwingSound.stop();
             this.throwingSound.play();
@@ -183,6 +184,10 @@ export class Player extends PhysicsEntity {
         if (this.dance) {
             this.dance.draw(ctx);
         }
+
+        if (this.dialogActive && this.speechBubble.message !== "") {
+            this.speechBubble.draw(ctx);
+        }
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
@@ -193,7 +198,6 @@ export class Player extends PhysicsEntity {
         const textWidth = ctx.measureText(this.dialogTipText).width;
         ctx.strokeText(this.dialogTipText, this.x - (this.width / 2) - (textWidth / 2), -this.y + 20);
         ctx.restore();
-        this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
     }
 
     private respawn() {
@@ -205,6 +209,7 @@ export class Player extends PhysicsEntity {
 
     update(dt: number): void {
         super.update(dt);
+        this.speechBubble.update(this.x, this.y);
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {

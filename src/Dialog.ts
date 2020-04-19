@@ -33,7 +33,7 @@ export class Dialog {
         if (this.messageToShow?.entity === "other") {
             this.actionPathSubscription?.unsubscribe();
             this.actionPathSubscription = null;
-            const speechBubble = new SpeechBubble(this.entity.x, this.entity.y + 40, "white", this.messageToShow.text);
+            const speechBubble = new SpeechBubble(this.entity.x, this.entity.y, "white", this.messageToShow.text);
             // this.actionPathSubscription = speechBubble.onActionPathTaken.subscribe(actionPaths => {
             //     this.messages = actionPaths;
             //     this.dialogIndex = 0;
@@ -47,7 +47,7 @@ export class Dialog {
 
     public getSpeechBubbleForPlayer(): SpeechBubble | null {
         if (this.messageToShow?.entity === "player") {
-            return new SpeechBubble(this.player.x, this.player.y + 40, "#FFBBBB", this.messageToShow.text);
+            return new SpeechBubble(this.player.x, this.player.y, "#FFBBBB", this.messageToShow.text);
         }
         return null;
     }

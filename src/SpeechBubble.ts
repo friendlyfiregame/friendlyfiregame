@@ -15,13 +15,19 @@ export class SpeechBubble {
     public fontSize = 10;
     public lineHeight = 15;
     public height = this.message.split("\n").length * this.lineHeight;
+    public offset = {x: 0, y: 40};
+
+    public x: number;
+    public y: number;
 
     constructor(
-        private x: number,
-        private y: number,
+        public anchorX: number,
+        public anchorY: number,
         private color = "#FFBBBB",
         public message = "",
     ) {
+        this.x = anchorX + this.offset.x;
+        this.y = anchorY + this.offset.y;
     }
 
     setMessage(message: string) {
@@ -29,26 +35,26 @@ export class SpeechBubble {
         this.height = this.message.split("\n").length * this.lineHeight;
     }
 
-    draw(ctx: CanvasRenderingContext2D, x?: number, y?: number): void {
-        x = x ?? this.x;
-        y = (y ?? this.y) + 10;
+    draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
         ctx.font = this.fontSize + "px Arial";
         const longestWidth = ctx.measureText(this.message.split("\n").sort((a, b) => b.length - a.length)[0]).width;
-        ctx = roundRect(ctx, x - longestWidth / 2, - y - this.height, longestWidth + 8, this.height, 5);
+        ctx = roundRect(ctx, this.x - longestWidth / 2, - this.y - this.height, longestWidth + 8, this.height, 5);
         ctx.fillStyle = this.color;
         ctx.fill();
 
         ctx.fillStyle = "black";
         const lines = this.message.split('\n');
         for (let i = 0; i<lines.length; i++) {
-            ctx.fillText(lines[i], x - longestWidth / 2 + 4, -y - this.height + 10 + (i * this.lineHeight), 200 - 8);
+            ctx.fillText(lines[i], this.x - longestWidth / 2 + 4, -this.y - this.height + 10 + (i * this.lineHeight), 200 - 8);
         }
 
         ctx.restore();
     }
 
-    update(dt: number): void {
+    update(anchorX: number, anchorY: number): void {
+        this.x = anchorX + this.offset.x;
+        this.y = anchorY + this.offset.y;
     }
 }
