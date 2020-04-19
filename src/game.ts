@@ -3,7 +3,7 @@ import { Player } from "./Player";
 import { DummyNPC } from './DummyNPC';
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
-import { clamp } from './util';
+import { clamp, now } from './util';
 import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
@@ -21,7 +21,7 @@ export class Game {
 
     private canvas: HTMLCanvasElement;
 
-    private lastUpdateTime = Date.now();
+    private lastUpdateTime = now();
 
     /* Time delta in game logic time (0 while game is paused, elapsed seconds since last frame otherwise) */
     public dt = 0;
@@ -84,7 +84,7 @@ export class Game {
     }
 
     private start() {
-        this.lastUpdateTime = Date.now();
+        this.lastUpdateTime = now();
         this.loop();
     }
 
@@ -96,7 +96,7 @@ export class Game {
 
     private update() {
         const prevTime = this.lastUpdateTime;
-        this.lastUpdateTime = Date.now();
+        this.lastUpdateTime = now();
         const realDt = (this.lastUpdateTime - prevTime) / 1000;
         this.appDt = realDt;
         this.appTime += realDt;

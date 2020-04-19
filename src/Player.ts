@@ -11,7 +11,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd } from './util';
+import { rnd, rndItem, timedRnd, now } from './util';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -262,6 +262,6 @@ export class Player extends PhysicsEntity {
 
 function getSpriteIndex(startIndex: number, delays: number[]): number {
     const duration = delays.reduce((duration, delay) => duration + delay, 0);
-    let time = Date.now() % duration;
+    let time = now() % duration;
     return startIndex + delays.findIndex(value => (time -= value) <= 0);
 }
