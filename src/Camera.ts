@@ -25,17 +25,62 @@ export class Camera {
     private focuses: camFocus[] = [];
     private time = 0;
     private interpolationTime!: number;
+    private zoomingOut = false;
 
     constructor(protected game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
         this.interpolationTime = interpolationTime / 2;
-        // TODO remove this example camera focus
-        // setTimeout(async () => {
-        //    this.focusOn(4, game.fire.x, game.fire.y + 20, 4, Math.PI * 2,
-        //        valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
-        // }, 2000);
+        console.log("Dev mode, press TAB to zoom out & click somewhere to teleport there");
+        document.addEventListener("keydown", this.handleKeyDown.bind(this));
+        document.addEventListener("keyup", this.handleKeyUp.bind(this));
+        this.game.canvas.addEventListener("click", this.handleClick.bind(this));
+    }
+
+    private handleKeyDown(e: KeyboardEvent) {
+        if (e.code === "Tab") {
+            if (!e.repeat) {
+                this.zoomingOut = true;
+            }
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    }
+
+    private handleKeyUp(e: KeyboardEvent) {
+        if (e.code === "Tab") {
+            this.zoomingOut = false;
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    }
+
+    private handleClick(e: MouseEvent) {
+        if (this.zoomingOut) {
+            const rect = this.game.canvas.getBoundingClientRect();
+            const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
+            const px = cx / rect.width, py = cy / rect.height;
+            const worldRect = this.getVisibleRect();
+            const tx = worldRect.x + px * worldRect.width, ty = worldRect.y + py * worldRect.height;
+            // Teleport player
+            this.game.player.x = tx;
+            this.game.player.y = ty;
+            this.game.player.setVelocity(0, 0);
+            this.zoomingOut = false;
+        }
+    }
+
+    public getVisibleRect() {
+        const cnv = this.game.canvas;
+        const cw = cnv.width, ch = cnv.height;
+        const offx = cw / 2 / this.zoom, offy = ch / 2 / this.zoom;
+        return {
+            x: this.x - offx,
+            y: this.y + offy,
+            width: offx * 2,
+            height: -offy * 2
+        };
     }
 
     public update(dt: number, time: number) {
@@ -43,7 +88,7 @@ export class Camera {
         // Base position always on target (player)
         this.x = this.target.x;
         this.y = this.target.y;
-        this.zoom = 1;
+        this.zoom = this.zoomingOut ? 0.2 : 1;
         this.rotation = 0;
         // On top of that, apply cam focus(es)
         for (const focus of this.focuses) {
