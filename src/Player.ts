@@ -69,6 +69,7 @@ export class Player extends PhysicsEntity {
     private walkingSound!: Sound;
     private throwingSound!: Sound;
     private jumpingSound!: Sound;
+    private bouncingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -98,12 +99,13 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-         this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
-         this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
-         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
-         this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
-         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
-         this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
+        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
+        this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
+        this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
+        this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
+        this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
     private handleKeyDown(event: KeyboardEvent) {
@@ -322,7 +324,8 @@ export class Player extends PhysicsEntity {
                 this.bounceEmitter.setPosition(this.x, this.y - 12);
                 this.bounceEmitter.emit(20);
                 this.dustEmitter.clear();
-                // TODO fancy sound
+                this.bouncingSound.stop();
+                this.bouncingSound.play();
                 // don't let caller know we collided, otherwise they'll override velocity. Don't mind the hack...
                 pulled = 0;
             }
