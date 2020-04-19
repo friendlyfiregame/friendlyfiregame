@@ -2,7 +2,7 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
@@ -158,15 +158,16 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
             this.moveLeft = false;
         }
+        const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
         if (this.moveRight) {
-            this.accelerateX(PLAYER_ACCELERATION * dt);
+            this.accelerateX(acceleration * dt);
         } else if (this.moveLeft) {
-            this.accelerateX(-PLAYER_ACCELERATION * dt);
+            this.accelerateX(-acceleration * dt);
         } else {
             if (this.getVelocityX() > 0) {
-                this.decelerateX(PLAYER_ACCELERATION * dt);
+                this.decelerateX(acceleration * dt);
             } else {
-                this.decelerateX(-PLAYER_ACCELERATION * dt);
+                this.decelerateX(-acceleration * dt);
             }
         }
 
