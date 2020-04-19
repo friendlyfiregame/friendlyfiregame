@@ -205,20 +205,18 @@ export class Dance {
                     if (this.performance[i]["1"] != null) {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 5, y1, 9, 9);
-                        ctx.fillStyle = "black";
                     }
                     ctx.strokeRect(x - 5, y1, 9, 9);
-                    ctx.fillText("1", x, y1 + 8);
+                    this.game.mainFont.drawText(ctx, "1", x - 2, y1 + 1, "black");
                 }
                 if (keys.includes("2")) {
                     ctx.strokeStyle = "blue";
                     if (this.performance[i]["2"] != null) {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 5, y2, 9, 9);
-                        ctx.fillStyle = "black";
                     }
                     ctx.strokeRect(x - 5, y2, 9, 9);
-                    ctx.fillText("2", x, y2 + 8);
+                    this.game.mainFont.drawText(ctx, "2", x - 3, y2 + 1, "black");
                 }
             }
         }
