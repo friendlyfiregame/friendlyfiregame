@@ -132,7 +132,7 @@ export class Player extends PhysicsEntity {
             ctx.scale(-1, 1);
         }
         this.legsSprite.draw(ctx, this.spriteIndex);
-        this.bodySprite.draw(ctx, this.spriteIndex);
+        this.bodySprite.draw(ctx, 11 - this.spriteIndex);
         ctx.restore();
 
         if (this.closestNPC && this.closestNPC.hasDialog) {
