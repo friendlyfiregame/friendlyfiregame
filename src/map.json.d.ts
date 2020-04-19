@@ -1,9 +1,21 @@
 declare module "*/map.json" {
+    export type PropertyType<T extends string> =
+        T extends "string" ? string :
+        T extends "int" ? number :
+        unknown;
+
+    export interface MapObjectPropertyJSON<T extends string> {
+        name: string;
+        type: T;
+        value: PropertyType<T>;
+    }
+
     export interface MapObjectJSON {
         name: string;
         type: string;
         x: number;
         y: number;
+        properties?: MapObjectPropertyJSON[];
     }
 
     export interface MapLayerJSON {

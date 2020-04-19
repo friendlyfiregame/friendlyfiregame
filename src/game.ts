@@ -9,7 +9,7 @@ import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
 import "./DummyNPC";
-import { Cloud } from "./Cloud";
+import "./Cloud";
 
 const gameWidth = 480;
 const gameHeight = 270;
@@ -81,9 +81,8 @@ export class Game {
         this.particles = particles;
         this.gameObjects = [
             this.world = new World(this),
-            new Cloud(this, 1500, 970),
             particles,
-            ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y))
+            ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y, npc.properties))
         ];
         this.player = this.getGameObject(Player);
         console.log(this.player.x, this.player.y);

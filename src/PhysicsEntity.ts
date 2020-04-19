@@ -98,12 +98,17 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     protected updatePosition(newX: number, newY: number): void {
-        const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
-        if (env === Environment.AIR) {
+        if (this.floating) {
             this.x = newX;
             this.y = newY;
         } else {
-            this.setVelocity(0, 0);
+            const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
+            if (env === Environment.AIR) {
+                this.x = newX;
+                this.y = newY;
+            } else {
+                this.setVelocity(0, 0);
+            }
         }
     }
 
