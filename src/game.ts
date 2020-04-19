@@ -59,7 +59,7 @@ export class Game {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
         this.player = new Player(this, 2656, 1270);
-        this.fire = new Fire(this, 2450, 1170);
+        this.fire = new Fire(this, 2548, 864);
         this.particles = particles;
         this.camera = new Camera(this.player);
         this.gameObjects = [
