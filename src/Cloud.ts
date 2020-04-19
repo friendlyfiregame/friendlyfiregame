@@ -16,7 +16,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private image!: HTMLImageElement;
 
     public constructor(game: Game, x: number, y: number, properties: GameObjectProperties) {
-        super(game, x, y, 74, 12);
+        super(game, x, y, 74, 5);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
