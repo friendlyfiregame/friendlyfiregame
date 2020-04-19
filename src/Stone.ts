@@ -10,6 +10,7 @@ import { EyeType, Face } from './Face';
 export class Stone extends NPC {
     private sprites!: Sprites;
     private spriteIndex = 0;
+    public direction = -1;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
@@ -23,14 +24,19 @@ export class Stone extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
+        if (this.direction === 1) {
+            ctx.scale(-1, 1);
+        }
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
         this.face?.draw(ctx);
     }
 
     update(dt: number): void {
+        super.update(dt);
         this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
     }
+
     startDialog(): void {
     }
 }

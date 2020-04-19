@@ -1,8 +1,8 @@
-import { Entity } from './Entity';
 import { Face } from './Face';
 import { ScriptedDialog } from './ScriptedDialog';
+import { PhysicsEntity } from "./PhysicsEntity";
 
-export abstract class NPC extends Entity {
+export abstract class NPC extends PhysicsEntity {
     public hasDialog = false;
     public face: Face | null = null;
     public scriptedDialog: ScriptedDialog | null = null;

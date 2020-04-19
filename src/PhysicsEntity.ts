@@ -137,6 +137,8 @@ export abstract class PhysicsEntity extends Entity {
                 this.velocityY = DROWNING_VELOCITY;
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
+                this.x = Math.round(this.x);
+                this.y = Math.round(this.y);
             }
         }
     }

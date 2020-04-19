@@ -12,9 +12,10 @@ import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd } from './util';
-import { entity } from "./Entity";
+import { entity, Entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
+import { Stone } from "./Stone";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -26,7 +27,9 @@ enum SpriteIndex {
     WALK2 = 6,
     WALK3 = 7,
     JUMP = 8,
-    FALL = 9
+    FALL = 9,
+    CARRY0 = 10,
+    CARRY1 = 11
 }
 
 const groundColors = [
@@ -58,6 +61,7 @@ export class Player extends PhysicsEntity {
     private readonly startX: number;
     private readonly startY: number;
     private dance: Dance | null = null;
+    private carrying: PhysicsEntity | null = null;
 
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
@@ -137,14 +141,20 @@ export class Player extends PhysicsEntity {
         } else if ((event.key === "s" || event.key === "ArrowDown") && !this.isInDialog) {
             this.jumpDown = true;
         } else if (event.key === "t" && !this.isInDialog) {
-            this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+            if (this.carrying) {
+                this.carrying.setVelocity(5 * this.direction, 5);
+                this.carrying = null;
+            } else {
+                this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+            }
             this.throwingSound.stop();
             this.throwingSound.play();
-        }
-        if (event.key === "c") {
+        } else if (event.key === "c") {
             if (!this.dance) {
                 this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
             }
+        } else if (event.key === "p" && !this.isInDialog && !this.carrying) {
+            this.carrying = this.game.stone;
         }
     }
 
@@ -172,7 +182,15 @@ export class Player extends PhysicsEntity {
             ctx.scale(-1, 1);
         }
         this.legsSprite.draw(ctx, this.spriteIndex);
-        this.bodySprite.draw(ctx, this.spriteIndex);
+        if (this.carrying) {
+            if (this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) {
+                this.bodySprite.draw(ctx, SpriteIndex.CARRY1);
+            } else {
+                this.bodySprite.draw(ctx, SpriteIndex.CARRY0);
+            }
+        } else {
+            this.bodySprite.draw(ctx, this.spriteIndex);
+        }
         ctx.restore();
 
         if (this.closestNPC && this.closestNPC.hasDialog) {
@@ -202,6 +220,15 @@ export class Player extends PhysicsEntity {
 
     update(dt: number): void {
         super.update(dt);
+
+        if (this.carrying) {
+            this.carrying.x = this.x;
+            this.carrying.y = this.y + this.height -
+                ((this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) ? 1 : 0);
+            if (this.carrying instanceof Stone) {
+                this.carrying.direction = this.direction;
+            }
+        }
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {

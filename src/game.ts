@@ -17,6 +17,7 @@ import "./FlameBoy";
 import "./Tree";
 import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
+import { Stone } from "./Stone";
 
 const gameWidth = 480;
 const gameHeight = 270;
@@ -67,6 +68,7 @@ export class Game {
     public camera: Camera;
 
     public player: Player;
+    public stone: Stone;
 
     public campaign: Campaign;
 
@@ -99,7 +101,9 @@ export class Game {
             ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y, npc.properties))
         ];
         this.player = this.getGameObject(Player);
-        this.fire =this.getGameObject(Fire);
+        this.fire = this.getGameObject(Fire);
+        this.stone = this.getGameObject(Stone);
+
         // testing dummy
         this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y),)
         this.camera = new Camera(this, this.player);
