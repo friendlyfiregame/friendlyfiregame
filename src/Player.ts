@@ -131,6 +131,8 @@ export class Player extends PhysicsEntity {
         super.update(dt);
 
         const world = this.game.world;
+        const wasFlying = this.flying;
+        const prevVelocity = this.getVelocityY();
 
         // Player movement
         if (!this.game.camera.isOnTarget()) {
@@ -175,10 +177,11 @@ export class Player extends PhysicsEntity {
         }
 
         // Spawn random dust particles while walking
-        if (!this.flying && Math.abs(this.getVelocityX()) > 1) {
-            if (timedRnd(dt, 0.2)) {
+        if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
+            if (timedRnd(dt, 0.2) || wasFlying) {
                 this.dustEmitter.setPosition(this.x, this.y);
-                this.dustEmitter.emit();
+                const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
+                this.dustEmitter.emit(count);
             }
         }
     }

@@ -118,7 +118,13 @@ export class ParticleEmitter {
         this.y = y;
     }
 
-    public emit(): Particle {
+    public emit(count = 1): void {
+        for (let i = 0; i < count; i++) {
+            this.emitSingle();
+        }
+    }
+
+    public emitSingle(): Particle {
         const v = this.velocityGenerator();
         const off = this.offsetGenerator();
         const particle = new Particle(
