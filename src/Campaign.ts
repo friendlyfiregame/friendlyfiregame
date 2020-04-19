@@ -11,6 +11,10 @@ export class Campaign {
         return this.states.includes(state);
     }
 
+    public setStates(states: CampaignState[]) {
+        this.states = states;
+    }
+
     public addState(state: CampaignState) {
         if (this.hasState(state)) {
             this.states.splice(this.states.indexOf(state), 1);

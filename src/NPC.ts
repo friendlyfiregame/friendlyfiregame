@@ -1,33 +1,11 @@
 import { Entity } from './Entity';
 import { Face } from './Face';
-import { SpeechBubble } from './SpeechBubble';
-import { Vector2 } from './util';
-import { Campaign } from './Campaign';
 import { ScriptedDialog } from './ScriptedDialog';
 
 export abstract class NPC extends Entity {
     public hasDialog = false;
     public face: Face | null = null;
     public scriptedDialog: ScriptedDialog | null = null;
-
-    protected greetingText = "";
-    protected greetingRange = 65;
-    protected greetingActive = false;
-    /* used to prevent multiple greetings, e.g after a dialog has ended */
-    protected greetingShown = false;
-    protected greetingOffset: Vector2 = {x: 0, y: 40};
-    protected greetingBubble = new SpeechBubble(
-        this.game,
-        this.x + this.greetingOffset.x,
-        this.y + this.greetingOffset.y,
-        "white",
-        false,
-        this.greetingText
-    );
-
-    protected get campaign(): Campaign {
-        return this.game.campaign;
-    }
 
     abstract startDialog(): void;
 
@@ -37,10 +15,11 @@ export abstract class NPC extends Entity {
         }
     }
 
-    protected drawGreeting(ctx: CanvasRenderingContext2D): void {
-        if (this.greetingActive && this.greetingText !== "") {
-            this.greetingBubble.message = this.greetingText;
-            this.greetingBubble.draw(ctx, this.x + this.greetingOffset.x, this.y + this.greetingOffset.y);
-        }
+    protected drawDialog(ctx: CanvasRenderingContext2D): void {
+        this.scriptedDialog?.draw(ctx);
+    }
+
+    protected updateDialog(dt: number) {
+        this.scriptedDialog?.update(dt);
     }
 }
