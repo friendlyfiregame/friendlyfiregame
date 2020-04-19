@@ -106,7 +106,9 @@ export class Camera {
             const f1 = 1 - force;
             this.x = f1 * this.x + force * focus.x;
             this.y = f1 * this.y + force * focus.y;
-            this.zoom = f1 * this.zoom + force * focus.zoom;
+            const originalSize = 1 / this.zoom, targetSize = 1 / focus.zoom;
+            const currentSize = f1 * originalSize + force * targetSize;
+            this.zoom = 1 / currentSize;
             this.rotation = f1 * this.rotation + force * focus.rotation;
         } else {
             if (focus.resolve) {
