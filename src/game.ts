@@ -11,6 +11,7 @@ import { createEntity } from "./Entity";
 import "./DummyNPC";
 import "./Cloud";
 import "./Stone";
+import "./FlameBoy";
 import { BitmapFont } from "./BitmapFont";
 
 const gameWidth = 480;
