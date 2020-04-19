@@ -1,7 +1,7 @@
 import { NPC } from './NPC';
 import { Game } from './game';
 import { PIXEL_PER_METER } from './constants';
-import { rnd, rndItem, rndInt } from './util';
+import { rnd, rndInt } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face } from './Face';
 import { FireGfx } from './FireGfx';
@@ -15,11 +15,13 @@ import { loadImage } from './graphics';
 //     "#500502"
 // ];
 
+/*
 const smokeColors = [
     "#555",
     "#444",
     "#333"
 ];
+*/
 
 @entity("fire")
 export class Fire extends NPC {
