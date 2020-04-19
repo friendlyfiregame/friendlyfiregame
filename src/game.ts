@@ -137,7 +137,8 @@ export class Game {
     private async playMusicTrack(): Promise<void> {
         const music = this.music[rndInt(0, 1)];
         this.music.forEach(music => music.stop());
-        music.setLoop(true);;
+        music.setLoop(true);
+        music.setVolume(0.25);
         return music.play();
     };
 
