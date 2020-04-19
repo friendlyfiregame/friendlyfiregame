@@ -4,7 +4,6 @@ import { SpeechBubble } from "./SpeechBubble";
 import { entity } from "./Entity";
 import { Game } from "./game";
 
-@entity("stone")
 @entity("tree")
 export class DummyNPC extends NPC {
     private activeDialog: Dialog | null = null;

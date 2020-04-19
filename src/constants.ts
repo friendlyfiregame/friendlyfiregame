@@ -31,3 +31,6 @@ export const PLAYER_IDLE_ANIMATION = [ 100, 500, 50, 1000 ];
 
 /** Animation speed for player running in milliseconds */
 export const PLAYER_RUNNING_ANIMATION = [ 150, 150, 150, 150 ];
+
+/** Animation speed for the stone in milliseconds */
+export const STONE_ANIMATION = [ 200, 200, 200 ];

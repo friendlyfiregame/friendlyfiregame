@@ -6,7 +6,7 @@ import {
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
-import { Sprites } from "./Sprites";
+import { Sprites, getSpriteIndex } from "./Sprites";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
@@ -312,10 +312,4 @@ export class Player extends PhysicsEntity {
             return GRAVITY;
         }
     }
-}
-
-function getSpriteIndex(startIndex: number, delays: number[]): number {
-    const duration = delays.reduce((duration, delay) => duration + delay, 0);
-    let time = now() % duration;
-    return startIndex + delays.findIndex(value => (time -= value) <= 0);
 }

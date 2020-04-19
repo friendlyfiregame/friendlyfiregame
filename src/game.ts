@@ -10,6 +10,7 @@ import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
 import "./DummyNPC";
 import "./Cloud";
+import "./Stone";
 
 const gameWidth = 480;
 const gameHeight = 270;
