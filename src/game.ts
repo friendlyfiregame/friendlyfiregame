@@ -11,6 +11,7 @@ import { createEntity } from "./Entity";
 import "./DummyNPC";
 import "./Cloud";
 import "./Stone";
+import "./FlameBoy";
 
 const gameWidth = 480;
 const gameHeight = 270;
