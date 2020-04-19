@@ -150,6 +150,18 @@
                 }, 
                 {
                  "height":0,
+                 "id":9,
+                 "name":"flameboy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":0,
+                 "x":1787,
+                 "y":1320
+                }, 
+                {
+                 "height":0,
                  "id":1,
                  "name":"player",
                  "point":true,
@@ -209,7 +221,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":9,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.3.1",

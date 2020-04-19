@@ -49,6 +49,7 @@ export class Player extends PhysicsEntity {
     private bodySprite!: Sprites;
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
+    public jumpDown: boolean = false;
     private debug = false;
     private jumpKeyPressed: boolean | null = false;
 
@@ -90,37 +91,41 @@ export class Player extends PhysicsEntity {
     }
 
     private handleKeyDown(event: KeyboardEvent) {
-        if (!this.game.camera.isOnTarget()) {
+        if (!this.game.camera.isOnTarget() || event.repeat) {
             return;
         }
-        if (event.key === "ArrowRight" && !this.isInDialog) {
+        if ((event.key === "ArrowRight" || event.key === "d") && !this.isInDialog) {
             this.direction = 1;
             this.moveRight = true;
-        } else if (event.key === "ArrowLeft" && !this.isInDialog) {
+            this.moveLeft = false;
+        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.isInDialog) {
             this.direction = -1;
             this.moveLeft = true;
-        }
-        if (event.key === "Enter") {
+            this.moveRight = false;
+        } else if (event.key === "Enter" || event.key === "e") {
             if (this.closestNPC && this.closestNPC.hasDialog) {
                 this.closestNPC.startDialog();
             }
-        }
-        if (event.key === " " && !event.repeat && !this.flying && !this.isInDialog) {
+        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && !this.flying
+                && !this.isInDialog) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
             this.jumpKeyPressed = true;
-        }
-        if (event.key === "t") {
+        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.isInDialog) {
+            this.jumpDown = true;
+        } else if (event.key === "t" && !this.isInDialog) {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
         }
     }
 
     private handleKeyUp(event: KeyboardEvent) {
-        if (event.key === "ArrowRight") {
+        if (event.key === "ArrowRight" || event.key === "d") {
             this.moveRight = false;
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === "ArrowLeft" || event.key === "a") {
             this.moveLeft = false;
-        } else if (event.key === " ") {
+        } else if (event.key === " " || event.key === "w" || event.key === "ArrowUp") {
             this.jumpKeyPressed = false;
+        } else if (event.key === "s" || event.key === "ArrowDown") {
+            this.jumpDown = false;
         }
     }
 
@@ -232,7 +237,8 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityY() <= 0) {
             const world = this.game.world;
             const height = world.getHeight();
-            collidedWith = col = world.collidesWith(this.x, this.y);
+            collidedWith = col = world.collidesWith(this.x, this.y, [ this ],
+                this.jumpDown ? [ Environment.PLATFORM ] : []);
             while (this.y < height && col) {
                 pulled++;
                 this.y++;
