@@ -2,16 +2,15 @@ import { Dialog, Message } from "./Dialog";
 import { NPC } from './NPC';
 import { SpeechBubble } from "./SpeechBubble";
 import { entity } from "./Entity";
+import { Game } from "./game";
 
-@entity("stone")
 @entity("tree")
 export class DummyNPC extends NPC {
     private activeDialog: Dialog | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;
 
-    async load(): Promise<void> {
-        this.width = 20;
-        this.height = 30;
+    public constructor(game: Game, x: number, y:number) {
+        super(game, x, y, 20, 30);
         this.hasDialog = true;
         this.greetingText = "Hi";
     }

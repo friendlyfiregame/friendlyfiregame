@@ -1,13 +1,21 @@
 import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY } from "./constants";
 import { Environment } from "./World";
-import { Cloud } from "./Cloud";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
     private velocityY = 0;
     private maxVelocityX = Infinity;
     private maxVelocityY = Infinity;
+    private floating = false;
+
+    public setFloating(floating: boolean): void {
+        this.floating = floating;
+    }
+
+    public isFloating(): boolean {
+        return this.floating;
+    }
 
     public setMaxVelocity(maxVelocityX: number, maxVelocityY = maxVelocityX): void {
         this.maxVelocityX = maxVelocityX;
@@ -70,7 +78,7 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     private checkCollision(x: number, y: number, ignore?: Environment[]): Environment {
-        return this.game.world.collidesWith(x, y, ignore);
+        return this.game.world.collidesWith(x, y, [ this ], ignore);
     }
 
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
@@ -90,21 +98,27 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     protected updatePosition(newX: number, newY: number): void {
-        const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
-        if (env === Environment.AIR) {
+        if (this.floating) {
             this.x = newX;
             this.y = newY;
         } else {
-            this.setVelocity(0, 0);
+            const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
+            if (env === Environment.AIR) {
+                this.x = newX;
+                this.y = newY;
+            } else {
+                this.setVelocity(0, 0);
+            }
         }
     }
 
     public update(dt: number): void {
         const world = this.game.world;
 
-        const ground = world.getObjectAt(this.x, this.y - 1);
-        if (ground instanceof Cloud) {
-            this.x += ground.movement;
+        const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
+        if (ground instanceof PhysicsEntity) {
+            this.x += ground.getVelocityX() * PIXEL_PER_METER * dt;
+            this.y += ground.getVelocityY() * PIXEL_PER_METER * dt;
         }
 
         this.updatePosition(
@@ -112,11 +126,17 @@ export abstract class PhysicsEntity extends Entity {
             this.y + this.velocityY * PIXEL_PER_METER * dt
         );
 
-        // Player dropping down when there is no ground below
-        if (world.collidesWith(this.x, this.y - 1) === 0) {
-            this.velocityY -= GRAVITY * dt;
-        } else if (this.velocityY < 0) {
-            this.velocityY = 0;
+        // Object dropping down when there is no ground below
+        if (!this.floating) {
+            if (world.collidesWith(this.x, this.y - 1, [ this ]) === 0) {
+                this.velocityY -= this.getGravity() * dt;
+            } else if (this.velocityY < 0) {
+                this.velocityY = 0;
+            }
         }
+    }
+
+    protected getGravity() {
+        return GRAVITY;
     }
 }

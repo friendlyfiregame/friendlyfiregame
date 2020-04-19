@@ -1,10 +1,19 @@
 import { Vector2 } from "./util";
 import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/map.json";
 
+export interface GameObjectProperties {
+    direction?: "up" | "down" | "left" | "right",
+    distance: number;
+
+    /** */
+    velocity: number;
+}
+
 export interface GameObjectInfo {
     x: number;
     y: number;
     name: string;
+    properties: GameObjectProperties;
 }
 
 export class MapInfo {
@@ -35,7 +44,11 @@ export class MapInfo {
         return this.getObjects().map(object => ({
             name: object.name,
             x: object.x,
-            y: mapHeight - object.y
+            y: mapHeight - object.y,
+            properties: (object.properties ?? []).reduce((props, property) => {
+                props[property.name] = property.value;
+                return props;
+            }, {})
         }));
     }
 

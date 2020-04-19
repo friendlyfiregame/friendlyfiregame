@@ -2,16 +2,16 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
-import { Sprites } from "./Sprites";
+import { Sprites, getSpriteIndex } from "./Sprites";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, now } from './util';
+import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
 
 enum SpriteIndex {
@@ -50,6 +50,7 @@ export class Player extends PhysicsEntity {
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     private debug = false;
+    private jumpKeyPressed: boolean | null = false;
 
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
@@ -106,6 +107,7 @@ export class Player extends PhysicsEntity {
         }
         if (event.key === " " && !event.repeat && !this.flying && !this.isInDialog) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
+            this.jumpKeyPressed = true;
         }
         if (event.key === "t") {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
@@ -117,6 +119,8 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
         } else if (event.key === "ArrowLeft") {
             this.moveLeft = false;
+        } else if (event.key === " ") {
+            this.jumpKeyPressed = false;
         }
     }
 
@@ -207,6 +211,11 @@ export class Player extends PhysicsEntity {
                 this.dustEmitter.emit(count);
             }
         }
+
+        // Reset jump key state when on ground
+        if (!this.flying && this.jumpKeyPressed != null) {
+            this.jumpKeyPressed = null;
+        }
     }
 
 
@@ -257,7 +266,7 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.game.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ Environment.PLATFORM ])) {
+        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ], [ Environment.PLATFORM ])) {
             pulled++;
             this.y--;
         }
@@ -269,13 +278,13 @@ export class Player extends PhysicsEntity {
         const world = this.game.world;
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
                 this.x--;
                 pulled++;
             }
         } else {
             while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
                 this.x++;
                 pulled++;
             }
@@ -295,10 +304,12 @@ export class Player extends PhysicsEntity {
             this.setVelocityX(0);
         }
     }
-}
 
-function getSpriteIndex(startIndex: number, delays: number[]): number {
-    const duration = delays.reduce((duration, delay) => duration + delay, 0);
-    let time = now() % duration;
-    return startIndex + delays.findIndex(value => (time -= value) <= 0);
+    getGravity() {
+        if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
+            return SHORT_JUMP_GRAVITY;
+        } else {
+            return GRAVITY;
+        }
+    }
 }

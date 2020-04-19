@@ -1,3 +1,5 @@
+import { now } from "./util";
+
 export class Sprites {
     private readonly spriteWidth: number;
     private readonly spriteHeight: number;
@@ -33,4 +35,10 @@ export class Sprites {
         ctx.drawImage(this.image, sourceLeft, sourceTop, sourceWidth, sourceHeight,
             -sourceWidth / 2 * scale, -sourceHeight * scale, sourceWidth * scale, sourceHeight * scale);
     }
+}
+
+export function getSpriteIndex(startIndex: number, delays: number[]): number {
+    const duration = delays.reduce((duration, delay) => duration + delay, 0);
+    let time = now() % duration;
+    return startIndex + delays.findIndex(value => (time -= value) <= 0);
 }

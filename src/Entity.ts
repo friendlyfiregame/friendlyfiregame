@@ -1,4 +1,5 @@
 import { GameObject, Game } from "./game";
+import { GameObjectProperties } from "./MapInfo";
 
 export interface EntityDistance {
     source: Entity;
@@ -6,7 +7,7 @@ export interface EntityDistance {
     distance: number;
 }
 
-type EntityConstructor = new (game: Game, x: number, y: number) => Entity;
+type EntityConstructor = new (game: Game, x: number, y: number, properties: GameObjectProperties) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
 
@@ -16,12 +17,12 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, game: Game, x: number, y: number): Entity {
+export function createEntity(name: string, game: Game, x: number, y: number, properties: GameObjectProperties): Entity {
     const constructor = entities.get(name);
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
-    return new constructor(game, x, y);
+    return new constructor(game, x, y, properties);
 }
 
 export abstract class Entity implements GameObject {
