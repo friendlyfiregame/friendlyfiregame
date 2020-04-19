@@ -1,6 +1,7 @@
 import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY } from "./constants";
 import { Environment } from "./World";
+import { Cloud } from "./Cloud";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -100,6 +101,11 @@ export abstract class PhysicsEntity extends Entity {
 
     public update(dt: number): void {
         const world = this.game.world;
+
+        const ground = world.getObjectAt(this.x, this.y - 1);
+        if (ground instanceof Cloud) {
+            this.x += ground.movement;
+        }
 
         this.updatePosition(
             this.x + this.velocityX * PIXEL_PER_METER * dt,

@@ -89,6 +89,18 @@ export class World implements GameObject {
         return this.collisionMap[index];
     }
 
+    public getObjectAt(x: number, y: number, ignore?: Environment[]): GameObject | null {
+        for (const gameObject of this.game.gameObjects) {
+            if (gameObject !== this && isCollidableGameObject(gameObject)) {
+                const environment = gameObject.collidesWith(x, y, ignore);
+                if (environment !== Environment.AIR) {
+                    return gameObject;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Check collision of a vertical line with the world.
      *

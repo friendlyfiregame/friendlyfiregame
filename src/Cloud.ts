@@ -6,6 +6,8 @@ import { now } from "./util";
 
 @entity("cloud")
 export class Cloud extends Entity implements CollidableGameObject {
+    public movement = 0;
+
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 5  * PIXEL_PER_METER, 0.75 * PIXEL_PER_METER);
     }
@@ -24,10 +26,11 @@ export class Cloud extends Entity implements CollidableGameObject {
 
     update(dt: number): void {
         if (now() % 5000 > 2500) {
-            this.x += 75 * dt;
+            this.movement = 75 * dt;
         } else {
-            this.x -= 75 *  dt;
+            this.movement = -75 * dt;
         }
+        this.x += this.movement;
     }
 
     collidesWith(x: number, y: number, ignore?: Environment[]): number {
