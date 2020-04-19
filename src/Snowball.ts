@@ -11,11 +11,11 @@ export class Snowball extends PhysicsEntity {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
+        ctx.translate(this.x, -this.y);
         ctx.strokeStyle = "black";
         ctx.fillStyle = "white";
-        ctx.translate(this.x, -this.y);
         ctx.beginPath();
-        ctx.arc(0, 0, this.width / 2, 0, Math.PI * 2, false);
+        ctx.arc(0, -this.height / 2, this.width / 2, 0, Math.PI * 2, false);
         ctx.fill();
         ctx.stroke();
         ctx.restore();
