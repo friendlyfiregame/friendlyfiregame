@@ -14,6 +14,7 @@ import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
+import { Dance } from './Dance';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -56,6 +57,7 @@ export class Player extends PhysicsEntity {
     private drowning = 0;
     private readonly startX: number;
     private readonly startY: number;
+    private dance: Dance | null = null;
 
     private interactionRange = 35;
     private closestNPC: NPC | null = null;
@@ -105,6 +107,10 @@ export class Player extends PhysicsEntity {
     }
 
     private handleKeyDown(event: KeyboardEvent) {
+        if (this.dance) {
+            this.dance.handleKeyDown(event);
+            return;
+        }
         if (!this.game.camera.isOnTarget() || event.repeat) {
             return;
         }
@@ -132,6 +138,12 @@ export class Player extends PhysicsEntity {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
             this.throwingSound.stop();
             this.throwingSound.play();
+        }
+        if (event.key === "c") {
+            if (!this.dance) {
+                this.dance = new Dance(this.game, this.x, this.y - 25, 192,
+                    "1   1   1   2   1   2   1 2 1 2 3   12  12  1221123   3   3   3331212123");
+            }
         }
     }
 
@@ -164,6 +176,10 @@ export class Player extends PhysicsEntity {
 
         if (this.closestNPC && this.closestNPC.hasDialog) {
             this.drawDialogTip(ctx);
+        }
+
+        if (this.dance) {
+            this.dance.draw(ctx);
         }
     }
 
@@ -268,6 +284,11 @@ export class Player extends PhysicsEntity {
         // Reset jump key state when on ground
         if (!this.flying && this.jumpKeyPressed != null) {
             this.jumpKeyPressed = null;
+        }
+
+        // Dance
+        if (this.dance) {
+            this.dance.update(dt);
         }
     }
 
