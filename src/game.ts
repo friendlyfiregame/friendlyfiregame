@@ -7,9 +7,10 @@ import { clamp, now } from './util';
 import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
+import { MapInfo } from "./MapInfo";
 
 const gameWidth = 480;
-const gameHeight = 300;
+const gameHeight = 270;
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -59,13 +60,17 @@ export class Game {
     private showFPS = true;
     private useRealResolution = false;
     private scale = 1;
+    private readonly mapInfo: MapInfo;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.updateCanvasSize();
         window.addEventListener("resize", () => this.updateCanvasSize());
+        this.mapInfo = new MapInfo();
+        const playerStart = this.mapInfo.getPlayerStart();
+        const mapSize = this.mapInfo.getMapSize();
+        this.player = new Player(this, playerStart.x, mapSize.height - playerStart.y);
         this.boundLoop = this.loop.bind(this);
-        this.player = new Player(this, 2656, 1270);
         this.fire = new Fire(this, 2548, 864);
         this.particles = particles;
         this.camera = new Camera(this.player);

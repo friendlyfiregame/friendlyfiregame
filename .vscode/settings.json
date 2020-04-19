@@ -11,6 +11,10 @@
         "devtool",
         "lerping",
         "ludum",
+        "objectgroup",
+        "tileheight",
+        "tilelayer",
+        "tilewidth",
         "tslib"
     ]
 }
