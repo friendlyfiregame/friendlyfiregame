@@ -26,16 +26,16 @@ export class Camera {
     private time = 0;
     private interpolationTime!: number;
 
-    constructor(private game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
+    constructor(protected game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
         this.interpolationTime = interpolationTime / 2;
         // TODO remove this example camera focus
-        setTimeout(async () => {
-            this.focusOn(4, game.fire.x, game.fire.y + 20, 4, Math.PI * 2,
-                valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
-        }, 2000);
+        // setTimeout(async () => {
+        //    this.focusOn(4, game.fire.x, game.fire.y + 20, 4, Math.PI * 2,
+        //        valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
+        // }, 2000);
     }
 
     public update(dt: number, time: number) {

@@ -36,6 +36,14 @@ export function clamp(v: number, min: number, max: number): number {
     return v < min ? min : v > max ? max : v;
 }
 
+export function orientPow(v: number, exp: number): number {
+    if (v < 0) {
+        return -((-v) ** exp);
+    } else {
+        return v ** exp;
+    }
+}
+
 const timeDelta = Date.now() - performance.now();
 export function now(): number {
     return performance.now() + timeDelta;
