@@ -34,6 +34,12 @@ const groundColors = [
     "#908784"
 ];
 
+const bounceColors = [
+    "#f06060",
+    "#e87f7f",
+    "#ff7070"
+];
+
 @entity("player")
 export class Player extends PhysicsEntity {
     private flying = false;
@@ -49,6 +55,7 @@ export class Player extends PhysicsEntity {
     public activeSpeechBubble: SpeechBubble | null = null;
     public isInDialog = false;
     private dustEmitter: ParticleEmitter;
+    private bounceEmitter: ParticleEmitter;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -62,6 +69,15 @@ export class Player extends PhysicsEntity {
             size: rnd(1, 2),
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 0.8),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        });
+        this.bounceEmitter = particles.createEmitter({
+            position: {x: this.x, y: this.y},
+            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
+            color: () => rndItem(bounceColors),
+            size: rnd(1.5, 3),
+            gravity: {x: 0, y: -120},
+            lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
     }
@@ -214,6 +230,10 @@ export class Player extends PhysicsEntity {
             // Bounce on bouncy things
             if (collidedWith === Environment.BOUNCE) {
                 this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
+                // Nice bouncy particles
+                this.bounceEmitter.setPosition(this.x, this.y - 12);
+                this.bounceEmitter.emit(20);
+                this.dustEmitter.clear();
                 // TODO fancy sound
                 // don't let caller know we collided, otherwise they'll override velocity. Don't mind the hack...
                 pulled = 0;

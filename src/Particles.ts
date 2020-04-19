@@ -118,6 +118,10 @@ export class ParticleEmitter {
         this.y = y;
     }
 
+    public clear() {
+        this.particles = [];
+    }
+
     public emit(count = 1): void {
         for (let i = 0; i < count; i++) {
             this.emitSingle();
