@@ -96,9 +96,11 @@ export class Player extends PhysicsEntity {
         if (event.key === "ArrowRight" && !this.isInDialog) {
             this.direction = 1;
             this.moveRight = true;
+            this.moveLeft = false;
         } else if (event.key === "ArrowLeft" && !this.isInDialog) {
             this.direction = -1;
             this.moveLeft = true;
+            this.moveRight = false;
         }
         if (event.key === "Enter") {
             if (this.closestNPC && this.closestNPC.hasDialog) {
