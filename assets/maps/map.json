@@ -31,7 +31,7 @@
                 {
                  "height":0,
                  "id":1,
-                 "name":"player_start",
+                 "name":"player",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -39,6 +39,18 @@
                  "width":0,
                  "x":1463,
                  "y":1498
+                }, 
+                {
+                 "height":0,
+                 "id":4,
+                 "name":"stone",
+                 "point":true,
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":0,
+                 "x":2718,
+                 "y":408
                 }, 
                 {
                  "height":0,
@@ -63,22 +75,10 @@
                  "width":0,
                  "x":3564,
                  "y":1464
-                }, 
-                {
-                 "height":0,
-                 "id":4,
-                 "name":"stone",
-                 "point":true,
-                 "rotation":0,
-                 "type":"npc",
-                 "visible":true,
-                 "width":0,
-                 "x":2718,
-                 "y":408
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
