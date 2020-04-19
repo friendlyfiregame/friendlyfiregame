@@ -15,6 +15,7 @@ import "./Cloud";
 import "./Stone";
 import "./FlameBoy";
 import "./Tree";
+import "./Seed";
 import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";

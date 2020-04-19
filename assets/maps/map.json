@@ -129,8 +129,20 @@
                  "type":"npc",
                  "visible":true,
                  "width":0,
-                 "x":1403,
-                 "y":1896
+                 "x":180,
+                 "y":2027
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"seed",
+                 "point":true,
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":0,
+                 "x":3091,
+                 "y":2040
                 }, 
                 {
                  "height":0,
@@ -143,34 +155,6 @@
                  "width":0,
                  "x":1061,
                  "y":2081
-                }, 
-                {
-                 "height":0,
-                 "id":10,
-                 "name":"cloud",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"direction",
-                         "type":"string",
-                         "value":"right"
-                        }, 
-                        {
-                         "name":"distance",
-                         "type":"int",
-                         "value":240
-                        }, 
-                        {
-                         "name":"velocity",
-                         "type":"int",
-                         "value":36
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1465,
-                 "y":1816
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -221,7 +205,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":12,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.3.1",
