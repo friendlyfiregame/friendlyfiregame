@@ -13,6 +13,7 @@ import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
+import { Sound } from "./Sound";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -62,6 +63,10 @@ export class Player extends PhysicsEntity {
     public isInDialog = false;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
+    private drowningSound!: Sound;
+    private walkingSound!: Sound;
+    private throwingSound!: Sound;
+    private jumpingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -93,6 +98,10 @@ export class Player extends PhysicsEntity {
     public async load(): Promise<void> {
          this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
          this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
+         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
+         this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
+         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
+         this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
     }
 
     private handleKeyDown(event: KeyboardEvent) {
@@ -115,10 +124,14 @@ export class Player extends PhysicsEntity {
                 && !this.isInDialog) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
             this.jumpKeyPressed = true;
+            this.jumpingSound.stop();
+            this.jumpingSound.play();
         } else if ((event.key === "s" || event.key === "ArrowDown") && !this.isInDialog) {
             this.jumpDown = true;
         } else if (event.key === "t" && !this.isInDialog) {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+            this.throwingSound.stop();
+            this.throwingSound.play();
         }
     }
 
@@ -175,6 +188,9 @@ export class Player extends PhysicsEntity {
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
+            if (this.drowning === 0) {
+                this.drowningSound.trigger();
+            }
             this.setVelocityX(0);
             this.drowning += dt;
             if (this.drowning > 2) {
@@ -196,10 +212,17 @@ export class Player extends PhysicsEntity {
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
         if (!isDrowning) {
             if (this.moveRight) {
+                if (!this.flying) {
+                    this.walkingSound.play();
+                }
                 this.accelerateX(acceleration * dt);
             } else if (this.moveLeft) {
+                if (!this.flying) {
+                    this.walkingSound.play();
+                }
                 this.accelerateX(-acceleration * dt);
             } else {
+                this.walkingSound.stop();
                 if (this.getVelocityX() > 0) {
                     this.decelerateX(acceleration * dt);
                 } else {
