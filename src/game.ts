@@ -2,7 +2,7 @@ import { World, Environment } from "./World";
 import { Player } from "./Player";
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
-import { clamp, now } from './util';
+import { clamp, now, rndInt } from './util';
 import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
@@ -14,7 +14,9 @@ import "./DummyNPC";
 import "./Cloud";
 import "./Stone";
 import "./FlameBoy";
+import "./Tree";
 import { BitmapFont } from "./BitmapFont";
+import { Sound } from "./Sound";
 
 const gameWidth = 480;
 const gameHeight = 270;
@@ -81,6 +83,7 @@ export class Game {
 
     public mainFont!: BitmapFont;
     public bigFont!: BitmapFont;
+    public music!: Sound[];
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -116,6 +119,9 @@ export class Game {
     }
 
     private async load() {
+        this.music = [
+            new Sound("music/music-2.mp3")
+        ];
         await this.loadFonts();
         await Face.load();
         await FireGfx.load();
@@ -123,6 +129,13 @@ export class Game {
             await obj.load();
         }
     }
+
+    private async playMusicTrack(): Promise<void> {
+        const music = this.music[rndInt(0, 1)];
+        this.music.forEach(music => music.stop());
+        music.setLoop(true);;
+        return music.play();
+    };
 
     private async loadFonts() {
         this.mainFont = await BitmapFont.load("fonts/fontsheet.png", {
@@ -137,6 +150,20 @@ export class Game {
 
     private start() {
         this.lastUpdateTime = now();
+
+        // Start music after pressing a key or mouse button because Chrome doesn't want to autostart music
+        const startMusic = async () => {
+            try {
+                await this.playMusicTrack();
+                document.removeEventListener("keydown", startMusic);
+                document.removeEventListener("mousedown", startMusic);
+            } catch (e) {
+                document.addEventListener("keydown", startMusic);
+                document.addEventListener("mousedown", startMusic);
+            }
+        }
+        startMusic();
+
         this.loop();
     }
 

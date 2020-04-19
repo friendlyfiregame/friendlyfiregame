@@ -39,3 +39,6 @@ export const STONE_ANIMATION = [ 167, 167, 167 ];
 
 /** Animation speed for the flameboy in milliseconds */
 export const FLAMEBOY_ANIMATION = [ 100, 100, 100, 100, 100, 100 ];
+
+/** Animation speed for the tree in milliseconds */
+export const TREE_ANIMATION = [ 250, 250 ];

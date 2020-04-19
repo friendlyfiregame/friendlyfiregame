@@ -2,22 +2,22 @@ import { entity } from "./Entity";
 import { Game } from "./game";
 import { Sprites, getSpriteIndex } from "./Sprites";
 import { loadImage } from "./graphics";
-import { STONE_ANIMATION } from "./constants";
+import { TREE_ANIMATION } from "./constants";
+import { Face, EyeType } from './Face';
 import { NPC } from './NPC';
-import { EyeType, Face } from './Face';
 
-@entity("stone")
-export class Stone extends NPC {
+@entity("tree")
+export class Tree extends NPC {
     private sprites!: Sprites;
     private spriteIndex = 0;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
-        this.face = new Face(this, EyeType.STONE, 1, 0, 21);
+        this.face = new Face(this, EyeType.TREE, 1, 5, 94);
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/stone.png"), 3, 1);
+        this.sprites = new Sprites(await loadImage("sprites/tree.png"), 2, 1);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -25,11 +25,11 @@ export class Stone extends NPC {
         ctx.translate(this.x, -this.y + 1);
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
-        this.face?.draw(ctx);
+        this.drawFace(ctx);
     }
 
     update(dt: number): void {
-        this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
+        this.spriteIndex = getSpriteIndex(0, TREE_ANIMATION);
     }
     startDialog(): void {
     }
