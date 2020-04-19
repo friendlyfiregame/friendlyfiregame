@@ -16,10 +16,9 @@ export class DummyNPC extends NPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        ctx.beginPath();
+        this.game.mainFont.drawText(ctx, "NPC", this.x, -this.y - this.height - 10, "black", 0.5);
         ctx.strokeStyle = "black";
-        ctx.strokeText("NPC", this.x - (this.width / 2), -this.y - this.height);
-        ctx.strokeRect(this.x - (this.width / 2), -this.y - this.height, this.width, this.height);
+        ctx.strokeRect(this.x - Math.round(this.width / 2) - 0.5, -this.y - this.height - 0.5, this.width, this.height);
         ctx.restore();
         this.drawDialog(ctx);
     }
