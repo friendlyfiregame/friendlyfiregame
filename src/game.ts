@@ -71,7 +71,7 @@ export class Game {
         const mapSize = this.mapInfo.getMapSize();
         this.player = new Player(this, playerStart.x, mapSize.height - playerStart.y);
         this.boundLoop = this.loop.bind(this);
-        this.fire = new Fire(this, 2450, 1170);
+        this.fire = new Fire(this, 2548, 864);
         this.particles = particles;
         this.camera = new Camera(this.player);
         this.gameObjects = [

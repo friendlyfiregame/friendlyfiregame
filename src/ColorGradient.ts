@@ -10,6 +10,11 @@ export class ColorGradient {
         return this.mapping(clamp(p, 0, 0.9999999999));
     }
 
+    public getCss(p: number): string {
+        const color = this.get(p);
+        return `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
+    }
+
     public static fromTable(table: number[][]): ColorGradient {
         const items = table.length;
         const grad = new ColorGradient((v) => {

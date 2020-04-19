@@ -63,11 +63,12 @@ export class Fire extends NPC {
         this.sparkEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
-            color: () => "#fff0c0" + rndItem("3456789abcdef") + "0",
+            color: () => FireGfx.gradient.getCss(rnd() ** 0.5),
             size: 2,
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(1, 1.5),
             blendMode: "screen",
+            alpha: () => rnd(0.3, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.face = new Face(this, 1, 0, 6);
@@ -97,7 +98,7 @@ export class Fire extends NPC {
             if (rnd() < 0.05) {
                 this.face?.setMode(Math.floor(Math.random() * 4));
             }
-            if (rnd() < 0.3) {
+            if (rnd() < 0.5) {
                 this.sparkEmitter.emit();
             }
             if (rnd() < 0.25) {

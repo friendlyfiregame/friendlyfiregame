@@ -32,7 +32,7 @@ export class Camera {
         this.interpolationTime = interpolationTime / 2;
         // TODO remove this example camera focus
         setTimeout(async () => {
-            this.focusOn(4, this.x, this.y + 20, 4, Math.PI * 2,
+            this.focusOn(4, (window as any).game.fire.x, (window as any).game.fire.y + 20, 4, Math.PI * 2,
                 valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
         }, 2000);
     }
@@ -106,7 +106,9 @@ export class Camera {
             const f1 = 1 - force;
             this.x = f1 * this.x + force * focus.x;
             this.y = f1 * this.y + force * focus.y;
-            this.zoom = f1 * this.zoom + force * focus.zoom;
+            const originalSize = 1 / this.zoom, targetSize = 1 / focus.zoom;
+            const currentSize = f1 * originalSize + force * targetSize;
+            this.zoom = 1 / currentSize;
             this.rotation = f1 * this.rotation + force * focus.rotation;
         } else {
             if (focus.resolve) {

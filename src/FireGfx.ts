@@ -12,12 +12,13 @@ export class FireGfx {
     private imageData: ImageData;
     private returnColor: number[] = [0, 0, 0, 255];
     private updateSteps = 0;
+    private bottomLine: number[] = [];
 
     constructor(
         private w = 48,
         private h = 64,
         private coneShaped = true,
-        private stepModulo = 3
+        private stepModulo = 2
     ) {
         this.canvas = document.createElement("canvas");
         this.canvas.width = this.w;
@@ -53,6 +54,7 @@ export class FireGfx {
             const smooth = 0.5 - 0.5 * Math.cos(2 * Math.PI * stuffedXrel);
             bottom[x] = 1.25 * Math.pow(smooth, 0.5);
         }
+        this.bottomLine = bottom.slice();
     }
 
     private getDecay(xrel: number, yrel: number): number {
@@ -94,9 +96,17 @@ export class FireGfx {
                     fromX = toCenter * midX + toCenter1 * fromX;
                 }
                 const fromX1 = Math.floor(fromX), fx = fromX - fromX1;
-                const v = fx * fromRow[fromX1 + 1] + (1 - fx) * fromRow[fromX1] - decayRow[x];
+                const v = fx * fromRow[fromX1 + 1] + (1 - fx) * fromRow[fromX1] - decayRow[x] + rnd(-0.03, 0.02);
                 row[x] = clamp(v, 0, Infinity);
             }
+        }
+        // Bottom line always stays mostly the same, only minor variations
+        const row = data[this.h - 1];
+        const t = this.updateSteps * 0.1
+        for (let x = 0; x < this.w; x++) {
+            // const f = 1 + 0.5 * Math.sin(0.1 * x + t) * Math.sin()
+            let f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
+            row[x] = this.bottomLine[x] * f;
         }
     }
 
