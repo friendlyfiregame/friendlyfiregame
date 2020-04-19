@@ -16,6 +16,7 @@ export class FireGfx {
     constructor(
         private w = 48,
         private h = 64,
+        private coneShaped = true,
         private stepModulo = 3
     ) {
         this.canvas = document.createElement("canvas");
@@ -48,13 +49,21 @@ export class FireGfx {
         }
         const bottom = data[this.h - 1];
         for (let x = 0; x < this.w; x++) {
-            const smooth = 0.5 - 0.5 * Math.cos(2 * Math.PI * x / (this.w - 1));
+            const xrel = x / (this.w - 1);
+            const stuffedXrel = this.coneShaped ? clamp(2 * xrel - 0.5, 0, 1) : xrel;
+            const smooth = 0.5 - 0.5 * Math.cos(2 * Math.PI * stuffedXrel);
             bottom[x] = 1.25 * Math.pow(smooth, 0.5);
         }
     }
 
     private getDecay(xrel: number, yrel: number): number {
         if (xrel > 0.5) { xrel = 1 - xrel; }
+        if (this.coneShaped) {
+            yrel = 1.2 * yrel;
+            if (yrel > 1) {
+                return 0.02;
+            }
+        }
         return 0.02 + (0.5 - xrel) * 0.1 + Math.pow(1 - yrel, 8);
     }
 
@@ -69,12 +78,22 @@ export class FireGfx {
     private updateStep() {
         const data = this.data;
         let fromRow = data[0];
+        let fromX = 0, toCenter = 0, midX = (this.w - 1) * 0.5, toCenter1 = 1;
+        const yThreshold = this.coneShaped ? this.h * 0.8 : Infinity;
         // Let all fire rows move upward, so update rows from top to bottom
         for (let y = 0; y < this.h - 1; y++) {
             const row = fromRow, decayRow = this.decayData[y];
             fromRow = data[y + 1];
+            if (y > yThreshold) {
+                const yp = (y - yThreshold) / (this.h - yThreshold);
+                toCenter = 0.15 * yp * yp;
+                toCenter1 = 1 - toCenter;
+            }
             for (let x = 0; x < this.w; x++) {
-                const fromX = clamp(x + rnd(-1, 1) * rnd(), 0.3, this.w - 1.3);
+                fromX = clamp(x + rnd(-1, 1) * rnd(), 0.3, this.w - 1.3);
+                if (toCenter) {
+                    fromX = toCenter * midX + toCenter1 * fromX;
+                }
                 const fromX1 = Math.floor(fromX), fx = fromX - fromX1;
                 const v = fx * fromRow[fromX1 + 1] + (1 - fx) * fromRow[fromX1] - decayRow[x];
                 row[x] = clamp(v, 0, Infinity);
