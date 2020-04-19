@@ -3,11 +3,12 @@ import { Face } from './Face';
 import { ScriptedDialog } from './ScriptedDialog';
 
 export abstract class NPC extends Entity {
-    public hasDialog = false;
     public face: Face | null = null;
     public scriptedDialog: ScriptedDialog | null = null;
 
-    abstract startDialog(): void;
+    public get hasDialog(): boolean {
+        return this.scriptedDialog?.hasPlayerDialog ?? false;
+    }
 
     protected drawFace(ctx: CanvasRenderingContext2D): void {
         if (this.face) {

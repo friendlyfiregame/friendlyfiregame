@@ -13,6 +13,9 @@ export class DummyNPC extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 20, 30);
+    }
+
+    async load(): Promise<void> {
         this.scriptedDialog = new ScriptedDialog(this, dialogData);
     }
 

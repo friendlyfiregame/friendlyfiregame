@@ -98,7 +98,7 @@ export class Game {
         this.player = this.getGameObject(Player);
         this.fire =this.getGameObject(Fire);
         // testing dummy
-        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y),)
+        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y - this.player.height),)
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;

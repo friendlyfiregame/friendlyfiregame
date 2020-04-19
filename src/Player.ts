@@ -56,10 +56,11 @@ export class Player extends PhysicsEntity {
     private readonly startX: number;
     private readonly startY: number;
 
-    private interactionRange = 35;
+    public isInDialog = false;
+    private dialogRange = 50;
+    private dialogTipText = "press 'Enter' or 'e' to talk";
     private closestNPC: NPC | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;
-    public isInDialog = false;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
 
@@ -109,7 +110,7 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
             if (this.closestNPC && this.closestNPC.hasDialog) {
-                this.closestNPC.startDialog();
+                this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && !this.flying
                 && !this.isInDialog) {
@@ -158,7 +159,9 @@ export class Player extends PhysicsEntity {
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = "white";
-        ctx.strokeText("press 'Enter' to talk", this.x - (this.width / 2), -this.y + 20);
+
+        const textWidth = ctx.measureText(this.dialogTipText).width;
+        ctx.strokeText(this.dialogTipText, this.x - (this.width / 2) - (textWidth / 2), -this.y + 20);
         ctx.restore();
         this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
     }
@@ -226,7 +229,7 @@ export class Player extends PhysicsEntity {
         }
 
         // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.interactionRange);
+        const closestEntity = this.getClosestEntityInRange(this.dialogRange);
         if (closestEntity instanceof NPC) {
             this.closestNPC = closestEntity;
         } else {

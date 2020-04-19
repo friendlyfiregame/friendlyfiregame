@@ -1,6 +1,3 @@
-import { Entity } from './Entity';
-import { Game } from "./game";
-
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): CanvasRenderingContext2D {
     if (w < 2 * r) {r = w / 2};
     if (h < 2 * r) {r = h / 2};
@@ -14,19 +11,17 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
     return ctx;
   }
 
-export class SpeechBubble extends Entity {
+export class SpeechBubble {
     public fontSize = 10;
     public lineHeight = 15;
     public height = this.message.split("\n").length * this.lineHeight;
 
     constructor(
-        game: Game,
-        x: number,
-        y: number,
+        private x: number,
+        private y: number,
         private color = "#FFBBBB",
         public message = "",
     ) {
-        super(game, x, y);
     }
 
     setMessage(message: string) {

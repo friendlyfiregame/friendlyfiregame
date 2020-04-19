@@ -115,7 +115,4 @@ export class Fire extends NPC {
         }
         this.fireGfx.update(dt);
     }
-
-    startDialog(): void {
-    }
 }
