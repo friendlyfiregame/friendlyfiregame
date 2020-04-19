@@ -1,25 +1,33 @@
 import { Game, CollidableGameObject } from "./game";
 import { PIXEL_PER_METER } from "./constants";
-import { PhysicsEntity } from "./PhysicsEntity";
 import { Environment } from "./World";
+import { Entity, entity } from "./Entity";
+import { now } from "./util";
 
-export class Snowball extends PhysicsEntity implements CollidableGameObject {
-    public constructor(game: Game, x: number, y: number, velocityX: number, velocityY: number) {
-        super(game, x, y, 0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER);
-        this.setVelocity(velocityX, velocityY);
+@entity("cloud")
+export class Cloud extends Entity implements CollidableGameObject {
+    public constructor(game: Game, x: number, y: number) {
+        super(game, x, y, 5  * PIXEL_PER_METER, 0.75 * PIXEL_PER_METER);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
-        ctx.translate(this.x, -this.y);
         ctx.strokeStyle = "black";
         ctx.fillStyle = "white";
         ctx.beginPath();
-        ctx.arc(0, -this.height / 2, this.width / 2, 0, Math.PI * 2, false);
+        ctx.rect(this.x - this.width / 2, -this.y - this.height, this.width, this.height);
         ctx.fill();
         ctx.stroke();
         ctx.restore();
+    }
+
+    update(dt: number): void {
+        if (now() % 5000 > 2500) {
+            this.x += 75 * dt;
+        } else {
+            this.x -= 75 *  dt;
+        }
     }
 
     collidesWith(x: number, y: number, ignore?: Environment[]): number {

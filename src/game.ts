@@ -1,4 +1,4 @@
-import { World } from "./World";
+import { World, Environment } from "./World";
 import { Player } from "./Player";
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
@@ -9,6 +9,7 @@ import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
 import "./DummyNPC";
+import { Cloud } from "./Cloud";
 
 const gameWidth = 480;
 const gameHeight = 270;
@@ -17,6 +18,14 @@ export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
     update(dt: number): void;
     load(): Promise<void>;
+}
+
+export interface CollidableGameObject extends GameObject {
+    collidesWith(x: number, y: number, ignore?: Environment[]): number;
+}
+
+export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
+    return typeof (object as CollidableGameObject).collidesWith === "function";
 }
 
 // Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump too much.
@@ -54,7 +63,7 @@ export class Game {
 
     public particles: Particles;
 
-    public fire!: Fire;
+    public fire: Fire;
 
     private frameCounter = 0;
     private framesPerSecond = 0;
@@ -72,10 +81,12 @@ export class Game {
         this.particles = particles;
         this.gameObjects = [
             this.world = new World(this),
+            new Cloud(this, 1500, 970),
             particles,
             ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y))
         ];
         this.player = this.getGameObject(Player);
+        console.log(this.player.x, this.player.y);
         this.fire =this.getGameObject(Fire);
         this.camera = new Camera(this, this.player);
         setInterval(() => {

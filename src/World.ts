@@ -1,5 +1,5 @@
 import { loadImage, getImageData } from "./graphics";
-import { GameObject, Game } from "./game";
+import { GameObject, Game, isCollidableGameObject } from "./game";
 
 export enum Environment {
     AIR = 0,
@@ -68,6 +68,15 @@ export class World implements GameObject {
      *         specific meaning which isn't defined yet).
      */
     public collidesWith(x: number, y: number, ignore?: Environment[]): number {
+        for (const gameObject of this.game.gameObjects) {
+            if (gameObject !== this && isCollidableGameObject(gameObject)) {
+                const environment = gameObject.collidesWith(x, y, ignore);
+                if (environment !== Environment.AIR) {
+                    return environment;
+                }
+            }
+        }
+
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
         if (index < 0 || index >= this.collisionMap.length) {
             return 0;

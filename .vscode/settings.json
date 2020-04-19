@@ -6,6 +6,7 @@
         "dist": true
     },
     "cSpell.words": [
+        "Collidable",
         "Entrypoint",
         "chunkhash",
         "devtool",
