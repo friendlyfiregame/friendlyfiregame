@@ -75,7 +75,6 @@ export class Game {
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            this.player,
             ...this.mapInfo.getNPCs().map(npc => {
                 switch (npc.name) {
                     case "fire":
@@ -83,7 +82,8 @@ export class Game {
                     default:
                         return new DummyNPC(this, npc.x, npc.y);
                 }
-            })
+            }),
+            this.player
         ];
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
