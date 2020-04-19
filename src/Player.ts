@@ -46,6 +46,12 @@ const bounceColors = [
     "#ff7070"
 ];
 
+const doubleJumpColors = [
+    "#ffffff",
+    "#cccccc",
+    "#aaaaaa"
+];
+
 @entity("player")
 export class Player extends PhysicsEntity {
     private flying = false;
@@ -63,6 +69,8 @@ export class Player extends PhysicsEntity {
     private readonly startY: number;
     private dance: Dance | null = null;
     private carrying: PhysicsEntity | null = null;
+    public doubleJump = false;
+    private usedDoubleJump = false;
 
     public speechBubble = new SpeechBubble(this.x, this.y, "white");
     public dialogActive = false;
@@ -72,6 +80,7 @@ export class Player extends PhysicsEntity {
     private closestNPC: NPC | null = null;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
+    private doubleJumpEmitter: ParticleEmitter;
     private drowningSound!: Sound;
     private walkingSound!: Sound;
     private throwingSound!: Sound;
@@ -98,6 +107,15 @@ export class Player extends PhysicsEntity {
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
             color: () => rndItem(bounceColors),
+            size: rnd(1.5, 3),
+            gravity: {x: 0, y: -120},
+            lifetime: () => rnd(0.4, 0.6),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        });
+        this.doubleJumpEmitter = particles.createEmitter({
+            position: {x: this.x, y: this.y},
+            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
+            color: () => rndItem(doubleJumpColors),
             size: rnd(1.5, 3),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
@@ -135,12 +153,10 @@ export class Player extends PhysicsEntity {
             if (this.closestNPC && this.closestNPC.hasDialog) {
                 this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
             }
-        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && !this.flying
+        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()
                 && !this.dialogActive) {
-            this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
             this.jumpKeyPressed = true;
-            this.jumpingSound.stop();
-            this.jumpingSound.play();
+            this.jump();
         } else if ((event.key === "s" || event.key === "ArrowDown") && !this.dialogActive) {
             this.jumpDown = true;
         } else if (event.key === "t" && !this.dialogActive) {
@@ -158,6 +174,24 @@ export class Player extends PhysicsEntity {
             }
         } else if (event.key === "p" && !this.dialogActive && !this.carrying) {
             this.carrying = this.game.stone;
+        }
+    }
+
+    private canJump(): boolean {
+        if (this.doubleJump) {
+            return !this.usedDoubleJump;
+        }
+        return !this.flying;
+    }
+
+    private jump(): void {
+        this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
+        this.jumpingSound.stop();
+        this.jumpingSound.play();
+        if (this.flying) {
+            this.usedDoubleJump = true;
+            this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+            this.doubleJumpEmitter.emit(20);
         }
     }
 
@@ -288,6 +322,7 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityX() === 0 && this.getVelocityY() === 0) {
             this.spriteIndex = getSpriteIndex(SpriteIndex.IDLE0, PLAYER_IDLE_ANIMATION);
             this.flying = false;
+            this.usedDoubleJump = false;
         } else {
             if (this.getVelocityY() > 0) {
                 this.spriteIndex = SpriteIndex.JUMP;
@@ -298,6 +333,7 @@ export class Player extends PhysicsEntity {
             } else {
                 this.spriteIndex = getSpriteIndex(SpriteIndex.WALK0, PLAYER_RUNNING_ANIMATION);
                 this.flying = false;
+                this.usedDoubleJump = false;
             }
         }
 
