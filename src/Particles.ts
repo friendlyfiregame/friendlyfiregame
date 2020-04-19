@@ -247,15 +247,28 @@ export class ValueCurve {
     public getExact(p: number): number {
         return this.func(p);
     }
+
+    public invert(): ValueCurve {
+        return new ValueCurve((p) => this.getExact(1 - p), this.steps);
+    }
+
+    public append(otherCurve: ValueCurve, relativeLength = 1): ValueCurve {
+        const total = 1 + relativeLength;
+        const mid = (total - relativeLength) / total;
+        return new ValueCurve((p) => p < mid ? this.getExact(p / mid) :
+                otherCurve.getExact((p - mid) / relativeLength),
+                Math.max(this.steps, otherCurve.steps));
+    }
 }
 
 function trapezeFunction(v: number, v1: number = v): ((p: number) => number) {
     return (p: number) => p < v ? p / v : p > 1 - v1 ? (1 - p) / v1 : 1
 }
 export const valueCurves = {
-    constant: new ValueCurve((p) => 1, 1),
-    linear: new ValueCurve((p) => p),
-    trapeze: (v: number = 0.1, v1: number = v) => new ValueCurve(trapezeFunction(v, v1)),
-    cos: (v: number = 0.1, v1: number = v) =>
-            new ValueCurve((p) => 0.5 - 0.5 * Math.cos(Math.PI * trapezeFunction(v, v1)(p)))
-}
+    constant: new ValueCurve((p) => 1, 1), // always 1
+    linear: new ValueCurve((p) => p), // linear 0 to 1
+    trapeze: (v: number = 0.1, v1: number = v) => new ValueCurve(trapezeFunction(v, v1)), // blocky 0 to 1 to 0
+    cos: (v: number = 0.1, v1: number = v) => // smooth 0 to 1 to 0
+            new ValueCurve((p) => 0.5 - 0.5 * Math.cos(Math.PI * trapezeFunction(v, v1)(p))),
+    cubic: new ValueCurve((p) => 3 * p * p - 2 * p * p * p) // smooth 0 to 1
+};

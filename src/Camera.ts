@@ -1,4 +1,5 @@
 import { Vector2, clamp } from './util';
+import { ValueCurve, valueCurves } from './Particles';
 
 interface camFocus {
     x: number;
@@ -7,15 +8,19 @@ interface camFocus {
     startTime: number;
     endTime: number;
     zoom: number;
+    rotation: number;
     progress: number;
     dead: boolean;
     force: number;
+    curve: ValueCurve;
+    resolve?: Function;
 };
 
 export class Camera {
     public x = 0;
     public y = 0;
     public zoom = 1;
+    public rotation = 0;
     private focuses: camFocus[] = [];
     private time = 0;
     private interpolationTime!: number;
@@ -26,7 +31,10 @@ export class Camera {
         }
         this.interpolationTime = interpolationTime / 2;
         // TODO remove this example camera focus
-        setTimeout(() => this.focusOn(3, 2150,1350, 0.5), 5000);
+        setTimeout(async () => {
+            this.focusOn(4, this.x, this.y + 20, 4, Math.PI * 2,
+                valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
+        }, 2000);
     }
 
     public update(dt: number, time: number) {
@@ -35,6 +43,7 @@ export class Camera {
         this.x = this.target.x;
         this.y = this.target.y;
         this.zoom = 1;
+        this.rotation = 0;
         // On top of that, apply cam focus(es)
         for (const focus of this.focuses) {
             this.updateAndApplyFocus(focus);
@@ -61,22 +70,30 @@ export class Camera {
 
     public applyTransform(ctx: CanvasRenderingContext2D): void {
         ctx.scale(this.zoom, this.zoom);
+        ctx.rotate(this.rotation);
         ctx.translate(-this.x, this.y);
     }
 
-    public focusOn(duration: number, x: number, y: number, zoom = 1) {
+    public focusOn(duration: number, x: number, y: number, zoom = 1, rotation = 0,
+            curve = valueCurves.cos(this.interpolationTime)): Promise<void> {
         const focus: camFocus = {
             x,
             y,
             duration,
             zoom,
+            rotation,
             startTime: this.time,
             endTime: this.time + duration,
             progress: 0,
             dead: false,
-            force: 0
+            force: 0,
+            curve
         };
         this.focuses.push(focus);
+        return new Promise((resolve, reject) => {
+            focus.resolve = resolve;
+            this.updateAndApplyFocus(focus);
+        });
     }
 
     public updateAndApplyFocus(focus: camFocus) {
@@ -84,17 +101,18 @@ export class Camera {
         focus.dead = (focus.progress >= 1);
         if (!focus.dead) {
             // Fade in and out of focus using force lerping from 0 to 1 and back to 0 over time
-            let force = 1;
-            if (focus.progress < this.interpolationTime || focus.progress > 1 - this.interpolationTime) {
-                const diff = ((focus.progress < 0.5) ? focus.progress : (1 - focus.progress)) / this.interpolationTime;
-                force = 0.5 - 0.5 * Math.cos(diff * Math.PI);
-            }
-            focus.force = force;
+            const force = focus.force = focus.curve.get(focus.progress);
             // Apply to camera state
             const f1 = 1 - force;
             this.x = f1 * this.x + force * focus.x;
             this.y = f1 * this.y + force * focus.y;
             this.zoom = f1 * this.zoom + force * focus.zoom;
+            this.rotation = f1 * this.rotation + force * focus.rotation;
+        } else {
+            if (focus.resolve) {
+                focus.resolve();
+                focus.resolve = undefined;
+            }
         }
     }
 
