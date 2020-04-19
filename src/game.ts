@@ -33,7 +33,7 @@ const MAX_DT = 0.1;
 
 export class Game {
 
-    private canvas: HTMLCanvasElement;
+    public canvas: HTMLCanvasElement;
 
     private lastUpdateTime = now();
 
