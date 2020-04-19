@@ -60,8 +60,8 @@ export class Game {
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            this.player,
             this.fire,
+            this.player,
             new DummyNPC(this, 2570, 1245),
         ];
     }
