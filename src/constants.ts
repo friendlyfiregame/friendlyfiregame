@@ -10,6 +10,8 @@ export const GRAVITY = 35;
 /** Gravity for short jumps (while flying upwards, after player releases jump key) in m/s² */
 export const SHORT_JUMP_GRAVITY = 70;
 
+/** Drowning velocity in meters per second. */
+export const DROWNING_VELOCITY = -1;
 
 /** Maximum movement speed of the player in m/s */
 export const MAX_PLAYER_SPEED = 5;
@@ -31,3 +33,9 @@ export const PLAYER_IDLE_ANIMATION = [ 100, 500, 50, 1000 ];
 
 /** Animation speed for player running in milliseconds */
 export const PLAYER_RUNNING_ANIMATION = [ 150, 150, 150, 150 ];
+
+/** Animation speed for the stone in milliseconds */
+export const STONE_ANIMATION = [ 167, 167, 167 ];
+
+/** Animation speed for the flameboy in milliseconds */
+export const FLAMEBOY_ANIMATION = [ 100, 100, 100, 100, 100, 100 ];

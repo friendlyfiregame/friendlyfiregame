@@ -1,6 +1,7 @@
 import { Entity } from './Entity';
-import { PIXEL_PER_METER, GRAVITY } from "./constants";
+import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
 import { Environment } from "./World";
+import { Player } from "./Player";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -128,8 +129,12 @@ export abstract class PhysicsEntity extends Entity {
 
         // Object dropping down when there is no ground below
         if (!this.floating) {
-            if (world.collidesWith(this.x, this.y - 1, [ this ]) === 0) {
+            const environment = world.collidesWith(this.x, this.y - 1, [ this ],
+                    this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
+            if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
+            } else if (environment === Environment.WATER) {
+                this.velocityY = DROWNING_VELOCITY;
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
             }

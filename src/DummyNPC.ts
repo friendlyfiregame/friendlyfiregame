@@ -6,7 +6,6 @@ import { Game } from "./game";
 import { ScriptedDialog } from './ScriptedDialog';
 import dialogData from "../assets/dummy.texts.json";
 
-@entity("stone")
 @entity("tree")
 export class DummyNPC extends NPC {
     private activeDialog: Dialog | null = null;

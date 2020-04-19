@@ -5,7 +5,8 @@ export enum Environment {
     AIR = 0,
     SOLID = 0xff000000,
     PLATFORM = 0xff7f7f7f,
-    BOUNCE = 0xffff0000
+    BOUNCE = 0xffff0000,
+    WATER = 0xff0000ff
 }
 
 export class World implements GameObject {

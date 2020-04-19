@@ -12,6 +12,9 @@ import { Campaign } from './Campaign';
 import { DummyNPC } from './DummyNPC';
 import "./DummyNPC";
 import "./Cloud";
+import "./Stone";
+import "./FlameBoy";
+import { BitmapFont } from "./BitmapFont";
 
 const gameWidth = 480;
 const gameHeight = 270;
@@ -35,7 +38,7 @@ const MAX_DT = 0.1;
 
 export class Game {
 
-    private canvas: HTMLCanvasElement;
+    public canvas: HTMLCanvasElement;
 
     private lastUpdateTime = now();
 
@@ -76,6 +79,9 @@ export class Game {
     private scale = 1;
     private readonly mapInfo: MapInfo;
 
+    public mainFont!: BitmapFont;
+    public bigFont!: BitmapFont;
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.updateCanvasSize();
@@ -110,12 +116,24 @@ export class Game {
     }
 
     private async load() {
+        await this.loadFonts();
         await Face.load();
         await FireGfx.load();
         for (const obj of this.gameObjects) {
             await obj.load();
         }
     }
+
+    private async loadFonts() {
+        this.mainFont = await BitmapFont.load("fonts/fontsheet.png", {
+            "white": "white", "black": "black", "gray": "gray", "darkgray": "#181818", "orange": "#d9913c",
+            "green": "#81bc1b", "red": "red", "blue": "#009cff", "gold": "#f0c030", "organ": "#a00824", "yellow":
+            "#d0c800", "money": "#81bc1b" }, "abcdefghijklmnopqrstuvwxyz0123456789#$()[]+-?!',. :",
+            [ 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5,
+            5, 5, 5, 3, 3, 2, 2, 5, 5, 4, 1, 1, 2, 2, 4, 3]);
+        this.bigFont = await BitmapFont.load("fonts/bignumbers.png", { "dark": "#5d5d5d" }, "0123456789",
+            [11, 6, 11, 11, 10, 11, 11, 11, 11, 11]);
+  }
 
     private start() {
         this.lastUpdateTime = now();

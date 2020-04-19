@@ -16,7 +16,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private image!: HTMLImageElement;
 
     public constructor(game: Game, x: number, y: number, properties: GameObjectProperties) {
-        super(game, x, y, 64, 12);
+        super(game, x, y, 74, 5);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
@@ -37,11 +37,11 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     public async load(): Promise<void> {
-         this.image = await loadImage("sprites/cloud2.png");
+         this.image = await loadImage("sprites/cloud3.png");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.drawImage(this.image, this.x - this.width / 2, -this.y - this.height);
+        ctx.drawImage(this.image, this.x - this.width / 2 - 4, -this.y - this.height - 16);
     }
 
     update(dt: number): void {
