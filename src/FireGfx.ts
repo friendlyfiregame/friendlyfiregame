@@ -1,7 +1,10 @@
 import { rnd, clamp } from './util';
+import { loadImage } from './graphics';
+import { ColorGradient } from './ColorGradient';
 
 
 export class FireGfx {
+    public static gradient: ColorGradient;
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private data: number[][];
@@ -23,6 +26,12 @@ export class FireGfx {
         this.data = [];
         this.decayData = [];
         this.init();
+    }
+
+    public static async load(): Promise<void> {
+        const gradientImg = await loadImage("gradients/fire.png");
+        this.gradient = ColorGradient.fromImage(gradientImg);
+        console.log(this.gradient);
     }
 
     private init() {
@@ -91,6 +100,10 @@ export class FireGfx {
     }
 
     public valueToColor(v: number): number[] {
+        return FireGfx.gradient.get(clamp(v, 0, 1));
+    }
+
+    public oldValueToColor(v: number): number[] {
         v = clamp(v, 0, 1);
         const v255 = 255 * v;
         this.returnColor[0] = 255;

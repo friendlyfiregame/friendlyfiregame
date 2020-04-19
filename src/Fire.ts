@@ -6,12 +6,12 @@ import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face } from './Face';
 import { FireGfx } from './FireGfx';
 
-const fireColors = [
-    "#603015",
-    "#601004",
-    "#604524",
-    "#500502"
-];
+// const fireColors = [
+//     "#603015",
+//     "#601004",
+//     "#604524",
+//     "#500502"
+// ];
 
 const smokeColors = [
     "#555",
