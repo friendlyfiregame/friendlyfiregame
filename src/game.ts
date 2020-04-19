@@ -10,7 +10,6 @@ import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
 import { Campaign } from './Campaign';
 import { DummyNPC } from './DummyNPC';
-import "./DummyNPC";
 import "./Cloud";
 import "./Stone";
 import "./FlameBoy";
@@ -106,7 +105,7 @@ export class Game {
         this.stone = this.getGameObject(Stone);
 
         // testing dummy
-        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y - this.player.height),)
+        this.gameObjects.splice(2, 0, new DummyNPC(this, this.player.x - 25, this.player.y));
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
@@ -245,11 +244,7 @@ export class Game {
 
         // Display FPS counter
         if (this.showFPS) {
-            ctx.save();
-            ctx.fillStyle = "white";
-            ctx.font = (10 * this.scale) + "px sans-serif";
-            ctx.fillText(`${this.framesPerSecond} FPS`, 2 * this.scale, 10 * this.scale);
-            ctx.restore();
+            this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;
     }

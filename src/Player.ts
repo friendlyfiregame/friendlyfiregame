@@ -77,7 +77,7 @@ export class Player extends PhysicsEntity {
     public dialogActive = false;
 
     private dialogRange = 50;
-    private dialogTipText = "press 'Enter' or 'e' to talk";
+    private dialogTipText = "Press 'Enter' or 'E' to talk";
     private closestNPC: NPC | null = null;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
@@ -249,10 +249,9 @@ export class Player extends PhysicsEntity {
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
-        ctx.strokeStyle = "white";
-
-        const textWidth = ctx.measureText(this.dialogTipText).width;
-        ctx.strokeText(this.dialogTipText, this.x - (this.width / 2) - (textWidth / 2), -this.y + 20);
+        const text = this.dialogTipText;
+        this.game.mainFont.drawTextWithOutline(ctx, text, this.x - Math.round(this.width / 2), -this.y + 12,
+            "white", "black", 0.5);
         ctx.restore();
     }
 
