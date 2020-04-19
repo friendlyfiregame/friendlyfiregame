@@ -14,8 +14,8 @@ export class Sound {
         this.audio.currentTime = 0;
     }
 
-    public play(): void {
-        this.audio.play();
+    public play(): Promise<void> {
+        return this.audio.play();
     }
 
     public setLoop(loop: boolean): void {
