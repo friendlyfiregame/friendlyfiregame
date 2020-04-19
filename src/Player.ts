@@ -13,6 +13,9 @@ import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
+import { Sound } from "./Sound";
+import { Dance } from './Dance';
+import { Cloud } from './Cloud';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -52,16 +55,29 @@ export class Player extends PhysicsEntity {
     public jumpDown: boolean = false;
     private debug = false;
     private jumpKeyPressed: boolean | null = false;
+    private drowning = 0;
+    private readonly startX: number;
+    private readonly startY: number;
+    private dance: Dance | null = null;
 
-    private interactionRange = 35;
+    public speechBubble = new SpeechBubble(this.x, this.y, "white");
+    public dialogActive = false;
+
+    private dialogRange = 50;
+    private dialogTipText = "press 'Enter' or 'e' to talk";
     private closestNPC: NPC | null = null;
-    public activeSpeechBubble: SpeechBubble | null = null;
-    public isInDialog = false;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
+    private drowningSound!: Sound;
+    private walkingSound!: Sound;
+    private throwingSound!: Sound;
+    private jumpingSound!: Sound;
+    private bouncingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+        this.startX = x;
+        this.startY = y;
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
         this.setMaxVelocity(MAX_PLAYER_SPEED);
@@ -86,34 +102,52 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-         this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
-         this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
+        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
+        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
+        this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
+        this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
+        this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
+        this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
     private handleKeyDown(event: KeyboardEvent) {
+        if (this.dance) {
+            this.dance.handleKeyDown(event);
+            return;
+        }
         if (!this.game.camera.isOnTarget() || event.repeat) {
             return;
         }
-        if ((event.key === "ArrowRight" || event.key === "d") && !this.isInDialog) {
+        if ((event.key === "ArrowRight" || event.key === "d") && !this.dialogActive) {
             this.direction = 1;
             this.moveRight = true;
             this.moveLeft = false;
-        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.isInDialog) {
+        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.dialogActive) {
             this.direction = -1;
             this.moveLeft = true;
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
             if (this.closestNPC && this.closestNPC.hasDialog) {
-                this.closestNPC.startDialog();
+                this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && !this.flying
-                && !this.isInDialog) {
+                && !this.dialogActive) {
             this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
             this.jumpKeyPressed = true;
-        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.isInDialog) {
+            this.jumpingSound.stop();
+            this.jumpingSound.play();
+        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.dialogActive) {
             this.jumpDown = true;
-        } else if (event.key === "t" && !this.isInDialog) {
+        } else if (event.key === "t" && !this.dialogActive) {
             this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+            this.throwingSound.stop();
+            this.throwingSound.play();
+        }
+        if (event.key === "c") {
+            if (!this.dance) {
+                this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
+            }
         }
     }
 
@@ -147,19 +181,50 @@ export class Player extends PhysicsEntity {
         if (this.closestNPC && this.closestNPC.hasDialog) {
             this.drawDialogTip(ctx);
         }
+
+        if (this.dance) {
+            this.dance.draw(ctx);
+        }
+
+        if (this.dialogActive && this.speechBubble.message !== "") {
+            this.speechBubble.draw(ctx);
+        }
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = "white";
-        ctx.strokeText("press 'Enter' to talk", this.x - (this.width / 2), -this.y + 20);
+
+        const textWidth = ctx.measureText(this.dialogTipText).width;
+        ctx.strokeText(this.dialogTipText, this.x - (this.width / 2) - (textWidth / 2), -this.y + 20);
         ctx.restore();
-        this.activeSpeechBubble?.draw(ctx, this.x, this.y + 30);
+    }
+
+    private respawn() {
+        this.x = this.startX;
+        this.y = this.startY;
+        this.direction = -1;
+        this.setVelocity(0, 0);
     }
 
     update(dt: number): void {
         super.update(dt);
+        this.speechBubble.update(this.x, this.y);
+
+        const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
+        if (isDrowning) {
+            if (this.drowning === 0) {
+                this.drowningSound.trigger();
+            }
+            this.setVelocityX(0);
+            this.drowning += dt;
+            if (this.drowning > 2) {
+                this.respawn();
+            }
+        } else {
+            this.drowning = 0;
+        }
 
         const world = this.game.world;
         const wasFlying = this.flying;
@@ -171,15 +236,24 @@ export class Player extends PhysicsEntity {
             this.moveLeft = false;
         }
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
-        if (this.moveRight) {
-            this.accelerateX(acceleration * dt);
-        } else if (this.moveLeft) {
-            this.accelerateX(-acceleration * dt);
-        } else {
-            if (this.getVelocityX() > 0) {
-                this.decelerateX(acceleration * dt);
+        if (!isDrowning) {
+            if (this.moveRight) {
+                if (!this.flying) {
+                    this.walkingSound.play();
+                }
+                this.accelerateX(acceleration * dt);
+            } else if (this.moveLeft) {
+                if (!this.flying) {
+                    this.walkingSound.play();
+                }
+                this.accelerateX(-acceleration * dt);
             } else {
-                this.decelerateX(-acceleration * dt);
+                this.walkingSound.stop();
+                if (this.getVelocityX() > 0) {
+                    this.decelerateX(acceleration * dt);
+                } else {
+                    this.decelerateX(-acceleration * dt);
+                }
             }
         }
 
@@ -191,7 +265,7 @@ export class Player extends PhysicsEntity {
             if (this.getVelocityY() > 0) {
                 this.spriteIndex = SpriteIndex.JUMP;
                 this.flying = true;
-            } else if (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10) {
+            } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
                 this.spriteIndex = SpriteIndex.FALL;
                 this.flying = true;
             } else {
@@ -201,7 +275,7 @@ export class Player extends PhysicsEntity {
         }
 
         // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.interactionRange);
+        const closestEntity = this.getClosestEntityInRange(this.dialogRange);
         if (closestEntity instanceof NPC) {
             this.closestNPC = closestEntity;
         } else {
@@ -221,6 +295,22 @@ export class Player extends PhysicsEntity {
         if (!this.flying && this.jumpKeyPressed != null) {
             this.jumpKeyPressed = null;
         }
+
+        // Dance
+        if (this.dance) {
+            this.dance.setPosition(this.x, this.y);
+            const done = this.dance.update(dt);
+            if (done) {
+                // On cloud -> make it rain
+                if (this.dance.wasSuccessful()) {
+                    const ground = this.getGround();
+                    if (ground && ground instanceof Cloud) {
+                        ground.startRain(15);
+                    }
+                }
+                this.dance = null;
+            }
+        }
     }
 
 
@@ -238,7 +328,7 @@ export class Player extends PhysicsEntity {
             const world = this.game.world;
             const height = world.getHeight();
             collidedWith = col = world.collidesWith(this.x, this.y, [ this ],
-                this.jumpDown ? [ Environment.PLATFORM ] : []);
+                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
             while (this.y < height && col) {
                 pulled++;
                 this.y++;
@@ -253,7 +343,8 @@ export class Player extends PhysicsEntity {
                 this.bounceEmitter.setPosition(this.x, this.y - 12);
                 this.bounceEmitter.emit(20);
                 this.dustEmitter.clear();
-                // TODO fancy sound
+                this.bouncingSound.stop();
+                this.bouncingSound.play();
                 // don't let caller know we collided, otherwise they'll override velocity. Don't mind the hack...
                 pulled = 0;
             }
@@ -272,7 +363,8 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.game.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ], [ Environment.PLATFORM ])) {
+        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
+                [ Environment.PLATFORM, Environment.WATER ])) {
             pulled++;
             this.y--;
         }
@@ -284,13 +376,13 @@ export class Player extends PhysicsEntity {
         const world = this.game.world;
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
                 this.x--;
                 pulled++;
             }
         } else {
             while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM ])) {
+                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
                 this.x++;
                 pulled++;
             }
@@ -311,7 +403,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    getGravity() {
+    protected getGravity() {
         if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
             return SHORT_JUMP_GRAVITY;
         } else {

@@ -21,6 +21,14 @@ export class Sprites {
         return this.image.height / this.rows - this.rows;
     }
 
+    public getColumns(): number {
+        return this.columns;
+    }
+
+    public getRows(): number {
+        return this.rows;
+    }
+
     public getAspectRatio(): number {
         return this.getSpriteWidth() / this.getSpriteHeight();
     }

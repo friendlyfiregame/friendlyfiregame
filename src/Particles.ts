@@ -225,7 +225,10 @@ export class Particle {
         }
         if (this.imageOrColor instanceof HTMLImageElement) {
             // Image
-            ctx.drawImage(this.imageOrColor, -this.halfSize, -this.halfSize, this.size, this.size);
+            const w = this.imageOrColor.naturalWidth, h = this.imageOrColor.naturalHeight;
+            const sz = Math.max(w, h);
+            ctx.drawImage(this.imageOrColor, -this.halfSize, -this.halfSize,
+                this.size * w / sz, this.size * h / sz);
         } else {
             // Color
             ctx.fillStyle = (this.imageOrColor as string);

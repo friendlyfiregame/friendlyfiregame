@@ -1,7 +1,8 @@
 import { Entity } from './Entity';
-import { PIXEL_PER_METER, GRAVITY } from "./constants";
+import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
 import { Environment } from "./World";
 import { Player } from "./Player";
+import { GameObject } from './game';
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -9,6 +10,7 @@ export abstract class PhysicsEntity extends Entity {
     private maxVelocityX = Infinity;
     private maxVelocityY = Infinity;
     private floating = false;
+    private ground: GameObject | null = null;
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
@@ -121,6 +123,7 @@ export abstract class PhysicsEntity extends Entity {
             this.x += ground.getVelocityX() * PIXEL_PER_METER * dt;
             this.y += ground.getVelocityY() * PIXEL_PER_METER * dt;
         }
+        this.ground = ground;
 
         this.updatePosition(
             this.x + this.velocityX * PIXEL_PER_METER * dt,
@@ -129,9 +132,12 @@ export abstract class PhysicsEntity extends Entity {
 
         // Object dropping down when there is no ground below
         if (!this.floating) {
-            if (world.collidesWith(this.x, this.y - 1, [ this ],
-                    this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []) === 0) {
+            const environment = world.collidesWith(this.x, this.y - 1, [ this ],
+                    this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
+            if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
+            } else if (environment === Environment.WATER) {
+                this.velocityY = DROWNING_VELOCITY;
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
             }
@@ -140,5 +146,9 @@ export abstract class PhysicsEntity extends Entity {
 
     protected getGravity() {
         return GRAVITY;
+    }
+
+    public getGround(): GameObject | null {
+        return this.ground;
     }
 }

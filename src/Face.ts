@@ -9,6 +9,12 @@ export enum FaceModes {
     AMUSED = 3
 };
 
+export enum EyeType {
+    STANDARD = 0,
+    TREE = 1,
+    STONE = 2
+}
+
 export class Face {
     private static sprites: Sprites;
     private mode = FaceModes.NEUTRAL;
@@ -16,13 +22,14 @@ export class Face {
 
     constructor(
         private owner: NPC,
+        private eyeType: EyeType,
         private scale = 1,
         private offX = 0,
         private offY = 20
     ) {}
 
     public static async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/eyes.png"), 4, 1);
+        this.sprites = new Sprites(await loadImage(`sprites/eyes.png`), 4, 3);
     }
 
     public setMode(mode: FaceModes) {
@@ -33,7 +40,7 @@ export class Face {
         ctx.save();
         ctx.translate(this.owner.x + this.offX, -this.owner.y - this.offY);
         ctx.scale(this.direction, 1);
-        Face.sprites.draw(ctx, this.mode, this.scale);
+        Face.sprites.draw(ctx, this.mode + (Face.sprites.getColumns() * this.eyeType), this.scale);
         ctx.restore();
     }
 
