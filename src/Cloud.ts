@@ -5,6 +5,8 @@ import { entity } from "./Entity";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { GameObjectProperties } from "./MapInfo";
 import { loadImage } from "./graphics";
+import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { rnd, timedRnd, rndInt } from './util';
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
@@ -14,6 +16,8 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private targetY: number;
     private velocity: number;
     private image!: HTMLImageElement;
+    private raindrop!: HTMLImageElement;
+    private rainEmitter: ParticleEmitter;
 
     public constructor(game: Game, x: number, y: number, properties: GameObjectProperties) {
         super(game, x, y, 74, 5);
@@ -34,10 +38,23 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             this.targetY = y - properties.distance;
             this.setVelocityY(-this.velocity);
         }
+        this.rainEmitter = particles.createEmitter({
+            position: {x: this.x, y: this.y},
+            offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
+            velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
+                        y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80) }),
+            color: () => this.raindrop,
+            size: 4,
+            gravity: {x: 0, y: -100},
+            lifetime: () => rnd(0.7, 1.2),
+            alpha: 0.6,
+            alphaCurve: valueCurves.linear.invert()
+        });
     }
 
     public async load(): Promise<void> {
          this.image = await loadImage("sprites/cloud3.png");
+         this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -67,6 +84,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.x = Math.min(this.startX, this.targetX);
                 this.setVelocityX(this.velocity);
             }
+        }
+        if (timedRnd(dt, 0.1)) {
+            this.rainEmitter.setPosition(this.x, this.y);
+            this.rainEmitter.emit(rndInt(1, 4));
         }
     }
 
