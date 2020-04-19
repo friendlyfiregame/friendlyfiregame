@@ -10,7 +10,7 @@ import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
 
 const gameWidth = 480;
-const gameHeight = 300;
+const gameHeight = 270;
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
