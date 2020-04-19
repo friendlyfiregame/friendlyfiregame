@@ -5,6 +5,7 @@ import { rnd, rndItem, rndInt } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face } from './Face';
 import { FireGfx } from './FireGfx';
+import { entity } from "./Entity";
 
 // const fireColors = [
 //     "#603015",
@@ -19,6 +20,7 @@ const smokeColors = [
     "#333"
 ];
 
+@entity("fire")
 export class Fire extends NPC {
 
     private intensity = 5;

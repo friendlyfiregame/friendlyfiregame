@@ -1,7 +1,10 @@
 import { Dialog, Message } from "./Dialog";
 import { NPC } from './NPC';
 import { SpeechBubble } from "./SpeechBubble";
+import { entity } from "./Entity";
 
+@entity("stone")
+@entity("tree")
 export class DummyNPC extends NPC {
     private activeDialog: Dialog | null = null;
     public activeSpeechBubble: SpeechBubble | null = null;

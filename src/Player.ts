@@ -2,7 +2,7 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
@@ -12,6 +12,7 @@ import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd, now } from './util';
+import { entity } from "./Entity";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -33,6 +34,7 @@ const groundColors = [
     "#908784"
 ];
 
+@entity("player")
 export class Player extends PhysicsEntity {
     private flying = false;
     private direction = 1;
@@ -57,7 +59,7 @@ export class Player extends PhysicsEntity {
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
-            size: rnd(0.5, 1.5),
+            size: rnd(1, 2),
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
@@ -197,13 +199,24 @@ export class Player extends PhysicsEntity {
      * @return The Y coordinate of the ground below the given coordinate.
      */
     private pullOutOfGround(): number {
-        let pulled = 0;
+        let pulled = 0, col = 0, collidedWith = 0;
         if (this.getVelocityY() <= 0) {
             const world = this.game.world;
             const height = world.getHeight();
-            while (this.y < height && world.collidesWith(this.x, this.y)) {
+            collidedWith = col = world.collidesWith(this.x, this.y);
+            while (this.y < height && col) {
                 pulled++;
                 this.y++;
+                col = world.collidesWith(this.x, this.y);
+            }
+        }
+        if (collidedWith) {
+            // Bounce on bouncy things
+            if (collidedWith === Environment.BOUNCE) {
+                this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
+                // TODO fancy sound
+                // don't let caller know we collided, otherwise they'll override velocity. Don't mind the hack...
+                pulled = 0;
             }
         }
         return pulled;

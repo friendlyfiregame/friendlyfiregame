@@ -16,6 +16,9 @@ export const PLAYER_ACCELERATION = 15;
 /** Player jump height in meters. */
 export const PLAYER_JUMP_HEIGHT = 3.75;
 
+/** Player jump height in meters. */
+export const PLAYER_BOUNCE_HEIGHT = 10;
+
 /** Animation speed for player idling in milliseconds */
 export const PLAYER_IDLE_ANIMATION = [ 100, 500, 50, 1000 ];
 
