@@ -51,6 +51,10 @@ export class Game {
 
     public particles: Particles;
 
+    private frameCounter = 0;
+    private framesPerSecond = 0;
+    private showFPS = true;
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.boundLoop = this.loop.bind(this);
@@ -65,6 +69,10 @@ export class Game {
             this.player,
             new DummyNPC(this, 2570, 1245),
         ];
+        setInterval(() => {
+            this.framesPerSecond = this.frameCounter;
+            this.frameCounter = 0;
+        }, 1000);
     }
 
     private async load() {
@@ -132,6 +140,14 @@ export class Game {
         this.camera.renderCinematicBars(ctx);
 
         ctx.restore();
+
+        // Display FPS counter
+        if (this.showFPS) {
+            ctx.fillStyle = "white";
+            ctx.font = "18px sans-serif";
+            ctx.fillText(`${this.framesPerSecond} FPS`, 5, 20);
+        }
+        this.frameCounter++;
     }
 
     public togglePause(paused = !this.paused) {
