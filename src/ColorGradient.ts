@@ -37,7 +37,8 @@ export class ColorGradient {
             for (let x = 0; x < w; x++) {
                 colors[x] = [];
                 for (let y = 0; y < h; y++) {
-                    colors[x].push([pixels[p++], pixels[p++], pixels[p++], pixels[p++]]);
+                    const p = 4 * (x + w * y);
+                    colors[x].push([pixels[p], pixels[p + 1], pixels[p + 2], pixels[p + 3]]);
                 }
             }
             const items = w;
