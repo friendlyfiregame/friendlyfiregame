@@ -45,7 +45,8 @@ export class Player extends PhysicsEntity {
     private flying = false;
     private direction = 1;
     private spriteIndex = SpriteIndex.IDLE0;
-    private sprites!: Sprites;
+    private legsSprite!: Sprites;
+    private bodySprite!: Sprites;
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     private debug = false;
@@ -83,7 +84,8 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-         this.sprites = new Sprites(await loadImage("sprites/main.png"), 4, 3);
+         this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
+         this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
     }
 
     private handleKeyDown(event: KeyboardEvent) {
@@ -129,7 +131,8 @@ export class Player extends PhysicsEntity {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.sprites.draw(ctx, this.spriteIndex);
+        this.legsSprite.draw(ctx, this.spriteIndex);
+        this.bodySprite.draw(ctx, this.spriteIndex);
         ctx.restore();
 
         if (this.closestNPC && this.closestNPC.hasDialog) {
