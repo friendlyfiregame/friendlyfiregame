@@ -31,10 +31,10 @@ export class Camera {
         }
         this.interpolationTime = interpolationTime / 2;
         // TODO remove this example camera focus
-        setTimeout(async () => {
-            this.focusOn(4, (window as any).game.fire.x, (window as any).game.fire.y + 20, 4, Math.PI * 2,
-                valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
-        }, 2000);
+        // setTimeout(async () => {
+        //     this.focusOn(4, (window as any).game.fire.x, (window as any).game.fire.y + 20, 4, Math.PI * 2,
+        //         valueCurves.cubic.append(valueCurves.cubic.invert(), 0.2));
+        // }, 2000);
     }
 
     public update(dt: number, time: number) {

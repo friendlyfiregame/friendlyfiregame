@@ -1,4 +1,4 @@
-import { rnd, clamp } from './util';
+import { rnd, clamp, orientPow } from './util';
 import { loadImage } from './graphics';
 import { ColorGradient } from './ColorGradient';
 
@@ -103,10 +103,14 @@ export class FireGfx {
         // Bottom line always stays mostly the same, only minor variations
         const row = data[this.h - 1];
         const t = this.updateSteps * 0.1
+        const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764) * Math.sin(t * 0.5433)
+                * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
+        const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);
         for (let x = 0; x < this.w; x++) {
             // const f = 1 + 0.5 * Math.sin(0.1 * x + t) * Math.sin()
             let f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
-            row[x] = this.bottomLine[x] * f;
+            const baseX = Math.floor((this.w - 1) * (x / (this.w - 1)) ** exponent);
+            row[x] = this.bottomLine[baseX] * f;
         }
     }
 
