@@ -1,5 +1,7 @@
 import { loadImage, getImageData } from "./graphics";
 import { GameObject, Game, isCollidableGameObject, gameWidth } from "./game";
+import { ParticleEmitter, particles, valueCurves } from "./Particles";
+import { rnd, rndInt } from "./util";
 
 export enum Environment {
     AIR = 0,
@@ -16,9 +18,23 @@ export class World implements GameObject {
     private background!: HTMLImageElement;
     private collisionMap!: Uint32Array;
     private game: Game;
+    private raindrop!: HTMLImageElement;
+    private rainEmitter: ParticleEmitter;
+    private raining = false;
 
     public constructor(game: Game) {
         this.game = game;
+        this.rainEmitter = particles.createEmitter({
+            position: {x: 2051, y: 2120},
+            offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
+            velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
+            color: () => this.raindrop,
+            size: 4,
+            gravity: {x: 0, y: -100},
+            lifetime: () => 3,
+            alpha: 0.6,
+            alphaCurve: valueCurves.linear.invert()
+        });
     }
 
     public async load(): Promise<void> {
@@ -30,6 +46,7 @@ export class World implements GameObject {
         this.foreground = worldImage;
         this.background = await loadImage("maps/bg.png");
         this.collisionMap = new Uint32Array(getImageData(worldCollisionImage).data.buffer);
+        this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
     public getWidth(): number {
@@ -41,6 +58,9 @@ export class World implements GameObject {
     }
 
     public update(dt: number) {
+        if (this.raining) {
+            this.rainEmitter.emit(rndInt(1, 4));
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -137,5 +157,13 @@ export class World implements GameObject {
             y--;
         }
         return y;
+    }
+
+    public startRain() {
+        this.raining = true;
+    }
+
+    public stopRain() {
+        this.raining = false;
     }
 }
