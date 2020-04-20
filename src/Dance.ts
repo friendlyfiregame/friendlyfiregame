@@ -34,6 +34,7 @@ export class Dance {
         private warmupBeats = 8,
         private allowedMistakes = 3,
         private timeTolerance = 0.75,
+        private readonly withMusic = true
     ){
         this.duration = keys.length;
         this.keys = [];
@@ -83,6 +84,8 @@ export class Dance {
         this.currentIndex = 0;
         this.performance = this.performance.map(() => ({}));
         this.success = false;
+        Dance.music.stop();
+        Dance.music.setVolume(0);
     }
 
     public setPosition(x: number, y: number) {
@@ -196,9 +199,11 @@ export class Dance {
     }
 
     private updateMusic() {
+        if (!this.withMusic) {
+            return;
+        }
         if (this.progress < 0 && !Dance.music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            if (fade > 1) { console.log(fade); }
             this.game.music[0].setVolume(0.25 * fade);
         } else {
             // own music paused
