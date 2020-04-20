@@ -173,7 +173,8 @@ export class Game {
 
     private async load() {
         this.music = [
-            new Sound("music/theme_01.mp3")
+            new Sound("music/theme_01.mp3"),
+            new Sound("music/inferno.mp3")
         ];
         await this.loadFonts();
         this.titleImage = await loadImage("images/title.png");
@@ -184,7 +185,7 @@ export class Game {
             await obj.load();
         }
         await this.loadApocalypse();
-        setTimeout(() => this.beginApocalypse(), 1000);
+        // setTimeout(() => this.beginApocalypse(), 1000);
     }
 
     public toggleScalingMethod () {
@@ -193,10 +194,11 @@ export class Game {
     }
 
     private async playMusicTrack(): Promise<void> {
-        const music = this.music[rndInt(0, 1)];
+        const music = this.music[0];
         this.music.forEach(music => music.stop());
         music.setLoop(true);
         music.setVolume(0.25);
+        this.music[1].setVolume(0.25);
         return music.play();
     };
 

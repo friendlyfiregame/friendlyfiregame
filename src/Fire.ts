@@ -3,7 +3,7 @@ import { Game } from './game';
 import { PIXEL_PER_METER } from './constants';
 import { rnd, rndInt, shiftValue } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';
-import { Face, EyeType } from './Face';
+import { Face, EyeType, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
 import { loadImage } from './graphics';
@@ -131,6 +131,22 @@ export class Fire extends NPC {
 
     public feed(wood: Wood) {
         wood.remove();
-        console.log("GAME OVER!!!");
+        // Handle end of the world
+        this.growthTarget = 14;
+        this.face?.setMode(FaceModes.ANGRY);
+        this.game.music[0].setVolume(0);
+        this.game.music[1].play();
+        // Player thoughts
+        [
+            ["What...", 2, 2],
+            ["What have I done?", 6, 3],
+            ["I trusted you! I helped you!", 10, 3]
+        ].forEach(line => setTimeout(() => {
+            this.game.player.think(line[0] as string, line[2] as number * 1000);
+        }, (line[1] as number) * 1000));
+        // Give fire new dialog
+        setTimeout(() => {
+            this.game.campaign.runAction("enable", null, ["fire", "fire2"]);
+        }, 13500);
     }
 }

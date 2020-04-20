@@ -283,7 +283,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private async think(message: string, time: number): Promise<void> {
+    public async think(message: string, time: number): Promise<void> {
         if (this.thinkBubble) {
             this.thinkBubble.hide();
             this.thinkBubble = null;
