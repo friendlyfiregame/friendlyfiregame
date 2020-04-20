@@ -104,7 +104,7 @@ export class Player extends PhysicsEntity {
     private milestone = Milestone.JUST_ARRIVED;
     private lastHint = Date.now();
     private flying = false;
-    private direction = 1;
+    public direction = 1;
     private spriteIndex = SpriteIndex.IDLE0;
     private legsSprite!: Sprites;
     private bodySprite!: Sprites;

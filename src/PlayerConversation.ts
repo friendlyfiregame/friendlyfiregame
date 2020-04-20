@@ -21,8 +21,10 @@ export class PlayerConversation {
         if (Math.abs(player.x - npc.x) < minDis) {
             if (player.x < npc.x) {
                 player.x = npc.x - minDis;
+                player.direction = 1;
             } else {
                 player.x = npc.x + minDis;
+                player.direction = -1;
             }
         }
     }
