@@ -84,6 +84,8 @@ export class Dance {
         this.currentIndex = 0;
         this.performance = this.performance.map(() => ({}));
         this.success = false;
+        Dance.music.stop();
+        Dance.music.setVolume(0);
     }
 
     public setPosition(x: number, y: number) {
