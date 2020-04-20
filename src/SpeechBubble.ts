@@ -89,6 +89,7 @@ export class SpeechBubble {
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
         this.updateContent();
+        this.contentLinesByLength = this.content.slice().sort((a, b) => b.length - a.length);
     }
 
     private updateContent() {
@@ -104,7 +105,9 @@ export class SpeechBubble {
         ctx.save();
         ctx.beginPath();
         const font = this.game.mainFont;
-        const metrics = font.measureText(this.contentLinesByLength[0]);
+        console.log(this.contentLinesByLength[0]);
+        const longestLine = this.contentLinesByLength[0];
+        const metrics = longestLine ? font.measureText(longestLine) : { width: 0, height: 0};
 
         let posX = this.x;
         let posY = this.y;
