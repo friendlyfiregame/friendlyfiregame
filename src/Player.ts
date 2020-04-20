@@ -214,9 +214,9 @@ export class Player extends PhysicsEntity {
                 // TODO Just for debugging, this must be removed later
                 this.carry(this.game.stone);
             } else if (event.key === "o" && !this.carrying) {
-                this.carry(this.game.seed);
+                this.carry(this.game.tree.spawnSeed());
             } else if (event.key === "i" && !this.carrying) {
-                this.carry(this.game.wood);
+                this.carry(this.game.tree.seed.spawnWood());
             } else if (event.key === "t") {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 this.throwingSound.stop();
