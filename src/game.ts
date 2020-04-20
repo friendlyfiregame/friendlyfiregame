@@ -18,6 +18,7 @@ import "./Seed";
 import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
+import { Seed } from "./Seed";
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -69,6 +70,7 @@ export class Game {
 
     public player: Player;
     public stone: Stone;
+    public seed: Seed;
 
     public campaign: Campaign;
 
@@ -104,6 +106,7 @@ export class Game {
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
+        this.seed = this.getGameObject(Seed);
 
         // testing dummy
         this.gameObjects.splice(2, 0, new DummyNPC(this, this.player.x - 25, this.player.y));
