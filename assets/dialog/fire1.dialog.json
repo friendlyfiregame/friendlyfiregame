@@ -3,7 +3,7 @@
     "entry": [
         "This is the start of the game! Bla!",
         ">You are dumb! @dumb !zoomIn !worried",
-        ">End this now! @done !angry !state finish",
+        ">End this now! !angry !state finish",
         ">Bye"
     ],
     "dumb": [
