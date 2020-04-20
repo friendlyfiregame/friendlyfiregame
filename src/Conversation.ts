@@ -26,7 +26,7 @@ export class Conversation {
         this.stateIndex = 0;
     }
 
-    public getNextInteraction() {
+    public getNextInteraction(): Interaction | null {
         const result: Interaction = {
             npcLine: null,
             options: [],
@@ -34,6 +34,10 @@ export class Conversation {
         };
         // Does NPC speak?
         const line = this.getNextLine()
+        if (line == null) {
+            // Conversation is over without changing state or anything
+            return null;
+        }
         if (line && this.isLineByNPC(line)) {
             result.npcLine = line;
         }
@@ -42,8 +46,11 @@ export class Conversation {
         while (option && this.isLineByPlayer(option)) {
             // TODO identify spoiled options (that don't lead to anything new for the player) and sort accordingly
             result.options.push(option);
+            option = this.getNextLine();
         }
-        this.goBack();
+        if (option) {
+            this.goBack();
+        }
         return result;
     }
 
@@ -79,7 +86,10 @@ export class Conversation {
     }
 
     private getNextLine(): string | null {
-        return this.data[this.state][this.stateIndex++] ?? null;
+        if (this.stateIndex >= this.data[this.state].length) {
+            return null;
+        }
+        return this.data[this.state][this.stateIndex++];
     }
 
     private isLineByNPC(line: string) {
