@@ -89,4 +89,8 @@ export class Stone extends NPC implements CollidableGameObject {
         }
         return Environment.AIR;
     }
+
+    public isCarried(): boolean {
+        return this.game.player.isCarrying(this);
+    }
 }
