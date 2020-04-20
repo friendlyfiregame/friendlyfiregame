@@ -102,6 +102,7 @@ export class Game {
     public fireFuryEndTime = 0;
 
     public apocalypse = false;
+    private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
 
@@ -119,6 +120,7 @@ export class Game {
     public gamepadInput!: GamepadInput;
 
     private titleImage!: HTMLImageElement;
+    private endImage!: HTMLImageElement;
     public stage = GameStage.TITLE;
     public keyHandler = new KeyHandler();
 
@@ -179,6 +181,7 @@ export class Game {
         ];
         await this.loadFonts();
         this.titleImage = await loadImage("images/title.png");
+        this.endImage = await loadImage("images/end.png");
         await Face.load();
         await Dance.load();
         await FireGfx.load();
@@ -285,6 +288,11 @@ export class Game {
             case GameStage.MAIN:
                 this.updateMain();
                 break;
+
+            case GameStage.END:
+                this.updateEnd();
+                break;
+
         }
     }
 
@@ -308,6 +316,10 @@ export class Game {
 
             case GameStage.MAIN:
                 this.drawMain(ctx);
+                break;
+
+            case GameStage.END:
+                this.drawEnd(ctx);
                 break;
         }
 
@@ -333,11 +345,34 @@ export class Game {
         ctx.restore();
     }
 
+    private updateEnd(): void {
+    }
+
+    private drawEnd(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clip();
+        ctx.drawImage(this.endImage, 0, 0);
+        ctx.restore();
+    }
+
     private titleFadeOut = 0;
+    private endFadeIn = 0;
+
+    public gameOver() {
+        this.endFadeIn = 1;
+    }
 
     private updateMain(): void {
         if (this.titleFadeOut < 1) {
             this.titleFadeOut += this.dt;
+        }
+        if (this.endFadeIn > 0) {
+            this.endFadeIn -= this.dt;
+            if (this.endFadeIn <= 0) {
+                this.stage = GameStage.END;
+            }
         }
 
         // Update all game classes
@@ -395,6 +430,23 @@ export class Game {
             ctx.restore();
         }
 
+        if (this.endFadeIn > 0) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(-ctx.canvas.width * this.endFadeIn, 0);
+            ctx.rect(0, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawEnd(ctx);
+            ctx.restore();
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(ctx.canvas.width * this.endFadeIn, 0);
+            ctx.rect(ctx.canvas.width / 2, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawEnd(ctx);
+            ctx.restore();
+        }
+
         // Display FPS counter
         if (this.dev) {
             this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
@@ -410,19 +462,31 @@ export class Game {
         }
         this.fire.growthTarget = Math.max(2, 20 - 6 * this.gameObjects.filter(
                 o => o instanceof Cloud && o.isRaining()).length);
+        if (this.fire.intensity < 5) {
+            this.apocalypseFactor = clamp((5 - this.fire.intensity) / 2, 0, 1);
+            this.music[1].setVolume(0.25 * this.apocalypseFactor);
+            if (this.apocalypseFactor <= 0.001) {
+                // End apocalypse
+                this.apocalypseFactor = 0;
+                this.apocalypse = false;
+                this.fire.angry = false;
+                this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
+                // Music
+                this.music[1].stop()
+            }
+        }
     }
 
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
         this.updateApocalypse();
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        this.camera.setCinematicBar(1);
+        this.camera.setCinematicBar(this.apocalypseFactor);
         // Red overlay
         ctx.fillStyle = "darkred";
         ctx.globalCompositeOperation = "color";
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.7 * this.apocalypseFactor;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        this.fireEffects[0].draw(ctx, 100, 100);
         ctx.restore();
     }
 
