@@ -4,7 +4,7 @@ import { valueCurves, ValueCurve } from './Particles';
 export class Dance {
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
-    /** Time of the first noce, depends on openTime and warmupBeats */
+    /** Time of the first note, depends on openTime and warmupBeats */
     private startTime!: number;
     /** Progress time relative to startTime. So starts out negative during warmup. */
     private progress = 0;
@@ -220,7 +220,7 @@ export class Dance {
                 }
             }
         }
-        // Sweetspot
+        // Sweet-spot
         ctx.globalAlpha = 1;
         ctx.fillStyle = "#2080bf";
         ctx.fillRect(sweetX - 6, -h2 + 1, 1, h);
