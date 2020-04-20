@@ -1,4 +1,3 @@
-import { Player } from './Player';
 import { Conversation, Interaction } from './Conversation';
 
 export class PlayerConversation {
@@ -6,7 +5,7 @@ export class PlayerConversation {
     private selectedOption = -1;
 
     constructor(
-        private readonly player: Player,
+        // private readonly player: Player,
         private readonly conversation: Conversation
     ) {
         this.interaction = this.conversation.getNextInteraction();
