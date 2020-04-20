@@ -105,6 +105,11 @@ export class Campaign {
                 this.game.fire.conversation = null;
                 this.game.fireFuryEndTime = this.game.gameTime + duration + 8;
                 break;
+            case "endgame":
+                setTimeout(() => {
+                    this.game.gameOver();
+                }, 2000);
+                break;
 
             case "game":
                 this.addState(params[0] as any);
