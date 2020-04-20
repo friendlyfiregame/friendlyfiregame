@@ -97,8 +97,11 @@ export class Campaign {
                 this.game.camera.zoom -= 1
                 break;
             case "crazyzoom":
-                this.game.camera.focusOn(12, this.game.fire.x, this.game.fire.y - 10, 8,
-                    2 * Math.PI, valueCurves.linear);
+                const duration = 12;
+                this.game.camera.focusOn(duration, this.game.fire.x, this.game.fire.y + 15, 8,
+                    -2 * Math.PI, valueCurves.cubic).then(() => this.game.beginApocalypse());
+                this.game.fire.conversation = null;
+                this.game.fireFuryEndTime = this.game.gameTime + duration + 8;
                 break;
 
             case "game":

@@ -99,6 +99,7 @@ export class Game {
     public particles: Particles;
 
     public fire: Fire;
+    public fireFuryEndTime = 0;
 
     public apocalypse = false;
     private fireEffects: FireGfx[] = [];
@@ -361,6 +362,14 @@ export class Game {
             obj.draw(ctx);
         }
         // Apocalypse
+        if (this.fireFuryEndTime) {
+            this.camera.setCinematicBar(1);
+            // Fade out
+            const diff = this.fireFuryEndTime - this.gameTime;
+            const p = diff / 16;
+            const fade = valueCurves.trapeze(0.3).get(p);
+            this.drawFade(ctx, fade, "black");
+        }
         if (this.apocalypse) {
             this.drawApocalypseOverlay(ctx);
         }
@@ -417,6 +426,15 @@ export class Game {
         ctx.restore();
     }
 
+    private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black") {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.restore();
+    }
+
     public beginApocalypse() {
         this.apocalypse = true;
         // Spawn 3 clouds over fire
@@ -434,6 +452,9 @@ export class Game {
             cloud.load().then(() => this.gameObjects.push(cloud));
         }
         this.player.multiJump = true;
+        // Some helpful thoughts
+        setTimeout(() => this.player.think("This is not over...", 2000), 9000);
+        setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
     }
 
     public loadApocalypse() {
