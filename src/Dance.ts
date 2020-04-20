@@ -219,7 +219,7 @@ export class Dance {
             const keys = this.keys[i];
             if (keys) {
                 const diff = i - this.progress;
-                const x = sweetX - diff * 10 - 6;
+                const x = sweetX - diff * 20 - 6;
                 const xp = (x - (-w2)) / w;
                 const alpha = this.alphaCurve.get(xp);
                 ctx.globalAlpha = alpha;

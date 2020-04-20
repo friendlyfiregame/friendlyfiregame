@@ -15,13 +15,17 @@ export class PlayerConversation {
         this.interaction = this.conversation.getNextInteraction();
         this.setSelectedOption(0);
         this.setBubblesContent();
+        this.interaction?.npcLine?.executeBeforeLine();
     }
 
     /**
      * Returns true if conversation has been terminated (one way or the other)
      */
     public update(dt: number): boolean {
-        if (!this.interaction) {
+        if (!this.interaction || this.conversation.hasEnded()) {
+            if (this.player.playerConversation != null) {
+                this.endConversation();
+            }
             return true;
         }
         this.player.game.camera.setCinematicBar(1);
@@ -89,7 +93,7 @@ export class PlayerConversation {
                 }
             } else if (this.interaction.npcLine) {
                 // NPC said something, player proceeds without any options
-                // if npc executes something after saying a line, that would happen here
+                this.interaction.npcLine.execute();
             }
             this.interaction = this.conversation.getNextInteraction();
             this.setSelectedOption(-1);
@@ -101,7 +105,7 @@ export class PlayerConversation {
             if (this.interaction.npcLine) {
                 // Mostly NPCs execute actions at the beginning of their line, not afterwards
                 this.npc.face?.setMode(FaceModes.NEUTRAL);
-                this.interaction.npcLine.execute();
+                this.interaction.npcLine.executeBeforeLine();
             }
         }
     }
