@@ -23,6 +23,7 @@ export class Dance {
     private success = false;
     private static successSound: Sound;
     private static failSound: Sound;
+    private static music: Sound;
 
     constructor(
         private game: Game,
@@ -30,7 +31,7 @@ export class Dance {
         private y: number,
         private bpm = 128,
         keys = "", // can contain "1" or "2" for single keys, or "3" for both at once
-        private warmupBeats = 2,
+        private warmupBeats = 8,
         private allowedMistakes = 3,
         private timeTolerance = 0.75,
     ){
@@ -50,6 +51,9 @@ export class Dance {
         console.log('loading');
         this.successSound = new Sound("sounds/dancing/success.mp3");
         this.failSound = new Sound("sounds/dancing/fail.mp3");
+        this.music = new Sound("music/raindance.mp3");
+        this.music.setVolume(0);
+        this.music.stop();
     }
 
     public wasSuccessful(): boolean {
@@ -70,7 +74,7 @@ export class Dance {
 
     private begin() {
         this.openTime = this.game.gameTime;
-        this.startTime = this.openTime + this.warmupBeats;
+        this.startTime = this.openTime + this.warmupBeats / this.bpm * 60;
         this.currentKey = "";
         this.currentDistanceToIdealTime = 0;
         this.mistakes = 0;
@@ -119,7 +123,7 @@ export class Dance {
         if (index === this.currentIndex && this.currentKey.length === 0 || this.keys[index].length === 0) {
             this.lastSuccess = this.progress;
             Dance.successSound.stop();
-            Dance.successSound.play();
+            // Dance.successSound.play();
         }
     }
 
@@ -160,6 +164,7 @@ export class Dance {
         this.progress = time * this.bpm / 60;
         const prevIndex = this.currentIndex;
         this.currentIndex = Math.floor(this.progress);
+        this.updateMusic();
         // Next key?
         if (this.currentIndex > prevIndex) {
             // Missed last one?
@@ -179,6 +184,7 @@ export class Dance {
         if (this.progress >= this.duration) {
             // Done! Success! Yeah!
             this.success = true;
+            this.resetMusic();
             return true;
         }
         if (this.currentKey) {
@@ -187,6 +193,26 @@ export class Dance {
             this.currentDistanceToIdealTime = 0;
         }
         return false;
+    }
+
+    private updateMusic() {
+        if (this.progress < 0 && !Dance.music.isPlaying()) {
+            const fade = -this.progress / this.warmupBeats;
+            if (fade > 1) { console.log(fade); }
+            this.game.music[0].setVolume(0.25 * fade);
+        } else {
+            // own music paused
+            if (!Dance.music.isPlaying()) {
+                Dance.music.setVolume(0.25);
+                Dance.music.play();
+                this.game.music[0].setVolume(0);
+            }
+        }
+    }
+
+    private resetMusic() {
+        Dance.music.stop();
+        this.game.music[0].setVolume(0.25);
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
