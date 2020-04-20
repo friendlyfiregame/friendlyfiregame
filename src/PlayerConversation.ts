@@ -13,7 +13,7 @@ export class PlayerConversation {
     ) {
         this.interaction = this.conversation.getNextInteraction();
         this.setSelectedOption(0);
-        this.initDialog();
+        this.setBubblesContent();
     }
 
     /**
@@ -31,7 +31,7 @@ export class PlayerConversation {
 
     }
 
-    private initDialog() {
+    private setBubblesContent() {
         if (this.interaction) {
             const optionsTexts = this.interaction.options.map(options => options.line)
             if (optionsTexts.length > 0) {
@@ -72,6 +72,7 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
+            this.setBubblesContent();
             const options = this.interaction.options;
             if (options && options.length > 0) {
                 // Player could choose between options, confirmed with Enter
