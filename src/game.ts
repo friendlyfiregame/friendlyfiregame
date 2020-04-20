@@ -19,8 +19,8 @@ import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 
-const gameWidth = 480;
-const gameHeight = 270;
+export const gameWidth = 480;
+export const gameHeight = 270;
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
