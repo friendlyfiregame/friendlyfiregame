@@ -189,7 +189,7 @@ export class Game {
             await obj.load();
         }
         await this.loadApocalypse();
-        setTimeout(() => this.beginApocalypse(), 1000);
+        // setTimeout(() => this.beginApocalypse(), 1000);
     }
 
     public toggleScalingMethod () {
