@@ -3,9 +3,7 @@ import { Game } from "./game";
 import { Sprites, getSpriteIndex } from "./Sprites";
 import { loadImage } from "./graphics";
 import { FLAMEBOY_ANIMATION } from "./constants";
-import dialog from "../assets/dialog/flameboy2.dialog.json";
 import { NPC } from './NPC';
-import { Conversation } from './Conversation';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -14,7 +12,6 @@ export class FlameBoy extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
-        this.conversation = new Conversation(dialog, this);
     }
 
     public async load(): Promise<void> {

@@ -21,6 +21,8 @@ import { Stone } from "./Stone";
 import { Dance } from './Dance';
 import { Tree } from "./Tree";
 import { GamepadInput } from "./GamepadInput";
+import { FlameBoy } from './FlameBoy';
+import { Wing } from './Wing';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -74,6 +76,8 @@ export class Game {
     public player: Player;
     public stone: Stone;
     public tree: Tree;
+    public flameboy: FlameBoy;
+    public wing: Wing;
 
     public campaign: Campaign;
 
@@ -111,6 +115,8 @@ export class Game {
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
         this.tree = this.getGameObject(Tree);
+        this.flameboy = this.getGameObject(FlameBoy);
+        this.wing = this.getGameObject(Wing);
 
         this.camera = new Camera(this, this.player);
         setInterval(() => {
