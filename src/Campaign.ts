@@ -5,6 +5,7 @@ import { FaceModes } from './Face';
 import fire1  from '../assets/dialog/fire1.dialog.json';
 import stone1  from '../assets/dialog/stone1.dialog.json';
 import tree1  from '../assets/dialog/tree1.dialog.json';
+import tree2  from '../assets/dialog/tree2.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
@@ -15,6 +16,7 @@ const allDialogs: Record<string, JSON> = {
     "fire1": fire1,
     "stone1": stone1,
     "tree1": tree1,
+    "tree2": tree2,
     "flameboy1": flameboy1,
     "wing1": wing1,
 };
@@ -97,6 +99,9 @@ export class Campaign {
                 break;
             case "spawnseed":
                 this.game.tree.spawnSeed();
+                break;
+            case "spawnwood":
+                this.game.tree.seed.spawnWood();
                 break;
             case "pickupstone":
                 this.game.stone.pickUp();

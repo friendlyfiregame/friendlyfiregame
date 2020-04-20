@@ -54,6 +54,7 @@ export class Seed extends NPC {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
             this.spriteIndex = 2;
+            this.game.campaign.runAction("enable", null, ["tree", "tree2"]);
         }
     }
 
