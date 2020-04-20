@@ -37,3 +37,13 @@ There are three alternatives to run the game in the browser:
   browser. This only works with a http/https URL not with a file URL.
 * Run `yarn dist` to package the game into the `dist` folder. Open the `dist/index.html` in your browser to run the
   game. To publish the game simply copy the contents of the `dist` folder to a public web server.
+
+
+### Publish game
+
+* Copy your local clone of the project to a new folder like `ludum-dare-46-site`.
+* In the new folder checkout the branch `gh-pages`.
+* In the `master` branch folder run `yarn dist`.
+* Copy the content of the `dist` of the master branch folder to the the `ludum-dare-46-site` branch folder.
+* Commit and push the changes of the `ludum-dare-46-site` branch.
+* The changes should be visible a few moments/minutes later.
