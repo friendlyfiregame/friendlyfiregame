@@ -12,7 +12,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, sleep } from './util';
+import { rnd, rndItem, timedRnd, sleep, rndInt } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
@@ -64,6 +64,20 @@ const doubleJumpColors = [
     "#aaaaaa"
 ];
 
+const drownThoughts = [
+    { message: "Ok, I'm not Jesus. Noted!", duration: 4000 },
+    { message: "Looks like I can't swim... But I can respawn, nice!", duration: 5000 },
+    { message: "Well, that was strange... And wet.", duration: 4000 }
+];
+
+const drowningThoughts = [
+    { message: "Waah!", duration: 1000 },
+    { message: "Help!", duration: 1000 },
+    { message: "Mama!", duration: 1000 },
+    { message: "Ieeh!", duration: 1000 },
+    { message: "Argh!", duration: 1000 }
+];
+
 @entity("player")
 export class Player extends PhysicsEntity {
     private flying = false;
@@ -87,6 +101,7 @@ export class Player extends PhysicsEntity {
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
+    public thinkBubble: SpeechBubble | null = null;
 
     private dialogRange = 50;
     private dialogTipText = "Press 'Enter' or 'E' to talk";
@@ -221,17 +236,25 @@ export class Player extends PhysicsEntity {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 this.throwingSound.stop();
                 this.throwingSound.play();
-                this.speechBubble.hide();
-                if (this.speechBubble.isCurrentlyWriting) {
-                    this.speechBubble.isCurrentlyWriting = false;
-                    await sleep(this.speechBubble.messageVelocity);
-                }
-                this.speechBubble.setMessage("Test message");
-                this.speechBubble.show();
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
             }
+        }
+    }
+
+    private async think(message: string, time: number): Promise<void> {
+        if (this.thinkBubble) {
+            this.thinkBubble.hide();
+            this.thinkBubble = null;
+        }
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.game, this.x, this.y, "white", false)
+        thinkBubble.setMessage(message);
+        thinkBubble.show();
+        await sleep(time);
+        if (this.thinkBubble === thinkBubble) {
+            thinkBubble.hide();
+            this.thinkBubble = null;
         }
     }
 
@@ -317,6 +340,9 @@ export class Player extends PhysicsEntity {
         }
 
         this.speechBubble.draw(ctx);
+        if (this.thinkBubble) {
+            this.thinkBubble.draw(ctx);
+        }
     }
 
     private canThrowStoneIntoWater(): boolean {
@@ -358,6 +384,9 @@ export class Player extends PhysicsEntity {
     update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
+        if (this.thinkBubble) {
+            this.thinkBubble.update(this.x, this.y);
+        }
         if (this.playerConversation) {
             this.playerConversation.update(dt);
         }
@@ -376,6 +405,10 @@ export class Player extends PhysicsEntity {
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
+            if (!this.thinkBubble) {
+                const thought = drowningThoughts[rndInt(0, drowningThoughts.length)];
+                this.think(thought.message, thought.duration);
+            }
             if (this.carrying instanceof Stone) {
                 this.carrying.setVelocity(-2, 10);
                 this.carrying = null;
@@ -388,6 +421,8 @@ export class Player extends PhysicsEntity {
             if (this.drowning > 3) {
                 this.drowningSound.stop();
                 this.respawn();
+                const thought = drownThoughts[rndInt(0, drownThoughts.length)];
+                this.think(thought.message, thought.duration);
             }
         } else {
             this.drowning = 0;
