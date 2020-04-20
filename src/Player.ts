@@ -751,7 +751,7 @@ export class Player extends PhysicsEntity {
                     this.think("I should check the mountains for a good place for the seed", 3000);
                     break;
                 case Milestone.PLANTED_SEED:
-                    this.think("The seeds needs something to grow, I think", 3000);
+                    this.think("The seed needs something to grow, I think", 3000);
                     break;
                 case Milestone.TALKED_TO_STONE:
                     this.think("I should talk to that crazy stone again", 3000);
@@ -769,7 +769,7 @@ export class Player extends PhysicsEntity {
                     this.think("I should talk to that singing tree again", 3000);
                     break;
                 case Milestone.GOT_WOOD:
-                    this.think("Quick! The fire needs the wood!", 3000);
+                    this.think("Quick! The fire needs wood!", 3000);
                     break;
             }
         }
