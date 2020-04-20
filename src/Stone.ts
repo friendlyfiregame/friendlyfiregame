@@ -1,9 +1,7 @@
-import dialog  from '../assets/dialog/stone1.dialog.json';
-import dialogData from "../assets/stone.texts.json";
+
 import { Environment } from "./World";
 import { EyeType, Face } from './Face';
 import { Game, CollidableGameObject } from "./game";
-import { Greeting } from './Greeting';
 import { NPC } from './NPC';
 import { STONE_ANIMATION } from "./constants";
 import { Sound } from './Sound';
@@ -11,7 +9,6 @@ import { Sprites, getSpriteIndex } from "./Sprites";
 import { entity } from "./Entity";
 import { loadImage } from "./graphics";
 import { now } from "./util";
-import { Conversation } from './Conversation';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -30,12 +27,11 @@ export class Stone extends NPC implements CollidableGameObject {
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
         this.face = new Face(this, EyeType.STONE, 1, 0, 21);
-        this.conversation = new Conversation(dialog, this);
     }
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/stone.png"), 3, 1);
-        this.greeting = new Greeting(this.game, this, dialogData);
+        // this.greeting = new Greeting(this.game, this, dialogData);
         this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
@@ -48,12 +44,12 @@ export class Stone extends NPC implements CollidableGameObject {
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
         this.face?.draw(ctx);
-        this.drawGreeting(ctx);
+        // this.drawGreeting(ctx);
     }
 
     update(dt: number): void {
         this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
-        this.updateGreeting(dt);
+        // this.updateGreeting(dt);
 
         super.update(dt);
 

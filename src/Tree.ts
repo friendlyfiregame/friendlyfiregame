@@ -1,5 +1,4 @@
-import dialog  from '../assets/dialog/tree1.dialog.json';
-import { Conversation } from './Conversation';
+
 import { Face, EyeType } from './Face';
 import { Game } from "./game";
 import { NPC } from './NPC';
@@ -41,7 +40,6 @@ export class Tree extends NPC {
     }
 
     startDialog(): void {
-        this.conversation = new Conversation(dialog, this);
         this.speechBubble.update(this.x, this.y);
     }
 
