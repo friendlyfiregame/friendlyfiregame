@@ -23,12 +23,9 @@ export class PlayerConversation {
         if (!this.interaction) {
             return true;
         }
+        this.player.game.camera.setCinematicBar(1);
 
         return false;
-    }
-
-    public draw(ctx: CanvasRenderingContext2D) {
-
     }
 
     private setBubblesContent() {
@@ -97,7 +94,6 @@ export class PlayerConversation {
     }
 
     private endConversation() {
-        console.log("ending!");
         this.player.playerConversation = null;
         this.player.speechBubble.hide();
         this.npc.speechBubble.hide();

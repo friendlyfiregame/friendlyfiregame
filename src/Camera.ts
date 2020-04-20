@@ -1,4 +1,4 @@
-import { Vector2, clamp } from './util';
+import { Vector2, clamp, shiftValue } from './util';
 import { ValueCurve, valueCurves } from './Particles';
 import { Game } from "./game";
 
@@ -34,6 +34,8 @@ export class Camera {
     private interpolationTime!: number;
     private zoomingOut = false;
     private visibleRect: Rectangle;
+    private currentBarTarget = 0;
+    private currentBarHeight = 0;
 
     constructor(protected game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
         if (interpolationTime > 1) {
@@ -47,6 +49,8 @@ export class Camera {
             this.game.canvas.addEventListener("click", this.handleClick.bind(this));
         }
         this.visibleRect = this.getVisibleRect();
+        this.currentBarTarget = 0;
+        this.currentBarHeight = 0;
     }
 
     private handleKeyDown(e: KeyboardEvent) {
@@ -57,7 +61,7 @@ export class Camera {
             e.stopPropagation();
             e.preventDefault();
         }
-        if (e.code === "KeyL") {
+        if (e.key === "L") {
             if (!e.repeat) {
                 this.game.toggleScalingMethod();
             }
@@ -106,6 +110,10 @@ export class Camera {
                 this.visibleRect.width + radius && y <= this.visibleRect.y + this.visibleRect.height + radius;
     }
 
+    public setCinematicBar(target: number) {
+        this.currentBarTarget = target;
+    }
+
     public update(dt: number, time: number) {
         this.time = time;
         // Base position always on target (player)
@@ -120,6 +128,10 @@ export class Camera {
         }
         // Drop any focus that is done
         this.focuses = this.focuses.filter(f => !f.dead);
+        // Update bar target towards goal
+        this.currentBarHeight = shiftValue(this.currentBarHeight, this.currentBarTarget, dt * 1.5);
+        // Reset bar to vanish automatically if not continuously set to 1
+        this.currentBarTarget = 0;
     }
 
     /**
@@ -189,10 +201,12 @@ export class Camera {
     }
 
     public renderCinematicBars(ctx: CanvasRenderingContext2D, force = this.getFocusForce()): void {
+        force = Math.max(force, this.getFocusForce(), this.currentBarHeight);
         ctx.save();
         ctx.fillStyle = "black";
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        const h = ctx.canvas.height * this.barHeight * force;
+        const f = 0.5 - 0.5 * Math.cos(Math.PI * force);
+        const h = ctx.canvas.height * this.barHeight * f;
         ctx.fillRect(0, 0, ctx.canvas.width, h);
         ctx.fillRect(0, ctx.canvas.height - h, ctx.canvas.width, h);
         ctx.restore();
