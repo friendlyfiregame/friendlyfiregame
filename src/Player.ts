@@ -86,7 +86,7 @@ export class Player extends PhysicsEntity {
     private usedDoubleJump = false;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
+    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", false);
 
     private dialogRange = 50;
     private dialogTipText = "Press 'Enter' or 'E' to talk";
@@ -221,6 +221,9 @@ export class Player extends PhysicsEntity {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 this.throwingSound.stop();
                 this.throwingSound.play();
+                this.speechBubble.hide();
+                this.speechBubble.setMessage("Test message");
+                this.speechBubble.show();
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
