@@ -188,7 +188,8 @@ export class Player extends PhysicsEntity {
             this.moveLeft = true;
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
-            if (!this.isCarrying() && this.closestNPC && this.closestNPC.conversation) {
+            if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() &&
+                    this.closestNPC.conversation) {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
             } else if (this.canDanceToMakeRain()) {
                 this.startDance(2);
@@ -328,7 +329,8 @@ export class Player extends PhysicsEntity {
         }
         ctx.restore();
 
-        if (!this.isCarrying() && this.closestNPC && this.closestNPC.conversation && !this.playerConversation) {
+        if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
+                && !this.playerConversation) {
             this.drawDialogTip(ctx);
         }
 

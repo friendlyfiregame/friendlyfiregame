@@ -4,6 +4,7 @@ import { NPC } from './NPC';
 import { FaceModes } from './Face';
 import fire1  from '../assets/dialog/fire1.dialog.json';
 import stone1  from '../assets/dialog/stone1.dialog.json';
+import seed1  from '../assets/dialog/seed1.dialog.json';
 import tree1  from '../assets/dialog/tree1.dialog.json';
 import tree2  from '../assets/dialog/tree2.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
@@ -15,6 +16,7 @@ export type CampaignState = "start" | "finished";
 const allDialogs: Record<string, JSON> = {
     "fire1": fire1,
     "stone1": stone1,
+    "seed1": seed1,
     "tree1": tree1,
     "tree2": tree2,
     "flameboy1": flameboy1,
@@ -117,6 +119,7 @@ export class Campaign {
                     "fire": this.game.fire,
                     "stone": this.game.stone,
                     "tree": this.game.tree,
+                    "seed": this.game.seed,
                     "flameboy": this.game.flameboy,
                     "wing": this.game.wing
                 };
@@ -132,6 +135,7 @@ export class Campaign {
                     "fire": this.game.fire,
                     "stone": this.game.stone,
                     "tree": this.game.tree,
+                    "seed": this.game.seed,
                     "flameboy": this.game.flameboy,
                     "wing": this.game.wing
                 };

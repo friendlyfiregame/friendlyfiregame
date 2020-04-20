@@ -25,6 +25,7 @@ import { FlameBoy } from './FlameBoy';
 import { Wing } from './Wing';
 import { loadImage } from "./graphics";
 import { KeyHandler } from "./KeyHandler";
+import { Seed } from './Seed';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -88,6 +89,7 @@ export class Game {
     public player: Player;
     public stone: Stone;
     public tree: Tree;
+    public seed!: Seed;
     public flameboy: FlameBoy;
     public wing: Wing;
 
@@ -314,9 +316,10 @@ export class Game {
         ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.clip();
         ctx.drawImage(this.titleImage, 0, 0);
-        const off = (this.appTime * 1000 / 12) % 2600;
+        const off = (this.appTime * 1000 / 12) % 2000;
         const cx = Math.round(ctx.canvas.width + 100 - off);
-        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "black", 0);
+        this.mainFont.drawText(ctx, 'Press Enter', 75, 160, "white", 0);
+        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "white", 0);
         ctx.restore();
     }
 
