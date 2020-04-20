@@ -92,6 +92,9 @@ export class Campaign {
             case "multijump":
                 this.game.player.multiJump = true;
                 break;
+            case "spawnseed":
+                this.game.seed.x = this.game.tree.x;
+                break;
             case "enable":
                 const char = params[0], dialogName = params[1];
                 const npcMap: Record<string, NPC> = {
