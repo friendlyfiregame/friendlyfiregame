@@ -38,7 +38,7 @@
         ">Why?",
         "Because your sole existence in this world hinges on helping to keep me alive.",
         "That's why you're here. There's nothing else to do for you anyway.",
-        ">Great! I'll help you.",
+        ">Great! I'll help you. @details",
         ">I'd rather think about this in private @bye"
     ],
     "bye": [
