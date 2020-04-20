@@ -171,6 +171,8 @@ export class Player extends PhysicsEntity {
         } else if (event.key === "Enter" || event.key === "e") {
             if (this.closestNPC && this.closestNPC.conversation) {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
+            } else if (this.canDanceToMakeRain()) {
+                this.startDance();
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
             this.jumpKeyPressed = true;
@@ -200,14 +202,19 @@ export class Player extends PhysicsEntity {
                 this.throwingSound.play();
             }
         } else if (event.key === "c") {
-            if (!this.dance) {
-                this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
-            }
+            // TODO Just for debugging. Real dancing is with action key on rain cloud
+            this.startDance();
         } else if (event.key === "p" && !this.carrying) {
             // TODO Just for debugging, this must be removed later
             this.carry(this.game.stone);
         } else if (event.key === "o" && !this.carrying) {
             this.carry(this.game.seed);
+        }
+    }
+
+    private startDance(): void {
+        if (!this.dance) {
+            this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
         }
     }
 
@@ -280,6 +287,11 @@ export class Player extends PhysicsEntity {
                 this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
         }
 
+        if (this.canDanceToMakeRain()) {
+            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to dance",
+                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+        }
+
         if (this.dance) {
             this.dance.draw(ctx);
         }
@@ -295,6 +307,11 @@ export class Player extends PhysicsEntity {
     private canThrowSeedIntoSoil(): boolean {
         return this.carrying instanceof Seed && (this.direction === -1 &&
             this.game.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
+    }
+
+    private canDanceToMakeRain(): boolean {
+        return !this.dance && !this.game.world.isRaining() && this.carrying === null &&
+            this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD;
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
