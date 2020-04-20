@@ -2,11 +2,12 @@ import { Subject } from 'rxjs';
 import { Game } from './game';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
-import fire1  from '../assets/dialog/fire1.dialog.json';
-import stone1  from '../assets/dialog/stone1.dialog.json';
-import seed1  from '../assets/dialog/seed1.dialog.json';
-import tree1  from '../assets/dialog/tree1.dialog.json';
-import tree2  from '../assets/dialog/tree2.dialog.json';
+import fire1 from '../assets/dialog/fire1.dialog.json';
+import stone1 from '../assets/dialog/stone1.dialog.json';
+import stone2 from '../assets/dialog/stone2.dialog.json';
+import seed1 from '../assets/dialog/seed1.dialog.json';
+import tree1 from '../assets/dialog/tree1.dialog.json';
+import tree2 from '../assets/dialog/tree2.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
@@ -16,6 +17,7 @@ export type CampaignState = "start" | "finished";
 const allDialogs: Record<string, JSON> = {
     "fire1": fire1,
     "stone1": stone1,
+    "stone2": stone2,
     "seed1": seed1,
     "tree1": tree1,
     "tree2": tree2,

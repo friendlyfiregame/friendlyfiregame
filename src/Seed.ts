@@ -82,6 +82,7 @@ export class Seed extends NPC {
                 this.y = 1624;
                 this.spriteIndex = 1;
                 this.successSound.play();
+                this.game.campaign.runAction("enable", null, ["stone", "stone2"]);
             }
             if (!this.isCarried() && this.state !== SeedState.SWIMMING && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = SeedState.SWIMMING;
