@@ -2,7 +2,8 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
+    PLAYER_DANCING_ANIMATION
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
@@ -30,7 +31,13 @@ enum SpriteIndex {
     JUMP = 8,
     FALL = 9,
     CARRY0 = 10,
-    CARRY1 = 11
+    CARRY1 = 11,
+    DANCE0 = 12,
+    DANCE1 = 13,
+    DANCE2 = 14,
+    DANCE3 = 15,
+    DANCE4 = 16,
+    DANCE5 = 17
 }
 
 const groundColors = [
@@ -86,6 +93,7 @@ export class Player extends PhysicsEntity {
     private walkingSound!: Sound;
     private throwingSound!: Sound;
     private jumpingSound!: Sound;
+    private landingSound!: Sound;
     private bouncingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
@@ -125,12 +133,13 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
-        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
+        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 5);
+        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 5);
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
-        this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
+        this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
         this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.landingSound = new Sound("sounds/jumping/landing.mp3");
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
@@ -303,7 +312,8 @@ export class Player extends PhysicsEntity {
             }
             this.setVelocityX(0);
             this.drowning += dt;
-            if (this.drowning > 2) {
+            if (this.drowning > 3) {
+                this.drowningSound.stop();
                 this.respawn();
             }
         } else {
@@ -360,6 +370,12 @@ export class Player extends PhysicsEntity {
             }
         }
 
+        if(wasFlying && !this.flying) {
+            console.log('landed');
+            this.landingSound.stop();
+            this.landingSound.play();
+        }
+
         // check for npc in interactionRange
         const closestEntity = this.getClosestEntityInRange(this.dialogRange);
         if (closestEntity instanceof NPC) {
@@ -384,7 +400,8 @@ export class Player extends PhysicsEntity {
 
         // Dance
         if (this.dance) {
-            this.dance.setPosition(this.x, this.y);
+            this.spriteIndex = getSpriteIndex(SpriteIndex.DANCE0, PLAYER_DANCING_ANIMATION);
+            this.dance.setPosition(this.x, this.y - 16);
             const done = this.dance.update(dt);
             if (done) {
                 // On cloud -> make it rain

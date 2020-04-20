@@ -31,6 +31,9 @@ export const PLAYER_BOUNCE_HEIGHT = 10;
 /** Animation speed for player idling in milliseconds */
 export const PLAYER_IDLE_ANIMATION = [ 100, 500, 50, 1000 ];
 
+/** Animation speed for player dancing in milliseconds */
+export const PLAYER_DANCING_ANIMATION = [ 167, 167, 167, 167, 167, 167 ];
+
 /** Animation speed for player running in milliseconds */
 export const PLAYER_RUNNING_ANIMATION = [ 150, 150, 150, 150 ];
 

@@ -182,7 +182,8 @@ export class Game {
         const width = window.innerWidth;
         const height = window.innerHeight;
         const dpr = window.devicePixelRatio;
-        const scale = Math.min(width / gameWidth, height / gameHeight);
+        const scale = Math.max(Math.floor(Math.min(width / gameWidth, height / gameHeight)), 1);
+
         this.canvas.style.width = gameWidth * scale + "px";
         this.canvas.style.height = gameHeight * scale + "px";
         if (this.useRealResolution) {
