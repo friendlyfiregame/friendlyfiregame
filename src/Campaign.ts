@@ -36,7 +36,7 @@ export class Campaign {
     private begin() {
         // Setup initial NPC dialogs
         this.runAction("enable", null, ["fire", "fire1"]);
-        this.runAction("enable", null, ["tree", "tree2"]);
+        this.runAction("enable", null, ["tree", "tree1"]);
         this.runAction("enable", null, ["stone", "stone1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
         this.runAction("enable", null, ["wing", "wing1"]);
