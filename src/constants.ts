@@ -37,6 +37,9 @@ export const PLAYER_DANCING_ANIMATION = [ 167, 167, 167, 167, 167, 167 ];
 /** Animation speed for player running in milliseconds */
 export const PLAYER_RUNNING_ANIMATION = [ 150, 150, 150, 150 ];
 
+/** Animation speed for failing the dance doesn't really matter as just one frame each */
+export const PLAYER_FAIL_ANIMATION = [ 150 ];
+
 /** Animation speed for the stone in milliseconds */
 export const STONE_ANIMATION = [ 167, 167, 167 ];
 
