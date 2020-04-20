@@ -98,6 +98,9 @@ export class Campaign {
             case "spawnseed":
                 this.game.tree.spawnSeed();
                 break;
+            case "pickupstone":
+                this.game.stone.pickUp();
+                break;
             case "enable":
                 const char = params[0], dialogName = params[1];
                 const npcMap: Record<string, NPC> = {

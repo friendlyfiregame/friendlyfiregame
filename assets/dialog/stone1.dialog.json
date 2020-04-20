@@ -44,14 +44,17 @@
         "So you can lift me and I will help you to get across that river.",
         "There you will find the answer to all your problems, maybe... hehehe",
         ">I am not sure if I really want to touch you... @nottouchyou",
-        ">By the power of Grayskull! @remember !end",
-        ">Yes Master. @remember !end"
+        ">By the power of Grayskull! @lift",
+        ">Yes Master. @lift"
     ],
     "nottouchyou": [
         "This is the beauty about power, and now lift me up!",
-        ">I... need... to... lift... my... master... @remember !end"
+        ">I... need... to... lift... my... master... @lift"
+    ],
+    "lift": [
+        "You are wooooorthy @remember !pickupstone !end"
     ],
     "remember": [
-        "There you are again, my padawan."
+        "There you are again, my padawan. @remember !end"
     ]
 }
