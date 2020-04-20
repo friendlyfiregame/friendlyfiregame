@@ -29,6 +29,10 @@ import { KeyHandler } from "./KeyHandler";
 export const gameWidth = 480;
 export const gameHeight = 270;
 
+const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
+    "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
+    "Klaus Reimer and Jennifer van Veen, within 72 hours.";
+
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
     update(dt: number): void;
@@ -254,18 +258,11 @@ export class Game {
 
         switch (this.stage) {
             case GameStage.TITLE:
-                if (this.keyHandler.isPressed("Enter")) {
-                    this.stage = GameStage.MAIN;
-                }
+                this.updateTitle();
                 break;
 
             case GameStage.MAIN:
-                // Update all game classes
-                for (const obj of this.gameObjects) {
-                    obj.update(this.dt);
-                }
-                this.gamepadInput.update();
-                this.camera.update(this.dt, this.gameTime);
+                this.updateMain();
                 break;
         }
     }
@@ -294,8 +291,26 @@ export class Game {
         }
     }
 
+    private updateTitle(): void {
+        if (this.keyHandler.isPressed("Enter")) {
+            this.stage = GameStage.MAIN;
+        }
+    }
+
     private drawTitle(ctx: CanvasRenderingContext2D) {
         ctx.drawImage(this.titleImage, 0, 0);
+        const off = (this.appTime * 1000 / 12) % 2600;
+        const cx = Math.round(ctx.canvas.width + 100 - off);
+        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "black", 0);
+    }
+
+    private updateMain(): void {
+        // Update all game classes
+        for (const obj of this.gameObjects) {
+            obj.update(this.dt);
+        }
+        this.gamepadInput.update();
+        this.camera.update(this.dt, this.gameTime);
     }
 
     private drawMain(ctx: CanvasRenderingContext2D) {
