@@ -180,7 +180,7 @@ export class Player extends PhysicsEntity {
         } else if (event.key === "t") {
             if (this.carrying) {
                 if (this.carrying instanceof Stone) {
-                    if (this.direction === -1 && this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER) {
+                    if (this.canThrowStoneIntoWater()) {
                         this.carrying.setVelocity(10 * this.direction, 10);
                         this.carrying = null;
                         this.throwingSound.stop();
@@ -270,11 +270,31 @@ export class Player extends PhysicsEntity {
             this.drawDialogTip(ctx);
         }
 
+        if (this.canThrowStoneIntoWater()) {
+            this.game.mainFont.drawTextWithOutline(ctx, "Press 'T' to throw the stone into the water",
+                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+        }
+
+        if (this.canThrowSeedIntoSoil()) {
+            this.game.mainFont.drawTextWithOutline(ctx, "Press 'T' to throw the seed into the soil",
+                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+        }
+
         if (this.dance) {
             this.dance.draw(ctx);
         }
 
         this.speechBubble.draw(ctx);
+    }
+
+    private canThrowStoneIntoWater(): boolean {
+        return this.carrying instanceof Stone && (this.direction === -1 &&
+            this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER);
+    }
+
+    private canThrowSeedIntoSoil(): boolean {
+        return this.carrying instanceof Seed && (this.direction === -1 &&
+            this.game.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
