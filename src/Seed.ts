@@ -6,6 +6,7 @@ import { Face, EyeType } from './Face';
 import { NPC } from './NPC';
 import { Environment } from "./World";
 import { now } from "./util";
+import { Sound } from './Sound';
 
 export enum SeedState {
     FREE = 0,
@@ -19,6 +20,7 @@ export class Seed extends NPC {
     private sprites!: Sprites;
     private spriteIndex = 0;
     public state = SeedState.FREE;
+    private successSound!: Sound;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
@@ -27,6 +29,7 @@ export class Seed extends NPC {
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/seed.png"), 3, 1);
+        this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -70,6 +73,7 @@ export class Seed extends NPC {
                 this.x = 2052;
                 this.y = 1624;
                 this.spriteIndex = 1;
+                this.successSound.play();
             }
             if (this.state !== SeedState.SWIMMING && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = SeedState.SWIMMING;
