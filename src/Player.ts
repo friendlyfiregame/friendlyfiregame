@@ -542,7 +542,7 @@ export class Player extends PhysicsEntity {
         }
 
         // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.dialogRange);
+        const closestEntity = this.getClosestEntityInRange(this.game.fire.angry ? 1.8 * this.dialogRange : this.dialogRange);
         if (closestEntity instanceof NPC) {
             this.closestNPC = closestEntity;
         } else {

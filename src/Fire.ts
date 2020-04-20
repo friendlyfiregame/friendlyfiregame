@@ -28,6 +28,8 @@ const smokeColors = [
 export class Fire extends NPC {
     private intensity = 5;
 
+    public angry = false; // fire will be angry once wood was fed
+
     public growthTarget = 5;
 
     public growth = 1;
@@ -105,6 +107,9 @@ export class Fire extends NPC {
     }
 
     update(dt: number): void {
+        if (this.angry) {
+            this.face?.setMode(FaceModes.ANGRY);
+        }
         if (this.intensity !== this.growthTarget) {
             this.intensity = shiftValue(this.intensity, this.growthTarget, this.growth * dt);
         }
@@ -132,10 +137,16 @@ export class Fire extends NPC {
     public feed(wood: Wood) {
         wood.remove();
         // Handle end of the world
+        this.angry = true;
         this.growthTarget = 14;
         this.face?.setMode(FaceModes.ANGRY);
         this.game.music[0].setVolume(0);
+        this.game.music[1].setLoop(true);
         this.game.music[1].play();
+        // Disable remaining dialogs
+        this.conversation = null;
+        // Disable all other characters
+        // TODO
         // Player thoughts
         [
             ["What...", 2, 2],

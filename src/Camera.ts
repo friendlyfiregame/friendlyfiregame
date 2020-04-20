@@ -2,7 +2,7 @@ import { Vector2, clamp, shiftValue } from './util';
 import { ValueCurve, valueCurves } from './Particles';
 import { Game } from "./game";
 
-interface camFocus {
+export interface camFocus {
     x: number;
     y: number;
     duration: number;
