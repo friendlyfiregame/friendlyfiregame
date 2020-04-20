@@ -3,10 +3,11 @@ import { Sprites } from './Sprites';
 import { loadImage } from './graphics';
 
 export enum FaceModes {
-    NEUTRAL = 0,
-    WORRIED = 1,
-    BORED = 2,
-    AMUSED = 3
+    NEUTRAL = 1,
+    ANGRY = 2,
+    BORED = 3,
+    AMUSED = 4,
+    SAD = 5
 };
 
 export enum EyeType {
@@ -29,7 +30,7 @@ export class Face {
     ) {}
 
     public static async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage(`sprites/eyes.png`), 4, 3);
+        this.sprites = new Sprites(await loadImage(`sprites/eyes.png`), 6, 3);
     }
 
     public setMode(mode: FaceModes) {
@@ -40,7 +41,9 @@ export class Face {
         ctx.save();
         ctx.translate(this.owner.x + this.offX, -this.owner.y - this.offY);
         ctx.scale(this.direction, 1);
-        Face.sprites.draw(ctx, this.mode + (Face.sprites.getColumns() * this.eyeType), this.scale);
+        const isBlinking = ((<any>window).game?.gameTime % 5) < 0.6;
+        const frame = isBlinking ? 0 : this.mode;
+        Face.sprites.draw(ctx, frame + (Face.sprites.getColumns() * this.eyeType), this.scale);
         ctx.restore();
     }
 

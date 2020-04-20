@@ -112,11 +112,8 @@ export class Fire extends NPC {
         let particleChance = dt - rnd() * this.averageParticleDelay;
         while (particleChance > 0) {
             // this.fireEmitter.emit();
-            if (rnd() < 0.12) {
+            if (rnd() < 0.03) {
                 this.face?.toggleDirection();
-            }
-            if (rnd() < 0.05) {
-                this.face?.setMode(Math.floor(Math.random() * 4));
             }
             if (rnd() < 0.5) {
                 this.sparkEmitter.emit();
