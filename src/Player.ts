@@ -265,7 +265,7 @@ export class Player extends PhysicsEntity {
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3");
                     break;
                 case 2:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "111 2 2 111 2 2 121 212 333 123 1212121");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 233");
                     break;
                 case 3:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132");
