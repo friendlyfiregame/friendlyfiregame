@@ -5,7 +5,7 @@ import { SpeechBubble } from './SpeechBubble';
 import { Conversation } from './Conversation';
 
 // Seconds where NPC can't be talked to after an ended conversation
-const PAUSE_AFTER_CONVERSATION = 3;
+const PAUSE_AFTER_CONVERSATION = 1.5;
 
 export abstract class NPC extends PhysicsEntity {
     public face: Face | null = null;
