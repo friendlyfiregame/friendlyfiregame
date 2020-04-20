@@ -189,7 +189,6 @@ export class Player extends PhysicsEntity {
                         // TODO Say something when wrong place to throw
                     }
                 } else if (this.carrying instanceof Seed) {
-                    console.log("Throw that thing!");
                     this.carrying.setVelocity(5 * this.direction, 5);
                     this.carrying = null;
                     this.throwingSound.stop();
