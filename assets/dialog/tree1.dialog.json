@@ -52,7 +52,7 @@
         "Oh you rude leafless imposter! Won't even listen to my sad, sad story. @entry !end"
     ],
     "definitly": [
-        "awesome @reminder !spawnseed !end"
+        "awesome !spawnseed @reminder !end"
     ],
     "cool": [
         "So the thing with pine cones, you see, is they need very special fertile ground to grow.",
@@ -65,6 +65,10 @@
         ">Ain't nobody got time for that! @notime"
     ],
     "reminder": [
-        "You know, you wanted to help me procreate. !end"
+        "You know, you wanted to help me procreate. Bring my cone to the highest place in this area @reminder !end",
+        ">Got it! @reminder !end",
+        ">Sorry, I lost your cone!",
+        "You did... what? Thank god I have an unlimited supply of them. @reminder !spawnseed !end"
+
     ]
 }
