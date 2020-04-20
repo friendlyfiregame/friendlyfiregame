@@ -139,15 +139,15 @@ export class SpeechBubble {
 
         let messageLineOffset = 4;
         for (let i = 0; i < this.messageLines.length; i++) {
-            this.game.mainFont.drawText(ctx, this.messageLines[i], posX - Math.round(metrics.width / 2),
-                -posY - this.height + 4 + (i * this.lineHeight), "black");
+            this.game.mainFont.drawText(ctx, this.messageLines[i], Math.round(posX - metrics.width / 2),
+                Math.round(-posY - this.height + 4 + (i * this.lineHeight)), "black");
             messageLineOffset += 4;
         }
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
             const selectionIndicator = isSelected ? ">" : " ";
-            this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], posX - Math.round(metrics.width / 2) + 4,
-                -posY - this.height + messageLineOffset + (i * this.lineHeight), "black");
+            this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2) + 4,
+                Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight)), "black");
         }
 
         ctx.restore();

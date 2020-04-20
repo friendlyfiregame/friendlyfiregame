@@ -21,6 +21,9 @@ import { Cloud } from './Cloud';
 import { Seed, SeedState } from "./Seed";
 import { PlayerConversation } from './PlayerConversation';
 import { Wood, WoodState } from "./Wood";
+import { Fire } from "./Fire";
+import { Tree } from "./Tree";
+import { FlameBoy } from "./FlameBoy";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -78,8 +81,28 @@ const drowningThoughts = [
     { message: "Argh!", duration: 1000 }
 ];
 
+export enum Milestone {
+    JUST_ARRIVED,
+    TALKED_TO_FIRE,
+    TALKED_TO_TREE,
+    GOT_SEED,
+    PLANTED_SEED,
+    TALKED_TO_STONE,
+    GOT_STONE,
+    THROWN_STONE_INTO_WATER,
+    TALKED_TO_FLAMEBOY,
+    MADE_RAIN,
+    GOT_WOOD,
+    THROWN_WOOD_INTO_FIRE
+}
+
+/** The number of seconds until player gets a hint. */
+const HINT_TIMEOUT = 90;
+
 @entity("player")
 export class Player extends PhysicsEntity {
+    private milestone = Milestone.JUST_ARRIVED;
+    private lastHint = Date.now();
     private flying = false;
     private direction = 1;
     private spriteIndex = SpriteIndex.IDLE0;
@@ -191,8 +214,21 @@ export class Player extends PhysicsEntity {
             if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() &&
                     this.closestNPC.conversation) {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
+                if (this.closestNPC instanceof Fire) {
+                    this.achieveMilestone(Milestone.TALKED_TO_FIRE);
+                }
+                if (this.closestNPC instanceof Tree) {
+                    this.achieveMilestone(Milestone.TALKED_TO_TREE);
+                }
+                if (this.closestNPC instanceof Stone) {
+                    this.achieveMilestone(Milestone.TALKED_TO_STONE);
+                }
+                if (this.closestNPC instanceof FlameBoy) {
+                    this.achieveMilestone(Milestone.TALKED_TO_FLAMEBOY);
+                }
             } else if (this.canDanceToMakeRain()) {
                 this.startDance(2);
+                this.achieveMilestone(Milestone.MADE_RAIN);
             } else {
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
@@ -267,7 +303,7 @@ export class Player extends PhysicsEntity {
                             undefined, undefined, false);
                     break;
                 case 2:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 12112122333     3      ");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121121223   ");
                     break;
                 case 3:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132");
@@ -405,7 +441,9 @@ export class Player extends PhysicsEntity {
         if (this.playerConversation) {
             this.playerConversation.update(dt);
         }
-
+        if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
+            this.showHint();
+        }
         if (this.carrying) {
             this.carrying.x = this.x;
             this.carrying.y = this.y + this.height -
@@ -658,6 +696,15 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
+            if (object instanceof Seed) {
+                this.achieveMilestone(Milestone.GOT_SEED);
+            }
+            if (object instanceof Wood) {
+                this.achieveMilestone(Milestone.GOT_WOOD);
+            }
+            if (object instanceof Stone) {
+                this.achieveMilestone(Milestone.GOT_STONE);
+            }
             this.carrying = object;
             object.setFloating(false);
             if (object instanceof Stone) {
@@ -681,5 +728,51 @@ export class Player extends PhysicsEntity {
         } else {
             return this.carrying != null;
         }
+    }
+
+    public achieveMilestone(milestone: Milestone): void {
+        this.milestone = Math.max(this.milestone, milestone);
+        this.lastHint = Date.now();
+    }
+
+    public showHint(): void {
+        if (this.playerConversation === null) {
+            switch (this.milestone) {
+                case Milestone.JUST_ARRIVED:
+                    this.think("I should talk to someone.", 3000);
+                    break;
+                case Milestone.TALKED_TO_FIRE:
+                    this.think("The fire told me to visit the tree in the east", 3000);
+                    break;
+                case Milestone.TALKED_TO_TREE:
+                    this.think("Maybe I should talk to the tree again", 3000);
+                    break;
+                case Milestone.GOT_SEED:
+                    this.think("I should check the mountains for a good place for the seed", 3000);
+                    break;
+                case Milestone.PLANTED_SEED:
+                    this.think("The seed needs something to grow, I think", 3000);
+                    break;
+                case Milestone.TALKED_TO_STONE:
+                    this.think("I should talk to that crazy stone again", 3000);
+                    break;
+                case Milestone.GOT_STONE:
+                    this.think("My arms get heavy. I really should throw that thing in the river", 3000);
+                    break;
+                case Milestone.THROWN_STONE_INTO_WATER:
+                    this.think("There must be something interesting west of the river", 3000);
+                    break;
+                case Milestone.TALKED_TO_FLAMEBOY:
+                    this.think("I should check the clouds. The seed still needs something to grow", 3000);
+                    break;
+                case Milestone.MADE_RAIN:
+                    this.think("I should talk to that singing tree again", 3000);
+                    break;
+                case Milestone.GOT_WOOD:
+                    this.think("Quick! The fire needs wood!", 3000);
+                    break;
+            }
+        }
+        this.lastHint = Date.now();
     }
 }

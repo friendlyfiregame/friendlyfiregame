@@ -8,6 +8,7 @@ import { Environment } from "./World";
 import { now } from "./util";
 import { Sound } from './Sound';
 import { Wood } from "./Wood";
+import { Milestone } from "./Player";
 
 export enum SeedState {
     FREE = 0,
@@ -77,6 +78,7 @@ export class Seed extends NPC {
             }
             if (!this.isCarried() && this.game.world.collidesWith(this.x, this.y - 8) === Environment.SOIL) {
                 this.state = SeedState.PLANTED;
+                this.game.player.achieveMilestone(Milestone.PLANTED_SEED);
                 this.setFloating(true);
                 this.x = 2052;
                 this.y = 1624;
