@@ -189,7 +189,7 @@ export class Game {
             await obj.load();
         }
         await this.loadApocalypse();
-        // setTimeout(() => this.beginApocalypse(), 1000);
+        setTimeout(() => this.beginApocalypse(), 1000);
     }
 
     public toggleScalingMethod () {
@@ -463,7 +463,8 @@ export class Game {
         this.fire.growthTarget = Math.max(2, 20 - 6 * this.gameObjects.filter(
                 o => o instanceof Cloud && o.isRaining()).length);
         if (this.fire.intensity < 5) {
-            this.apocalypseFactor = clamp((5 - this.fire.intensity) / 2, 0, 1);
+            this.fire.intensity = Math.max(this.fire.intensity, 3);
+            this.apocalypseFactor = clamp((this.fire.intensity - 3) / 2, 0, 1);
             this.music[1].setVolume(0.25 * this.apocalypseFactor);
             if (this.apocalypseFactor <= 0.001) {
                 // End apocalypse
