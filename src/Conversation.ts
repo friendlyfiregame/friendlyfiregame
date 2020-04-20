@@ -72,6 +72,7 @@ export class Conversation {
         if (option) {
             this.goBack();
         }
+        // shuffle(result.options);
         return result;
     }
 
