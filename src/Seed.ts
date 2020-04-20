@@ -5,10 +5,12 @@ import { loadImage } from "./graphics";
 import { Face, EyeType } from './Face';
 import { NPC } from './NPC';
 import { Environment } from "./World";
+import { now } from "./util";
 
 export enum SeedState {
     FREE = 0,
-    PLANTED = 1
+    PLANTED = 1,
+    SWIMMING = 2
 }
 
 @entity("seed")
@@ -42,10 +44,16 @@ export class Seed extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        if (this.state === SeedState.FREE) {
+        if (this.state === SeedState.SWIMMING) {
+            const diffX = 1035 - this.x;
+            const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
+            this.x += moveX * dt;
+            this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
+        }
+        if (this.state === SeedState.FREE || this.state === SeedState.SWIMMING) {
             this.spriteIndex = 0;
             const player = this.game.player;
-            if (!this.isCarried() && this.distanceTo(player) < 10) {
+            if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
             if (!this.isCarried() && this.game.world.collidesWith(this.x, this.y - 8) === Environment.SOIL) {
@@ -55,7 +63,14 @@ export class Seed extends NPC {
                 this.y = 1624;
                 this.spriteIndex = 1;
             }
+            if (this.state !== SeedState.SWIMMING && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+                this.state = SeedState.SWIMMING;
+                this.setVelocity(0, 0);
+                this.setFloating(true);
+                this.y = 390;
+            }
         } else if (this.state === SeedState.PLANTED) {
+            // TODO Special update behavior while planted
         }
     }
 

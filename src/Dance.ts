@@ -51,6 +51,18 @@ export class Dance {
         return this.success;
     }
 
+    public hasStarted(): boolean {
+        return this.progress > 0;
+    }
+
+    public getTimeSinceLastMistake(): number {
+        return this.progress - this.lastMistake;
+    }
+
+    public getTimeSinceLastSuccess(): number {
+        return this.progress - this.lastSuccess;
+    }
+
     private begin() {
         this.openTime = this.game.gameTime;
         this.startTime = this.openTime + this.warmupBeats;
@@ -71,7 +83,7 @@ export class Dance {
 
     // Called by parent
     public handleKeyDown(e: KeyboardEvent) {
-        if (!e.repeat) {
+        if (!e.repeat && this.hasStarted()) {
             const key = e.key.substr(-1).toLowerCase();
             if (this.allKeys.indexOf(key) >= 0) {
                 if (this.currentKey.includes(key)) {
@@ -111,8 +123,10 @@ export class Dance {
     }
 
     private keyMissed(key: string) {
-        for (let char of key) {
-            this.performance[this.currentIndex][char] = false;
+        if (this.performance[this.currentIndex]) {
+            for (let char of key) {
+                this.performance[this.currentIndex][char] = false;
+            }
         }
         this.registerMistake()
     }
@@ -148,7 +162,7 @@ export class Dance {
             // Proceed
             this.currentKey = this.keys[this.currentIndex] || "";
             for (let char of this.currentKey) {
-                if (this.performance[this.currentIndex][char]) {
+                if (this.performance[this.currentIndex] && this.performance[this.currentIndex][char]) {
                     this.currentKey = this.currentKey.replace(char, "");
                 }
             }
