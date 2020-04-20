@@ -2,7 +2,7 @@ import { World } from "./World";
 import { Player } from "./Player";
 import { particles, Particles, ParticleEmitter, valueCurves } from './Particles';
 import { Fire } from './Fire';
-import { clamp, now, rndInt, rndItem, rnd, timedRnd } from './util';
+import { clamp, now, rndItem, rnd, timedRnd } from './util';
 import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
