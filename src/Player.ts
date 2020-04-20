@@ -1,5 +1,5 @@
 import { SpeechBubble } from "./SpeechBubble";
-import { Game } from "./game";
+import { Game, GameStage } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
@@ -191,6 +191,9 @@ export class Player extends PhysicsEntity {
     }
 
     private async handleKeyDown(event: KeyboardEvent) {
+        if (this.game.stage === GameStage.TITLE) {
+            return;
+        }
         if (this.dance) {
             this.dance.handleKeyDown(event);
             return;

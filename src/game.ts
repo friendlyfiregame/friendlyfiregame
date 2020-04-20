@@ -115,7 +115,7 @@ export class Game {
     public gamepadInput!: GamepadInput;
 
     private titleImage!: HTMLImageElement;
-    private stage = GameStage.TITLE;
+    public stage = GameStage.TITLE;
     public keyHandler = new KeyHandler();
 
     constructor(canvas: HTMLCanvasElement) {
