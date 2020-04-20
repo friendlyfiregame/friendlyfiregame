@@ -86,7 +86,7 @@ export class Player extends PhysicsEntity {
     private usedDoubleJump = false;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", false);
+    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
 
     private dialogRange = 50;
     private dialogTipText = "Press 'Enter' or 'E' to talk";
