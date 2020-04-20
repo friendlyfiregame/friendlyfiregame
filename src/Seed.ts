@@ -10,7 +10,8 @@ import { now } from "./util";
 export enum SeedState {
     FREE = 0,
     PLANTED = 1,
-    SWIMMING = 2
+    SWIMMING = 2,
+    GROWN = 3
 }
 
 @entity("seed")
@@ -33,13 +34,20 @@ export class Seed extends NPC {
         ctx.translate(this.x, -this.y + 1);
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
-        if (this.state === SeedState.PLANTED) {
+        if (this.state === SeedState.PLANTED || this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }
     }
 
     public isCarried(): boolean {
         return this.game.player.isCarrying(this);
+    }
+
+    public grow(): void {
+        if (this.state === SeedState.PLANTED) {
+            this.state = SeedState.GROWN;
+            this.spriteIndex = 1;
+        }
     }
 
     update(dt: number): void {
@@ -61,7 +69,7 @@ export class Seed extends NPC {
                 this.setFloating(true);
                 this.x = 2052;
                 this.y = 1624;
-                this.spriteIndex = 1;
+                this.spriteIndex = 0;
             }
             if (this.state !== SeedState.SWIMMING && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = SeedState.SWIMMING;
@@ -71,6 +79,8 @@ export class Seed extends NPC {
             }
         } else if (this.state === SeedState.PLANTED) {
             // TODO Special update behavior while planted
+        } else if (this.state === SeedState.GROWN) {
+            // TODO Special update behavior when grown
         }
     }
 
