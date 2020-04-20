@@ -256,6 +256,8 @@ export class Game {
             this.gameTime += this.dt;
         }
 
+        this.gamepadInput.update();
+
         switch (this.stage) {
             case GameStage.TITLE:
                 this.updateTitle();
@@ -309,7 +311,6 @@ export class Game {
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
         }
-        this.gamepadInput.update();
         this.camera.update(this.dt, this.gameTime);
     }
 
