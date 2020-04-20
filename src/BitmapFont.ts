@@ -86,7 +86,8 @@ export class BitmapFont {
         const colorIndex = this.colorMap[color];
         const charIndex = (typeof char == "number") ? char : this.getCharIndex(char);
         const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
-        ctx.drawImage(this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight, x, y, this.charWidths[charIndex], this.charHeight);
+        ctx.drawImage(this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
+            Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight);
     };
 
     public drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0) {
@@ -99,7 +100,7 @@ export class BitmapFont {
         const offX = Math.round(-align * width);
         for (let i = 0; i < text.length; i++) {
             const index = this.getCharIndex(text[i]);
-            this.drawCharacter(ctx, index, x + offX, y, color);
+            this.drawCharacter(ctx, index, Math.round(x + offX), Math.round(y), color);
             x += this.charWidths[index] + 1;
         }
     }
