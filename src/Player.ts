@@ -1,5 +1,5 @@
 import { SpeechBubble } from "./SpeechBubble";
-import { Game } from "./game";
+import { Game, GameObject } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
@@ -18,6 +18,7 @@ import { Sound } from "./Sound";
 import { Dance } from './Dance';
 import { Stone, StoneState } from "./Stone";
 import { Cloud } from './Cloud';
+import { Seed, SeedState } from "./Seed";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -178,6 +179,10 @@ export class Player extends PhysicsEntity {
                     } else {
                         // TODO Say something when wrong place to throw
                     }
+                } else if (this.carrying instanceof Seed) {
+                    console.log("Throw that thing!");
+                    this.carrying.setVelocity(5 * this.direction, 5);
+                    this.carrying = null;
                 }
             } else {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
@@ -190,12 +195,9 @@ export class Player extends PhysicsEntity {
             }
         } else if (event.key === "p" && !this.dialogActive && !this.carrying) {
             // TODO Just for debugging, this must be removed later
-            this.carrying = this.game.stone;
-            this.game.stone.setFloating(false);
-            this.game.stone.state = StoneState.DEFAULT;
-            this.game.stone.x = this.x;
-            this.game.stone.y = this.y + this.height;
-            this.game.stone.setVelocity(0, 0);
+            this.carry(this.game.stone);
+        } else if (event.key === "o" && !this.dialogActive && !this.carrying) {
+            this.carry(this.game.seed);
         }
     }
 
@@ -296,6 +298,10 @@ export class Player extends PhysicsEntity {
             this.carrying.x = this.x;
             this.carrying.y = this.y + this.height -
                 ((this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) ? 1 : 0);
+            if (this.carrying instanceof Seed) {
+                this.carrying.y -= 2;
+                this.carrying.x += 7;
+            }
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }
@@ -510,6 +516,30 @@ export class Player extends PhysicsEntity {
             return SHORT_JUMP_GRAVITY;
         } else {
             return GRAVITY;
+        }
+    }
+
+    public carry(object: PhysicsEntity) {
+        if (!this.carrying) {
+            this.carrying = object;
+            object.setFloating(false);
+            if (object instanceof Stone) {
+                object.state = StoneState.DEFAULT;
+            }
+            if (object instanceof Seed) {
+                object.state = SeedState.FREE;
+            }
+            object.x = this.x;
+            object.y = this.y + this.height;
+            object.setVelocity(0, 0);
+        }
+    }
+
+    public isCarrying(object?: PhysicsEntity): boolean {
+        if (object) {
+            return this.carrying === object;
+        } else {
+            return this.carrying != null;
         }
     }
 }
