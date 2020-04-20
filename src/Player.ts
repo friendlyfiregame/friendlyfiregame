@@ -73,7 +73,6 @@ export class Player extends PhysicsEntity {
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     public jumpDown: boolean = false;
-    private debug = false;
     private jumpKeyPressed: boolean | null = false;
     private drowning = 0;
     private readonly startX: number;
@@ -81,8 +80,8 @@ export class Player extends PhysicsEntity {
     private dance: Dance | null = null;
     private currentFailSpriteIndex = 0;
     private carrying: PhysicsEntity | null = null;
-    public doubleJump = true;
-    public multiJump = true;
+    public doubleJump = false;
+    public multiJump = false;
     private usedDoubleJump = false;
 
     public playerConversation: PlayerConversation | null = null;
@@ -107,6 +106,10 @@ export class Player extends PhysicsEntity {
         this.startY = y;
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
+        if (this.game.dev) {
+            console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, T to throw " +
+                "useless snowball, K to learn all abilities");
+        }
         this.setMaxVelocity(MAX_PLAYER_SPEED);
         this.dustEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
@@ -173,14 +176,7 @@ export class Player extends PhysicsEntity {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
             } else if (this.canDanceToMakeRain()) {
                 this.startDance();
-            }
-        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
-            this.jumpKeyPressed = true;
-            this.jump();
-        } else if ((event.key === "s" || event.key === "ArrowDown")) {
-            this.jumpDown = true;
-        } else if (event.key === "t") {
-            if (this.carrying) {
+            } else {
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
                         this.carrying.setVelocity(10 * this.direction, 10);
@@ -196,19 +192,31 @@ export class Player extends PhysicsEntity {
                     this.throwingSound.stop();
                     this.throwingSound.play();
                 }
-            } else {
+            }
+        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
+            this.jumpKeyPressed = true;
+            this.jump();
+        } else if ((event.key === "s" || event.key === "ArrowDown")) {
+            this.jumpDown = true;
+        }
+
+        if (this.game.dev) {
+            if (event.key === "c") {
+                // TODO Just for debugging. Real dancing is with action key on rain cloud
+                this.startDance();
+            } else if (event.key === "p" && !this.carrying) {
+                // TODO Just for debugging, this must be removed later
+                this.carry(this.game.stone);
+            } else if (event.key === "o" && !this.carrying) {
+                this.carry(this.game.seed);
+            } else if (event.key === "t") {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 this.throwingSound.stop();
                 this.throwingSound.play();
+            } else if (event.key === "k") {
+                this.multiJump = true;
+                this.doubleJump = true;
             }
-        } else if (event.key === "c") {
-            // TODO Just for debugging. Real dancing is with action key on rain cloud
-            this.startDance();
-        } else if (event.key === "p" && !this.carrying) {
-            // TODO Just for debugging, this must be removed later
-            this.carry(this.game.stone);
-        } else if (event.key === "o" && !this.carrying) {
-            this.carry(this.game.seed);
         }
     }
 
@@ -255,9 +263,6 @@ export class Player extends PhysicsEntity {
         ctx.beginPath();
         ctx.strokeStyle = "red";
         ctx.translate(this.x, -this.y + 1);
-        if (this.debug) {
-            ctx.strokeRect(-this.width / 2, -this.height, this.width, this.height);
-        }
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
@@ -278,12 +283,12 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.canThrowStoneIntoWater()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'T' to throw the stone into the water",
+            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the stone into the water",
                 this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
         }
 
         if (this.canThrowSeedIntoSoil()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'T' to throw the seed into the soil",
+            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the seed into the soil",
                 this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
         }
 
