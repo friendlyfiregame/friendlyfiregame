@@ -19,6 +19,19 @@ export class Campaign {
     public statesChanged$ = new Subject<CampaignState[]>();
     public states: CampaignState[] = ["start"];
 
+    constructor(public game: Game) {
+        setTimeout(() => {
+            this.begin();
+        });
+    }
+
+    private begin() {
+        // Setup initial NPC dialogs
+        this.runAction("enable", null, ["fire", "fire1"]);
+        this.runAction("enable", null, ["tree", "tree1"]);
+        this.runAction("enable", null, ["stone", "stone1"]);
+    }
+
     public hasState(state: CampaignState) {
         return this.states.includes(state);
     }
@@ -42,10 +55,7 @@ export class Campaign {
         }
     }
 
-    constructor(public game: Game) {
-    }
-
-    public runAction(action: string, npc?: NPC, params: string[] = []): void {
+    public runAction(action: string, npc?: NPC | null, params: string[] = []): void {
         switch(action) {
             case "angry":
                 npc?.face?.setMode(FaceModes.ANGRY);
