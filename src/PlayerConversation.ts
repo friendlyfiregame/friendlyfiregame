@@ -1,15 +1,19 @@
 import { Conversation, Interaction } from './Conversation';
+import { Player } from './Player';
+import { NPC } from './NPC';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;
     private selectedOption = -1;
 
     constructor(
-        // private readonly player: Player,
+        private readonly player: Player,
+        private readonly npc: NPC,
         private readonly conversation: Conversation
     ) {
         this.interaction = this.conversation.getNextInteraction();
-        this.selectedOption = -1;
+        this.setSelectedOption(0);
+        this.setBubblesContent();
     }
 
     /**
@@ -27,6 +31,20 @@ export class PlayerConversation {
 
     }
 
+    private setBubblesContent() {
+        if (this.interaction) {
+            const optionsTexts = this.interaction.options.map(options => options.line)
+            if (optionsTexts.length > 0) {
+                this.player.speechBubble.setOptions(optionsTexts);
+                this.player.speechBubble.show();
+            }
+            if (this.interaction.npcLine) {
+                this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
+                this.npc.speechBubble.show();
+            }
+        }
+    }
+
     private setSelectedOption(num = 0): number {
         if (this.interaction && this.interaction.options && this.interaction.options.length > 0) {
             let sel = (this.selectedOption + num) % this.interaction.options.length;
@@ -35,13 +53,14 @@ export class PlayerConversation {
         } else {
             this.selectedOption = -1;
         }
+        this.player.speechBubble.selectedOptionIndex = this.selectedOption;
         return this.selectedOption;
     }
 
     public handleKey(e: KeyboardEvent) {
         if (!e.repeat) {
             // Enter to proceed
-            if (e.key == "Enter") {
+            if (e.key == "Enter" || e.key == "e") {
                 this.proceed();
             }
             const upDown = (["D", "ArrowDown"].includes(e.key) ? 1 : 0) - (["W", "ArrowUp"].includes(e.key) ? 1 : 0);
@@ -53,6 +72,7 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
+            this.setBubblesContent();
             const options = this.interaction.options;
             if (options && options.length > 0) {
                 // Player could choose between options, confirmed with Enter
@@ -68,7 +88,11 @@ export class PlayerConversation {
                 // NPC said something, player proceeds without any options
                 this.interaction.npcLine.execute();
             }
-            this.interaction = this.conversation .getNextInteraction();
+            this.interaction = this.conversation.getNextInteraction();
+        } else {
+            this.player.playerConversation = null;
+            this.player.speechBubble.hide();
+            this.npc.speechBubble.hide();
         }
     }
 }

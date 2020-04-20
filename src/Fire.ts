@@ -27,7 +27,6 @@ const smokeColors = [
 
 @entity("fire")
 export class Fire extends NPC {
-
     private intensity = 5;
 
     private growth = 0;
@@ -42,8 +41,6 @@ export class Fire extends NPC {
     // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
-
-    private conversation: Conversation;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -85,7 +82,6 @@ export class Fire extends NPC {
         });
         this.face = new Face(this, EyeType.STANDARD, 1, 0, 6);
         this.conversation = new Conversation(dialog, this);
-        console.log(this.conversation);
     }
 
 
@@ -101,6 +97,7 @@ export class Fire extends NPC {
         }
         this.fireGfx.draw(ctx, this.x, this.y);
         this.drawFace(ctx);
+        this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
@@ -132,5 +129,6 @@ export class Fire extends NPC {
         if (this.isVisible) {
             this.fireGfx.update(dt);
         }
+        this.speechBubble.update(this.x, this.y);
     }
 }

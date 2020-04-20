@@ -1,5 +1,5 @@
 import { SpeechBubble } from "./SpeechBubble";
-import { Game, GameObject } from "./game";
+import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
@@ -19,6 +19,7 @@ import { Dance } from './Dance';
 import { Stone, StoneState } from "./Stone";
 import { Cloud } from './Cloud';
 import { Seed, SeedState } from "./Seed";
+import { PlayerConversation } from './PlayerConversation';
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -81,8 +82,8 @@ export class Player extends PhysicsEntity {
     public multiJump = false;
     private usedDoubleJump = false;
 
+    public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
-    public dialogActive = false;
 
     private dialogRange = 50;
     private dialogTipText = "Press 'Enter' or 'E' to talk";
@@ -152,25 +153,28 @@ export class Player extends PhysicsEntity {
         if (!this.game.camera.isOnTarget() || event.repeat) {
             return;
         }
-        if ((event.key === "ArrowRight" || event.key === "d") && !this.dialogActive) {
+        if (this.playerConversation) {
+            this.playerConversation.handleKey(event);
+            return;
+        }
+        if ((event.key === "ArrowRight" || event.key === "d")) {
             this.direction = 1;
             this.moveRight = true;
             this.moveLeft = false;
-        } else if ((event.key === "ArrowLeft" || event.key === "a") && !this.dialogActive) {
+        } else if ((event.key === "ArrowLeft" || event.key === "a")) {
             this.direction = -1;
             this.moveLeft = true;
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
-            if (this.closestNPC && this.closestNPC.hasDialog) {
-                this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
+            if (this.closestNPC && this.closestNPC.conversation) {
+                this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
             }
-        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()
-                && !this.dialogActive) {
+        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
             this.jumpKeyPressed = true;
             this.jump();
-        } else if ((event.key === "s" || event.key === "ArrowDown") && !this.dialogActive) {
+        } else if ((event.key === "s" || event.key === "ArrowDown")) {
             this.jumpDown = true;
-        } else if (event.key === "t" && !this.dialogActive) {
+        } else if (event.key === "t") {
             if (this.carrying) {
                 if (this.carrying instanceof Stone) {
                     if (this.direction === -1 && this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER) {
@@ -193,10 +197,10 @@ export class Player extends PhysicsEntity {
             if (!this.dance) {
                 this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
             }
-        } else if (event.key === "p" && !this.dialogActive && !this.carrying) {
+        } else if (event.key === "p" && !this.carrying) {
             // TODO Just for debugging, this must be removed later
             this.carry(this.game.stone);
-        } else if (event.key === "o" && !this.dialogActive && !this.carrying) {
+        } else if (event.key === "o" && !this.carrying) {
             this.carry(this.game.seed);
         }
     }
@@ -256,7 +260,7 @@ export class Player extends PhysicsEntity {
         }
         ctx.restore();
 
-        if (this.closestNPC && this.closestNPC.hasDialog) {
+        if (this.closestNPC && this.closestNPC.conversation) {
             this.drawDialogTip(ctx);
         }
 
@@ -264,9 +268,7 @@ export class Player extends PhysicsEntity {
             this.dance.draw(ctx);
         }
 
-        if (this.dialogActive && this.speechBubble.message !== "") {
-            this.speechBubble.draw(ctx);
-        }
+        this.speechBubble.draw(ctx);
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
