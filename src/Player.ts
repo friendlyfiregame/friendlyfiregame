@@ -434,9 +434,13 @@ export class Player extends PhysicsEntity {
             if (done) {
                 // On cloud -> make it rain
                 if (this.dance.wasSuccessful()) {
+                    // (Useless because wrong cloud but hey...)
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
                         ground.startRain(15);
+                    }
+                    if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD) {
+                        this.game.world.startRain();
                     }
                 }
                 this.dance = null;
