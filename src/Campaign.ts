@@ -93,7 +93,7 @@ export class Campaign {
                 this.game.player.multiJump = true;
                 break;
             case "spawnseed":
-                this.game.seed.x = this.game.tree.x;
+                this.game.tree.spawnSeed();
                 break;
             case "enable":
                 const char = params[0], dialogName = params[1];

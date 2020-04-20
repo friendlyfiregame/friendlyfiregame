@@ -23,7 +23,6 @@ import { Tree } from "./Tree";
 import { GamepadInput } from "./GamepadInput";
 import { FlameBoy } from './FlameBoy';
 import { Wing } from './Wing';
-import { Seed } from './Seed';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -79,7 +78,6 @@ export class Game {
     public tree: Tree;
     public flameboy: FlameBoy;
     public wing: Wing;
-    public seed: Seed;
 
     public campaign: Campaign;
 
@@ -119,7 +117,6 @@ export class Game {
         this.tree = this.getGameObject(Tree);
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
-        this.seed = this.getGameObject(Seed);
 
         this.camera = new Camera(this, this.player);
         setInterval(() => {
