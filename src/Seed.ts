@@ -7,6 +7,7 @@ import { NPC } from './NPC';
 import { Environment } from "./World";
 import { now } from "./util";
 import { Sound } from './Sound';
+import { Wood } from "./Wood";
 
 export enum SeedState {
     FREE = 0,
@@ -21,15 +22,18 @@ export class Seed extends NPC {
     private spriteIndex = 0;
     public state = SeedState.FREE;
     private successSound!: Sound;
+    private wood: Wood;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
+        this.wood = new Wood(game, x, y);
         this.face = new Face(this, EyeType.STANDARD, 1, -4, 8);
     }
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/seed.png"), 3, 1);
         this.successSound = new Sound("sounds/throwing/success.mp3");
+        await this.wood.load();
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -88,6 +92,16 @@ export class Seed extends NPC {
         } else if (this.state === SeedState.GROWN) {
             // TODO Special update behavior when grown
         }
+    }
+
+    public spawnWood(): Wood {
+        if (!this.game.gameObjects.includes(this.wood)) {
+            this.game.addGameObject(this.wood);
+        }
+        this.wood.x = this.x;
+        this.wood.y = this.y + this.height / 2;
+        this.wood.setVelocity(-5, 0);
+        return this.wood;
     }
 
     startDialog(): void {
