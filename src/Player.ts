@@ -16,7 +16,7 @@ import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
-import { Stone } from "./Stone";
+import { Stone, StoneState } from "./Stone";
 import { Cloud } from './Cloud';
 
 enum SpriteIndex {
@@ -76,7 +76,7 @@ export class Player extends PhysicsEntity {
     private readonly startY: number;
     private dance: Dance | null = null;
     private carrying: PhysicsEntity | null = null;
-    public doubleJump = false;
+    public doubleJump = true;
     public multiJump = false;
     private usedDoubleJump = false;
 
@@ -171,8 +171,14 @@ export class Player extends PhysicsEntity {
             this.jumpDown = true;
         } else if (event.key === "t" && !this.dialogActive) {
             if (this.carrying) {
-                this.carrying.setVelocity(5 * this.direction, 5);
-                this.carrying = null;
+                if (this.carrying instanceof Stone) {
+                    if (this.direction === -1 && this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER) {
+                        this.carrying.setVelocity(10 * this.direction, 10);
+                        this.carrying = null;
+                    } else {
+                        // TODO Say something when wrong place to throw
+                    }
+                }
             } else {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
             }
@@ -183,7 +189,13 @@ export class Player extends PhysicsEntity {
                 this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
             }
         } else if (event.key === "p" && !this.dialogActive && !this.carrying) {
+            // TODO Just for debugging, this must be removed later
             this.carrying = this.game.stone;
+            this.game.stone.setFloating(false);
+            this.game.stone.state = StoneState.DEFAULT;
+            this.game.stone.x = this.x;
+            this.game.stone.y = this.y + this.height;
+            this.game.stone.setVelocity(0, 0);
         }
     }
 
@@ -265,9 +277,14 @@ export class Player extends PhysicsEntity {
     }
 
     private respawn() {
-        this.x = this.startX;
+        if (this.x > this.startX - 242) {
+            this.x = this.startX;
+            this.direction = -1;
+        } else {
+            this.x = this.startX - 485;
+            this.direction = 1;
+        }
         this.y = this.startY;
-        this.direction = -1;
         this.setVelocity(0, 0);
     }
 
@@ -286,6 +303,10 @@ export class Player extends PhysicsEntity {
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
+            if (this.carrying instanceof Stone) {
+                this.carrying.setVelocity(-2, 10);
+                this.carrying = null;
+            }
             if (this.drowning === 0) {
                 this.drowningSound.trigger();
             }

@@ -1,6 +1,6 @@
 import { NPC } from './NPC';
 
-interface Interaction {
+export interface Interaction {
     npcLine: ConversationLine | null;
     options: ConversationLine[];
     spoiledOptions: ConversationLine[];

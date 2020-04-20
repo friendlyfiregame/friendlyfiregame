@@ -72,7 +72,7 @@ export class Dance {
     // Called by parent
     public handleKeyDown(e: KeyboardEvent) {
         if (!e.repeat) {
-            const key = e.code.substr(-1).toLowerCase();
+            const key = e.key.substr(-1).toLowerCase();
             if (this.allKeys.indexOf(key) >= 0) {
                 if (this.currentKey.includes(key)) {
                     if (this.currentDistanceToIdealTime <= this.timeTolerance) {

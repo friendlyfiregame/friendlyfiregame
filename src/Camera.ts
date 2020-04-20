@@ -48,7 +48,7 @@ export class Camera {
     }
 
     private handleKeyDown(e: KeyboardEvent) {
-        if (e.code === "Tab") {
+        if (e.key === "Tab") {
             if (!e.repeat) {
                 this.zoomingOut = true;
             }
@@ -65,7 +65,7 @@ export class Camera {
     }
 
     private handleKeyUp(e: KeyboardEvent) {
-        if (e.code === "Tab") {
+        if (e.key === "Tab") {
             this.zoomingOut = false;
             e.stopPropagation();
             e.preventDefault();
