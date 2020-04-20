@@ -77,6 +77,7 @@ export class SpeechBubble {
             }
             this.updateContent();
         }
+        this.isCurrentlyWriting = false;
         this.updateContent();
     }
 
