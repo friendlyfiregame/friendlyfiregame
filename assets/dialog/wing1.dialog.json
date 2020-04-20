@@ -3,6 +3,7 @@
         "How did you get up here...?",
         ">Via jumping @jumping",
         ">You.. look like a flying ability power up @pickup",
+        ">Do you know anything about growing seeds? @seed",
         ">What a strange person... ",
         "Whatever @entry !end"
     ],
@@ -23,13 +24,25 @@
         ">Guilty as charged",
         "I guessed so. @acquainted !end"
     ],
+    "seed": [
+        "Seeds? What is there to know? Just put the thing in dirt and pour some water over it",
+        "If you need water, just use the rain cloud there.",
+        ">How?",
+        "I usually just punch the thing right in the face. Psychological abuse works as well.",
+        ">Are there peaceful options as well?",
+        "Yeah, I heard something about rain dancing on top of the cloud. But that's for people without anger issues",
+        ">Thanks... seek help",
+        "Great advice, mom! @acquainted !end"
+    ],
     "acquainted": [
         "Go away please?",
         ">Sure buddy",
+        ">I really need help with the seed @seed",
         "Thanks @exhausted !end"
     ],
     "exhausted": [
         "you again...",
-        ">I'm on my way! @acquainted !end"
+        ">I'm on my way! @acquainted !end",
+        ">I really need help with the seed @seed"
     ]
 }
