@@ -9,7 +9,6 @@ import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
 import { Campaign } from './Campaign';
-import { DummyNPC } from './DummyNPC';
 import "./Cloud";
 import "./Stone";
 import "./FlameBoy";
@@ -108,8 +107,6 @@ export class Game {
         this.stone = this.getGameObject(Stone);
         this.seed = this.getGameObject(Seed);
 
-        // testing dummy
-        this.gameObjects.splice(2, 0, new DummyNPC(this, this.player.x - 25, this.player.y));
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
