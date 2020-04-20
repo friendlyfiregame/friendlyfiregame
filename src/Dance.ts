@@ -203,7 +203,7 @@ export class Dance {
         } else {
             // own music paused
             if (!Dance.music.isPlaying()) {
-                Dance.music.setVolume(0.25);
+                Dance.music.setVolume(0.8);
                 Dance.music.play();
                 this.game.music[0].setVolume(0);
             }
