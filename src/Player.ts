@@ -3,7 +3,7 @@ import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
-    PLAYER_DANCING_ANIMATION
+    PLAYER_DANCING_ANIMATION, PLAYER_FAIL_ANIMATION
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
@@ -39,7 +39,9 @@ enum SpriteIndex {
     DANCE2 = 14,
     DANCE3 = 15,
     DANCE4 = 16,
-    DANCE5 = 17
+    DANCE5 = 17,
+    FAIL0 = 18,
+    FAIL1 = 19
 }
 
 const groundColors = [
@@ -77,6 +79,7 @@ export class Player extends PhysicsEntity {
     private readonly startX: number;
     private readonly startY: number;
     private dance: Dance | null = null;
+    private currentFailSpriteIndex = 0;
     private carrying: PhysicsEntity | null = null;
     public doubleJump = true;
     public multiJump = false;
@@ -411,7 +414,23 @@ export class Player extends PhysicsEntity {
 
         // Dance
         if (this.dance) {
-            this.spriteIndex = getSpriteIndex(SpriteIndex.DANCE0, PLAYER_DANCING_ANIMATION);
+            if (this.dance.hasStarted()) {
+                // Basic dancing or error?
+                const err = this.dance.getTimeSinceLastMistake(), suc = this.dance.getTimeSinceLastSuccess();
+                if (Math.random() < 0.01) { console.log(err, suc); }
+                if (err < 1 || suc < 3) {
+                    if (err <= suc) {
+                        if (err == 0) {
+                            this.currentFailSpriteIndex = rnd() < 0.5 ? SpriteIndex.FAIL0 : SpriteIndex.FAIL1;
+                        }
+                        // Show error frame?
+                        this.spriteIndex = getSpriteIndex(this.currentFailSpriteIndex, PLAYER_FAIL_ANIMATION);
+                    } else {
+                        // Show dance frame?
+                        this.spriteIndex = getSpriteIndex(SpriteIndex.DANCE0, PLAYER_DANCING_ANIMATION);
+                    }
+                }
+            }
             this.dance.setPosition(this.x, this.y - 16);
             const done = this.dance.update(dt);
             if (done) {
