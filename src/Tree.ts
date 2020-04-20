@@ -16,7 +16,7 @@ export class Tree extends NPC {
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
         this.face = new Face(this, EyeType.TREE, 1, 5, 94);
-        this.conversation = new Conversation(dialog, this);
+        this.startDialog();
     }
 
     public async load(): Promise<void> {
@@ -35,5 +35,6 @@ export class Tree extends NPC {
         this.spriteIndex = getSpriteIndex(0, TREE_ANIMATION);
     }
     startDialog(): void {
+        this.conversation = new Conversation(dialog, this);
     }
 }
