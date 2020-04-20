@@ -20,6 +20,7 @@ import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 import { Dance } from './Dance';
 import { Tree } from "./Tree";
+import { GamepadInput } from "./GamepadInput";
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -91,6 +92,8 @@ export class Game {
     public bigFont!: BitmapFont;
     public music!: Sound[];
 
+    public gamepadInput!: GamepadInput;
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.updateCanvasSize();
@@ -114,6 +117,8 @@ export class Game {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
+
+        this.gamepadInput = new GamepadInput();
     }
 
     public addGameObject(object: GameObject): void {
@@ -231,6 +236,7 @@ export class Game {
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
         }
+        this.gamepadInput.update();
         this.camera.update(this.dt, this.gameTime);
     }
 
