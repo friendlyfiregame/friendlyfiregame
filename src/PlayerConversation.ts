@@ -36,8 +36,12 @@ export class PlayerConversation {
                 this.player.speechBubble.show();
             }
             if (this.interaction.npcLine) {
-                this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
-                this.npc.speechBubble.show();
+                if (this.npc.speechBubble.isCurrentlyWriting) {
+                    this.npc.speechBubble.isCurrentlyWriting = false;
+                } else {
+                    this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
+                    this.npc.speechBubble.show();
+                }
             }
         }
     }

@@ -45,7 +45,6 @@ export class Greeting implements GameObject {
         this.speechBubble.update(this.npc.x, this.npc.y);
         const isInRange = this.npc.game.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
-            console.log("yes")
             this.setRandomGreeting();
             this.greetingActive = this.greetingAlreadyShown = true;
             this.speechBubble.show();

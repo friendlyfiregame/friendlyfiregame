@@ -26,12 +26,12 @@ export class SpeechBubble {
 
     public x: number;
     public y: number;
+    public isCurrentlyWriting = false;
 
     private isVisible = false;
 
     private content: string [] = [];
     private contentLinesByLength: string[] = [];
-    private isCurrentlyWriting = false;
 
     constructor(
         private game: Game,
@@ -58,17 +58,10 @@ export class SpeechBubble {
 
     async setMessage(message: string): Promise<void> {
         this.messageLines = [""];
-        if (this.isCurrentlyWriting) {
-            this.isCurrentlyWriting = false;
-            await sleep(this.messageVelocity);
-        }
         this.isCurrentlyWriting = true;
         this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) => b.length - a.length);
         let index = 0;
         for (let char of message) {
-            if (!this.isCurrentlyWriting) {
-                break;
-            }
             if (!char) {
                 index++;
                 continue
@@ -79,7 +72,9 @@ export class SpeechBubble {
                 continue
             }
             this.messageLines[index] += char;
-            await sleep(this.messageVelocity)
+            if (this.isCurrentlyWriting) {
+                await sleep(this.messageVelocity)
+            }
             this.updateContent();
         }
         this.updateContent();
@@ -105,7 +100,6 @@ export class SpeechBubble {
         ctx.save();
         ctx.beginPath();
         const font = this.game.mainFont;
-        console.log(this.contentLinesByLength[0]);
         const longestLine = this.contentLinesByLength[0];
         const metrics = longestLine ? font.measureText(longestLine) : { width: 0, height: 0};
 
