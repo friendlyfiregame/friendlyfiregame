@@ -263,7 +263,8 @@ export class Player extends PhysicsEntity {
         if (!this.dance) {
             switch (difficulty) {
                 case 1:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3", undefined,
+                            undefined, undefined, false);
                     break;
                 case 2:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 12112122333     3      ");
@@ -330,7 +331,7 @@ export class Player extends PhysicsEntity {
         ctx.restore();
 
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
-                && !this.playerConversation) {
+                && !this.playerConversation && !this.dance) {
             this.drawDialogTip(ctx);
         }
 
