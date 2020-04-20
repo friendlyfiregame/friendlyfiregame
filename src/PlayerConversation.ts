@@ -114,5 +114,6 @@ export class PlayerConversation {
         this.player.playerConversation = null;
         this.player.speechBubble.hide();
         this.npc.speechBubble.hide();
+        this.npc.registerEndedConversation();
     }
 }
