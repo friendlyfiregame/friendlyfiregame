@@ -46,7 +46,7 @@ export class Seed extends NPC {
     public grow(): void {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
-            this.spriteIndex = 1;
+            this.spriteIndex = 2;
         }
     }
 
@@ -78,7 +78,9 @@ export class Seed extends NPC {
                 this.y = 390;
             }
         } else if (this.state === SeedState.PLANTED) {
-            // TODO Special update behavior while planted
+            if (this.game.world.isRaining()) {
+                this.grow();
+            }
         } else if (this.state === SeedState.GROWN) {
             // TODO Special update behavior when grown
         }
