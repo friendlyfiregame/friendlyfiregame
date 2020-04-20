@@ -52,9 +52,10 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     update(dt: number): void {
-        super.update(dt);
         this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
         this.updateGreeting(dt);
+
+        super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
             if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
