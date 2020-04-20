@@ -103,10 +103,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         }
     }
 
-    collidesWith(x: number, y: number, ignore?: Environment[]): number {
+    collidesWith(x: number, y: number): number {
         if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
                 && y >= this.y && y <= this.y + this.height) {
-            return Environment.SOLID;
+            return Environment.PLATFORM;
         }
         return Environment.AIR;
     }

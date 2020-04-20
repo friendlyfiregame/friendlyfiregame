@@ -14,6 +14,9 @@ export abstract class PhysicsEntity extends Entity {
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
+        if (floating) {
+            this.setVelocity(0, 0);
+        }
     }
 
     public isFloating(): boolean {
@@ -106,7 +109,7 @@ export abstract class PhysicsEntity extends Entity {
             this.y = newY;
         } else {
             const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
-            if (env === Environment.AIR) {
+            if (env === Environment.AIR || env === Environment.WATER) {
                 this.x = newX;
                 this.y = newY;
             } else {
@@ -138,8 +141,12 @@ export abstract class PhysicsEntity extends Entity {
                 this.velocityY -= this.getGravity() * dt;
             } else if (environment === Environment.WATER) {
                 this.velocityY = DROWNING_VELOCITY;
+                this.velocityX = 0;
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
+                if (!(this instanceof Player)) {
+                    this.velocityX = 0;
+                }
                 this.x = Math.round(this.x);
                 this.y = Math.round(this.y);
             }

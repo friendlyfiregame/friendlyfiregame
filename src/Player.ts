@@ -2,7 +2,8 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
+    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
+    PLAYER_DANCING_ANIMATION
 } from "./constants";
 import { NPC } from './NPC';
 import { loadImage } from "./graphics";
@@ -15,7 +16,7 @@ import { rnd, rndItem, timedRnd } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
-import { Stone } from "./Stone";
+import { Stone, StoneState } from "./Stone";
 import { Cloud } from './Cloud';
 
 enum SpriteIndex {
@@ -30,7 +31,13 @@ enum SpriteIndex {
     JUMP = 8,
     FALL = 9,
     CARRY0 = 10,
-    CARRY1 = 11
+    CARRY1 = 11,
+    DANCE0 = 12,
+    DANCE1 = 13,
+    DANCE2 = 14,
+    DANCE3 = 15,
+    DANCE4 = 16,
+    DANCE5 = 17
 }
 
 const groundColors = [
@@ -69,15 +76,15 @@ export class Player extends PhysicsEntity {
     private readonly startY: number;
     private dance: Dance | null = null;
     private carrying: PhysicsEntity | null = null;
-    public doubleJump = false;
+    public doubleJump = true;
     public multiJump = false;
     private usedDoubleJump = false;
 
-    public speechBubble = new SpeechBubble(this.x, this.y, "white");
+    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
     public dialogActive = false;
 
     private dialogRange = 50;
-    private dialogTipText = "press 'Enter' or 'e' to talk";
+    private dialogTipText = "Press 'Enter' or 'E' to talk";
     private closestNPC: NPC | null = null;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
@@ -86,6 +93,7 @@ export class Player extends PhysicsEntity {
     private walkingSound!: Sound;
     private throwingSound!: Sound;
     private jumpingSound!: Sound;
+    private landingSound!: Sound;
     private bouncingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
@@ -125,12 +133,13 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
-        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
+        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 5);
+        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 5);
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
-        this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
+        this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
         this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.landingSound = new Sound("sounds/jumping/landing.mp3");
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
@@ -151,7 +160,7 @@ export class Player extends PhysicsEntity {
             this.moveLeft = true;
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
-            if (this.closestNPC && this.closestNPC.hasDialog) {
+            if (this.closestNPC && this.closestNPC.conversation) {
                 this.game.campaign.startPlayerDialogWithNPC(this.closestNPC);
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()
@@ -162,8 +171,14 @@ export class Player extends PhysicsEntity {
             this.jumpDown = true;
         } else if (event.key === "t" && !this.dialogActive) {
             if (this.carrying) {
-                this.carrying.setVelocity(5 * this.direction, 5);
-                this.carrying = null;
+                if (this.carrying instanceof Stone) {
+                    if (this.direction === -1 && this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER) {
+                        this.carrying.setVelocity(10 * this.direction, 10);
+                        this.carrying = null;
+                    } else {
+                        // TODO Say something when wrong place to throw
+                    }
+                }
             } else {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
             }
@@ -174,7 +189,13 @@ export class Player extends PhysicsEntity {
                 this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
             }
         } else if (event.key === "p" && !this.dialogActive && !this.carrying) {
+            // TODO Just for debugging, this must be removed later
             this.carrying = this.game.stone;
+            this.game.stone.setFloating(false);
+            this.game.stone.state = StoneState.DEFAULT;
+            this.game.stone.x = this.x;
+            this.game.stone.y = this.y + this.height;
+            this.game.stone.setVelocity(0, 0);
         }
     }
 
@@ -233,7 +254,7 @@ export class Player extends PhysicsEntity {
         }
         ctx.restore();
 
-        if (this.closestNPC && this.closestNPC.hasDialog) {
+        if (this.closestNPC && this.closestNPC.conversation) {
             this.drawDialogTip(ctx);
         }
 
@@ -249,17 +270,21 @@ export class Player extends PhysicsEntity {
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
-        ctx.strokeStyle = "white";
-
-        const textWidth = ctx.measureText(this.dialogTipText).width;
-        ctx.strokeText(this.dialogTipText, this.x - (this.width / 2) - (textWidth / 2), -this.y + 20);
+        const text = this.dialogTipText;
+        this.game.mainFont.drawTextWithOutline(ctx, text, this.x - Math.round(this.width / 2), -this.y + 12,
+            "white", "black", 0.5);
         ctx.restore();
     }
 
     private respawn() {
-        this.x = this.startX;
+        if (this.x > this.startX - 242) {
+            this.x = this.startX;
+            this.direction = -1;
+        } else {
+            this.x = this.startX - 485;
+            this.direction = 1;
+        }
         this.y = this.startY;
-        this.direction = -1;
         this.setVelocity(0, 0);
     }
 
@@ -278,12 +303,17 @@ export class Player extends PhysicsEntity {
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
+            if (this.carrying instanceof Stone) {
+                this.carrying.setVelocity(-2, 10);
+                this.carrying = null;
+            }
             if (this.drowning === 0) {
                 this.drowningSound.trigger();
             }
             this.setVelocityX(0);
             this.drowning += dt;
-            if (this.drowning > 2) {
+            if (this.drowning > 3) {
+                this.drowningSound.stop();
                 this.respawn();
             }
         } else {
@@ -340,6 +370,11 @@ export class Player extends PhysicsEntity {
             }
         }
 
+        if(wasFlying && !this.flying) {
+            this.landingSound.stop();
+            this.landingSound.play();
+        }
+
         // check for npc in interactionRange
         const closestEntity = this.getClosestEntityInRange(this.dialogRange);
         if (closestEntity instanceof NPC) {
@@ -364,7 +399,8 @@ export class Player extends PhysicsEntity {
 
         // Dance
         if (this.dance) {
-            this.dance.setPosition(this.x, this.y);
+            this.spriteIndex = getSpriteIndex(SpriteIndex.DANCE0, PLAYER_DANCING_ANIMATION);
+            this.dance.setPosition(this.x, this.y - 16);
             const done = this.dance.update(dt);
             if (done) {
                 // On cloud -> make it rain

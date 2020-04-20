@@ -4,7 +4,7 @@ import { valueCurves, ValueCurve } from './Particles';
 export class Dance {
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
-    /** Time of the first noce, depends on openTime and warmupBeats */
+    /** Time of the first note, depends on openTime and warmupBeats */
     private startTime!: number;
     /** Progress time relative to startTime. So starts out negative during warmup. */
     private progress = 0;
@@ -72,7 +72,7 @@ export class Dance {
     // Called by parent
     public handleKeyDown(e: KeyboardEvent) {
         if (!e.repeat) {
-            const key = e.code.substr(-1).toLowerCase();
+            const key = e.key.substr(-1).toLowerCase();
             if (this.allKeys.indexOf(key) >= 0) {
                 if (this.currentKey.includes(key)) {
                     if (this.currentDistanceToIdealTime <= this.timeTolerance) {
@@ -205,24 +205,22 @@ export class Dance {
                     if (this.performance[i]["1"] != null) {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 5, y1, 9, 9);
-                        ctx.fillStyle = "black";
                     }
                     ctx.strokeRect(x - 5, y1, 9, 9);
-                    ctx.fillText("1", x, y1 + 8);
+                    this.game.mainFont.drawText(ctx, "1", x - 2, y1 + 1, "black");
                 }
                 if (keys.includes("2")) {
                     ctx.strokeStyle = "blue";
                     if (this.performance[i]["2"] != null) {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 5, y2, 9, 9);
-                        ctx.fillStyle = "black";
                     }
                     ctx.strokeRect(x - 5, y2, 9, 9);
-                    ctx.fillText("2", x, y2 + 8);
+                    this.game.mainFont.drawText(ctx, "2", x - 3, y2 + 1, "black");
                 }
             }
         }
-        // Sweetspot
+        // Sweet-spot
         ctx.globalAlpha = 1;
         ctx.fillStyle = "#2080bf";
         ctx.fillRect(sweetX - 6, -h2 + 1, 1, h);

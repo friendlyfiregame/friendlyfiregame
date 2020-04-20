@@ -1,20 +1,23 @@
 import { NPC } from './NPC';
 
-interface Interaction {
-    npcLine: string | null;
-    options: string[];
-    spoiledOptions: string[];
+export interface Interaction {
+    npcLine: ConversationLine | null;
+    options: ConversationLine[];
+    spoiledOptions: ConversationLine[];
 };
 
 export class Conversation {
     private states: string[];
-    private data: {[key: string]: string[]};
+    private data: {[key: string]: ConversationLine[]};
     private state!: string;
     private stateIndex = 0;
 
-    constructor(json: JSON, private readonly npc: NPC) {
+    constructor(json: any, private readonly npc: NPC) {
         this.states = Object.keys(json);
-        this.data = <any>json;
+        this.data = {};
+        for (const state of this.states) {
+            this.data[state] = json[state].map((line: string) => new ConversationLine(line, this));
+        }
         this.setState("entry");
     }
 
@@ -26,7 +29,7 @@ export class Conversation {
         this.stateIndex = 0;
     }
 
-    public getNextInteraction() {
+    public getNextInteraction(): Interaction | null {
         const result: Interaction = {
             npcLine: null,
             options: [],
@@ -34,20 +37,77 @@ export class Conversation {
         };
         // Does NPC speak?
         const line = this.getNextLine()
-        if (line && this.isLineByNPC(line)) {
+        if (line == null) {
+            // Conversation is over without changing state or anything
+            return null;
+        }
+        if (line && line.isNpc) {
             result.npcLine = line;
         }
         // Does Player react?
         let option = this.getNextLine();
-        while (option && this.isLineByPlayer(option)) {
+        while (option && !option.isNpc) {
             // TODO identify spoiled options (that don't lead to anything new for the player) and sort accordingly
             result.options.push(option);
+            option = this.getNextLine();
         }
-        this.goBack();
+        if (option) {
+            this.goBack();
+        }
         return result;
     }
 
-    public extractText(line: string): string {
+    public runAction(action: string[]) {
+        this.npc.game.campaign.runAction(action[0], this.npc, action.slice(1));
+    }
+
+    private goBack() {
+        this.stateIndex--;
+    }
+
+    private getNextLine(): ConversationLine | null {
+        if (this.stateIndex >= this.data[this.state].length) {
+            return null;
+        }
+        return this.data[this.state][this.stateIndex++];
+    }
+}
+
+export class ConversationLine {
+    public readonly line: string;
+    public readonly targetState: string | null;
+    public readonly actions: string[][];
+    public readonly isNpc: boolean;
+    private visited = false;
+
+    constructor(
+        public readonly full: string,
+        public readonly conversation: Conversation
+    ) {
+        this.line = ConversationLine.extractText(full);
+        this.targetState = ConversationLine.extractState(full);
+        this.actions = ConversationLine.extractActions(full);
+        this.isNpc = !full.startsWith(">");
+        this.visited = false;
+    }
+
+    public execute() {
+        this.visited = true;
+        if (this.targetState != null) {
+            this.conversation.setState(this.targetState);
+        }
+        if (this.actions.length > 0) {
+            for (const action of this.actions) {
+                this.conversation.runAction(action);
+            }
+        }
+    }
+
+    public wasVisited(): boolean {
+        return this.visited;
+    }
+
+    private static extractText(line: string): string {
         // Remove player option sign
         if (line.startsWith(">")) { line = line.substr(1); }
         // Remove actions and state changes
@@ -58,35 +118,24 @@ export class Conversation {
         return line;
     }
 
-    public executeLine(line: string): void {
+    private static extractState(line: string): string | null {
         const stateChanges = line.match(/(@[a-z]+)/g);
-        const actions = line.match(/(\![a-z][a-z ]*)+/g);
         if (stateChanges && stateChanges.length > 0) {
-            // Jump to state
             const stateName = stateChanges[0].substr(1);
-            this.setState(stateName);
+            return stateName;
         }
+        return null;
+    }
+
+    private static extractActions(line: string): string[][] {
+        const actions = line.match(/(\![a-z][a-z ]*)+/g);
+        const result = [];
         if (actions) {
             for (const action of actions) {
                 const segments = action.substr(1).split(" ");
-                this.npc.game.campaign.runAction(segments[0], this.npc, segments.slice(1));
+                result.push(segments);
             }
         }
-    }
-
-    private goBack() {
-        this.stateIndex--;
-    }
-
-    private getNextLine(): string | null {
-        return this.data[this.state][this.stateIndex++] ?? null;
-    }
-
-    private isLineByNPC(line: string) {
-        return !this.isLineByPlayer(line);
-    }
-
-    private isLineByPlayer(line: string) {
-        return line.startsWith(">");
+        return result;
     }
 }

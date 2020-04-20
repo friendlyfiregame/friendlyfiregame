@@ -1,5 +1,5 @@
 import { loadImage, getImageData } from "./graphics";
-import { GameObject, Game, isCollidableGameObject } from "./game";
+import { GameObject, Game, isCollidableGameObject, gameWidth } from "./game";
 
 export enum Environment {
     AIR = 0,
@@ -46,9 +46,10 @@ export class World implements GameObject {
         const bgY = this.getHeight() / this.background.height;
         const camX = this.game.camera.x;
         const camY = this.game.camera.y;
+        const posXMultiplier = 1 - (camX / this.getWidth() * 2);
         ctx.save();
         ctx.translate(camX, -camY);
-        ctx.drawImage(this.background, -camX / bgX, (-this.getHeight() + camY) / bgY);
+        ctx.drawImage(this.background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
         ctx.drawImage(this.foreground, -camX, -this.getHeight() + camY);
         ctx.restore();
     }
@@ -69,11 +70,11 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
      *         specific meaning which isn't defined yet).
      */
-    public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore?: Environment[]): number {
+    public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
         for (const gameObject of this.game.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
-                const environment = gameObject.collidesWith(x, y, ignore);
-                if (environment !== Environment.AIR) {
+                const environment = gameObject.collidesWith(x, y);
+                if (environment !== Environment.AIR && !ignore.includes(environment) ) {
                     return environment;
                 }
             }
@@ -90,12 +91,12 @@ export class World implements GameObject {
         return this.collisionMap[index];
     }
 
-    public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore?: Environment[]):
+    public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
             GameObject | null {
         for (const gameObject of this.game.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
-                const environment = gameObject.collidesWith(x, y, ignore);
-                if (environment !== Environment.AIR) {
+                const environment = gameObject.collidesWith(x, y);
+                if (environment !== Environment.AIR && !ignore.includes(environment)) {
                     return gameObject;
                 }
             }

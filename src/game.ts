@@ -1,4 +1,4 @@
-import { World, Environment } from "./World";
+import { World } from "./World";
 import { Player } from "./Player";
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
@@ -10,7 +10,6 @@ import { MapInfo } from "./MapInfo";
 import { createEntity } from "./Entity";
 import { Campaign } from './Campaign';
 import { DummyNPC } from './DummyNPC';
-import "./DummyNPC";
 import "./Cloud";
 import "./Stone";
 import "./FlameBoy";
@@ -20,8 +19,8 @@ import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 
-const gameWidth = 480;
-const gameHeight = 270;
+export const gameWidth = 480;
+export const gameHeight = 270;
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -30,7 +29,7 @@ export interface GameObject {
 }
 
 export interface CollidableGameObject extends GameObject {
-    collidesWith(x: number, y: number, ignore?: Environment[]): number;
+    collidesWith(x: number, y: number): number;
 }
 
 export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
@@ -81,6 +80,7 @@ export class Game {
     private framesPerSecond = 0;
     private showFPS = true;
     private useRealResolution = false;
+    private scalePixelPerfect = false;
     private scale = 1;
     private readonly mapInfo: MapInfo;
 
@@ -106,7 +106,7 @@ export class Game {
         this.stone = this.getGameObject(Stone);
 
         // testing dummy
-        this.gameObjects.push(new DummyNPC(this, this.player.x - 30, this.player.y - this.player.height),)
+        this.gameObjects.splice(2, 0, new DummyNPC(this, this.player.x - 25, this.player.y));
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
@@ -135,10 +135,16 @@ export class Game {
         }
     }
 
+    public toggleScalingMethod () {
+        this.scalePixelPerfect = !this.scalePixelPerfect;
+        this.updateCanvasSize();
+    }
+
     private async playMusicTrack(): Promise<void> {
         const music = this.music[rndInt(0, 1)];
         this.music.forEach(music => music.stop());
-        music.setLoop(true);;
+        music.setLoop(true);
+        music.setVolume(0.25);
         return music.play();
     };
 
@@ -182,7 +188,12 @@ export class Game {
         const width = window.innerWidth;
         const height = window.innerHeight;
         const dpr = window.devicePixelRatio;
-        const scale = Math.min(width / gameWidth, height / gameHeight);
+
+        let scale = Math.min(width / gameWidth, height / gameHeight);
+        if (this.scalePixelPerfect) {
+            scale = Math.max(Math.floor(scale), 1);
+        }
+
         this.canvas.style.width = gameWidth * scale + "px";
         this.canvas.style.height = gameHeight * scale + "px";
         if (this.useRealResolution) {
@@ -245,11 +256,7 @@ export class Game {
 
         // Display FPS counter
         if (this.showFPS) {
-            ctx.save();
-            ctx.fillStyle = "white";
-            ctx.font = (10 * this.scale) + "px sans-serif";
-            ctx.fillText(`${this.framesPerSecond} FPS`, 2 * this.scale, 10 * this.scale);
-            ctx.restore();
+            this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;
     }

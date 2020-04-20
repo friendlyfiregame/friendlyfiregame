@@ -1,3 +1,5 @@
+import { Game } from "./game";
+
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): CanvasRenderingContext2D {
     if (w < 2 * r) {r = w / 2};
     if (h < 2 * r) {r = h / 2};
@@ -21,6 +23,7 @@ export class SpeechBubble {
     public y: number;
 
     constructor(
+        private game: Game,
         public anchorX: number,
         public anchorY: number,
         private color = "#FFBBBB",
@@ -38,16 +41,17 @@ export class SpeechBubble {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
-        ctx.font = this.fontSize + "px Arial";
-        const longestWidth = ctx.measureText(this.message.split("\n").sort((a, b) => b.length - a.length)[0]).width;
-        ctx = roundRect(ctx, this.x - longestWidth / 2, - this.y - this.height, longestWidth + 8, this.height, 5);
+        const font = this.game.mainFont;
+        const metrics = font.measureText(this.message.split("\n").sort((a, b) => b.length - a.length)[0]);
+        ctx = roundRect(ctx, this.x - metrics.width / 2, - this.y - this.height, metrics.width + 8, this.height, 5);
         ctx.fillStyle = this.color;
         ctx.fill();
 
         ctx.fillStyle = "black";
         const lines = this.message.split('\n');
-        for (let i = 0; i<lines.length; i++) {
-            ctx.fillText(lines[i], this.x - longestWidth / 2 + 4, -this.y - this.height + 10 + (i * this.lineHeight), 200 - 8);
+        for (let i = 0; i < lines.length; i++) {
+            this.game.mainFont.drawText(ctx, lines[i], this.x - Math.round(metrics.width / 2) + 4,
+                -this.y - this.height + 4 + (i * this.lineHeight), "black");
         }
 
         ctx.restore();
