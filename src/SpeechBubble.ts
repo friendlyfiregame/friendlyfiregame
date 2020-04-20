@@ -83,7 +83,7 @@ export class SpeechBubble {
         this.updateContent();
         setTimeout(() => {
             this.isCurrentlyWriting = false;
-        }, 300);
+        }, 500);
     }
 
     setOptions(options: string[], partnersBubble: SpeechBubble) {
