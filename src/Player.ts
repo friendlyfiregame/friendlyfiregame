@@ -97,7 +97,7 @@ export enum Milestone {
 }
 
 /** The number of seconds until player gets a hint. */
-const HINT_TIMEOUT = 10;
+const HINT_TIMEOUT = 90;
 
 @entity("player")
 export class Player extends PhysicsEntity {
