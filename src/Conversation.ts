@@ -46,9 +46,12 @@ export class Conversation {
         if (line == null) {
             // Conversation is over without changing state or anything
             return null;
-        }
-        if (line && line.isNpc) {
-            result.npcLine = line;
+        } else {
+            if (line.isNpc) {
+                result.npcLine = line;
+            } else {
+                this.goBack();
+            }
         }
         // Does Player react?
         let option = this.getNextLine();
@@ -146,11 +149,12 @@ export class ConversationLine {
     }
 
     private static extractActions(line: string): string[][] {
-        const actions = line.match(/(\![a-z][a-z ]*)+/g);
+        let actions = line.match(/(\![a-z][a-z ]*)+/g);
         const result = [];
         if (actions) {
+            actions = actions[0].split("!").map(action => action.trim()).filter(s => s.length > 0);
             for (const action of actions) {
-                const segments = action.substr(1).split(" ");
+                const segments = action.split(" ");
                 result.push(segments);
             }
         }
