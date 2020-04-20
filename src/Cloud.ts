@@ -54,8 +54,8 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     public async load(): Promise<void> {
-         this.image = await loadImage("sprites/cloud3.png");
-         this.raindrop = await loadImage("sprites/raindrop.png");
+        this.image = await loadImage("sprites/cloud3.png");
+        this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
     public startRain(time: number = Infinity) {

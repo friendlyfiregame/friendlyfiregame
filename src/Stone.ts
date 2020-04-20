@@ -9,6 +9,7 @@ import { ScriptedDialog } from './ScriptedDialog';
 import dialogData from "../assets/stone.texts.json";
 import { Environment } from "./World";
 import { now } from "./util";
+import { Sound } from './Sound';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -22,6 +23,7 @@ export class Stone extends NPC implements CollidableGameObject {
     private spriteIndex = 0;
     public direction = -1;
     public state: StoneState = StoneState.DEFAULT;
+    private successSound!: Sound;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
@@ -31,6 +33,7 @@ export class Stone extends NPC implements CollidableGameObject {
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/stone.png"), 3, 1);
         this.scriptedDialog = new ScriptedDialog(this.game, this, dialogData);
+        this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -56,6 +59,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 this.setVelocity(0, 0);
                 this.setFloating(true);
                 this.y = 380;
+                this.successSound.play();
             }
         } else if (this.state === StoneState.SWIMMING) {
             const diffX = 900 - this.x;
