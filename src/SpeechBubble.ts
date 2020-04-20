@@ -80,8 +80,10 @@ export class SpeechBubble {
             }
             this.updateContent();
         }
-        this.isCurrentlyWriting = false;
         this.updateContent();
+        setTimeout(() => {
+            this.isCurrentlyWriting = false;
+        }, 300);
     }
 
     setOptions(options: string[], partnersBubble: SpeechBubble) {
