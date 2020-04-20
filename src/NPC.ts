@@ -8,7 +8,7 @@ export abstract class NPC extends PhysicsEntity {
     public face: Face | null = null;
     public scriptedDialog: ScriptedDialog | null = null;
     public conversation: Conversation | null = null;
-    public speechBubble = new SpeechBubble(this.x, this.y, "white");
+    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
 
     protected drawFace(ctx: CanvasRenderingContext2D): void {
         if (this.face) {

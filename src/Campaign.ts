@@ -41,12 +41,4 @@ export class Campaign {
                 break;
         }
     }
-
-    public async startPlayerDialogWithNPC(npc: NPC) {
-        this.game.player.dialogActive = true;
-        this.game.player.speechBubble.setMessage("heeey");
-        // TODO modify focus to stop focus on a callback
-        await this.game.camera.focusOn(10, npc.x, npc.y);
-        this.game.player.dialogActive = false;
-    }
 }
