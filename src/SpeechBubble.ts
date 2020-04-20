@@ -22,7 +22,7 @@ export class SpeechBubble {
     public lineHeight = 15;
     public height = 0;
     public offset = { x: 0, y: 40 };
-    private messageVelocity = 100;
+    private messageVelocity = 40;
 
     public x: number;
     public y: number;
@@ -63,6 +63,7 @@ export class SpeechBubble {
             await sleep(this.messageVelocity);
         }
         this.isCurrentlyWriting = true;
+        this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) => b.length - a.length);
         let index = 0;
         for (let char of message) {
             if (!this.isCurrentlyWriting) {
@@ -92,7 +93,6 @@ export class SpeechBubble {
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.contentLinesByLength = this.content.slice().sort((a, b) => b.length - a.length);
         this.height = this.content.length * this.lineHeight;
     }
 
