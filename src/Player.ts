@@ -20,6 +20,7 @@ import { Stone, StoneState } from "./Stone";
 import { Cloud } from './Cloud';
 import { Seed, SeedState } from "./Seed";
 import { PlayerConversation } from './PlayerConversation';
+import { Wood, WoodState } from "./Wood";
 
 enum SpriteIndex {
     IDLE0 = 0,
@@ -107,8 +108,8 @@ export class Player extends PhysicsEntity {
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
         if (this.game.dev) {
-            console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, T to throw " +
-                "useless snowball, K to learn all abilities");
+            console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
+                "wood, T to throw useless snowball, K to learn all abilities");
         }
         this.setMaxVelocity(MAX_PLAYER_SPEED);
         this.dustEmitter = particles.createEmitter({
@@ -191,6 +192,11 @@ export class Player extends PhysicsEntity {
                     this.carrying = null;
                     this.throwingSound.stop();
                     this.throwingSound.play();
+                } else if (this.carrying instanceof Wood) {
+                    this.carrying.setVelocity(5 * this.direction, 5);
+                    this.carrying = null;
+                    this.throwingSound.stop();
+                    this.throwingSound.play();
                 }
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
@@ -209,6 +215,8 @@ export class Player extends PhysicsEntity {
                 this.carry(this.game.stone);
             } else if (event.key === "o" && !this.carrying) {
                 this.carry(this.game.seed);
+            } else if (event.key === "i" && !this.carrying) {
+                this.carry(this.game.wood);
             } else if (event.key === "t") {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 this.throwingSound.stop();
@@ -597,6 +605,9 @@ export class Player extends PhysicsEntity {
             }
             if (object instanceof Seed) {
                 object.state = SeedState.FREE;
+            }
+            if (object instanceof Wood) {
+                object.state = WoodState.FREE;
             }
             object.x = this.x;
             object.y = this.y + this.height;
