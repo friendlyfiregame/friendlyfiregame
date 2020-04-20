@@ -12,7 +12,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd } from './util';
+import { rnd, rndItem, timedRnd, sleep } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
@@ -152,7 +152,7 @@ export class Player extends PhysicsEntity {
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
-    private handleKeyDown(event: KeyboardEvent) {
+    private async handleKeyDown(event: KeyboardEvent) {
         if (this.dance) {
             this.dance.handleKeyDown(event);
             return;
@@ -222,6 +222,10 @@ export class Player extends PhysicsEntity {
                 this.throwingSound.stop();
                 this.throwingSound.play();
                 this.speechBubble.hide();
+                if (this.speechBubble.isCurrentlyWriting) {
+                    this.speechBubble.isCurrentlyWriting = false;
+                    await sleep(this.speechBubble.messageVelocity);
+                }
                 this.speechBubble.setMessage("Test message");
                 this.speechBubble.show();
             } else if (event.key === "k") {
