@@ -1,12 +1,12 @@
 import { Face } from './Face';
-import { ScriptedDialog } from './ScriptedDialog';
+import { Greeting } from './Greeting';
 import { PhysicsEntity } from "./PhysicsEntity";
 import { SpeechBubble } from './SpeechBubble';
 import { Conversation } from './Conversation';
 
 export abstract class NPC extends PhysicsEntity {
     public face: Face | null = null;
-    public scriptedDialog: ScriptedDialog | null = null;
+    public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
 
@@ -16,11 +16,11 @@ export abstract class NPC extends PhysicsEntity {
         }
     }
 
-    protected drawDialog(ctx: CanvasRenderingContext2D): void {
-        this.scriptedDialog?.draw(ctx);
+    protected drawGreeting(ctx: CanvasRenderingContext2D): void {
+        this.greeting?.draw(ctx);
     }
 
-    protected updateDialog(dt: number) {
-        this.scriptedDialog?.update(dt);
+    protected updateGreeting(dt: number) {
+        this.greeting?.update(dt);
     }
 }

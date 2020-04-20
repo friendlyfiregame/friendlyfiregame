@@ -1,16 +1,11 @@
 import { NPC } from './NPC';
-import { ScriptedDialogJSON, DialogJSON } from "../assets/dummy.texts.json";
+import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from './SpeechBubble';
 import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
 import { GameObject, Game } from './game';
 
-export class ScriptedDialog implements GameObject {
-    public get hasPlayerDialog(): boolean {
-        return !!this.currentMatchingDialog;
-    }
-    public currentMatchingDialog: DialogJSON | null = null;
-
+export class Greeting implements GameObject {
     public greetingRange = 120;
     private currentMatchingGreetings: string[] = [];
     private greetingActive = false;
@@ -24,10 +19,12 @@ export class ScriptedDialog implements GameObject {
         "white"
     );
 
-    private dialogActive = false;
+    public get dialogActive(): boolean {
+        return !!this.game.player.playerConversation;
+    }
 
     public get campaign(): Campaign {
-        return this.npc.game.campaign;
+        return this.game.campaign;
     }
 
     constructor(private game: Game, public npc: NPC, private dialogData: ScriptedDialogJSON) {
@@ -48,17 +45,15 @@ export class ScriptedDialog implements GameObject {
         this.speechBubble.update(this.npc.x, this.npc.y);
         const isInRange = this.npc.game.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
+            console.log("yes")
             this.setRandomGreeting();
             this.greetingActive = this.greetingAlreadyShown = true;
+            this.speechBubble.show();
         } else if (!isInRange) {
-            this.closeAllSpeechBubbles();
+            this.greetingActive = false;
             this.greetingAlreadyShown = false;
+            this.speechBubble.hide();
         }
-    }
-
-    public closeAllSpeechBubbles() {
-        this.dialogActive = false;
-        this.greetingActive = false;
     }
 
     private setRandomGreeting() {
@@ -74,13 +69,6 @@ export class ScriptedDialog implements GameObject {
         } else {
             this.greetingActive = false;
             this.currentMatchingGreetings = [];
-        }
-        const matchingDialogSelector = this.findMatchingSelectorByStates(this.dialogData.dialogs, states);
-        if (matchingDialogSelector) {
-            this.currentMatchingDialog = this.dialogData.dialogs[matchingDialogSelector];
-        } else {
-            this.currentMatchingDialog = null
-            this.dialogActive = false;
         }
     }
 

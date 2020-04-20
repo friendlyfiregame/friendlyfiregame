@@ -19,6 +19,7 @@ import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 import { Seed } from "./Seed";
+import { Wood } from "./Wood";
 import { Dance } from './Dance';
 
 export const gameWidth = 480;
@@ -42,6 +43,7 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 const MAX_DT = 0.1;
 
 export class Game {
+    public dev = window.location.port === "8000";
 
     public canvas: HTMLCanvasElement;
 
@@ -72,6 +74,7 @@ export class Game {
     public player: Player;
     public stone: Stone;
     public seed: Seed;
+    public wood: Wood;
 
     public campaign: Campaign;
 
@@ -81,7 +84,6 @@ export class Game {
 
     private frameCounter = 0;
     private framesPerSecond = 0;
-    private showFPS = true;
     private useRealResolution = false;
     private scalePixelPerfect = false;
     private scale = 1;
@@ -107,7 +109,19 @@ export class Game {
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
-        this.seed = this.getGameObject(Seed);
+        let seed = this.findGameObject(Seed);
+        if (!seed) {
+            seed = new Seed(this, 0, 0);
+            this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, seed);
+        }
+        this.seed = seed;
+
+        let wood = this.findGameObject(Wood);
+        if (!wood) {
+            wood = new Wood(this, 0, 0);
+            this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, wood);
+        }
+        this.wood = wood;
 
         this.camera = new Camera(this, this.player);
         setInterval(() => {
@@ -123,6 +137,15 @@ export class Game {
             }
         }
         throw new Error(`Game object of type ${type.name} not found`);
+    }
+
+    private findGameObject<T>(type: new (...args: any[]) => T): T | null {
+        for (const gameObject of this.gameObjects) {
+            if (gameObject instanceof type) {
+                return gameObject;
+            }
+        }
+        return null;
     }
 
     private async load() {
@@ -258,7 +281,7 @@ export class Game {
         ctx.restore();
 
         // Display FPS counter
-        if (this.showFPS) {
+        if (this.dev) {
             this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;

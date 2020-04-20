@@ -18,6 +18,8 @@
         "lerping",
         "ludum",
         "objectgroup",
+        "offx",
+        "offy",
         "respawn",
         "tileheight",
         "tilelayer",

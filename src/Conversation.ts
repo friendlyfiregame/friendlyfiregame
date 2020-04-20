@@ -65,7 +65,6 @@ export class Conversation {
 
     public runAction(action: string[]) {
         if (action[0] === "end") {
-            console.log("ending conv");
             this.endConversation = true;
         } else {
             this.npc.game.campaign.runAction(action[0], this.npc, action.slice(1));
@@ -84,6 +83,9 @@ export class Conversation {
     }
 }
 
+
+const MAX_CHARS_PER_LINE = 50;
+
 export class ConversationLine {
     public readonly line: string;
     public readonly targetState: string | null;
@@ -95,7 +97,7 @@ export class ConversationLine {
         public readonly full: string,
         public readonly conversation: Conversation
     ) {
-        this.line = ConversationLine.extractText(full);
+        this.line = ConversationLine.extractText(full, true);
         this.targetState = ConversationLine.extractState(full);
         this.actions = ConversationLine.extractActions(full);
         this.isNpc = !full.startsWith(">");
@@ -118,14 +120,18 @@ export class ConversationLine {
         return this.visited;
     }
 
-    private static extractText(line: string): string {
+    private static extractText(line: string, autoWrap = false): string {
         // Remove player option sign
         if (line.startsWith(">")) { line = line.substr(1); }
         // Remove actions and state changes
         const atPos = line.indexOf("@"), exclPos = line.search(/\![a-z]/);
         if (atPos >= 0 || exclPos >= 0) {
             const minPos = (atPos >= 0 && exclPos >= 0) ? Math.min(atPos, exclPos) : (atPos >= 0) ? atPos : exclPos;
-            return line.substr(0, minPos);
+            line = line.substr(0, minPos);
+        }
+        // Auto wrap to some character count
+        if (autoWrap) {
+            return ConversationLine.wrapString(line, MAX_CHARS_PER_LINE);
         }
         return line;
     }
@@ -149,5 +155,34 @@ export class ConversationLine {
             }
         }
         return result;
+    }
+
+    public static wrapString(s: string, charsPerLine: number): string {
+        let currentLength = 0, lastSpace = -1;
+        for (let i = 0; i < s.length; i++) {
+            const char = s[i];
+            if (char === "\n") {
+                // New line
+                currentLength = 0;
+            } else {
+                if (char === " ") {
+                    lastSpace = i;
+                }
+                currentLength++;
+                if (currentLength >= charsPerLine) {
+                    if (lastSpace >= 0) {
+                        // Add cut at last space
+                        s = s.substr(0, lastSpace) + "\n" + s.substr(lastSpace + 1);
+                        currentLength = i - lastSpace;
+                        lastSpace = -1;
+                    } else {
+                        // Cut mid-word
+                        s = s.substr(0, i + 1) + "\n" + s.substr(i + 1);
+                        currentLength = 0;
+                    }
+                }
+            }
+        }
+        return s;
     }
 }

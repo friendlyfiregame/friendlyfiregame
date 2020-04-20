@@ -23,12 +23,9 @@ export class PlayerConversation {
         if (!this.interaction) {
             return true;
         }
+        this.player.game.camera.setCinematicBar(1);
 
         return false;
-    }
-
-    public draw(ctx: CanvasRenderingContext2D) {
-
     }
 
     private setBubblesContent() {
@@ -90,7 +87,8 @@ export class PlayerConversation {
             this.interaction = this.conversation.getNextInteraction();
             this.setSelectedOption();
             this.setBubblesContent();
-        } else {
+        }
+        if (!this.interaction) {
             this.endConversation();
         }
     }
