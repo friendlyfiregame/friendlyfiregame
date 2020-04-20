@@ -48,3 +48,21 @@ const timeDelta = Date.now() - performance.now();
 export function now(): number {
     return performance.now() + timeDelta;
 }
+
+export function shiftValue(v: number, trg: number, inc: number): number {
+    if (v === trg) {
+        return trg;
+    }
+    if (v < trg) {
+        v += inc;
+        if (v >= trg) {
+            return trg;
+        }
+    } else {
+        v -= inc;
+        if (v <= trg) {
+            return trg;
+        }
+    }
+    return v;
+}
