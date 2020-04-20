@@ -38,7 +38,7 @@ export class Campaign {
     public runAction(action: string, npc?: NPC, params: string[] = []): void {
         switch(action) {
             case "angry":
-                npc?.face?.setMode(FaceModes.WORRIED);
+                npc?.face?.setMode(FaceModes.ANGRY);
                 break;
             case "neutral":
                 npc?.face?.setMode(FaceModes.NEUTRAL);
@@ -48,6 +48,9 @@ export class Campaign {
                 break;
             case "amused":
                 npc?.face?.setMode(FaceModes.AMUSED);
+                break;
+            case "sad":
+                npc?.face?.setMode(FaceModes.SAD);
                 break;
 
             case "zoomin":

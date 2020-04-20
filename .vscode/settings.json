@@ -24,6 +24,8 @@
         "tileheight",
         "tilelayer",
         "tilewidth",
-        "tslib"
+        "tslib",
+        "zoomin",
+        "zoomout"
     ]
 }
