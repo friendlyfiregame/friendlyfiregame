@@ -9,6 +9,7 @@ import { Sprites, getSpriteIndex } from "./Sprites";
 import { entity } from "./Entity";
 import { loadImage } from "./graphics";
 import { now } from "./util";
+import { Milestone } from "./Player";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -56,6 +57,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+                this.game.player.achieveMilestone(Milestone.THROWN_STONE_INTO_WATER);
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);

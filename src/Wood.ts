@@ -6,6 +6,7 @@ import { Environment } from "./World";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Sound } from "./Sound";
+import { Milestone } from "./Player";
 
 export enum WoodState {
     FREE = 0,
@@ -61,6 +62,7 @@ export class Wood extends PhysicsEntity {
         }
         if (!this.isCarried() && this.distanceTo(this.game.fire) < 20) {
             this.game.fire.feed(this);
+            this.game.player.achieveMilestone(Milestone.THROWN_WOOD_INTO_FIRE);
             this.successSound.play();
         }
     }
