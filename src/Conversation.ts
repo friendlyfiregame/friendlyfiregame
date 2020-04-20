@@ -113,7 +113,8 @@ export class ConversationLine {
         // Remove actions and state changes
         const atPos = line.indexOf("@"), exclPos = line.search(/\![a-z]/);
         if (atPos >= 0 || exclPos >= 0) {
-            return line.substr(0, Math.min(atPos, exclPos));
+            const minPos = (atPos >= 0 && exclPos >= 0) ? Math.min(atPos, exclPos) : (atPos >= 0) ? atPos : exclPos;
+            return line.substr(0, minPos);
         }
         return line;
     }
