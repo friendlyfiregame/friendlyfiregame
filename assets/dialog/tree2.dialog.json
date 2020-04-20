@@ -1,0 +1,12 @@
+{
+    "entry": [
+        "How did you fare? How is my child?",
+        ">There was a suspicious patch of soil... your boy lives there now",
+        "This is good news",
+        "Here, have a piece of my body !spawnwood",
+        ">Thanks! @returning !end"
+    ],
+    "returning": [
+        "Hello there! @returning !end"
+    ]
+}
