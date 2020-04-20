@@ -360,10 +360,9 @@ export class Game {
         ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.clip();
         ctx.drawImage(this.endImage, 0, 0);
-        ctx.restore();
 
-        ctx.save();
-        ctx.translate(24, -24);
+        ctx.translate(240, 222);
+        ctx.scale(2, 2);
         this.endBoy.draw(ctx, this.endBoySpriteIndex);
         ctx.restore();
     }
