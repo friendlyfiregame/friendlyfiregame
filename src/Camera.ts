@@ -61,7 +61,8 @@ export class Camera {
             e.stopPropagation();
             e.preventDefault();
         }
-        if (e.key === "L") {
+        if (e.key === "l") {
+
             if (!e.repeat) {
                 this.game.toggleScalingMethod();
             }
