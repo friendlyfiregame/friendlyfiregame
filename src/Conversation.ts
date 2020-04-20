@@ -6,6 +6,15 @@ export interface Interaction {
     spoiledOptions: ConversationLine[];
 };
 
+// Actions that shall be executed before an NPC talks, not after
+const earlyActions = [
+    "angry",
+    "sad",
+    "amused",
+    "neutral",
+    "bored"
+];
+
 export class Conversation {
     private states: string[];
     private data: {[key: string]: ConversationLine[]};
@@ -46,9 +55,12 @@ export class Conversation {
         if (line == null) {
             // Conversation is over without changing state or anything
             return null;
-        }
-        if (line && line.isNpc) {
-            result.npcLine = line;
+        } else {
+            if (line.isNpc) {
+                result.npcLine = line;
+            } else {
+                this.goBack();
+            }
         }
         // Does Player react?
         let option = this.getNextLine();
@@ -81,6 +93,10 @@ export class Conversation {
         }
         return this.data[this.state][this.stateIndex++];
     }
+
+    public hasEnded() {
+        return this.endConversation;
+    }
 }
 
 
@@ -104,6 +120,16 @@ export class ConversationLine {
         this.visited = false;
     }
 
+    public executeBeforeLine() {
+        if (this.actions.length > 0) {
+            for (const action of this.actions) {
+                if (this.isEarlyAction(action[0])) {
+                    this.conversation.runAction(action);
+                }
+            }
+        }
+    }
+
     public execute() {
         this.visited = true;
         if (this.targetState != null) {
@@ -111,9 +137,15 @@ export class ConversationLine {
         }
         if (this.actions.length > 0) {
             for (const action of this.actions) {
-                this.conversation.runAction(action);
+                if (!this.isEarlyAction(action[0])) {
+                    this.conversation.runAction(action);
+                }
             }
         }
+    }
+
+    public isEarlyAction(s: string): boolean {
+        return earlyActions.includes(s);
     }
 
     public wasVisited(): boolean {
@@ -146,11 +178,12 @@ export class ConversationLine {
     }
 
     private static extractActions(line: string): string[][] {
-        const actions = line.match(/(\![a-z][a-z ]*)+/g);
+        let actions = line.match(/(\![a-z][a-z ]*)+/g);
         const result = [];
         if (actions) {
+            actions = actions[0].split("!").map(action => action.trim()).filter(s => s.length > 0);
             for (const action of actions) {
-                const segments = action.substr(1).split(" ");
+                const segments = action.split(" ");
                 result.push(segments);
             }
         }

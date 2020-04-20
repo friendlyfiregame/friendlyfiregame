@@ -1,0 +1,11 @@
+{
+    "entry": [
+        "Hello humble adventurer, welcome to my... wait, how did you get past the river? That's not how this works! ",
+        ">Whoops, I'll be on my way.",
+        "Yeah, do that please. @visted !end"
+    ],
+    "visted": [
+        "No no no no! Don't go breaking the sequences!",
+        "> You're right @visted !end"
+    ]
+}

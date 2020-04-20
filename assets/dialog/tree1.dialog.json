@@ -1,27 +1,64 @@
 {
     "entry": [
+        "You are the dancing Tree,\nOld and Rough !amused",
+        "One hundred and seventeen,\nDancing Tree !amused",
+        "Feel the beat from the tree topsee, oh yeah !amused",
+        ">Hello?",
+        ">Wait.. what?",
+        "You can dance\nYou can grow !amused",
+        "Having the root of your life !amused",
+        ">Can you hear me?",
+        ">What is this?",
+        ">I know that song!",
+        "Ooh, see that birch\nWatch that tribe !amused",
+        "Digging the dancing Tree !amused",
+        ">Are you done yet?",
+        "Rude! !angry",
+        "I'll talk to you after you prove you're worthy",
+        "Show me your moves, boy! @danced !end !dance 1"
+    ],
+    "danced": [
         "Your little dance amuses me. @amuse",
         ">Thanks for the compliment! @smile",
-        ">There's nothing like putting a smile on a tree's face. How are you? @smile ",
+        ">There is nothing like putting a smile on a tree's face. How are you? @smile ",
         ">How dare you?! @dare"
     ],
     "dare": [
-        "Oh you pesky human! Can’t even take a compliment! @entry !end"
+        "Oh you pesky human! Can't even take a compliment! @request !end"
     ],
     "nothelpfull": [
-        "Oh you gnarly individual. I should have never trusted you in the first place... @entry !end"
+        "Oh you gnarly individual. I should have never trusted you in the first place... @request !end"
     ],
     "smile": [
         "You seem like a decent lad! Maybe you can help me out with something.",
-        ">Sure! @sure",
-        ">What is it? @sure"
+        ">Actually, I was about to ask you for something",
+        "Huh? You came here just for me? How nice! @request"
+    ],
+    "request": [
+        "What is it that made you come all this way?",
+        ">I'd like to humbly ask you for a pice of your wood @wood",
+        ">I'm gonna cut you down",
+        "You... and what army?! !angry",
+        ">Haha, it's just a prank bro! !prank",
+        ">You're right, stupid idea @request",
+        ">Maybe we can help each other out",
+        "How? Why are you here?",
+        ">I need a piece of you. @wood"
+    ],
+    "prank": [
+        "Go prank somebody else. I'm too old for this. @sure !end"
+    ],
+    "wood": [
+        "Sure sure. I can spare some. If you help me, you shall have your wood.",
+        ">Awesome! @sure",
+        ">What can I do for you? @sure"
     ],
     "sure": [
         "I'm an old tree. I don't have any children.",
-        "My pine cones never amount to anything…",
+        "My pine cones never amount to anything...",
         "I could really need your help. With procreation.",
         ">I'd love that! @lovethat",
-        ">Isn't that a little… weird? @weird",
+        ">Isn't that a little... weird? @weird",
         ">Why do you want offspring so badly? @sobadly",
         ">Oh no! What happens to your pine cones? @pinecones",
         ">Nah I'm not really the helpful kind. @nothelpfull"
@@ -40,19 +77,24 @@
         ">Ain't nobody got time for that! @notime"
     ],
     "weird": [
-        "Oh you judgemental humanoid! Show some empathy! @entry !end"
+        "Oh you judgemental humanoid! Show some empathy! @request !end"
     ],
     "sobadly": [
-        "Oh you nosy little meat sack! Mind your own business! @entry !end"
+        "Oh you nosy little meat sack! Mind your own business! @request !end"
     ],
     "notime": [
-        "Oh you are not a very helpful lifeform! @entry !end"
+        "Oh you are not a very helpful lifeform! @request !end"
     ],
     "nevermind": [
-        "Oh you rude leafless imposter! Won't even listen to my sad, sad story. @entry !end"
+        "Oh you rude leafless imposter! Won't even listen to my sad, sad story. @request !end"
     ],
     "definitly": [
-        "awesome @reminder !end"
+        "awesome @missinggear"
+    ],
+    "missinggear": [
+        "Oh, and I almost forgot!",
+        "You will need some special gear to be able to climb that mountain. I hereby grant my personal pair of double jump boots!",
+        ">Awesome, thanks! !doublejump !spawnseed @reminder !end"
     ],
     "cool": [
         "So the thing with pine cones, you see, is they need very special fertile ground to grow.",
@@ -65,6 +107,10 @@
         ">Ain't nobody got time for that! @notime"
     ],
     "reminder": [
-        "You know, you wanted to help me procreate. !end"
+        "You know, you wanted to help me procreate. Bring my cone to the highest place in this area @reminder !end",
+        ">Got it! @reminder !end",
+        ">Sorry, I lost your cone!",
+        "You did... what? Thank god I have an unlimited supply of them. @reminder !spawnseed !end"
+
     ]
 }

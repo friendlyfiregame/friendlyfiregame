@@ -1,13 +1,24 @@
 import { Game } from "./game";
 import { sleep } from "./util";
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): CanvasRenderingContext2D {
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false):
+        CanvasRenderingContext2D {
     if (w < 2 * r) {r = w / 2};
     if (h < 2 * r) {r = h / 2};
     ctx.beginPath();
     ctx.moveTo(x + r, y);
+    if (up) {
+        ctx.lineTo(x + w / 2 - 4, y);
+        ctx.lineTo(x + w / 2, y - 4);
+        ctx.lineTo(x + w / 2 + 4, y);
+    }
     ctx.arcTo(x + w, y, x + w, y + h, r);
     ctx.arcTo(x + w, y + h, x, y + h, r);
+    if (!up) {
+        ctx.lineTo(x + w / 2 - 4, y + h);
+        ctx.lineTo(x + w / 2, y + h + 4);
+        ctx.lineTo(x + w / 2 + 4, y + h);
+    }
     ctx.arcTo(x, y + h, x, y, r);
     ctx.arcTo(x, y, x + w, y, r);
     ctx.closePath();
@@ -22,16 +33,19 @@ export class SpeechBubble {
     public lineHeight = 15;
     public height = 0;
     public offset = { x: 0, y: 40 };
-    private messageVelocity = 100;
+    public messageVelocity = 20;
 
     public x: number;
     public y: number;
+    public isCurrentlyWriting = false;
+    public preventUnwantedSelection = false;
 
     private isVisible = false;
 
     private content: string [] = [];
     private contentLinesByLength: string[] = [];
-    private isCurrentlyWriting = false;
+
+    private partnersBubble: SpeechBubble | null = null;
 
     constructor(
         private game: Game,
@@ -53,21 +67,16 @@ export class SpeechBubble {
     }
 
     public hasContent() {
-        return this.content.length > 0;
+        return this.content.length > 0 &&
+            (!this.partnersBubble || !this.partnersBubble.isCurrentlyWriting && this.selectedOptionIndex > -1);
     }
 
     async setMessage(message: string): Promise<void> {
         this.messageLines = [""];
-        if (this.isCurrentlyWriting) {
-            this.isCurrentlyWriting = false;
-            await sleep(this.messageVelocity);
-        }
         this.isCurrentlyWriting = true;
+        this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) => b.length - a.length);
         let index = 0;
         for (let char of message) {
-            if (!this.isCurrentlyWriting) {
-                break;
-            }
             if (!char) {
                 index++;
                 continue
@@ -78,21 +87,29 @@ export class SpeechBubble {
                 continue
             }
             this.messageLines[index] += char;
-            await sleep(this.messageVelocity)
+            if (this.isCurrentlyWriting) {
+                await sleep(this.messageVelocity)
+            }
             this.updateContent();
         }
+        this.preventUnwantedSelection = true;
         this.updateContent();
+        this.isCurrentlyWriting = false;
+        setTimeout(() => {
+            this.preventUnwantedSelection = false;
+        }, 500);
     }
 
-    setOptions(options: string[]) {
+    setOptions(options: string[], partnersBubble: SpeechBubble) {
+        this.partnersBubble = partnersBubble;
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
         this.updateContent();
+        this.contentLinesByLength = this.content.slice().sort((a, b) => b.length - a.length);
     }
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.contentLinesByLength = this.content.slice().sort((a, b) => b.length - a.length);
         this.height = this.content.length * this.lineHeight;
     }
 
@@ -102,31 +119,33 @@ export class SpeechBubble {
         }
 
         ctx.save();
-        ctx.beginPath();
         const font = this.game.mainFont;
-        const metrics = font.measureText(this.contentLinesByLength[0]);
+        const longestLine = this.contentLinesByLength[0];
+        const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
 
         let posX = this.x;
         let posY = this.y;
         if (this.relativeToScreen) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             posX = ctx.canvas.width / 2;
-            posY = - ctx.canvas.height + 20;
+            posY = - ctx.canvas.height * 0.53 - this.height;
         }
 
-        ctx = roundRect(ctx, posX - metrics.width / 2, - posY - this.height, metrics.width + 8, this.height, 5);
+        ctx.beginPath();
+        ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
+            this.relativeToScreen);
         ctx.fillStyle = this.color;
         ctx.fill();
 
         let messageLineOffset = 4;
         for (let i = 0; i < this.messageLines.length; i++) {
-            this.game.mainFont.drawText(ctx, this.messageLines[i], posX - Math.round(metrics.width / 2) + 4,
+            this.game.mainFont.drawText(ctx, this.messageLines[i], posX - Math.round(metrics.width / 2),
                 -posY - this.height + 4 + (i * this.lineHeight), "black");
             messageLineOffset += 4;
         }
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const selectionIndicator = isSelected ? ">" : "";
+            const selectionIndicator = isSelected ? ">" : " ";
             this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], posX - Math.round(metrics.width / 2) + 4,
                 -posY - this.height + messageLineOffset + (i * this.lineHeight), "black");
         }

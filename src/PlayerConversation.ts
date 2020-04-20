@@ -1,6 +1,7 @@
 import { Conversation, Interaction } from './Conversation';
 import { Player } from './Player';
 import { NPC } from './NPC';
+import { FaceModes } from './Face';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;
@@ -14,13 +15,17 @@ export class PlayerConversation {
         this.interaction = this.conversation.getNextInteraction();
         this.setSelectedOption(0);
         this.setBubblesContent();
+        this.interaction?.npcLine?.executeBeforeLine();
     }
 
     /**
      * Returns true if conversation has been terminated (one way or the other)
      */
     public update(dt: number): boolean {
-        if (!this.interaction) {
+        if (!this.interaction || this.conversation.hasEnded()) {
+            if (this.player.playerConversation != null) {
+                this.endConversation();
+            }
             return true;
         }
         this.player.game.camera.setCinematicBar(1);
@@ -31,13 +36,14 @@ export class PlayerConversation {
     private setBubblesContent() {
         if (this.interaction) {
             const optionsTexts = this.interaction.options.map(options => options.line)
-            if (optionsTexts.length > 0) {
-                this.player.speechBubble.setOptions(optionsTexts);
-                this.player.speechBubble.show();
-            }
             if (this.interaction.npcLine) {
                 this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
                 this.npc.speechBubble.show();
+            }
+            if (optionsTexts.length > 0) {
+                this.setSelectedOption(0);
+                this.player.speechBubble.setOptions(optionsTexts, this.npc.speechBubble);
+                this.player.speechBubble.show();
             }
         }
     }
@@ -69,6 +75,11 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
+
+            if (this.npc.speechBubble.isCurrentlyWriting || this.npc.speechBubble.preventUnwantedSelection) {
+                this.npc.speechBubble.isCurrentlyWriting = false;
+                return;
+            }
             const options = this.interaction.options;
             if (options && options.length > 0) {
                 // Player could choose between options, confirmed with Enter
@@ -85,11 +96,17 @@ export class PlayerConversation {
                 this.interaction.npcLine.execute();
             }
             this.interaction = this.conversation.getNextInteraction();
-            this.setSelectedOption();
+            this.setSelectedOption(-1);
             this.setBubblesContent();
         }
         if (!this.interaction) {
             this.endConversation();
+        } else {
+            if (this.interaction.npcLine) {
+                // Mostly NPCs execute actions at the beginning of their line, not afterwards
+                this.npc.face?.setMode(FaceModes.NEUTRAL);
+                this.interaction.npcLine.executeBeforeLine();
+            }
         }
     }
 

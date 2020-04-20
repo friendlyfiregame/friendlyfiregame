@@ -1,0 +1,35 @@
+{
+    "entry": [
+        "How did you get up here...?",
+        ">Via jumping @jumping",
+        ">You.. look like a flying ability power up @pickup",
+        ">What a strange person... ",
+        "Whatever @entry !end"
+    ],
+    "jumping": [
+        "Aw man, another one of the multi jump gang. Flying is better and you know it.",
+        "> There was no flying ability available @noflying",
+        "> I like the multi jump",
+        "Yeah, you look like someone who would @acquainted !end"
+    ],
+    "noflying": [
+        "That's because I'm up here and don't let strangers touch me. That includes you! @acquainted !end"
+    ],
+    "pickup": [
+        "And you look like a generic action hero. Go be generic somewhere else, it's unbearable",
+        ">Don't change the subject. You're even glowing",
+        ">Ouch! @acquainted !end",
+        "Yeah so? That's none of your business and as if you needed a flying ability in the first place! I bet you got one of those multi jump things! Even birds are falling for this scam nowadays",
+        ">Guilty as charged",
+        "I guessed so. @acquainted !end"
+    ],
+    "acquainted": [
+        "Go away please?",
+        ">Sure buddy",
+        "Thanks @exhausted !end"
+    ],
+    "exhausted": [
+        "you again...",
+        ">I'm on my way! @acquainted !end"
+    ]
+}

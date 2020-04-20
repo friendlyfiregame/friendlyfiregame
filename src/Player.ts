@@ -12,7 +12,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd } from './util';
+import { rnd, rndItem, timedRnd, sleep, rndInt } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
@@ -64,6 +64,20 @@ const doubleJumpColors = [
     "#aaaaaa"
 ];
 
+const drownThoughts = [
+    { message: "Ok, I'm not Jesus. Noted!", duration: 4000 },
+    { message: "Looks like I can't swim... But I can respawn, nice!", duration: 5000 },
+    { message: "Well, that was strange... And wet.", duration: 4000 }
+];
+
+const drowningThoughts = [
+    { message: "Waah!", duration: 1000 },
+    { message: "Help!", duration: 1000 },
+    { message: "Mama!", duration: 1000 },
+    { message: "Ieeh!", duration: 1000 },
+    { message: "Argh!", duration: 1000 }
+];
+
 @entity("player")
 export class Player extends PhysicsEntity {
     private flying = false;
@@ -87,6 +101,7 @@ export class Player extends PhysicsEntity {
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
+    public thinkBubble: SpeechBubble | null = null;
 
     private dialogRange = 50;
     private dialogTipText = "Press 'Enter' or 'E' to talk";
@@ -152,7 +167,7 @@ export class Player extends PhysicsEntity {
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
-    private handleKeyDown(event: KeyboardEvent) {
+    private async handleKeyDown(event: KeyboardEvent) {
         if (this.dance) {
             this.dance.handleKeyDown(event);
             return;
@@ -228,9 +243,36 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private startDance(): void {
+    private async think(message: string, time: number): Promise<void> {
+        if (this.thinkBubble) {
+            this.thinkBubble.hide();
+            this.thinkBubble = null;
+        }
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.game, this.x, this.y, "white", false)
+        thinkBubble.setMessage(message);
+        thinkBubble.show();
+        await sleep(time);
+        if (this.thinkBubble === thinkBubble) {
+            thinkBubble.hide();
+            this.thinkBubble = null;
+        }
+    }
+
+    public startDance(difficulty: number = 1): void {
         if (!this.dance) {
-            this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
+            switch (difficulty) {
+                case 1:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3");
+                    break;
+                case 2:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 1 1 3  121212 113 223");
+                    break;
+                case 3:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132");
+                    break;
+                default:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "3");
+            }
         }
     }
 
@@ -310,6 +352,9 @@ export class Player extends PhysicsEntity {
         }
 
         this.speechBubble.draw(ctx);
+        if (this.thinkBubble) {
+            this.thinkBubble.draw(ctx);
+        }
     }
 
     private canThrowStoneIntoWater(): boolean {
@@ -351,6 +396,9 @@ export class Player extends PhysicsEntity {
     update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
+        if (this.thinkBubble) {
+            this.thinkBubble.update(this.x, this.y);
+        }
         if (this.playerConversation) {
             this.playerConversation.update(dt);
         }
@@ -369,6 +417,10 @@ export class Player extends PhysicsEntity {
 
         const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
+            if (!this.thinkBubble) {
+                const thought = drowningThoughts[rndInt(0, drowningThoughts.length)];
+                this.think(thought.message, thought.duration);
+            }
             if (this.carrying instanceof Stone) {
                 this.carrying.setVelocity(-2, 10);
                 this.carrying = null;
@@ -381,6 +433,8 @@ export class Player extends PhysicsEntity {
             if (this.drowning > 3) {
                 this.drowningSound.stop();
                 this.respawn();
+                const thought = drownThoughts[rndInt(0, drownThoughts.length)];
+                this.think(thought.message, thought.duration);
             }
         } else {
             this.drowning = 0;
@@ -463,12 +517,16 @@ export class Player extends PhysicsEntity {
             this.jumpKeyPressed = null;
         }
 
+        // Bounce
+        if (this.game.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
+            this.bounce();
+        }
+
         // Dance
         if (this.dance) {
             if (this.dance.hasStarted()) {
                 // Basic dancing or error?
                 const err = this.dance.getTimeSinceLastMistake(), suc = this.dance.getTimeSinceLastSuccess();
-                if (Math.random() < 0.01) { console.log(err, suc); }
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
                         if (err == 0) {
@@ -511,11 +569,11 @@ export class Player extends PhysicsEntity {
      * @return The Y coordinate of the ground below the given coordinate.
      */
     private pullOutOfGround(): number {
-        let pulled = 0, col = 0, collidedWith = 0;
+        let pulled = 0, col = 0;
         if (this.getVelocityY() <= 0) {
             const world = this.game.world;
             const height = world.getHeight();
-            collidedWith = col = world.collidesWith(this.x, this.y, [ this ],
+            col = world.collidesWith(this.x, this.y, [ this ],
                 this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
             while (this.y < height && col) {
                 pulled++;
@@ -523,21 +581,17 @@ export class Player extends PhysicsEntity {
                 col = world.collidesWith(this.x, this.y);
             }
         }
-        if (collidedWith) {
-            // Bounce on bouncy things
-            if (collidedWith === Environment.BOUNCE) {
-                this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
-                // Nice bouncy particles
-                this.bounceEmitter.setPosition(this.x, this.y - 12);
-                this.bounceEmitter.emit(20);
-                this.dustEmitter.clear();
-                this.bouncingSound.stop();
-                this.bouncingSound.play();
-                // don't let caller know we collided, otherwise they'll override velocity. Don't mind the hack...
-                pulled = 0;
-            }
-        }
         return pulled;
+    }
+
+    private bounce(): void {
+        this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
+        // Nice bouncy particles
+        this.bounceEmitter.setPosition(this.x, this.y - 12);
+        this.bounceEmitter.emit(20);
+        this.dustEmitter.clear();
+        this.bouncingSound.stop();
+        this.bouncingSound.play();
     }
 
     /**

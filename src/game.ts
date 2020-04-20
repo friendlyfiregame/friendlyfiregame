@@ -20,9 +20,18 @@ import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 import { Dance } from './Dance';
 import { Tree } from "./Tree";
+import { GamepadInput } from "./GamepadInput";
+import { FlameBoy } from './FlameBoy';
+import { Wing } from './Wing';
+import { loadImage } from "./graphics";
+import { KeyHandler } from "./KeyHandler";
 
 export const gameWidth = 480;
 export const gameHeight = 270;
+
+const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
+    "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
+    "Klaus Reimer and Jennifer van Veen, within 72 hours.";
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
@@ -40,6 +49,12 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 
 // Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump too much.
 const MAX_DT = 0.1;
+
+export enum GameStage {
+    TITLE,
+    MAIN,
+    END
+}
 
 export class Game {
     public dev = window.location.port === "8000";
@@ -73,6 +88,8 @@ export class Game {
     public player: Player;
     public stone: Stone;
     public tree: Tree;
+    public flameboy: FlameBoy;
+    public wing: Wing;
 
     public campaign: Campaign;
 
@@ -83,13 +100,19 @@ export class Game {
     private frameCounter = 0;
     private framesPerSecond = 0;
     private useRealResolution = false;
-    private scalePixelPerfect = false;
+    private scalePixelPerfect = true;
     private scale = 1;
     private readonly mapInfo: MapInfo;
 
     public mainFont!: BitmapFont;
     public bigFont!: BitmapFont;
     public music!: Sound[];
+
+    public gamepadInput!: GamepadInput;
+
+    private titleImage!: HTMLImageElement;
+    private stage = GameStage.TITLE;
+    public keyHandler = new KeyHandler();
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -108,12 +131,16 @@ export class Game {
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
         this.tree = this.getGameObject(Tree);
+        this.flameboy = this.getGameObject(FlameBoy);
+        this.wing = this.getGameObject(Wing);
 
         this.camera = new Camera(this, this.player);
         setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
+
+        this.gamepadInput = new GamepadInput();
     }
 
     public addGameObject(object: GameObject): void {
@@ -135,6 +162,7 @@ export class Game {
             new Sound("music/theme_01.mp3")
         ];
         await this.loadFonts();
+        this.titleImage = await loadImage("images/title.png");
         await Face.load();
         await Dance.load();
         await FireGfx.load();
@@ -227,11 +255,18 @@ export class Game {
             this.dt = clamp(realDt, 0, MAX_DT);
             this.gameTime += this.dt;
         }
-        // Update all game classes
-        for (const obj of this.gameObjects) {
-            obj.update(this.dt);
+
+        this.gamepadInput.update();
+
+        switch (this.stage) {
+            case GameStage.TITLE:
+                this.updateTitle();
+                break;
+
+            case GameStage.MAIN:
+                this.updateMain();
+                break;
         }
-        this.camera.update(this.dt, this.gameTime);
     }
 
     private draw() {
@@ -247,6 +282,54 @@ export class Game {
         // Want more pixels!
         ctx.imageSmoothingEnabled = false;
 
+        switch (this.stage) {
+            case GameStage.TITLE:
+                this.drawTitle(ctx);
+                break;
+
+            case GameStage.MAIN:
+                this.drawMain(ctx);
+                break;
+        }
+
+        ctx.restore();
+    }
+
+    private updateTitle(): void {
+        if (this.keyHandler.isPressed("Enter")) {
+            this.stage = GameStage.MAIN;
+        }
+    }
+
+    private drawTitle(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clip();
+        ctx.drawImage(this.titleImage, 0, 0);
+        const off = (this.appTime * 1000 / 12) % 2600;
+        const cx = Math.round(ctx.canvas.width + 100 - off);
+        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "black", 0);
+        ctx.restore();
+    }
+
+    private titleFadeOut = 0;
+
+    private updateMain(): void {
+        if (this.titleFadeOut < 1) {
+            this.titleFadeOut += this.dt;
+        }
+
+        // Update all game classes
+        for (const obj of this.gameObjects) {
+            obj.update(this.dt);
+        }
+        this.camera.update(this.dt, this.gameTime);
+    }
+
+    private drawMain(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+
         // Center coordinate system
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
@@ -261,6 +344,23 @@ export class Game {
         this.camera.renderCinematicBars(ctx);
 
         ctx.restore();
+
+        if (this.titleFadeOut < 1) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(-ctx.canvas.width * this.titleFadeOut, 0);
+            ctx.rect(0, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawTitle(ctx);
+            ctx.restore();
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(ctx.canvas.width * this.titleFadeOut, 0);
+            ctx.rect(ctx.canvas.width / 2, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawTitle(ctx);
+            ctx.restore();
+        }
 
         // Display FPS counter
         if (this.dev) {

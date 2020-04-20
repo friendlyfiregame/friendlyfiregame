@@ -7,8 +7,6 @@ import { Face, EyeType } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
 import { loadImage } from './graphics';
-import dialog  from '../assets/dialog/fire1.dialog.json';
-import { Conversation } from './Conversation';
 
 // const fireColors = [
 //     "#603015",
@@ -81,7 +79,6 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.face = new Face(this, EyeType.STANDARD, 1, 0, 6);
-        this.conversation = new Conversation(dialog, this);
     }
 
 
@@ -95,7 +92,11 @@ export class Fire extends NPC {
         if (!this.isVisible) {
             return;
         }
-        this.fireGfx.draw(ctx, this.x, this.y);
+        ctx.save();
+        ctx.translate(this.x, -this.y);
+        ctx.scale(this.intensity / 5, this.intensity / 5);
+        this.fireGfx.draw(ctx, 0, 0);
+        ctx.restore();
         this.drawFace(ctx);
         this.speechBubble.draw(ctx);
     }
@@ -111,13 +112,6 @@ export class Fire extends NPC {
         this.isVisible = true;
         let particleChance = dt - rnd() * this.averageParticleDelay;
         while (particleChance > 0) {
-            // this.fireEmitter.emit();
-            if (rnd() < 0.12) {
-                this.face?.toggleDirection();
-            }
-            if (rnd() < 0.05) {
-                this.face?.setMode(Math.floor(Math.random() * 4));
-            }
             if (rnd() < 0.5) {
                 this.sparkEmitter.emit();
             }

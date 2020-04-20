@@ -1,0 +1,40 @@
+{
+    "entry": [
+        "Hello humble adventurer, welcome to my sacred hut, yadda yadda. What do you need?",
+        ">What's with that attitude? @attitude",
+        ">I'm just here for some kind of power up. @powerup"
+    ],
+    "attitude": [
+        "I've just had the worst day. Lost my job to some fancy pants high framerate fire jerk and was put here to give away power ups.",
+        ">The other fire across the river? @otherfire",
+        ">I don't care. You said something about power ups? @powerup"
+    ],
+    "otherfire": [
+        "Yeah, that jiggly eyed bastard!",
+        ">He seemed pretty helpless to me",
+        ">I don't care. You said something about power ups? @powerup",
+        "Hah! That's just fantastic! Do whatever you like, just leave me out of it. And don't come back complaining after you get scorched.",
+        ">Okay... You said something about powerups? @powerup"
+    ],
+    "powerup": [
+        "Yeah, I'm assigned to distribute the flying ability. It's popular amongst school children... and birds.",
+        "> Nice, flying!",
+        "Don't expect too much. It's more of a multi jump if you ask me. But you know... marketing.",
+        "> I'll take one",
+        "Sure, here you go !multijump @visited !end"
+    ],
+    "visited": [
+        "Sorry, we have a strict no return policy!",
+        "> I just wanted to talk more @more",
+        "> Damn...",
+        "Come on man! You didn't even pay anything. @finished !end"
+    ],
+    "more": [
+        "I already have a headache, thanks. Can't you just do like a bird... and multi jump out of here? @finished !end"
+    ],
+    "finished": [
+        "Just let me do my job in peace",
+        "> fine @finished !end"
+    ]
+
+}
