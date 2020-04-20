@@ -34,7 +34,8 @@ export class SpeechBubble {
         private game: Game,
         public anchorX: number,
         public anchorY: number,
-        private color = "#FFBBBB"
+        private color = "#FFBBBB",
+        private relativeToScreen = false
     ) {
         this.x = anchorX + this.offset.x;
         this.y = anchorY + this.offset.y;
@@ -78,21 +79,30 @@ export class SpeechBubble {
         ctx.beginPath();
         const font = this.game.mainFont;
         const metrics = font.measureText(this.contentLinesByLength[0]);
-        ctx = roundRect(ctx, this.x - metrics.width / 2, - this.y - this.height, metrics.width + 8, this.height, 5);
+
+        let posX = this.x;
+        let posY = this.y;
+        if (this.relativeToScreen) {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            posX = ctx.canvas.width / 2;
+            posY = - ctx.canvas.height + 20;
+        }
+
+        ctx = roundRect(ctx, posX - metrics.width / 2, - posY - this.height, metrics.width + 8, this.height, 5);
         ctx.fillStyle = this.color;
         ctx.fill();
 
         let messageLineOffset = 4;
         for (let i = 0; i < this.messageLines.length; i++) {
-            this.game.mainFont.drawText(ctx, this.messageLines[i], this.x - Math.round(metrics.width / 2) + 4,
-                -this.y - this.height + 4 + (i * this.lineHeight), "black");
+            this.game.mainFont.drawText(ctx, this.messageLines[i], posX - Math.round(metrics.width / 2) + 4,
+                -posY - this.height + 4 + (i * this.lineHeight), "black");
             messageLineOffset += 4;
         }
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
             const selectionIndicator = isSelected ? ">" : "";
-            this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], this.x - Math.round(metrics.width / 2) + 4,
-                -this.y - this.height + messageLineOffset + (i * this.lineHeight), "black");
+            this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], posX - Math.round(metrics.width / 2) + 4,
+                -posY - this.height + messageLineOffset + (i * this.lineHeight), "black");
         }
 
         ctx.restore();

@@ -166,4 +166,8 @@ export class World implements GameObject {
     public stopRain() {
         this.raining = false;
     }
+
+    public isRaining() {
+        return this.raining;
+    }
 }

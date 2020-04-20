@@ -88,6 +88,7 @@ export class PlayerConversation {
                 this.interaction.npcLine.execute();
             }
             this.interaction = this.conversation.getNextInteraction();
+            this.setSelectedOption();
             this.setBubblesContent();
         } else {
             this.endConversation();
