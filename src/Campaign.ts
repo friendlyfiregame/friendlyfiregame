@@ -101,7 +101,7 @@ export class Campaign {
                 this.game.tree.spawnSeed();
                 break;
             case "spawnwood":
-                this.game.tree.seed.spawnWood();
+                this.game.tree.spawnWood();
                 break;
             case "pickupstone":
                 this.game.stone.pickUp();
