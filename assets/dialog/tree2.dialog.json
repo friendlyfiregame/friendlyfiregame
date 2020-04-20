@@ -3,8 +3,8 @@
         "How did you fare? How is my child?",
         ">There was a suspicious patch of soil... your boy lives there now",
         "This is good news",
-        "Here, have a piece of my body !spawnwood",
-        ">Thanks! @returning !end"
+        "Here, have a piece of my body",
+        ">Thanks! @returning !spawnwood !end"
     ],
     "returning": [
         "Hello there! @returning !end"
