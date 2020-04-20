@@ -31,13 +31,14 @@ export class PlayerConversation {
     private setBubblesContent() {
         if (this.interaction) {
             const optionsTexts = this.interaction.options.map(options => options.line)
-            if (optionsTexts.length > 0) {
-                this.player.speechBubble.setOptions(optionsTexts);
-                this.player.speechBubble.show();
-            }
             if (this.interaction.npcLine) {
                 this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
                 this.npc.speechBubble.show();
+            }
+            if (optionsTexts.length > 0) {
+                this.setSelectedOption(0);
+                this.player.speechBubble.setOptions(optionsTexts, this.npc.speechBubble);
+                this.player.speechBubble.show();
             }
         }
     }
@@ -90,7 +91,7 @@ export class PlayerConversation {
                 this.interaction.npcLine.execute();
             }
             this.interaction = this.conversation.getNextInteraction();
-            this.setSelectedOption();
+            this.setSelectedOption(-1);
             this.setBubblesContent();
         }
         if (!this.interaction) {
