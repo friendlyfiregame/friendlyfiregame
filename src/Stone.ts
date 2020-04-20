@@ -74,7 +74,7 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     collidesWith(x: number, y: number): number {
-        if (this.state === StoneState.FLOATING) {
+        if (this.state === StoneState.FLOATING || this.state === StoneState.SWIMMING) {
             if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
                     && y >= this.y && y <= this.y + this.height) {
                 return Environment.PLATFORM;
