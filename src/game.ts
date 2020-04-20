@@ -23,6 +23,8 @@ import { Tree } from "./Tree";
 import { GamepadInput } from "./GamepadInput";
 import { FlameBoy } from './FlameBoy';
 import { Wing } from './Wing';
+import { loadImage } from "./graphics";
+import { KeyHandler } from "./KeyHandler";
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -43,6 +45,12 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 
 // Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump too much.
 const MAX_DT = 0.1;
+
+export enum GameStage {
+    TITLE,
+    MAIN,
+    END
+}
 
 export class Game {
     public dev = window.location.port === "8000";
@@ -98,6 +106,10 @@ export class Game {
 
     public gamepadInput!: GamepadInput;
 
+    private titleImage!: HTMLImageElement;
+    private stage = GameStage.TITLE;
+    public keyHandler = new KeyHandler();
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.updateCanvasSize();
@@ -146,6 +158,7 @@ export class Game {
             new Sound("music/theme_01.mp3")
         ];
         await this.loadFonts();
+        this.titleImage = await loadImage("images/title.png");
         await Face.load();
         await Dance.load();
         await FireGfx.load();
@@ -238,12 +251,23 @@ export class Game {
             this.dt = clamp(realDt, 0, MAX_DT);
             this.gameTime += this.dt;
         }
-        // Update all game classes
-        for (const obj of this.gameObjects) {
-            obj.update(this.dt);
+
+        switch (this.stage) {
+            case GameStage.TITLE:
+                if (this.keyHandler.isPressed("Enter")) {
+                    this.stage = GameStage.MAIN;
+                }
+                break;
+
+            case GameStage.MAIN:
+                // Update all game classes
+                for (const obj of this.gameObjects) {
+                    obj.update(this.dt);
+                }
+                this.gamepadInput.update();
+                this.camera.update(this.dt, this.gameTime);
+                break;
         }
-        this.gamepadInput.update();
-        this.camera.update(this.dt, this.gameTime);
     }
 
     private draw() {
@@ -259,6 +283,22 @@ export class Game {
         // Want more pixels!
         ctx.imageSmoothingEnabled = false;
 
+        switch (this.stage) {
+            case GameStage.TITLE:
+                this.drawTitle(ctx);
+                break;
+
+            case GameStage.MAIN:
+                this.drawMain(ctx);
+                break;
+        }
+    }
+
+    private drawTitle(ctx: CanvasRenderingContext2D) {
+        ctx.drawImage(this.titleImage, 0, 0);
+    }
+
+    private drawMain(ctx: CanvasRenderingContext2D) {
         // Center coordinate system
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
