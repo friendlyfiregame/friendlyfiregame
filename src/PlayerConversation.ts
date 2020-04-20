@@ -36,12 +36,8 @@ export class PlayerConversation {
                 this.player.speechBubble.show();
             }
             if (this.interaction.npcLine) {
-                if (this.npc.speechBubble.isCurrentlyWriting) {
-                    this.npc.speechBubble.isCurrentlyWriting = false;
-                } else {
-                    this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
-                    this.npc.speechBubble.show();
-                }
+                this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
+                this.npc.speechBubble.show();
             }
         }
     }
@@ -73,6 +69,11 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
+
+            if (this.npc.speechBubble.isCurrentlyWriting) {
+                this.npc.speechBubble.isCurrentlyWriting = false;
+                return;
+            }
             const options = this.interaction.options;
             if (options && options.length > 0) {
                 // Player could choose between options, confirmed with Enter
