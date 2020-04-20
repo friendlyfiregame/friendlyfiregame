@@ -1,10 +1,12 @@
-import { entity } from "./Entity";
-import { Game } from "./game";
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { loadImage } from "./graphics";
-import { TREE_ANIMATION } from "./constants";
+import dialog  from '../assets/dialog/tree1.dialog.json';
+import { Conversation } from './Conversation';
 import { Face, EyeType } from './Face';
+import { Game } from "./game";
 import { NPC } from './NPC';
+import { Sprites, getSpriteIndex } from "./Sprites";
+import { TREE_ANIMATION } from "./constants";
+import { entity } from "./Entity";
+import { loadImage } from "./graphics";
 
 @entity("tree")
 export class Tree extends NPC {
@@ -14,6 +16,7 @@ export class Tree extends NPC {
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
         this.face = new Face(this, EyeType.TREE, 1, 5, 94);
+        this.conversation = new Conversation(dialog, this);
     }
 
     public async load(): Promise<void> {
