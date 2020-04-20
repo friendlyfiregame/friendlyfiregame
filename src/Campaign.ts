@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs';
 import { Game } from './game';
 import { NPC } from './NPC';
+import { FaceModes } from './Face';
 
 export type CampaignState = "start" | "finished";
 
@@ -17,14 +18,14 @@ export class Campaign {
         this.statesChanged$.next(this.states);
     }
 
-    public addState(state: CampaignState) {
+    public removeState(state: CampaignState) {
         if (this.hasState(state)) {
             this.states.splice(this.states.indexOf(state), 1);
             this.statesChanged$.next(this.states);
         }
     }
 
-    public removeState(state: CampaignState) {
+    public addState(state: CampaignState) {
         if (!this.hasState(state)) {
             this.states.push(state);
             this.statesChanged$.next(this.states);
@@ -36,8 +37,28 @@ export class Campaign {
 
     public runAction(action: string, npc?: NPC, params: string[] = []): void {
         switch(action) {
-            case "finishGame":
-                this.addState("finished");
+            case "angry":
+                npc?.face?.setMode(FaceModes.WORRIED);
+                break;
+            case "neutral":
+                npc?.face?.setMode(FaceModes.NEUTRAL);
+                break;
+            case "bored":
+                npc?.face?.setMode(FaceModes.BORED);
+                break;
+            case "amused":
+                npc?.face?.setMode(FaceModes.AMUSED);
+                break;
+
+            case "zoomin":
+                this.game.camera.zoom += 1
+                break;
+            case "zoomout":
+                this.game.camera.zoom -= 1
+                break;
+
+            case "game":
+                this.addState(params[0] as any);
                 break;
         }
     }

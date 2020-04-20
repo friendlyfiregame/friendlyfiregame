@@ -351,6 +351,9 @@ export class Player extends PhysicsEntity {
     update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
+        if (this.playerConversation) {
+            this.playerConversation.update(dt);
+        }
 
         if (this.carrying) {
             this.carrying.x = this.x;
