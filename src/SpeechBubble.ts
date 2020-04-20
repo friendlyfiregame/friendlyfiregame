@@ -1,13 +1,24 @@
 import { Game } from "./game";
 import { sleep } from "./util";
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): CanvasRenderingContext2D {
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false):
+        CanvasRenderingContext2D {
     if (w < 2 * r) {r = w / 2};
     if (h < 2 * r) {r = h / 2};
     ctx.beginPath();
     ctx.moveTo(x + r, y);
+    if (up) {
+        ctx.lineTo(x + w / 2 - 4, y);
+        ctx.lineTo(x + w / 2, y - 4);
+        ctx.lineTo(x + w / 2 + 4, y);
+    }
     ctx.arcTo(x + w, y, x + w, y + h, r);
     ctx.arcTo(x + w, y + h, x, y + h, r);
+    if (!up) {
+        ctx.lineTo(x + w / 2 - 4, y + h);
+        ctx.lineTo(x + w / 2, y + h + 4);
+        ctx.lineTo(x + w / 2 + 4, y + h);
+    }
     ctx.arcTo(x, y + h, x, y, r);
     ctx.arcTo(x, y, x + w, y, r);
     ctx.closePath();
@@ -108,7 +119,6 @@ export class SpeechBubble {
         }
 
         ctx.save();
-        ctx.beginPath();
         const font = this.game.mainFont;
         const longestLine = this.contentLinesByLength[0];
         const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
@@ -121,13 +131,15 @@ export class SpeechBubble {
             posY = - ctx.canvas.height + 20;
         }
 
-        ctx = roundRect(ctx, posX - metrics.width / 2, - posY - this.height, metrics.width + 8, this.height, 5);
+        ctx.beginPath();
+        ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
+            this.relativeToScreen);
         ctx.fillStyle = this.color;
         ctx.fill();
 
         let messageLineOffset = 4;
         for (let i = 0; i < this.messageLines.length; i++) {
-            this.game.mainFont.drawText(ctx, this.messageLines[i], posX - Math.round(metrics.width / 2) + 4,
+            this.game.mainFont.drawText(ctx, this.messageLines[i], posX - Math.round(metrics.width / 2),
                 -posY - this.height + 4 + (i * this.lineHeight), "black");
             messageLineOffset += 4;
         }
