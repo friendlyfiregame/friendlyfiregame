@@ -5,6 +5,8 @@ import { FaceModes } from './Face';
 import fire1  from '../assets/dialog/fire1.dialog.json';
 import stone1  from '../assets/dialog/stone1.dialog.json';
 import tree1  from '../assets/dialog/tree1.dialog.json';
+import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
+import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
 
 export type CampaignState = "start" | "finished";
@@ -12,7 +14,9 @@ export type CampaignState = "start" | "finished";
 const allDialogs: Record<string, JSON> = {
     "fire1": fire1,
     "stone1": stone1,
-    "tree1": tree1
+    "tree1": tree1,
+    "flameboy1": flameboy1,
+    "wing1": wing1,
 };
 
 export class Campaign {
@@ -30,6 +34,8 @@ export class Campaign {
         this.runAction("enable", null, ["fire", "fire1"]);
         this.runAction("enable", null, ["tree", "tree1"]);
         this.runAction("enable", null, ["stone", "stone1"]);
+        this.runAction("enable", null, ["flameboy", "flameboy1"]);
+        this.runAction("enable", null, ["wing", "wing1"]);
     }
 
     public hasState(state: CampaignState) {
@@ -83,15 +89,23 @@ export class Campaign {
             case "game":
                 this.addState(params[0] as any);
                 break;
+            case "doublejump":
+                this.game.player.doubleJump = true;
+                break;
             case "multijump":
                 this.game.player.multiJump = true;
+                break;
+            case "spawnseed":
+                this.game.tree.spawnSeed();
                 break;
             case "enable":
                 const char = params[0], dialogName = params[1];
                 const npcMap: Record<string, NPC> = {
                     "fire": this.game.fire,
                     "stone": this.game.stone,
-                    "tree": this.game.tree
+                    "tree": this.game.tree,
+                    "flameboy": this.game.flameboy,
+                    "wing": this.game.wing
                 };
                 const targetNpc = npcMap[char];
                 const dialog = allDialogs[dialogName];
@@ -104,7 +118,9 @@ export class Campaign {
                 const npcMap1: Record<string, NPC> = {
                     "fire": this.game.fire,
                     "stone": this.game.stone,
-                    "tree": this.game.tree
+                    "tree": this.game.tree,
+                    "flameboy": this.game.flameboy,
+                    "wing": this.game.wing
                 };
                 const targetNpc1 = npcMap1[char1];
                 console.log(char1, targetNpc1);

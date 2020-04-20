@@ -15,7 +15,7 @@ export class Tree extends NPC {
     public seed: Seed;
 
     public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 26, 54);
+        super(game, x, y, 78, 140);
         this.face = new Face(this, EyeType.TREE, 1, 5, 94);
         this.seed = new Seed(game, x, y);
         this.startDialog();

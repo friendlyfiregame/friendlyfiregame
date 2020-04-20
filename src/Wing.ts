@@ -4,8 +4,6 @@ import { Sprites, getSpriteIndex } from "./Sprites";
 import { loadImage } from "./graphics";
 import { WING_ANIMATION } from "./constants";
 import { NPC } from './NPC';
-import dialog  from '../assets/dialog/wing.dialog.json';
-import { Conversation } from './Conversation';
 
 @entity("wing")
 export class Wing extends NPC {
@@ -14,7 +12,6 @@ export class Wing extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
-        this.conversation = new Conversation(dialog, this);
     }
 
     public async load(): Promise<void> {
