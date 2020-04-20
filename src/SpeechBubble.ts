@@ -128,7 +128,7 @@ export class SpeechBubble {
         if (this.relativeToScreen) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             posX = ctx.canvas.width / 2;
-            posY = - ctx.canvas.height + 20;
+            posY = - ctx.canvas.height * 0.53 - this.height;
         }
 
         ctx.beginPath();
