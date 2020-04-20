@@ -92,7 +92,11 @@ export class Fire extends NPC {
         if (!this.isVisible) {
             return;
         }
-        this.fireGfx.draw(ctx, this.x, this.y);
+        ctx.save();
+        ctx.translate(this.x, -this.y);
+        ctx.scale(this.intensity / 5, this.intensity / 5);
+        this.fireGfx.draw(ctx, 0, 0);
+        ctx.restore();
         this.drawFace(ctx);
         this.speechBubble.draw(ctx);
     }
