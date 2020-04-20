@@ -505,6 +505,11 @@ export class Player extends PhysicsEntity {
             this.jumpKeyPressed = null;
         }
 
+        // Bounce
+        if (this.game.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
+            this.bounce();
+        }
+
         // Dance
         if (this.dance) {
             if (this.dance.hasStarted()) {
@@ -552,11 +557,11 @@ export class Player extends PhysicsEntity {
      * @return The Y coordinate of the ground below the given coordinate.
      */
     private pullOutOfGround(): number {
-        let pulled = 0, col = 0, collidedWith = 0;
+        let pulled = 0, col = 0;
         if (this.getVelocityY() <= 0) {
             const world = this.game.world;
             const height = world.getHeight();
-            collidedWith = col = world.collidesWith(this.x, this.y, [ this ],
+            col = world.collidesWith(this.x, this.y, [ this ],
                 this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
             while (this.y < height && col) {
                 pulled++;
@@ -564,21 +569,17 @@ export class Player extends PhysicsEntity {
                 col = world.collidesWith(this.x, this.y);
             }
         }
-        if (collidedWith) {
-            // Bounce on bouncy things
-            if (collidedWith === Environment.BOUNCE) {
-                this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
-                // Nice bouncy particles
-                this.bounceEmitter.setPosition(this.x, this.y - 12);
-                this.bounceEmitter.emit(20);
-                this.dustEmitter.clear();
-                this.bouncingSound.stop();
-                this.bouncingSound.play();
-                // don't let caller know we collided, otherwise they'll override velocity. Don't mind the hack...
-                pulled = 0;
-            }
-        }
         return pulled;
+    }
+
+    private bounce(): void {
+        this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
+        // Nice bouncy particles
+        this.bounceEmitter.setPosition(this.x, this.y - 12);
+        this.bounceEmitter.emit(20);
+        this.dustEmitter.clear();
+        this.bouncingSound.stop();
+        this.bouncingSound.play();
     }
 
     /**
