@@ -22,7 +22,7 @@ export class SpeechBubble {
     public lineHeight = 15;
     public height = 0;
     public offset = { x: 0, y: 40 };
-    private messageVelocity = 40;
+    public messageVelocity = 40;
 
     public x: number;
     public y: number;

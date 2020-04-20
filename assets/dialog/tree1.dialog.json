@@ -6,7 +6,7 @@
         ">How dare you?! @dare"
     ],
     "dare": [
-        "Oh you pesky human! Can’t even take a compliment! @entry !end"
+        "Oh you pesky human! Can't even take a compliment!@entry !end"
     ],
     "nothelpfull": [
         "Oh you gnarly individual. I should have never trusted you in the first place... @entry !end"
@@ -18,10 +18,10 @@
     ],
     "sure": [
         "I'm an old tree. I don't have any children.",
-        "My pine cones never amount to anything…",
+        "My pine cones never amount to anything...",
         "I could really need your help. With procreation.",
         ">I'd love that! @lovethat",
-        ">Isn't that a little… weird? @weird",
+        ">Isn't that a little... weird? @weird",
         ">Why do you want offspring so badly? @sobadly",
         ">Oh no! What happens to your pine cones? @pinecones",
         ">Nah I'm not really the helpful kind. @nothelpfull"

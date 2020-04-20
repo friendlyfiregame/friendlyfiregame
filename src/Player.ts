@@ -12,7 +12,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd } from './util';
+import { rnd, rndItem, timedRnd, sleep } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
@@ -152,7 +152,7 @@ export class Player extends PhysicsEntity {
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
-    private handleKeyDown(event: KeyboardEvent) {
+    private async handleKeyDown(event: KeyboardEvent) {
         if (this.dance) {
             this.dance.handleKeyDown(event);
             return;
@@ -221,6 +221,13 @@ export class Player extends PhysicsEntity {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 this.throwingSound.stop();
                 this.throwingSound.play();
+                this.speechBubble.hide();
+                if (this.speechBubble.isCurrentlyWriting) {
+                    this.speechBubble.isCurrentlyWriting = false;
+                    await sleep(this.speechBubble.messageVelocity);
+                }
+                this.speechBubble.setMessage("Test message");
+                this.speechBubble.show();
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
@@ -468,7 +475,6 @@ export class Player extends PhysicsEntity {
             if (this.dance.hasStarted()) {
                 // Basic dancing or error?
                 const err = this.dance.getTimeSinceLastMistake(), suc = this.dance.getTimeSinceLastSuccess();
-                if (Math.random() < 0.01) { console.log(err, suc); }
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
                         if (err == 0) {
