@@ -291,6 +291,8 @@ export class Game {
                 this.drawMain(ctx);
                 break;
         }
+
+        ctx.restore();
     }
 
     private updateTitle(): void {
@@ -300,13 +302,24 @@ export class Game {
     }
 
     private drawTitle(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clip();
         ctx.drawImage(this.titleImage, 0, 0);
         const off = (this.appTime * 1000 / 12) % 2600;
         const cx = Math.round(ctx.canvas.width + 100 - off);
         this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "black", 0);
+        ctx.restore();
     }
 
+    private titleFadeOut = 0;
+
     private updateMain(): void {
+        if (this.titleFadeOut < 1) {
+            this.titleFadeOut += this.dt;
+        }
+
         // Update all game classes
         for (const obj of this.gameObjects) {
             obj.update(this.dt);
@@ -315,6 +328,8 @@ export class Game {
     }
 
     private drawMain(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+
         // Center coordinate system
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
@@ -329,6 +344,23 @@ export class Game {
         this.camera.renderCinematicBars(ctx);
 
         ctx.restore();
+
+        if (this.titleFadeOut < 1) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(-ctx.canvas.width * this.titleFadeOut, 0);
+            ctx.rect(0, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawTitle(ctx);
+            ctx.restore();
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(ctx.canvas.width * this.titleFadeOut, 0);
+            ctx.rect(ctx.canvas.width / 2, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawTitle(ctx);
+            ctx.restore();
+        }
 
         // Display FPS counter
         if (this.dev) {
