@@ -146,7 +146,12 @@ export class Fire extends NPC {
         // Disable remaining dialogs
         this.conversation = null;
         // Disable all other characters
-        // TODO
+        for (const npc of [this.game.tree, this.game.stone, this.game.seed, this.game.flameboy]) {
+            if (npc) {
+                npc.conversation = null;
+                npc.face = null;
+            }
+        }
         // Player thoughts
         [
             ["What...", 2, 2],

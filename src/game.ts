@@ -367,7 +367,7 @@ export class Game {
             // Fade out
             const diff = this.fireFuryEndTime - this.gameTime;
             const p = diff / 16;
-            const fade = valueCurves.trapeze(0.3).get(p);
+            const fade = valueCurves.trapeze(0.4).get(p);
             this.drawFade(ctx, fade, "black");
         }
         if (this.apocalypse) {
