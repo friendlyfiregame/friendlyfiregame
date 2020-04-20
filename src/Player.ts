@@ -475,7 +475,6 @@ export class Player extends PhysicsEntity {
             if (this.dance.hasStarted()) {
                 // Basic dancing or error?
                 const err = this.dance.getTimeSinceLastMistake(), suc = this.dance.getTimeSinceLastSuccess();
-                if (Math.random() < 0.01) { console.log(err, suc); }
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
                         if (err == 0) {
