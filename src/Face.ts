@@ -48,7 +48,9 @@ export class Face {
     }
 
     public toggleDirection(direction = this.direction > 0 ? -1 : 1) {
-        this.direction = direction;
+        if (direction !== this.direction) {
+            this.direction = direction;
+        }
     }
 
 }
