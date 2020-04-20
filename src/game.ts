@@ -19,6 +19,7 @@ import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 import { Seed } from "./Seed";
+import { Dance } from './Dance';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -41,6 +42,7 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 const MAX_DT = 0.1;
 
 export class Game {
+    public dev = window.location.port === "8000";
 
     public canvas: HTMLCanvasElement;
 
@@ -80,7 +82,6 @@ export class Game {
 
     private frameCounter = 0;
     private framesPerSecond = 0;
-    private showFPS = true;
     private useRealResolution = false;
     private scalePixelPerfect = false;
     private scale = 1;
@@ -130,6 +131,7 @@ export class Game {
         ];
         await this.loadFonts();
         await Face.load();
+        await Dance.load();
         await FireGfx.load();
         for (const obj of this.gameObjects) {
             await obj.load();
@@ -256,7 +258,7 @@ export class Game {
         ctx.restore();
 
         // Display FPS counter
-        if (this.showFPS) {
+        if (this.dev) {
             this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;

@@ -40,10 +40,12 @@ export class Camera {
             throw new Error("Camera interpolation time may not exceed 1");
         }
         this.interpolationTime = interpolationTime / 2;
-        console.log("Dev mode, press TAB to zoom out & click somewhere to teleport there");
-        document.addEventListener("keydown", this.handleKeyDown.bind(this));
-        document.addEventListener("keyup", this.handleKeyUp.bind(this));
-        this.game.canvas.addEventListener("click", this.handleClick.bind(this));
+        if (game.dev) {
+            console.log("Dev mode, press TAB to zoom out & click somewhere to teleport there");
+            document.addEventListener("keydown", this.handleKeyDown.bind(this));
+            document.addEventListener("keyup", this.handleKeyUp.bind(this));
+            this.game.canvas.addEventListener("click", this.handleClick.bind(this));
+        }
         this.visibleRect = this.getVisibleRect();
     }
 
