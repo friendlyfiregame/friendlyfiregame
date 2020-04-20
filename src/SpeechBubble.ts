@@ -68,7 +68,6 @@ export class SpeechBubble {
             if (!this.isCurrentlyWriting) {
                 break;
             }
-            console.log(char);
             if (!char) {
                 index++;
                 continue
