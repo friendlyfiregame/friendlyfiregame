@@ -33,6 +33,7 @@ export class Tree extends NPC {
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
         this.drawFace(ctx);
+        this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
@@ -41,6 +42,7 @@ export class Tree extends NPC {
 
     startDialog(): void {
         this.conversation = new Conversation(dialog, this);
+        this.speechBubble.update(this.x, this.y);
     }
 
     public spawnSeed(): Seed {
