@@ -45,6 +45,7 @@ export class Stone extends NPC implements CollidableGameObject {
         ctx.restore();
         this.face?.draw(ctx);
         // this.drawGreeting(ctx);
+        this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
@@ -75,6 +76,7 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = -1;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
+        this.speechBubble.update(this.x, this.y);
     }
 
     collidesWith(x: number, y: number): number {
