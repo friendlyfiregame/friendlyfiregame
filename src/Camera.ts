@@ -55,6 +55,13 @@ export class Camera {
             e.stopPropagation();
             e.preventDefault();
         }
+        if (e.code === "KeyL") {
+            if (!e.repeat) {
+                this.game.toggleScalingMethod();
+            }
+            e.stopPropagation();
+            e.preventDefault();
+        }
     }
 
     private handleKeyUp(e: KeyboardEvent) {

@@ -350,7 +350,6 @@ export class Player extends PhysicsEntity {
         }
 
         if(wasFlying && !this.flying) {
-            console.log('landed');
             this.landingSound.stop();
             this.landingSound.play();
         }

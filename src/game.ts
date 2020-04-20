@@ -80,6 +80,7 @@ export class Game {
     private framesPerSecond = 0;
     private showFPS = true;
     private useRealResolution = false;
+    private scalePixelPerfect = false;
     private scale = 1;
     private readonly mapInfo: MapInfo;
 
@@ -134,6 +135,11 @@ export class Game {
         }
     }
 
+    public toggleScalingMethod () {
+        this.scalePixelPerfect = !this.scalePixelPerfect;
+        this.updateCanvasSize();
+    }
+
     private async playMusicTrack(): Promise<void> {
         const music = this.music[rndInt(0, 1)];
         this.music.forEach(music => music.stop());
@@ -182,7 +188,11 @@ export class Game {
         const width = window.innerWidth;
         const height = window.innerHeight;
         const dpr = window.devicePixelRatio;
-        const scale = Math.max(Math.floor(Math.min(width / gameWidth, height / gameHeight)), 1);
+
+        let scale = Math.min(width / gameWidth, height / gameHeight);
+        if (this.scalePixelPerfect) {
+            scale = Math.max(Math.floor(scale), 1);
+        }
 
         this.canvas.style.width = gameWidth * scale + "px";
         this.canvas.style.height = gameHeight * scale + "px";
