@@ -2,8 +2,18 @@ import { Subject } from 'rxjs';
 import { Game } from './game';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
+import fire1  from '../assets/dialog/fire1.dialog.json';
+import stone1  from '../assets/dialog/stone1.dialog.json';
+import tree1  from '../assets/dialog/tree1.dialog.json';
+import { Conversation } from './Conversation';
 
 export type CampaignState = "start" | "finished";
+
+const allDialogs: Record<string, JSON> = {
+    "fire1": fire1,
+    "stone1": stone1,
+    "tree1": tree1
+};
 
 export class Campaign {
     public statesChanged$ = new Subject<CampaignState[]>();
@@ -65,6 +75,32 @@ export class Campaign {
                 break;
             case "multijump":
                 this.game.player.multiJump = true;
+                break;
+            case "enable":
+                const char = params[0], dialogName = params[1];
+                const npcMap: Record<string, NPC> = {
+                    "fire": this.game.fire,
+                    "stone": this.game.stone,
+                    "tree": this.game.tree
+                };
+                const targetNpc = npcMap[char];
+                const dialog = allDialogs[dialogName];
+                if (targetNpc && dialog) {
+                    targetNpc.conversation = new Conversation(dialog, targetNpc);
+                }
+                break;
+            case "disable":
+                const char1 = params[0];
+                const npcMap1: Record<string, NPC> = {
+                    "fire": this.game.fire,
+                    "stone": this.game.stone,
+                    "tree": this.game.tree
+                };
+                const targetNpc1 = npcMap1[char1];
+                console.log(char1, targetNpc1);
+                if (targetNpc1) {
+                    targetNpc1.conversation = null;
+                }
                 break;
         }
     }
