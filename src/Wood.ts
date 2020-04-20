@@ -5,6 +5,7 @@ import { loadImage } from "./graphics";
 import { Environment } from "./World";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
+import { Sound } from "./Sound";
 
 export enum WoodState {
     FREE = 0,
@@ -15,6 +16,7 @@ export enum WoodState {
 export class Wood extends PhysicsEntity {
     private sprites!: Sprites;
     public state = WoodState.FREE;
+    private successSound!: Sound;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
@@ -22,6 +24,7 @@ export class Wood extends PhysicsEntity {
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/wood.png"), 1, 1);
+        this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -55,6 +58,10 @@ export class Wood extends PhysicsEntity {
                 this.setFloating(true);
                 this.y = 390;
             }
+        }
+        if (!this.isCarried() && this.distanceTo(this.game.fire) < 20) {
+            this.game.fire.feed(this);
+            this.successSound.play();
         }
     }
 }

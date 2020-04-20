@@ -191,7 +191,7 @@ export class Player extends PhysicsEntity {
             if (!this.isCarrying() && this.closestNPC && this.closestNPC.conversation) {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
             } else if (this.canDanceToMakeRain()) {
-                this.startDance();
+                this.startDance(2);
             } else {
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
@@ -224,7 +224,7 @@ export class Player extends PhysicsEntity {
         if (this.game.dev) {
             if (event.key === "c") {
                 // TODO Just for debugging. Real dancing is with action key on rain cloud
-                this.startDance();
+                this.startDance(2);
             } else if (event.key === "p" && !this.carrying) {
                 // TODO Just for debugging, this must be removed later
                 this.carry(this.game.stone);
@@ -265,7 +265,7 @@ export class Player extends PhysicsEntity {
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3");
                     break;
                 case 2:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 1 1 3  121212 113 223");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 233");
                     break;
                 case 3:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132");

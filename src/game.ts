@@ -148,6 +148,13 @@ export class Game {
         this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, object);
     }
 
+    public removeGameObject(object: GameObject): void {
+        const index = this.gameObjects.indexOf(object);
+        if (index >= 0) {
+            this.gameObjects.splice(index, 1);
+        }
+    }
+
     private getGameObject<T>(type: new (...args: any[]) => T): T {
         for (const gameObject of this.gameObjects) {
             if (gameObject instanceof type) {
