@@ -25,7 +25,7 @@ export class Seed extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/seed.png"), 2, 1);
+        this.sprites = new Sprites(await loadImage("sprites/seed.png"), 3, 1);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

@@ -146,18 +146,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":1,
-                 "name":"player",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1093,
-                 "y":2077
-                }, 
-                {
-                 "height":0,
                  "id":13,
                  "name":"wing",
                  "point":true,
@@ -167,6 +155,18 @@
                  "width":0,
                  "x":2508,
                  "y":330
+                }, 
+                {
+                 "height":0,
+                 "id":1,
+                 "name":"player",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1093,
+                 "y":2077
                 }],
          "opacity":1,
          "type":"objectgroup",
