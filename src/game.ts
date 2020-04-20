@@ -1,4 +1,4 @@
-import { World, Environment } from "./World";
+import { World } from "./World";
 import { Player } from "./Player";
 import { particles, Particles } from './Particles';
 import { Fire } from './Fire';
@@ -29,7 +29,7 @@ export interface GameObject {
 }
 
 export interface CollidableGameObject extends GameObject {
-    collidesWith(x: number, y: number, ignore?: Environment[]): number;
+    collidesWith(x: number, y: number): number;
 }
 
 export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
