@@ -12,6 +12,9 @@ export abstract class NPC extends PhysicsEntity {
 
     protected drawFace(ctx: CanvasRenderingContext2D): void {
         if (this.face) {
+            // Look at player
+            const dx = this.game.player.x - this.x;
+            this.face.toggleDirection((dx > 0) ? 1 : -1);
             this.face.draw(ctx);
         }
     }

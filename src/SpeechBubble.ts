@@ -22,7 +22,7 @@ export class SpeechBubble {
     public lineHeight = 15;
     public height = 0;
     public offset = { x: 0, y: 40 };
-    public messageVelocity = 40;
+    public messageVelocity = 20;
 
     public x: number;
     public y: number;
@@ -32,6 +32,8 @@ export class SpeechBubble {
 
     private content: string [] = [];
     private contentLinesByLength: string[] = [];
+
+    private partnersBubble: SpeechBubble | null = null;
 
     constructor(
         private game: Game,
@@ -53,7 +55,8 @@ export class SpeechBubble {
     }
 
     public hasContent() {
-        return this.content.length > 0;
+        return this.content.length > 0 &&
+            (!this.partnersBubble || !this.partnersBubble.isCurrentlyWriting && this.selectedOptionIndex > -1);
     }
 
     async setMessage(message: string): Promise<void> {
@@ -77,11 +80,14 @@ export class SpeechBubble {
             }
             this.updateContent();
         }
-        this.isCurrentlyWriting = false;
         this.updateContent();
+        setTimeout(() => {
+            this.isCurrentlyWriting = false;
+        }, 500);
     }
 
-    setOptions(options: string[]) {
+    setOptions(options: string[], partnersBubble: SpeechBubble) {
+        this.partnersBubble = partnersBubble;
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
         this.updateContent();
@@ -102,7 +108,7 @@ export class SpeechBubble {
         ctx.beginPath();
         const font = this.game.mainFont;
         const longestLine = this.contentLinesByLength[0];
-        const metrics = longestLine ? font.measureText(longestLine) : { width: 0, height: 0};
+        const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
 
         let posX = this.x;
         let posY = this.y;

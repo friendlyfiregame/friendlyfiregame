@@ -1,5 +1,57 @@
 {
     "entry": [
-        "..."
+        "Well, if you are willing to listen, I would be willing to teach you.",
+        ">I do not need a teacher @noteacher",
+        ">Sure, whatever will help me finally get this done. @getthisdone",
+        ">Seriously, can everything talk here? @getthisdone",
+        ">I can do this on my own, thanks. @onmyown"
+    ],
+    "noteacher": [
+        "Then go to hell. @entry !end"
+    ],
+    "ionlymaster": [
+        "Fool! Out of my sight! @entry !end"
+    ],
+    "getthisdone": [
+        "A bit more respect, young boy. Start by calling me Master!",
+        ">I am the only Master I acknowledge! @ionlymaster",
+        ">Fine, what can you teach me… Master? @yesmaster",
+        ">Forgive me, Master. I am willing to learn @yesmaster"
+    ],
+    "onmyown": [
+        "Good luck, fool. @entry !end"
+    ],
+    "yesmaster": [
+        "So, let an old and wise stone tell you: Basic gardening requires water. So...",
+        ">Soooo...? @soo",
+        ">I think I need a drink...a hard one @drink",
+        "Rain? @padawan"
+    ],
+    "soo": [
+        "This is harder than I thought. @rain"
+    ],
+    "drink": [
+        "Me too, although I am hard enough already, hahahahaha. @rain"
+    ],
+    "padawan": [
+        "Very good my young padawan. @awesome"
+    ],
+    "rain": [
+        "You need some rain of course, you foolish man. @awesome"
+    ],
+    "awesome": [
+        "Because I am the most awesome being, I will give you incredible strength.",
+        "So you can lift me and I will help you to get across that river.",
+        "There you will find the answer to all your problems, maybe... hehehe",
+        ">I am not sure if I really want to touch you... @nottouchyou",
+        ">By the power of Grayskull! @remember !end",
+        ">Yes Master. @remember !end"
+    ],
+    "nottouchyou": [
+        "This is the beauty about power, and now lift me up!",
+        ">I... need... to... lift... my... master... @remember !end"
+    ],
+    "remember": [
+        "There you are again, my padawan."
     ]
 }
