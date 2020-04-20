@@ -284,7 +284,8 @@ export class Player extends PhysicsEntity {
             }
             this.setVelocityX(0);
             this.drowning += dt;
-            if (this.drowning > 2) {
+            if (this.drowning > 3) {
+                this.drowningSound.stop();
                 this.respawn();
             }
         } else {
