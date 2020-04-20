@@ -16,6 +16,17 @@ export class PlayerConversation {
         this.setSelectedOption(0);
         this.setBubblesContent();
         this.interaction?.npcLine?.executeBeforeLine();
+        // Ensure safe distance to NPC
+        const minDis = 28;
+        if (Math.abs(player.x - npc.x) < minDis) {
+            if (player.x < npc.x) {
+                player.x = npc.x - minDis;
+                player.direction = 1;
+            } else {
+                player.x = npc.x + minDis;
+                player.direction = -1;
+            }
+        }
     }
 
     /**

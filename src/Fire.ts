@@ -141,12 +141,18 @@ export class Fire extends NPC {
         this.growthTarget = 14;
         this.face?.setMode(FaceModes.ANGRY);
         this.game.music[0].setVolume(0);
+        this.game.music[0].stop();
         this.game.music[1].setLoop(true);
         this.game.music[1].play();
         // Disable remaining dialogs
         this.conversation = null;
         // Disable all other characters
-        // TODO
+        for (const npc of [this.game.tree, this.game.stone, this.game.seed, this.game.flameboy]) {
+            if (npc) {
+                npc.conversation = null;
+                npc.face = null;
+            }
+        }
         // Player thoughts
         [
             ["What...", 2, 2],
