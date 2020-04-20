@@ -123,7 +123,7 @@ export class SpeechBubble {
         }
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const selectionIndicator = isSelected ? ">" : "";
+            const selectionIndicator = isSelected ? ">" : " ";
             this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], posX - Math.round(metrics.width / 2) + 4,
                 -posY - this.height + messageLineOffset + (i * this.lineHeight), "black");
         }
