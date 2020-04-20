@@ -9,6 +9,7 @@ import seed1 from '../assets/dialog/seed1.dialog.json';
 import tree1 from '../assets/dialog/tree1.dialog.json';
 import tree2 from '../assets/dialog/tree2.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
+import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
 
@@ -22,6 +23,7 @@ const allDialogs: Record<string, JSON> = {
     "tree1": tree1,
     "tree2": tree2,
     "flameboy1": flameboy1,
+    "flameboy2": flameboy2,
     "wing1": wing1,
 };
 
