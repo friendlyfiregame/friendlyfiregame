@@ -105,6 +105,10 @@ export class Fire extends NPC {
     update(dt: number): void {
         if (this.growth !== 0) {
             this.intensity += this.growth * dt;
+            if (this.intensity > 20) {
+                this.intensity = 20;
+                this.growth = 0;
+            }
         }
         if (!this.game.camera.isPointVisible(this.x, this.y, 200)) {
             this.isVisible = false;
