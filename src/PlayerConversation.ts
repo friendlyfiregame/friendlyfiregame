@@ -1,6 +1,7 @@
 import { Conversation, Interaction } from './Conversation';
 import { Player } from './Player';
 import { NPC } from './NPC';
+import { FaceModes } from './Face';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;
@@ -88,7 +89,7 @@ export class PlayerConversation {
                 }
             } else if (this.interaction.npcLine) {
                 // NPC said something, player proceeds without any options
-                this.interaction.npcLine.execute();
+                // if npc executes something after saying a line, that would happen here
             }
             this.interaction = this.conversation.getNextInteraction();
             this.setSelectedOption(-1);
@@ -96,6 +97,12 @@ export class PlayerConversation {
         }
         if (!this.interaction) {
             this.endConversation();
+        } else {
+            if (this.interaction.npcLine) {
+                // Mostly NPCs execute actions at the beginning of their line, not afterwards
+                this.npc.face?.setMode(FaceModes.NEUTRAL);
+                this.interaction.npcLine.execute();
+            }
         }
     }
 

@@ -1,19 +1,20 @@
 
 {
     "entry": [
-        "I am starving, I fear to die very soon and my light will go out forever. @help"
+        "Hey, person!",
+        "I am starving, I fear to die very soon and my light will go out forever. @help !sad"
     ],
     "help": [
         "Would you help me out, kind stranger?",
         ">How can I help you? @how",
         ">Why should I help you? @why",
         ">Oh my God, a talking fire?! @impressed",
-        ">I don't care",
-        "Oh you son of a ...! No, sorry, I get it. Well, maybe another time.",
+        ">I don't care !angry",
+        "Oh you son of a ...! No, sorry, I get it. Well, maybe another time. !neutral",
         "Just be aware this whole game is pretty pointless if you don't help me out... @help !end"
     ],
     "impressed": [
-        "Well yes, I'm impressed too. Took me some time to get used to it. @help"
+        "Well yes, I'm impressed too. Took me some time to get used to it. @help !amused"
     ],
     "how": [
         "I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
