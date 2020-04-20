@@ -230,7 +230,7 @@ export class Player extends PhysicsEntity {
                     this.achieveMilestone(Milestone.TALKED_TO_FLAMEBOY);
                 }
             } else if (this.canDanceToMakeRain()) {
-                this.startDance(2);
+                this.startDance(this.game.apocalypse ? 3 : 2);
                 this.achieveMilestone(Milestone.MADE_RAIN);
             } else {
                 if (this.carrying instanceof Stone) {
@@ -309,7 +309,7 @@ export class Player extends PhysicsEntity {
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121121223   ");
                     break;
                 case 3:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132 11323132   ");
                     break;
                 default:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "3");
@@ -410,8 +410,10 @@ export class Player extends PhysicsEntity {
     }
 
     private canDanceToMakeRain(): boolean {
+        const ground = this.getGround();
         return !this.dance && !this.game.world.isRaining() && this.carrying === null &&
-            this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD;
+            (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD ||
+            ground instanceof Cloud && this.game.apocalypse && !ground.isRaining());
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
@@ -592,7 +594,7 @@ export class Player extends PhysicsEntity {
                     // (Useless because wrong cloud but hey...)
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
-                        ground.startRain(15);
+                        ground.startRain(this.game.apocalypse ? Infinity : 15);
                     }
                     if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD) {
                         this.game.world.startRain();

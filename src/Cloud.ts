@@ -62,6 +62,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         this.raining = time;
     }
 
+    public isRaining(): boolean {
+        return this.raining > 0;
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.drawImage(this.image, this.x - this.width / 2 - 4, -this.y - this.height - 16);
     }

@@ -1,8 +1,8 @@
 import { World } from "./World";
 import { Player } from "./Player";
-import { particles, Particles } from './Particles';
+import { particles, Particles, ParticleEmitter, valueCurves } from './Particles';
 import { Fire } from './Fire';
-import { clamp, now, rndInt } from './util';
+import { clamp, now, rndInt, rndItem, rnd, timedRnd } from './util';
 import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
@@ -26,6 +26,7 @@ import { Wing } from './Wing';
 import { loadImage } from "./graphics";
 import { KeyHandler } from "./KeyHandler";
 import { Seed } from './Seed';
+import { Cloud } from './Cloud';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -100,6 +101,8 @@ export class Game {
     public fire: Fire;
 
     public apocalypse = false;
+    private fireEffects: FireGfx[] = [];
+    private fireEmitter!: ParticleEmitter;
 
     private frameCounter = 0;
     private framesPerSecond = 0;
@@ -180,6 +183,8 @@ export class Game {
         for (const obj of this.gameObjects) {
             await obj.load();
         }
+        await this.loadApocalypse();
+        setTimeout(() => this.beginApocalypse(), 1000);
     }
 
     public toggleScalingMethod () {
@@ -386,7 +391,18 @@ export class Game {
         this.frameCounter++;
     }
 
+    private updateApocalypse() {
+        this.fireEmitter.setPosition(this.player.x, this.player.y);
+        this.fireEffects.forEach(e => e.update(this.dt));
+        if (timedRnd(this.dt, 0.8)) {
+            this.fireEmitter.emit();
+        }
+        this.fire.growthTarget = Math.max(2, 20 - 6 * this.gameObjects.filter(
+                o => o instanceof Cloud && o.isRaining()).length);
+    }
+
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
+        this.updateApocalypse();
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.camera.setCinematicBar(1);
@@ -395,7 +411,49 @@ export class Game {
         ctx.globalCompositeOperation = "color";
         ctx.globalAlpha = 0.7;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        this.fireEffects[0].draw(ctx, 100, 100);
         ctx.restore();
+    }
+
+    public beginApocalypse() {
+        this.apocalypse = true;
+        // Spawn 3 clouds over fire
+        const cx = 1500, cy = 570;
+        const coords = [
+            [cx, cy],
+            [cx - 60, cy - 32],
+            [cx + 74, cy - 24]
+        ];
+        for (let c of coords) {
+            const cloud = new Cloud(this, c[0], c[1], {
+                velocity: 0,
+                distance: 1
+            });
+            cloud.load().then(() => this.gameObjects.push(cloud));
+        }
+        this.player.multiJump = true;
+    }
+
+    public loadApocalypse() {
+        this.fireEffects = [1, 2].map(num =>  new FireGfx(32, 24, true, 2));
+        this.fireEmitter = particles.createEmitter({
+            position: {x: this.player.x, y: this.player.y},
+            offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
+            velocity: () => ({ x: 0, y: -25}),
+            color: () => rndItem(this.fireEffects).getImage(),
+            size: () => rnd(16, 32),
+            gravity: {x: -10, y: -30},
+            lifetime: () => rnd(5, 15),
+            alpha: 1,
+            breakFactor: 0.9,
+            alphaCurve: valueCurves.cos(0.2, 0.1),
+            update: particle => {
+                if (this.world.collidesWith(particle.x, particle.y - particle.size / 4)) {
+                    particle.vx = 0;
+                    particle.vy = 0;
+                }
+            }
+        });
     }
 
     public togglePause(paused = !this.paused) {

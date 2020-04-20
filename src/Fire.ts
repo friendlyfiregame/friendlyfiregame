@@ -1,7 +1,7 @@
 import { NPC } from './NPC';
 import { Game } from './game';
 import { PIXEL_PER_METER } from './constants';
-import { rnd, rndInt } from './util';
+import { rnd, rndInt, shiftValue } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face, EyeType } from './Face';
 import { FireGfx } from './FireGfx';
@@ -28,7 +28,9 @@ const smokeColors = [
 export class Fire extends NPC {
     private intensity = 5;
 
-    private growth = 0;
+    public growthTarget = 5;
+
+    public growth = 1;
 
     private averageParticleDelay = 0.1;
 
@@ -103,12 +105,8 @@ export class Fire extends NPC {
     }
 
     update(dt: number): void {
-        if (this.growth !== 0) {
-            this.intensity += this.growth * dt;
-            if (this.intensity > 20) {
-                this.intensity = 20;
-                this.growth = 0;
-            }
+        if (this.intensity !== this.growthTarget) {
+            this.intensity = shiftValue(this.intensity, this.growthTarget, this.growth * dt);
         }
         if (!this.game.camera.isPointVisible(this.x, this.y, 200)) {
             this.isVisible = false;

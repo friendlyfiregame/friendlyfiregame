@@ -24,6 +24,7 @@ export interface ParticleEmitterArguments {
     sizeCurve?: ValueCurve;
     angle?: number | NumberGenerator;
     angleSpeed?: number | NumberGenerator;
+    update?: (p: Particle) => void
 };
 
 export class Particles {
@@ -84,6 +85,7 @@ export class ParticleEmitter {
     private blendMode: string;
     public alphaCurve: ValueCurve;
     public sizeCurve: ValueCurve;
+    private updateMethod: ((p: Particle) => void) | undefined;
 
     constructor(args: ParticleEmitterArguments) {
         this.particles = [];
@@ -103,6 +105,7 @@ export class ParticleEmitter {
         this.blendMode = args.blendMode || "source-over";
         this.alphaCurve = args.alphaCurve || valueCurves.constant;
         this.sizeCurve = args.sizeCurve || valueCurves.constant;
+        this.updateMethod = args.update;
 
         function toGenerator<tp>(obj: tp | (() => tp)): (() => tp) {
             if (obj instanceof Function) {
@@ -155,6 +158,11 @@ export class ParticleEmitter {
                 this.particles.splice(i, 1);
             }
         }
+        if (this.updateMethod) {
+            for (const p of this.particles) {
+                this.updateMethod(p);
+            }
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -180,7 +188,7 @@ export class Particle {
         private angle = 0,
         private angleSpeed = 0,
         private imageOrColor: ParticleAppearance = "white",
-        private size = 4,
+        public readonly size = 4,
         private lifetime = 1,
         private alpha = 1
     ) {
@@ -223,12 +231,12 @@ export class Particle {
         if (this.angle) {
             ctx.rotate(this.angle);
         }
-        if (this.imageOrColor instanceof HTMLImageElement) {
+        if (this.imageOrColor instanceof Object) {
             // Image
-            const w = this.imageOrColor.naturalWidth, h = this.imageOrColor.naturalHeight;
+            const img = this.imageOrColor;
+            const w = ((<any>img).naturalWidth || img.width), h = ((<any>img).naturalHeight || img.height);
             const sz = Math.max(w, h);
-            ctx.drawImage(this.imageOrColor, -this.halfSize, -this.halfSize,
-                this.size * w / sz, this.size * h / sz);
+            ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
         } else {
             // Color
             ctx.fillStyle = (this.imageOrColor as string);
