@@ -99,6 +99,8 @@ export class Game {
 
     public fire: Fire;
 
+    public apocalypse = false;
+
     private frameCounter = 0;
     private framesPerSecond = 0;
     private useRealResolution = false;
@@ -351,6 +353,11 @@ export class Game {
         for (const obj of this.gameObjects) {
             obj.draw(ctx);
         }
+        // Apocalypse
+        if (this.apocalypse) {
+            this.drawApocalypseOverlay(ctx);
+        }
+        // Cinematic bars
         this.camera.renderCinematicBars(ctx);
 
         ctx.restore();
@@ -377,6 +384,18 @@ export class Game {
             this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;
+    }
+
+    private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.camera.setCinematicBar(1);
+        // Red overlay
+        ctx.fillStyle = "darkred";
+        ctx.globalCompositeOperation = "color";
+        ctx.globalAlpha = 0.7;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.restore();
     }
 
     public togglePause(paused = !this.paused) {
