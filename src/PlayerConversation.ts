@@ -63,7 +63,7 @@ export class PlayerConversation {
             if (e.key == "Enter" || e.key == "e") {
                 this.proceed();
             }
-            const upDown = (["D", "ArrowDown"].includes(e.key) ? 1 : 0) - (["W", "ArrowUp"].includes(e.key) ? 1 : 0);
+            const upDown = (["s", "ArrowDown"].includes(e.key) ? 1 : 0) - (["w", "ArrowUp"].includes(e.key) ? 1 : 0);
             if (upDown !== 0) {
                 this.setSelectedOption(this.selectedOption + upDown);
             }
@@ -72,7 +72,6 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
-            this.setBubblesContent();
             const options = this.interaction.options;
             if (options && options.length > 0) {
                 // Player could choose between options, confirmed with Enter
@@ -89,10 +88,15 @@ export class PlayerConversation {
                 this.interaction.npcLine.execute();
             }
             this.interaction = this.conversation.getNextInteraction();
+            this.setBubblesContent();
         } else {
-            this.player.playerConversation = null;
-            this.player.speechBubble.hide();
-            this.npc.speechBubble.hide();
+            this.endConversation();
         }
+    }
+
+    private endConversation() {
+        this.player.playerConversation = null;
+        this.player.speechBubble.hide();
+        this.npc.speechBubble.hide();
     }
 }
