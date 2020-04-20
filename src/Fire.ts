@@ -26,7 +26,7 @@ const smokeColors = [
 
 @entity("fire")
 export class Fire extends NPC {
-    private intensity = 5;
+    public intensity = 5;
 
     public angry = false; // fire will be angry once wood was fed
 

@@ -4,6 +4,7 @@ import { NPC } from './NPC';
 import { FaceModes } from './Face';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
+import fire3 from '../assets/dialog/fire3.dialog.json';
 import stone1 from '../assets/dialog/stone1.dialog.json';
 import stone2 from '../assets/dialog/stone2.dialog.json';
 import seed1 from '../assets/dialog/seed1.dialog.json';
@@ -20,6 +21,7 @@ export type CampaignState = "start" | "finished";
 const allDialogs: Record<string, JSON> = {
     "fire1": fire1,
     "fire2": fire2,
+    "fire3": fire3,
     "stone1": stone1,
     "stone2": stone2,
     "seed1": seed1,

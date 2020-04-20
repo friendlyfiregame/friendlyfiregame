@@ -102,6 +102,7 @@ export class Game {
     public fireFuryEndTime = 0;
 
     public apocalypse = false;
+    private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
 
@@ -410,19 +411,31 @@ export class Game {
         }
         this.fire.growthTarget = Math.max(2, 20 - 6 * this.gameObjects.filter(
                 o => o instanceof Cloud && o.isRaining()).length);
+        if (this.fire.intensity < 5) {
+            this.apocalypseFactor = clamp((5 - this.fire.intensity) / 2, 0, 1);
+            this.music[1].setVolume(0.25 * this.apocalypseFactor);
+            if (this.apocalypseFactor <= 0.001) {
+                // End apocalypse
+                this.apocalypseFactor = 0;
+                this.apocalypse = false;
+                this.fire.angry = false;
+                this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
+                // Music
+                this.music[1].stop()
+            }
+        }
     }
 
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
         this.updateApocalypse();
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        this.camera.setCinematicBar(1);
+        this.camera.setCinematicBar(this.apocalypseFactor);
         // Red overlay
         ctx.fillStyle = "darkred";
         ctx.globalCompositeOperation = "color";
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.7 * this.apocalypseFactor;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        this.fireEffects[0].draw(ctx, 100, 100);
         ctx.restore();
     }
 
