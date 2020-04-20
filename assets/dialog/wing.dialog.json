@@ -1,0 +1,25 @@
+{
+    "entry": [
+        "What's your deal? Trying to pick me up like everyone else?",
+        ">Yeah, you.. look like a flying ability power up @pickup",
+        ">What a strange person... nevermind.",
+        "Whatever @entry !end"
+    ],
+    "pickup": [
+        "And you look like some generic boring action hero. Go be stupid somewhere else please",
+        ">Don't change the subject. You're even glowing",
+        ">Ouch! @acquainted !end",
+        "Whatever. As if you needed a flight ability. How the hell did you get up here without flight anyway, huh?",
+        ">You got me!",
+        "Yes... yes I did. @acquainted !end"
+    ],
+    "acquainted": [
+        "Go away please?",
+        ">Sure buddy",
+        "Thanks @exhausted !end"
+    ],
+    "exhausted": [
+        "you again...",
+        ">I'm on my way! @acquainted !end"
+    ]
+}
