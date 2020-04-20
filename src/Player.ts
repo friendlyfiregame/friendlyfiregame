@@ -308,8 +308,7 @@ export class Player extends PhysicsEntity {
             this.carrying.y = this.y + this.height -
                 ((this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) ? 1 : 0);
             if (this.carrying instanceof Seed) {
-                this.carrying.y -= 2;
-                this.carrying.x += 7;
+                this.carrying.x += 4;
             }
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
