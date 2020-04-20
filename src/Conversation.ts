@@ -97,10 +97,10 @@ export class ConversationLine {
         public readonly full: string,
         public readonly conversation: Conversation
     ) {
-        this.line = ConversationLine.extractText(full, true);
+        this.isNpc = !full.startsWith(">");
+        this.line = ConversationLine.extractText(full, this.isNpc);
         this.targetState = ConversationLine.extractState(full);
         this.actions = ConversationLine.extractActions(full);
-        this.isNpc = !full.startsWith(">");
         this.visited = false;
     }
 

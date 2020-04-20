@@ -37,7 +37,7 @@ export class Camera {
     private currentBarTarget = 0;
     private currentBarHeight = 0;
 
-    constructor(protected game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.15) {
+    constructor(protected game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.06) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
