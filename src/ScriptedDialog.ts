@@ -12,12 +12,6 @@ export class ScriptedDialog implements GameObject {
     public currentMatchingDialog: DialogJSON | null = null;
 
     public greetingRange = 120;
-    private get currentGreeting () {
-        return this.speechBubble.message;
-    }
-    private set currentGreeting(message: string) {
-        this.speechBubble.setMessage(message);
-    }
     private currentMatchingGreetings: string[] = [];
     private greetingActive = false;
     /* used to prevent multiple greetings, e.g after a dialog has ended */
@@ -44,7 +38,7 @@ export class ScriptedDialog implements GameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
-        if (this.greetingActive && this.currentGreeting !== "") {
+        if (this.greetingActive) {
             this.speechBubble.draw(ctx);
         }
     }
@@ -67,11 +61,8 @@ export class ScriptedDialog implements GameObject {
     }
 
     private setRandomGreeting() {
-        if (this.currentMatchingGreetings.length > 0) {
-            this.currentGreeting = rndItem(this.currentMatchingGreetings);
-        } else {
-            this.currentGreeting = "";
-        }
+        const message = this.currentMatchingGreetings.length > 0 ? rndItem(this.currentMatchingGreetings) : "";
+        this.speechBubble.setMessage(message);
     }
 
     private updateMatchingData(states: CampaignState[]) {
