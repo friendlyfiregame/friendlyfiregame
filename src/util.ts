@@ -66,3 +66,9 @@ export function shiftValue(v: number, trg: number, inc: number): number {
     }
     return v;
 }
+
+export async function sleep(ms = 0): Promise<void> {
+    await new Promise((resolve) => {
+        setTimeout(() => resolve(), ms);
+    });
+}

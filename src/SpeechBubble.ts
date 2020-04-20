@@ -1,4 +1,5 @@
 import { Game } from "./game";
+import { sleep } from "./util";
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): CanvasRenderingContext2D {
     if (w < 2 * r) {r = w / 2};
@@ -20,7 +21,8 @@ export class SpeechBubble {
     public fontSize = 10;
     public lineHeight = 15;
     public height = 0;
-    public offset = {x: 0, y: 40};
+    public offset = { x: 0, y: 40 };
+    private messageVelocity = 100;
 
     public x: number;
     public y: number;
@@ -29,6 +31,7 @@ export class SpeechBubble {
 
     private content: string [] = [];
     private contentLinesByLength: string[] = [];
+    private isCurrentlyWriting = false;
 
     constructor(
         private game: Game,
@@ -53,8 +56,31 @@ export class SpeechBubble {
         return this.content.length > 0;
     }
 
-    setMessage(message: string) {
-        this.messageLines = message.split("\n");
+    async setMessage(message: string): Promise<void> {
+        this.messageLines = [""];
+        if (this.isCurrentlyWriting) {
+            this.isCurrentlyWriting = false;
+            await sleep(this.messageVelocity);
+        }
+        this.isCurrentlyWriting = true;
+        let index = 0;
+        for (let char of message) {
+            if (!this.isCurrentlyWriting) {
+                break;
+            }
+            if (!char) {
+                index++;
+                continue
+            }
+            if (char === "\n") {
+                index++;
+                this.messageLines.push("")
+                continue
+            }
+            this.messageLines[index] += char;
+            await sleep(this.messageVelocity)
+            this.updateContent();
+        }
         this.updateContent();
     }
 

@@ -16,6 +16,8 @@ export enum Environment {
 export class World implements GameObject {
     private foreground!: HTMLImageElement;
     private background!: HTMLImageElement;
+    private background2!: HTMLImageElement;
+    private background3!: HTMLImageElement;
     private collisionMap!: Uint32Array;
     private game: Game;
     private raindrop!: HTMLImageElement;
@@ -45,6 +47,8 @@ export class World implements GameObject {
         }
         this.foreground = worldImage;
         this.background = await loadImage("maps/bg.png");
+        this.background2 = await loadImage("maps/bg2.png");
+        this.background3 = await loadImage("maps/bg3.png");
         this.collisionMap = new Uint32Array(getImageData(worldCollisionImage).data.buffer);
         this.raindrop = await loadImage("sprites/raindrop.png");
     }
@@ -66,12 +70,21 @@ export class World implements GameObject {
     public draw(ctx: CanvasRenderingContext2D): void {
         const bgX = this.getWidth() / this.background.width;
         const bgY = this.getHeight() / this.background.height;
+
+        const bg2X = this.getWidth() / this.background2.width;
+        const bg2Y = this.getHeight() / this.background2.height;
+
+        const bg3X = this.getWidth() / this.background3.width;
+        const bg3Y = this.getHeight() / this.background3.height;
+
         const camX = this.game.camera.x;
         const camY = this.game.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
         ctx.save();
         ctx.translate(camX, -camY);
         ctx.drawImage(this.background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
+        ctx.drawImage(this.background2, (-camX / bg2X) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bg2Y);
+        ctx.drawImage(this.background3, (-camX / bg3X) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bg3Y);
         ctx.drawImage(this.foreground, -camX, -this.getHeight() + camY);
         ctx.restore();
     }
