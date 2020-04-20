@@ -23,7 +23,8 @@ export class Dance {
     private success = false;
     private static successSound: Sound;
     private static failSound: Sound;
-    private static music: Sound;
+    private static raindance_music: Sound;
+    private static treedance_music: Sound;
 
     constructor(
         private game: Game,
@@ -34,7 +35,8 @@ export class Dance {
         private warmupBeats = 8,
         private allowedMistakes = 3,
         private timeTolerance = 0.75,
-        private readonly withMusic = true
+        private readonly withMusic = true,
+        private readonly musicIndex = 1 // 0 tree-dance, 1 for raindance
     ){
         this.duration = keys.length;
         this.keys = [];
@@ -52,9 +54,12 @@ export class Dance {
         console.log('loading');
         this.successSound = new Sound("sounds/dancing/success.mp3");
         this.failSound = new Sound("sounds/dancing/fail.mp3");
-        this.music = new Sound("music/raindance.mp3");
-        this.music.setVolume(0);
-        this.music.stop();
+        this.raindance_music = new Sound("music/raindance.mp3");
+        this.raindance_music.setVolume(0);
+        this.raindance_music.stop();
+        this.treedance_music = new Sound("music/dancing_queen.mp3");
+        this.treedance_music.setVolume(0);
+        this.treedance_music.stop();
     }
 
     public wasSuccessful(): boolean {
@@ -84,8 +89,10 @@ export class Dance {
         this.currentIndex = 0;
         this.performance = this.performance.map(() => ({}));
         this.success = false;
-        Dance.music.stop();
-        Dance.music.setVolume(0);
+        Dance.raindance_music.stop();
+        Dance.raindance_music.setVolume(0);
+        Dance.treedance_music.stop();
+        Dance.treedance_music.setVolume(0);
     }
 
     public setPosition(x: number, y: number) {
@@ -202,21 +209,27 @@ export class Dance {
         if (!this.withMusic) {
             return;
         }
-        if (this.progress < 0 && !Dance.music.isPlaying()) {
+        if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
             this.game.music[0].setVolume(0.25 * fade);
         } else {
             // own music paused
-            if (!Dance.music.isPlaying()) {
-                Dance.music.setVolume(0.8);
-                Dance.music.play();
+            if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
+                Dance.treedance_music.setVolume(0.8);
+                Dance.treedance_music.play();
+                this.game.music[0].setVolume(0);
+            }
+            if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
+                Dance.raindance_music.setVolume(0.8);
+                Dance.raindance_music.play();
                 this.game.music[0].setVolume(0);
             }
         }
     }
 
     private resetMusic() {
-        Dance.music.stop();
+        Dance.raindance_music.stop();
+        Dance.treedance_music.stop();
         this.game.music[0].setVolume(0.25);
     }
 

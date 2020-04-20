@@ -302,8 +302,8 @@ export class Player extends PhysicsEntity {
         if (!this.dance) {
             switch (difficulty) {
                 case 1:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3", undefined,
-                            undefined, undefined, false);
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 100, "    1 1 2 2 1 2 1 3", undefined,
+                            undefined, undefined, true, 0);
                     break;
                 case 2:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121121223   ");
