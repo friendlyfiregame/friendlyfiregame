@@ -82,7 +82,7 @@ export class Player extends PhysicsEntity {
     private currentFailSpriteIndex = 0;
     private carrying: PhysicsEntity | null = null;
     public doubleJump = true;
-    public multiJump = false;
+    public multiJump = true;
     private usedDoubleJump = false;
 
     public playerConversation: PlayerConversation | null = null;
