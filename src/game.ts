@@ -89,7 +89,7 @@ export class Game {
     public player: Player;
     public stone: Stone;
     public tree: Tree;
-    public seed: Seed | undefined;
+    public seed!: Seed;
     public flameboy: FlameBoy;
     public wing: Wing;
 
