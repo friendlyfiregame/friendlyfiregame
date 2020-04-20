@@ -89,6 +89,9 @@ export class Campaign {
             case "game":
                 this.addState(params[0] as any);
                 break;
+            case "doublejump":
+                this.game.player.doubleJump = true;
+                break;
             case "multijump":
                 this.game.player.multiJump = true;
                 break;

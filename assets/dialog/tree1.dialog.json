@@ -52,7 +52,12 @@
         "Oh you rude leafless imposter! Won't even listen to my sad, sad story. @entry !end"
     ],
     "definitly": [
-        "awesome !spawnseed @reminder !end"
+        "awesome @missinggear !spawnseed !end"
+    ],
+    "missinggear": [
+        "Oh, and I almost forgot!",
+        "You will need some special gear to be able to climb that mountain. I hereby grant my personal pair of double jump boots!",
+        ">Awesome, thanks! !doublejump @reminder !end"
     ],
     "cool": [
         "So the thing with pine cones, you see, is they need very special fertile ground to grow.",
