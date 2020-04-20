@@ -120,6 +120,7 @@ export class Game {
     public gamepadInput!: GamepadInput;
 
     private titleImage!: HTMLImageElement;
+    private endImage!: HTMLImageElement;
     public stage = GameStage.TITLE;
     public keyHandler = new KeyHandler();
 
@@ -180,6 +181,7 @@ export class Game {
         ];
         await this.loadFonts();
         this.titleImage = await loadImage("images/title.png");
+        this.endImage = await loadImage("images/end.png");
         await Face.load();
         await Dance.load();
         await FireGfx.load();
@@ -286,6 +288,11 @@ export class Game {
             case GameStage.MAIN:
                 this.updateMain();
                 break;
+
+            case GameStage.END:
+                this.updateEnd();
+                break;
+
         }
     }
 
@@ -309,6 +316,10 @@ export class Game {
 
             case GameStage.MAIN:
                 this.drawMain(ctx);
+                break;
+
+            case GameStage.END:
+                this.drawEnd(ctx);
                 break;
         }
 
@@ -334,11 +345,34 @@ export class Game {
         ctx.restore();
     }
 
+    private updateEnd(): void {
+    }
+
+    private drawEnd(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clip();
+        ctx.drawImage(this.endImage, 0, 0);
+        ctx.restore();
+    }
+
     private titleFadeOut = 0;
+    private endFadeIn = 0;
+
+    public gameOver() {
+        this.endFadeIn = 1;
+    }
 
     private updateMain(): void {
         if (this.titleFadeOut < 1) {
             this.titleFadeOut += this.dt;
+        }
+        if (this.endFadeIn > 0) {
+            this.endFadeIn -= this.dt;
+            if (this.endFadeIn <= 0) {
+                this.stage = GameStage.END;
+            }
         }
 
         // Update all game classes
@@ -393,6 +427,23 @@ export class Game {
             ctx.rect(ctx.canvas.width / 2, 0, ctx.canvas.width / 2, ctx.canvas.height);
             ctx.clip();
             this.drawTitle(ctx);
+            ctx.restore();
+        }
+
+        if (this.endFadeIn > 0) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(-ctx.canvas.width * this.endFadeIn, 0);
+            ctx.rect(0, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawEnd(ctx);
+            ctx.restore();
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(ctx.canvas.width * this.endFadeIn, 0);
+            ctx.rect(ctx.canvas.width / 2, 0, ctx.canvas.width / 2, ctx.canvas.height);
+            ctx.clip();
+            this.drawEnd(ctx);
             ctx.restore();
         }
 
