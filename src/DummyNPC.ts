@@ -1,7 +1,7 @@
 import { NPC } from './NPC';
 import { entity } from "./Entity";
 import { Game } from "./game";
-import { ScriptedDialog } from './ScriptedDialog';
+import { Greeting } from './Greeting';
 import dialogData from "../assets/dummy.texts.json";
 
 @entity("tree")
@@ -11,7 +11,7 @@ export class DummyNPC extends NPC {
     }
 
     async load(): Promise<void> {
-        this.scriptedDialog = new ScriptedDialog(this.game, this, dialogData);
+        this.greeting = new Greeting(this.game, this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -20,11 +20,11 @@ export class DummyNPC extends NPC {
         ctx.strokeStyle = "black";
         ctx.strokeRect(this.x - Math.round(this.width / 2) - 0.5, -this.y - this.height - 0.5, this.width, this.height);
         ctx.restore();
-        this.drawDialog(ctx);
+        this.drawGreeting(ctx);
     }
 
     update(dt: number): void {
-        this.updateDialog(dt);
+        this.updateGreeting(dt);
     }
 
 }

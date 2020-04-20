@@ -90,12 +90,14 @@ export class PlayerConversation {
             this.interaction = this.conversation.getNextInteraction();
             this.setSelectedOption();
             this.setBubblesContent();
-        } else {
+        }
+        if (!this.interaction) {
             this.endConversation();
         }
     }
 
     private endConversation() {
+        console.log("ending!");
         this.player.playerConversation = null;
         this.player.speechBubble.hide();
         this.npc.speechBubble.hide();

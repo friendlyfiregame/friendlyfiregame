@@ -3,7 +3,7 @@ import { Game } from "./game";
 import { Sprites, getSpriteIndex } from "./Sprites";
 import { loadImage } from "./graphics";
 import { FLAMEBOY_ANIMATION } from "./constants";
-import { ScriptedDialog } from './ScriptedDialog';
+import { Greeting } from './Greeting';
 import dialogData from "../assets/flameboy.texts.json";
 import { NPC } from './NPC';
 import { Face, EyeType } from './Face';
@@ -20,7 +20,7 @@ export class FlameBoy extends NPC {
 
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/flameboy.png"), 6, 1);
-        this.scriptedDialog = new ScriptedDialog(this.game, this, dialogData);
+        this.greeting = new Greeting(this.game, this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -28,12 +28,12 @@ export class FlameBoy extends NPC {
         ctx.translate(this.x, -this.y + 1);
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
-        this.drawDialog(ctx);
+        this.drawGreeting(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
         this.spriteIndex = getSpriteIndex(0, FLAMEBOY_ANIMATION);
-        this.updateDialog(dt);
+        this.updateGreeting(dt);
     }
 }
