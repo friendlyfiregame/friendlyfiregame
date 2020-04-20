@@ -318,7 +318,7 @@ export class Game {
         ctx.drawImage(this.titleImage, 0, 0);
         const off = (this.appTime * 1000 / 12) % 2600;
         const cx = Math.round(ctx.canvas.width + 100 - off);
-        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "black", 0);
+        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "white", 0);
         ctx.restore();
     }
 
