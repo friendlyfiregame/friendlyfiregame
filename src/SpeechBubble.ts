@@ -27,6 +27,7 @@ export class SpeechBubble {
     public x: number;
     public y: number;
     public isCurrentlyWriting = false;
+    public preventUnwantedSelection = false;
 
     private isVisible = false;
 
@@ -80,9 +81,11 @@ export class SpeechBubble {
             }
             this.updateContent();
         }
+        this.preventUnwantedSelection = true;
         this.updateContent();
+        this.isCurrentlyWriting = false;
         setTimeout(() => {
-            this.isCurrentlyWriting = false;
+            this.preventUnwantedSelection = false;
         }, 500);
     }
 
