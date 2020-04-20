@@ -258,9 +258,21 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private startDance(): void {
+    public startDance(difficulty: number = 1): void {
         if (!this.dance) {
-            this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 1 2 1 2  12 11221122 3 3 3");
+            switch (difficulty) {
+                case 1:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 2 1 2 1 2 3");
+                    break;
+                case 2:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1 1 2 1 1 3  121212 113 223");
+                    break;
+                case 3:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 31323132");
+                    break;
+                default:
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "3");
+            }
         }
     }
 

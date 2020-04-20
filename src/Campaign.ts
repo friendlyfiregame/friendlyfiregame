@@ -106,6 +106,11 @@ export class Campaign {
             case "pickupstone":
                 this.game.stone.pickUp();
                 break;
+            case "dance":
+                setTimeout(() => {
+                    this.game.player.startDance(+params[0] || 1);
+                }, 500);
+                break;
             case "enable":
                 const char = params[0], dialogName = params[1];
                 const npcMap: Record<string, NPC> = {
