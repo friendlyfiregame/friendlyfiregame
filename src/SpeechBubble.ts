@@ -85,7 +85,7 @@ export class SpeechBubble {
         if (this.relativeToScreen) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             posX = ctx.canvas.width / 2;
-            posY = ctx.canvas.height -50;
+            posY = - ctx.canvas.height + 20;
         }
 
         ctx = roundRect(ctx, posX - metrics.width / 2, - posY - this.height, metrics.width + 8, this.height, 5);

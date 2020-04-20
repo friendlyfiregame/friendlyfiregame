@@ -11,6 +11,7 @@ export class Conversation {
     private data: {[key: string]: ConversationLine[]};
     private state!: string;
     private stateIndex = 0;
+    private endConversation = false;
 
     constructor(json: any, private readonly npc: NPC) {
         this.states = Object.keys(json);
@@ -19,6 +20,7 @@ export class Conversation {
             this.data[state] = json[state].map((line: string) => new ConversationLine(line, this));
         }
         this.setState("entry");
+        this.endConversation = false;
     }
 
     public setState(name = "entry") {
@@ -30,6 +32,10 @@ export class Conversation {
     }
 
     public getNextInteraction(): Interaction | null {
+        if (this.endConversation) {
+            this.endConversation = false;
+            return null;
+        }
         const result: Interaction = {
             npcLine: null,
             options: [],
@@ -58,7 +64,12 @@ export class Conversation {
     }
 
     public runAction(action: string[]) {
-        this.npc.game.campaign.runAction(action[0], this.npc, action.slice(1));
+        if (action[0] === "end") {
+            console.log("ending conv");
+            this.endConversation = true;
+        } else {
+            this.npc.game.campaign.runAction(action[0], this.npc, action.slice(1));
+        }
     }
 
     private goBack() {

@@ -19,6 +19,7 @@ import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
 import { Seed } from "./Seed";
+import { Dance } from './Dance';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -130,6 +131,7 @@ export class Game {
         ];
         await this.loadFonts();
         await Face.load();
+        await Dance.load();
         await FireGfx.load();
         for (const obj of this.gameObjects) {
             await obj.load();
