@@ -26,7 +26,7 @@ export class Seed extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/seed.png"), 2, 1);
+        this.sprites = new Sprites(await loadImage("sprites/seed.png"), 3, 1);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -34,7 +34,7 @@ export class Seed extends NPC {
         ctx.translate(this.x, -this.y + 1);
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
-        if (this.state === SeedState.PLANTED || this.state === SeedState.GROWN) {
+        if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }
     }
@@ -69,7 +69,7 @@ export class Seed extends NPC {
                 this.setFloating(true);
                 this.x = 2052;
                 this.y = 1624;
-                this.spriteIndex = 0;
+                this.spriteIndex = 1;
             }
             if (this.state !== SeedState.SWIMMING && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = SeedState.SWIMMING;

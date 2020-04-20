@@ -47,7 +47,7 @@ export class PlayerConversation {
 
     private setSelectedOption(num = 0): number {
         if (this.interaction && this.interaction.options && this.interaction.options.length > 0) {
-            let sel = (this.selectedOption + num) % this.interaction.options.length;
+            let sel = num % this.interaction.options.length;
             if (sel < 0) { sel += this.interaction.options.length; }
             this.selectedOption = sel;
         } else {
