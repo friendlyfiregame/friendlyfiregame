@@ -55,7 +55,8 @@ module.exports = {
                 return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/game\"",
                     "src=\"game.js\"");
             }},
-            { from: "style.css" }
+            { from: "style.css" },
+            { from: "manifest.webmanifest" }
         ])
     ]
 }
