@@ -1,26 +1,62 @@
 
 {
     "entry": [
-        "This is the start of the game! Bla!",
-        ">You are dumb! @dumb !zoomIn !worried",
-        ">End this now! !angry !state finish",
-        ">Bye"
+        "I am starving, I fear to die very soon and my light will go out forever. @help"
     ],
-    "dumb": [
-        "HOW DARE YOU TALK TO ME LIKE THAT",
-        ">Like that: you dumb @dumber !angry",
-        ">I'm so sorry @ok !amused"
+    "help": [
+        "Would you help me out, kind stranger?",
+        ">How can I help you? @how",
+        ">Why should I help you? @why",
+        ">Oh my God, a talking fire?! @impressed",
+        ">I don't care",
+        "Oh you son of a ...! No, sorry, I get it. Well, maybe another time.",
+        "Just be aware this whole game is pretty pointless if you don't help me out... @help !end"
     ],
-    "dumber": [
-        "I don't talk to you! @grumpyEntry !end"
+    "impressed": [
+        "Well yes, I'm impressed too. Took me some time to get used to it. @help"
     ],
-    "grumpyEntry": [
-        "You again!",
-        "What do you want? !zoomIn",
-        ">I'm sorry, didn't mean it",
-        ">(more mean answers) @meanAnswers"
+    "how": [
+        "I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
+        ">I'm in. @details",
+        ">Sounds boring. Maybe later @bye",
+        ">What do we say to the god of Fire?",
+        "I don't know, what?",
+        ">Not today! @bye"
     ],
-    "meanAnswers": [
-        ">Screw you!!"
+    "why": [
+        "Because I am the essence of life. If I die, everything dies. Do you want everything to die?",
+        ">Oh, I wouldn't want to be responsible for that! @details",
+        ">I don't know, do I?",
+        "No!",
+        ">OK",
+        "So you'll help me then?",
+        ">Definitely! @details",
+        ">Do I even have a choice?",
+        "Technically yes. Practically deciding against it would be a little stupid though.",
+        ">Well OK then, you convinced me. @details",
+        ">Why?",
+        "Because your sole existence in this world hinges on helping to keep me alive.",
+        "That's why you're here. There's nothing else to do for you anyway.",
+        ">Great! I'll help you.",
+        ">I'd rather think about this in private @bye"
+    ],
+    "bye": [
+        "Sure, take your time. You'll come back eventually! @help !end"
+    ],
+    "details": [
+        "Great! I knew I could rely on you. I know a good person when I see one!",
+        ">So what exactly should I do?",
+        "It's easy! I just need a little firewood so I can keep burning for some longer.",
+        ">I can get you some wood!",
+        "Yes yes! But it needs to be special kind of wood.",
+        "There's a good tree in the East. His wood is good. Go ask him!",
+        ">Sure thing! @reminder !end"
+    ],
+    "reminder": [
+        "Hello again!",
+        ">What do I need to do?",
+        ">Bye @reminder !end",
+        "Go to East. Ask tree for wood. Bring me wood. Soon!",
+        ">On my way!"
     ]
 }
