@@ -70,4 +70,7 @@ export abstract class Entity implements GameObject {
         return entitiesInRange;
     }
 
+    public remove(): void {
+        this.game.removeGameObject(this);
+    }
 }

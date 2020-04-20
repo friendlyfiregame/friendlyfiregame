@@ -7,6 +7,7 @@ import { Face, EyeType } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
 import { loadImage } from './graphics';
+import { Wood } from "./Wood";
 
 // const fireColors = [
 //     "#603015",
@@ -124,5 +125,10 @@ export class Fire extends NPC {
             this.fireGfx.update(dt);
         }
         this.speechBubble.update(this.x, this.y);
+    }
+
+    public feed(wood: Wood) {
+        wood.remove();
+        console.log("GAME OVER!!!");
     }
 }
