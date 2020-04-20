@@ -1,5 +1,6 @@
 import { Game } from './game';
 import { valueCurves, ValueCurve } from './Particles';
+import { Sound } from './Sound';
 
 export class Dance {
     /** When the dance was created and visible to the player for the first time */
@@ -20,6 +21,8 @@ export class Dance {
     private performance: Record<string, boolean>[] = [];
     private currentIndex = 0;
     private success = false;
+    private static successSound: Sound;
+    private static failSound: Sound;
 
     constructor(
         private game: Game,
@@ -44,7 +47,9 @@ export class Dance {
     }
 
     public static async load(): Promise<void> {
-
+        console.log('loading');
+        this.successSound = new Sound("sounds/dancing/success.mp3");
+        this.failSound = new Sound("sounds/dancing/fail.mp3");
     }
 
     public wasSuccessful(): boolean {
@@ -113,12 +118,15 @@ export class Dance {
         }
         if (index === this.currentIndex && this.currentKey.length === 0 || this.keys[index].length === 0) {
             this.lastSuccess = this.progress;
+            Dance.successSound.stop();
+            Dance.successSound.play();
         }
     }
 
     private keyFailure(key: string) {
         if (!this.currentKey.includes(key)) {
             this.registerMistake();
+            Dance.failSound.play();
         }
     }
 
@@ -134,6 +142,7 @@ export class Dance {
     private registerMistake() {
         this.mistakes++;
         this.lastMistake = this.progress;
+        Dance.failSound.play();
         if (this.mistakes > this.allowedMistakes) {
             this.loseGame();
         }
