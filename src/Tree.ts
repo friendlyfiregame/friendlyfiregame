@@ -27,6 +27,7 @@ export class Tree extends NPC {
     public async load(): Promise<void> {
         this.sprites = new Sprites(await loadImage("sprites/tree.png"), 2, 1);
         await this.seed.load();
+        await this.wood.load();
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -62,7 +63,7 @@ export class Tree extends NPC {
         }
         this.wood.x = this.x;
         this.wood.y = this.y + this.height / 2;
-        this.wood.setVelocity(-5, 0);
+        this.wood.setVelocity(5, 0);
         return this.wood;
     }
 }
