@@ -14,44 +14,85 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   }
 
 export class SpeechBubble {
+    private messageLines :string[] = [];
+    private options: string[] = [];
+    public selectedOptionIndex = -1;
     public fontSize = 10;
     public lineHeight = 15;
-    public height = this.message.split("\n").length * this.lineHeight;
+    public height = 0;
     public offset = {x: 0, y: 40};
 
     public x: number;
     public y: number;
 
+    private isVisible = false;
+
+    private content: string [] = [];
+    private contentLinesByLength: string[] = [];
+
     constructor(
         private game: Game,
         public anchorX: number,
         public anchorY: number,
-        private color = "#FFBBBB",
-        public message = "",
+        private color = "#FFBBBB"
     ) {
         this.x = anchorX + this.offset.x;
         this.y = anchorY + this.offset.y;
     }
 
+    public show() {
+        this.isVisible = true;
+    }
+
+    public hide() {
+        this.isVisible = false;
+    }
+
+    public hasContent() {
+        return this.content.length > 0;
+    }
+
     setMessage(message: string) {
-        this.message = message;
-        this.height = this.message.split("\n").length * this.lineHeight;
+        this.messageLines = message.split("\n");
+        this.updateContent();
+    }
+
+    setOptions(options: string[]) {
+        this.options = options;
+        this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
+        this.updateContent();
+    }
+
+    private updateContent() {
+        this.content = this.messageLines.concat(this.options);
+        this.contentLinesByLength = this.content.slice().sort((a, b) => b.length - a.length);
+        this.height = this.content.length * this.lineHeight;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        if (!this.isVisible || !this.hasContent()) {
+            return;
+        }
+
         ctx.save();
         ctx.beginPath();
         const font = this.game.mainFont;
-        const metrics = font.measureText(this.message.split("\n").sort((a, b) => b.length - a.length)[0]);
+        const metrics = font.measureText(this.contentLinesByLength[0]);
         ctx = roundRect(ctx, this.x - metrics.width / 2, - this.y - this.height, metrics.width + 8, this.height, 5);
         ctx.fillStyle = this.color;
         ctx.fill();
 
-        ctx.fillStyle = "black";
-        const lines = this.message.split('\n');
-        for (let i = 0; i < lines.length; i++) {
-            this.game.mainFont.drawText(ctx, lines[i], this.x - Math.round(metrics.width / 2) + 4,
+        let messageLineOffset = 4;
+        for (let i = 0; i < this.messageLines.length; i++) {
+            this.game.mainFont.drawText(ctx, this.messageLines[i], this.x - Math.round(metrics.width / 2) + 4,
                 -this.y - this.height + 4 + (i * this.lineHeight), "black");
+            messageLineOffset += 4;
+        }
+        for (let i = 0; i < this.options.length; i++) {
+            const isSelected = this.selectedOptionIndex === i;
+            const selectionIndicator = isSelected ? ">" : "";
+            this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], this.x - Math.round(metrics.width / 2) + 4,
+                -this.y - this.height + messageLineOffset + (i * this.lineHeight), "black");
         }
 
         ctx.restore();
