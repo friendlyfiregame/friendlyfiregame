@@ -25,6 +25,7 @@ import { FlameBoy } from './FlameBoy';
 import { Wing } from './Wing';
 import { loadImage } from "./graphics";
 import { KeyHandler } from "./KeyHandler";
+import { Seed } from './Seed';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -88,6 +89,7 @@ export class Game {
     public player: Player;
     public stone: Stone;
     public tree: Tree;
+    public seed!: Seed;
     public flameboy: FlameBoy;
     public wing: Wing;
 

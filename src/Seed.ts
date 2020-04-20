@@ -44,6 +44,7 @@ export class Seed extends NPC {
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }
+        this.speechBubble.draw(ctx);
     }
 
     public isCarried(): boolean {
@@ -54,7 +55,9 @@ export class Seed extends NPC {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
             this.spriteIndex = 2;
+            this.game.seed = this;
             this.game.campaign.runAction("enable", null, ["tree", "tree2"]);
+            this.game.campaign.runAction("enable", null, ["seed", "seed1"]);
         }
     }
 
@@ -93,6 +96,7 @@ export class Seed extends NPC {
         } else if (this.state === SeedState.GROWN) {
             // TODO Special update behavior when grown
         }
+        this.speechBubble.update(this.x, this.y);
     }
 
     public spawnWood(): Wood {
