@@ -86,6 +86,7 @@ export class Player extends PhysicsEntity {
     private walkingSound!: Sound;
     private throwingSound!: Sound;
     private jumpingSound!: Sound;
+    private landingSound!: Sound;
     private bouncingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
@@ -128,9 +129,10 @@ export class Player extends PhysicsEntity {
         this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 3);
         this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 3);
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
-        this.walkingSound = new Sound("sounds/feet-walking/feet-walking.mp3");
+        this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
         this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.landingSound = new Sound("sounds/jumping/landing.mp3");
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
@@ -337,6 +339,12 @@ export class Player extends PhysicsEntity {
                 this.flying = false;
                 this.usedDoubleJump = false;
             }
+        }
+
+        if(wasFlying && !this.flying) {
+            console.log('landed');
+            this.landingSound.stop();
+            this.landingSound.play();
         }
 
         // check for npc in interactionRange
