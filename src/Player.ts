@@ -89,7 +89,7 @@ export class Player extends PhysicsEntity {
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
 
     private dialogRange = 50;
-    private dialogTipText = "talk";
+    private dialogTipText = "Press 'Enter' or 'E' to talk";
     private closestNPC: NPC | null = null;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
@@ -173,7 +173,7 @@ export class Player extends PhysicsEntity {
             this.moveLeft = true;
             this.moveRight = false;
         } else if (event.key === "Enter" || event.key === "e") {
-            if (this.closestNPC && this.closestNPC.conversation) {
+            if (!this.isCarrying() && this.closestNPC && this.closestNPC.conversation) {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
             } else if (this.canDanceToMakeRain()) {
                 this.startDance();
@@ -286,7 +286,7 @@ export class Player extends PhysicsEntity {
         }
         ctx.restore();
 
-        if (this.closestNPC && this.closestNPC.conversation && !this.playerConversation) {
+        if (!this.isCarrying() && this.closestNPC && this.closestNPC.conversation && !this.playerConversation) {
             this.drawDialogTip(ctx);
         }
 
