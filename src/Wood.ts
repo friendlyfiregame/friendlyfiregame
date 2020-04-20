@@ -56,5 +56,8 @@ export class Wood extends PhysicsEntity {
                 this.y = 390;
             }
         }
+        if (!this.isCarried() && this.distanceTo(this.game.fire) < 20) {
+            this.game.fire.feed(this);
+        }
     }
 }
