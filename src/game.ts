@@ -100,7 +100,7 @@ export class Game {
     private frameCounter = 0;
     private framesPerSecond = 0;
     private useRealResolution = false;
-    private scalePixelPerfect = false;
+    private scalePixelPerfect = true;
     private scale = 1;
     private readonly mapInfo: MapInfo;
 
