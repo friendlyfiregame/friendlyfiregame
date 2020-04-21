@@ -182,7 +182,7 @@ export class ConversationLine {
         let actions = line.match(/(\![a-z][a-z ]*)+/g);
         const result = [];
         if (actions) {
-            actions = actions[0].split("!").map(action => action.trim()).filter(s => s.length > 0);
+            actions = actions.join(" ").split("!").map(action => action.trim()).filter(s => s.length > 0);
             for (const action of actions) {
                 const segments = action.split(" ");
                 result.push(segments);

@@ -75,7 +75,6 @@ export class Campaign {
     }
 
     public runAction(action: string, npc?: NPC | null, params: string[] = []): void {
-        console.log(action);
         switch(action) {
             case "angry":
                 npc?.face?.setMode(FaceModes.ANGRY);
@@ -100,7 +99,6 @@ export class Campaign {
                 this.game.camera.zoom -= 1
                 break;
             case "treezoom":
-                console.log("yes yes");
                 this.game.camera.focusOn(8, 3100, 500, 1, 0, valueCurves.cos(0.3));
                 break;
             case "mountainzoom":
