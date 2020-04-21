@@ -19,12 +19,14 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private raindrop!: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = 0;
+    private isRainCloud = false;
 
-    public constructor(game: Game, x: number, y: number, properties: GameObjectProperties) {
+    public constructor(game: Game, x: number, y: number, properties: GameObjectProperties, canRain = false) {
         super(game, x, y, 74, 5);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
+        this.isRainCloud = canRain;
         this.velocity = properties.velocity / PIXEL_PER_METER;
         if (properties.direction === "right") {
             this.targetX = x + properties.distance;
@@ -64,6 +66,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
 
     public isRaining(): boolean {
         return this.raining > 0;
+    }
+
+    public canRain(): boolean {
+        return this.isRainCloud;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

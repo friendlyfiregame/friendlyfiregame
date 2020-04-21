@@ -524,7 +524,7 @@ export class Game {
             const cloud = new Cloud(this, c[0], c[1], {
                 velocity: 0,
                 distance: 1
-            });
+            }, true);
             cloud.load().then(() => this.gameObjects.push(cloud));
         }
         this.player.multiJump = true;

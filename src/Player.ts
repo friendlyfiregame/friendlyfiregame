@@ -412,8 +412,8 @@ export class Player extends PhysicsEntity {
     private canDanceToMakeRain(): boolean {
         const ground = this.getGround();
         return !this.dance && !this.game.world.isRaining() && this.carrying === null &&
-            (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD ||
-            ground instanceof Cloud && this.game.apocalypse && !ground.isRaining());
+            (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.game.apocalypse ||
+            ground instanceof Cloud && this.game.apocalypse && !ground.isRaining() && ground.canRain());
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
@@ -596,7 +596,8 @@ export class Player extends PhysicsEntity {
                     if (ground && ground instanceof Cloud) {
                         ground.startRain(this.game.apocalypse ? Infinity : 15);
                     }
-                    if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD) {
+                    if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD &&
+                            !this.game.apocalypse) {
                         this.game.world.startRain();
                     }
                 }
