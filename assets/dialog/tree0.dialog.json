@@ -1,0 +1,13 @@
+{
+    "entry": [
+        "You are the dancing Tree,\nOld and Rough !amused",
+        "One hundred and seventeen,\nDancing Tree !amused",
+        ">hello?",
+        "Feel the beat from the tree topsee, oh yeah !amused",
+        ">He seems preoccupied with singing @visited !end"
+    ],
+    "visited": [
+        "la la la...",
+        ">I should talk to someone else... @visited !end"
+    ]
+}
