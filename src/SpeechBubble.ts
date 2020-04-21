@@ -107,7 +107,9 @@ export class SpeechBubble {
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
         this.updateContent();
-        this.contentLinesByLength = this.content.slice().sort((a, b) => b.length - a.length);
+        const font = this.game.mainFont;
+        this.contentLinesByLength = this.content.slice().sort((a, b) =>
+            font.measureText(b).width - font.measureText(a).width);
     }
 
     private updateContent() {
