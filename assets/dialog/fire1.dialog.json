@@ -6,9 +6,9 @@
     ],
     "help": [
         "Would you help me out, kind stranger?",
-        ">How can I help you? @how",
-        ">Why should I help you? @why",
         ">Oh my God, a talking fire?! @impressed",
+        ">Why should I help you? @why",
+        ">How can I help you? @how",
         ">I don't care !angry",
         "Oh you son of a ...! No, sorry, I get it. Well, maybe another time. !neutral",
         "Just be aware this whole game is pretty pointless if you don't help me out... @help !end"
@@ -18,8 +18,8 @@
     ],
     "how": [
         "I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
-        ">I'm in. @details",
         ">Sounds boring. Maybe later @bye",
+        ">I'm in. @details",
         ">What do we say to the god of Fire?",
         "I don't know, what?",
         ">Not today! @bye"
