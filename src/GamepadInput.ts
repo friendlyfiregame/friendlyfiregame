@@ -44,6 +44,8 @@ buttonMapping.set(GamePadButtonId.BUTTON_1, "Enter");
 buttonMapping.set(GamePadButtonId.SHOULDER_TOP_LEFT, "o");
 buttonMapping.set(GamePadButtonId.SHOULDER_TOP_RIGHT, "i");
 buttonMapping.set(GamePadButtonId.SHOULDER_BOTTOM_RIGHT, "t");
+buttonMapping.set(GamePadButtonId.BUTTON_2, "2");
+buttonMapping.set(GamePadButtonId.BUTTON_4, "1");
 
 
 class GamepadButtonWrapper {
