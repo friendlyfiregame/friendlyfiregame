@@ -303,13 +303,13 @@ export class Player extends PhysicsEntity {
             switch (difficulty) {
                 case 1:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
-                            undefined, undefined, true, 0);
+                            1, undefined, true, 0);
                     break;
                 case 2:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121121223   ");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
                     break;
                 case 3:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "121 212 312 123 3132313 3323132 3  ");
+                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "112 221 312 123 311 223 111 222 3    ", undefined, 4);
                     break;
                 default:
                     this.dance = new Dance(this.game, this.x, this.y - 25, 192, "3");
