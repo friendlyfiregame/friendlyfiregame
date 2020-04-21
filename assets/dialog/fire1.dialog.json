@@ -59,6 +59,6 @@
         ">What do I need to do?",
         ">Bye @reminder !end",
         "Go to East. Ask tree for wood. Bring me wood. Soon!",
-        ">On my way!"
+        ">On my way! @reminder !end"
     ]
 }
