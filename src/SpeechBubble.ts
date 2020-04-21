@@ -123,7 +123,6 @@ export class SpeechBubble {
         ctx.save();
         const font = this.game.mainFont;
         const longestLine = this.contentLinesByLength[0];
-        console.log(longestLine);
         const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
 
         let posX = this.x;
