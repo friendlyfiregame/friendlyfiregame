@@ -12,11 +12,11 @@
         ">No",
         "I see you've learned a lesson here",
         "'Keep it alive', they said, 'it will be fun'. And you almost paid the price",
-        "Good for you the weather shifted.",
+        "Good for you the weather shifted. !bored",
         "Goodbye. Maybe see you in a sequel. !endgame"
     ],
     "nothing": [
-        "Then you have learned nothing!!!",
+        "Then you have learned nothing!!! !angry",
         "Thank you nonetheless, very kind of you.",
         "We're still coming to an end now. This game can't go on forever.",
         "You've made it. Good for you.",
