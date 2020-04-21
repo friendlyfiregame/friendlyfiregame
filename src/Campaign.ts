@@ -8,6 +8,7 @@ import fire3 from '../assets/dialog/fire3.dialog.json';
 import stone1 from '../assets/dialog/stone1.dialog.json';
 import stone2 from '../assets/dialog/stone2.dialog.json';
 import seed1 from '../assets/dialog/seed1.dialog.json';
+import tree0 from '../assets/dialog/tree0.dialog.json';
 import tree1 from '../assets/dialog/tree1.dialog.json';
 import tree2 from '../assets/dialog/tree2.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
@@ -25,6 +26,7 @@ const allDialogs: Record<string, JSON> = {
     "stone1": stone1,
     "stone2": stone2,
     "seed1": seed1,
+    "tree0": tree0,
     "tree1": tree1,
     "tree2": tree2,
     "flameboy1": flameboy1,
@@ -45,7 +47,7 @@ export class Campaign {
     private begin() {
         // Setup initial NPC dialogs
         this.runAction("enable", null, ["fire", "fire1"]);
-        this.runAction("enable", null, ["tree", "tree1"]);
+        this.runAction("enable", null, ["tree", "tree0"]);
         this.runAction("enable", null, ["stone", "stone1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
         this.runAction("enable", null, ["wing", "wing1"]);

@@ -51,7 +51,7 @@
         ">I can get you some wood!",
         "Yes yes! But it needs to be special kind of wood.",
         "There's a good tree in the East. His wood is good. !treezoom",
-        "Go ask him!",
+        "Go ask him! !enable tree tree1",
         ">Sure thing! @reminder !end"
     ],
     "reminder": [

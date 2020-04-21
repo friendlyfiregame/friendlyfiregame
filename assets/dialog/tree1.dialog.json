@@ -95,7 +95,8 @@
     "missinggear": [
         "Oh, and I almost forgot!",
         "You will need some special gear to be able to climb that mountain. I hereby grant my personal pair of double jump boots!",
-        ">Awesome, thanks! !doublejump !spawnseed @reminder !end"
+        ">Awesome, thanks! !doublejump",
+        "I'll drop the seed for you now. Good luck on your journey! !spawnseed @reminder !end"
     ],
     "cool": [
         "So the thing with pine cones, you see, is they need very special fertile ground to grow.",
