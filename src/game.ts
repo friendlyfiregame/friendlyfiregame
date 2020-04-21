@@ -512,6 +512,7 @@ export class Game {
 
     public beginApocalypse() {
         this.apocalypse = true;
+        this.world.stopRain();
         // Spawn 3 clouds over fire
         const cx = 1500, cy = 570;
         const coords = [

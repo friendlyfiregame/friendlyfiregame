@@ -102,7 +102,8 @@ export class PlayerConversation {
                     console.error("Tried to execute invalid option at index " + index + " in interaction around line: "
                             + this.interaction.npcLine);
                 }
-            } else if (this.interaction.npcLine) {
+            }
+            if (this.interaction.npcLine) {
                 // NPC said something, player proceeds without any options
                 this.interaction.npcLine.execute();
             }
