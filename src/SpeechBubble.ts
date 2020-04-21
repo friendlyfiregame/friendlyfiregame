@@ -74,7 +74,9 @@ export class SpeechBubble {
     async setMessage(message: string): Promise<void> {
         this.messageLines = [""];
         this.isCurrentlyWriting = true;
-        this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) => b.length - a.length);
+        const font = this.game.mainFont;
+        this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) =>
+            font.measureText(b).width - font.measureText(a).width);
         let index = 0;
         for (let char of message) {
             if (!char) {

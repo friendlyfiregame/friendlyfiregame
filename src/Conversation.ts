@@ -179,7 +179,7 @@ export class ConversationLine {
     }
 
     private static extractActions(line: string): string[][] {
-        let actions = line.match(/(\![a-z][a-z ]*)+/g);
+        let actions = line.match(/(\![a-z][a-z0-9 ]*)+/g);
         const result = [];
         if (actions) {
             actions = actions.join(" ").split("!").map(action => action.trim()).filter(s => s.length > 0);
