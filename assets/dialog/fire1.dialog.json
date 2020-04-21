@@ -50,7 +50,8 @@
         "It's easy! I just need a little firewood so I can keep burning for some longer.",
         ">I can get you some wood!",
         "Yes yes! But it needs to be special kind of wood.",
-        "There's a good tree in the East. His wood is good. Go ask him!",
+        "There's a good tree in the East. His wood is good. !treezoom",
+        "Go ask him!",
         ">Sure thing! @reminder !end"
     ],
     "reminder": [
