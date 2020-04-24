@@ -1,5 +1,5 @@
 import { Vector2 } from "./util";
-import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/map.json";
+import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
 
 export interface GameObjectProperties {
     direction?: "up" | "down" | "left" | "right",

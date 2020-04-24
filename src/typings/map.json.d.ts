@@ -1,4 +1,4 @@
-declare module "*/map.json" {
+declare module "*/level.json" {
     export type PropertyType<T extends string> =
         T extends "string" ? string :
         T extends "int" ? number :
