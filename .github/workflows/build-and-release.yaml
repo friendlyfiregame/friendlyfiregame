@@ -1,0 +1,33 @@
+# Builds, packages and releases the game everytime something gets pushsed
+# onto the branch called 'release'.
+
+name: Release
+on:
+  push:
+    branches:
+    - release
+jobs:
+  build:
+    name: Build, Package and Release/Publish
+    runs-on: ubuntu-18.04
+    steps:
+    - name: git checkout
+      uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: "13.x"
+    - run: yarn install
+    - run: yarn compile
+    - run: yarn dist
+    - name: Publish to gh-pages
+      # Be extra cautious about what is being published.
+      # It is not really necessary to put this guard in here, since we run
+      # this workflows only for pushes to the 'release' branch.
+      if: github.ref, == 'refs/heads/release'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        # TODO Rename to gh-pages once the workflow works as supposed.
+        publish_branch: gh-pages-test
+        publish_dir: ./dist
