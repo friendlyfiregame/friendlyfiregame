@@ -119,7 +119,7 @@ export class Camera {
         this.time = time;
         // Base position always on target (player)
         this.x = this.target.x;
-        this.y = this.target.y;
+        this.y = this.target.y + 30;
         this.zoom = this.zoomingOut ? 0.2 : 1;
         this.rotation = 0;
         this.visibleRect = this.getVisibleRect();
