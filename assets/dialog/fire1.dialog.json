@@ -20,14 +20,25 @@
         "I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
         ">Sounds boring. Maybe later @bye",
         ">I'm in. @details",
+        ">I'm not a man @notaman",
         ">What do we say to the god of Fire?",
         "I don't know, what?",
-        ">Not today! @bye"
+        ">Not today!",
+        "But if you don't help me out, there may not be a tomorrow @why"
+    ],
+    "notaman": [
+        "Neither am I, we have so much in common! So will you help me? With the wood? !amused",
+        ">Of course! @details",
+        ">I'd rather not get involved",
+        "Yes you do !angry",
+        "Sorry, I mean, you should really help me because otherwise your existence here would be boring !amused",
+        ">Why? @existence"
     ],
     "why": [
         "Because I am the essence of life. If I die, everything dies. Do you want everything to die?",
         ">Oh, I wouldn't want to be responsible for that! @details",
         ">I don't know, do I?",
+        ">Yes",
         "No!",
         ">OK",
         "So you'll help me then?",
@@ -35,10 +46,12 @@
         ">Do I even have a choice?",
         "Technically yes. Practically deciding against it would be a little stupid though.",
         ">Well OK then, you convinced me. @details",
-        ">Why?",
+        ">Why? @existence"
+    ],
+    "existence": [
         "Because your sole existence in this world hinges on helping to keep me alive.",
         "That's why you're here. There's nothing else to do for you anyway.",
-        ">Great! I'll help you. @details",
+        ">Cool! I'll help you. @details",
         ">I'd rather think about this in private @bye"
     ],
     "bye": [
@@ -51,7 +64,7 @@
         ">I can get you some wood!",
         "Yes yes! But it needs to be special kind of wood.",
         "There's a good tree in the East. His wood is good. !treezoom",
-        "Go ask him! !enable tree tree1",
+        "Go get it! !enable tree tree1",
         ">Sure thing! @reminder !end"
     ],
     "reminder": [
