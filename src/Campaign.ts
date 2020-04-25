@@ -116,6 +116,9 @@ export class Campaign {
                 this.game.fire.conversation = null;
                 this.game.fireFuryEndTime = this.game.gameTime + duration + 8;
                 break;
+            case "givebeard":
+                this.game.player.setBeard(true);
+                break;
             case "endgame":
                 this.game.fire.conversation = null;
                 setTimeout(() => {

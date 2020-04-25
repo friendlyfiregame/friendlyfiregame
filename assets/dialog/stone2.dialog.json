@@ -16,7 +16,8 @@
         ">I can do this on my own, thanks. @onmyown"
     ],
     "noteacher": [
-        "Then go to hell. @visitedentry !end"
+        "Without my teachings your little tree will remain but a sad seed in the sand.",
+        "Return to me when you've grown some wisdom! @visitedentry !end"
     ],
     "ionlymaster": [
         "Fool! Out of my sight! @visitedentry !end"
@@ -25,7 +26,68 @@
         "A bit more respect, young boy. Start by calling me Master!",
         ">I am the only Master I acknowledge! @ionlymaster",
         ">Fine, what can you teach me... Master? @yesmaster",
-        ">Forgive me, Master. I am willing to learn @yesmaster"
+        ">Forgive me, Master. I am willing to learn @yesmaster",
+        ">When do you beings stop calling be 'boy' for once!",
+        "What are you saying, boy?",
+        ">I'm a girl! @girl",
+        ">I'm a man! @man",
+        ">I'm a human, leave me alone with your gender talk @human"
+    ],
+    "man": [
+        "Ohohoh. Have you looked in a mirror? You have less facial hair than a stone.",
+        ">You're right, master @yesmaster",
+        ">Touche @touche",
+        ">A man is defined by his actions, not by his beard",
+        "And for now you have neither. But I reckon this may change today.",
+        ">You're right, master @yesmaster",
+        ">But I have accomplished so much!",
+        ">Are you saying I'll grow a beard today? @beard",
+        "So what, you talked to a fire, bounced off a mushroom and stuck a pine cone into the mud.",
+        "Mediocre!",
+        "But I'll lead you to greatness once you've accepted your current lack thereof",
+        ">Please do, master @yesmaster",
+        ">Just get to the point already",
+        "So impatient. I'll bless you with my teachings once you've demonstrated your willingness to accept them",
+        ">Okay, master, you win @yesmaster",
+        ">Just tell me!",
+        "Well, let me help you help yourself then...",
+        ">Master master master master!",
+        "See, easy! @yesmaster"
+    ],
+    "beard": [
+        "Well that's a miracle for another game. Your fate in this world is a different one, one of carrying and dancing, I presume.",
+        ">Okay, master @yesmaster",
+        ">But I want a beard",
+        "Are you sure this is what you desire?",
+        ">No, master. But I'm ready for your teachings. @yesmaster",
+        ">Sure!",
+        "Aren't there more important things right now?",
+        ">Yes, master. Let's discuss those instead. @yesmaster",
+        ">No, I really want a beard",
+        "Well... I guess I could lend you a piece of mine. But please call me master first.",
+        ">Master master master!",
+        "Here you go. !givebeard",
+        "But don't complain! I can only do white ones. This is your life now.",
+        ">Thank you, master. Now back to your teachings. @yesmaster",
+        ">Mphffpfhffhfpf.",
+        "Takes some getting used to. But, where were we... right. @yesmaster"
+    ],
+    "girl": [
+        "Well I guess even my immense wisdom has its limits. So let me correct myself:",
+        "A bit more respect, young girl. Start by calling me Master!",
+        ">I am the only Master I acknowledge! @ionlymaster",
+        ">Fine, what can you teach me... Master? @yesmaster",
+        ">Forgive me, Master. I am willing to learn @yesmaster",
+        ">May I call you Mistress instead?",
+        "You sassy little person. You may, but only after you've demonstrated your worth.",
+        ">How? @yesmaster"
+    ],
+    "touche": [
+        "...",
+        ">...touche, master. @yesmaster"
+    ],
+    "human": [
+        "This... exceeds my expertise. Umm. Where were we. Ah yes. @yesmaster"
     ],
     "onmyown": [
         "Good luck, fool. @visitedentry !end"

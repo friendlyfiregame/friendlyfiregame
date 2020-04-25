@@ -108,6 +108,7 @@ export class Player extends PhysicsEntity {
     private spriteIndex = SpriteIndex.IDLE0;
     private legsSprite!: Sprites;
     private bodySprite!: Sprites;
+    private beardedBodySprite!: Sprites;
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     public jumpDown: boolean = false;
@@ -121,6 +122,7 @@ export class Player extends PhysicsEntity {
     public doubleJump = false;
     public multiJump = false;
     private usedDoubleJump = false;
+    private hasBeard = false;
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
@@ -182,6 +184,7 @@ export class Player extends PhysicsEntity {
     public async load(): Promise<void> {
         this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 5);
         this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 5);
+        this.beardedBodySprite = new Sprites(await loadImage("sprites/main_beard.png"), 4, 5);
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
         this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
@@ -358,14 +361,15 @@ export class Player extends PhysicsEntity {
             ctx.scale(-1, 1);
         }
         this.legsSprite.draw(ctx, this.spriteIndex);
+        const body = this.hasBeard ? this.beardedBodySprite : this.bodySprite;
         if (this.carrying) {
             if (this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) {
-                this.bodySprite.draw(ctx, SpriteIndex.CARRY1);
+                body.draw(ctx, SpriteIndex.CARRY1);
             } else {
-                this.bodySprite.draw(ctx, SpriteIndex.CARRY0);
+                body.draw(ctx, SpriteIndex.CARRY0);
             }
         } else {
-            this.bodySprite.draw(ctx, this.spriteIndex);
+            body.draw(ctx, this.spriteIndex);
         }
         ctx.restore();
 
@@ -639,6 +643,10 @@ export class Player extends PhysicsEntity {
         this.dustEmitter.clear();
         this.bouncingSound.stop();
         this.bouncingSound.play();
+    }
+
+    public setBeard(beard: boolean) {
+        this.hasBeard = beard;
     }
 
     /**
