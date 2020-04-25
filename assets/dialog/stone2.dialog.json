@@ -33,8 +33,7 @@
     "yesmaster": [
         "So, let an old and wise stone tell you: Basic gardening requires water. So...",
         ">Soooo...? @soo",
-        ">I think I need a drink...a hard one @drink",
-        "Rain? @padawan"
+        ">I think I need a drink...a hard one @drink"
     ],
     "soo": [
         "This is harder than I thought. @rain"
@@ -42,20 +41,14 @@
     "drink": [
         "Me too, although I am hard enough already, hahahahaha. @rain"
     ],
-    "padawan": [
-        "Very good my young padawan. @awesome"
-    ],
     "rain": [
         "You need some rain of course, you foolish man.",
         "Rain from the clouds above!",
         "But your journey will lead you down first. Down and over the body of water.",
-        "Where you will meet your Destiny. @awesome"
-        
-    ],
-    "awesome": [
+        "Where you will meet your Destiny.",
         "Because I am the most awesome being, I will give you incredible strength.",
-        "So you can lift me and I will help you to get across that river.",
-        "There you will find the answer to all your problems, maybe... hehehe",
+        "So you can bring me there, and I will help you cross the river. !riverzoom",
+        "Beyond it you will find the answer to all your problems, maybe... hehehe",
         ">I am not sure if I really want to touch you... @nottouchyou",
         ">By the power of Grayskull! @lift",
         ">Yes Master. @lift"
