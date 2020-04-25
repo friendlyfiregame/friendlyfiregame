@@ -1,6 +1,7 @@
-import { Vector2, clamp, shiftValue } from './util';
+import { Vector2, clamp, shiftValue, rnd } from './util';
 import { ValueCurve, valueCurves } from './Particles';
 import { Game } from "./game";
+import { Fire } from './Fire';
 
 export interface camFocus {
     x: number;
@@ -120,6 +121,10 @@ export class Camera {
         // Base position always on target (player)
         this.x = this.target.x;
         this.y = this.target.y + 30;
+        // Cam Shake during apocalypse
+        if (this.game.fire.angry || this.game.apocalypse) {
+            this.applyApocalypticShake(this.game.fire);
+        }
         this.zoom = this.zoomingOut ? 0.2 : 1;
         this.rotation = 0;
         this.visibleRect = this.getVisibleRect();
@@ -133,6 +138,20 @@ export class Camera {
         this.currentBarHeight = shiftValue(this.currentBarHeight, this.currentBarTarget, dt * 1.5);
         // Reset bar to vanish automatically if not continuously set to 1
         this.currentBarTarget = 0;
+    }
+
+    private applyApocalypticShake(shakeSource: Fire) {
+        const dx = this.x - shakeSource.x, dy = this.y - shakeSource.y;
+        const dis = Math.sqrt(dx * dx + dy * dy);
+        const maxDis = 200;
+        if (dis < maxDis) {
+            const intensity = (shakeSource.intensity - 5) / 15;
+            if (intensity > 0) {
+                const shake = 5 * intensity * (1 - dis / maxDis) * (this.game.player.playerConversation ? 0.5 : 1);
+                this.x += rnd(-1, 1) * shake;
+                this.y += rnd(-1, 1) * shake;
+            }
+        }
     }
 
     /**
