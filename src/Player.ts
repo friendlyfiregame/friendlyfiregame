@@ -96,10 +96,11 @@ export enum Milestone {
     THROWN_WOOD_INTO_FIRE
 }
 
+export enum Gender { MALE, FEMALE }
 export enum SpritePart { LEGS, BODY, HEAD }
-export enum PlayerLegSprite { MALE }
-export enum PlayerBodySprite { MALE }
-export enum PlayerHeadSprite { MALE, MALE_BEARD }
+export enum PlayerLegSprite { MALE, FEMALE }
+export enum PlayerBodySprite { MALE, FEMALE }
+export enum PlayerHeadSprite { MALE, MALE_BEARD, FEMALE }
 export type PlayerSprites = Record<SpritePart, Sprites[]>
 
 /** The number of seconds until player gets a hint. */
@@ -110,6 +111,7 @@ export class Player extends PhysicsEntity {
     private milestone = Milestone.JUST_ARRIVED;
     private lastHint = Date.now();
     private flying = false;
+    private gender = Gender.MALE;
     public direction = 1;
     public playerSprites: PlayerSprites = {
         [SpritePart.LEGS]: [],
@@ -194,14 +196,17 @@ export class Player extends PhysicsEntity {
 
     public async load(): Promise<void> {
         this.playerSprites[SpritePart.LEGS].push(
-            new Sprites(await loadImage("sprites/pc/male_legs.png"), 4, 5) // Standard male legs
+            new Sprites(await loadImage("sprites/pc/male_legs.png"), 4, 5), // Standard male legs
+            new Sprites(await loadImage("sprites/pc/female_legs.png"), 4, 5) // Standard female legs
         )
         this.playerSprites[SpritePart.BODY].push(
-            new Sprites(await loadImage("sprites/pc/male_body.png"), 4, 5) // Standard male body
+            new Sprites(await loadImage("sprites/pc/male_body.png"), 4, 5), // Standard male body
+            new Sprites(await loadImage("sprites/pc/female_body.png"), 4, 5) // Standard male body
         )
         this.playerSprites[SpritePart.HEAD].push(
             new Sprites(await loadImage("sprites/pc/male_head.png"), 4, 5), // Standard male head
-            new Sprites(await loadImage("sprites/pc/male_head_beard.png"), 4, 5) // Standard male head with beard
+            new Sprites(await loadImage("sprites/pc/male_head_beard.png"), 4, 5), // Standard male head with beard
+            new Sprites(await loadImage("sprites/pc/female_head.png"), 4, 5), // Standard male head
         )
 
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
@@ -210,6 +215,19 @@ export class Player extends PhysicsEntity {
         this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
         this.landingSound = new Sound("sounds/jumping/landing.mp3");
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
+    }
+
+    public toggleGender () {
+        this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
+        if (this.gender === Gender.MALE) {
+            this.legSpriteIndex = PlayerLegSprite.MALE;
+            this.bodySpriteIndex = PlayerBodySprite.MALE;
+            this.headSpriteIndex = PlayerHeadSprite.MALE;
+        } else {
+            this.legSpriteIndex = PlayerLegSprite.FEMALE;
+            this.bodySpriteIndex = PlayerBodySprite.FEMALE;
+            this.headSpriteIndex = PlayerHeadSprite.FEMALE;
+        }
     }
 
     private async handleKeyDown(event: KeyboardEvent) {
