@@ -21,12 +21,12 @@ export enum StoneState {
 export class Stone extends NPC implements CollidableGameObject {
     private sprites!: Sprites;
     private spriteIndex = 0;
-    public direction = -1;
     public state: StoneState = StoneState.DEFAULT;
     private successSound!: Sound;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
+        this.direction = -1;
         this.face = new Face(this, EyeType.STONE, 1, 0, 21);
     }
 
@@ -39,13 +39,12 @@ export class Stone extends NPC implements CollidableGameObject {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        if (this.direction === 1) {
+        if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
-        this.face?.draw(ctx);
-        // this.drawGreeting(ctx);
+        this.drawFace(ctx, false);
         this.speechBubble.draw(ctx);
     }
 
