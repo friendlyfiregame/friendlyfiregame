@@ -13,7 +13,8 @@ export enum FaceModes {
 export enum EyeType {
     STANDARD = 0,
     TREE = 1,
-    STONE = 2
+    STONE = 2,
+    FLAMEBOY = 3
 }
 
 export class Face {
@@ -30,7 +31,7 @@ export class Face {
     ) {}
 
     public static async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage(`sprites/eyes.png`), 6, 3);
+        this.sprites = new Sprites(await loadImage(`sprites/eyes.png`), 6, 4);
     }
 
     public setMode(mode: FaceModes) {

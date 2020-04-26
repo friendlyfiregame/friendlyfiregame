@@ -4,6 +4,7 @@ import { Sprites, getSpriteIndex } from "./Sprites";
 import { loadImage } from "./graphics";
 import { FLAMEBOY_ANIMATION } from "./constants";
 import { NPC } from './NPC';
+import { Face, EyeType, FaceModes } from './Face';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -12,6 +13,9 @@ export class FlameBoy extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
+        this.face = new Face(this, EyeType.FLAMEBOY, 1, 0, 5);
+        this.defaultFaceMode = FaceModes.BORED
+        this.face.setMode(this.defaultFaceMode);
     }
 
     public async load(): Promise<void> {
@@ -23,6 +27,7 @@ export class FlameBoy extends NPC {
         ctx.translate(this.x, -this.y + 1);
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
+        this.drawFace(ctx, false);
         this.speechBubble.draw(ctx);
     }
 

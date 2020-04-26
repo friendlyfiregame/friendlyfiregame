@@ -1,4 +1,4 @@
-import { Face } from './Face';
+import { Face, FaceModes } from './Face';
 import { Greeting } from './Greeting';
 import { PhysicsEntity } from "./PhysicsEntity";
 import { SpeechBubble } from './SpeechBubble';
@@ -10,6 +10,7 @@ const PAUSE_AFTER_CONVERSATION = 1.5;
 export abstract class NPC extends PhysicsEntity {
     public direction = 1;
     public face: Face | null = null;
+    public defaultFaceMode = FaceModes.NEUTRAL;
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");

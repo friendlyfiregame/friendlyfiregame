@@ -116,7 +116,7 @@ export class PlayerConversation {
         } else {
             if (this.interaction.npcLine) {
                 // Mostly NPCs execute actions at the beginning of their line, not afterwards
-                this.npc.face?.setMode(FaceModes.NEUTRAL);
+                this.npc.face?.setMode(this.npc.defaultFaceMode);
                 this.interaction.npcLine.executeBeforeLine();
             }
         }

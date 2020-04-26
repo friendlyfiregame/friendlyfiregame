@@ -28,7 +28,7 @@ export class Seed extends NPC {
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
         this.wood = new Wood(game, x, y);
-        this.face = new Face(this, EyeType.STANDARD, 1, -4, 8);
+        this.face = new Face(this, EyeType.STANDARD, 1, 0, 8);
     }
 
     public async load(): Promise<void> {
