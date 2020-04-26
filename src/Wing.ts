@@ -9,6 +9,10 @@ import { NPC } from './NPC';
 export class Wing extends NPC {
     private sprites!: Sprites;
     private spriteIndex = 0;
+    private timeAlive = 0;
+
+    private flaotAmount = 4;
+    private floatSpeed = 2;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
@@ -20,7 +24,8 @@ export class Wing extends NPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        ctx.translate(this.x, -this.y);
+        const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.flaotAmount;
+        ctx.translate(this.x, -this.y - floatOffsetY);
         this.sprites.draw(ctx, this.spriteIndex);
         ctx.restore();
         this.speechBubble.draw(ctx);
@@ -28,6 +33,7 @@ export class Wing extends NPC {
 
     update(dt: number): void {
         super.update(dt);
+        this.timeAlive += dt;
         this.spriteIndex = getSpriteIndex(0, WING_ANIMATION);
         this.speechBubble.update(this.x, this.y);
     }
