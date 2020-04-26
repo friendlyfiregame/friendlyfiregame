@@ -95,7 +95,8 @@
     "yesmaster": [
         "So, let an old and wise stone tell you: Basic gardening requires water. So...",
         ">Soooo...? @soo",
-        ">I think I need a drink...a hard one @drink"
+        ">I think I need a drink...a hard one @drink",
+        ">Wait... I want to talk about something else first @introduction"
     ],
     "soo": [
         "This is harder than I thought. @rain"
@@ -113,7 +114,8 @@
         "Beyond it you will find the answer to all your problems, maybe... hehehe",
         ">I am not sure if I really want to touch you... @nottouchyou",
         ">By the power of Grayskull! @lift",
-        ">Yes Master. @lift"
+        ">Yes Master. @lift",
+        ">On second thought, I don't like this... at all. @visitedentry"
     ],
     "nottouchyou": [
         "This is the beauty about power, and now lift me up!",
