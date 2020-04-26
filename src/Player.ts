@@ -123,7 +123,7 @@ export class Player extends PhysicsEntity {
     public doubleJump = false;
     public multiJump = false;
     private usedDoubleJump = false;
-    private hasBeard = true;
+    private hasBeard = false;
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
