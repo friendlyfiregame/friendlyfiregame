@@ -150,7 +150,7 @@ export class Player extends PhysicsEntity {
     private drowningSound!: Sound;
     private walkingSound!: Sound;
     private throwingSound!: Sound;
-    private jumpingSound!: Sound;
+    private jumpingSounds: Sound[] = [];
     private landingSound!: Sound;
     private bouncingSound!: Sound;
 
@@ -212,7 +212,10 @@ export class Player extends PhysicsEntity {
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
         this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
-        this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
+        this.jumpingSounds.push(
+            new Sound("sounds/jumping/jumping.mp3"),
+            new Sound("sounds/jumping/jumping_female.mp3")
+        );
         this.landingSound = new Sound("sounds/jumping/landing.mp3");
         this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
@@ -368,8 +371,8 @@ export class Player extends PhysicsEntity {
 
     private jump(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-        this.jumpingSound.stop();
-        this.jumpingSound.play();
+        this.jumpingSounds[this.gender].stop();
+        this.jumpingSounds[this.gender].play();
         if (this.flying) {
             this.usedDoubleJump = true;
             this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
