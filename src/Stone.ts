@@ -1,6 +1,6 @@
 
 import { Environment } from "./World";
-import { EyeType, Face } from './Face';
+import { EyeType, Face, FaceModes } from './Face';
 import { Game, CollidableGameObject } from "./game";
 import { NPC } from './NPC';
 import { STONE_ANIMATION } from "./constants";
@@ -50,8 +50,6 @@ export class Stone extends NPC implements CollidableGameObject {
 
     update(dt: number): void {
         this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
-        // this.updateGreeting(dt);
-
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
@@ -96,6 +94,7 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public pickUp(): void {
+        this.face?.setMode(FaceModes.AMUSED);
         this.game.player.carry(this);
     }
 }

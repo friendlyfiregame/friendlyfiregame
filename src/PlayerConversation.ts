@@ -1,7 +1,6 @@
 import { Conversation, Interaction } from './Conversation';
 import { Player } from './Player';
 import { NPC } from './NPC';
-import { FaceModes } from './Face';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;

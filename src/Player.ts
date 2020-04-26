@@ -96,6 +96,12 @@ export enum Milestone {
     THROWN_WOOD_INTO_FIRE
 }
 
+export enum SpritePart { LEGS, BODY, HEAD }
+export enum PlayerLegSprite { MALE }
+export enum PlayerBodySprite { MALE }
+export enum PlayerHeadSprite { MALE, MALE_BEARD }
+export type PlayerSprites = Record<SpritePart, Sprites[]>
+
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
 
@@ -105,11 +111,15 @@ export class Player extends PhysicsEntity {
     private lastHint = Date.now();
     private flying = false;
     public direction = 1;
+    public playerSprites: PlayerSprites = {
+        [SpritePart.LEGS]: [],
+        [SpritePart.BODY]: [],
+        [SpritePart.HEAD]: []
+    }
     private spriteIndex = SpriteIndex.IDLE0;
-    private legsSprite!: Sprites;
-    private bodySprite!: Sprites;
-    private headSprite!: Sprites;
-    private beardedHeadSprite!: Sprites;
+    private legSpriteIndex = PlayerLegSprite.MALE;
+    private bodySpriteIndex = PlayerBodySprite.MALE;
+    private headSpriteIndex = PlayerHeadSprite.MALE;
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     public jumpDown: boolean = false;
@@ -183,10 +193,17 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 5);
-        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 5);
-        this.headSprite = new Sprites(await loadImage("sprites/main_head.png"), 4, 5);
-        this.beardedHeadSprite = new Sprites(await loadImage("sprites/main_head_beard.png"), 4, 5);
+        this.playerSprites[SpritePart.LEGS].push(
+            new Sprites(await loadImage("sprites/pc/male_legs.png"), 4, 5) // Standard male legs
+        )
+        this.playerSprites[SpritePart.BODY].push(
+            new Sprites(await loadImage("sprites/pc/male_body.png"), 4, 5) // Standard male body
+        )
+        this.playerSprites[SpritePart.HEAD].push(
+            new Sprites(await loadImage("sprites/pc/male_head.png"), 4, 5), // Standard male head
+            new Sprites(await loadImage("sprites/pc/male_head_beard.png"), 4, 5) // Standard male head with beard
+        )
+
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
         this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
@@ -362,20 +379,24 @@ export class Player extends PhysicsEntity {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.legsSprite.draw(ctx, this.spriteIndex);
-        
-        const head = this.hasBeard ? this.beardedHeadSprite : this.headSprite;
+
+        const legs = this.playerSprites[SpritePart.LEGS][this.legSpriteIndex];
+        const body = this.playerSprites[SpritePart.BODY][this.bodySpriteIndex];
+        const head = this.playerSprites[SpritePart.HEAD][this.hasBeard ? PlayerHeadSprite.MALE_BEARD : this.headSpriteIndex];
+
+        legs.draw(ctx, this.spriteIndex);
+        // const head = this.hasBeard ? this.beardedHeadSprite : this.headSprite;
 
         if (this.carrying) {
             if (this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) {
-                this.bodySprite.draw(ctx, SpriteIndex.CARRY1);
+                body.draw(ctx, SpriteIndex.CARRY1);
                 head.draw(ctx, SpriteIndex.CARRY1);
             } else {
-                this.bodySprite.draw(ctx, SpriteIndex.CARRY0);
+                body.draw(ctx, SpriteIndex.CARRY0);
                 head.draw(ctx, SpriteIndex.CARRY0);
             }
         } else {
-            this.bodySprite.draw(ctx, this.spriteIndex);
+            body.draw(ctx, this.spriteIndex);
             head.draw(ctx, this.spriteIndex);
         }
         ctx.restore();
