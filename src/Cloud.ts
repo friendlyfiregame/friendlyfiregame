@@ -75,7 +75,6 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        console.log(this.width);
         ctx.save();
         ctx.translate(this.x, -this.y);
         this.sprite.draw(ctx, this.spriteIndex);

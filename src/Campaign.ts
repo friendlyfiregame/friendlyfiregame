@@ -176,7 +176,6 @@ export class Campaign {
                     "wing": this.game.wing
                 };
                 const targetNpc1 = npcMap1[char1];
-                console.log(char1, targetNpc1);
                 if (targetNpc1) {
                     targetNpc1.conversation = null;
                 }

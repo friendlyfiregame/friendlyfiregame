@@ -51,7 +51,6 @@ export class Dance {
     }
 
     public static async load(): Promise<void> {
-        console.log('loading');
         this.successSound = new Sound("sounds/dancing/success.mp3");
         this.failSound = new Sound("sounds/dancing/fail.mp3");
         this.raindance_music = new Sound("music/raindance.mp3");
