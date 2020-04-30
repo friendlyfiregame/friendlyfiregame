@@ -1,0 +1,82 @@
+{
+    "entry": [
+        "Greetings, adventurer. Welcome to this ancient and mysterious land.",
+        "I am your designated magical gender fairy and will guide you on your quest. I bet you have a lot of questions",
+        ">Nice to meet you @friendly",
+        ">What's going on here? @whatsgoingon",
+        ">What gender related magic can you cast? @magic",
+        ">Seriously? Magical FAIRY? @spider",
+        ">I got no time for this...",
+        "Hey, at least I tried... @visited !end"
+    ],
+    "entry2": [
+        "Changed your mind yet?",
+        ">Yes, I'm totally lost @visited",
+        ">Hell no! @entry2 !end",
+        "..."
+    ],
+    "visited": [
+        "How can I help?",
+        ">What's going on here? @whatsgoingon",
+        ">What gender related magic can you cast? @magic",
+        ">Seriosly? Magical FAIRY? @spider",
+        ">Gotta get a move on",
+        "Please do @visited !end"
+    ],
+    "friendly": [
+        "Ho ho ho, what a friendly fella you are. The last one wasn't of the talkative kind.",
+        "He had the WORST time!",
+        "But you and I will get along just fine.",
+        ">What happened to the last one? @chosenone",
+        ">Yeah sure, back to topic",
+        "Suuuure @visited"
+    ],
+    "chosenone": [
+        "It wasn't a pretty sight. Lot's of misunderstandings, some disrespectful verbal exchanges.",
+        "Long story short, you won't see him anytime soon. Trust me.",
+        "Some would say, he 'burned' to 'death'",
+        "...",
+        "Subtelty is not my strong suit",
+        ">I can see that. Back to topic!",
+        "Aye @visited"
+    ],
+    "whatsgoingon": [
+        "Oh you now, the usual. Some unresolved cataclysmic quarrels between some fire elementals.",
+        "You'll find one of them just around the corner to the east",
+        ">That sounds kinda dangerous @dangerous",
+        ">I like fire @likefire"
+    ],
+    "dangerous": [
+        "Not as dangerous as it sounds. How dangerous can a sentient fire be...",
+        "he... he he",
+        "Nevermind.",
+        ">Okay... @visited"
+    ],
+    "likefire": [
+        "Please don't touch the fire, man... We cannot deal with another lawsuit. Not to speak of the smell...",
+        "Took a while to get the stench of the plains",
+        ">I was just joking...",
+        "What a great comedian you are!",
+        ">Back to topic please! @visited"
+    ],
+    "spider": [
+        "What, don't you see the fairy wings on my back?",
+        "I worked really hard to earn these.",
+        ">Can anyone become a fairy?",
+        ">Since when are spiders fairies?"
+    ],
+    "magic": [
+        "Great that you ask!",
+        "I'm not your run of the mill gender fairy.",
+        "With my bachelor degree in gender studies, I know everything about genders",
+        "I can tell that you have one of two genders!",
+        ">What a surprise...",
+        ">Is that your magical power...?",
+        "Ho ho ho, that's not all! I have the power to accidentally change the gender of humans against their will",
+        "Abra cadabra and it is done! ",
+        ">What... WAIT !togglegender",
+        "You are very welcome, gender swapped human!",
+        ">It's not that bad, actually @visited",
+        ">You even changed the clothes, nice @visited"
+    ]
+}

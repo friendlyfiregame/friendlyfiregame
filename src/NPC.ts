@@ -14,6 +14,7 @@ export abstract class NPC extends PhysicsEntity {
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
+    public lookAtPlayer = false;
     private lastEndedConversation = -Infinity;
 
     protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {
@@ -50,5 +51,11 @@ export abstract class NPC extends PhysicsEntity {
         if (direction !== this.direction) {
             this.direction = direction;
         }
+    }
+
+    public update(dt: number): void {
+        const dx = this.game.player.x - this.x;
+        this.toggleDirection((dx > 0) ? 1 : -1);
+        super.update(dt);
     }
 }

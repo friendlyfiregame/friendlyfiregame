@@ -11,6 +11,7 @@ import seed1 from '../assets/dialog/seed1.dialog.json';
 import tree0 from '../assets/dialog/tree0.dialog.json';
 import tree1 from '../assets/dialog/tree1.dialog.json';
 import tree2 from '../assets/dialog/tree2.dialog.json';
+import spider1 from '../assets/dialog/spider1.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import wing1 from '../assets/dialog/wing1.dialog.json';
@@ -29,6 +30,7 @@ const allDialogs: Record<string, JSON> = {
     "tree0": tree0,
     "tree1": tree1,
     "tree2": tree2,
+    "spider1": spider1,
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
     "wing1": wing1,
@@ -51,6 +53,7 @@ export class Campaign {
         this.runAction("enable", null, ["stone", "stone1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
         this.runAction("enable", null, ["wing", "wing1"]);
+        this.runAction("enable", null, ["spider", "spider1"]);
     }
 
     public hasState(state: CampaignState) {
@@ -149,6 +152,10 @@ export class Campaign {
                     this.game.player.startDance(+params[0] || 1);
                 }, 500);
                 break;
+            case "togglegender":
+                console.log('togle');
+                this.game.player.toggleGender();
+                break;
             case "enable":
                 const char = params[0], dialogName = params[1];
                 const npcMap: Record<string, NPC> = {
@@ -157,7 +164,8 @@ export class Campaign {
                     "tree": this.game.tree,
                     "seed": this.game.seed,
                     "flameboy": this.game.flameboy,
-                    "wing": this.game.wing
+                    "wing": this.game.wing,
+                    "spider": this.game.spider
                 };
                 const targetNpc = npcMap[char];
                 const dialog = allDialogs[dialogName];
@@ -173,7 +181,8 @@ export class Campaign {
                     "tree": this.game.tree,
                     "seed": this.game.seed,
                     "flameboy": this.game.flameboy,
-                    "wing": this.game.wing
+                    "wing": this.game.wing,
+                    "spider": this.game.spider
                 };
                 const targetNpc1 = npcMap1[char1];
                 if (targetNpc1) {

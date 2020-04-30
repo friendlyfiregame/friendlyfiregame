@@ -15,6 +15,7 @@ import "./FlameBoy";
 import "./Tree";
 import "./Seed";
 import "./Wing";
+import "./Spider";
 import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
@@ -23,6 +24,7 @@ import { Tree } from "./Tree";
 import { GamepadInput } from "./GamepadInput";
 import { FlameBoy } from './FlameBoy';
 import { Wing } from './Wing';
+import { Spider } from './Spider';
 import { loadImage } from "./graphics";
 import { KeyHandler } from "./KeyHandler";
 import { Seed } from './Seed';
@@ -95,6 +97,7 @@ export class Game {
     public seed!: Seed;
     public flameboy: FlameBoy;
     public wing: Wing;
+    public spider: Spider;
 
     public campaign: Campaign;
 
@@ -147,6 +150,7 @@ export class Game {
         this.tree = this.getGameObject(Tree);
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
+        this.spider = this.getGameObject(Spider);
 
         this.camera = new Camera(this, this.player);
         setInterval(() => {
