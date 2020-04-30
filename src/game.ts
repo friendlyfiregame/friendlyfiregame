@@ -29,6 +29,7 @@ import { Seed } from './Seed';
 import { Cloud } from './Cloud';
 import { Sprites, getSpriteIndex } from './Sprites';
 import { FLAMEBOY_ANIMATION } from './constants';
+import { Conversation } from './Conversation';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -155,6 +156,8 @@ export class Game {
         }, 1000);
 
         this.gamepadInput = new GamepadInput();
+
+        Conversation.setGlobal("devmode", this.dev + "");
     }
 
     public addGameObject(object: GameObject): void {
