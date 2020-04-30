@@ -15,12 +15,15 @@ const earlyActions = [
     "bored"
 ];
 
+const globalVariables: Record<string, string> = {};
+
 export class Conversation {
     private states: string[];
     private data: {[key: string]: ConversationLine[]};
     private state!: string;
     private stateIndex = 0;
     private endConversation = false;
+    private localVariables: Record<string, string> = {};
 
     constructor(json: any, private readonly npc: NPC) {
         this.states = Object.keys(json);
@@ -77,10 +80,26 @@ export class Conversation {
     }
 
     public runAction(action: string[]) {
-        if (action[0] === "end") {
-            this.endConversation = true;
+        switch (action[0]) {
+            case "end":
+                this.endConversation = true;
+                break;
+            case "set":
+                this.setVariable(action[1], action[2]);
+                break;
+            default:
+                this.npc.game.campaign.runAction(action[0], this.npc, action.slice(1));
+        }
+    }
+
+    private setVariable(name = "", value = "true"): void {
+        console.log("Setting conversation variable", name, "to", value);
+        if (name.startsWith("$")) {
+            // Global variable
+            globalVariables[name] = value;
         } else {
-            this.npc.game.campaign.runAction(action[0], this.npc, action.slice(1));
+            // Local variable
+            this.localVariables[name] = value;
         }
     }
 
@@ -170,7 +189,7 @@ export class ConversationLine {
     }
 
     private static extractState(line: string): string | null {
-        const stateChanges = line.match(/(@[a-z]+)/g);
+        const stateChanges = line.match(/(@[a-zA-Z]+)/g);
         if (stateChanges && stateChanges.length > 0) {
             const stateName = stateChanges[0].substr(1);
             return stateName;
@@ -179,7 +198,7 @@ export class ConversationLine {
     }
 
     private static extractActions(line: string): string[][] {
-        let actions = line.match(/(\![a-z][a-z0-9 ]*)+/g);
+        let actions = line.match(/(\![a-zA-Z][a-zA-Z0-9 ]*)+/g);
         const result = [];
         if (actions) {
             actions = actions.join(" ").split("!").map(action => action.trim()).filter(s => s.length > 0);
