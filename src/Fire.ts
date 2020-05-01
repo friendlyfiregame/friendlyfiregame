@@ -42,7 +42,7 @@ export class Fire extends NPC {
 
     private isVisible = true;
 
-    private fireGfx!: FireGfx;
+    private fireGfx = new FireGfx();
 
     // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
