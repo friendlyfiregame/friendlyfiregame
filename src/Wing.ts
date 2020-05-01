@@ -9,7 +9,7 @@ export class Wing extends NPC {
     private sprite!: Aseprite;
     private timeAlive = 0;
 
-    private flaotAmount = 4;
+    private floatAmount = 4;
     private floatSpeed = 2;
 
     public constructor(game: Game, x: number, y:number) {
@@ -29,7 +29,7 @@ export class Wing extends NPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.flaotAmount;
+        const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         ctx.translate(this.x, -this.y - floatOffsetY);
         this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();

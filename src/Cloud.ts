@@ -1,5 +1,5 @@
 import { Game, CollidableGameObject } from "./game";
-import { PIXEL_PER_METER, CLOUD_ANIMATION } from "./constants";
+import { PIXEL_PER_METER } from "./constants";
 import { Environment } from "./World";
 import { entity } from "./Entity";
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -7,7 +7,7 @@ import { GameObjectProperties } from "./MapInfo";
 import { loadImage } from "./graphics";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, timedRnd, rndInt } from './util';
-import { Sprites, getSpriteIndex } from './Sprites';
+import { Aseprite } from "./Aseprite";
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
@@ -16,8 +16,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private targetX: number;
     private targetY: number;
     private velocity: number;
-    private sprite!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
     private raindrop!: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = 0;
@@ -58,7 +57,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     public async load(): Promise<void> {
-        this.sprite = new Sprites(await loadImage("sprites/cloud3.png"), 3, 1);
+        this.sprite = await Aseprite.load("assets/sprites/cloud3.aseprite.json");
         this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
@@ -77,13 +76,12 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
-        this.sprite.draw(ctx, this.spriteIndex);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
     }
 
     update(dt: number): void {
         super.update(dt);
-        this.spriteIndex = getSpriteIndex(0, CLOUD_ANIMATION);
         if (this.getVelocityY() > 0) {
             if (this.y >= Math.max(this.startY, this.targetY)) {
                 this.y = Math.max(this.startY, this.targetY);

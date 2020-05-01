@@ -3,7 +3,6 @@ import { Player } from "./Player";
 import { particles, Particles, ParticleEmitter, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { clamp, now, rndItem, rnd, timedRnd } from './util';
-import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
@@ -29,10 +28,9 @@ import { loadImage } from "./graphics";
 import { KeyHandler } from "./KeyHandler";
 import { Seed } from './Seed';
 import { Cloud } from './Cloud';
-import { Sprites, getSpriteIndex } from './Sprites';
-import { FLAMEBOY_ANIMATION } from './constants';
 import { Conversation } from './Conversation';
 import { DialoguePrompt } from './DialoguePrompt';
+import { Aseprite } from "./Aseprite";
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -128,8 +126,7 @@ export class Game {
 
     private titleImage!: HTMLImageElement;
     private endImage!: HTMLImageElement;
-    private endBoy!: Sprites;
-    private endBoySpriteIndex = 0;
+    private endBoy!: Aseprite;
     public stage = GameStage.TITLE;
     public keyHandler = new KeyHandler();
 
@@ -194,8 +191,7 @@ export class Game {
         await this.loadFonts();
         this.titleImage = await loadImage("images/title.png");
         this.endImage = await loadImage("images/end.png");
-        this.endBoy = new Sprites(await loadImage("sprites/flameboy2.png"), 6, 1);
-        await Face.load();
+        this.endBoy = await Aseprite.load("assets/sprites/flameboy2.aseprite.json");
         await Dance.load();
         await FireGfx.load();
         await DialoguePrompt.load();
@@ -360,7 +356,6 @@ export class Game {
     }
 
     private updateEnd(): void {
-        this.endBoySpriteIndex = getSpriteIndex(0, FLAMEBOY_ANIMATION);
     }
 
     private drawEnd(ctx: CanvasRenderingContext2D) {
@@ -372,7 +367,7 @@ export class Game {
 
         ctx.translate(240, 222);
         ctx.scale(2, 2);
-        this.endBoy.draw(ctx, this.endBoySpriteIndex);
+        this.endBoy.drawTag(ctx, "idle", -this.endBoy.width >> 1, -this.endBoy.height);
         ctx.restore();
     }
 

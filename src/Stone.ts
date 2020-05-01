@@ -24,10 +24,11 @@ export class Stone extends NPC implements CollidableGameObject {
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
         this.direction = -1;
-        this.face = new Face(this, EyeType.STONE, 1, 0, 21);
+        this.face = new Face(this, EyeType.STONE, 0, 21);
     }
 
     public async load(): Promise<void> {
+        await super.load();
         this.sprite = await Aseprite.load("assets/sprites/stone.aseprite.json");
         // this.greeting = new Greeting(this.game, this, dialogData);
         this.successSound = new Sound("sounds/throwing/success.mp3");
