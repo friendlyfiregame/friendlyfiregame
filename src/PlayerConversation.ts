@@ -85,7 +85,6 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
-
             if (this.npc.speechBubble.isCurrentlyWriting || this.npc.speechBubble.preventUnwantedSelection) {
                 this.npc.speechBubble.isCurrentlyWriting = false;
                 return;

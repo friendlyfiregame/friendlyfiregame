@@ -24,6 +24,7 @@ export class Conversation {
     private stateIndex = 0;
     private endConversation = false;
     private localVariables: Record<string, string> = {};
+    private skippedLines = 0; // help variable to make goBack() work with skipped dialog lines due to conditions
 
     constructor(json: any, private readonly npc: NPC) {
         this.states = Object.keys(json);
@@ -48,6 +49,7 @@ export class Conversation {
             this.endConversation = false;
             return null;
         }
+        this.skippedLines = 0;
         const result: Interaction = {
             npcLine: null,
             options: [],
@@ -62,20 +64,25 @@ export class Conversation {
             if (line.isNpc) {
                 result.npcLine = line;
             } else {
-                this.goBack();
+                this.goBack(1 + this.skippedLines);
             }
         }
         // Does Player react?
+        this.skippedLines = 0;
         let option = this.getNextLine();
         while (option && !option.isNpc) {
             // TODO identify spoiled options (that don't lead to anything new for the player) and sort accordingly
             result.options.push(option);
+            this.skippedLines = 0;
             option = this.getNextLine();
         }
-        if (option) {
+        if (option && !option.isNpc) {
             this.goBack();
+        } else {
+            this.goBack(1 + this.skippedLines);
         }
         // shuffle(result.options);
+        this.skippedLines = 0;
         return result;
     }
 
@@ -123,8 +130,13 @@ export class Conversation {
         }
     }
 
-    private goBack() {
-        this.stateIndex--;
+    private goBack(steps = 1) {
+        if (steps <= 0) {
+            return;
+        }
+        const prev = this.stateIndex;
+        this.stateIndex -= steps;
+        this.skippedLines = 0;
     }
 
     private getNextLine(ignoreDisabled = false): ConversationLine | null {
@@ -132,8 +144,9 @@ export class Conversation {
             return null;
         }
         let line = this.data[this.state][this.stateIndex++];
-        if (line.condition && !this.testCondition(line.condition)) {
-            return this.getNextLine();
+        if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {
+            this.skippedLines++;
+            return this.getNextLine(ignoreDisabled);
         }
         return line;
     }
