@@ -1,14 +1,12 @@
 import { entity } from "./Entity";
 import { Game } from "./game";
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { loadImage } from "./graphics";
-import { WING_ANIMATION } from "./constants";
+import { getSpriteIndex } from "./Sprites";
 import { NPC } from './NPC';
+import { Aseprite } from './Aseprite';
 
 @entity("wing")
 export class Wing extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
     private timeAlive = 0;
 
     private flaotAmount = 4;
@@ -19,14 +17,14 @@ export class Wing extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/powerup_wing.png"), 4, 1);
+        this.sprite = await Aseprite.load("assets/sprites/wing.aseprite.json");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.flaotAmount;
         ctx.translate(this.x, -this.y - floatOffsetY);
-        this.sprites.draw(ctx, this.spriteIndex);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.speechBubble.draw(ctx);
     }
@@ -34,7 +32,6 @@ export class Wing extends NPC {
     update(dt: number): void {
         super.update(dt);
         this.timeAlive += dt;
-        this.spriteIndex = getSpriteIndex(0, WING_ANIMATION);
         this.speechBubble.update(this.x, this.y);
     }
 }
