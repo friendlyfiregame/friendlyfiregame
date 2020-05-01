@@ -1,6 +1,5 @@
 import { entity } from "./Entity";
 import { Game } from "./game";
-import { getSpriteIndex } from "./Sprites";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 
