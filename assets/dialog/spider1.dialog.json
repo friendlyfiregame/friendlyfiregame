@@ -70,7 +70,8 @@
         ">I cannot guess why... Back to topic @entry"
     ],
     "racist": [
-        "I will ignore your racist remark in good faith... you racist! !set isracist !set askedaboutspider @spider"
+        "I will ignore your racist remark in good faith... you racist! !set isracist !set askedaboutspider",
+        ">Sorry... @spider"
     ],
     "magic": [
         "[not askedformoregenders]Great that you ask!",
