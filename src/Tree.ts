@@ -2,17 +2,14 @@
 import { Face, EyeType } from './Face';
 import { Game } from "./game";
 import { NPC } from './NPC';
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { TREE_ANIMATION } from "./constants";
 import { entity } from "./Entity";
-import { loadImage } from "./graphics";
 import { Seed } from "./Seed";
 import { Wood } from './Wood';
+import { Aseprite } from './Aseprite';
 
 @entity("tree")
 export class Tree extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
     public seed: Seed;
     private wood: Wood;
 
@@ -25,7 +22,7 @@ export class Tree extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/tree.png"), 2, 1);
+        this.sprite = await Aseprite.load("assets/sprites/tree.aseprite.json");
         await this.seed.load();
         await this.wood.load();
     }
@@ -33,14 +30,10 @@ export class Tree extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        this.sprites.draw(ctx, this.spriteIndex);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.drawFace(ctx);
         this.speechBubble.draw(ctx);
-    }
-
-    update(dt: number): void {
-        this.spriteIndex = getSpriteIndex(0, TREE_ANIMATION);
     }
 
     startDialog(): void {

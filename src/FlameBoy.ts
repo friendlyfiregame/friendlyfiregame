@@ -1,15 +1,12 @@
 import { entity } from "./Entity";
 import { Game } from "./game";
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { loadImage } from "./graphics";
-import { FLAMEBOY_ANIMATION } from "./constants";
 import { NPC } from './NPC';
 import { Face, EyeType, FaceModes } from './Face';
+import { Aseprite } from './Aseprite';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
@@ -19,13 +16,12 @@ export class FlameBoy extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/flameboy.png"), 6, 1);
+        this.sprite = await Aseprite.load("assets/sprites/flameboy.aseprite.json");
     }
-
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        this.sprites.draw(ctx, this.spriteIndex);
+        ctx.translate(this.x, -this.y);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.drawFace(ctx, false);
         this.speechBubble.draw(ctx);
@@ -33,7 +29,6 @@ export class FlameBoy extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.spriteIndex = getSpriteIndex(0, FLAMEBOY_ANIMATION);
         this.speechBubble.update(this.x, this.y);
     }
 }
