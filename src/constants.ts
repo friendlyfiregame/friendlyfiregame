@@ -36,6 +36,3 @@ export const WING_ANIMATION = [ 200, 200, 200, 200 ];
 
 /** Animation speed for the tree in milliseconds */
 export const TREE_ANIMATION = [ 250, 250 ];
-
-/** Animation speed for the platforming cloud in milliseconds */
-export const CLOUD_ANIMATION = [ 200, 200, 200 ];
