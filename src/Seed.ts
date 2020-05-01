@@ -26,10 +26,11 @@ export class Seed extends NPC {
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
         this.wood = new Wood(game, x, y);
-        this.face = new Face(this, EyeType.STANDARD, 1, 0, 8);
+        this.face = new Face(this, EyeType.STANDARD, 0, 8);
     }
 
     public async load(): Promise<void> {
+        await super.load();
         this.sprite = await Aseprite.load("assets/sprites/seed.aseprite.json");
         this.successSound = new Sound("sounds/throwing/success.mp3");
         await this.wood.load();

@@ -3,7 +3,6 @@ import { Player } from "./Player";
 import { particles, Particles, ParticleEmitter, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { clamp, now, rndItem, rnd, timedRnd } from './util';
-import { Face } from './Face';
 import { Camera } from './Camera';
 import { FireGfx } from './FireGfx';
 import { MapInfo } from "./MapInfo";
@@ -192,7 +191,6 @@ export class Game {
         this.titleImage = await loadImage("images/title.png");
         this.endImage = await loadImage("images/end.png");
         this.endBoy = await Aseprite.load("assets/sprites/flameboy2.aseprite.json");
-        await Face.load();
         await Dance.load();
         await FireGfx.load();
         for (const obj of this.gameObjects) {

@@ -83,12 +83,11 @@ export class Fire extends NPC {
             alpha: () => rnd(0.3, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.face = new Face(this, EyeType.STANDARD, 1, 0, 6);
+        this.face = new Face(this, EyeType.STANDARD, 0, 6);
     }
 
-
-
     async load(): Promise<void> {
+        await super.load();
         this.fireGfx = new FireGfx();
         this.smokeImage = await loadImage("sprites/smoke.png");
     }

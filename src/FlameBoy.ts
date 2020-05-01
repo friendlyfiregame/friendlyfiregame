@@ -10,14 +10,16 @@ export class FlameBoy extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
-        this.face = new Face(this, EyeType.FLAMEBOY, 1, 0, 5);
+        this.face = new Face(this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED
         this.face.setMode(this.defaultFaceMode);
     }
 
     public async load(): Promise<void> {
+        await super.load();
         this.sprite = await Aseprite.load("assets/sprites/flameboy.aseprite.json");
     }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);

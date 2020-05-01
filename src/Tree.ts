@@ -15,13 +15,14 @@ export class Tree extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 78, 140);
-        this.face = new Face(this, EyeType.TREE, 1, 5, 94);
+        this.face = new Face(this, EyeType.TREE, 5, 94);
         this.seed = new Seed(game, x, y);
         this.wood = new Wood(game, x, y);
         this.startDialog();
     }
 
     public async load(): Promise<void> {
+        await super.load();
         this.sprite = await Aseprite.load("assets/sprites/tree.aseprite.json");
         await this.seed.load();
         await this.wood.load();

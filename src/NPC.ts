@@ -31,6 +31,12 @@ export abstract class NPC extends PhysicsEntity {
         }
     }
 
+    public async load(): Promise<void> {
+        if (this.face) {
+            await this.face.load();
+        }
+    }
+
     protected drawGreeting(ctx: CanvasRenderingContext2D): void {
         this.greeting?.draw(ctx);
     }
