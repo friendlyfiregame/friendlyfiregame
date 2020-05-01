@@ -1,14 +1,11 @@
 import { Game } from "./game";
 import { NPC } from './NPC';
-import { SPIDER_IDLE_ANIMATION } from "./constants";
-import { Sprites, getSpriteIndex } from "./Sprites";
 import { entity } from "./Entity";
-import { loadImage } from "./graphics";
+import { Aseprite } from "./Aseprite";
 
 @entity("spider")
 export class Spider extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 36, 36);
@@ -16,7 +13,7 @@ export class Spider extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/magicspider.png"), 4, 1);
+        this.sprite = await Aseprite.load("assets/sprites/magicspider.aseprite.json");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -25,13 +22,12 @@ export class Spider extends NPC {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.sprites.draw(ctx, this.spriteIndex);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
-        this.spriteIndex = getSpriteIndex(0, SPIDER_IDLE_ANIMATION);
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
     }
