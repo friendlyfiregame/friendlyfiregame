@@ -32,9 +32,6 @@ export class Greeting implements GameObject {
         this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }
 
-    async load() {
-    }
-
     public draw(ctx: CanvasRenderingContext2D) {
         if (this.greetingActive) {
             this.speechBubble.draw(ctx);
