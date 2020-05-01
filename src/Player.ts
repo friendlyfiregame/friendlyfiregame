@@ -2,12 +2,9 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Game, GameStage } from "./game";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
-    PLAYER_DANCING_ANIMATION, PLAYER_FAIL_ANIMATION
+    PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
 } from "./constants";
 import { NPC } from './NPC';
-import { loadImage } from "./graphics";
-import { Sprites, getSpriteIndex } from "./Sprites";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
@@ -24,29 +21,7 @@ import { Wood, WoodState } from "./Wood";
 import { Fire } from "./Fire";
 import { Tree } from "./Tree";
 import { FlameBoy } from "./FlameBoy";
-
-enum SpriteIndex {
-    IDLE0 = 0,
-    IDLE1 = 1,
-    IDLE2 = 2,
-    IDLE3 = 3,
-    WALK0 = 4,
-    WALK1 = 5,
-    WALK2 = 6,
-    WALK3 = 7,
-    JUMP = 8,
-    FALL = 9,
-    CARRY0 = 10,
-    CARRY1 = 11,
-    DANCE0 = 12,
-    DANCE1 = 13,
-    DANCE2 = 14,
-    DANCE3 = 15,
-    DANCE4 = 16,
-    DANCE5 = 17,
-    FAIL0 = 18,
-    FAIL1 = 19
-}
+import { Aseprite } from "./Aseprite";
 
 const groundColors = [
     "#806057",
@@ -96,12 +71,10 @@ export enum Milestone {
     THROWN_WOOD_INTO_FIRE
 }
 
-export enum Gender { MALE, FEMALE }
-export enum SpritePart { LEGS, BODY, HEAD }
-export enum PlayerLegSprite { MALE, FEMALE }
-export enum PlayerBodySprite { MALE, FEMALE }
-export enum PlayerHeadSprite { MALE, MALE_BEARD, FEMALE }
-export type PlayerSprites = Record<SpritePart, Sprites[]>
+export enum Gender {
+    FEMALE = 0,
+    MALE = 1
+};
 
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
@@ -113,15 +86,8 @@ export class Player extends PhysicsEntity {
     private flying = false;
     private gender = Gender.MALE;
     public direction = 1;
-    public playerSprites: PlayerSprites = {
-        [SpritePart.LEGS]: [],
-        [SpritePart.BODY]: [],
-        [SpritePart.HEAD]: []
-    }
-    private spriteIndex = SpriteIndex.IDLE0;
-    private legSpriteIndex = PlayerLegSprite.MALE;
-    private bodySpriteIndex = PlayerBodySprite.MALE;
-    private headSpriteIndex = PlayerHeadSprite.MALE;
+    public playerSprites: Aseprite[] = [];
+    public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
     public jumpDown: boolean = false;
@@ -130,7 +96,7 @@ export class Player extends PhysicsEntity {
     private readonly startX: number;
     private readonly startY: number;
     private dance: Dance | null = null;
-    private currentFailSpriteIndex = 0;
+    private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
     public doubleJump = false;
     public multiJump = false;
@@ -195,20 +161,8 @@ export class Player extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-        this.playerSprites[SpritePart.LEGS].push(
-            new Sprites(await loadImage("sprites/pc/male_legs.png"), 4, 5), // Standard male legs
-            new Sprites(await loadImage("sprites/pc/female_legs.png"), 4, 5) // Standard female legs
-        )
-        this.playerSprites[SpritePart.BODY].push(
-            new Sprites(await loadImage("sprites/pc/male_body.png"), 4, 5), // Standard male body
-            new Sprites(await loadImage("sprites/pc/female_body.png"), 4, 5) // Standard male body
-        )
-        this.playerSprites[SpritePart.HEAD].push(
-            new Sprites(await loadImage("sprites/pc/male_head.png"), 4, 5), // Standard male head
-            new Sprites(await loadImage("sprites/pc/male_head_beard.png"), 4, 5), // Standard male head with beard
-            new Sprites(await loadImage("sprites/pc/female_head.png"), 4, 5), // Standard male head
-        )
-
+        this.playerSprites[Gender.MALE] = await Aseprite.load("assets/sprites/pc/male.aseprite.json");
+        this.playerSprites[Gender.FEMALE] = await Aseprite.load("assets/sprites/pc/male.aseprite.json"); // TODO
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
         this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
@@ -222,15 +176,6 @@ export class Player extends PhysicsEntity {
 
     public toggleGender () {
         this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
-        if (this.gender === Gender.MALE) {
-            this.legSpriteIndex = PlayerLegSprite.MALE;
-            this.bodySpriteIndex = PlayerBodySprite.MALE;
-            this.headSpriteIndex = PlayerHeadSprite.MALE;
-        } else {
-            this.legSpriteIndex = PlayerLegSprite.FEMALE;
-            this.bodySpriteIndex = PlayerBodySprite.FEMALE;
-            this.headSpriteIndex = PlayerHeadSprite.FEMALE;
-        }
     }
 
     private async handleKeyDown(event: KeyboardEvent) {
@@ -401,25 +346,17 @@ export class Player extends PhysicsEntity {
             ctx.scale(-1, 1);
         }
 
-        const legs = this.playerSprites[SpritePart.LEGS][this.legSpriteIndex];
-        const body = this.playerSprites[SpritePart.BODY][this.bodySpriteIndex];
-        const head = this.playerSprites[SpritePart.HEAD][this.hasBeard ? PlayerHeadSprite.MALE_BEARD : this.headSpriteIndex];
-
-        legs.draw(ctx, this.spriteIndex);
-        // const head = this.hasBeard ? this.beardedHeadSprite : this.headSprite;
-
-        if (this.carrying) {
-            if (this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) {
-                body.draw(ctx, SpriteIndex.CARRY1);
-                head.draw(ctx, SpriteIndex.CARRY1);
-            } else {
-                body.draw(ctx, SpriteIndex.CARRY0);
-                head.draw(ctx, SpriteIndex.CARRY0);
-            }
-        } else {
-            body.draw(ctx, this.spriteIndex);
-            head.draw(ctx, this.spriteIndex);
+        const sprite = this.playerSprites[this.gender];
+        let animation = this.animation;
+        if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump"
+                || animation === "fall")) {
+            animation = animation + "-carry";
         }
+        if (this.hasBeard) {
+            // TODO
+        }
+        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height);
+
         ctx.restore();
 
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
@@ -504,8 +441,7 @@ export class Player extends PhysicsEntity {
         }
         if (this.carrying) {
             this.carrying.x = this.x;
-            this.carrying.y = this.y + this.height -
-                ((this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) ? 1 : 0);
+            this.carrying.y = this.y + this.height - 1; // TODO Bobbing while walking tied to animation? How?
             if (this.carrying instanceof Seed) {
                 this.carrying.x += 4;
             }
@@ -572,18 +508,18 @@ export class Player extends PhysicsEntity {
 
         // Set sprite index depending on movement
         if (this.getVelocityX() === 0 && this.getVelocityY() === 0) {
-            this.spriteIndex = getSpriteIndex(SpriteIndex.IDLE0, PLAYER_IDLE_ANIMATION);
+            this.animation = "idle";
             this.flying = false;
             this.usedDoubleJump = false;
         } else {
             if (this.getVelocityY() > 0) {
-                this.spriteIndex = SpriteIndex.JUMP;
+                this.animation = "jump";
                 this.flying = true;
             } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
-                this.spriteIndex = SpriteIndex.FALL;
+                this.animation = "fall";
                 this.flying = true;
             } else {
-                this.spriteIndex = getSpriteIndex(SpriteIndex.WALK0, PLAYER_RUNNING_ANIMATION);
+                this.animation = "walk";
                 this.flying = false;
                 this.usedDoubleJump = false;
             }
@@ -629,13 +565,11 @@ export class Player extends PhysicsEntity {
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
                         if (err == 0) {
-                            this.currentFailSpriteIndex = rnd() < 0.5 ? SpriteIndex.FAIL0 : SpriteIndex.FAIL1;
+                            this.currentFailAnimation = rndInt(1, 3);
                         }
-                        // Show error frame?
-                        this.spriteIndex = getSpriteIndex(this.currentFailSpriteIndex, PLAYER_FAIL_ANIMATION);
+                        this.animation = "dance-fluke-" + this.currentFailAnimation;
                     } else {
-                        // Show dance frame?
-                        this.spriteIndex = getSpriteIndex(SpriteIndex.DANCE0, PLAYER_DANCING_ANIMATION);
+                        this.animation = "dance";
                     }
                 }
             }

@@ -28,21 +28,6 @@ export const PLAYER_JUMP_HEIGHT = 3.75;
 /** Player jump height in meters. */
 export const PLAYER_BOUNCE_HEIGHT = 10;
 
-/** Animation speed for player idling in milliseconds */
-export const PLAYER_IDLE_ANIMATION = [ 100, 500, 50, 1000 ];
-
-/** Animation speed for player dancing in milliseconds */
-export const PLAYER_DANCING_ANIMATION = [ 167, 167, 167, 167, 167, 167 ];
-
-/** Animation speed for player running in milliseconds */
-export const PLAYER_RUNNING_ANIMATION = [ 150, 150, 150, 150 ];
-
-/** Animation speed for failing the dance doesn't really matter as just one frame each */
-export const PLAYER_FAIL_ANIMATION = [ 150 ];
-
-/** Animation speed for the stone in milliseconds */
-export const STONE_ANIMATION = [ 167, 167, 167 ];
-
 /** Animation speed for the flameboy in milliseconds */
 export const FLAMEBOY_ANIMATION = [ 100, 100, 100, 100, 100, 100 ];
 
