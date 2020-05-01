@@ -6,10 +6,13 @@ import { entity } from "./Entity";
 import { Seed } from "./Seed";
 import { Wood } from './Wood';
 import { Aseprite } from './Aseprite';
+import { asset } from "./Assets";
 
 @entity("tree")
 export class Tree extends NPC {
-    private sprite!: Aseprite;
+    @asset("sprites/tree.aseprite.json")
+    private static sprite: Aseprite;
+
     public seed: Seed;
     private wood: Wood;
 
@@ -21,17 +24,10 @@ export class Tree extends NPC {
         this.startDialog();
     }
 
-    public async load(): Promise<void> {
-        await super.load();
-        this.sprite = await Aseprite.load("assets/sprites/tree.aseprite.json");
-        await this.seed.load();
-        await this.wood.load();
-    }
-
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
+        Tree.sprite.drawTag(ctx, "idle", -Tree.sprite.width >> 1, -Tree.sprite.height);
         ctx.restore();
         this.drawFace(ctx);
         this.speechBubble.draw(ctx);

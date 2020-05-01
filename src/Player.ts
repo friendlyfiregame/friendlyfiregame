@@ -22,6 +22,7 @@ import { Fire } from "./Fire";
 import { Tree } from "./Tree";
 import { FlameBoy } from "./FlameBoy";
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 const groundColors = [
     "#806057",
@@ -85,13 +86,39 @@ interface PlayerSpriteMetadata {
 
 @entity("player")
 export class Player extends PhysicsEntity {
+    @asset([
+        "sprites/pc/male.aseprite.json", // TODO Create female sprite
+        "sprites/pc/male.aseprite.json"
+    ])
+    public static playerSprites: Aseprite[];
+
+    @asset("sounds/drowning/drowning.mp3")
+    private static drowningSound: Sound;
+
+    @asset("sounds/feet-walking/steps_single.mp3")
+    private static walkingSound: Sound;
+
+    @asset("sounds/throwing/throwing.mp3")
+    private static throwingSound: Sound;
+
+    @asset([
+        "sounds/jumping/jumping.mp3",
+        "sounds/jumping/jumping_female.mp3"
+    ])
+    private static jumpingSounds: Sound[] = [];
+
+    @asset("sounds/jumping/landing.mp3")
+    private static landingSound: Sound;
+
+    @asset("sounds/jumping/squish.mp3")
+    private static bouncingSound: Sound;
+
     private milestone = Milestone.JUST_ARRIVED;
     private lastHint = Date.now();
     private flying = false;
     private gender = Gender.MALE;
     public direction = 1;
-    public playerSprites: Aseprite[] = [];
-    public playerSpriteMetadata: PlayerSpriteMetadata[] = [];
+    private playerSpriteMetadata: PlayerSpriteMetadata[] | null = null;
     public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
@@ -118,12 +145,6 @@ export class Player extends PhysicsEntity {
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
-    private drowningSound!: Sound;
-    private walkingSound!: Sound;
-    private throwingSound!: Sound;
-    private jumpingSounds: Sound[] = [];
-    private landingSound!: Sound;
-    private bouncingSound!: Sound;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -163,26 +184,6 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-    }
-
-    public async load(): Promise<void> {
-        this.playerSprites[Gender.MALE] = await Aseprite.load("assets/sprites/pc/male.aseprite.json");
-        this.playerSprites[Gender.FEMALE] = await Aseprite.load("assets/sprites/pc/male.aseprite.json"); // TODO
-
-        this.playerSprites.forEach((sprite, index) => {
-            const metaDataJSON = sprite.getLayer("Meta")?.data;
-            this.playerSpriteMetadata[index] = metaDataJSON ? JSON.parse(metaDataJSON): {};
-        });
-
-        this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
-        this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
-        this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
-        this.jumpingSounds.push(
-            new Sound("sounds/jumping/jumping.mp3"),
-            new Sound("sounds/jumping/jumping_female.mp3")
-        );
-        this.landingSound = new Sound("sounds/jumping/landing.mp3");
-        this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
     }
 
     public toggleGender () {
@@ -236,21 +237,21 @@ export class Player extends PhysicsEntity {
                     if (this.canThrowStoneIntoWater()) {
                         this.carrying.setVelocity(10 * this.direction, 10);
                         this.carrying = null;
-                        this.throwingSound.stop();
-                        this.throwingSound.play();
+                        Player.throwingSound.stop();
+                        Player.throwingSound.play();
                     } else {
                         // TODO Say something when wrong place to throw
                     }
                 } else if (this.carrying instanceof Seed) {
                     this.carrying.setVelocity(5 * this.direction, 5);
                     this.carrying = null;
-                    this.throwingSound.stop();
-                    this.throwingSound.play();
+                    Player.throwingSound.stop();
+                    Player.throwingSound.play();
                 } else if (this.carrying instanceof Wood) {
                     this.carrying.setVelocity(5 * this.direction, 5);
                     this.carrying = null;
-                    this.throwingSound.stop();
-                    this.throwingSound.play();
+                    Player.throwingSound.stop();
+                    Player.throwingSound.play();
                 }
             }
         } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
@@ -273,8 +274,8 @@ export class Player extends PhysicsEntity {
                 this.carry(this.game.tree.seed.spawnWood());
             } else if (event.key === "t") {
                 this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
-                this.throwingSound.stop();
-                this.throwingSound.play();
+                Player.throwingSound.stop();
+                Player.throwingSound.play();
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
@@ -327,8 +328,8 @@ export class Player extends PhysicsEntity {
 
     private jump(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-        this.jumpingSounds[this.gender].stop();
-        this.jumpingSounds[this.gender].play();
+        Player.jumpingSounds[this.gender].stop();
+        Player.jumpingSounds[this.gender].play();
         if (this.flying) {
             this.usedDoubleJump = true;
             this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
@@ -357,7 +358,7 @@ export class Player extends PhysicsEntity {
             ctx.scale(-1, 1);
         }
 
-        const sprite = this.playerSprites[this.gender];
+        const sprite = Player.playerSprites[this.gender];
         let animation = this.animation;
         if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump"
                 || animation === "fall")) {
@@ -438,6 +439,16 @@ export class Player extends PhysicsEntity {
         this.setVelocity(0, 0);
     }
 
+    private getPlayerSpriteMetadata(): PlayerSpriteMetadata[] {
+        if (this.playerSpriteMetadata == null) {
+            this.playerSpriteMetadata = Player.playerSprites.map(sprite => {
+                const metaDataJSON = sprite.getLayer("Meta")?.data;
+                return metaDataJSON ? JSON.parse(metaDataJSON): {};
+            });
+        };
+        return this.playerSpriteMetadata;
+    }
+
     update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
@@ -452,8 +463,8 @@ export class Player extends PhysicsEntity {
         }
         if (this.carrying) {
             this.carrying.x = this.x;
-            const currentFrameIndex = this.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry");
-            const carryOffsetFrames = this.playerSpriteMetadata[this.gender].carryOffsetFrames ?? [];
+            const currentFrameIndex = Player.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry");
+            const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
             this.carrying.y = this.y + this.height - offset;
             if (this.carrying instanceof Seed) {
@@ -475,12 +486,12 @@ export class Player extends PhysicsEntity {
                 this.carrying = null;
             }
             if (this.drowning === 0) {
-                this.drowningSound.trigger();
+                Player.drowningSound.trigger();
             }
             this.setVelocityX(0);
             this.drowning += dt;
             if (this.drowning > 3) {
-                this.drowningSound.stop();
+                Player.drowningSound.stop();
                 this.respawn();
                 const thought = drownThoughts[rndInt(0, drownThoughts.length)];
                 this.think(thought.message, thought.duration);
@@ -502,16 +513,16 @@ export class Player extends PhysicsEntity {
         if (!isDrowning) {
             if (this.moveRight) {
                 if (!this.flying) {
-                    this.walkingSound.play();
+                    Player.walkingSound.play();
                 }
                 this.accelerateX(acceleration * dt);
             } else if (this.moveLeft) {
                 if (!this.flying) {
-                    this.walkingSound.play();
+                    Player.walkingSound.play();
                 }
                 this.accelerateX(-acceleration * dt);
             } else {
-                this.walkingSound.stop();
+                Player.walkingSound.stop();
                 if (this.getVelocityX() > 0) {
                     this.decelerateX(acceleration * dt);
                 } else {
@@ -540,8 +551,8 @@ export class Player extends PhysicsEntity {
         }
 
         if(wasFlying && !this.flying) {
-            this.landingSound.stop();
-            this.landingSound.play();
+            Player.landingSound.stop();
+            Player.landingSound.play();
         }
 
         // check for npc in interactionRange
@@ -638,8 +649,8 @@ export class Player extends PhysicsEntity {
         this.bounceEmitter.setPosition(this.x, this.y - 12);
         this.bounceEmitter.emit(20);
         this.dustEmitter.clear();
-        this.bouncingSound.stop();
-        this.bouncingSound.play();
+        Player.bouncingSound.stop();
+        Player.bouncingSound.play();
     }
 
     public setBeard(beard: boolean) {

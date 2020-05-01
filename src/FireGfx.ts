@@ -1,10 +1,12 @@
 import { rnd, clamp, orientPow } from './util';
-import { loadImage } from './graphics';
 import { ColorGradient } from './ColorGradient';
+import { asset } from "./Assets";
 
 
 export class FireGfx {
+    @asset("gradients/fire.png", { map: (image: HTMLImageElement) => ColorGradient.fromImage(image) })
     public static gradient: ColorGradient;
+
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private data: number[][];
@@ -30,11 +32,6 @@ export class FireGfx {
         this.data = [];
         this.decayData = [];
         this.init();
-    }
-
-    public static async load(): Promise<void> {
-        const gradientImg = await loadImage("gradients/fire.png");
-        this.gradient = ColorGradient.fromImage(gradientImg);
     }
 
     private init() {

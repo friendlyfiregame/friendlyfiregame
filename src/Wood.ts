@@ -6,6 +6,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Sound } from "./Sound";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 export enum WoodState {
     FREE = 0,
@@ -14,23 +15,22 @@ export enum WoodState {
 
 @entity("wood")
 export class Wood extends PhysicsEntity {
-    private sprite!: Aseprite;
+    @asset("sprites/wood.aseprite.json")
+    private static sprite: Aseprite;
+
+    @asset("sounds/throwing/success.mp3")
+    private static successSound: Sound;
+
     public state = WoodState.FREE;
-    private successSound!: Sound;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
     }
 
-    public async load(): Promise<void> {
-        this.sprite = await Aseprite.load("assets/sprites/wood.aseprite.json");
-        this.successSound = new Sound("sounds/throwing/success.mp3");
-    }
-
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
+        Wood.sprite.drawTag(ctx, "idle", -Wood.sprite.width >> 1, -Wood.sprite.height);
         ctx.restore();
     }
 
@@ -62,7 +62,7 @@ export class Wood extends PhysicsEntity {
         if (!this.isCarried() && this.distanceTo(this.game.fire) < 20) {
             this.game.fire.feed(this);
             this.game.player.achieveMilestone(Milestone.THROWN_WOOD_INTO_FIRE);
-            this.successSound.play();
+            Wood.successSound.play();
         }
     }
 }

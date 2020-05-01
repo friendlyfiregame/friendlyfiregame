@@ -6,8 +6,8 @@ import { particles, ParticleEmitter, valueCurves } from './Particles';
 import { Face, EyeType, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
-import { loadImage } from './graphics';
 import { Wood } from "./Wood";
+import { asset } from "./Assets";
 
 // const fireColors = [
 //     "#603015",
@@ -26,6 +26,9 @@ const smokeColors = [
 
 @entity("fire")
 export class Fire extends NPC {
+    @asset("sprites/smoke.png")
+    private static smokeImage: HTMLImageElement;
+
     public intensity = 5;
 
     public angry = false; // fire will be angry once wood was fed
@@ -39,7 +42,6 @@ export class Fire extends NPC {
     private isVisible = true;
 
     private fireGfx!: FireGfx;
-    private smokeImage!: HTMLImageElement;
 
     // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
@@ -51,7 +53,7 @@ export class Fire extends NPC {
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
             velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
-            color: () => this.smokeImage,
+            color: () => Fire.smokeImage,
             size: () => rndInt(24, 32),
             gravity: {x: 0, y: 8},
             lifetime: () => rnd(5, 8),
@@ -84,12 +86,7 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.face = new Face(this, EyeType.STANDARD, 0, 6);
-    }
-
-    async load(): Promise<void> {
-        await super.load();
         this.fireGfx = new FireGfx();
-        this.smokeImage = await loadImage("sprites/smoke.png");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -139,10 +136,10 @@ export class Fire extends NPC {
         this.angry = true;
         this.growthTarget = 14;
         this.face?.setMode(FaceModes.ANGRY);
-        this.game.music[0].setVolume(0);
-        this.game.music[0].stop();
-        this.game.music[1].setLoop(true);
-        this.game.music[1].play();
+        Game.music[0].setVolume(0);
+        Game.music[0].stop();
+        Game.music[1].setLoop(true);
+        Game.music[1].play();
         // Disable remaining dialogs
         this.conversation = null;
         // Disable all other characters

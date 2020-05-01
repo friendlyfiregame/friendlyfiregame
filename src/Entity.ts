@@ -34,10 +34,6 @@ export abstract class Entity implements GameObject {
         public height = 0
     ) {}
 
-    async load(): Promise<void> {
-        // set width/height based on loaded sprite?
-    }
-
     abstract draw(ctx: CanvasRenderingContext2D): void;
 
     abstract update(dt: number): void;

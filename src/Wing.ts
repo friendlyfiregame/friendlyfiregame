@@ -2,10 +2,13 @@ import { entity } from "./Entity";
 import { Game } from "./game";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
+import { asset } from "./Assets";
 
 @entity("wing")
 export class Wing extends NPC {
-    private sprite!: Aseprite;
+    @asset("sprites/wing.aseprite.json")
+    private static sprite: Aseprite;
+
     private timeAlive = 0;
 
     private floatAmount = 4;
@@ -15,15 +18,11 @@ export class Wing extends NPC {
         super(game, x, y, 24, 24);
     }
 
-    public async load(): Promise<void> {
-        this.sprite = await Aseprite.load("assets/sprites/wing.aseprite.json");
-    }
-
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         ctx.translate(this.x, -this.y - floatOffsetY);
-        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
+        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height);
         ctx.restore();
         this.speechBubble.draw(ctx);
     }

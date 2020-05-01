@@ -30,13 +30,6 @@ export interface ParticleEmitterArguments {
 export class Particles {
     private emitters: ParticleEmitter[] = [];
 
-    constructor() {
-
-    }
-
-    public async load(): Promise<void> {
-    }
-
     public update(dt: number): void {
         this.emitters.forEach(emitter => emitter.update(dt));
     }

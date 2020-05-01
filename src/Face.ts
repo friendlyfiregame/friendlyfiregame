@@ -1,5 +1,6 @@
 import { NPC } from './NPC';
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 export enum FaceModes {
     BLINK = "blink",
@@ -11,14 +12,21 @@ export enum FaceModes {
 };
 
 export enum EyeType {
-    STANDARD = "standard",
-    TREE = "tree",
-    STONE = "stone",
-    FLAMEBOY = "flameboy"
+    STANDARD = 0,
+    TREE = 1,
+    STONE = 2,
+    FLAMEBOY = 3
 }
 
 export class Face {
-    private sprite!: Aseprite;
+    @asset([
+        "sprites/eyes/standard.aseprite.json",
+        "sprites/eyes/tree.aseprite.json",
+        "sprites/eyes/stone.aseprite.json",
+        "sprites/eyes/flameboy.aseprite.json",
+    ])
+    private static sprites: Aseprite[];
+
     private mode = FaceModes.NEUTRAL;
     private direction = 1; // 1 = right, -1 = left
 
@@ -28,10 +36,6 @@ export class Face {
         private offX = 0,
         private offY = 20
     ) {}
-
-    public async load(): Promise<void> {
-        this.sprite = await Aseprite.load(`assets/sprites/eyes/${this.eyeType}.aseprite.json`);
-    }
 
     public setMode(mode: FaceModes) {
         this.mode = mode;
@@ -43,7 +47,8 @@ export class Face {
         ctx.scale(this.direction, 1);
         const isBlinking = ((<any>window).game?.gameTime % 5) < 0.6;
         const frame = isBlinking ? FaceModes.BLINK : this.mode;
-        this.sprite.drawTag(ctx, frame, -this.sprite.width >> 1, -this.sprite.height);
+        const sprite = Face.sprites[this.eyeType];
+        sprite.drawTag(ctx, frame, -sprite.width >> 1, -sprite.height);
         ctx.restore();
     }
 

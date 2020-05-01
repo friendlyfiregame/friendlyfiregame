@@ -8,6 +8,7 @@ import { entity } from "./Entity";
 import { now } from "./util";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -17,21 +18,18 @@ export enum StoneState {
 
 @entity("stone")
 export class Stone extends NPC implements CollidableGameObject {
-    private sprite!: Aseprite;
+    @asset("sprites/stone.aseprite.json")
+    private static sprite: Aseprite;
+
+    @asset("sounds/throwing/success.mp3")
+    private static successSound: Sound;
+
     public state: StoneState = StoneState.DEFAULT;
-    private successSound!: Sound;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 26, 54);
         this.direction = -1;
         this.face = new Face(this, EyeType.STONE, 0, 21);
-    }
-
-    public async load(): Promise<void> {
-        await super.load();
-        this.sprite = await Aseprite.load("assets/sprites/stone.aseprite.json");
-        // this.greeting = new Greeting(this.game, this, dialogData);
-        this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -40,7 +38,7 @@ export class Stone extends NPC implements CollidableGameObject {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
+        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height);
         ctx.restore();
         this.drawFace(ctx, false);
         this.speechBubble.draw(ctx);
@@ -56,7 +54,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 this.setVelocity(0, 0);
                 this.setFloating(true);
                 this.y = 380;
-                this.successSound.play();
+                Stone.successSound.play();
                 this.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {

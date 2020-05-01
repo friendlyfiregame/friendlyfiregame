@@ -4,20 +4,25 @@ import { Environment } from "./World";
 import { entity } from "./Entity";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { GameObjectProperties } from "./MapInfo";
-import { loadImage } from "./graphics";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, timedRnd, rndInt } from './util';
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
+    @asset("sprites/cloud3.aseprite.json")
+    private static sprite: Aseprite;
+
+    @asset("sprites/raindrop.png")
+    private static raindrop: HTMLImageElement;
+
     private startX: number;
     private startY: number;
     private targetX: number;
     private targetY: number;
     private velocity: number;
-    private sprite!: Aseprite;
-    private raindrop!: HTMLImageElement;
+
     private rainEmitter: ParticleEmitter;
     private raining = 0;
     private isRainCloud = false;
@@ -47,18 +52,13 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
                         y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80) }),
-            color: () => this.raindrop,
+            color: () => Cloud.raindrop,
             size: 4,
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.7, 1.2),
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
         });
-    }
-
-    public async load(): Promise<void> {
-        this.sprite = await Aseprite.load("assets/sprites/cloud3.aseprite.json");
-        this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
     public startRain(time: number = Infinity) {
@@ -76,7 +76,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
-        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
+        Cloud.sprite.drawTag(ctx, "idle", -Cloud.sprite.width >> 1, -Cloud.sprite.height);
         ctx.restore();
     }
 

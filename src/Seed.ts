@@ -8,6 +8,7 @@ import { Sound } from './Sound';
 import { Wood } from "./Wood";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 export enum SeedState {
     FREE = 0,
@@ -18,22 +19,19 @@ export enum SeedState {
 
 @entity("seed")
 export class Seed extends NPC {
-    private sprite!: Aseprite;
+    @asset("sprites/seed.aseprite.json")
+    private static sprite: Aseprite;
+
+    @asset("sounds/throwing/success.mp3")
+    private static successSound: Sound;
+
     public state = SeedState.FREE;
-    private successSound!: Sound;
     private wood: Wood;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 24, 24);
         this.wood = new Wood(game, x, y);
         this.face = new Face(this, EyeType.STANDARD, 0, 8);
-    }
-
-    public async load(): Promise<void> {
-        await super.load();
-        this.sprite = await Aseprite.load("assets/sprites/seed.aseprite.json");
-        this.successSound = new Sound("sounds/throwing/success.mp3");
-        await this.wood.load();
     }
 
     private getSpriteTag(): string {
@@ -50,7 +48,7 @@ export class Seed extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        this.sprite.drawTag(ctx, this.getSpriteTag(), -this.sprite.width >> 1, -this.sprite.height);
+        Seed.sprite.drawTag(ctx, this.getSpriteTag(), -Seed.sprite.width >> 1, -Seed.sprite.height);
         ctx.restore();
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
@@ -90,7 +88,7 @@ export class Seed extends NPC {
                 this.setFloating(true);
                 this.x = 2052;
                 this.y = 1624;
-                this.successSound.play();
+                Seed.successSound.play();
                 this.game.campaign.runAction("enable", null, ["stone", "stone2"]);
             }
             if (!this.isCarried() && this.state !== SeedState.SWIMMING && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {

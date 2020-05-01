@@ -1,8 +1,21 @@
 import { Game } from './game';
 import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
+import { asset } from "./Assets";
 
 export class Dance {
+    @asset("sounds/dancing/success.mp3")
+    private static successSound: Sound;
+
+    @asset("sounds/dancing/fail.mp3")
+    private static failSound: Sound;
+
+    @asset("music/raindance.mp3")
+    private static raindance_music: Sound;
+
+    @asset("music/dancing_queen.mp3")
+    private static treedance_music: Sound;
+
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
     /** Time of the first note, depends on openTime and warmupBeats */
@@ -21,10 +34,6 @@ export class Dance {
     private performance: Record<string, boolean>[] = [];
     private currentIndex = 0;
     private success = false;
-    private static successSound: Sound;
-    private static failSound: Sound;
-    private static raindance_music: Sound;
-    private static treedance_music: Sound;
 
     constructor(
         private game: Game,
@@ -48,17 +57,6 @@ export class Dance {
         }
         this.begin();
         this.alphaCurve = valueCurves.cos(0.15);
-    }
-
-    public static async load(): Promise<void> {
-        this.successSound = new Sound("sounds/dancing/success.mp3");
-        this.failSound = new Sound("sounds/dancing/fail.mp3");
-        this.raindance_music = new Sound("music/raindance.mp3");
-        this.raindance_music.setVolume(0);
-        this.raindance_music.stop();
-        this.treedance_music = new Sound("music/dancing_queen.mp3");
-        this.treedance_music.setVolume(0);
-        this.treedance_music.stop();
     }
 
     public wasSuccessful(): boolean {
@@ -210,18 +208,18 @@ export class Dance {
         }
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            this.game.music[0].setVolume(0.25 * fade);
+            Game.music[0].setVolume(0.25 * fade);
         } else {
             // own music paused
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
                 Dance.treedance_music.setVolume(0.8);
                 Dance.treedance_music.play();
-                this.game.music[0].setVolume(0);
+                Game.music[0].setVolume(0);
             }
             if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
                 Dance.raindance_music.setVolume(0.8);
                 Dance.raindance_music.play();
-                this.game.music[0].setVolume(0);
+                Game.music[0].setVolume(0);
             }
         }
     }
@@ -229,7 +227,7 @@ export class Dance {
     private resetMusic() {
         Dance.raindance_music.stop();
         Dance.treedance_music.stop();
-        this.game.music[0].setVolume(0.25);
+        Game.music[0].setVolume(0.25);
     }
 
     public draw(ctx: CanvasRenderingContext2D) {

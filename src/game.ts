@@ -18,18 +18,17 @@ import "./Spider";
 import { BitmapFont } from "./BitmapFont";
 import { Sound } from "./Sound";
 import { Stone } from "./Stone";
-import { Dance } from './Dance';
 import { Tree } from "./Tree";
 import { GamepadInput } from "./GamepadInput";
 import { FlameBoy } from './FlameBoy';
 import { Wing } from './Wing';
 import { Spider } from './Spider';
-import { loadImage } from "./graphics";
 import { KeyHandler } from "./KeyHandler";
 import { Seed } from './Seed';
 import { Cloud } from './Cloud';
 import { Conversation } from './Conversation';
 import { Aseprite } from "./Aseprite";
+import { Assets, asset } from "./Assets";
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -41,7 +40,6 @@ const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D): void;
     update(dt: number): void;
-    load(): Promise<void>;
 }
 
 export interface CollidableGameObject extends GameObject {
@@ -62,6 +60,21 @@ export enum GameStage {
 }
 
 export class Game {
+    @asset([
+        "music/theme_01.mp3",
+        "music/inferno.mp3"
+    ])
+    public static music: Sound[];
+
+    @asset("images/title.png")
+    private static titleImage: HTMLImageElement;
+
+    @asset("images/end.png")
+    private static endImage: HTMLImageElement;
+
+    @asset("sprites/flameboy2.aseprite.json")
+    private static endBoy: Aseprite;
+
     public dev = window.location.port === "8000";
 
     public canvas: HTMLCanvasElement;
@@ -81,15 +94,10 @@ export class Game {
     public appTime = 0;
 
     private boundLoop: () => void;
-
     public gameObjects: GameObject[] = [];
-
     private paused = false;
-
     public world: World;
-
     public camera: Camera;
-
     public player: Player;
     public stone: Stone;
     public tree: Tree;
@@ -97,37 +105,26 @@ export class Game {
     public flameboy: FlameBoy;
     public wing: Wing;
     public spider: Spider;
-
     public campaign: Campaign;
-
     public particles: Particles;
-
     public fire: Fire;
     public fireFuryEndTime = 0;
-
     public apocalypse = false;
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
-
     private frameCounter = 0;
     private framesPerSecond = 0;
     private useRealResolution = false;
     private scalePixelPerfect = true;
     private scale = 1;
     private readonly mapInfo: MapInfo;
-
     public mainFont!: BitmapFont;
     public bigFont!: BitmapFont;
-    public music!: Sound[];
-
     public gamepadInput!: GamepadInput;
-
-    private titleImage!: HTMLImageElement;
-    private endImage!: HTMLImageElement;
-    private endBoy!: Aseprite;
     public stage = GameStage.TITLE;
     public keyHandler = new KeyHandler();
+    public readonly assets = new Assets();
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -182,20 +179,9 @@ export class Game {
         throw new Error(`Game object of type ${type.name} not found`);
     }
 
-    private async load() {
-        this.music = [
-            new Sound("music/theme_01.mp3"),
-            new Sound("music/inferno.mp3")
-        ];
+    private async load(): Promise<void> {
+        await this.assets.load();
         await this.loadFonts();
-        this.titleImage = await loadImage("images/title.png");
-        this.endImage = await loadImage("images/end.png");
-        this.endBoy = await Aseprite.load("assets/sprites/flameboy2.aseprite.json");
-        await Dance.load();
-        await FireGfx.load();
-        for (const obj of this.gameObjects) {
-            await obj.load();
-        }
         await this.loadApocalypse();
         // setTimeout(() => this.beginApocalypse(), 1000);
     }
@@ -206,11 +192,11 @@ export class Game {
     }
 
     private async playMusicTrack(): Promise<void> {
-        const music = this.music[0];
-        this.music.forEach(music => music.stop());
+        const music = Game.music[0];
+        Game.music.forEach(music => music.stop());
         music.setLoop(true);
         music.setVolume(0.25);
-        this.music[1].setVolume(0.25);
+        Game.music[1].setVolume(0.25);
         return music.play();
     };
 
@@ -345,7 +331,7 @@ export class Game {
         ctx.beginPath();
         ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.clip();
-        ctx.drawImage(this.titleImage, 0, 0);
+        ctx.drawImage(Game.titleImage, 0, 0);
         const off = (this.appTime * 1000 / 12) % 2000;
         const cx = Math.round(ctx.canvas.width + 100 - off);
         this.mainFont.drawText(ctx, 'Press Enter', 75, 160, "white", 0);
@@ -361,11 +347,11 @@ export class Game {
         ctx.beginPath();
         ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.clip();
-        ctx.drawImage(this.endImage, 0, 0);
+        ctx.drawImage(Game.endImage, 0, 0);
 
         ctx.translate(240, 222);
         ctx.scale(2, 2);
-        this.endBoy.drawTag(ctx, "idle", -this.endBoy.width >> 1, -this.endBoy.height);
+        Game.endBoy.drawTag(ctx, "idle", -Game.endBoy.width >> 1, -Game.endBoy.height);
         ctx.restore();
     }
 
@@ -477,7 +463,7 @@ export class Game {
         if (this.fire.intensity < 6) {
             this.fire.intensity = Math.max(this.fire.intensity, 4);
             this.apocalypseFactor = clamp((this.fire.intensity - 4) / 2, 0, 1);
-            this.music[1].setVolume(0.25 * this.apocalypseFactor);
+            Game.music[1].setVolume(0.25 * this.apocalypseFactor);
             if (this.apocalypseFactor <= 0.001) {
                 // End apocalypse
                 this.apocalypseFactor = 0;
@@ -485,7 +471,7 @@ export class Game {
                 this.fire.angry = false;
                 this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
-                this.music[1].stop()
+                Game.music[1].stop()
             }
         }
     }
@@ -527,7 +513,7 @@ export class Game {
                 velocity: 0,
                 distance: 1
             }, true);
-            cloud.load().then(() => this.gameObjects.push(cloud));
+            this.gameObjects.push(cloud);
         }
         this.player.multiJump = true;
         // Some helpful thoughts

@@ -1,7 +1,8 @@
-import { loadImage, getImageData } from "./graphics";
+import { getImageData } from "./graphics";
 import { GameObject, Game, isCollidableGameObject, gameWidth } from "./game";
 import { ParticleEmitter, particles, valueCurves } from "./Particles";
 import { rnd, rndInt } from "./util";
+import { asset } from "./Assets";
 
 export enum Environment {
     AIR = 0,
@@ -14,13 +15,23 @@ export enum Environment {
 }
 
 export class World implements GameObject {
-    private foreground!: HTMLImageElement;
-    private background!: HTMLImageElement;
-    private background2!: HTMLImageElement;
-    private background3!: HTMLImageElement;
-    private collisionMap!: Uint32Array;
+    @asset("maps/level.png")
+    private static foreground: HTMLImageElement;
+
+    @asset("maps/level_collision.png", { map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer) })
+    private static collisionMap: Uint32Array;
+
+    @asset([
+        "maps/bg.png",
+        "maps/bg2.png",
+        "maps/bg3.png"
+    ])
+    private static backgrounds: HTMLImageElement[];
+
     private game: Game;
-    private raindrop!: HTMLImageElement;
+
+    @asset("sprites/raindrop.png")
+    private static raindrop: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = false;
 
@@ -30,7 +41,7 @@ export class World implements GameObject {
             position: {x: 2051, y: 2120},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
-            color: () => this.raindrop,
+            color: () => World.raindrop,
             size: 4,
             gravity: {x: 0, y: -100},
             lifetime: () => 3,
@@ -39,26 +50,12 @@ export class World implements GameObject {
         });
     }
 
-    public async load(): Promise<void> {
-        const worldImage = await loadImage("maps/level.png");
-        const worldCollisionImage = await loadImage("maps/level_collision.png");
-        if (worldImage.width !== worldCollisionImage.width || worldImage.height !== worldCollisionImage.height) {
-            throw new Error("World image must have same size as world collision image");
-        }
-        this.foreground = worldImage;
-        this.background = await loadImage("maps/bg.png");
-        this.background2 = await loadImage("maps/bg2.png");
-        this.background3 = await loadImage("maps/bg3.png");
-        this.collisionMap = new Uint32Array(getImageData(worldCollisionImage).data.buffer);
-        this.raindrop = await loadImage("sprites/raindrop.png");
-    }
-
     public getWidth(): number {
-        return this.foreground.width;
+        return World.foreground.width;
     }
 
     public getHeight(): number {
-        return this.foreground.height;
+        return World.foreground.height;
     }
 
     public update(dt: number) {
@@ -68,33 +65,26 @@ export class World implements GameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        const bgX = this.getWidth() / this.background.width;
-        const bgY = this.getHeight() / this.background.height;
-
-        const bg2X = this.getWidth() / this.background2.width;
-        const bg2Y = this.getHeight() / this.background2.height;
-
-        const bg3X = this.getWidth() / this.background3.width;
-        const bg3Y = this.getHeight() / this.background3.height;
-
         const camX = this.game.camera.x;
         const camY = this.game.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
         ctx.save();
         ctx.translate(camX, -camY);
-        ctx.drawImage(this.background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
-        ctx.drawImage(this.background2, (-camX / bg2X) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bg2Y);
-        ctx.drawImage(this.background3, (-camX / bg3X) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bg3Y);
-        ctx.drawImage(this.foreground, -camX, -this.getHeight() + camY);
+        for (const background of World.backgrounds) {
+            const bgX = this.getWidth() / background.width;
+            const bgY = this.getHeight() / background.height;
+            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
+        }
+        ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
         ctx.restore();
     }
 
     public getEnvironment(x: number, y: number): Environment {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
-        if (index < 0 || index >= this.collisionMap.length) {
+        if (index < 0 || index >= World.collisionMap.length) {
             return Environment.AIR;
         }
-        return this.collisionMap[index];
+        return World.collisionMap[index];
     }
 
     /**
@@ -116,14 +106,14 @@ export class World implements GameObject {
         }
 
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
-        if (index < 0 || index >= this.collisionMap.length) {
+        if (index < 0 || index >= World.collisionMap.length) {
             return 0;
         }
         const environment = this.getEnvironment(x, y);
         if (ignore && ignore.includes(environment)) {
             return Environment.AIR;
         }
-        return this.collisionMap[index];
+        return World.collisionMap[index];
     }
 
     public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):

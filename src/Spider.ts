@@ -2,18 +2,16 @@ import { Game } from "./game";
 import { NPC } from './NPC';
 import { entity } from "./Entity";
 import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
 
 @entity("spider")
 export class Spider extends NPC {
-    private sprite!: Aseprite;
+    @asset("sprites/magicspider.aseprite.json")
+    private static sprite: Aseprite;
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 36, 36);
         this.direction = -1;
-    }
-
-    public async load(): Promise<void> {
-        this.sprite = await Aseprite.load("assets/sprites/magicspider.aseprite.json");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -22,7 +20,7 @@ export class Spider extends NPC {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
+        Spider.sprite.drawTag(ctx, "idle", -Spider.sprite.width >> 1, -Spider.sprite.height);
         ctx.restore();
         this.speechBubble.draw(ctx);
     }
