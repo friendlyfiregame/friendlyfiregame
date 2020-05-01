@@ -1,35 +1,30 @@
 {
     "entry": [
-        "Greetings, adventurer. Welcome to this ancient and mysterious land.",
-        "I am your designated magical gender fairy and will guide you on your quest. I bet you have a lot of questions",
-        ">Nice to meet you @friendly",
+        "[not visited]Greetings, adventurer. Welcome to this ancient and mysterious land.",
+        "[not visited]I am your designated magical gender fairy and will guide you on your quest. I bet you have a lot of questions !set visited",
+        "[visited]How can I help?",
+        ">[not option_nicetomeet]It's nice to meet you @nicetomeet",
         ">What's going on here? @whatsgoingon",
-        ">What gender related magic can you cast? @magic",
+        ">[not toggledgender]What gender related magic can you cast? @magic",
+        ">[toggledgender]Can you 'accidentaly' change my gender again? @swapgender",
         ">Seriously? Magical FAIRY? @spider",
-        ">I got no time for this...",
-        "Hey, at least I tried... @visited !end"
+        ">[not visited]I got no time for this...",
+        ">[visited]Gonna go... @entry !end",
+        "The nerve! @rejected !end"
     ],
-    "entry2": [
-        "Changed your mind yet?",
-        ">Yes, I'm totally lost @visited",
-        ">Hell no! @entry2 !end",
-        "..."
+    "rejected": [
+        "Look who cames crawling back",
+        ">Sorry, I actually do need some guidance @entry",
+        ">I just pressed the wrong button!",
+        "Jerk! @rejected !end"
     ],
-    "visited": [
-        "How can I help?",
-        ">What's going on here? @whatsgoingon",
-        ">What gender related magic can you cast? @magic",
-        ">Seriosly? Magical FAIRY? @spider",
-        ">Gotta get a move on",
-        "Please do @visited !end"
-    ],
-    "friendly": [
-        "Ho ho ho, what a friendly fella you are. The last one wasn't of the talkative kind.",
+    "nicetomeet": [
+        "Ho ho ho, what a friendly fella you are. The last one wasn't of the talkative kind. !set option_nicetomeet",
         "He had the WORST time!",
         "But you and I will get along just fine.",
         ">What happened to the last one? @chosenone",
         ">Yeah sure, back to topic",
-        "Suuuure @visited"
+        "Suuuure @entry"
     ],
     "chosenone": [
         "It wasn't a pretty sight. Lot's of misunderstandings, some disrespectful verbal exchanges.",
@@ -38,7 +33,7 @@
         "...",
         "Subtelty is not my strong suit",
         ">I can see that. Back to topic!",
-        "Aye @visited"
+        "Aye @entry"
     ],
     "whatsgoingon": [
         "Oh you now, the usual. Some unresolved cataclysmic quarrels between some fire elementals.",
@@ -50,33 +45,56 @@
         "Not as dangerous as it sounds. How dangerous can a sentient fire be...",
         "he... he he",
         "Nevermind.",
-        ">Okay... @visited"
+        ">Okay... @entry"
     ],
     "likefire": [
-        "Please don't touch the fire, man... We cannot deal with another lawsuit. Not to speak of the smell...",
-        "Took a while to get the stench of the plains",
+        "Please don't touch the fire... We cannot deal with another lawsuit. Not to speak of the smell...",
+        "Took a while to get the stench of this level",
         ">I was just joking...",
         "What a great comedian you are!",
-        ">Back to topic please! @visited"
+        ">Back to topic please! @entry"
     ],
     "spider": [
-        "What, don't you see the fairy wings on my back?",
-        "I worked really hard to earn these.",
-        ">Can anyone become a fairy?",
-        ">Since when are spiders fairies?"
+        "[not isracist]What, don't you see the fairy wings on my back? My golden hair and cute make up?",
+        "[not isracist]I worked really hard to earn all of these traits.",
+        "[isracist]...",
+        ">Can anyone become a fairy? @fairyschool",
+        ">[not isracist]Since when are spiders allowed to be fairies? @racist",
+        ">Nevermind @entry"
+    ],
+    "fairyschool": [
+        "Are you kidding me?",
+        "Of course not. Only the best of the best can become fairies",
+        "I went through six years of fairy university and another two years of unpaid internships as fairy assistant",
+        "Can't wait until I get my new pink fairy dress. The one I got at graduation didn't fit.",
+        ">I cannot guess why... Back to topic @entry"
+    ],
+    "racist": [
+        "I will ignore your racist remark in good faith... you racist! !set isracist !set askedaboutspider @spider"
     ],
     "magic": [
-        "Great that you ask!",
-        "I'm not your run of the mill gender fairy.",
-        "With my bachelor degree in gender studies, I know everything about genders",
-        "I can tell that you have one of two genders!",
-        ">What a surprise...",
+        "[not askedformoregenders]Great that you ask!",
+        "[not askedformoregenders]I'm not your run of the mill gender fairy.",
+        "[not askedformoregenders]With my bachelor degree in gender studies, I know everything about genders",
+        "[not askedformoregenders]I can instantly tell that you've been born to be at least one of two genders!",
+        "[askedformoregenders] Like I said, you have a gender!",
+        ">[not askedformoregenders]Aren't there more? @moregenders",
         ">Is that your magical power...?",
         "Ho ho ho, that's not all! I have the power to accidentally change the gender of humans against their will",
         "Abra cadabra and it is done! ",
-        ">What... WAIT !togglegender",
+        ">What... WAIT !set toggledgender !togglegender",
         "You are very welcome, gender swapped human!",
-        ">It's not that bad, actually @visited",
-        ">You even changed the clothes, nice @visited"
+        ">It's not that bad, actually @entry",
+        ">You even changed the clothes, nice @entry"
+    ],
+    "moregenders": [
+        "There's only so much you can do with this kind of pixel resolution...",
+        "Also, don't question my bachelor knowledge!",
+        ">Two genders is fine !set askedformoregenders @magic"
+    ],
+    "swapgender": [
+        "Why? Don't you like your current gender?",
+        "Whoops, there we go again !togglegender",
+        ">I feel sick @entry"
     ]
 }
