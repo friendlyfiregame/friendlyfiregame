@@ -3,6 +3,7 @@ import { Game } from "./game";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
+import { Milestone } from './Player';
 
 @entity("wing")
 export class Wing extends NPC {
@@ -18,18 +19,29 @@ export class Wing extends NPC {
         super(game, x, y, 24, 24);
     }
 
+    private showDialoguePrompt (): boolean {
+        return (
+            this.game.player.getMilestone() >= Milestone.GOT_MULTIJUMP &&
+            this.game.player.getMilestone() < Milestone.MADE_RAIN
+        );
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         ctx.translate(this.x, -this.y - floatOffsetY);
         Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height);
         ctx.restore();
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt(ctx);
+        }
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
         this.timeAlive += dt;
+        this.dialoguePrompt.update(dt, this.x, this.y + 16);
         this.speechBubble.update(this.x, this.y);
     }
 }

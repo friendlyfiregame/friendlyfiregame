@@ -20,7 +20,6 @@ import { PlayerConversation } from './PlayerConversation';
 import { Wood, WoodState } from "./Wood";
 import { Fire } from "./Fire";
 import { Tree } from "./Tree";
-import { FlameBoy } from "./FlameBoy";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 
@@ -60,14 +59,17 @@ const drowningThoughts = [
 export enum Milestone {
     JUST_ARRIVED,
     TALKED_TO_FIRE,
+    GOT_QUEST_FROM_FIRE,
     TALKED_TO_TREE,
+    GOT_QUEST_FROM_TREE,
     GOT_SEED,
     PLANTED_SEED,
     TALKED_TO_STONE,
     GOT_STONE,
     THROWN_STONE_INTO_WATER,
-    TALKED_TO_FLAMEBOY,
+    GOT_MULTIJUMP,
     MADE_RAIN,
+    TREE_DROPPED_WOOD,
     GOT_WOOD,
     THROWN_WOOD_INTO_FIRE
 }
@@ -222,12 +224,6 @@ export class Player extends PhysicsEntity {
                 }
                 if (this.closestNPC instanceof Tree) {
                     this.achieveMilestone(Milestone.TALKED_TO_TREE);
-                }
-                if (this.closestNPC instanceof Stone) {
-                    this.achieveMilestone(Milestone.TALKED_TO_STONE);
-                }
-                if (this.closestNPC instanceof FlameBoy) {
-                    this.achieveMilestone(Milestone.TALKED_TO_FLAMEBOY);
                 }
             } else if (this.canDanceToMakeRain()) {
                 this.startDance(this.game.apocalypse ? 3 : 2);
@@ -718,13 +714,14 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            if (object instanceof Seed) {
+            if (object instanceof Seed && this.milestone < Milestone.GOT_SEED) {
                 this.achieveMilestone(Milestone.GOT_SEED);
             }
-            if (object instanceof Wood) {
+            if (object instanceof Wood && this.milestone < Milestone.GOT_WOOD) {
                 this.achieveMilestone(Milestone.GOT_WOOD);
+                this.game.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
-            if (object instanceof Stone) {
+            if (object instanceof Stone && this.milestone < Milestone.GOT_STONE) {
                 this.achieveMilestone(Milestone.GOT_STONE);
             }
             this.carrying = object;
@@ -757,6 +754,10 @@ export class Player extends PhysicsEntity {
         this.lastHint = Date.now();
     }
 
+    public getMilestone(): Milestone {
+        return this.milestone;
+    }
+
     public showHint(): void {
         if (this.playerConversation === null) {
             switch (this.milestone) {
@@ -764,6 +765,9 @@ export class Player extends PhysicsEntity {
                     this.think("I should talk to someone.", 3000);
                     break;
                 case Milestone.TALKED_TO_FIRE:
+                    this.think("I think the fire needs my help", 3000);
+                    break;
+                case Milestone.GOT_QUEST_FROM_FIRE:
                     this.think("The fire told me to visit the tree in the east", 3000);
                     break;
                 case Milestone.TALKED_TO_TREE:
@@ -784,7 +788,7 @@ export class Player extends PhysicsEntity {
                 case Milestone.THROWN_STONE_INTO_WATER:
                     this.think("There must be something interesting west of the river", 3000);
                     break;
-                case Milestone.TALKED_TO_FLAMEBOY:
+                case Milestone.GOT_MULTIJUMP:
                     this.think("I should check the clouds. The seed still needs something to grow", 3000);
                     break;
                 case Milestone.MADE_RAIN:

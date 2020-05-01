@@ -1,0 +1,41 @@
+{ "frames": [
+   {
+    "filename": "0",
+    "frame": { "x": 0, "y": 0, "w": 12, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 16 },
+    "sourceSize": { "w": 12, "h": 16 },
+    "duration": 200
+   },
+   {
+    "filename": "1",
+    "frame": { "x": 12, "y": 0, "w": 12, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 16 },
+    "sourceSize": { "w": 12, "h": 16 },
+    "duration": 200
+   },
+   {
+    "filename": "2",
+    "frame": { "x": 0, "y": 16, "w": 12, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 16 },
+    "sourceSize": { "w": 12, "h": 16 },
+    "duration": 200
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.18",
+  "image": "dialogue.png",
+  "format": "RGBA8888",
+  "size": { "w": 24, "h": 32 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 2, "direction": "pingpong" }
+  ]
+ }
+}

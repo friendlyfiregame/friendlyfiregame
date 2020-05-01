@@ -1,6 +1,7 @@
 import { Game } from './game';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
+import fire0 from '../assets/dialog/fire0.dialog.json';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
 import fire3 from '../assets/dialog/fire3.dialog.json';
@@ -17,10 +18,12 @@ import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
+import { Milestone } from './Player';
 
 export type CampaignState = "start" | "finished";
 
 const allDialogs: Record<string, JSON> = {
+    "fire0": fire0,
     "fire1": fire1,
     "fire2": fire2,
     "fire3": fire3,
@@ -48,7 +51,7 @@ export class Campaign {
 
     private begin() {
         // Setup initial NPC dialogs
-        this.runAction("enable", null, ["fire", "fire1"]);
+        this.runAction("enable", null, ["fire", "fire0"]);
         this.runAction("enable", null, ["tree", "tree0"]);
         this.runAction("enable", null, ["stone", "stone1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
@@ -119,6 +122,10 @@ export class Campaign {
                 this.game.fire.conversation = null;
                 this.game.fireFuryEndTime = this.game.gameTime + duration + 8;
                 break;
+            case "gotFireQuest":
+                this.game.player.achieveMilestone(Milestone.GOT_QUEST_FROM_FIRE);
+                this.game.campaign.runAction("enable", null, ["tree", "tree1"]);
+                break;
             case "givebeard":
                 this.game.player.setBeard(true);
                 break;
@@ -133,17 +140,25 @@ export class Campaign {
                 this.addState(params[0] as any);
                 break;
             case "doublejump":
+                this.game.player.achieveMilestone(Milestone.GOT_QUEST_FROM_TREE);
                 this.game.player.doubleJump = true;
                 break;
             case "multijump":
+                this.game.player.achieveMilestone(Milestone.GOT_MULTIJUMP);
                 this.game.player.multiJump = true;
                 break;
             case "spawnseed":
                 this.game.tree.spawnSeed();
                 break;
             case "spawnwood":
+                this.game.player.achieveMilestone(Milestone.TREE_DROPPED_WOOD);
                 this.game.tree.spawnWood();
                 break;
+            case "talkedToStone":
+                if (this.game.player.getMilestone() === Milestone.PLANTED_SEED) {
+                    this.game.player.achieveMilestone(Milestone.TALKED_TO_STONE); 
+                }
+                break; 
             case "pickupstone":
                 this.game.stone.pickUp();
                 break;
