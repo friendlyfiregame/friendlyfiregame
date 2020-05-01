@@ -235,6 +235,12 @@
    { "name": "dance", "from": 16, "to": 21, "direction": "pingpong" },
    { "name": "dance-fluke-1", "from": 22, "to": 22, "direction": "forward" },
    { "name": "dance-fluke-2", "from": 23, "to": 23, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Meta", "opacity": 255, "blendMode": "normal", "data": "{ \"carryOffsetFrames\": [ 10, 12 ]}" },
+   { "name": "Legs", "opacity": 255, "blendMode": "normal" },
+   { "name": "Body", "opacity": 255, "blendMode": "normal" },
+   { "name": "Head", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

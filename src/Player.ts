@@ -79,6 +79,10 @@ export enum Gender {
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
 
+interface PlayerSpriteMetadata {
+    carryOffsetFrames?: number[];
+}
+
 @entity("player")
 export class Player extends PhysicsEntity {
     private milestone = Milestone.JUST_ARRIVED;
@@ -87,6 +91,7 @@ export class Player extends PhysicsEntity {
     private gender = Gender.MALE;
     public direction = 1;
     public playerSprites: Aseprite[] = [];
+    public playerSpriteMetadata: PlayerSpriteMetadata[] = [];
     public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
@@ -163,6 +168,12 @@ export class Player extends PhysicsEntity {
     public async load(): Promise<void> {
         this.playerSprites[Gender.MALE] = await Aseprite.load("assets/sprites/pc/male.aseprite.json");
         this.playerSprites[Gender.FEMALE] = await Aseprite.load("assets/sprites/pc/male.aseprite.json"); // TODO
+
+        this.playerSprites.forEach((sprite, index) => {
+            const metaDataJSON = sprite.getLayer("Meta")?.data;
+            this.playerSpriteMetadata[index] = metaDataJSON ? JSON.parse(metaDataJSON): {};
+        });
+
         this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
         this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
         this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
@@ -441,7 +452,10 @@ export class Player extends PhysicsEntity {
         }
         if (this.carrying) {
             this.carrying.x = this.x;
-            this.carrying.y = this.y + this.height - 1; // TODO Bobbing while walking tied to animation? How?
+            const currentFrameIndex = this.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry");
+            const carryOffsetFrames = this.playerSpriteMetadata[this.gender].carryOffsetFrames ?? [];
+            const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
+            this.carrying.y = this.y + this.height - offset;
             if (this.carrying instanceof Seed) {
                 this.carrying.x += 4;
             }

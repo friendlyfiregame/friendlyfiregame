@@ -1,4 +1,4 @@
-import type { AsepriteJSON, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteDirection } from "*.aseprite.json";
+import type { AsepriteJSON, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteDirection, AsepriteLayerJSON } from "*.aseprite.json";
 import { loadImage } from "./graphics";
 import { now } from "./util";
 
@@ -12,7 +12,7 @@ export class Aseprite {
     private readonly frameTagDurations: Record<string, number> = {};
     private readonly duration: number;
 
-    private constructor(json: AsepriteJSON, private readonly image: HTMLImageElement) {
+    private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
         this.duration = this.frames.reduce((duration, frame) => duration + frame.duration, 0);
         for (const frameTag of json.meta.frameTags ?? []) {
@@ -56,7 +56,7 @@ export class Aseprite {
         return this.frames[0].sourceSize.h;
     }
 
-    private getFrameIndex(time: number, duration = this.duration, from = 0, to = this.frames.length - 1,
+    private calculateFrameIndex(time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
             direction: AsepriteDirection = "forward"): number {
         let delta = direction === "reverse" ? -1 : 1;
         if (direction === "pingpong") {
@@ -73,6 +73,16 @@ export class Aseprite {
             }
         }
         return frameIndex;
+    }
+
+    /**
+     * Returns the frame index to be drawn at the given time.
+     *
+     * @param time - Optional time index of the animation. Current system time is used if not specified.
+     * @return The frame index to draw.
+     */
+    public getFrameIndex(time: number = now()): number {
+        return this.calculateFrameIndex(time);
     }
 
     /**
@@ -94,6 +104,22 @@ export class Aseprite {
     }
 
     /**
+     * Returns the frame index of a tagged sprite animation at the given time.
+     *
+     * @param tag  - The animation tag to draw.
+     * @param time - Optional time index of the animation. Current system time is used if not specified.
+     * @return The frame index to draw.
+     */
+    public getTaggedFrameIndex(tag: string, time: number = now()): number {
+        const frameTag = this.frameTags[tag];
+        if (frameTag == null) {
+            throw new Error("Frame tag not found: " + tag);
+        }
+        return this.calculateFrameIndex(time, this.frameTagDurations[tag], frameTag.from, frameTag.to,
+            frameTag.direction);
+    }
+
+    /**
      * Draws a tagged sprite animation.
      *
      * @param ctx  - The canvas context to draw to.
@@ -103,13 +129,7 @@ export class Aseprite {
      * @param time - Optional time index of the animation. Current system time is used if not specified.
      */
     public drawTag(ctx: CanvasRenderingContext2D, tag: string, x: number, y: number, time: number = now()): void {
-        const frameTag = this.frameTags[tag];
-        if (frameTag == null) {
-            throw new Error("Frame tag not found: " + tag);
-        }
-        const frameIndex = this.getFrameIndex(time, this.frameTagDurations[tag], frameTag.from, frameTag.to,
-            frameTag.direction);
-        this.drawFrame(ctx, frameIndex, x, y);
+        this.drawFrame(ctx, this.getTaggedFrameIndex(tag, time), x, y);
     }
 
     /**
@@ -121,7 +141,17 @@ export class Aseprite {
      * @param time - Optional time index of the animation. Current system time is used if not specified.
      */
     public draw(ctx: CanvasRenderingContext2D, x: number, y: number, time: number = now()): void {
-        const frameIndex = this.getFrameIndex(time);
+        const frameIndex = this.calculateFrameIndex(time);
         this.drawFrame(ctx, frameIndex, x, y);
+    }
+
+    /**
+     * Returns the layer with the given name.
+     *
+     * @param name - The layer name.
+     * @return The found layer. Null if none.
+     */
+    public getLayer(name: string): AsepriteLayerJSON | null {
+        return this.json.meta.layers?.find(layer => layer.name === name) ?? null;
     }
 }
