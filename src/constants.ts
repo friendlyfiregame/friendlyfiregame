@@ -27,12 +27,3 @@ export const PLAYER_JUMP_HEIGHT = 3.75;
 
 /** Player jump height in meters. */
 export const PLAYER_BOUNCE_HEIGHT = 10;
-
-/** Animation speed for the flameboy in milliseconds */
-export const FLAMEBOY_ANIMATION = [ 100, 100, 100, 100, 100, 100 ];
-
-/** Animation speed for the flameboy in milliseconds */
-export const WING_ANIMATION = [ 200, 200, 200, 200 ];
-
-/** Animation speed for the tree in milliseconds */
-export const TREE_ANIMATION = [ 250, 250 ];
