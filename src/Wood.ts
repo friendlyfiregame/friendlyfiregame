@@ -1,12 +1,11 @@
 import { entity } from "./Entity";
 import { Game } from "./game";
-import { Sprites } from "./Sprites";
-import { loadImage } from "./graphics";
 import { Environment } from "./World";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Sound } from "./Sound";
 import { Milestone } from "./Player";
+import { Aseprite } from "./Aseprite";
 
 export enum WoodState {
     FREE = 0,
@@ -15,7 +14,7 @@ export enum WoodState {
 
 @entity("wood")
 export class Wood extends PhysicsEntity {
-    private sprites!: Sprites;
+    private sprite!: Aseprite;
     public state = WoodState.FREE;
     private successSound!: Sound;
 
@@ -24,14 +23,14 @@ export class Wood extends PhysicsEntity {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/wood.png"), 1, 1);
+        this.sprite = await Aseprite.load("assets/sprites/wood.aseprite.json");
         this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        this.sprites.draw(ctx, 0);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
     }
 
