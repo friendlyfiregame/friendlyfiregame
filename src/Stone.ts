@@ -33,6 +33,13 @@ export class Stone extends NPC implements CollidableGameObject {
         this.successSound = new Sound("sounds/throwing/success.mp3");
     }
 
+    private showDialoguePrompt (): boolean {
+        return (
+            this.game.player.getMilestone() >= Milestone.PLANTED_SEED &&
+            this.game.player.getMilestone() < Milestone.GOT_STONE
+        );
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
@@ -42,6 +49,9 @@ export class Stone extends NPC implements CollidableGameObject {
         this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.drawFace(ctx, false);
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt(ctx);
+        }
         this.speechBubble.draw(ctx);
     }
 
@@ -72,6 +82,7 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = -1;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
+        this.dialoguePrompt.update(dt, this.x, this.y + 48);
         this.speechBubble.update(this.x, this.y);
     }
 

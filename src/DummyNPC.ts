@@ -20,6 +20,7 @@ export class DummyNPC extends NPC {
         ctx.strokeStyle = "black";
         ctx.strokeRect(this.x - Math.round(this.width / 2) - 0.5, -this.y - this.height - 0.5, this.width, this.height);
         ctx.restore();
+        this.drawDialoguePrompt(ctx);
         this.drawGreeting(ctx);
     }
 

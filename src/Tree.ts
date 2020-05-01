@@ -6,6 +6,7 @@ import { entity } from "./Entity";
 import { Seed } from "./Seed";
 import { Wood } from './Wood';
 import { Aseprite } from './Aseprite';
+import { Milestone } from './Player';
 
 @entity("tree")
 export class Tree extends NPC {
@@ -27,13 +28,33 @@ export class Tree extends NPC {
         await this.wood.load();
     }
 
+    public showDialoguePrompt (): boolean {
+        return (
+            this.game.player.getMilestone() >= Milestone.GOT_QUEST_FROM_FIRE &&
+            this.game.player.getMilestone() < Milestone.GOT_QUEST_FROM_TREE
+        ) || (
+            this.game.player.getMilestone() >= Milestone.MADE_RAIN &&
+            this.game.player.getMilestone() < Milestone.TREE_DROPPED_WOOD
+        );
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
         this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.drawFace(ctx);
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt(ctx);
+        }
         this.speechBubble.draw(ctx);
+    }
+
+    update(dt: number): void {
+        super.update(dt);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.update(dt, this.x + 4, this.y + 128);
+        }
     }
 
     startDialog(): void {

@@ -32,6 +32,7 @@ import { Cloud } from './Cloud';
 import { Sprites, getSpriteIndex } from './Sprites';
 import { FLAMEBOY_ANIMATION } from './constants';
 import { Conversation } from './Conversation';
+import { DialoguePrompt } from './DialoguePrompt';
 
 export const gameWidth = 480;
 export const gameHeight = 270;
@@ -197,6 +198,7 @@ export class Game {
         await Face.load();
         await Dance.load();
         await FireGfx.load();
+        await DialoguePrompt.load();
         for (const obj of this.gameObjects) {
             await obj.load();
         }

@@ -8,6 +8,7 @@ import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
 import { loadImage } from './graphics';
 import { Wood } from "./Wood";
+import { Milestone } from './Player';
 
 // const fireColors = [
 //     "#603015",
@@ -86,7 +87,9 @@ export class Fire extends NPC {
         this.face = new Face(this, EyeType.STANDARD, 1, 0, 6);
     }
 
-
+    public showDialoguePrompt (): boolean {
+        return this.game.player.getMilestone() < Milestone.GOT_QUEST_FROM_FIRE;
+    }
 
     async load(): Promise<void> {
         this.fireGfx = new FireGfx();
@@ -103,6 +106,9 @@ export class Fire extends NPC {
         this.fireGfx.draw(ctx, 0, 0);
         ctx.restore();
         this.drawFace(ctx);
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt(ctx);
+        }
         this.speechBubble.draw(ctx);
     }
 
@@ -130,6 +136,9 @@ export class Fire extends NPC {
         }
         if (this.isVisible) {
             this.fireGfx.update(dt);
+        }
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.update(dt, this.x, this.y + 32);
         }
         this.speechBubble.update(this.x, this.y);
     }
