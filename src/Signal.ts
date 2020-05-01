@@ -11,7 +11,7 @@ class Slot<T = unknown> {
 /**
  * Light-weight and very fast signal/slot based event system. Just create a signal instance, connect slots
  * (event listeners) to it and then let the signal emit values which are then send to all connected slots.
- * Slots can be methods and its easy to disconnect them again using the disconnect() method or calling the function
+ * Slots can be methods and it's easy to disconnect them again using the disconnect() method or calling the function
  * returned by connect().
  */
 export class Signal<T = void> {
@@ -86,7 +86,7 @@ export class Signal<T = void> {
     }
 
     /**
-     * Returns a new signal which maps all emitted value to something else.
+     * Returns a new signal which maps all emitted values to something else.
      *
      * @param mapper - The function which maps the original value to something new.
      * @return The new signal.
