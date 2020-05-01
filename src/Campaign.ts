@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 import { Game } from './game';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
@@ -17,6 +16,7 @@ import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
+import { Signal } from "./Signal";
 
 export type CampaignState = "start" | "finished";
 
@@ -37,7 +37,7 @@ const allDialogs: Record<string, JSON> = {
 };
 
 export class Campaign {
-    public statesChanged$ = new Subject<CampaignState[]>();
+    public onStatesChanged = new Signal<CampaignState[]>();
     public states: CampaignState[] = ["start"];
 
     constructor(public game: Game) {
@@ -62,20 +62,20 @@ export class Campaign {
 
     public setStates(states: CampaignState[]) {
         this.states = states;
-        this.statesChanged$.next(this.states);
+        this.onStatesChanged.emit(this.states);
     }
 
     public removeState(state: CampaignState) {
         if (this.hasState(state)) {
             this.states.splice(this.states.indexOf(state), 1);
-            this.statesChanged$.next(this.states);
+            this.onStatesChanged.emit(this.states);
         }
     }
 
     public addState(state: CampaignState) {
         if (!this.hasState(state)) {
             this.states.push(state);
-            this.statesChanged$.next(this.states);
+            this.onStatesChanged.emit(this.states);
         }
     }
 
@@ -153,7 +153,6 @@ export class Campaign {
                 }, 500);
                 break;
             case "togglegender":
-                console.log('togle');
                 this.game.player.toggleGender();
                 break;
             case "enable":

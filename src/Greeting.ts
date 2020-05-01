@@ -29,7 +29,7 @@ export class Greeting implements GameObject {
 
     constructor(private game: Game, public npc: NPC, private dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
-        this.campaign.statesChanged$.subscribe(this.updateMatchingData.bind(this))
+        this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }
 
     async load() {

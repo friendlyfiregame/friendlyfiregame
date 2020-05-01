@@ -3,13 +3,11 @@ import { Environment } from "./World";
 import { EyeType, Face, FaceModes } from './Face';
 import { Game, CollidableGameObject } from "./game";
 import { NPC } from './NPC';
-import { STONE_ANIMATION } from "./constants";
 import { Sound } from './Sound';
-import { Sprites, getSpriteIndex } from "./Sprites";
 import { entity } from "./Entity";
-import { loadImage } from "./graphics";
 import { now } from "./util";
 import { Milestone } from "./Player";
+import { Aseprite } from "./Aseprite";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -19,8 +17,7 @@ export enum StoneState {
 
 @entity("stone")
 export class Stone extends NPC implements CollidableGameObject {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
     public state: StoneState = StoneState.DEFAULT;
     private successSound!: Sound;
 
@@ -31,7 +28,7 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/stone.png"), 3, 1);
+        this.sprite = await Aseprite.load("assets/sprites/stone.aseprite.json");
         // this.greeting = new Greeting(this.game, this, dialogData);
         this.successSound = new Sound("sounds/throwing/success.mp3");
     }
@@ -42,14 +39,13 @@ export class Stone extends NPC implements CollidableGameObject {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        this.sprites.draw(ctx, this.spriteIndex);
+        this.sprite.drawTag(ctx, "idle", -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         this.drawFace(ctx, false);
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
-        this.spriteIndex = getSpriteIndex(0, STONE_ANIMATION);
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {

@@ -1,13 +1,13 @@
-export async function loadImage(fileName: string): Promise<HTMLImageElement> {
+export async function loadImage(source: string | URL): Promise<HTMLImageElement> {
     const img = new Image();
     return new Promise<HTMLImageElement>((resolve, reject) => {
         img.onload = () => {
             resolve(img);
         };
         img.onerror = () => {
-            reject(new Error(`Unable to load image '${fileName}'`));
+            reject(new Error(`Unable to load image '${source}'`));
         }
-        img.src = `assets/${fileName}`;
+        img.src = source instanceof URL ? source.href : `assets/${source}`;
     });
 }
 

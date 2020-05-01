@@ -1,0 +1,41 @@
+{ "frames": [
+   {
+    "filename": "0",
+    "frame": { "x": 0, "y": 0, "w": 24, "h": 51 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 2, "w": 24, "h": 51 },
+    "sourceSize": { "w": 26, "h": 54 },
+    "duration": 167
+   },
+   {
+    "filename": "1",
+    "frame": { "x": 24, "y": 0, "w": 24, "h": 51 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 2, "w": 24, "h": 51 },
+    "sourceSize": { "w": 26, "h": 54 },
+    "duration": 167
+   },
+   {
+    "filename": "2",
+    "frame": { "x": 48, "y": 0, "w": 24, "h": 51 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 2, "w": 24, "h": 51 },
+    "sourceSize": { "w": 26, "h": 54 },
+    "duration": 167
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.18-x64",
+  "image": "stone.png",
+  "format": "RGBA8888",
+  "size": { "w": 72, "h": 51 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 2, "direction": "forward" }
+  ]
+ }
+}

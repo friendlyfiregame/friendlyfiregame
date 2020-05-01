@@ -1,0 +1,50 @@
+{ "frames": [
+   {
+    "filename": "0",
+    "frame": { "x": 0, "y": 0, "w": 34, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 0, "w": 34, "h": 36 },
+    "sourceSize": { "w": 36, "h": 36 },
+    "duration": 400
+   },
+   {
+    "filename": "1",
+    "frame": { "x": 34, "y": 0, "w": 34, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 0, "w": 34, "h": 36 },
+    "sourceSize": { "w": 36, "h": 36 },
+    "duration": 100
+   },
+   {
+    "filename": "2",
+    "frame": { "x": 0, "y": 36, "w": 34, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 0, "w": 34, "h": 36 },
+    "sourceSize": { "w": 36, "h": 36 },
+    "duration": 400
+   },
+   {
+    "filename": "3",
+    "frame": { "x": 34, "y": 36, "w": 34, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 0, "w": 34, "h": 36 },
+    "sourceSize": { "w": 36, "h": 36 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.18-x64",
+  "image": "magicspider.png",
+  "format": "RGBA8888",
+  "size": { "w": 68, "h": 72 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 3, "direction": "forward" }
+  ]
+ }
+}

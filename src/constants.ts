@@ -54,6 +54,3 @@ export const TREE_ANIMATION = [ 250, 250 ];
 
 /** Animation speed for the platforming cloud in milliseconds */
 export const CLOUD_ANIMATION = [ 200, 200, 200 ];
-
-/** Idle Animation speed for spider in milliseconds */
-export const SPIDER_IDLE_ANIMATION = [ 400, 100, 400, 100 ];
