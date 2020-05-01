@@ -1,7 +1,5 @@
 import { entity } from "./Entity";
 import { Game } from "./game";
-import { Sprites } from "./Sprites";
-import { loadImage } from "./graphics";
 import { Face, EyeType } from './Face';
 import { NPC } from './NPC';
 import { Environment } from "./World";
@@ -9,6 +7,7 @@ import { now } from "./util";
 import { Sound } from './Sound';
 import { Wood } from "./Wood";
 import { Milestone } from "./Player";
+import { Aseprite } from "./Aseprite";
 
 export enum SeedState {
     FREE = 0,
@@ -19,8 +18,7 @@ export enum SeedState {
 
 @entity("seed")
 export class Seed extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    private sprite!: Aseprite;
     public state = SeedState.FREE;
     private successSound!: Sound;
     private wood: Wood;
@@ -32,15 +30,26 @@ export class Seed extends NPC {
     }
 
     public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/seed.png"), 3, 1);
+        this.sprite = await Aseprite.load("assets/sprites/seed.aseprite.json");
         this.successSound = new Sound("sounds/throwing/success.mp3");
         await this.wood.load();
+    }
+
+    private getSpriteTag(): string {
+        switch (this.state) {
+            case SeedState.PLANTED:
+                return "planted";
+            case SeedState.GROWN:
+                return "grown";
+            default:
+                return "free";
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        this.sprites.draw(ctx, this.spriteIndex);
+        this.sprite.drawTag(ctx, this.getSpriteTag(), -this.sprite.width >> 1, -this.sprite.height);
         ctx.restore();
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
@@ -55,7 +64,6 @@ export class Seed extends NPC {
     public grow(): void {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
-            this.spriteIndex = 2;
             this.game.seed = this;
             this.game.campaign.runAction("enable", null, ["tree", "tree2"]);
             this.game.campaign.runAction("enable", null, ["seed", "seed1"]);
@@ -71,7 +79,6 @@ export class Seed extends NPC {
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
         if (this.state === SeedState.FREE || this.state === SeedState.SWIMMING) {
-            this.spriteIndex = 0;
             const player = this.game.player;
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
@@ -82,7 +89,6 @@ export class Seed extends NPC {
                 this.setFloating(true);
                 this.x = 2052;
                 this.y = 1624;
-                this.spriteIndex = 1;
                 this.successSound.play();
                 this.game.campaign.runAction("enable", null, ["stone", "stone2"]);
             }
