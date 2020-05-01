@@ -134,7 +134,7 @@ export class Conversation {
         if (steps <= 0) {
             return;
         }
-        const prev = this.stateIndex;
+        // const prev = this.stateIndex;
         this.stateIndex -= steps;
         this.skippedLines = 0;
     }

@@ -28,6 +28,9 @@ export class FlameBoy extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
+        if (this.direction < 0) {
+            ctx.scale(-1, 1);
+        }
         FlameBoy.sprite.drawTag(ctx, "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height);
         ctx.restore();
         this.drawFace(ctx, false);

@@ -12,7 +12,6 @@ export class Spider extends NPC {
 
     public constructor(game: Game, x: number, y:number) {
         super(game, x, y, 36, 36);
-        this.direction = -1;
         Conversation.setGlobal("talkedToSpider", "false");
     }
 

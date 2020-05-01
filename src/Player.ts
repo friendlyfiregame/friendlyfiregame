@@ -71,6 +71,7 @@ export enum Milestone {
     MADE_RAIN,
     TREE_DROPPED_WOOD,
     GOT_WOOD,
+    TALKED_TO_FIRE_WITH_WOOD,
     THROWN_WOOD_INTO_FIRE
 }
 
@@ -89,7 +90,7 @@ interface PlayerSpriteMetadata {
 @entity("player")
 export class Player extends PhysicsEntity {
     @asset([
-        "sprites/pc/male.aseprite.json", // TODO Create female sprite
+        "sprites/pc/female.aseprite.json",
         "sprites/pc/male.aseprite.json"
     ])
     public static playerSprites: Aseprite[];

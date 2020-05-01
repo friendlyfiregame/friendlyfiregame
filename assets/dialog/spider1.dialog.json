@@ -1,11 +1,11 @@
 {
     "entry": [
         "[not visited]Greetings, adventurer. Welcome to this ancient and mysterious land. !set $talkedToSpider true",
-        "[not visited]I am your designated magical sex fairy and will guide you on your quest. I bet you have a lot of questions !set visited",
+        "[not visited]I am your designated magical gender fairy and will guide you on your quest. I bet you have a lot of questions !set visited",
         "[visited]How can I help?",
         ">[not option_nicetomeet]It's nice to meet you @nicetomeet",
         ">What's going on here? @whatsgoingon",
-        ">[not toggledgender]What sex related magic can you cast? @magic",
+        ">[not toggledgender]What is a gender fairy? @magic",
         ">[toggledgender]Can you 'accidentaly' change my gender again? @swapgender",
         ">Seriously? Magical FAIRY? @spider",
         ">[not visited]I got no time for this...",
@@ -42,14 +42,13 @@
         ">I like fire @likefire"
     ],
     "dangerous": [
-        "Not as dangerous as it sounds. How dangerous can a sentient fire be...",
-        "he... he he",
+        "Not really. How dangerous can a sentient fire elemental be...?",
+        "he... he hmmm",
         "Nevermind.",
         ">Okay... @entry"
     ],
     "likefire": [
-        "Please don't touch the fire... We cannot deal with another lawsuit. Not to speak of the smell...",
-        "Took a while to get the stench of this level",
+        "Please don't touch the fire... We cannot deal with another lawsuit. And not to speak of the smell...",
         ">I was just joking...",
         "What a great comedian you are!",
         ">Back to topic please! @entry"
@@ -75,13 +74,13 @@
     ],
     "magic": [
         "[not askedformoregenders]Great that you ask!",
-        "[not askedformoregenders]I'm not your run of the mill gender fairy.",
+        "[not askedformoregenders]I'm not just a normal fairy, but one with an academic background",
         "[not askedformoregenders]With my bachelor degree in gender studies, I know everything about genders",
         "[not askedformoregenders]I can instantly tell that you've been born to be at least one of two genders!",
         "[askedformoregenders] Like I said, you have a gender!",
         ">[not askedformoregenders]Aren't there more? @moregenders",
-        ">Is that your magical power...?",
-        "Ho ho ho, that's not all! I have the power to accidentally change the gender of humans against their will",
+        ">Is that all...?",
+        "Ha! Not in the least. I have the power to accidentally change the gender of humans against their will",
         "Abra cadabra and it is done! ",
         ">What... WAIT !set toggledgender !togglegender",
         "You are very welcome, gender swapped human!",

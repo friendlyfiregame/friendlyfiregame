@@ -30,6 +30,7 @@ export class Stone extends NPC implements CollidableGameObject {
         super(game, x, y, 26, 54);
         this.direction = -1;
         this.face = new Face(this, EyeType.STONE, 0, 21);
+        this.lookAtPlayer = false;
     }
 
     private showDialoguePrompt (): boolean {

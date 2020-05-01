@@ -162,6 +162,11 @@ export class Campaign {
             case "pickupstone":
                 this.game.stone.pickUp();
                 break;
+            case "talkedToFireWithWood":
+                if (this.game.player.getMilestone() === Milestone.GOT_WOOD) {
+                    this.game.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD); 
+                }
+                break; 
             case "dance":
                 setTimeout(() => {
                     this.game.player.startDance(+params[0] || 1);

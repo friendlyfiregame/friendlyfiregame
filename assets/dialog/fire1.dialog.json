@@ -1,9 +1,9 @@
 
 {
     "entry": [
-        "Oh, you did it! That's the real deal !amused",
+        "Oh, you did it! That's the real deal !amused !talkedToFireWithWood",
         "Good job on scalping that piece of junk",
-        "Just take the wood an throw it into my fire. You won't regret it, I promise",
+        "Just take the wood an throw it into my fire, just as we agreed.",
         ">Got it",
         ">I have second thoughts... @secondthoughts",
         "Just do it! @holdup !end"
@@ -16,7 +16,7 @@
     "secondthoughts": [
         "You can't be serious. Are you numb? !angry",
         "Take the WOOD and THROW it into ME, you understand? !angry",
-        "Don't make me regret this",
+        "Don't make me wait",
         ">Wow, calm down",
         "You calm down! Just give me the wood already !angry @holdup !end"
     ]

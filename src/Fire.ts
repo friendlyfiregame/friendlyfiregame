@@ -90,7 +90,13 @@ export class Fire extends NPC {
     }
 
     public showDialoguePrompt (): boolean {
-        return this.game.player.getMilestone() < Milestone.GOT_QUEST_FROM_FIRE;
+        return (
+            this.game.player.getMilestone() === Milestone.JUST_ARRIVED ||
+            (
+                this.game.player.getMilestone() >= Milestone.GOT_WOOD &&
+                this.game.player.getMilestone() < Milestone.TALKED_TO_FIRE_WITH_WOOD
+            )
+        );
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -135,6 +141,7 @@ export class Fire extends NPC {
             this.fireGfx.update(dt);
         }
         if (this.showDialoguePrompt()) {
+            // console.log(dt);
             this.dialoguePrompt.update(dt, this.x, this.y + 32);
         }
         this.speechBubble.update(this.x, this.y);
