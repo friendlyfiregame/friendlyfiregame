@@ -1,5 +1,4 @@
 import { NPC } from './NPC';
-import { Game } from './oldgame';
 import { PIXEL_PER_METER } from './constants';
 import { rnd, rndInt, shiftValue } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';
@@ -9,6 +8,8 @@ import { entity } from "./Entity";
 import { Wood } from "./Wood";
 import { asset } from "./Assets";
 import { Milestone } from './Player';
+import { GameScene } from "./scenes/GameScene";
+import { FriendlyFire } from "./FriendlyFire";
 
 // const fireColors = [
 //     "#603015",
@@ -48,7 +49,7 @@ export class Fire extends NPC {
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
 
-    public constructor(game: Game, x: number, y: number) {
+    public constructor(game: GameScene, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         this.smokeEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
@@ -91,10 +92,10 @@ export class Fire extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.game.player.getMilestone() === Milestone.JUST_ARRIVED ||
+            this.scene.player.getMilestone() === Milestone.JUST_ARRIVED ||
             (
-                this.game.player.getMilestone() >= Milestone.GOT_WOOD &&
-                this.game.player.getMilestone() < Milestone.TALKED_TO_FIRE_WITH_WOOD
+                this.scene.player.getMilestone() >= Milestone.GOT_WOOD &&
+                this.scene.player.getMilestone() < Milestone.TALKED_TO_FIRE_WITH_WOOD
             )
         );
     }
@@ -122,7 +123,7 @@ export class Fire extends NPC {
         if (this.intensity !== this.growthTarget) {
             this.intensity = shiftValue(this.intensity, this.growthTarget, this.growth * dt);
         }
-        if (!this.game.camera.isPointVisible(this.x, this.y, 200)) {
+        if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
             this.isVisible = false;
             return;
         }
@@ -153,14 +154,14 @@ export class Fire extends NPC {
         this.angry = true;
         this.growthTarget = 14;
         this.face?.setMode(FaceModes.ANGRY);
-        Game.music[0].setVolume(0);
-        Game.music[0].stop();
-        Game.music[1].setLoop(true);
-        Game.music[1].play();
+        FriendlyFire.music[0].setVolume(0);
+        FriendlyFire.music[0].stop();
+        FriendlyFire.music[1].setLoop(true);
+        FriendlyFire.music[1].play();
         // Disable remaining dialogs
         this.conversation = null;
         // Disable all other characters
-        for (const npc of [this.game.tree, this.game.stone, this.game.seed, this.game.flameboy]) {
+        for (const npc of [this.scene.tree, this.scene.stone, this.scene.seed, this.scene.flameboy]) {
             if (npc) {
                 npc.conversation = null;
                 npc.face = null;
@@ -172,11 +173,11 @@ export class Fire extends NPC {
             ["What have I done?", 6, 3],
             ["I trusted you! I helped you!", 10, 3]
         ].forEach(line => setTimeout(() => {
-            this.game.player.think(line[0] as string, line[2] as number * 1000);
+            this.scene.player.think(line[0] as string, line[2] as number * 1000);
         }, (line[1] as number) * 1000));
         // Give fire new dialog
         setTimeout(() => {
-            this.game.campaign.runAction("enable", null, ["fire", "fire2"]);
+            this.scene.campaign.runAction("enable", null, ["fire", "fire2"]);
         }, 13500);
     }
 }

@@ -1,8 +1,9 @@
-import { Game } from './oldgame';
 import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { GameScene } from "./scenes/GameScene";
+import { FriendlyFire } from "./FriendlyFire";
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
@@ -40,7 +41,7 @@ export class Dance {
     private success = false;
 
     constructor(
-        private game: Game,
+        private game: GameScene,
         private x: number,
         private y: number,
         private bpm = 128,
@@ -212,18 +213,18 @@ export class Dance {
         }
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            Game.music[0].setVolume(0.25 * fade);
+            FriendlyFire.music[0].setVolume(0.25 * fade);
         } else {
             // own music paused
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
                 Dance.treedance_music.setVolume(0.8);
                 Dance.treedance_music.play();
-                Game.music[0].setVolume(0);
+                FriendlyFire.music[0].setVolume(0);
             }
             if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
                 Dance.raindance_music.setVolume(0.8);
                 Dance.raindance_music.play();
-                Game.music[0].setVolume(0);
+                FriendlyFire.music[0].setVolume(0);
             }
         }
     }
@@ -231,7 +232,7 @@ export class Dance {
     private resetMusic() {
         Dance.raindance_music.stop();
         Dance.treedance_music.stop();
-        Game.music[0].setVolume(0.25);
+        FriendlyFire.music[0].setVolume(0.25);
     }
 
     public draw(ctx: CanvasRenderingContext2D) {

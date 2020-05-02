@@ -1,9 +1,9 @@
 import { entity } from "./Entity";
-import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { Milestone } from './Player';
+import { GameScene } from "./scenes/GameScene";
 
 @entity("wing")
 export class Wing extends NPC {
@@ -15,14 +15,14 @@ export class Wing extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(game: Game, x: number, y:number) {
+    public constructor(game: GameScene, x: number, y:number) {
         super(game, x, y, 24, 24);
     }
 
     private showDialoguePrompt (): boolean {
         return (
-            this.game.player.getMilestone() >= Milestone.GOT_MULTIJUMP &&
-            this.game.player.getMilestone() < Milestone.MADE_RAIN
+            this.scene.player.getMilestone() >= Milestone.GOT_MULTIJUMP &&
+            this.scene.player.getMilestone() < Milestone.MADE_RAIN
         );
     }
 

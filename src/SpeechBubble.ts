@@ -1,7 +1,7 @@
-import { Game } from "./oldgame";
 import { sleep } from "./util";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { GameScene } from "./scenes/GameScene";
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false):
         CanvasRenderingContext2D {
@@ -53,7 +53,7 @@ export class SpeechBubble {
     private partnersBubble: SpeechBubble | null = null;
 
     constructor(
-        private game: Game,
+        private game: GameScene,
         public anchorX: number,
         public anchorY: number,
         private color = "#FFBBBB",

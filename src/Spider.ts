@@ -1,9 +1,9 @@
-import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { entity } from "./Entity";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { Conversation } from './Conversation';
+import { GameScene } from "./scenes/GameScene";
 
 interface SpiderSpriteMetadata {
     eyeOffsetFrames?: number[];
@@ -21,7 +21,7 @@ export class Spider extends NPC {
     private spriteMetadata: SpiderSpriteMetadata | null = null;
     private eyeOffsetY = 0;
 
-    public constructor(game: Game, x: number, y:number) {
+    public constructor(game: GameScene, x: number, y:number) {
         super(game, x, y, 36, 36);
         Conversation.setGlobal("talkedToSpider", "false");
     }

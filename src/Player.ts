@@ -1,5 +1,4 @@
 import { SpeechBubble } from "./SpeechBubble";
-import { Game, GameStage } from "./oldgame";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
@@ -23,6 +22,7 @@ import { Tree } from "./Tree";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { GameScene } from "./scenes/GameScene";
 
 const groundColors = [
     "#806057",
@@ -154,7 +154,7 @@ export class Player extends PhysicsEntity {
     private hasBeard = false;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
+    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
     public thinkBubble: SpeechBubble | null = null;
 
     private dialogRange = 50;
@@ -165,13 +165,13 @@ export class Player extends PhysicsEntity {
     private doubleJumpEmitter: ParticleEmitter;
     private genderSwapEmitter: ParticleEmitter;
 
-    public constructor(game: Game, x: number, y: number) {
+    public constructor(game: GameScene, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         this.startX = x;
         this.startY = y;
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
-        if (this.game.dev) {
+        if (this.scene.dev) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
                 "wood, T to throw useless snowball, K to learn all abilities");
         }
@@ -221,14 +221,11 @@ export class Player extends PhysicsEntity {
     }
 
     private async handleKeyDown(event: KeyboardEvent) {
-        if (this.game.stage === GameStage.TITLE) {
-            return;
-        }
         if (this.dance) {
             this.dance.handleKeyDown(event);
             return;
         }
-        if (!this.game.camera.isOnTarget() || event.repeat) {
+        if (!this.scene.camera.isOnTarget() || event.repeat) {
             return;
         }
         if (this.playerConversation) {
@@ -254,7 +251,7 @@ export class Player extends PhysicsEntity {
                     this.achieveMilestone(Milestone.TALKED_TO_TREE);
                 }
             } else if (this.canDanceToMakeRain()) {
-                this.startDance(this.game.apocalypse ? 3 : 2);
+                this.startDance(this.scene.apocalypse ? 3 : 2);
                 this.achieveMilestone(Milestone.MADE_RAIN);
             } else {
                 if (this.carrying instanceof Stone) {
@@ -285,19 +282,19 @@ export class Player extends PhysicsEntity {
             this.jumpDown = true;
         }
 
-        if (this.game.dev) {
+        if (this.scene.dev) {
             if (event.key === "c") {
                 // TODO Just for debugging. Real dancing is with action key on rain cloud
                 this.startDance(3);
             } else if (event.key === "p" && !this.carrying) {
                 // TODO Just for debugging, this must be removed later
-                this.carry(this.game.stone);
+                this.carry(this.scene.stone);
             } else if (event.key === "o" && !this.carrying) {
-                this.carry(this.game.tree.spawnSeed());
+                this.carry(this.scene.tree.spawnSeed());
             } else if (event.key === "i" && !this.carrying) {
-                this.carry(this.game.tree.seed.spawnWood());
+                this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+                this.scene.gameObjects.push(new Snowball(this.scene, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
             } else if (event.key === "k") {
@@ -312,7 +309,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.game, this.x, this.y, "white", false)
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y, "white", false)
         thinkBubble.setMessage(message);
         thinkBubble.show();
         await sleep(time);
@@ -326,17 +323,17 @@ export class Player extends PhysicsEntity {
         if (!this.dance) {
             switch (difficulty) {
                 case 1:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
                             1, undefined, true, 0);
                     break;
                 case 2:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
                     break;
                 case 3:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "112 221 312 123 2121121 111 222 3    ", undefined, 4);
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "112 221 312 123 2121121 111 222 3    ", undefined, 4);
                     break;
                 default:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "3");
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "3");
             }
         }
     }
@@ -427,19 +424,19 @@ export class Player extends PhysicsEntity {
 
     private canThrowStoneIntoWater(): boolean {
         return this.carrying instanceof Stone && (this.direction === -1 &&
-            this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER);
+            this.scene.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER);
     }
 
     private canThrowSeedIntoSoil(): boolean {
         return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.game.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
+            this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
     }
 
     private canDanceToMakeRain(): boolean {
         const ground = this.getGround();
-        return !this.dance && !this.game.world.isRaining() && this.carrying === null &&
-            (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.game.apocalypse ||
-            ground instanceof Cloud && this.game.apocalypse && !ground.isRaining() && ground.canRain());
+        return !this.dance && !this.scene.world.isRaining() && this.carrying === null &&
+            (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.scene.apocalypse ||
+            ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain());
     }
 
     drawDialogTip(ctx: CanvasRenderingContext2D): void {
@@ -499,7 +496,7 @@ export class Player extends PhysicsEntity {
             }
         }
 
-        const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
+        const isDrowning = this.scene.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
             if (!this.thinkBubble) {
                 const thought = drowningThoughts[rndInt(0, drowningThoughts.length)];
@@ -524,12 +521,12 @@ export class Player extends PhysicsEntity {
             this.drowning = 0;
         }
 
-        const world = this.game.world;
+        const world = this.scene.world;
         const wasFlying = this.flying;
         const prevVelocity = this.getVelocityY();
 
         // Player movement
-        if (!this.game.camera.isOnTarget()) {
+        if (!this.scene.camera.isOnTarget()) {
             this.moveRight = false;
             this.moveLeft = false;
         }
@@ -580,7 +577,7 @@ export class Player extends PhysicsEntity {
         }
 
         // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.game.fire.angry ? 1.8 * this.dialogRange : this.dialogRange);
+        const closestEntity = this.getClosestEntityInRange(this.scene.fire.angry ? 1.8 * this.dialogRange : this.dialogRange);
         if (closestEntity instanceof NPC) {
             this.closestNPC = closestEntity;
         } else {
@@ -602,7 +599,7 @@ export class Player extends PhysicsEntity {
         }
 
         // Bounce
-        if (this.game.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
+        if (this.scene.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
             this.bounce();
         }
 
@@ -630,11 +627,11 @@ export class Player extends PhysicsEntity {
                     // (Useless because wrong cloud but hey...)
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
-                        ground.startRain(this.game.apocalypse ? Infinity : 15);
+                        ground.startRain(this.scene.apocalypse ? Infinity : 15);
                     }
-                    if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD &&
-                            !this.game.apocalypse) {
-                        this.game.world.startRain();
+                    if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD &&
+                            !this.scene.apocalypse) {
+                        this.scene.world.startRain();
                     }
                 }
                 this.dance = null;
@@ -654,7 +651,7 @@ export class Player extends PhysicsEntity {
     private pullOutOfGround(): number {
         let pulled = 0, col = 0;
         if (this.getVelocityY() <= 0) {
-            const world = this.game.world;
+            const world = this.scene.world;
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ],
                 this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
@@ -691,7 +688,7 @@ export class Player extends PhysicsEntity {
      */
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.game.world;
+        const world = this.scene.world;
         while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
                 [ Environment.PLATFORM, Environment.WATER ])) {
             pulled++;
@@ -702,7 +699,7 @@ export class Player extends PhysicsEntity {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.game.world;
+        const world = this.scene.world;
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
                     this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
@@ -747,7 +744,7 @@ export class Player extends PhysicsEntity {
             }
             if (object instanceof Wood && this.milestone < Milestone.GOT_WOOD) {
                 this.achieveMilestone(Milestone.GOT_WOOD);
-                this.game.campaign.runAction("enable", null, ["fire", "fire1"]);
+                this.scene.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
             if (object instanceof Stone && this.milestone < Milestone.GOT_STONE) {
                 this.achieveMilestone(Milestone.GOT_STONE);

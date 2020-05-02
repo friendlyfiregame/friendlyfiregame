@@ -1,5 +1,5 @@
-import { GameObject, Game } from "./oldgame";
 import { GameObjectProperties } from "./MapInfo";
+import { GameScene, GameObject } from "./scenes/GameScene";
 
 export interface EntityDistance {
     source: Entity;
@@ -7,7 +7,7 @@ export interface EntityDistance {
     distance: number;
 }
 
-type EntityConstructor = new (game: Game, x: number, y: number, properties: GameObjectProperties) => Entity;
+type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
 
@@ -17,17 +17,17 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, game: Game, x: number, y: number, properties: GameObjectProperties): Entity {
+export function createEntity(name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties): Entity {
     const constructor = entities.get(name);
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
-    return new constructor(game, x, y, properties);
+    return new constructor(scene, x, y, properties);
 }
 
 export abstract class Entity implements GameObject {
     constructor(
-        public game: Game,
+        public scene: GameScene,
         public x: number,
         public y: number,
         public width = 0,
@@ -55,7 +55,7 @@ export abstract class Entity implements GameObject {
 
     protected getEntitiesInRange(range: number): EntityDistance[] {
         const entitiesInRange: EntityDistance[] = []
-        this.game.gameObjects.forEach(gameObject => {
+        this.scene.gameObjects.forEach(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
                 if (distance < range) {
@@ -67,6 +67,6 @@ export abstract class Entity implements GameObject {
     }
 
     public remove(): void {
-        this.game.removeGameObject(this);
+        this.scene.removeGameObject(this);
     }
 }

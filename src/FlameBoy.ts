@@ -1,17 +1,17 @@
 import { entity } from "./Entity";
-import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { Face, EyeType, FaceModes } from './Face';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { Milestone } from './Player';
+import { GameScene } from "./scenes/GameScene";
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
     @asset("sprites/flameboy.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(game: Game, x: number, y:number) {
+    public constructor(game: GameScene, x: number, y:number) {
         super(game, x, y, 26, 54);
         this.face = new Face(this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED
@@ -20,8 +20,8 @@ export class FlameBoy extends NPC {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.game.player.getMilestone() >= Milestone.THROWN_STONE_INTO_WATER &&
-            this.game.player.getMilestone() < Milestone.GOT_MULTIJUMP
+            this.scene.player.getMilestone() >= Milestone.THROWN_STONE_INTO_WATER &&
+            this.scene.player.getMilestone() < Milestone.GOT_MULTIJUMP
         );
     }
 

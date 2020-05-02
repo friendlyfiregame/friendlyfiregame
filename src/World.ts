@@ -1,8 +1,8 @@
 import { getImageData } from "./graphics";
-import { GameObject, Game, isCollidableGameObject, gameWidth } from "./oldgame";
 import { ParticleEmitter, particles, valueCurves } from "./Particles";
 import { rnd, rndInt } from "./util";
 import { asset } from "./Assets";
+import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 
 export enum Environment {
     AIR = 0,
@@ -28,14 +28,14 @@ export class World implements GameObject {
     ])
     private static backgrounds: HTMLImageElement[];
 
-    private game: Game;
+    private game: GameScene;
 
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = false;
 
-    public constructor(game: Game) {
+    public constructor(game: GameScene) {
         this.game = game;
         this.rainEmitter = particles.createEmitter({
             position: {x: 2051, y: 2120},
@@ -64,7 +64,7 @@ export class World implements GameObject {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         const camX = this.game.camera.x;
         const camY = this.game.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
@@ -73,7 +73,7 @@ export class World implements GameObject {
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
-            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
+            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
         }
         ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
         ctx.restore();

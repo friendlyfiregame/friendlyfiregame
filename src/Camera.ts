@@ -1,7 +1,7 @@
 import { Vector2, clamp, shiftValue, rnd } from './util';
 import { ValueCurve, valueCurves } from './Particles';
-import { Game } from "./oldgame";
 import { Fire } from './Fire';
+import { GameScene } from "./scenes/GameScene";
 
 export interface camFocus {
     x: number;
@@ -38,16 +38,16 @@ export class Camera {
     private currentBarTarget = 0;
     private currentBarHeight = 0;
 
-    constructor(protected game: Game, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.1) {
+    constructor(protected scene: GameScene, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.1) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
         this.interpolationTime = interpolationTime / 2;
-        if (game.dev) {
+        if (scene.dev) {
             console.log("Dev mode, press TAB to zoom out & click somewhere to teleport there");
             document.addEventListener("keydown", this.handleKeyDown.bind(this));
             document.addEventListener("keyup", this.handleKeyUp.bind(this));
-            this.game.canvas.addEventListener("click", this.handleClick.bind(this));
+            this.scene.game.canvas.addEventListener("click", this.handleClick.bind(this));
         }
         this.visibleRect = this.getVisibleRect();
         this.currentBarTarget = 0;
@@ -58,14 +58,6 @@ export class Camera {
         if (e.key === "Tab") {
             if (!e.repeat) {
                 this.zoomingOut = true;
-            }
-            e.stopPropagation();
-            e.preventDefault();
-        }
-        if (e.key === "l") {
-
-            if (!e.repeat) {
-                this.game.toggleScalingMethod();
             }
             e.stopPropagation();
             e.preventDefault();
@@ -82,21 +74,21 @@ export class Camera {
 
     private handleClick(e: MouseEvent) {
         if (this.zoomingOut) {
-            const rect = this.game.canvas.getBoundingClientRect();
+            const rect = this.scene.game.canvas.getBoundingClientRect();
             const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
             const px = cx / rect.width, py = cy / rect.height;
             const worldRect = this.getVisibleRect();
             const tx = worldRect.x + px * worldRect.width, ty = worldRect.y + (1 - py) * worldRect.height;
             // Teleport player
-            this.game.player.x = tx;
-            this.game.player.y = ty;
-            this.game.player.setVelocity(0, 0);
+            this.scene.player.x = tx;
+            this.scene.player.y = ty;
+            this.scene.player.setVelocity(0, 0);
             this.zoomingOut = false;
         }
     }
 
     public getVisibleRect() {
-        const cnv = this.game.canvas;
+        const cnv = this.scene.game.canvas;
         const cw = cnv.width, ch = cnv.height;
         const offx = cw / 2 / this.zoom, offy = ch / 2 / this.zoom;
         return {
@@ -122,8 +114,8 @@ export class Camera {
         this.x = this.target.x;
         this.y = this.target.y + 30;
         // Cam Shake during apocalypse
-        if (this.game.fire.angry || this.game.apocalypse) {
-            this.applyApocalypticShake(this.game.fire);
+        if (this.scene.fire.angry || this.scene.apocalypse) {
+            this.applyApocalypticShake(this.scene.fire);
         }
         this.zoom = this.zoomingOut ? 0.2 : 1;
         this.rotation = 0;
@@ -147,7 +139,7 @@ export class Camera {
         if (dis < maxDis) {
             const intensity = (shakeSource.intensity - 5) / 15;
             if (intensity > 0) {
-                const shake = 5 * intensity * (1 - dis / maxDis) * (this.game.player.playerConversation ? 0.5 : 1);
+                const shake = 5 * intensity * (1 - dis / maxDis) * (this.scene.player.playerConversation ? 0.5 : 1);
                 this.x += rnd(-1, 1) * shake;
                 this.y += rnd(-1, 1) * shake;
             }

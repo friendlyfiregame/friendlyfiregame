@@ -1,6 +1,5 @@
 
 import { Face, EyeType } from './Face';
-import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { entity } from "./Entity";
 import { Seed } from "./Seed";
@@ -8,6 +7,7 @@ import { Wood } from './Wood';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { Milestone } from './Player';
+import { GameScene } from "./scenes/GameScene";
 
 @entity("tree")
 export class Tree extends NPC {
@@ -17,7 +17,7 @@ export class Tree extends NPC {
     public seed: Seed;
     private wood: Wood;
 
-    public constructor(game: Game, x: number, y:number) {
+    public constructor(game: GameScene, x: number, y:number) {
         super(game, x, y, 78, 140);
         this.face = new Face(this, EyeType.TREE, 5, 94);
         this.seed = new Seed(game, x, y);
@@ -27,11 +27,11 @@ export class Tree extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.game.player.getMilestone() >= Milestone.GOT_QUEST_FROM_FIRE &&
-            this.game.player.getMilestone() < Milestone.GOT_QUEST_FROM_TREE
+            this.scene.player.getMilestone() >= Milestone.GOT_QUEST_FROM_FIRE &&
+            this.scene.player.getMilestone() < Milestone.GOT_QUEST_FROM_TREE
         ) || (
-            this.game.player.getMilestone() >= Milestone.MADE_RAIN &&
-            this.game.player.getMilestone() < Milestone.TREE_DROPPED_WOOD
+            this.scene.player.getMilestone() >= Milestone.MADE_RAIN &&
+            this.scene.player.getMilestone() < Milestone.TREE_DROPPED_WOOD
         );
     }
 
@@ -59,8 +59,8 @@ export class Tree extends NPC {
     }
 
     public spawnSeed(): Seed {
-        if (!this.game.gameObjects.includes(this.seed)) {
-            this.game.addGameObject(this.seed);
+        if (!this.scene.gameObjects.includes(this.seed)) {
+            this.scene.addGameObject(this.seed);
         }
         this.seed.x = this.x;
         this.seed.y = this.y + this.height / 2;
@@ -69,8 +69,8 @@ export class Tree extends NPC {
     }
 
     public spawnWood(): Wood {
-        if (!this.game.gameObjects.includes(this.wood)) {
-            this.game.addGameObject(this.wood);
+        if (!this.scene.gameObjects.includes(this.wood)) {
+            this.scene.addGameObject(this.wood);
         }
         this.wood.x = this.x;
         this.wood.y = this.y + this.height / 2;

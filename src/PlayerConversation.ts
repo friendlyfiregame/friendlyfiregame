@@ -38,7 +38,7 @@ export class PlayerConversation {
             }
             return true;
         }
-        this.player.game.camera.setCinematicBar(1);
+        this.player.scene.camera.setCinematicBar(1);
 
         return false;
     }

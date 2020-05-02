@@ -3,7 +3,7 @@ import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from './SpeechBubble';
 import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
-import { GameObject, Game } from './oldgame';
+import { GameScene, GameObject } from "./scenes/GameScene";
 
 export class Greeting implements GameObject {
     public greetingRange = 120;
@@ -27,7 +27,7 @@ export class Greeting implements GameObject {
         return this.game.campaign;
     }
 
-    constructor(private game: Game, public npc: NPC, private dialogData: ScriptedDialogJSON) {
+    constructor(private game: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
         this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }
@@ -40,7 +40,7 @@ export class Greeting implements GameObject {
 
     public update(dt: number) {
         this.speechBubble.update(this.npc.x, this.npc.y);
-        const isInRange = this.npc.game.player.distanceTo(this.npc) < this.greetingRange;
+        const isInRange = this.npc.scene.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
             this.setRandomGreeting();
             this.greetingActive = this.greetingAlreadyShown = true;

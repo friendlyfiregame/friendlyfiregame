@@ -1,5 +1,4 @@
 import { entity } from "./Entity";
-import { Game } from "./oldgame";
 import { Environment } from "./World";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -7,6 +6,7 @@ import { Sound } from "./Sound";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
+import { GameScene } from "./scenes/GameScene";
 
 export enum WoodState {
     FREE = 0,
@@ -23,7 +23,7 @@ export class Wood extends PhysicsEntity {
 
     public state = WoodState.FREE;
 
-    public constructor(game: Game, x: number, y:number) {
+    public constructor(game: GameScene, x: number, y:number) {
         super(game, x, y, 24, 24);
     }
 
@@ -35,7 +35,7 @@ export class Wood extends PhysicsEntity {
     }
 
     public isCarried(): boolean {
-        return this.game.player.isCarrying(this);
+        return this.scene.player.isCarrying(this);
     }
 
     update(dt: number): void {
@@ -47,21 +47,21 @@ export class Wood extends PhysicsEntity {
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
         if (this.state === WoodState.FREE || this.state === WoodState.SWIMMING) {
-            const player = this.game.player;
+            const player = this.scene.player;
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
             if (!this.isCarried() && this.state !== WoodState.SWIMMING
-                    && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+                    && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
                 this.y = 390;
             }
         }
-        if (!this.isCarried() && this.distanceTo(this.game.fire) < 20) {
-            this.game.fire.feed(this);
-            this.game.player.achieveMilestone(Milestone.THROWN_WOOD_INTO_FIRE);
+        if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
+            this.scene.fire.feed(this);
+            this.scene.player.achieveMilestone(Milestone.THROWN_WOOD_INTO_FIRE);
             Wood.successSound.play();
         }
     }

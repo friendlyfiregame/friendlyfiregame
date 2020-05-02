@@ -1,7 +1,6 @@
 import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
-import { StartScene } from "./StartScene";
-import { FadeTransition } from "../transitions/FadeTransition";
+import { TitleScene } from "./TitleScene";
 
 export class LoadingScene extends Scene<FriendlyFire> {
     private total = 100;
@@ -9,7 +8,7 @@ export class LoadingScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         this.game.assets.load(this.updateProgress.bind(this)).then(() => {
-            this.game.scenes.setScene(StartScene);
+            this.game.scenes.setScene(TitleScene);
         });
     }
 

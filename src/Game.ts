@@ -14,7 +14,7 @@ export abstract class Game {
 
     public backgroundColor: string = "black";
 
-    private canvas: HTMLCanvasElement;
+    public canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
     private readonly gameLoopCallback = this.gameLoop.bind(this);
     private gameLoopId: number | null = null;

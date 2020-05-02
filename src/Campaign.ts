@@ -1,4 +1,3 @@
-import { Game } from './oldgame';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
 import type { DialogJSON } from "*.dialog.json";
@@ -20,6 +19,7 @@ import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
 import { Milestone } from './Player';
+import { GameScene } from "./scenes/GameScene";
 
 export type CampaignState = "start" | "finished";
 
@@ -44,7 +44,7 @@ export class Campaign {
     public onStatesChanged = new Signal<CampaignState[]>();
     public states: CampaignState[] = ["start"];
 
-    constructor(public game: Game) {
+    constructor(public game: GameScene) {
         setTimeout(() => {
             this.begin();
         });
