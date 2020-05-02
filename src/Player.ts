@@ -36,10 +36,21 @@ const bounceColors = [
     "#ff7070"
 ];
 
+
 const doubleJumpColors = [
     "#ffffff",
     "#cccccc",
     "#aaaaaa"
+];
+
+const genderSwapColors = [
+    "#ef002d",
+    "#a900ef",
+    "#0049ef",
+    "#00e7ef",
+    "#00ef33",
+    "#bfef00",
+    "#ef8d00",
 ];
 
 const drownThoughts = [
@@ -105,8 +116,8 @@ export class Player extends PhysicsEntity {
     private static throwingSound: Sound;
 
     @asset([
-        "sounds/jumping/jumping.mp3",
-        "sounds/jumping/jumping_female.mp3"
+        "sounds/jumping/jumping_female.mp3",
+        "sounds/jumping/jumping.mp3"
     ])
     private static jumpingSounds: Sound[] = [];
 
@@ -148,6 +159,7 @@ export class Player extends PhysicsEntity {
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
+    private genderSwapEmitter: ParticleEmitter;
 
     public constructor(game: Game, x: number, y: number) {
         super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -187,9 +199,20 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
+        this.genderSwapEmitter = particles.createEmitter({
+            position: {x: this.x, y: this.y},
+            velocity: () => ({ x: rnd(-1, 1) * 45, y: rnd(-1, 1) * 45 }),
+            color: () => rndItem(genderSwapColors),
+            size: rnd(2, 2),
+            gravity: {x: 0, y: 0},
+            lifetime: () => rnd(0.5, 1),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        });
     }
 
     public toggleGender () {
+        this.genderSwapEmitter.setPosition(this.x, this.y + Player.playerSprites[this.gender].height / 2);
+        this.genderSwapEmitter.emit(20);
         this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
     }
 
