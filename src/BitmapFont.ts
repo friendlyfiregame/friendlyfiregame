@@ -99,8 +99,9 @@ export class BitmapFont {
             Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight);
     };
 
-    public drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0) {
+    public drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0, alpha = 1) {
         text = "" + text;
+        ctx.globalAlpha = alpha;
         let width = 0;
         for (var char of text) {
             const index = this.getCharIndex(char);

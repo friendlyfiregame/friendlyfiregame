@@ -6,10 +6,17 @@ import { CurtainTransition } from "../transitions/CurtainTransition";
 import { easeInSine } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { GameScene } from "./GameScene";
+import { MenuList, MenuItem } from '../Menu';
 
 const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
     "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
     "Klaus Reimer and Jennifer van Veen, within 72 hours.";
+
+enum MenuItemKey {
+    START = 'start',
+    CONTROLS = 'controls',
+    CREDITS = 'credits'
+}
 
 export class TitleScene extends Scene<FriendlyFire> {
     @asset("images/title.png")
@@ -19,15 +26,37 @@ export class TitleScene extends Scene<FriendlyFire> {
     private static font: BitmapFont;
 
     private time: number = 0;
+    private menu = new MenuList();
 
     public setup(): void {
         this.zIndex = 1;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
+
+        this.menu.addItems(
+            new MenuItem(MenuItemKey.START, "Start Game", TitleScene.font, "white", 75, 160),
+            new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175, false),
+            new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190, false),
+        )
+    }
+
+    public handleMenuAction (buttonId: string) {
+        switch(buttonId) {
+            case MenuItemKey.START:
+                this.game.scenes.setScene(GameScene);
+                break;
+            case MenuItemKey.CONTROLS:
+                console.log('show controls')
+                break;
+            case MenuItemKey.CREDITS:
+                console.log('show credits')
+                break;
+        }
     }
 
     public activate(): void {
         this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.menu.onActivated.connect(this.handleMenuAction, this)
 
         // Start music after pressing a key or mouse button because Chrome doesn't want to autostart music
         const startMusic = async () => {
@@ -45,11 +74,16 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     public deactivate(): void {
         this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.menu.onActivated.disconnect(this.handleMenuAction, this)
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
         if (event.code === "Enter") {
-            this.game.scenes.setScene(GameScene);
+            this.menu.executeAction();
+        } else if (event.key === "w" || event.key === "ArrowUp") {
+            this.menu.prev();
+        } else if (event.key === "s" || event.key === "ArrowDown") {
+            this.menu.next();
         }
     }
 
@@ -63,9 +97,9 @@ export class TitleScene extends Scene<FriendlyFire> {
         ctx.drawImage(TitleScene.titleImage, 0, 0);
         const off = (this.time * 1000 / 12) % 2000;
         const cx = Math.round(width + 100 - off);
-        TitleScene.font.drawText(ctx, "Press Enter", 75, 160, "white", 0);
         TitleScene.font.drawText(ctx, credits, cx, ctx.canvas.height - 20, "white", 0);
         ctx.restore();
+        this.menu.draw(ctx);
     }
 
     private async playMusicTrack(): Promise<void> {
