@@ -2,6 +2,7 @@ import { Game } from './game';
 import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
 import { asset } from "./Assets";
+import { BitmapFont } from "./BitmapFont";
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
@@ -15,6 +16,9 @@ export class Dance {
 
     @asset("music/dancing_queen.mp3")
     private static treedance_music: Sound;
+
+    @asset("fonts/standard.font.json")
+    private static font: BitmapFont;
 
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
@@ -271,7 +275,7 @@ export class Dance {
                         ctx.fillRect(x - 5, y1, 9, 9);
                     }
                     ctx.strokeRect(x - 5, y1, 9, 9);
-                    this.game.mainFont.drawText(ctx, "1", x - 2, y1 + 1, "black");
+                    Dance.font.drawText(ctx, "1", x - 2, y1 + 1, "black");
                 }
                 if (keys.includes("2")) {
                     ctx.strokeStyle = "blue";
@@ -280,7 +284,7 @@ export class Dance {
                         ctx.fillRect(x - 5, y2, 9, 9);
                     }
                     ctx.strokeRect(x - 5, y2, 9, 9);
-                    this.game.mainFont.drawText(ctx, "2", x - 3, y2 + 1, "black");
+                    Dance.font.drawText(ctx, "2", x - 3, y2 + 1, "black");
                 }
             }
         }

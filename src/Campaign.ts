@@ -1,6 +1,7 @@
 import { Game } from './game';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
+import type { DialogJSON } from "*.dialog.json";
 import fire0 from '../assets/dialog/fire0.dialog.json';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
@@ -22,7 +23,7 @@ import { Milestone } from './Player';
 
 export type CampaignState = "start" | "finished";
 
-const allDialogs: Record<string, JSON> = {
+const allDialogs: Record<string, DialogJSON> = {
     "fire0": fire0,
     "fire1": fire1,
     "fire2": fire2,
@@ -156,17 +157,17 @@ export class Campaign {
                 break;
             case "talkedToStone":
                 if (this.game.player.getMilestone() === Milestone.PLANTED_SEED) {
-                    this.game.player.achieveMilestone(Milestone.TALKED_TO_STONE); 
+                    this.game.player.achieveMilestone(Milestone.TALKED_TO_STONE);
                 }
-                break; 
+                break;
             case "pickupstone":
                 this.game.stone.pickUp();
                 break;
             case "talkedToFireWithWood":
                 if (this.game.player.getMilestone() === Milestone.GOT_WOOD) {
-                    this.game.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD); 
+                    this.game.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD);
                 }
-                break; 
+                break;
             case "dance":
                 setTimeout(() => {
                     this.game.player.startDance(+params[0] || 1);

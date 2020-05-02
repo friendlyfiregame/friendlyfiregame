@@ -1,4 +1,5 @@
 import { NPC } from './NPC';
+import { DialogJSON } from "*.dialog.json";
 
 export interface Interaction {
     npcLine: ConversationLine | null;
@@ -26,11 +27,11 @@ export class Conversation {
     private localVariables: Record<string, string> = {};
     private skippedLines = 0; // help variable to make goBack() work with skipped dialog lines due to conditions
 
-    constructor(json: any, private readonly npc: NPC) {
+    constructor(json: DialogJSON, private readonly npc: NPC) {
         this.states = Object.keys(json);
         this.data = {};
         for (const state of this.states) {
-            this.data[state] = json[state].map((line: string) => new ConversationLine(line, this));
+            this.data[state] = json[state].map(line => new ConversationLine(line, this));
         }
         this.setState("entry");
         this.endConversation = false;

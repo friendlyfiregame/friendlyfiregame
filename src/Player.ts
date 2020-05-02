@@ -22,6 +22,7 @@ import { Fire } from "./Fire";
 import { Tree } from "./Tree";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
+import { BitmapFont } from "./BitmapFont";
 
 const groundColors = [
     "#806057",
@@ -126,6 +127,9 @@ export class Player extends PhysicsEntity {
 
     @asset("sounds/jumping/squish.mp3")
     private static bouncingSound: Sound;
+
+    @asset("fonts/standard.font.json")
+    private static font: BitmapFont;
 
     private milestone = Milestone.JUST_ARRIVED;
     private lastHint = Date.now();
@@ -397,17 +401,17 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.canThrowStoneIntoWater()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the stone into the water",
+            Player.font.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the stone into the water",
                 this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
         }
 
         if (this.canThrowSeedIntoSoil()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the seed into the soil",
+            Player.font.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the seed into the soil",
                 this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
         }
 
         if (this.canDanceToMakeRain()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to dance",
+            Player.font.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to dance",
                 this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
         }
 
@@ -442,7 +446,7 @@ export class Player extends PhysicsEntity {
         ctx.save();
         ctx.beginPath();
         const text = this.dialogTipText;
-        this.game.mainFont.drawTextWithOutline(ctx, text, this.x - Math.round(this.width / 2), -this.y + 12,
+        Player.font.drawTextWithOutline(ctx, text, this.x - Math.round(this.width / 2), -this.y + 12,
             "white", "black", 0.5);
         ctx.restore();
     }
