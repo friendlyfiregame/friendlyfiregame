@@ -490,7 +490,8 @@ export class Player extends PhysicsEntity {
         }
         if (this.carrying) {
             this.carrying.x = this.x;
-            const currentFrameIndex = Player.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry");
+            const currentFrameIndex = Player.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry",
+                this.scene.gameTime * 1000);
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
             this.carrying.y = this.y + this.height - offset;
