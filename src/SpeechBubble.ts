@@ -1,5 +1,7 @@
 import { Game } from "./oldgame";
 import { sleep } from "./util";
+import { asset } from "./Assets";
+import { BitmapFont } from "./BitmapFont";
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false):
         CanvasRenderingContext2D {
@@ -26,6 +28,9 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   }
 
 export class SpeechBubble {
+    @asset("fonts/standard.font.json")
+    private static font: BitmapFont;
+
     private messageLines :string[] = [];
     private options: string[] = [];
     public selectedOptionIndex = -1;
@@ -74,7 +79,7 @@ export class SpeechBubble {
     async setMessage(message: string): Promise<void> {
         this.messageLines = [""];
         this.isCurrentlyWriting = true;
-        const font = this.game.mainFont;
+        const font = SpeechBubble.font;
         this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) =>
             font.measureText(b).width - font.measureText(a).width);
         let index = 0;
@@ -107,7 +112,7 @@ export class SpeechBubble {
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
         this.updateContent();
-        const font = this.game.mainFont;
+        const font = SpeechBubble.font;
         this.contentLinesByLength = this.content.slice().sort((a, b) =>
             font.measureText(b).width - font.measureText(a).width);
     }
@@ -123,7 +128,7 @@ export class SpeechBubble {
         }
 
         ctx.save();
-        const font = this.game.mainFont;
+        const font = SpeechBubble.font;
         const longestLine = this.contentLinesByLength[0];
         const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
 
@@ -143,14 +148,14 @@ export class SpeechBubble {
 
         let messageLineOffset = 4;
         for (let i = 0; i < this.messageLines.length; i++) {
-            this.game.mainFont.drawText(ctx, this.messageLines[i], Math.round(posX - metrics.width / 2),
+            font.drawText(ctx, this.messageLines[i], Math.round(posX - metrics.width / 2),
                 Math.round(-posY - this.height + 4 + (i * this.lineHeight)), "black");
             messageLineOffset += 4;
         }
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
             const selectionIndicator = isSelected ? ">" : " ";
-            this.game.mainFont.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2),
+            font.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2),
                 Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight)), "black");
         }
 

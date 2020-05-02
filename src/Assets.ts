@@ -1,6 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { Sound } from "./Sound";
 import { loadImage } from "./graphics";
+import { BitmapFont } from "./BitmapFont";
 
 const assets = new Map<string, unknown>();
 
@@ -37,6 +38,8 @@ export class Assets {
         if (asset == null) {
             if (src.endsWith(".aseprite.json")) {
                 asset = await Aseprite.load("assets/" + src);
+            } else if (src.endsWith(".font.json")) {
+                asset = await BitmapFont.load("assets/" + src);
             } else if (src.endsWith(".png")) {
                 asset = await loadImage(src);
             } else if (src.endsWith(".mp3")) {

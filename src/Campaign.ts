@@ -1,6 +1,7 @@
 import { Game } from './oldgame';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
+import type { DialogJSON } from "*.dialog.json";
 import fire0 from '../assets/dialog/fire0.dialog.json';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
@@ -22,7 +23,7 @@ import { Milestone } from './Player';
 
 export type CampaignState = "start" | "finished";
 
-const allDialogs: Record<string, JSON> = {
+const allDialogs: Record<string, DialogJSON> = {
     "fire0": fire0,
     "fire1": fire1,
     "fire2": fire2,
