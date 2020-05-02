@@ -1,5 +1,6 @@
 import { rndInt } from "./util.js";
 import { loadImage } from "./graphics.js";
+import { FontJSON } from "*.font.json";
 
 export class BitmapFont {
     private sourceImage: HTMLImageElement;
@@ -30,9 +31,17 @@ export class BitmapFont {
         }
     }
 
-    public static async load(url: string, colors: Record<string, string>, charMap: string, charWidths: number[],
-            charMargin = 1) {
-        return new BitmapFont(await loadImage(url), colors, charMap, charWidths, charMargin);
+    /**
+     * Loads the sprite from the given source.
+     *
+     * @param source - The URL pointing to the JSON file of the sprite.
+     * @return The loaded sprite.
+     */
+    public static async load(source: string): Promise<BitmapFont> {
+        const json = await (await fetch(source)).json() as FontJSON;
+        const baseURL = new URL(source, location.href);
+        const image = await loadImage(new URL(json.image, baseURL));
+        return new BitmapFont(image, json.colors, json.characters, json.widths, json.margin);
     }
 
     private prepareColors(colorMap: { [x: string]: string; }): { [x: string]: number } {

@@ -75,6 +75,9 @@ export class Game {
     @asset("sprites/flameboy2.aseprite.json")
     private static endBoy: Aseprite;
 
+    @asset("fonts/standard.font.json")
+    private static font: BitmapFont;
+
     public dev = window.location.port === "8000";
 
     public canvas: HTMLCanvasElement;
@@ -119,8 +122,6 @@ export class Game {
     private scalePixelPerfect = true;
     private scale = 1;
     private readonly mapInfo: MapInfo;
-    public mainFont!: BitmapFont;
-    public bigFont!: BitmapFont;
     public gamepadInput!: GamepadInput;
     public stage = GameStage.TITLE;
     public keyHandler = new KeyHandler();
@@ -181,7 +182,6 @@ export class Game {
 
     private async load(): Promise<void> {
         await this.assets.load();
-        await this.loadFonts();
         await this.loadApocalypse();
         // setTimeout(() => this.beginApocalypse(), 1000);
     }
@@ -199,17 +199,6 @@ export class Game {
         Game.music[1].setVolume(0.25);
         return music.play();
     };
-
-    private async loadFonts() {
-        this.mainFont = await BitmapFont.load("fonts/fontsheet.png", {
-            "white": "white", "black": "black", "gray": "gray", "darkgray": "#181818", "orange": "#d9913c",
-            "green": "#81bc1b", "red": "red", "blue": "#009cff", "gold": "#f0c030", "organ": "#a00824", "yellow":
-            "#d0c800", "money": "#81bc1b" }, "abcdefghijklmnopqrstuvwxyz0123456789#$()[]+-?!',. :>",
-            [ 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5,
-            5, 5, 5, 3, 3, 2, 2, 5, 5, 4, 1, 1, 2, 2, 4, 3, 4]);
-        this.bigFont = await BitmapFont.load("fonts/bignumbers.png", { "dark": "#5d5d5d" }, "0123456789",
-            [11, 6, 11, 11, 10, 11, 11, 11, 11, 11]);
-  }
 
     private start() {
         this.lastUpdateTime = now();
@@ -334,8 +323,8 @@ export class Game {
         ctx.drawImage(Game.titleImage, 0, 0);
         const off = (this.appTime * 1000 / 12) % 2000;
         const cx = Math.round(ctx.canvas.width + 100 - off);
-        this.mainFont.drawText(ctx, 'Press Enter', 75, 160, "white", 0);
-        this.mainFont.drawText(ctx, credits, cx, ctx.canvas.height - 20, "white", 0);
+        Game.font.drawText(ctx, 'Press Enter', 75, 160, "white", 0);
+        Game.font.drawText(ctx, credits, cx, ctx.canvas.height - 20, "white", 0);
         ctx.restore();
     }
 
@@ -447,7 +436,7 @@ export class Game {
 
         // Display FPS counter
         if (this.dev) {
-            this.mainFont.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
+            Game.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;
     }
