@@ -21,6 +21,7 @@ export class TitleScene extends Scene<FriendlyFire> {
     private time: number = 0;
 
     public setup(): void {
+        this.zIndex = 1;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
     }

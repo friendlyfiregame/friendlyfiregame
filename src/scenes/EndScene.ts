@@ -13,6 +13,7 @@ export class EndScene extends Scene<FriendlyFire> {
     private static endBoy: Aseprite;
 
     public setup(): void {
+        this.zIndex = 1;
         this.inTransition = new CurtainTransition({ reverse: true, easing: easeOutSine });
     }
 
