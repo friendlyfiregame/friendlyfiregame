@@ -16,7 +16,7 @@ export abstract class NPC extends PhysicsEntity {
     public conversation: Conversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white");
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.x, this.y);
+    public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
     private lastEndedConversation = -Infinity;
 
     protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {

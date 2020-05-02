@@ -41,7 +41,7 @@ export class Dance {
     private success = false;
 
     constructor(
-        private game: GameScene,
+        private scene: GameScene,
         private x: number,
         private y: number,
         private bpm = 128,
@@ -81,7 +81,7 @@ export class Dance {
     }
 
     private begin() {
-        this.openTime = this.game.gameTime;
+        this.openTime = this.scene.gameTime;
         this.startTime = this.openTime + this.warmupBeats / this.bpm * 60;
         this.currentKey = "";
         this.currentDistanceToIdealTime = 0;
@@ -172,7 +172,7 @@ export class Dance {
 
 
     public update(dt: number): boolean {
-        const time = this.game.gameTime - this.startTime;
+        const time = this.scene.gameTime - this.startTime;
         this.progress = time * this.bpm / 60;
         const prevIndex = this.currentIndex;
         this.currentIndex = Math.floor(this.progress);

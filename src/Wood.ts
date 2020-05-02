@@ -23,14 +23,14 @@ export class Wood extends PhysicsEntity {
 
     public state = WoodState.FREE;
 
-    public constructor(game: GameScene, x: number, y:number) {
-        super(game, x, y, 24, 24);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 24, 24);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        Wood.sprite.drawTag(ctx, "idle", -Wood.sprite.width >> 1, -Wood.sprite.height);
+        Wood.sprite.drawTag(ctx, "idle", -Wood.sprite.width >> 1, -Wood.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
     }
 

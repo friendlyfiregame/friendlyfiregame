@@ -17,11 +17,11 @@ export class Tree extends NPC {
     public seed: Seed;
     private wood: Wood;
 
-    public constructor(game: GameScene, x: number, y:number) {
-        super(game, x, y, 78, 140);
-        this.face = new Face(this, EyeType.TREE, 5, 94);
-        this.seed = new Seed(game, x, y);
-        this.wood = new Wood(game, x, y);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 78, 140);
+        this.face = new Face(scene, this, EyeType.TREE, 5, 94);
+        this.seed = new Seed(scene, x, y);
+        this.wood = new Wood(scene, x, y);
         this.startDialog();
     }
 
@@ -38,7 +38,7 @@ export class Tree extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        Tree.sprite.drawTag(ctx, "idle", -Tree.sprite.width >> 1, -Tree.sprite.height);
+        Tree.sprite.drawTag(ctx, "idle", -Tree.sprite.width >> 1, -Tree.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
         this.drawFace(ctx);
         if (this.showDialoguePrompt()) {

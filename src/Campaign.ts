@@ -44,7 +44,7 @@ export class Campaign {
     public onStatesChanged = new Signal<CampaignState[]>();
     public states: CampaignState[] = ["start"];
 
-    constructor(public game: GameScene) {
+    constructor(public scene: GameScene) {
         setTimeout(() => {
             this.begin();
         });
@@ -102,38 +102,38 @@ export class Campaign {
                 break;
 
             case "zoomin":
-                this.game.camera.zoom += 1
+                this.scene.camera.zoom += 1
                 break;
             case "zoomout":
-                this.game.camera.zoom -= 1
+                this.scene.camera.zoom -= 1
                 break;
             case "treezoom":
-                this.game.camera.focusOn(8, 3100, 500, 1, 0, valueCurves.cos(0.35));
+                this.scene.camera.focusOn(8, 3100, 500, 1, 0, valueCurves.cos(0.35));
                 break;
             case "mountainzoom":
-                this.game.camera.focusOn(8, 2052, 1625, 1, 0, valueCurves.cos(0.35));
+                this.scene.camera.focusOn(8, 2052, 1625, 1, 0, valueCurves.cos(0.35));
                 break;
             case "riverzoom":
-                this.game.camera.focusOn(8, 900, 400, 1, 0, valueCurves.cos(0.35));
+                this.scene.camera.focusOn(8, 900, 400, 1, 0, valueCurves.cos(0.35));
                 break;
             case "crazyzoom":
                 const duration = 12;
-                this.game.camera.focusOn(duration, this.game.fire.x, this.game.fire.y + 15, 8,
-                    -2 * Math.PI, valueCurves.cubic).then(() => this.game.beginApocalypse());
-                this.game.fire.conversation = null;
-                this.game.fireFuryEndTime = this.game.gameTime + duration + 8;
+                this.scene.camera.focusOn(duration, this.scene.fire.x, this.scene.fire.y + 15, 8,
+                    -2 * Math.PI, valueCurves.cubic).then(() => this.scene.beginApocalypse());
+                this.scene.fire.conversation = null;
+                this.scene.fireFuryEndTime = this.scene.gameTime + duration + 8;
                 break;
             case "gotFireQuest":
-                this.game.player.achieveMilestone(Milestone.GOT_QUEST_FROM_FIRE);
-                this.game.campaign.runAction("enable", null, ["tree", "tree1"]);
+                this.scene.player.achieveMilestone(Milestone.GOT_QUEST_FROM_FIRE);
+                this.scene.campaign.runAction("enable", null, ["tree", "tree1"]);
                 break;
             case "givebeard":
-                this.game.player.setBeard(true);
+                this.scene.player.setBeard(true);
                 break;
             case "endgame":
-                this.game.fire.conversation = null;
+                this.scene.fire.conversation = null;
                 setTimeout(() => {
-                    this.game.gameOver();
+                    this.scene.gameOver();
                 }, 2000);
                 break;
 
@@ -141,51 +141,51 @@ export class Campaign {
                 this.addState(params[0] as any);
                 break;
             case "doublejump":
-                this.game.player.achieveMilestone(Milestone.GOT_QUEST_FROM_TREE);
-                this.game.player.doubleJump = true;
+                this.scene.player.achieveMilestone(Milestone.GOT_QUEST_FROM_TREE);
+                this.scene.player.doubleJump = true;
                 break;
             case "multijump":
-                this.game.player.achieveMilestone(Milestone.GOT_MULTIJUMP);
-                this.game.player.multiJump = true;
+                this.scene.player.achieveMilestone(Milestone.GOT_MULTIJUMP);
+                this.scene.player.multiJump = true;
                 break;
             case "spawnseed":
-                this.game.tree.spawnSeed();
+                this.scene.tree.spawnSeed();
                 break;
             case "spawnwood":
-                this.game.player.achieveMilestone(Milestone.TREE_DROPPED_WOOD);
-                this.game.tree.spawnWood();
+                this.scene.player.achieveMilestone(Milestone.TREE_DROPPED_WOOD);
+                this.scene.tree.spawnWood();
                 break;
             case "talkedToStone":
-                if (this.game.player.getMilestone() === Milestone.PLANTED_SEED) {
-                    this.game.player.achieveMilestone(Milestone.TALKED_TO_STONE);
+                if (this.scene.player.getMilestone() === Milestone.PLANTED_SEED) {
+                    this.scene.player.achieveMilestone(Milestone.TALKED_TO_STONE);
                 }
                 break;
             case "pickupstone":
-                this.game.stone.pickUp();
+                this.scene.stone.pickUp();
                 break;
             case "talkedToFireWithWood":
-                if (this.game.player.getMilestone() === Milestone.GOT_WOOD) {
-                    this.game.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD);
+                if (this.scene.player.getMilestone() === Milestone.GOT_WOOD) {
+                    this.scene.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD);
                 }
                 break;
             case "dance":
                 setTimeout(() => {
-                    this.game.player.startDance(+params[0] || 1);
+                    this.scene.player.startDance(+params[0] || 1);
                 }, 500);
                 break;
             case "togglegender":
-                this.game.player.toggleGender();
+                this.scene.player.toggleGender();
                 break;
             case "enable":
                 const char = params[0], dialogName = params[1];
                 const npcMap: Record<string, NPC> = {
-                    "fire": this.game.fire,
-                    "stone": this.game.stone,
-                    "tree": this.game.tree,
-                    "seed": this.game.seed,
-                    "flameboy": this.game.flameboy,
-                    "wing": this.game.wing,
-                    "spider": this.game.spider
+                    "fire": this.scene.fire,
+                    "stone": this.scene.stone,
+                    "tree": this.scene.tree,
+                    "seed": this.scene.seed,
+                    "flameboy": this.scene.flameboy,
+                    "wing": this.scene.wing,
+                    "spider": this.scene.spider
                 };
                 const targetNpc = npcMap[char];
                 const dialog = allDialogs[dialogName];
@@ -196,13 +196,13 @@ export class Campaign {
             case "disable":
                 const char1 = params[0];
                 const npcMap1: Record<string, NPC> = {
-                    "fire": this.game.fire,
-                    "stone": this.game.stone,
-                    "tree": this.game.tree,
-                    "seed": this.game.seed,
-                    "flameboy": this.game.flameboy,
-                    "wing": this.game.wing,
-                    "spider": this.game.spider
+                    "fire": this.scene.fire,
+                    "stone": this.scene.stone,
+                    "tree": this.scene.tree,
+                    "seed": this.scene.seed,
+                    "flameboy": this.scene.flameboy,
+                    "wing": this.scene.wing,
+                    "spider": this.scene.spider
                 };
                 const targetNpc1 = npcMap1[char1];
                 if (targetNpc1) {

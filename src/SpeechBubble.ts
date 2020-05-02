@@ -53,7 +53,7 @@ export class SpeechBubble {
     private partnersBubble: SpeechBubble | null = null;
 
     constructor(
-        private game: GameScene,
+        private scene: GameScene,
         public anchorX: number,
         public anchorY: number,
         private color = "#FFBBBB",
@@ -123,7 +123,7 @@ export class SpeechBubble {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isVisible || !this.hasContent() || !this.game.camera.isOnTarget()) {
+        if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget()) {
             return;
         }
 

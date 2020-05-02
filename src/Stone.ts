@@ -26,10 +26,10 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public state: StoneState = StoneState.DEFAULT;
 
-    public constructor(game: GameScene, x: number, y:number) {
-        super(game, x, y, 26, 54);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 26, 54);
         this.direction = -1;
-        this.face = new Face(this, EyeType.STONE, 0, 21);
+        this.face = new Face(scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
     }
 
@@ -46,7 +46,7 @@ export class Stone extends NPC implements CollidableGameObject {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height);
+        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {

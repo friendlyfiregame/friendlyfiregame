@@ -49,8 +49,8 @@ export class Fire extends NPC {
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
 
-    public constructor(game: GameScene, x: number, y: number) {
-        super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+    public constructor(scene: GameScene, x: number, y: number) {
+        super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         this.smokeEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
@@ -87,7 +87,7 @@ export class Fire extends NPC {
             alpha: () => rnd(0.3, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.face = new Face(this, EyeType.STANDARD, 0, 6);
+        this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
     }
 
     public showDialoguePrompt (): boolean {

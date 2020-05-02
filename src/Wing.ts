@@ -15,8 +15,8 @@ export class Wing extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(game: GameScene, x: number, y:number) {
-        super(game, x, y, 24, 24);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 24, 24);
     }
 
     private showDialoguePrompt (): boolean {
@@ -30,7 +30,7 @@ export class Wing extends NPC {
         ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         ctx.translate(this.x, -this.y - floatOffsetY);
-        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height);
+        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

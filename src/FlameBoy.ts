@@ -11,9 +11,9 @@ export class FlameBoy extends NPC {
     @asset("sprites/flameboy.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(game: GameScene, x: number, y:number) {
-        super(game, x, y, 26, 54);
-        this.face = new Face(this, EyeType.FLAMEBOY, 0, 5);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 26, 54);
+        this.face = new Face(scene, this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED
         this.face.setMode(this.defaultFaceMode);
     }
@@ -31,7 +31,8 @@ export class FlameBoy extends NPC {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        FlameBoy.sprite.drawTag(ctx, "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height);
+        FlameBoy.sprite.drawTag(ctx, "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height,
+            this.scene.gameTime * 1000);
         ctx.restore();
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {

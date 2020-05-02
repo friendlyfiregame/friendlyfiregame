@@ -3,8 +3,8 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { GameScene } from "./scenes/GameScene";
 
 export class Snowball extends PhysicsEntity {
-    public constructor(game: GameScene, x: number, y: number, velocityX: number, velocityY: number) {
-        super(game, x, y, 0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER);
+    public constructor(scene: GameScene, x: number, y: number, velocityX: number, velocityY: number) {
+        super(scene, x, y, 0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER);
         this.setVelocity(velocityX, velocityY);
     }
 

@@ -76,7 +76,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
-        Cloud.sprite.drawTag(ctx, "idle", -Cloud.sprite.width >> 1, -Cloud.sprite.height);
+        Cloud.sprite.drawTag(ctx, "idle", -Cloud.sprite.width >> 1, -Cloud.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
     }
 

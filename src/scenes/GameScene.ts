@@ -22,6 +22,7 @@ import { Cloud } from "../Cloud";
 import { asset } from "../Assets";
 import { rnd, rndItem, clamp, timedRnd } from "../util";
 import { BitmapFont } from "../BitmapFont";
+import { PauseScene } from "./PauseScene";
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -46,7 +47,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    private paused = false;
+    public paused = false;
     public world!: World;
     public camera!: Camera;
     public player!: Player;
@@ -123,13 +124,18 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.resume();
     }
 
     public deactivate(): void {
+        this.pause();
         this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
+        if (event.code === "Escape" || event.key === "P") {
+            this.scenes.pushScene(PauseScene);
+        }
     }
 
     public gameOver() {
@@ -277,7 +283,7 @@ export class GameScene extends Scene<FriendlyFire> {
         setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
     }
 
-    public togglePause(paused = !this.paused) {
+    private togglePause(paused = !this.paused) {
         this.paused = paused;
     }
 

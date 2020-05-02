@@ -165,8 +165,8 @@ export class Player extends PhysicsEntity {
     private doubleJumpEmitter: ParticleEmitter;
     private genderSwapEmitter: ParticleEmitter;
 
-    public constructor(game: GameScene, x: number, y: number) {
-        super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+    public constructor(scene: GameScene, x: number, y: number) {
+        super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         this.startX = x;
         this.startY = y;
         document.addEventListener("keydown", event => this.handleKeyDown(event));
@@ -221,6 +221,9 @@ export class Player extends PhysicsEntity {
     }
 
     private async handleKeyDown(event: KeyboardEvent) {
+        if (this.scene.paused) {
+            return;
+        }
         if (this.dance) {
             this.dance.handleKeyDown(event);
             return;
@@ -359,6 +362,9 @@ export class Player extends PhysicsEntity {
     }
 
     private handleKeyUp(event: KeyboardEvent) {
+        if (this.scene.paused) {
+            return;
+        }
         if (event.key === "ArrowRight" || event.key === "d") {
             this.moveRight = false;
         } else if (event.key === "ArrowLeft" || event.key === "a") {
@@ -388,7 +394,7 @@ export class Player extends PhysicsEntity {
         if (this.hasBeard) {
             // TODO
         }
-        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height);
+        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height, this.scene.gameTime * 1000);
 
         ctx.restore();
 

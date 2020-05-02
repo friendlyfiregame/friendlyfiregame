@@ -13,21 +13,21 @@ export class Greeting implements GameObject {
     private greetingAlreadyShown = false;
 
     private speechBubble = new SpeechBubble(
-        this.game,
+        this.scene,
         this.npc.x,
         this.npc.y,
         "white"
     );
 
     public get dialogActive(): boolean {
-        return !!this.game.player.playerConversation;
+        return !!this.scene.player.playerConversation;
     }
 
     public get campaign(): Campaign {
-        return this.game.campaign;
+        return this.scene.campaign;
     }
 
-    constructor(private game: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {
+    constructor(private scene: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
         this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }

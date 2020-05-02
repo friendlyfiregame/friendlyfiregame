@@ -28,10 +28,10 @@ export class Seed extends NPC {
     public state = SeedState.FREE;
     private wood: Wood;
 
-    public constructor(game: GameScene, x: number, y:number) {
-        super(game, x, y, 24, 24);
-        this.wood = new Wood(game, x, y);
-        this.face = new Face(this, EyeType.STANDARD, 0, 8);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 24, 24);
+        this.wood = new Wood(scene, x, y);
+        this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
     }
 
     private getSpriteTag(): string {
@@ -48,7 +48,8 @@ export class Seed extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y + 1);
-        Seed.sprite.drawTag(ctx, this.getSpriteTag(), -Seed.sprite.width >> 1, -Seed.sprite.height);
+        Seed.sprite.drawTag(ctx, this.getSpriteTag(), -Seed.sprite.width >> 1, -Seed.sprite.height,
+            this.scene.gameTime * 1000);
         ctx.restore();
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
