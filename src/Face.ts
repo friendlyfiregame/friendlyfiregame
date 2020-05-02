@@ -1,6 +1,7 @@
 import { NPC } from './NPC';
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
+import { GameScene } from "./scenes/GameScene";
 
 export enum FaceModes {
     BLINK = "blink",
@@ -31,6 +32,7 @@ export class Face {
     private direction = 1; // 1 = right, -1 = left
 
     constructor(
+        private scene: GameScene,
         private owner: NPC,
         private eyeType: EyeType,
         private offX = 0,
@@ -48,7 +50,7 @@ export class Face {
         const isBlinking = ((<any>window).game?.gameTime % 5) < 0.6;
         const frame = isBlinking ? FaceModes.BLINK : this.mode;
         const sprite = Face.sprites[this.eyeType];
-        sprite.drawTag(ctx, frame, -sprite.width >> 1, -sprite.height);
+        sprite.drawTag(ctx, frame, -sprite.width >> 1, -sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
     }
 

@@ -1,19 +1,19 @@
 import { NPC } from './NPC';
 import { entity } from "./Entity";
-import { Game } from "./game";
 import { Greeting } from './Greeting';
 import dialogData from "../assets/dummy.texts.json";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { GameScene } from "./scenes/GameScene";
 
 @entity("tree")
 export class DummyNPC extends NPC {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
-    public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 20, 30);
-        this.greeting = new Greeting(this.game, this, dialogData);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 20, 30);
+        this.greeting = new Greeting(this.scene, this, dialogData);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

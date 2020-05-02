@@ -2,7 +2,7 @@ import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
 import { Environment } from "./World";
 import { Player } from "./Player";
-import { GameObject } from './game';
+import { GameObject } from "./scenes/GameScene";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -84,7 +84,7 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     private checkCollision(x: number, y: number, ignore?: Environment[]): Environment {
-        return this.game.world.collidesWith(x, y, [ this ], ignore);
+        return this.scene.world.collidesWith(x, y, [ this ], ignore);
     }
 
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
@@ -119,7 +119,7 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     public update(dt: number): void {
-        const world = this.game.world;
+        const world = this.scene.world;
 
         const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
         if (ground instanceof PhysicsEntity) {

@@ -1,7 +1,6 @@
 
 import { Environment } from "./World";
 import { EyeType, Face, FaceModes } from './Face';
-import { Game, CollidableGameObject } from "./game";
 import { NPC } from './NPC';
 import { Sound } from './Sound';
 import { entity } from "./Entity";
@@ -9,6 +8,7 @@ import { now } from "./util";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
+import { GameScene, CollidableGameObject } from "./scenes/GameScene";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -26,17 +26,17 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public state: StoneState = StoneState.DEFAULT;
 
-    public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 26, 54);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 26, 54);
         this.direction = -1;
-        this.face = new Face(this, EyeType.STONE, 0, 21);
+        this.face = new Face(scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
     }
 
     private showDialoguePrompt (): boolean {
         return (
-            this.game.player.getMilestone() >= Milestone.PLANTED_SEED &&
-            this.game.player.getMilestone() < Milestone.GOT_STONE
+            this.scene.player.getMilestone() >= Milestone.PLANTED_SEED &&
+            this.scene.player.getMilestone() < Milestone.GOT_STONE
         );
     }
 
@@ -46,7 +46,7 @@ export class Stone extends NPC implements CollidableGameObject {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height);
+        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {
@@ -59,14 +59,14 @@ export class Stone extends NPC implements CollidableGameObject {
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
-            if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
-                this.game.player.achieveMilestone(Milestone.THROWN_STONE_INTO_WATER);
+            if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+                this.scene.player.achieveMilestone(Milestone.THROWN_STONE_INTO_WATER);
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
                 this.y = 380;
                 Stone.successSound.play();
-                this.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
+                this.scene.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {
             const diffX = 900 - this.x;
@@ -97,11 +97,11 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public isCarried(): boolean {
-        return this.game.player.isCarrying(this);
+        return this.scene.player.isCarrying(this);
     }
 
     public pickUp(): void {
         this.face?.setMode(FaceModes.AMUSED);
-        this.game.player.carry(this);
+        this.scene.player.carry(this);
     }
 }

@@ -1,9 +1,9 @@
 import { entity } from "./Entity";
-import { Game } from "./game";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { Milestone } from './Player';
+import { GameScene } from "./scenes/GameScene";
 
 @entity("wing")
 export class Wing extends NPC {
@@ -15,14 +15,14 @@ export class Wing extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 24, 24);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 24, 24);
     }
 
     private showDialoguePrompt (): boolean {
         return (
-            this.game.player.getMilestone() >= Milestone.GOT_MULTIJUMP &&
-            this.game.player.getMilestone() < Milestone.MADE_RAIN
+            this.scene.player.getMilestone() >= Milestone.GOT_MULTIJUMP &&
+            this.scene.player.getMilestone() < Milestone.MADE_RAIN
         );
     }
 
@@ -30,7 +30,7 @@ export class Wing extends NPC {
         ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         ctx.translate(this.x, -this.y - floatOffsetY);
-        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height);
+        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

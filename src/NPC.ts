@@ -14,16 +14,16 @@ export abstract class NPC extends PhysicsEntity {
     public defaultFaceMode = FaceModes.NEUTRAL;
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
-    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white");
+    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white");
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.x, this.y);
+    public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
     private lastEndedConversation = -Infinity;
 
     protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {
         if (this.face) {
             // Look at player
             if (lookAtPlayer) {
-                const dx = this.game.player.x - this.x;
+                const dx = this.scene.player.x - this.x;
                 this.face.toggleDirection((dx > 0) ? 1 : -1);
                 this.face.draw(ctx);
             } else {
@@ -46,11 +46,11 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     public registerEndedConversation() {
-        this.lastEndedConversation = this.game.gameTime;
+        this.lastEndedConversation = this.scene.gameTime;
     }
 
     public isReadyForConversation() {
-        return this.conversation && this.game.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION;
+        return this.conversation && this.scene.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION;
     }
 
     public toggleDirection(direction = this.direction > 0 ? -1 : 1) {
@@ -61,7 +61,7 @@ export abstract class NPC extends PhysicsEntity {
 
     public update(dt: number): void {
         if (this.lookAtPlayer) {
-            const dx = this.game.player.x - this.x;
+            const dx = this.scene.player.x - this.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
         }
         super.update(dt);

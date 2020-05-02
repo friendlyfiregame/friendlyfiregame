@@ -1,8 +1,8 @@
 import { getImageData } from "./graphics";
-import { GameObject, Game, isCollidableGameObject, gameWidth } from "./game";
 import { ParticleEmitter, particles, valueCurves } from "./Particles";
 import { rnd, rndInt } from "./util";
 import { asset } from "./Assets";
+import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 
 export enum Environment {
     AIR = 0,
@@ -28,15 +28,15 @@ export class World implements GameObject {
     ])
     private static backgrounds: HTMLImageElement[];
 
-    private game: Game;
+    private scene: GameScene;
 
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = false;
 
-    public constructor(game: Game) {
-        this.game = game;
+    public constructor(scene: GameScene) {
+        this.scene = scene;
         this.rainEmitter = particles.createEmitter({
             position: {x: 2051, y: 2120},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
@@ -64,16 +64,16 @@ export class World implements GameObject {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        const camX = this.game.camera.x;
-        const camY = this.game.camera.y;
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+        const camX = this.scene.camera.x;
+        const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
         ctx.save();
         ctx.translate(camX, -camY);
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
-            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
+            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
         }
         ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
         ctx.restore();
@@ -96,7 +96,7 @@ export class World implements GameObject {
      *         specific meaning which isn't defined yet).
      */
     public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
-        for (const gameObject of this.game.gameObjects) {
+        for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y);
                 if (environment !== Environment.AIR && !ignore.includes(environment) ) {
@@ -118,7 +118,7 @@ export class World implements GameObject {
 
     public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
             GameObject | null {
-        for (const gameObject of this.game.gameObjects) {
+        for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y);
                 if (environment !== Environment.AIR && !ignore.includes(environment)) {
