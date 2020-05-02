@@ -1,4 +1,5 @@
 declare module "*.dialog.json" {
-    const value: any;
+    export type DialogJSON = Record<string, string[]>;
+    const value: DialogJSON;
     export default value;
 }
