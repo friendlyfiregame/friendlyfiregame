@@ -1,6 +1,6 @@
 
 import { Face, EyeType } from './Face';
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { entity } from "./Entity";
 import { Seed } from "./Seed";

@@ -1,4 +1,4 @@
-import { Game } from './game';
+import { Game } from './oldgame';
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
 import fire0 from '../assets/dialog/fire0.dialog.json';
@@ -156,17 +156,17 @@ export class Campaign {
                 break;
             case "talkedToStone":
                 if (this.game.player.getMilestone() === Milestone.PLANTED_SEED) {
-                    this.game.player.achieveMilestone(Milestone.TALKED_TO_STONE); 
+                    this.game.player.achieveMilestone(Milestone.TALKED_TO_STONE);
                 }
-                break; 
+                break;
             case "pickupstone":
                 this.game.stone.pickUp();
                 break;
             case "talkedToFireWithWood":
                 if (this.game.player.getMilestone() === Milestone.GOT_WOOD) {
-                    this.game.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD); 
+                    this.game.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD);
                 }
-                break; 
+                break;
             case "dance":
                 setTimeout(() => {
                     this.game.player.startDance(+params[0] || 1);

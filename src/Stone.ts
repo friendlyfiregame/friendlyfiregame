@@ -1,7 +1,7 @@
 
 import { Environment } from "./World";
 import { EyeType, Face, FaceModes } from './Face';
-import { Game, CollidableGameObject } from "./game";
+import { Game, CollidableGameObject } from "./oldgame";
 import { NPC } from './NPC';
 import { Sound } from './Sound';
 import { entity } from "./Entity";

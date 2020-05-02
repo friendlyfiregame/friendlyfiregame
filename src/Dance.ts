@@ -1,4 +1,4 @@
-import { Game } from './game';
+import { Game } from './oldgame';
 import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
 import { asset } from "./Assets";

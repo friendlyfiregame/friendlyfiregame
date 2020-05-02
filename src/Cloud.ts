@@ -1,4 +1,4 @@
-import { Game, CollidableGameObject } from "./game";
+import { Game, CollidableGameObject } from "./oldgame";
 import { PIXEL_PER_METER } from "./constants";
 import { Environment } from "./World";
 import { entity } from "./Entity";

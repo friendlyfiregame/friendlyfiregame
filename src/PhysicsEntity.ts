@@ -2,7 +2,7 @@ import { Entity } from './Entity';
 import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
 import { Environment } from "./World";
 import { Player } from "./Player";
-import { GameObject } from './game';
+import { GameObject } from './oldgame';
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;

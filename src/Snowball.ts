@@ -1,4 +1,4 @@
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { PIXEL_PER_METER } from "./constants";
 import { PhysicsEntity } from "./PhysicsEntity";
 

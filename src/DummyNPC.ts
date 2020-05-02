@@ -1,6 +1,6 @@
 import { NPC } from './NPC';
 import { entity } from "./Entity";
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { Greeting } from './Greeting';
 import dialogData from "../assets/dummy.texts.json";
 

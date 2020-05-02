@@ -1,4 +1,4 @@
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { entity } from "./Entity";
 import { Aseprite } from "./Aseprite";
@@ -11,7 +11,7 @@ interface SpiderSpriteMetadata {
 
 @entity("spider")
 export class Spider extends NPC {
-    
+
     @asset("sprites/magicspider.aseprite.json")
     private static sprite: Aseprite;
 

@@ -1,4 +1,4 @@
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { sleep } from "./util";
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false):

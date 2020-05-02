@@ -1,4 +1,4 @@
-import { GameObject, Game } from "./game";
+import { GameObject, Game } from "./oldgame";
 import { GameObjectProperties } from "./MapInfo";
 
 export interface EntityDistance {

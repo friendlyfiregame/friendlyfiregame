@@ -1,5 +1,5 @@
 import { entity } from "./Entity";
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { Environment } from "./World";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";

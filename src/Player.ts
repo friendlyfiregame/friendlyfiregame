@@ -1,5 +1,5 @@
 import { SpeechBubble } from "./SpeechBubble";
-import { Game, GameStage } from "./game";
+import { Game, GameStage } from "./oldgame";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY

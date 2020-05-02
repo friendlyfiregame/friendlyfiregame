@@ -3,7 +3,7 @@ import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from './SpeechBubble';
 import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
-import { GameObject, Game } from './game';
+import { GameObject, Game } from './oldgame';
 
 export class Greeting implements GameObject {
     public greetingRange = 120;

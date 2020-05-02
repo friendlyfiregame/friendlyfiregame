@@ -1,5 +1,5 @@
 import { NPC } from './NPC';
-import { Game } from './game';
+import { Game } from './oldgame';
 import { PIXEL_PER_METER } from './constants';
 import { rnd, rndInt, shiftValue } from './util';
 import { particles, ParticleEmitter, valueCurves } from './Particles';

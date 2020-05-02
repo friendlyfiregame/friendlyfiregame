@@ -1,5 +1,5 @@
 import { entity } from "./Entity";
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";

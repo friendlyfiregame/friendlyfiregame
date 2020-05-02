@@ -1,6 +1,6 @@
 import { Vector2, clamp, shiftValue, rnd } from './util';
 import { ValueCurve, valueCurves } from './Particles';
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { Fire } from './Fire';
 
 export interface camFocus {

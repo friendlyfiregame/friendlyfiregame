@@ -1,5 +1,5 @@
 import { getImageData } from "./graphics";
-import { GameObject, Game, isCollidableGameObject, gameWidth } from "./game";
+import { GameObject, Game, isCollidableGameObject, gameWidth } from "./oldgame";
 import { ParticleEmitter, particles, valueCurves } from "./Particles";
 import { rnd, rndInt } from "./util";
 import { asset } from "./Assets";

@@ -1,5 +1,5 @@
 import { entity } from "./Entity";
-import { Game } from "./game";
+import { Game } from "./oldgame";
 import { NPC } from './NPC';
 import { Face, EyeType, FaceModes } from './Face';
 import { Aseprite } from './Aseprite';
