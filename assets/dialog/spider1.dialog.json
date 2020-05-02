@@ -8,8 +8,11 @@
         ">[not toggledgender]What is a gender fairy? @magic",
         ">[toggledgender]Can you 'accidentaly' change my gender again? @swapgender",
         ">Seriously? Magical FAIRY? @spider",
-        ">[not visited]I got no time for this...",
-        ">[visited]Gonna go... @entry !end",
+        ">[not visited]I got no time for this... @nerve",
+        ">[visited]Gonna go...",
+        "Byeeee @entry !end"
+    ],
+    "nerve": [
         "The nerve! @rejected !end"
     ],
     "rejected": [
