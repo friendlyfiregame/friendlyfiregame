@@ -203,6 +203,18 @@
                  "width":0,
                  "x":2051,
                  "y":847
+                }, 
+                {
+                 "height":0,
+                 "id":20,
+                 "name":"seedposition",
+                 "point":true,
+                 "rotation":0,
+                 "type":"pointer",
+                 "visible":true,
+                 "width":0,
+                 "x":2054,
+                 "y":872
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -253,7 +265,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":20,
+ "nextobjectid":21,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.3.1",

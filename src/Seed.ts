@@ -84,11 +84,14 @@ export class Seed extends NPC {
                 player.carry(this);
             }
             if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL) {
+                const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'seedposition');
+                if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
+
                 this.state = SeedState.PLANTED;
                 this.scene.player.achieveMilestone(Milestone.PLANTED_SEED);
                 this.setFloating(true);
-                this.x = 2052;
-                this.y = 1624;
+                this.x = seedPosition.x;
+                this.y = seedPosition.y;
                 Seed.successSound.play();
                 this.scene.campaign.runAction("enable", null, ["stone", "stone2"]);
             }
