@@ -53,12 +53,29 @@ export class MenuList {
   public onActivated = new Signal<string>();
 
   /**
-   * Adds a arbitray number of menu items to the menu list
+   * Adds an arbitray number of menu items to the menu list
    * The first available menu item will be focused automatically
    * @param items 
    */
   public addItems(...items: MenuItem[]) {
     this.items.push(...items);
+    this.focusFirstItem();
+  }
+
+  /**
+   * Sets an arbitray number of menu items to the menu list and overrides
+   * any previously added items. The first available menu item will be focused automatically
+   * @param items 
+   */
+  public setItems(...items: MenuItem[]) {
+    this.items = [...items];
+    this.focusFirstItem();
+  }
+
+  /**
+   * Finds and focuses the first available item if no item was focused before.
+   */
+  private focusFirstItem (): void {
     if (!this.getFocusedItem()) {
       const index = this.items.findIndex(item => item.enabled)
       if (index > -1) {

@@ -34,7 +34,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
 
-        this.menu.addItems(
+        this.menu.setItems(
             new MenuItem(MenuItemKey.START, "Start Game", TitleScene.font, "white", 75, 160),
             new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175),
             new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190, false),
@@ -48,7 +48,6 @@ export class TitleScene extends Scene<FriendlyFire> {
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);
-                console.log(this.game.scenes);
                 break;
             case MenuItemKey.CREDITS:
                 console.log('show credits')

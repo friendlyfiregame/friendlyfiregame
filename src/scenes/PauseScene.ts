@@ -4,26 +4,63 @@ import { SlideTransition } from "../transitions/SlideTransition";
 import { easeOutBounce } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { asset } from "../Assets";
+import { MenuList, MenuItem } from '../Menu';
+import { ControlsScene } from './ControlsScene';
+
+enum MenuItemKey {
+    RESUME = 'resume',
+    CONTROLS = 'controls',
+}
+
 
 export class PauseScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
+    @asset("fonts/headline.font.json")
+    private static headlineFont: BitmapFont;
+
+    private menu = new MenuList();
+
     public setup(): void {
         this.inTransition = new SlideTransition({ duration: 1, direction: "top", easing: easeOutBounce });
         this.outTransition = new SlideTransition({ duration: 0.25 });
+
+        this.menu.setItems(
+            new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
+            new MenuItem(MenuItemKey.CONTROLS, "Controls", PauseScene.font, "white", 75, 145),
+        )
     }
 
     public activate(): void {
         this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.menu.onActivated.connect(this.handleMenuAction, this)
     }
 
     public deactivate(): void {
         this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.menu.onActivated.disconnect(this.handleMenuAction, this);
+    }
+
+    public handleMenuAction (buttonId: string) {
+        switch(buttonId) {
+            case MenuItemKey.RESUME:
+                this.scenes.popScene();
+                break;
+            case MenuItemKey.CONTROLS:
+                this.game.scenes.pushScene(ControlsScene);
+                break;
+        }
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
-        this.scenes.popScene();
+        if (event.code === "Enter" || event.key === "e") {
+            this.menu.executeAction();
+        } else if (event.key === "w" || event.key === "ArrowUp") {
+            this.menu.prev();
+        } else if (event.key === "s" || event.key === "ArrowDown") {
+            this.menu.next();
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -33,9 +70,10 @@ export class PauseScene extends Scene<FriendlyFire> {
         ctx.fillRect(0, 0, width, height);
         ctx.font = "20px sans-serif";
         ctx.fillStyle = "white";
-        const text = "Pause - Press any key to continue";
-        const metrics = PauseScene.font.measureText(text);
-        PauseScene.font.drawText(ctx, text, (width - metrics.width) >> 1, (height - metrics.height) >> 1, "white");
+        // const text = "Pause - Press any key to continue";
+        // const metrics = PauseScene.font.measureText(text);
+        PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
         ctx.restore();
+        this.menu.draw(ctx);
     }
 }
