@@ -225,8 +225,8 @@
                  "type":"pointer",
                  "visible":true,
                  "width":0,
-                 "x":1532,
-                 "y":1855
+                 "x":1526,
+                 "y":1874
                 }, 
                 {
                  "height":0,
@@ -238,7 +238,7 @@
                  "visible":true,
                  "width":0,
                  "x":1464,
-                 "y":1897
+                 "y":1944
                 }, 
                 {
                  "height":0,
@@ -249,8 +249,8 @@
                  "type":"pointer",
                  "visible":true,
                  "width":0,
-                 "x":1600,
-                 "y":1895
+                 "x":1599,
+                 "y":1921
                 }],
          "opacity":1,
          "type":"objectgroup",
