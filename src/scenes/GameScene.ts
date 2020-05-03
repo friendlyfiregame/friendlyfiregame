@@ -6,7 +6,7 @@ import { World } from "../World";
 import { MapInfo } from "../MapInfo";
 import { Campaign } from "../Campaign";
 import { createEntity } from "../Entity";
-import { Player } from "../Player";
+import { Player, Milestone } from "../Player";
 import { Fire } from "../Fire";
 import { Stone } from "../Stone";
 import { Tree } from "../Tree";
@@ -29,6 +29,12 @@ export interface GameObject {
     update(dt: number): void;
 }
 
+export type PointOfInterest = {
+    name: string;
+    x: number;
+    y: number;
+}
+
 export interface CollidableGameObject extends GameObject {
     collidesWith(x: number, y: number): number;
 }
@@ -47,6 +53,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
+    public pointsOfInterest: PointOfInterest[] = [];
     public paused = false;
     public world!: World;
     public camera!: Camera;
@@ -79,8 +86,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            ...this.mapInfo.getGameObjectInfos().map(npc => createEntity(npc.name, this, npc.x, npc.y, npc.properties))
+            ...this.mapInfo.getGameObjectInfos().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
         ];
+        this.pointsOfInterest = this.mapInfo.getPointers();
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
@@ -209,6 +217,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.apocalypseFactor = 0;
                 this.apocalypse = false;
                 this.fire.angry = false;
+                this.player.achieveMilestone(Milestone.BEAT_FIRE);
                 this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
                 FriendlyFire.music[1].stop()

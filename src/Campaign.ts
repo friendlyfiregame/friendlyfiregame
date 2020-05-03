@@ -108,15 +108,25 @@ export class Campaign {
                 this.scene.camera.zoom -= 1
                 break;
             case "treezoom":
-                this.scene.camera.focusOn(8, 3100, 500, 1, 0, valueCurves.cos(0.35));
+                const forestPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'forest');
+                if (forestPointer) {
+                    this.scene.camera.focusOn(8, forestPointer.x, forestPointer.y, 1, 0, valueCurves.cos(0.35));
+                }
                 break;
             case "mountainzoom":
-                this.scene.camera.focusOn(8, 2052, 1625, 1, 0, valueCurves.cos(0.35));
+                const mountainPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'mountain');
+                if (mountainPointer) {
+                    this.scene.camera.focusOn(8, mountainPointer.x, mountainPointer.y, 1, 0, valueCurves.cos(0.35));
+                }
                 break;
             case "riverzoom":
-                this.scene.camera.focusOn(8, 900, 400, 1, 0, valueCurves.cos(0.35));
+                const riverPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'river');
+                if (riverPointer) {
+                    this.scene.camera.focusOn(8, riverPointer.x, riverPointer.y, 1, 0, valueCurves.cos(0.35));
+                }
                 break;
             case "crazyzoom":
+                this.scene.player.achieveMilestone(Milestone.APOCALYPSE_STARTED);
                 const duration = 12;
                 this.scene.camera.focusOn(duration, this.scene.fire.x, this.scene.fire.y + 15, 8,
                     -2 * Math.PI, valueCurves.cubic).then(() => this.scene.beginApocalypse());
@@ -131,6 +141,7 @@ export class Campaign {
                 this.scene.player.setBeard(true);
                 break;
             case "endgame":
+                this.scene.player.achieveMilestone(Milestone.BEAT_GAME);
                 this.scene.fire.conversation = null;
                 setTimeout(() => {
                     this.scene.gameOver();

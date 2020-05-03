@@ -84,7 +84,10 @@ export enum Milestone {
     TREE_DROPPED_WOOD,
     GOT_WOOD,
     TALKED_TO_FIRE_WITH_WOOD,
-    THROWN_WOOD_INTO_FIRE
+    THROWN_WOOD_INTO_FIRE,
+    APOCALYPSE_STARTED,
+    BEAT_FIRE,
+    BEAT_GAME
 }
 
 export enum Gender {

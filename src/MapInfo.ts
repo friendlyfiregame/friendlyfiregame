@@ -1,5 +1,6 @@
 import { Vector2 } from "./util";
 import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
+import { PointOfInterest } from './scenes/GameScene';
 
 export interface GameObjectProperties {
     direction?: "up" | "down" | "left" | "right",
@@ -41,7 +42,7 @@ export class MapInfo {
 
     public getGameObjectInfos(): GameObjectInfo[] {
         const mapHeight = this.getMapSize().height;
-        return this.getObjects().map(object => ({
+        return this.getObjects('entity').map(object => ({
             name: object.name,
             x: object.x,
             y: mapHeight - object.y,
@@ -49,6 +50,15 @@ export class MapInfo {
                 props[property.name] = property.value;
                 return props;
             }, {})
+        }));
+    }
+
+    public getPointers(): PointOfInterest[] {
+        const mapHeight = this.getMapSize().height;
+        return this.getObjects('pointer').map(object => ({
+            name: object.name,
+            x: object.x,
+            y: mapHeight - object.y
         }));
     }
 
