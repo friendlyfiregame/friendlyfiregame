@@ -6,6 +6,7 @@ import { CurtainTransition } from "../transitions/CurtainTransition";
 import { easeInSine } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { GameScene } from "./GameScene";
+import { ControlsScene } from "./ControlsScene";
 import { MenuList, MenuItem } from '../Menu';
 
 const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
@@ -35,7 +36,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
         this.menu.addItems(
             new MenuItem(MenuItemKey.START, "Start Game", TitleScene.font, "white", 75, 160),
-            new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175, false),
+            new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175),
             new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190, false),
         )
     }
@@ -46,7 +47,8 @@ export class TitleScene extends Scene<FriendlyFire> {
                 this.game.scenes.setScene(GameScene);
                 break;
             case MenuItemKey.CONTROLS:
-                console.log('show controls')
+                this.game.scenes.pushScene(ControlsScene);
+                console.log(this.game.scenes);
                 break;
             case MenuItemKey.CREDITS:
                 console.log('show credits')
@@ -74,11 +76,11 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     public deactivate(): void {
         this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
-        this.menu.onActivated.disconnect(this.handleMenuAction, this)
+        this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
-        if (event.code === "Enter") {
+        if (event.code === "Enter" || event.key === "e") {
             this.menu.executeAction();
         } else if (event.key === "w" || event.key === "ArrowUp") {
             this.menu.prev();
