@@ -116,6 +116,9 @@ export class Player extends PhysicsEntity {
     @asset("sounds/throwing/throwing.mp3")
     private static throwingSound: Sound;
 
+    @asset("sounds/genderswapping/fairydust.mp3")
+    private static genderSwapSound: Sound;
+
     @asset([
         "sounds/jumping/jumping_female.mp3",
         "sounds/jumping/jumping.mp3"
@@ -217,6 +220,7 @@ export class Player extends PhysicsEntity {
     public toggleGender () {
         this.genderSwapEmitter.setPosition(this.x, this.y + Player.playerSprites[this.gender].height / 2);
         this.genderSwapEmitter.emit(20);
+        Player.genderSwapSound.play();
         this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
     }
 
