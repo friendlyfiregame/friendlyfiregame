@@ -272,20 +272,16 @@ export class GameScene extends Scene<FriendlyFire> {
     public beginApocalypse() {
         this.apocalypse = true;
         this.world.stopRain();
-        // Spawn 3 clouds over fire
-        const cx = 1500, cy = 570;
-        const coords = [
-            [cx, cy],
-            [cx - 60, cy - 32],
-            [cx + 74, cy - 24]
-        ];
-        for (let c of coords) {
-            const cloud = new Cloud(this, c[0], c[1], {
+
+        const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === 'bosscloud');
+        cloudPositions.forEach(pos => {
+            const cloud = new Cloud(this, pos.x, pos.y, {
                 velocity: 0,
                 distance: 1
             }, true);
             this.gameObjects.push(cloud);
-        }
+        })
+
         this.player.multiJump = true;
         // Some helpful thoughts
         setTimeout(() => this.player.think("This is not over...", 2000), 9000);
