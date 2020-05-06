@@ -70,10 +70,6 @@ export class PauseScene extends Scene<FriendlyFire> {
         ctx.globalAlpha = 0.8;
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
-        ctx.font = "20px sans-serif";
-        ctx.fillStyle = "white";
-        // const text = "Pause - Press any key to continue";
-        // const metrics = PauseScene.font.measureText(text);
         PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
         ctx.restore();
         this.menu.draw(ctx);

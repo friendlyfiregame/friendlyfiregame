@@ -23,6 +23,8 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
+import { GotItemScene, Item } from './scenes/GotItemScene';
+import { PauseScene } from './scenes/PauseScene';
 
 const groundColors = [
     "#806057",
@@ -154,8 +156,8 @@ export class Player extends PhysicsEntity {
     private dance: Dance | null = null;
     private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
-    public doubleJump = false;
-    public multiJump = false;
+    private doubleJump = false;
+    private multiJump = false;
     private usedDoubleJump = false;
     private hasBeard = false;
 
@@ -225,6 +227,16 @@ export class Player extends PhysicsEntity {
         this.genderSwapEmitter.emit(20);
         Player.genderSwapSound.play();
         this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
+    }
+
+    public enableDoubleJump () {
+        this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
+        this.doubleJump = true;
+    }
+
+    public enableMultiJump () {
+        this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
+        this.multiJump = true;
     }
 
     private async handleKeyDown(event: KeyboardEvent) {

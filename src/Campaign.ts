@@ -153,11 +153,11 @@ export class Campaign {
                 break;
             case "doublejump":
                 this.scene.player.achieveMilestone(Milestone.GOT_QUEST_FROM_TREE);
-                this.scene.player.doubleJump = true;
+                this.scene.player.enableDoubleJump();
                 break;
             case "multijump":
                 this.scene.player.achieveMilestone(Milestone.GOT_MULTIJUMP);
-                this.scene.player.multiJump = true;
+                this.scene.player.enableMultiJump();
                 break;
             case "spawnseed":
                 this.scene.tree.spawnSeed();

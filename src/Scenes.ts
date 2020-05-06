@@ -1,4 +1,4 @@
-import { Scene, SceneConstructor } from "./Scene";
+import { Scene, SceneConstructor, SceneProperties } from "./Scene";
 import { Game } from "./Game";
 
 export class Scenes<T extends Game> {
@@ -18,11 +18,14 @@ export class Scenes<T extends Game> {
         return scene;
     }
 
-    public async pushScene(sceneClass: SceneConstructor<T>): Promise<void> {
+    public async pushScene(sceneClass: SceneConstructor<T>, properties: SceneProperties = null): Promise<void> {
         if (this.activeScene != null) {
             await this.activeScene.deactivate();
         }
         const scene = this.createScene(sceneClass);
+        if (properties) {
+            scene.setProperties(properties);
+        }
         await scene.setup();
         this.scenes.push(scene);
         this.updateSortedScenes();

@@ -4,12 +4,14 @@ import { Keyboard } from "./Keyboard";
 import { Scenes } from "./Scenes";
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
+export type SceneProperties = Record<string, string | number | boolean> | null;
 
 export abstract class Scene<T extends Game> {
     public zIndex: number = 0;
     public currentTransition: Transition | null = null;
     public inTransition: Transition | null = null;
     public outTransition: Transition | null = null;
+    public properties: SceneProperties = null;
 
     public constructor(public readonly game: T) {}
 
@@ -19,6 +21,10 @@ export abstract class Scene<T extends Game> {
 
     public get scenes(): Scenes<T> {
         return this.game.scenes;
+    }
+
+    public setProperties(properties: SceneProperties) {
+        this.properties = properties;
     }
 
     /**

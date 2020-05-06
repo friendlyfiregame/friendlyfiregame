@@ -77,7 +77,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private scale = 1;
     private mapInfo!: MapInfo;
     public gamepadInput!: GamepadInput;
-    private dt: number = 0;
+    public dt: number = 0;
 
     public setup(): void {
         this.mapInfo = new MapInfo();
