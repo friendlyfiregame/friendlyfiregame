@@ -24,7 +24,6 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
-import { PauseScene } from './scenes/PauseScene';
 
 const groundColors = [
     "#806057",
