@@ -123,7 +123,7 @@ export class SpeechBubble {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget()) {
+        if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
             return;
         }
 

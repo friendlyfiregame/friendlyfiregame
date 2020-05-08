@@ -27,6 +27,10 @@ export abstract class Scene<T extends Game> {
         this.properties = properties;
     }
 
+    public isActive(): boolean {
+        return this.scenes.activeScene === this;
+    }
+
     /**
      * Called when the scene is pushed onto the stack and before any transitions.
      */

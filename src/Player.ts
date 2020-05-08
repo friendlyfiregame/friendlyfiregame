@@ -229,13 +229,17 @@ export class Player extends PhysicsEntity {
     }
 
     public enableDoubleJump () {
-        this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
-        this.doubleJump = true;
+        if (!this.doubleJump) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
+            this.doubleJump = true;
+        }
     }
 
     public enableMultiJump () {
-        this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
-        this.multiJump = true;
+        if (!this.multiJump) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
+            this.multiJump = true;
+        }
     }
 
     private async handleKeyDown(event: KeyboardEvent) {

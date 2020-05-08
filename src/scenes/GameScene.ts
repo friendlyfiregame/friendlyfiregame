@@ -150,6 +150,10 @@ export class GameScene extends Scene<FriendlyFire> {
         this.game.scenes.setScene(EndScene);
     }
 
+    public isActive(): boolean {
+        return !this.paused;
+    }
+
     public update(dt: number) {
         if (this.paused) {
             dt = 0;
@@ -282,7 +286,8 @@ export class GameScene extends Scene<FriendlyFire> {
             this.gameObjects.push(cloud);
         })
 
-        this.player.multiJump = true;
+        this.player.enableMultiJump();
+
         // Some helpful thoughts
         setTimeout(() => this.player.think("This is not over...", 2000), 9000);
         setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
