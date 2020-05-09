@@ -1,15 +1,26 @@
 {
     "entry": [
-        "I am the wise stone. Hard, but fair. !talkedToStone",
-        "What wisdom do you seek",
-        ">That planted seed over there needs some help growing up, I guess @introduction"
+        "[not met]I am the wise stone. Hard, but fair. !talkedToStone",
+        "[not met]I oversee the sacred garden up that hill. What wisdom do you seek? !set met",
+        "[met]Welcome back young human. What wisdom do you seek?",
+        ">[not $seedplanted]I need to plant a seed. Any tips? @tips",
+        ">[$seedplanted]I planted the seed but nothing happened @introduction",
+        ">Nevermind @entry !end"
+    ],
+    "tips": [
+        "You can use the the sacred garden of course. Just throw the seed directly onto the soil.",
+        "The item will be absorbed by the blessed and fertile ground to help create new life",
+        "What a miracle!",
+        ">It's just a gardening...",
+        ">Will do",
+        "Good Luck @entry !end"
     ],
     "visitedentry": [
         "I see that you still struggle with your task",
         ">Yeah, kind of @introduction"
     ],
     "introduction": [
-        "Well, if you are willing to listen, I would be willing to teach you.",
+        "Well, if you are willing to listen, I would be willing to teach you the ways of the sacred soil.",
         ">I do not need a teacher @noteacher",
         ">Sure, whatever will help me finally get this done. @getthisdone",
         ">Seriously, can everything talk here? @getthisdone",
@@ -23,15 +34,23 @@
         "Fool! Out of my sight! @visitedentry !end"
     ],
     "getthisdone": [
-        "A bit more respect, young boy. Start by calling me Master!",
+        "[$ismale]A bit more respect, young boy. Start by calling me Master!",
+        "[not $ismale]A bit more respect, young girl. Start by calling me Master!",
         ">I am the only Master I acknowledge! @ionlymaster",
         ">Fine, what can you teach me... Master? @yesmaster",
         ">Forgive me, Master. I am willing to learn @yesmaster",
-        ">When do you beings stop calling be 'boy' for once!",
-        "What are you saying, boy?",
-        ">I'm a girl! @girl",
-        ">I'm a man! @man",
+        ">[$ismale]When do you beings stop calling be 'boy' for once!",
+        ">[not $ismale]When do you beings stop calling be 'girl' for once!",
+        "[$ismale]What are you saying, boy?",
+        "[not $ismale]What are you saying, girl?",
+        ">[$ismale]I'm a girl! @genderswap",
+        ">[not $ismale]I'm a woman! @woman",
+        ">[$ismale]I'm a man! @man",
+        ">[not $ismale]I'm a man! @genderswap",
         ">I'm a human, leave me alone with your gender talk @human"
+    ],
+    "woman": [
+        "Great for you @getthisdone"
     ],
     "man": [
         "Ohohoh. Have you looked in a mirror? You have less facial hair than a stone.",
@@ -72,15 +91,12 @@
         ">Mphffpfhffhfpf.",
         "Takes some getting used to. But, where were we... right. @yesmaster"
     ],
-    "girl": [
-        "Well I guess even my immense wisdom has its limits. So let me correct myself:",
-        "A bit more respect, young girl. Start by calling me Master!",
-        ">I am the only Master I acknowledge! @ionlymaster",
-        ">Fine, what can you teach me... Master? @yesmaster",
-        ">Forgive me, Master. I am willing to learn @yesmaster",
-        ">May I call you Mistress instead?",
-        "You sassy little person. You may, but only after you've demonstrated your worth.",
-        ">How? @yesmaster"
+    "genderswap": [
+        "Well I guess even my immense wisdom has its limits.",
+        "Maybe you should have a chat with your designated gender fairy then...",
+        "... I have no idea where mine is. Haven't seen her for a while",
+        "> All righty. Maybe I'll do that",
+        "Where were we? Ah yes! @getthisdone"
     ],
     "touche": [
         "...",

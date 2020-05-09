@@ -9,6 +9,7 @@ import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
+import { Conversation } from './Conversation';
 
 export enum SeedState {
     FREE = 0,
@@ -93,7 +94,7 @@ export class Seed extends NPC {
                 this.x = seedPosition.x;
                 this.y = seedPosition.y;
                 Seed.successSound.play();
-                this.scene.campaign.runAction("enable", null, ["stone", "stone2"]);
+                Conversation.setGlobal("seedplanted", "true");
             }
             if (!this.isCarried() && this.state !== SeedState.SWIMMING && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = SeedState.SWIMMING;

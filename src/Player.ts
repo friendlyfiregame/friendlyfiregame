@@ -24,6 +24,7 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
+import { Conversation } from './Conversation';
 
 const groundColors = [
     "#806057",
@@ -99,6 +100,9 @@ export enum Gender {
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
 
+const startingGender = Gender.MALE;
+Conversation.setGlobal("ismale", "true");
+
 interface PlayerSpriteMetadata {
     carryOffsetFrames?: number[];
 }
@@ -141,7 +145,7 @@ export class Player extends PhysicsEntity {
     private milestone = Milestone.JUST_ARRIVED;
     private lastHint = Date.now();
     private flying = false;
-    private gender = Gender.MALE;
+    private gender = startingGender;
     public direction = 1;
     private playerSpriteMetadata: PlayerSpriteMetadata[] | null = null;
     public animation = "idle";
@@ -226,6 +230,7 @@ export class Player extends PhysicsEntity {
         this.genderSwapEmitter.emit(20);
         Player.genderSwapSound.play();
         this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
+        Conversation.setGlobal("ismale", this.gender === Gender.MALE ? "true" : "" );
     }
 
     public enableDoubleJump () {

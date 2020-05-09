@@ -83,12 +83,12 @@ export class GameScene extends Scene<FriendlyFire> {
         this.mapInfo = new MapInfo();
         this.campaign = new Campaign(this);
         this.particles = particles;
+        this.pointsOfInterest = this.mapInfo.getPointers();
         this.gameObjects = [
             this.world = new World(this),
             particles,
             ...this.mapInfo.getGameObjectInfos().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
         ];
-        this.pointsOfInterest = this.mapInfo.getPointers();
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);

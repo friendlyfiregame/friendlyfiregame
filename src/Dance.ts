@@ -1,7 +1,6 @@
 import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
 import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { FriendlyFire } from "./FriendlyFire";
 import { Aseprite } from './Aseprite';
@@ -18,9 +17,6 @@ export class Dance {
 
     @asset("music/dancing_queen.mp3")
     private static treedance_music: Sound;
-
-    @asset("fonts/standard.font.json")
-    private static font: BitmapFont;
 
     @asset("sprites/dancing_ui_bar.png")
     private static bar: HTMLImageElement; 
