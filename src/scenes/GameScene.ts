@@ -142,7 +142,12 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private handleKeyDown(event: KeyboardEvent): void {
         if (event.code === "Escape" || event.key === "P") {
-            this.scenes.pushScene(PauseScene);
+            if (this.player.getDance()) {
+                this.player.getDance()?.resetMusic();
+                this.player.cancelDance();
+            } else {
+                this.scenes.pushScene(PauseScene);
+            }
         }
     }
 

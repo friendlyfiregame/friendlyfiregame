@@ -242,6 +242,14 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    public getDance (): Dance | null {
+        return this.dance;
+    }
+
+    public cancelDance (): void {
+        this.dance = null;
+    }
+
     private async handleKeyDown(event: KeyboardEvent) {
         if (this.scene.paused) {
             return;
