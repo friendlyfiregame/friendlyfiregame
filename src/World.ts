@@ -117,11 +117,19 @@ export class World implements GameObject {
         return World.collisionMap[index];
     }
 
-    public getEntityCollisions (entity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
+    /**
+     * Checks if a specific entity (`sourceEntity`) collides with either of of the entities in the gameObjects array
+     * of the GameScene and returns all entities that currently collide. `Particles` are taken out of this check automatically.
+     * @param sourceEntity    - The entity to be checked against the other entities 
+     * @param margin          - Optional margin added to the bounding boxes of the entities to extend collision radius
+     * @param ignoreEntities  - Array of entities to be ignored with this check
+     * @return                - An array containing all entities that collide with the source entity.
+     */
+    public getEntityCollisions (sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
         const collidesWith: Entity[] = [];
         for (const gameObject of this.scene.gameObjects) {
-            if (gameObject !== entity && !(gameObject instanceof Particles) && gameObject instanceof Entity && !ignoreEntities.includes(gameObject)) {
-                const colliding = this.boundingBoxesCollide(entity.getBounds(margin), gameObject.getBounds(margin));
+            if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && !ignoreEntities.includes(gameObject)) {
+                const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(margin), gameObject.getBounds(margin));
                 if (colliding) {
                     collidesWith.push(gameObject);
                 }
@@ -130,6 +138,12 @@ export class World implements GameObject {
         return collidesWith;
     }
 
+    /**
+     * Checks if the two provided bounding boxes are touching each other
+     * @param box1 first bounding box
+     * @param box2 second bounding box
+     * @return `true` when the bounding boxes are touching, `false` if not.
+     */
     private boundingBoxesCollide (box1: Bounds, box2: Bounds): boolean {
         return !(
             ((box1.y - box1.height) > (box2.y)) ||

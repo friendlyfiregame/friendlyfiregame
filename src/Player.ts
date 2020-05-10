@@ -503,10 +503,6 @@ export class Player extends PhysicsEntity {
         return this.playerSpriteMetadata;
     }
 
-    private getEntityCollisions (margin = 0): Entity[] {
-        return this.scene.world.getEntityCollisions(this, margin);
-    }
-
     update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
@@ -615,16 +611,17 @@ export class Player extends PhysicsEntity {
             Player.landingSound.play();
         }
 
-        // check for npc in interactionRange
-        const entities = this.getEntityCollisions(5);
+        // Check for NPC's that can be interacted with
+        // Reset closestNPC and get all entities that collide with the player with an added 5px of margin
+        // If there are multiple npcs colliding, the closest one will be chosen
         this.closestNPC = null;
+        const entities = this.scene.world.getEntityCollisions(this, 5);
         if (entities.length > 0) {
             const closestEntity = entities.length > 1 ? this.getClosestEntity(entities) : entities[0];
             if (closestEntity instanceof NPC) {
                 this.closestNPC = closestEntity;
             }
         }
-
 
         // Spawn random dust particles while walking
         if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
