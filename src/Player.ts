@@ -166,7 +166,6 @@ export class Player extends PhysicsEntity {
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
     public thinkBubble: SpeechBubble | null = null;
 
-    private dialogRange = 50;
     private dialogTipText = "Press 'Enter' or 'E' to talk";
     private closestNPC: NPC | null = null;
     private dustEmitter: ParticleEmitter;
