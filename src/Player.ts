@@ -9,7 +9,7 @@ import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd, sleep, rndInt } from './util';
-import { entity, Entity } from "./Entity";
+import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
 import { Stone, StoneState } from "./Stone";
@@ -105,6 +105,12 @@ interface PlayerSpriteMetadata {
     carryOffsetFrames?: number[];
 }
 
+type AutoMove = {
+    destinationX: number;
+    lastX: number;
+    turnAround: boolean;
+}
+
 @entity("player")
 export class Player extends PhysicsEntity {
     @asset([
@@ -161,6 +167,7 @@ export class Player extends PhysicsEntity {
     private multiJump = false;
     private usedDoubleJump = false;
     private hasBeard = false;
+    private autoMove: AutoMove | null = null;
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
@@ -230,6 +237,25 @@ export class Player extends PhysicsEntity {
         Conversation.setGlobal("ismale", this.gender === Gender.MALE ? "true" : "" );
     }
 
+    public startAutoMove (x: number, turnAround: boolean) {
+        if (!this.autoMove) {
+            this.autoMove = {
+                destinationX: x,
+                lastX: this.x,
+                turnAround
+            };
+        }
+    }
+
+    public stopAutoMove () {
+        if (this.autoMove?.turnAround) {
+            this.direction = this.direction * -1;
+        }
+        this.autoMove = null;
+        this.moveRight = false;
+        this.moveLeft = false;
+    }
+
     public enableDoubleJump () {
         if (!this.doubleJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
@@ -267,48 +293,52 @@ export class Player extends PhysicsEntity {
             this.playerConversation.handleKey(event);
             return;
         }
-        if ((event.key === "ArrowRight" || event.key === "d")) {
-            this.direction = 1;
-            this.moveRight = true;
-            this.moveLeft = false;
-        } else if ((event.key === "ArrowLeft" || event.key === "a")) {
-            this.direction = -1;
-            this.moveLeft = true;
-            this.moveRight = false;
-        } else if (event.key === "Enter" || event.key === "e") {
-            if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() &&
-                    this.closestNPC.conversation) {
-                this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
-            } else if (this.canDanceToMakeRain()) {
-                this.startDance(this.scene.apocalypse ? 3 : 2);
-                this.achieveMilestone(Milestone.MADE_RAIN);
-            } else {
-                if (this.carrying instanceof Stone) {
-                    if (this.canThrowStoneIntoWater()) {
-                        this.carrying.setVelocity(10 * this.direction, 10);
+
+        if (!this.autoMove) {
+            if ((event.key === "ArrowRight" || event.key === "d")) {
+                this.moveRight = true;
+                this.moveLeft = false;
+            } else if ((event.key === "ArrowLeft" || event.key === "a")) {
+                this.moveLeft = true;
+                this.moveRight = false;
+            } else if (event.key === "Enter" || event.key === "e") {
+                if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                    const conversation = this.closestNPC.conversation;
+                    // Disable auto movement to a safe talking distance for the stone in the river
+                    const autoMove = this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT ? false : true;
+                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+
+                } else if (this.canDanceToMakeRain()) {
+                    this.startDance(this.scene.apocalypse ? 3 : 2);
+                    this.achieveMilestone(Milestone.MADE_RAIN);
+                } else {
+                    if (this.carrying instanceof Stone) {
+                        if (this.canThrowStoneIntoWater()) {
+                            this.carrying.setVelocity(10 * this.direction, 10);
+                            this.carrying = null;
+                            Player.throwingSound.stop();
+                            Player.throwingSound.play();
+                        } else {
+                            // TODO Say something when wrong place to throw
+                        }
+                    } else if (this.carrying instanceof Seed) {
+                        this.carrying.setVelocity(5 * this.direction, 5);
                         this.carrying = null;
                         Player.throwingSound.stop();
                         Player.throwingSound.play();
-                    } else {
-                        // TODO Say something when wrong place to throw
+                    } else if (this.carrying instanceof Wood) {
+                        this.carrying.setVelocity(5 * this.direction, 5);
+                        this.carrying = null;
+                        Player.throwingSound.stop();
+                        Player.throwingSound.play();
                     }
-                } else if (this.carrying instanceof Seed) {
-                    this.carrying.setVelocity(5 * this.direction, 5);
-                    this.carrying = null;
-                    Player.throwingSound.stop();
-                    Player.throwingSound.play();
-                } else if (this.carrying instanceof Wood) {
-                    this.carrying.setVelocity(5 * this.direction, 5);
-                    this.carrying = null;
-                    Player.throwingSound.stop();
-                    Player.throwingSound.play();
                 }
+            } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
+                this.jumpKeyPressed = true;
+                this.jump();
+            } else if ((event.key === "s" || event.key === "ArrowDown")) {
+                this.jumpDown = true;
             }
-        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
-            this.jumpKeyPressed = true;
-            this.jump();
-        } else if ((event.key === "s" || event.key === "ArrowDown")) {
-            this.jumpDown = true;
         }
 
         if (this.scene.dev) {
@@ -556,6 +586,24 @@ export class Player extends PhysicsEntity {
         const wasFlying = this.flying;
         const prevVelocity = this.getVelocityY();
 
+        // Apply auto movement
+        if (this.autoMove) {
+            if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.x - this.autoMove.destinationX) <= 0 ) {
+                // Reached or overreached destination 
+                this.stopAutoMove();
+            } else {
+                // Not yet reached, keep going
+                this.autoMove.lastX = this.x;
+                if (this.x < this.autoMove.destinationX) {
+                    this.moveRight = true;
+                    this.moveLeft = false;
+                } else {
+                    this.moveRight = false;
+                    this.moveLeft = true;
+                }
+            }
+        }
+
         // Player movement
         if (!this.scene.camera.isOnTarget()) {
             this.moveRight = false;
@@ -564,11 +612,13 @@ export class Player extends PhysicsEntity {
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
         if (!isDrowning) {
             if (this.moveRight) {
+                this.direction = 1;
                 if (!this.flying) {
                     Player.walkingSound.play();
                 }
                 this.accelerateX(acceleration * dt);
             } else if (this.moveLeft) {
+                this.direction = -1;
                 if (!this.flying) {
                     Player.walkingSound.play();
                 }
