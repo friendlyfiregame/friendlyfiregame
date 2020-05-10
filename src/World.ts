@@ -1,8 +1,9 @@
 import { getImageData } from "./graphics";
-import { ParticleEmitter, particles, valueCurves } from "./Particles";
+import { ParticleEmitter, particles, valueCurves, Particles } from "./Particles";
 import { rnd, rndInt } from "./util";
 import { asset } from "./Assets";
 import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
+import { Entity, Bounds } from './Entity';
 
 export enum Environment {
     AIR = 0,
@@ -114,6 +115,28 @@ export class World implements GameObject {
             return Environment.AIR;
         }
         return World.collisionMap[index];
+    }
+
+    public getEntityCollisions (entity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
+        const collidesWith: Entity[] = [];
+        for (const gameObject of this.scene.gameObjects) {
+            if (gameObject !== entity && !(gameObject instanceof Particles) && gameObject instanceof Entity && !ignoreEntities.includes(gameObject)) {
+                const colliding = this.boundingBoxesCollide(entity.getBounds(margin), gameObject.getBounds(margin));
+                if (colliding) {
+                    collidesWith.push(gameObject);
+                }
+            }
+        }
+        return collidesWith;
+    }
+
+    private boundingBoxesCollide (box1: Bounds, box2: Bounds): boolean {
+        return !(
+            ((box1.y - box1.height) > (box2.y)) ||
+            (box1.y < (box2.y - box2.height)) ||
+            ((box1.x + box1.width) < box2.x) ||
+            (box1.x > (box2.x + box2.width))
+        );
     }
 
     public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):

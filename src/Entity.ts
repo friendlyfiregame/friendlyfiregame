@@ -7,6 +7,14 @@ export interface EntityDistance {
     distance: number;
 }
 
+
+export type Bounds = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
 type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
@@ -64,6 +72,26 @@ export abstract class Entity implements GameObject {
             }
         });
         return entitiesInRange;
+    }
+
+    protected getClosestEntity(entities: Entity[]): Entity {
+        const entitiesInRange: EntityDistance[] = []
+        this.scene.gameObjects.forEach(gameObject => {
+            if (gameObject instanceof Entity && gameObject !== this) {
+                const distance = this.distanceTo(gameObject);
+                entitiesInRange.push({source: this, target: gameObject, distance});
+            }
+        });
+        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; })
+        return entitiesInRange[0].target;
+    }
+
+    public getBounds(margin = 0): Bounds {
+        const width = this.width + (margin * 2);
+        const height = this.height + (margin * 2);
+        const x = this.x - (this.width / 2) - margin;
+        const y = this.y - -this.height + margin;
+        return { x, y, width, height };
     }
 
     public remove(): void {

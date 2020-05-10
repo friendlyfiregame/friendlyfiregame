@@ -72,6 +72,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 this.setFloating(true);
                 this.y = this.floatingPosition.y;
                 Stone.successSound.play();
+                this.scene.campaign.runAction("enable", null, ["stone", "stone2"]);
                 this.scene.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {
@@ -96,7 +97,7 @@ export class Stone extends NPC implements CollidableGameObject {
         if (this.state === StoneState.FLOATING || this.state === StoneState.SWIMMING) {
             if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
                     && y >= this.y && y <= this.y + this.height) {
-                return Environment.PLATFORM;
+                return Environment.SOLID;
             }
         }
         return Environment.AIR;

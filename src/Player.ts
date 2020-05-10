@@ -9,7 +9,7 @@ import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd, sleep, rndInt } from './util';
-import { entity } from "./Entity";
+import { entity, Entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
 import { Stone, StoneState } from "./Stone";
@@ -17,8 +17,6 @@ import { Cloud } from './Cloud';
 import { Seed, SeedState } from "./Seed";
 import { PlayerConversation } from './PlayerConversation';
 import { Wood, WoodState } from "./Wood";
-import { Fire } from "./Fire";
-import { Tree } from "./Tree";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
@@ -177,7 +175,7 @@ export class Player extends PhysicsEntity {
     private genderSwapEmitter: ParticleEmitter;
 
     public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+        super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
         this.startX = x;
         this.startY = y;
         document.addEventListener("keydown", event => this.handleKeyDown(event));
@@ -282,12 +280,6 @@ export class Player extends PhysicsEntity {
             if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() &&
                     this.closestNPC.conversation) {
                 this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
-                if (this.closestNPC instanceof Fire) {
-                    this.achieveMilestone(Milestone.TALKED_TO_FIRE);
-                }
-                if (this.closestNPC instanceof Tree) {
-                    this.achieveMilestone(Milestone.TALKED_TO_TREE);
-                }
             } else if (this.canDanceToMakeRain()) {
                 this.startDance(this.scene.apocalypse ? 3 : 2);
                 this.achieveMilestone(Milestone.MADE_RAIN);
@@ -511,6 +503,10 @@ export class Player extends PhysicsEntity {
         return this.playerSpriteMetadata;
     }
 
+    private getEntityCollisions (margin = 0): Entity[] {
+        return this.scene.world.getEntityCollisions(this, margin);
+    }
+
     update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
@@ -530,8 +526,9 @@ export class Player extends PhysicsEntity {
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
             this.carrying.y = this.y + this.height - offset;
+            this.carrying.y += 4;
             if (this.carrying instanceof Seed) {
-                this.carrying.x += 4;
+                this.carrying.x += 2;
             }
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
@@ -619,12 +616,15 @@ export class Player extends PhysicsEntity {
         }
 
         // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.scene.fire.angry ? 1.8 * this.dialogRange : this.dialogRange);
-        if (closestEntity instanceof NPC) {
-            this.closestNPC = closestEntity;
-        } else {
-            this.closestNPC = null;
+        const entities = this.getEntityCollisions(5);
+        this.closestNPC = null;
+        if (entities.length > 0) {
+            const closestEntity = entities.length > 1 ? this.getClosestEntity(entities) : entities[0];
+            if (closestEntity instanceof NPC) {
+                this.closestNPC = closestEntity;
+            }
         }
+
 
         // Spawn random dust particles while walking
         if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
@@ -839,6 +839,9 @@ export class Player extends PhysicsEntity {
                     break;
                 case Milestone.TALKED_TO_TREE:
                     this.think("Maybe I should talk to the tree again", 3000);
+                    break;
+                case Milestone.GOT_QUEST_FROM_TREE:
+                    this.think("I need to pick up the seed by the tree", 3000);
                     break;
                 case Milestone.GOT_SEED:
                     this.think("I should check the mountains for a good place for the seed", 3000);
