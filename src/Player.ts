@@ -522,9 +522,6 @@ export class Player extends PhysicsEntity {
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
             this.carrying.y = this.y + this.height - offset;
             this.carrying.y += 4;
-            if (this.carrying instanceof Seed) {
-                this.carrying.x += 2;
-            }
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }

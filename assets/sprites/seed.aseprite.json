@@ -1,16 +1,16 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 11, "y": 0, "w": 17, "h": 18 },
+    "filename": ".aseprite",
+    "frame": { "x": 0, "y": 0, "w": 18, "h": 20 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 4, "y": 36, "w": 17, "h": 18 },
+    "spriteSourceSize": { "x": 4, "y": 34, "w": 18, "h": 20 },
     "sourceSize": { "w": 26, "h": 54 },
     "duration": 100
    },
    {
-    "filename": "1",
-    "frame": { "x": 11, "y": 18, "w": 14, "h": 11 },
+    "filename": ".aseprite",
+    "frame": { "x": 18, "y": 0, "w": 14, "h": 11 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 5, "y": 43, "w": 14, "h": 11 },
@@ -18,8 +18,8 @@
     "duration": 100
    },
    {
-    "filename": "2",
-    "frame": { "x": 0, "y": 0, "w": 11, "h": 53 },
+    "filename": ".aseprite",
+    "frame": { "x": 32, "y": 0, "w": 11, "h": 53 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 9, "y": 1, "w": 11, "h": 53 },
@@ -29,15 +29,20 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18-x64",
+  "version": "1.2.18",
   "image": "seed.png",
   "format": "I8",
-  "size": { "w": 28, "h": 53 },
+  "size": { "w": 43, "h": 53 },
   "scale": "1",
   "frameTags": [
    { "name": "free", "from": 0, "to": 0, "direction": "forward" },
    { "name": "planted", "from": 1, "to": 1, "direction": "forward" },
    { "name": "grown", "from": 2, "to": 2, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }
