@@ -8,7 +8,7 @@ import { Wood } from "./Wood";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { GameScene, PointOfInterest } from "./scenes/GameScene";
 import { Conversation } from './Conversation';
 
 export enum SeedState {
@@ -28,11 +28,16 @@ export class Seed extends NPC {
 
     public state = SeedState.FREE;
     private wood: Wood;
+    private floatingPosition: PointOfInterest;
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 24, 24);
         this.wood = new Wood(scene, x, y);
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
+
+        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
+        if (!floatingPosition) throw new Error ('Could not find "recover_floating_position" point of interest in game scene');
+        this.floatingPosition = floatingPosition;
     }
 
     private getSpriteTag(): string {
@@ -74,7 +79,7 @@ export class Seed extends NPC {
     update(dt: number): void {
         super.update(dt);
         if (this.state === SeedState.SWIMMING) {
-            const diffX = 1035 - this.x;
+            const diffX = this.floatingPosition.x - this.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.x += moveX * dt;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
@@ -100,7 +105,7 @@ export class Seed extends NPC {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.y = 390;
+                this.y = this.floatingPosition.y;
             }
         } else if (this.state === SeedState.PLANTED) {
             if (this.scene.world.isRaining()) {

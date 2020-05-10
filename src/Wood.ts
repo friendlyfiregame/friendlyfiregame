@@ -6,7 +6,7 @@ import { Sound } from "./Sound";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { GameScene, PointOfInterest } from "./scenes/GameScene";
 
 export enum WoodState {
     FREE = 0,
@@ -20,11 +20,16 @@ export class Wood extends PhysicsEntity {
 
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
+    private floatingPosition: PointOfInterest;
 
     public state = WoodState.FREE;
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 24, 24);
+
+        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
+        if (!floatingPosition) throw new Error ('Could not find "recover_floating_position" point of interest in game scene');
+        this.floatingPosition = floatingPosition;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -41,7 +46,7 @@ export class Wood extends PhysicsEntity {
     update(dt: number): void {
         super.update(dt);
         if (this.state === WoodState.SWIMMING) {
-            const diffX = 1035 - this.x;
+            const diffX = this.floatingPosition.x - this.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.x += moveX * dt;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
@@ -56,7 +61,7 @@ export class Wood extends PhysicsEntity {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.y = 390;
+                this.y = this.floatingPosition.y + 8;
             }
         }
         if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
