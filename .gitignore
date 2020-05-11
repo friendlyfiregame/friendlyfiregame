@@ -6,7 +6,9 @@
 # Build output
 /node_modules/
 /lib/
+/out/
 /dist/
+/.webpack/
 /*.tgz
 
 # Crash logs and backups

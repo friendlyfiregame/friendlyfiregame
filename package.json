@@ -1,23 +1,85 @@
 {
   "$schema": "http://json.schemastore.org/package",
-  "name": "ludum-dare-46",
+  "name": "friendlyfire",
   "version": "1.0.0",
-  "description": "",
+  "description": "TODO",
+  "author": "TODO",
   "keywords": [],
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/iplabs/ludum-dare-46"
   },
+  "main": ".webpack/main",
   "scripts": {
-    "clean": "rimraf lib",
+    "clean": "rimraf lib dist out",
     "compile": "tsc",
     "watch": "tsc -w",
     "prepare": "npm run -s clean && npm run -s compile",
     "dist": "webpack",
-    "start": "webpack-dev-server -d"
+    "start": "webpack-dev-server -d",
+    "electron-package": "npm run -s prepare && electron-forge package",
+    "electron-make": "electron-forge make",
+    "electron-publish": "electron-forge publish"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "friendlyfire"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "icon": "./assets/appicon/256x256.png",
+            "productName": "Friendly Fire",
+            "genericName": "Friendly Fire",
+            "categories": [ "Game" ]
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack.main.config.js",
+            "renderer": {
+              "config": "./webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "js": "./lib/FriendlyFire.js",
+                  "name": "./"
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
   },
   "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.51",
+    "@electron-forge/maker-deb": "6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.51",
+    "@electron-forge/maker-zip": "6.0.0-beta.51",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.51",
+    "electron": "8.2.5",
     "copy-webpack-plugin": "5.1.1",
     "rimraf": "3.0.2",
     "source-map-loader": "0.2.4",
@@ -28,6 +90,7 @@
     "webpack-dev-server": "3.10.3"
   },
   "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
     "tslib": "^1.11.1"
   }
 }
