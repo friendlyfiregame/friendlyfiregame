@@ -6,7 +6,6 @@ import { BitmapFont } from "../BitmapFont";
 import { asset } from "../Assets";
 import { MenuList, MenuItem } from '../Menu';
 import { ControlsScene } from './ControlsScene';
-import { TitleScene } from './TitleScene';
 
 enum MenuItemKey {
     RESUME = 'resume',

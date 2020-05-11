@@ -119,6 +119,9 @@ export class Player extends PhysicsEntity {
     ])
     public static playerSprites: Aseprite[];
 
+    @asset("sprites/buttons.aseprite.json")
+    public static buttons: Aseprite;
+
     @asset("sounds/drowning/drowning.mp3")
     private static drowningSound: Sound;
 
@@ -173,7 +176,6 @@ export class Player extends PhysicsEntity {
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
     public thinkBubble: SpeechBubble | null = null;
 
-    private dialogTipText = "Press 'Enter' or 'E' to talk";
     private closestNPC: NPC | null = null;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
@@ -432,6 +434,17 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, controller = "keyboard", buttonTag = "action") {
+        const measure = Player.font.measureText(text);
+        const gap = 4;
+        const offsetY = 12;
+        const textPositionX = Math.round(this.x - ((measure.width - Player.buttons.width + gap) / 2));
+        const textPositionY = -this.y + offsetY;
+        Player.buttons.drawTag(ctx, controller + "-" + buttonTag, textPositionX - Player.buttons.width - gap, textPositionY - 3);
+        Player.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY,
+            "white", "black");
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
@@ -456,22 +469,19 @@ export class Player extends PhysicsEntity {
 
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
                 && !this.playerConversation && !this.dance) {
-            this.drawDialogTip(ctx);
+            this.drawTooltip(ctx, "Talk");
         }
 
         if (this.canThrowStoneIntoWater()) {
-            Player.font.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the stone into the water",
-                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+            this.drawTooltip(ctx, "Throw stone");
         }
 
         if (this.canThrowSeedIntoSoil()) {
-            Player.font.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the seed into the soil",
-                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+            this.drawTooltip(ctx, "Plant seed");
         }
 
         if (this.canDanceToMakeRain()) {
-            Player.font.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to dance",
-                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+            this.drawTooltip(ctx, "Dance");
         }
 
         if (this.dance) {
@@ -499,15 +509,6 @@ export class Player extends PhysicsEntity {
         return !this.dance && !this.scene.world.isRaining() && this.carrying === null &&
             (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.scene.apocalypse ||
             ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain());
-    }
-
-    drawDialogTip(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.beginPath();
-        const text = this.dialogTipText;
-        Player.font.drawTextWithOutline(ctx, text, this.x - Math.round(this.width / 2), -this.y + 12,
-            "white", "black", 0.5);
-        ctx.restore();
     }
 
     private respawn() {
