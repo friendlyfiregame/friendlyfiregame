@@ -6,10 +6,12 @@ import { BitmapFont } from "../BitmapFont";
 import { asset } from "../Assets";
 import { MenuList, MenuItem } from '../Menu';
 import { ControlsScene } from './ControlsScene';
+import { TitleScene } from './TitleScene';
 
 enum MenuItemKey {
     RESUME = 'resume',
     CONTROLS = 'controls',
+    EXIT = 'exit'
 }
 
 
@@ -29,6 +31,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         this.menu.setItems(
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
             new MenuItem(MenuItemKey.CONTROLS, "Controls", PauseScene.font, "white", 75, 145),
+            new MenuItem(MenuItemKey.EXIT, "Back to Title", PauseScene.font, "white", 75, 160),
         )
     }
 
@@ -49,6 +52,9 @@ export class PauseScene extends Scene<FriendlyFire> {
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);
+                break;
+            case MenuItemKey.EXIT:
+                console.log('TODO: exit to main menu');
                 break;
         }
     }

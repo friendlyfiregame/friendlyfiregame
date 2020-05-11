@@ -16,7 +16,8 @@ const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest 
 enum MenuItemKey {
     START = 'start',
     CONTROLS = 'controls',
-    CREDITS = 'credits'
+    CREDITS = 'credits',
+    EXIT = 'exit'
 }
 
 export class TitleScene extends Scene<FriendlyFire> {
@@ -37,7 +38,8 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.menu.setItems(
             new MenuItem(MenuItemKey.START, "Start Game", TitleScene.font, "white", 75, 160),
             new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175),
-            new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190, false),
+            new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190),
+            new MenuItem(MenuItemKey.EXIT, "Exit", TitleScene.font, "white", 75, 205)
         )
     }
 
@@ -50,7 +52,10 @@ export class TitleScene extends Scene<FriendlyFire> {
                 this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.CREDITS:
-                console.log('show credits')
+                console.log('TODO: show credits')
+                break;
+            case MenuItemKey.EXIT:
+                console.log('TODO: exit to main menu');
                 break;
         }
     }
