@@ -1,6 +1,7 @@
 import { createCanvas, getRenderingContext } from "./graphics";
 import { clamp } from "./util";
 import { Keyboard } from "./Keyboard";
+import { GamepadInput } from "./GamepadInput";
 import { Scenes } from "./Scenes";
 import { Assets } from "./Assets";
 
@@ -9,6 +10,7 @@ const MAX_DT = 0.1;
 
 export abstract class Game {
     public readonly keyboard = new Keyboard();
+    public readonly gamepad = new GamepadInput();
     public readonly scenes = new Scenes(this);
     public readonly assets = new Assets();
 
@@ -64,6 +66,7 @@ export abstract class Game {
     }
 
     protected update(dt: number): void {
+        this.gamepad.update();
         this.scenes.update(dt);
     }
 
