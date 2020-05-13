@@ -13,7 +13,6 @@ import { Tree } from "../Tree";
 import { FlameBoy } from "../FlameBoy";
 import { Wing } from "../Wing";
 import { Spider } from "../Spider";
-import { GamepadInput } from "../GamepadInput";
 import { Conversation } from "../Conversation";
 import { Particles, ParticleEmitter, particles, valueCurves } from "../Particles";
 import { Seed } from "../Seed";
@@ -73,7 +72,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public showBounds = false;
     private scale = 1;
     private mapInfo!: MapInfo;
-    public gamepadInput!: GamepadInput;
     public dt: number = 0;
 
     public setup(): void {
@@ -100,8 +98,6 @@ export class GameScene extends Scene<FriendlyFire> {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
-
-        this.gamepadInput = new GamepadInput();
 
         Conversation.setGlobal("devmode", this.dev + "");
         this.loadApocalypse();

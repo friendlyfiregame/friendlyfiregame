@@ -23,6 +23,7 @@ import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
+import { ControllerType } from "./input/ControllerType";
 
 const groundColors = [
     "#806057",
@@ -436,7 +437,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, controller = "keyboard", buttonTag = "action") {
+    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, controller: ControllerType = this.scene.game.currentControllerType, buttonTag = "action") {
         const measure = Player.font.measureText(text);
         const gap = 4;
         const offsetY = 12;
@@ -608,7 +609,7 @@ export class Player extends PhysicsEntity {
         // Apply auto movement
         if (this.autoMove) {
             if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.x - this.autoMove.destinationX) <= 0 ) {
-                // Reached or overreached destination 
+                // Reached or overreached destination
                 this.stopAutoMove();
             } else {
                 // Not yet reached, keep going

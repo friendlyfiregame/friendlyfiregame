@@ -1,6 +1,6 @@
 import { Transition } from "./Transition";
 import { Game } from "./Game";
-import { Keyboard } from "./Keyboard";
+import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
