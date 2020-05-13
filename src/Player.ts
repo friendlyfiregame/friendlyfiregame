@@ -190,7 +190,7 @@ export class Player extends PhysicsEntity {
         document.addEventListener("keyup", event => this.handleKeyUp(event));
         if (this.scene.dev) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
-                "wood, T to throw useless snowball, K to learn all abilities");
+                "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
         }
         this.setMaxVelocity(MAX_PLAYER_SPEED);
         this.dustEmitter = particles.createEmitter({
@@ -361,6 +361,8 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
+            } else if (event.key === "m") {
+                this.scene.showBounds = !this.scene.showBounds;
             }
         }
     }
@@ -448,7 +450,7 @@ export class Player extends PhysicsEntity {
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
-        ctx.strokeStyle = "red";
+
         ctx.translate(this.x, -this.y + 1);
         if (this.direction < 0) {
             ctx.scale(-1, 1);
@@ -466,6 +468,8 @@ export class Player extends PhysicsEntity {
         sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height, this.scene.gameTime * 1000);
 
         ctx.restore();
+
+        if (this.scene.showBounds) this.drawBounds(ctx);
 
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
                 && !this.playerConversation && !this.dance) {
@@ -504,11 +508,25 @@ export class Player extends PhysicsEntity {
             this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
     }
 
+    public debugCollisions(): void {
+        console.log('Entities: ',this.scene.world.getEntityCollisions(this));
+        console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
+    }
+
     private canDanceToMakeRain(): boolean {
         const ground = this.getGround();
-        return !this.dance && !this.scene.world.isRaining() && this.carrying === null &&
-            (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.scene.apocalypse ||
-            ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain());
+        return (
+            (this.isCollidingWithTrigger('raincloud_sky') &&
+            !this.scene.world.isRaining() &&
+            this.carrying === null &&
+            !this.scene.apocalypse) ||
+            (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
+        );
+
+        // const ground = this.getGround();
+        // return !this.dance && !this.scene.world.isRaining() && this.carrying === null &&
+        //     (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.scene.apocalypse ||
+        //     ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain());
     }
 
     private respawn() {
@@ -715,8 +733,7 @@ export class Player extends PhysicsEntity {
                     if (ground && ground instanceof Cloud) {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
                     }
-                    if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD &&
-                            !this.scene.apocalypse) {
+                    if (this.isCollidingWithTrigger('raincloud_sky')) {
                         this.scene.world.startRain();
                     }
                 }

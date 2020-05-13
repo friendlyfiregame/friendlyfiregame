@@ -20,19 +20,14 @@ import { Seed } from "../Seed";
 import { FireGfx } from "../FireGfx";
 import { Cloud } from "../Cloud";
 import { asset } from "../Assets";
-import { rnd, rndItem, clamp, timedRnd } from "../util";
+import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject } from "../util";
 import { BitmapFont } from "../BitmapFont";
 import { PauseScene } from "./PauseScene";
+import { MapObjectJSON } from '*/level.json';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
     update(dt: number): void;
-}
-
-export type PointOfInterest = {
-    name: string;
-    x: number;
-    y: number;
 }
 
 export interface CollidableGameObject extends GameObject {
@@ -53,7 +48,8 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    public pointsOfInterest: PointOfInterest[] = [];
+    public pointsOfInterest: MapObjectJSON[] = [];
+    public triggerObjects: MapObjectJSON[] = [];
     public paused = false;
     public world!: World;
     public camera!: Camera;
@@ -74,6 +70,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private fireEmitter!: ParticleEmitter;
     private frameCounter = 0;
     private framesPerSecond = 0;
+    public showBounds = false;
     private scale = 1;
     private mapInfo!: MapInfo;
     public gamepadInput!: GamepadInput;
@@ -84,6 +81,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.campaign = new Campaign(this);
         this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
+        this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.gameObjects = [
             this.world = new World(this),
             particles,
@@ -185,6 +183,16 @@ export class GameScene extends Scene<FriendlyFire> {
         for (const obj of this.gameObjects) {
             obj.draw(ctx, width, height);
         }
+
+        if (this.showBounds) {
+            // Draw trigger bounds for collisions
+            for (const obj of this.triggerObjects) {
+                const bounds = boundsFromMapObject(obj);
+                ctx.strokeStyle = "blue";
+                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
+            }
+        }
+
         // Apocalypse
         if (this.fireFuryEndTime) {
             this.camera.setCinematicBar(1);

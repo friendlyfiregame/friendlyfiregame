@@ -32,6 +32,7 @@ export class Wing extends NPC {
         ctx.translate(this.x, -this.y - floatOffsetY);
         Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
+        if (this.scene.showBounds) this.drawBounds(ctx);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }

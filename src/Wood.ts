@@ -6,7 +6,8 @@ import { Sound } from "./Sound";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { GameScene, PointOfInterest } from "./scenes/GameScene";
+import { GameScene } from "./scenes/GameScene";
+import { MapObjectJSON } from '*/level.json';
 
 export enum WoodState {
     FREE = 0,
@@ -20,7 +21,7 @@ export class Wood extends PhysicsEntity {
 
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
-    private floatingPosition: PointOfInterest;
+    private floatingPosition: MapObjectJSON;
 
     public state = WoodState.FREE;
 
@@ -37,6 +38,7 @@ export class Wood extends PhysicsEntity {
         ctx.translate(this.x, -this.y + 1);
         Wood.sprite.drawTag(ctx, "idle", -Wood.sprite.width >> 1, -Wood.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
+        if (this.scene.showBounds) this.drawBounds(ctx);
     }
 
     public isCarried(): boolean {

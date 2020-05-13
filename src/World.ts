@@ -1,9 +1,10 @@
 import { getImageData } from "./graphics";
 import { ParticleEmitter, particles, valueCurves, Particles } from "./Particles";
-import { rnd, rndInt } from "./util";
+import { rnd, rndInt, boundsFromMapObject } from "./util";
 import { asset } from "./Assets";
 import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 import { Entity, Bounds } from './Entity';
+import { MapObjectJSON } from '*/level.json';
 
 export enum Environment {
     AIR = 0,
@@ -38,8 +39,12 @@ export class World implements GameObject {
 
     public constructor(scene: GameScene) {
         this.scene = scene;
+
+        const rainSpawnPosition = this.scene.pointsOfInterest.find(o => o.name === 'rain_spawn_position');
+        if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
+
         this.rainEmitter = particles.createEmitter({
-            position: {x: 2051, y: 2120},
+            position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
             color: () => World.raindrop,
@@ -133,6 +138,21 @@ export class World implements GameObject {
                 if (colliding) {
                     collidesWith.push(gameObject);
                 }
+            }
+        }
+        return collidesWith;
+    }
+
+    /**
+     * Returns all triggers that do collide with the provided entitiy
+     * @param sourceEntity Entity to check collisions against trigger boxes
+     */
+    public getTriggerCollisions (sourceEntity: Entity): MapObjectJSON[] {
+        const collidesWith: MapObjectJSON[] = [];
+        for (const triggerObject of this.scene.triggerObjects) {
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+            if (colliding) {
+                collidesWith.push(triggerObject);
             }
         }
         return collidesWith;

@@ -8,7 +8,8 @@ import { now } from "./util";
 import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { GameScene, CollidableGameObject, PointOfInterest } from "./scenes/GameScene";
+import { GameScene, CollidableGameObject } from "./scenes/GameScene";
+import { MapObjectJSON } from '*/level.json';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -24,7 +25,7 @@ export class Stone extends NPC implements CollidableGameObject {
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
 
-    private floatingPosition: PointOfInterest;
+    private floatingPosition: MapObjectJSON;
 
     public state: StoneState = StoneState.DEFAULT;
 
@@ -54,6 +55,7 @@ export class Stone extends NPC implements CollidableGameObject {
         }
         Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
+        if (this.scene.showBounds) this.drawBounds(ctx);
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

@@ -15,6 +15,8 @@ declare module "*/level.json" {
         type: string;
         x: number;
         y: number;
+        width: number;
+        height: number;
         properties?: MapObjectPropertyJSON[];
     }
 

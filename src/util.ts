@@ -1,3 +1,5 @@
+import { MapObjectJSON } from '*/level.json';
+import { Bounds } from './Entity';
 
 export type Vector2 = {x: number, y: number};
 
@@ -88,4 +90,12 @@ export function shuffle<T>(array: T[]): T[] {
         }
     }
     return array;
+}
+
+export function boundsFromMapObject(o: MapObjectJSON, margin = 0): Bounds {
+    const width = o.width + (margin * 2);
+    const height = o.height + (margin * 2);
+    const x = o.x - margin;
+    const y = o.y + margin;
+    return { x, y, width, height };
 }

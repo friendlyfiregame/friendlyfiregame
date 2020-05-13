@@ -34,6 +34,7 @@ export class FlameBoy extends NPC {
         FlameBoy.sprite.drawTag(ctx, "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
+        if (this.scene.showBounds) this.drawBounds(ctx);
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

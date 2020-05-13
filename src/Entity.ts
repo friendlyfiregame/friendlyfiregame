@@ -94,6 +94,22 @@ export abstract class Entity implements GameObject {
         return { x, y, width, height };
     }
 
+    protected drawBounds(ctx: CanvasRenderingContext2D): void {
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(this.getBounds().x, -this.getBounds().y, this.getBounds().width, this.getBounds().height);
+    }
+
+    /**
+     * Checks wether this entity is currently colliding with the provided named trigger.
+     * @param triggerName the trigger name to check against.
+     */
+    protected isCollidingWithTrigger (triggerName: string): boolean {
+        const collisions = this.scene.world.getTriggerCollisions(this);
+        if (collisions.length === 0) return false;
+        return collisions.findIndex(o => o.name === triggerName) > -1;
+    }
+
     public remove(): void {
         this.scene.removeGameObject(this);
     }

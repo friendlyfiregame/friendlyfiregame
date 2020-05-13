@@ -40,6 +40,7 @@ export class Spider extends NPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
+        ctx.beginPath();
         ctx.translate(this.x, -this.y);
         if (this.direction < 0) {
             ctx.scale(-1, 1);
@@ -49,6 +50,8 @@ export class Spider extends NPC {
             this.scene.gameTime * 1000);
 
         ctx.restore();
+
+        if (this.scene.showBounds) this.drawBounds(ctx);
 
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

@@ -50,7 +50,7 @@ export class Fire extends NPC {
     private smokeEmitter: ParticleEmitter;
 
     public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+        super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         this.smokeEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
@@ -116,6 +116,7 @@ export class Fire extends NPC {
             this.drawDialoguePrompt(ctx);
         }
         this.speechBubble.draw(ctx);
+        if (this.scene.showBounds) this.drawBounds(ctx);
     }
 
     update(dt: number): void {
