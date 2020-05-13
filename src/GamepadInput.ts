@@ -93,6 +93,27 @@ class GamepadAxisWrapper {
         this.value = newValue;
         let emulatedButtonId: number|undefined = undefined;
 
+        // Virtual button 1 released
+        if (oldValue <= -this.threshold && newValue > -this.threshold) {
+            emulatedButtonId = axisMapping.get(this.index)?.button1;
+            if (emulatedButtonId != null) {
+                document.dispatchEvent(new KeyboardEvent("keyup", {
+                    key: buttonMapping.get(emulatedButtonId)?.key,
+                    code: buttonMapping.get(emulatedButtonId)?.code
+                }));
+            }
+        }
+
+        // Virtual button 2 released
+        if (oldValue > this.threshold && newValue <= this.threshold) {
+            emulatedButtonId = axisMapping.get(this.index)?.button2;
+            if (emulatedButtonId != null) {
+                document.dispatchEvent(new KeyboardEvent("keyup", {
+                    key: buttonMapping.get(emulatedButtonId)?.key,
+                    code: buttonMapping.get(emulatedButtonId)?.code
+                }));
+            }
+        }
 
         // Virtual button 1 pressed
         if (oldValue > -this.threshold && newValue <= -this.threshold) {
@@ -110,28 +131,6 @@ class GamepadAxisWrapper {
             emulatedButtonId = axisMapping.get(this.index)?.button2;
             if (emulatedButtonId != null) {
                 document.dispatchEvent(new KeyboardEvent("keydown", {
-                    key: buttonMapping.get(emulatedButtonId)?.key,
-                    code: buttonMapping.get(emulatedButtonId)?.code
-                }));
-            }
-        }
-
-        // Virtual button 1 released
-        if (oldValue < -this.threshold && newValue >= this.threshold) {
-            emulatedButtonId = axisMapping.get(this.index)?.button1;
-            if (emulatedButtonId != null) {
-                document.dispatchEvent(new KeyboardEvent("keyup", {
-                    key: buttonMapping.get(emulatedButtonId)?.key,
-                    code: buttonMapping.get(emulatedButtonId)?.code
-                }));
-            }
-        }
-
-        // Virtual button 2 released
-        if (oldValue > this.threshold && newValue <= this.threshold) {
-            emulatedButtonId = axisMapping.get(this.index)?.button2;
-            if (emulatedButtonId != null) {
-                document.dispatchEvent(new KeyboardEvent("keyup", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
                 }));
@@ -178,25 +177,20 @@ export class GamepadInput {
     private gamepads: Map<string, GamepadWrapper>;
     constructor() {
         this.gamepads = new Map();
-        if (typeof navigator.getGamepads === "function") {
-            console.info("Initializing Gamepad input...");
-            window.addEventListener("gamepadconnected", (e: any) => {
-                console.debug("Gamepad connected:", e);
-                const gamepad = (e as GamepadEventInit).gamepad;
-                if (gamepad != null) {
-                    this.gamepads.set(gamepad.id, new GamepadWrapper(gamepad));
-                }
-            });
-            window.addEventListener("gamepaddisconnected", (e: any) => {
-                console.debug("Gamepad disconnected:", e);
-                const gamepad = (e as GamepadEventInit).gamepad;
-                if (gamepad != null) {
-                    this.gamepads.delete(gamepad.id);
-                }
-            });
-        } else {
-            console.info("Gamepads are not supported in your browser.");
-        }
+        window.addEventListener("gamepadconnected", (e: any) => {
+            console.debug("Gamepad connected:", e);
+            const gamepad = (e as GamepadEventInit).gamepad;
+            if (gamepad != null) {
+                this.gamepads.set(gamepad.id, new GamepadWrapper(gamepad));
+            }
+        });
+        window.addEventListener("gamepaddisconnected", (e: any) => {
+            console.debug("Gamepad disconnected:", e);
+            const gamepad = (e as GamepadEventInit).gamepad;
+            if (gamepad != null) {
+                this.gamepads.delete(gamepad.id);
+            }
+        });
     }
     update(): void {
         this.gamepads.forEach(gamepad => gamepad.update());
