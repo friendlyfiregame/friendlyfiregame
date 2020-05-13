@@ -1,4 +1,4 @@
-import { Signal } from "./Signal";
+import { Signal } from "../Signal";
 
 export class Keyboard {
     public readonly onKeyDown = new Signal<KeyboardEvent>();

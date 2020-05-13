@@ -1,7 +1,9 @@
 import { createCanvas, getRenderingContext } from "./graphics";
 import { clamp } from "./util";
-import { Keyboard } from "./Keyboard";
-import { GamepadInput } from "./GamepadInput";
+import { ControllerType } from "./input/ControllerType";
+import { ControllerManager } from "./input/ControllerManager";
+import { Keyboard } from "./input/Keyboard";
+import { GamepadInput } from "./input/GamepadInput";
 import { Scenes } from "./Scenes";
 import { Assets } from "./Assets";
 
@@ -9,6 +11,7 @@ import { Assets } from "./Assets";
 const MAX_DT = 0.1;
 
 export abstract class Game {
+    public readonly controllerManager = new ControllerManager();
     public readonly keyboard = new Keyboard();
     public readonly gamepad = new GamepadInput();
     public readonly scenes = new Scenes(this);
@@ -86,5 +89,9 @@ export abstract class Game {
             cancelAnimationFrame(this.gameLoopId);
             this.gameLoopId = null;
         }
+    }
+
+    public get currentControllerType(): ControllerType {
+        return this.controllerManager.currentControllerType;
     }
 }

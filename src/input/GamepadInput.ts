@@ -49,6 +49,17 @@ buttonMapping.set(GamePadButtonId.BUTTON_2, { key: "2", code: "Digit2" });
 buttonMapping.set(GamePadButtonId.BUTTON_4, { key: "1", code: "Digit1" });
 buttonMapping.set(GamePadButtonId.START, { key: "Escape", code: "Escape" });
 
+/**
+ * Special class to distinguish gamepad events from keyboard events.
+ * Can be used in conjunction with the `instanceof` operator to check if any given
+ * KeyboardEvent was created by a Gamepad or not.
+ */
+export class VirtualKeyboardEvent extends KeyboardEvent {
+    constructor(type: string, eventInitDict?: KeyboardEventInit | undefined) {
+        super(type, eventInitDict);
+    }
+}
+
 class GamepadButtonWrapper {
     public readonly index: number;
     private pressed: boolean;
@@ -61,7 +72,7 @@ class GamepadButtonWrapper {
         this.pressed = pressed;
         if (oldPressed != pressed) {
             const eventName = pressed ? "keydown" : "keyup";
-            document.dispatchEvent(new KeyboardEvent(eventName, {
+            document.dispatchEvent(new VirtualKeyboardEvent(eventName, {
                 key: buttonMapping.get(this.index)?.key,
                 code: buttonMapping.get(this.index)?.code
             }));
@@ -97,9 +108,9 @@ class GamepadAxisWrapper {
         if (oldValue <= -this.threshold && newValue > -this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button1;
             if (emulatedButtonId != null) {
-                document.dispatchEvent(new KeyboardEvent("keyup", {
+                document.dispatchEvent(new VirtualKeyboardEvent("keyup", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
-                    code: buttonMapping.get(emulatedButtonId)?.code
+                    code: buttonMapping.get(emulatedButtonId)?.code,
                 }));
             }
         }
@@ -108,7 +119,7 @@ class GamepadAxisWrapper {
         if (oldValue > this.threshold && newValue <= this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button2;
             if (emulatedButtonId != null) {
-                document.dispatchEvent(new KeyboardEvent("keyup", {
+                document.dispatchEvent(new VirtualKeyboardEvent("keyup", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
                 }));
@@ -119,7 +130,7 @@ class GamepadAxisWrapper {
         if (oldValue > -this.threshold && newValue <= -this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button1;
             if (emulatedButtonId != null) {
-                document.dispatchEvent(new KeyboardEvent("keydown", {
+                document.dispatchEvent(new VirtualKeyboardEvent("keydown", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
                 }));
@@ -130,7 +141,7 @@ class GamepadAxisWrapper {
         if (oldValue < this.threshold && newValue >= this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button2;
             if (emulatedButtonId != null) {
-                document.dispatchEvent(new KeyboardEvent("keydown", {
+                document.dispatchEvent(new VirtualKeyboardEvent("keydown", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
                 }));
