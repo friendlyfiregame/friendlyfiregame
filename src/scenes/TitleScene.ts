@@ -8,6 +8,7 @@ import { BitmapFont } from "../BitmapFont";
 import { GameScene } from "./GameScene";
 import { ControlsScene } from "./ControlsScene";
 import { MenuList, MenuItem } from '../Menu';
+import { isElectron } from "../util";
 
 const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
     "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
@@ -34,13 +35,16 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.zIndex = 1;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
-
         this.menu.setItems(
             new MenuItem(MenuItemKey.START, "Start Game", TitleScene.font, "white", 75, 160),
             new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175),
             new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190),
-            new MenuItem(MenuItemKey.EXIT, "Exit", TitleScene.font, "white", 75, 205)
         )
+        if (isElectron()) {
+            this.menu.addItems(
+                new MenuItem(MenuItemKey.EXIT, "Exit", TitleScene.font, "white", 75, 205)
+            );
+        }
     }
 
     public handleMenuAction (buttonId: string) {
@@ -55,7 +59,7 @@ export class TitleScene extends Scene<FriendlyFire> {
                 console.log('TODO: show credits')
                 break;
             case MenuItemKey.EXIT:
-                console.log('TODO: exit to main menu');
+                window.close();
                 break;
         }
     }

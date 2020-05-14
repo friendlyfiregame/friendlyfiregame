@@ -18,8 +18,8 @@
     "prepare": "npm run -s clean && npm run -s compile",
     "dist": "webpack",
     "start": "webpack-dev-server -d",
-    "package": "npm run -s prepare && electron-forge package",
-    "make": "npm run -s prepare && electron-forge make"
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "config": {
     "forge": {

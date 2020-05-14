@@ -99,3 +99,7 @@ export function boundsFromMapObject(o: MapObjectJSON, margin = 0): Bounds {
     const y = o.y + margin;
     return { x, y, width, height };
 }
+
+export function isElectron(): boolean {
+    return !!navigator.userAgent.match(/\belectron\b/i);
+}
