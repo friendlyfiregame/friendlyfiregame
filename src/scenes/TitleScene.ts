@@ -40,7 +40,7 @@ export class TitleScene extends Scene<FriendlyFire> {
             new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175),
             new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190),
         )
-        if (isElectron()) {
+        if (isElectron() || window.opener) {
             this.menu.addItems(
                 new MenuItem(MenuItemKey.EXIT, "Exit", TitleScene.font, "white", 75, 205)
             );
