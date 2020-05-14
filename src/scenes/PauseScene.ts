@@ -6,13 +6,13 @@ import { BitmapFont } from "../BitmapFont";
 import { asset } from "../Assets";
 import { MenuList, MenuItem } from '../Menu';
 import { ControlsScene } from './ControlsScene';
+import { TitleScene } from "./TitleScene";
 
 enum MenuItemKey {
     RESUME = 'resume',
     CONTROLS = 'controls',
     EXIT = 'exit'
 }
-
 
 export class PauseScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
@@ -44,7 +44,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
-    public handleMenuAction (buttonId: string) {
+    public async handleMenuAction (buttonId: string): Promise<void> {
         switch(buttonId) {
             case MenuItemKey.RESUME:
                 this.scenes.popScene();
@@ -53,7 +53,8 @@ export class PauseScene extends Scene<FriendlyFire> {
                 this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.EXIT:
-                console.log('TODO: exit to main menu');
+                await this.game.scenes.popScene({ noTransition: true });
+                this.game.scenes.setScene(TitleScene);
                 break;
         }
     }

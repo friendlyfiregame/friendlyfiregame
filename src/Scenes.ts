@@ -38,11 +38,11 @@ export class Scenes<T extends Game> {
         this.activeScene = scene;
     }
 
-    public async popScene(): Promise<Scene<T> | null> {
+    public async popScene({ noTransition = false }: { noTransition?: boolean} = {}): Promise<Scene<T> | null> {
         const activeScene = this.activeScene;
         if (activeScene != null) {
             await activeScene.deactivate();
-            if (activeScene.outTransition != null) {
+            if (!noTransition && activeScene.outTransition != null) {
                 activeScene.currentTransition = activeScene.outTransition;
                 await activeScene.currentTransition.start("out");
                 activeScene.currentTransition = null;
