@@ -40,13 +40,14 @@ axisMapping.set(StickAxisId.LEFT_UP_DOWN, { button1: GamePadButtonId.D_PAD_UP, b
 
 const buttonMapping = new Map<number, { code: string, key: string }>();
 buttonMapping.set(GamePadButtonId.D_PAD_UP, { key: "ArrowUp", code: "ArrowUp" });
-buttonMapping.set(GamePadButtonId.BUTTON_3, { key: " ", code: "Space" });
 buttonMapping.set(GamePadButtonId.D_PAD_DOWN, { key: "ArrowDown", code: "ArrowDown" });
 buttonMapping.set(GamePadButtonId.D_PAD_LEFT, { key: "ArrowLeft", code: "ArrowLeft" });
 buttonMapping.set(GamePadButtonId.D_PAD_RIGHT, { key: "ArrowRight", code: "ArrowRight" });
-buttonMapping.set(GamePadButtonId.BUTTON_1, { key: "Enter", code: "Enter" });
-buttonMapping.set(GamePadButtonId.BUTTON_2, { key: "2", code: "Digit2" });
-buttonMapping.set(GamePadButtonId.BUTTON_4, { key: "1", code: "Digit1" });
+buttonMapping.set(GamePadButtonId.BUTTON_1, { key: " ", code: "Space" });
+buttonMapping.set(GamePadButtonId.BUTTON_2, { key: "Escape", code: "Escape" });
+buttonMapping.set(GamePadButtonId.BUTTON_3, { key: "Enter", code: "Enter" });
+buttonMapping.set(GamePadButtonId.SHOULDER_TOP_LEFT, { key: "1", code: "Digit1" });
+buttonMapping.set(GamePadButtonId.SHOULDER_TOP_RIGHT, { key: "2", code: "Digit2" });
 buttonMapping.set(GamePadButtonId.START, { key: "Escape", code: "Escape" });
 
 /**
@@ -91,7 +92,7 @@ class GamepadAxisWrapper {
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
      * might lead to button flibber flubber...
      */
-    private threshold = 0.2;
+    private threshold = 0.3;
 
     public readonly index: number;
     private value: number = 0.0;

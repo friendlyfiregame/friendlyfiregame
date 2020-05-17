@@ -25,6 +25,11 @@ export class ControllerManager {
         console.info(`New active controller type: ${this.currentControllerType}`);
     }
 
+    /**
+     * Returns the current (a.k.a. most recently used!) controller type.
+     * Can be used to determine which tooltips (gamepad buttons or keyboard indicators)
+     * to show.qaa
+     */
     public get currentControllerType(): ControllerType {
         return this[currentControllerTypeSymbol];
     }
