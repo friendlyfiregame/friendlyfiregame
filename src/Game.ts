@@ -27,7 +27,9 @@ export abstract class Game {
 
     public constructor(public readonly width: number = 480, public readonly height: number = 270) {
         const canvas = this.canvas = createCanvas(width, height);
-        this.ctx = getRenderingContext(canvas, "2d", { alpha: false, desynchronized: true });
+        // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
+        // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.
+        this.ctx = getRenderingContext(canvas, "2d", { alpha: false, desynchronized: false });
         const style = canvas.style;
         style.position = "absolute";
         style.margin = "auto";
