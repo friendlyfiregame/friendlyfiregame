@@ -73,6 +73,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
+    private fpsInterval: any = null;
 
     public setup(): void {
         this.mapInfo = new MapInfo();
@@ -94,13 +95,19 @@ export class GameScene extends Scene<FriendlyFire> {
         this.spider = this.getGameObject(Spider);
 
         this.camera = new Camera(this, this.player);
-        setInterval(() => {
+        this.fpsInterval = setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
 
         Conversation.setGlobal("devmode", this.dev + "");
         this.loadApocalypse();
+    }
+
+    public cleanup() {
+        if (this.fpsInterval != null) {
+            clearInterval(this.fpsInterval);
+        }
     }
 
     public addGameObject(object: GameObject): void {
