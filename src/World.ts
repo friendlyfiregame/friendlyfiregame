@@ -125,7 +125,7 @@ export class World implements GameObject {
     /**
      * Checks if a specific entity (`sourceEntity`) collides with either of of the entities in the gameObjects array
      * of the GameScene and returns all entities that currently collide. `Particles` are taken out of this check automatically.
-     * @param sourceEntity    - The entity to be checked against the other entities 
+     * @param sourceEntity    - The entity to be checked against the other entities
      * @param margin          - Optional margin added to the bounding boxes of the entities to extend collision radius
      * @param ignoreEntities  - Array of entities to be ignored with this check
      * @return                - An array containing all entities that collide with the source entity.
@@ -144,7 +144,7 @@ export class World implements GameObject {
     }
 
     /**
-     * Returns all triggers that do collide with the provided entitiy
+     * Returns all triggers that do collide with the provided entity
      * @param sourceEntity Entity to check collisions against trigger boxes
      */
     public getTriggerCollisions (sourceEntity: Entity): MapObjectJSON[] {

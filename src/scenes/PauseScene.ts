@@ -60,9 +60,9 @@ export class PauseScene extends Scene<FriendlyFire> {
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
-        if (event.code === "Escape") {
+        if (event.key === "Escape") {
             this.scenes.popScene();
-        } else if (event.code === "Enter" || event.key === "e") {
+        } else if (event.key === "Enter" || event.key === "e") {
             this.menu.executeAction();
         } else if (event.key === "w" || event.key === "ArrowUp") {
             this.menu.prev();
