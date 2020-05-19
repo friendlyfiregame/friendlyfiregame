@@ -588,7 +588,7 @@ export class Player extends PhysicsEntity {
                 this.carrying = null;
             }
             if (this.drowning === 0) {
-                Player.drowningSound.trigger();
+                Player.drowningSound.play();
             }
             this.setVelocityX(0);
             this.drowning += dt;

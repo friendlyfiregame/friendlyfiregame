@@ -43,7 +43,7 @@ export class Assets {
             } else if (src.endsWith(".png")) {
                 asset = await loadImage(src);
             } else if (src.endsWith(".mp3")) {
-                asset = new Sound(src);
+                asset = await Sound.load("assets/" + src);
             } else {
                 throw new Error("Unknown asset format: " + src);
             }

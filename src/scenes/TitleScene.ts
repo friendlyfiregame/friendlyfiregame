@@ -67,19 +67,7 @@ export class TitleScene extends Scene<FriendlyFire> {
     public activate(): void {
         this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this)
-
-        // Start music after pressing a key or mouse button because Chrome doesn't want to autostart music
-        const startMusic = async () => {
-            try {
-                await this.playMusicTrack();
-                document.removeEventListener("keydown", startMusic);
-                document.removeEventListener("mousedown", startMusic);
-            } catch (e) {
-                document.addEventListener("keydown", startMusic);
-                document.addEventListener("mousedown", startMusic);
-            }
-        }
-        startMusic();
+        this.playMusicTrack();
     }
 
     public deactivate(): void {
@@ -112,12 +100,12 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.menu.draw(ctx);
     }
 
-    private async playMusicTrack(): Promise<void> {
+    private playMusicTrack(): void {
         const music = FriendlyFire.music[0];
         FriendlyFire.music.forEach(music => music.stop());
         music.setLoop(true);
         music.setVolume(0.25);
         FriendlyFire.music[1].setVolume(0.25);
-        return music.play();
+        music.play();
     }
 }

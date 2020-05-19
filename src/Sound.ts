@@ -1,38 +1,102 @@
-export class Sound {
-    private readonly audio: HTMLAudioElement;
+import { clamp } from "./util";
 
-    public constructor(src: string) {
-        this.audio = new Audio(`assets/${src}`);
+// Get cross-browser AudioContext (Safari still uses webkitAudioContext...)
+const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext as AudioContext;
+
+let audioContext: AudioContext | null = null;
+let globalGainNode: GainNode | null = null;
+
+export function getAudioContext(): AudioContext {
+    if (audioContext == null) {
+        audioContext = new AudioContext();
+
+        // When audio context is suspended then try to wake it up on next key or pointer press
+        if (audioContext.state === "suspended") {
+            const resume = () => {
+                audioContext?.resume();
+            };
+            document.addEventListener("keydown", resume);
+            document.addEventListener("pointerdown", resume);
+            audioContext.addEventListener("statechange", () => {
+                if (audioContext?.state === "running") {
+                    document.removeEventListener("keydown", resume);
+                    document.removeEventListener("pointerdown", resume);
+                }
+            });
+        }
+    }
+    return audioContext;
+}
+
+export function getGlobalGainNode(): GainNode {
+    if (globalGainNode == null) {
+        const audioContext = getAudioContext();
+        globalGainNode = audioContext.createGain();
+        globalGainNode.connect(audioContext.destination);
+    }
+    return globalGainNode;
+}
+
+export class Sound {
+    private readonly gainNode: GainNode;
+    private source: AudioBufferSourceNode | null = null;
+    private loop: boolean = false;
+
+    private constructor(private readonly buffer: AudioBuffer) {
+        this.gainNode = getAudioContext().createGain();
+        this.gainNode.connect(getGlobalGainNode());
+    }
+
+    public static async load(url: string): Promise<Sound> {
+        const arrayBuffer = await (await fetch(url)).arrayBuffer()
+        return new Promise((resolve, reject) => {
+            getAudioContext().decodeAudioData(arrayBuffer,
+                buffer => resolve(new Sound(buffer)),
+                error => reject(error)
+            );
+        });
     }
 
     public isPlaying(): boolean {
-        return !!(this.audio.currentTime > 0 && !this.audio.paused && !this.audio.ended && this.audio.readyState > 2)
+        return this.source != null;
+    }
+
+    public play(): void {
+        if (!this.isPlaying()) {
+            const source = getAudioContext().createBufferSource();
+            source.buffer = this.buffer;
+            source.loop = this.loop;
+            source.connect(this.gainNode);
+            source.addEventListener("ended", () => {
+                if (this.source === source) {
+                    this.source = null;
+                }
+            });
+            this.source = source;
+            source.start();
+        }
     }
 
     public stop(): void {
-        this.audio.pause();
-        this.audio.currentTime = 0;
-    }
-
-    public play(): Promise<void> {
-        return this.audio.play();
+        if (this.source) {
+            try {
+                this.source.stop();
+            } catch (e) {
+                // Ignored. Happens on Safari sometimes. Can't stop a sound which may not be really playing?
+            }
+            this.source = null;
+        }
     }
 
     public setLoop(loop: boolean): void {
-        this.audio.loop = loop;
-    }
-
-    public trigger(): void {
-        if (!this.isPlaying()) {
-            this.play();
+        this.loop = loop;
+        if (this.source) {
+            this.source.loop = loop;
         }
     }
 
     public setVolume(volume: number): void {
-        if (volume < 0) {
-            this.audio.volume = 0;
-        } else {
-            this.audio.volume = volume;
-        }
+        const gain = this.gainNode.gain;
+        gain.value = clamp(volume, gain.minValue, gain.maxValue);
     }
 }
