@@ -18,19 +18,19 @@ export class Keyboard {
 
     private handleKeyDown(event: KeyboardEvent): void {
         if (!event.repeat) {
-            this.pressed.add(event.code);
+            this.pressed.add(event.key);
         }
         this.onKeyDown.emit(event);
     }
 
     private handleKeyUp(event: KeyboardEvent): void {
         if (!event.repeat) {
-            this.pressed.delete(event.code);
+            this.pressed.delete(event.key);
         }
         this.onKeyUp.emit(event);
     }
 
-    public isPressed(code: string): boolean {
-        return this.pressed.has(code);
+    public isPressed(key: string): boolean {
+        return this.pressed.has(key);
     }
 }
