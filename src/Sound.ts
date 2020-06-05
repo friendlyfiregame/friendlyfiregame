@@ -1,4 +1,5 @@
 import { clamp } from "./util";
+import { ControllerManager } from "./input/ControllerManager";
 
 // Get cross-browser AudioContext (Safari still uses webkitAudioContext...)
 const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext as AudioContext;
@@ -7,6 +8,7 @@ let audioContext: AudioContext | null = null;
 let globalGainNode: GainNode | null = null;
 
 export function getAudioContext(): AudioContext {
+    const controllerManager = ControllerManager.getInstance();
     if (audioContext == null) {
         audioContext = new AudioContext();
 
@@ -15,11 +17,11 @@ export function getAudioContext(): AudioContext {
             const resume = () => {
                 audioContext?.resume();
             };
-            document.addEventListener("keydown", resume);
+            controllerManager.onButtonDown.connect(resume);
             document.addEventListener("pointerdown", resume);
             audioContext.addEventListener("statechange", () => {
                 if (audioContext?.state === "running") {
-                    document.removeEventListener("keydown", resume);
+                    controllerManager.onButtonDown.disconnect(resume);
                     document.removeEventListener("pointerdown", resume);
                 }
             });

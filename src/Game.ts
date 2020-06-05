@@ -1,6 +1,6 @@
 import { createCanvas, getRenderingContext } from "./graphics";
 import { clamp } from "./util";
-import { ControllerType } from "./input/ControllerType";
+import { ControllerFamily } from "./input/ControllerFamily";
 import { ControllerManager } from "./input/ControllerManager";
 import { Keyboard } from "./input/Keyboard";
 import { GamepadInput } from "./input/GamepadInput";
@@ -17,7 +17,7 @@ const MAX_DT = 0.1;
 const MOUSE_TIMEOUT = 2.0;
 
 export abstract class Game {
-    public readonly controllerManager = new ControllerManager();
+    public readonly controllerManager = ControllerManager.getInstance();
     public readonly keyboard = new Keyboard();
     public readonly gamepad = new GamepadInput();
     public readonly scenes = new Scenes(this);
@@ -116,7 +116,11 @@ export abstract class Game {
         }
     }
 
-    public get currentControllerType(): ControllerType {
-        return this.controllerManager.currentControllerType;
+    /**
+     * Returns the current controller family type (Gamepad, Keyboard) that
+     * is being used to play the game.
+     */
+    public get currentControllerFamily(): ControllerFamily {
+        return this.controllerManager.currentControllerFamily;
     }
 }

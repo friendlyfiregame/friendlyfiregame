@@ -4,6 +4,7 @@ import { SlideTransition } from "../transitions/SlideTransition";
 import { easeOutCubic } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { asset } from "../Assets";
+import { ControllerEvent } from "../input/ControllerEvent";
 
 export class ControlsScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
@@ -21,15 +22,15 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         console.log('control scene is activated');
-        this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
         console.log('control scene is deactivate');
-        this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
-    private handleKeyDown(event: KeyboardEvent): void {
+    private handleButtonDown(event: ControllerEvent): void {
         this.scenes.popScene();
     }
 

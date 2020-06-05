@@ -7,6 +7,7 @@ import { asset } from "../Assets";
 import { MenuList, MenuItem } from '../Menu';
 import { ControlsScene } from './ControlsScene';
 import { TitleScene } from "./TitleScene";
+import { ControllerEvent } from "../input/ControllerEvent";
 
 enum MenuItemKey {
     RESUME = 'resume',
@@ -35,12 +36,12 @@ export class PauseScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this)
     }
 
     public deactivate(): void {
-        this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
@@ -59,14 +60,14 @@ export class PauseScene extends Scene<FriendlyFire> {
         }
     }
 
-    private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === "Escape") {
+    private handleButtonDown(event: ControllerEvent): void {
+        if (event.isAbort) {
             this.scenes.popScene();
-        } else if (event.key === "Enter" || event.key === "e") {
+        } else if (event.isConfirm) {
             this.menu.executeAction();
-        } else if (event.key === "w" || event.key === "ArrowUp") {
+        } else if (event.isMenuUp) {
             this.menu.prev();
-        } else if (event.key === "s" || event.key === "ArrowDown") {
+        } else if (event.isMenuDown) {
             this.menu.next();
         }
     }

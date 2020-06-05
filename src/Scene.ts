@@ -2,6 +2,7 @@ import { Transition } from "./Transition";
 import { Game } from "./Game";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
+import { ControllerManager } from './input/ControllerManager';
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
 export type SceneProperties = Record<string, string | number | boolean> | null;
@@ -17,6 +18,10 @@ export abstract class Scene<T extends Game> {
 
     public get keyboard(): Keyboard {
         return this.game.keyboard;
+    }
+
+    public get controllerManager(): ControllerManager {
+        return ControllerManager.getInstance();
     }
 
     public get scenes(): Scenes<T> {

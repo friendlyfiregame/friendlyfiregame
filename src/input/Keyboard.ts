@@ -1,4 +1,25 @@
 import { Signal } from "../Signal";
+import { ControllerManager } from "./ControllerManager";
+import { ControllerIntent } from "./ControllerIntent";
+import { ControllerEvent } from "./ControllerEvent";
+import { ControllerEventType } from "./ControllerEventType";
+import { ControllerFamily } from "./ControllerFamily";
+
+const keyToIntentMappings = new Map<string, ControllerIntent[]>();
+keyToIntentMappings.set(" ", [ControllerIntent.PLAYER_JUMP]);
+keyToIntentMappings.set("w", [ControllerIntent.PLAYER_JUMP]);
+keyToIntentMappings.set("a", [ControllerIntent.PLAYER_MOVE_LEFT]);
+keyToIntentMappings.set("s", [ControllerIntent.PLAYER_DROP]);
+keyToIntentMappings.set("d", [ControllerIntent.PLAYER_MOVE_RIGHT]);
+keyToIntentMappings.set("ArrowUp", [ControllerIntent.PLAYER_JUMP, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("ArrowDown", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
+keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
+keyToIntentMappings.set("ArrowRight", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
+keyToIntentMappings.set("Enter", [ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("Escape", [ControllerIntent.ABORT, ControllerIntent.PAUSE]);
+keyToIntentMappings.set("e", [ControllerIntent.PLAYER_INTERACT]);
+keyToIntentMappings.set("1", [ControllerIntent.PLAYER_DANCE_1]);
+keyToIntentMappings.set("2", [ControllerIntent.PLAYER_DANCE_2]);
 
 export class Keyboard {
     public readonly onKeyDown = new Signal<KeyboardEvent>();
@@ -10,6 +31,10 @@ export class Keyboard {
         document.addEventListener("keypress", event => this.handleKeyPress(event));
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
+
+        document.addEventListener("keypress", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.PRESS, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE])));
+        document.addEventListener("keydown", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.DOWN, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE])));
+        document.addEventListener("keyup", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.UP, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE])));
     }
 
     private handleKeyPress(event: KeyboardEvent): void {

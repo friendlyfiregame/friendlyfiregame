@@ -9,6 +9,7 @@ import { GameScene } from "./GameScene";
 import { ControlsScene } from "./ControlsScene";
 import { MenuList, MenuItem } from '../Menu';
 import { isElectron } from "../util";
+import { ControllerEvent } from "../input/ControllerEvent";
 
 const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
     "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
@@ -65,22 +66,22 @@ export class TitleScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this)
         this.playMusicTrack();
     }
 
     public deactivate(): void {
-        this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
-    private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === "Enter" || event.key === "e") {
+    private handleButtonDown(event: ControllerEvent): void {
+        if (event.isConfirm) {
             this.menu.executeAction();
-        } else if (event.key === "w" || event.key === "ArrowUp") {
+        } else if (event.isMenuUp) {
             this.menu.prev();
-        } else if (event.key === "s" || event.key === "ArrowDown") {
+        } else if (event.isMenuDown) {
             this.menu.next();
         }
     }

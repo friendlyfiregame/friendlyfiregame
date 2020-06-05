@@ -23,6 +23,7 @@ import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject } from "../util";
 import { BitmapFont } from "../BitmapFont";
 import { PauseScene } from "./PauseScene";
 import { MapObjectJSON } from '*/level.json';
+import { ControllerEvent } from "../input/ControllerEvent";
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -132,23 +133,27 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        this.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
         this.resume();
     }
 
     public deactivate(): void {
         this.pause();
-        this.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
-    private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === "Escape" || event.key === "P") {
+    private handleButtonDown(event: ControllerEvent): void {
+        if (event.isAbort) {
             if (this.player.getDance()) {
                 this.player.getDance()?.resetMusic();
                 this.player.cancelDance();
-            } else {
-                this.scenes.pushScene(PauseScene);
             }
+        } else if (event.isPause) {
+            if (this.player.getDance()) {
+                this.player.getDance()?.resetMusic();
+                this.player.cancelDance();
+            }
+            this.scenes.pushScene(PauseScene);
         }
     }
 

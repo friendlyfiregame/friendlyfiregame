@@ -23,7 +23,7 @@ import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
-import { ControllerType } from "./input/ControllerType";
+import { ControllerFamily } from "./input/ControllerFamily";
 
 const groundColors = [
     "#806057",
@@ -437,7 +437,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, controller: ControllerType = this.scene.game.currentControllerType, buttonTag = "action") {
+    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, controller: ControllerFamily = this.scene.game.currentControllerFamily, buttonTag = "action") {
         const measure = Player.font.measureText(text);
         const gap = 4;
         const offsetY = 12;

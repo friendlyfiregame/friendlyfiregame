@@ -1,37 +1,48 @@
 import { VirtualKeyboardEvent } from "./GamepadInput";
-import { ControllerType } from "./ControllerType";
+import { ControllerEvent } from "./ControllerEvent";
+import { ControllerFamily } from "./ControllerFamily";
+import { Signal } from "../Signal";
 
-/** Symbol to identify the current/active controller type */
-const currentControllerTypeSymbol = Symbol("currentControllerType");
+/** Symbol to identify the current/active controller family */
+const currentControllerFamilySymbol = Symbol("currentControllerFamily");
 
 export class ControllerManager {
 
-    private [currentControllerTypeSymbol]: ControllerType;
-    public constructor(initialControllerType: ControllerType = ControllerType.KEYBOARD) {
-        this.currentControllerType = initialControllerType;
+    private static readonly INSTANCE = new ControllerManager();
+    public static getInstance(): ControllerManager {
+        return ControllerManager.INSTANCE;
+    }
+
+    public readonly onButtonDown = new Signal<ControllerEvent>();
+    public readonly onButtonUp = new Signal<ControllerEvent>();
+    public readonly onButtonPress = new Signal<ControllerEvent>();
+
+    private [currentControllerFamilySymbol]: ControllerFamily;
+    private constructor(initialControllerFamily: ControllerFamily = ControllerFamily.KEYBOARD) {
+        this.currentControllerFamily = initialControllerFamily;
         document.addEventListener("keydown", (e: KeyboardEvent) => {
             if (e instanceof VirtualKeyboardEvent) {
-                if (this.currentControllerType !== ControllerType.GAMEPAD) {
-                    this.currentControllerType = ControllerType.GAMEPAD;
+                if (this.currentControllerFamily !== ControllerFamily.GAMEPAD) {
+                    this.currentControllerFamily = ControllerFamily.GAMEPAD;
                 }
-            } else if (this.currentControllerType !== ControllerType.KEYBOARD) {
-                this.currentControllerType = ControllerType.KEYBOARD;
+            } else if (this.currentControllerFamily !== ControllerFamily.KEYBOARD) {
+                this.currentControllerFamily = ControllerFamily.KEYBOARD;
             }
         });
     }
 
-    public set currentControllerType(controllerType: ControllerType) {
-        this[currentControllerTypeSymbol] = controllerType;
-        console.info(`New active controller type: ${this.currentControllerType}`);
+    public set currentControllerFamily(controllerFamily: ControllerFamily) {
+        this[currentControllerFamilySymbol] = controllerFamily;
+        console.info(`New active controller family: ${this.currentControllerFamily}`);
     }
 
     /**
-     * Returns the current (a.k.a. most recently used!) controller type.
+     * Returns the current (a.k.a. most recently used!) controller family.
      * Can be used to determine which tooltips (gamepad buttons or keyboard indicators)
      * to show.qaa
      */
-    public get currentControllerType(): ControllerType {
-        return this[currentControllerTypeSymbol];
+    public get currentControllerFamily(): ControllerFamily {
+        return this[currentControllerFamilySymbol];
     }
 
 }

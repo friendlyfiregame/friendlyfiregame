@@ -1,3 +1,9 @@
+import { ControllerManager } from "./ControllerManager";
+import { ControllerIntent } from "./ControllerIntent";
+import { ControllerEventType } from "./ControllerEventType";
+import { ControllerFamily } from "./ControllerFamily";
+import { ControllerEvent } from "./ControllerEvent";
+
 // TODO Possibily these constants are for XBox gamepads only...
 enum GamePadButtonId {
     /** Button A */
@@ -50,6 +56,18 @@ buttonMapping.set(GamePadButtonId.SHOULDER_TOP_LEFT, { key: "1", code: "Digit1" 
 buttonMapping.set(GamePadButtonId.SHOULDER_TOP_RIGHT, { key: "2", code: "Digit2" });
 buttonMapping.set(GamePadButtonId.START, { key: "Escape", code: "Escape" });
 
+const intentMappings = new Map<number, ControllerIntent[]>();
+intentMappings.set(GamePadButtonId.D_PAD_UP, [ControllerIntent.MENU_UP]);
+intentMappings.set(GamePadButtonId.D_PAD_DOWN, [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
+intentMappings.set(GamePadButtonId.D_PAD_LEFT, [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
+intentMappings.set(GamePadButtonId.D_PAD_RIGHT, [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
+intentMappings.set(GamePadButtonId.BUTTON_1, [ControllerIntent.PLAYER_JUMP, ControllerIntent.CONFIRM]);
+intentMappings.set(GamePadButtonId.BUTTON_2, [ControllerIntent.ABORT]);
+intentMappings.set(GamePadButtonId.BUTTON_3, [ControllerIntent.PLAYER_INTERACT]);
+intentMappings.set(GamePadButtonId.SHOULDER_TOP_LEFT, [ControllerIntent.PLAYER_DANCE_1]);
+intentMappings.set(GamePadButtonId.SHOULDER_TOP_RIGHT, [ControllerIntent.PLAYER_DANCE_2]);
+intentMappings.set(GamePadButtonId.START, [ControllerIntent.PAUSE]);
+
 /**
  * Special class to distinguish gamepad events from keyboard events.
  * Can be used in conjunction with the `instanceof` operator to check if any given
@@ -72,6 +90,11 @@ class GamepadButtonWrapper {
         const oldPressed = this.pressed;
         this.pressed = pressed;
         if (oldPressed != pressed) {
+            if (pressed) {
+                ControllerManager.getInstance().onButtonDown.emit(new ControllerEvent(ControllerFamily.GAMEPAD, ControllerEventType.DOWN, intentMappings.get(this.index) || [ControllerIntent.NONE]));
+            } else {
+                ControllerManager.getInstance().onButtonUp.emit(new ControllerEvent(ControllerFamily.GAMEPAD, ControllerEventType.DOWN, intentMappings.get(this.index) || [ControllerIntent.NONE]));
+            }
             const eventName = pressed ? "keydown" : "keyup";
             document.dispatchEvent(new VirtualKeyboardEvent(eventName, {
                 key: buttonMapping.get(this.index)?.key,
@@ -109,6 +132,7 @@ class GamepadAxisWrapper {
         if (oldValue <= -this.threshold && newValue > -this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button1;
             if (emulatedButtonId != null) {
+                ControllerManager.getInstance().onButtonDown.emit(new ControllerEvent(ControllerFamily.GAMEPAD, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
                 document.dispatchEvent(new VirtualKeyboardEvent("keyup", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code,
@@ -120,6 +144,7 @@ class GamepadAxisWrapper {
         if (oldValue > this.threshold && newValue <= this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button2;
             if (emulatedButtonId != null) {
+                ControllerManager.getInstance().onButtonDown.emit(new ControllerEvent(ControllerFamily.GAMEPAD, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
                 document.dispatchEvent(new VirtualKeyboardEvent("keyup", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
@@ -131,6 +156,7 @@ class GamepadAxisWrapper {
         if (oldValue > -this.threshold && newValue <= -this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button1;
             if (emulatedButtonId != null) {
+                ControllerManager.getInstance().onButtonDown.emit(new ControllerEvent(ControllerFamily.GAMEPAD, ControllerEventType.DOWN, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
                 document.dispatchEvent(new VirtualKeyboardEvent("keydown", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
@@ -142,6 +168,7 @@ class GamepadAxisWrapper {
         if (oldValue < this.threshold && newValue >= this.threshold) {
             emulatedButtonId = axisMapping.get(this.index)?.button2;
             if (emulatedButtonId != null) {
+                ControllerManager.getInstance().onButtonDown.emit(new ControllerEvent(ControllerFamily.GAMEPAD, ControllerEventType.DOWN, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
                 document.dispatchEvent(new VirtualKeyboardEvent("keydown", {
                     key: buttonMapping.get(emulatedButtonId)?.key,
                     code: buttonMapping.get(emulatedButtonId)?.code
