@@ -5,16 +5,19 @@ import { ControllerIntent } from "./ControllerIntent";
 const controllerFamilySymbol = Symbol("controllerFamily");
 const intentsSymbol = Symbol("intent");
 const eventTypeSymbol = Symbol("eventType");
+const repeatSymbol = Symbol("repeat");
 
 export class ControllerEvent {
     private [controllerFamilySymbol]: ControllerFamily;
     private [intentsSymbol]: ControllerIntent;
     private [eventTypeSymbol]: ControllerEventType;
+    private [repeatSymbol]: boolean;
 
-    constructor(controllerFamily: ControllerFamily, eventType: ControllerEventType, intents: ControllerIntent[]) {
+    constructor(controllerFamily: ControllerFamily, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
         this[controllerFamilySymbol] = controllerFamily;
         this[intentsSymbol] = intents.reduce((prev, curr) => prev | curr);
         this[eventTypeSymbol] = eventType;
+        this[repeatSymbol] = repeat;
     }
 
     get controllerFamily(): ControllerFamily {
@@ -23,6 +26,10 @@ export class ControllerEvent {
 
     get eventType(): ControllerEventType {
         return this[eventTypeSymbol];
+    }
+
+    get repeat(): boolean {
+        return this[repeatSymbol];
     }
 
     get isMenuLeft(): boolean {

@@ -32,9 +32,9 @@ export class Keyboard {
         document.addEventListener("keydown", event => this.handleKeyDown(event));
         document.addEventListener("keyup", event => this.handleKeyUp(event));
 
-        document.addEventListener("keypress", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.PRESS, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE])));
-        document.addEventListener("keydown", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.DOWN, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE])));
-        document.addEventListener("keyup", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.UP, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE])));
+        document.addEventListener("keypress", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.PRESS, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE], event.repeat)));
+        document.addEventListener("keydown", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.DOWN, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE], event.repeat)));
+        document.addEventListener("keyup", event => ControllerManager.getInstance().onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.UP, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE], event.repeat)));
     }
 
     private handleKeyPress(event: KeyboardEvent): void {
