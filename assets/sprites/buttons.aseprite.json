@@ -1,6 +1,5 @@
-{ "frames": [
-   {
-    "filename": "buttons 0.aseprite",
+{ "frames": {
+   "buttons 0.aseprite": {
     "frame": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -8,8 +7,7 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "buttons 1.aseprite",
+   "buttons 1.aseprite": {
     "frame": { "x": 14, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -17,8 +15,7 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "buttons 2.aseprite",
+   "buttons 2.aseprite": {
     "frame": { "x": 28, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -26,8 +23,7 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "buttons 3.aseprite",
+   "buttons 3.aseprite": {
     "frame": { "x": 42, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -35,8 +31,7 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "buttons 4.aseprite",
+   "buttons 4.aseprite": {
     "frame": { "x": 56, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -44,8 +39,7 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "buttons 5.aseprite",
+   "buttons 5.aseprite": {
     "frame": { "x": 70, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -53,22 +47,37 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "buttons 6.aseprite",
+   "buttons 6.aseprite": {
     "frame": { "x": 84, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
+   },
+   "buttons 7.aseprite": {
+    "frame": { "x": 98, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons 8.aseprite": {
+    "frame": { "x": 112, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
    }
- ],
+ },
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18-x64",
+  "version": "1.2.19.2-x64",
   "image": "buttons.png",
   "format": "RGBA8888",
-  "size": { "w": 98, "h": 14 },
+  "size": { "w": 126, "h": 14 },
   "scale": "1",
   "frameTags": [
    { "name": "keyboard-action", "from": 0, "to": 0, "direction": "forward" },
@@ -81,8 +90,10 @@
    { "name": "gamepad-button-y", "from": 4, "to": 4, "direction": "forward" },
    { "name": "gamepad-button-lb", "from": 5, "to": 5, "direction": "forward" },
    { "name": "gamepad-dance1", "from": 5, "to": 5, "direction": "forward" },
-   { "name": "gamepad-button-rb", "from": 6, "to": 6, "direction": "forward" },
-   { "name": "gamepad-dance2", "from": 6, "to": 6, "direction": "forward" }
+   { "name": "gamepad-button-rb", "from": 6, "to": 8, "direction": "forward" },
+   { "name": "gamepad-dance2", "from": 6, "to": 8, "direction": "forward" },
+   { "name": "keyboard-dance1", "from": 7, "to": 7, "direction": "forward" },
+   { "name": "keyboard-dance2", "from": 8, "to": 8, "direction": "forward" }
   ],
   "layers": [
    { "name": "Button base", "opacity": 255, "blendMode": "normal" },

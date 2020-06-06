@@ -5,6 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { FriendlyFire } from "./FriendlyFire";
 import { Aseprite } from './Aseprite';
 import { ControllerEvent } from './input/ControllerEvent';
+import { ControllerFamily } from './input/ControllerFamily';
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
@@ -25,11 +26,8 @@ export class Dance {
     @asset("sprites/dancing_ui_indicator.png")
     private static indicator: HTMLImageElement;
 
-    @asset("sprites/dancing_ui_key1.aseprite.json")
-    private static key1: Aseprite;
-
-    @asset("sprites/dancing_ui_key2.aseprite.json")
-    private static key2: Aseprite;
+    @asset("sprites/dancing_ui_keys.aseprite.json")
+    private static keys: Aseprite;
 
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
@@ -243,7 +241,7 @@ export class Dance {
         FriendlyFire.music[0].setVolume(0.25);
     }
 
-    public draw(ctx: CanvasRenderingContext2D) {
+    public draw(ctx: CanvasRenderingContext2D, controller: ControllerFamily = this.scene.game.currentControllerFamily) {
         ctx.save();
         ctx.translate(this.x, -this.y);
 
@@ -285,7 +283,7 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y1, 9, 9);
                     } else {
-                        Dance.key1.drawTag(ctx, 'idle', x + Dance.key1.width / -2, y1);
+                        Dance.keys.drawTag(ctx, `${controller}-dance1`, x + Dance.keys.width / -2, y1);
                     }
                 }
                 if (keys.includes("2")) {
@@ -294,7 +292,7 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y2, 9, 9);
                     } else {
-                        Dance.key2.drawTag(ctx, 'idle', x + Dance.key2.width / -2, y2);
+                        Dance.keys.drawTag(ctx, `${controller}-dance2`, x + Dance.keys.width / -2, y2);
                     }
                 }
             }
