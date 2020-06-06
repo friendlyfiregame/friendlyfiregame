@@ -7,13 +7,14 @@ const intentsSymbol = Symbol("intent");
 const eventTypeSymbol = Symbol("eventType");
 const repeatSymbol = Symbol("repeat");
 
-export class ControllerEvent {
+export class ControllerEvent extends Object {
     private [controllerFamilySymbol]: ControllerFamily;
     private [intentsSymbol]: ControllerIntent;
     private [eventTypeSymbol]: ControllerEventType;
     private [repeatSymbol]: boolean;
 
     constructor(controllerFamily: ControllerFamily, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
+        super();
         this[controllerFamilySymbol] = controllerFamily;
         this[intentsSymbol] = intents.reduce((prev, curr) => prev | curr);
         this[eventTypeSymbol] = eventType;

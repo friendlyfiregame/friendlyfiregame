@@ -4,6 +4,7 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { FriendlyFire } from "./FriendlyFire";
 import { Aseprite } from './Aseprite';
+import { ControllerEvent } from './input/ControllerEvent';
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
@@ -19,10 +20,10 @@ export class Dance {
     private static treedance_music: Sound;
 
     @asset("sprites/dancing_ui_bar.png")
-    private static bar: HTMLImageElement; 
+    private static bar: HTMLImageElement;
 
     @asset("sprites/dancing_ui_indicator.png")
-    private static indicator: HTMLImageElement; 
+    private static indicator: HTMLImageElement;
 
     @asset("sprites/dancing_ui_key1.aseprite.json")
     private static key1: Aseprite;
@@ -112,9 +113,9 @@ export class Dance {
     }
 
     // Called by parent
-    public handleKeyDown(e: KeyboardEvent) {
+    public handleButtonDown(e: ControllerEvent) {
         if (!e.repeat && this.hasStarted()) {
-            const key = e.key.substr(-1).toLowerCase();
+            const key = e.isPlayerDance1 ? "1" : "2";
             if (this.allKeys.indexOf(key) >= 0) {
                 if (this.currentKey.includes(key)) {
                     if (this.currentDistanceToIdealTime <= this.timeTolerance) {

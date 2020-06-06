@@ -24,6 +24,7 @@ import { GameScene } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
+import { ControllerEvent } from './input/ControllerEvent';
 
 const groundColors = [
     "#806057",
@@ -187,8 +188,9 @@ export class Player extends PhysicsEntity {
         super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
         this.startX = x;
         this.startY = y;
+        scene.game.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
+        scene.game.controllerManager.onButtonUp.connect(this.handleButtonUp, this);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
-        document.addEventListener("keyup", event => this.handleKeyUp(event));
         if (this.scene.dev) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
@@ -281,30 +283,30 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
-    private async handleKeyDown(event: KeyboardEvent) {
+    private async handleButtonDown(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
         }
         if (this.dance) {
-            this.dance.handleKeyDown(event);
+            this.dance.handleButtonDown(event);
             return;
         }
         if (!this.scene.camera.isOnTarget() || event.repeat) {
             return;
         }
         if (this.playerConversation) {
-            this.playerConversation.handleKey(event);
+            this.playerConversation.handleButton(event);
             return;
         }
 
         if (!this.autoMove) {
-            if ((event.key === "ArrowRight" || event.key === "d")) {
+            if (event.isPlayerMoveRight) {
                 this.moveRight = true;
                 this.moveLeft = false;
-            } else if ((event.key === "ArrowLeft" || event.key === "a")) {
+            } else if (event.isPlayerMoveLeft) {
                 this.moveLeft = true;
                 this.moveRight = false;
-            } else if (event.key === "Enter" || event.key === "e") {
+            } else if (event.isPlayerInteract) {
                 if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
                     const conversation = this.closestNPC.conversation;
                     // Disable auto movement to a safe talking distance for the stone in the river
@@ -336,12 +338,23 @@ export class Player extends PhysicsEntity {
                         Player.throwingSound.play();
                     }
                 }
-            } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
+            } else if (event.isPlayerJump && this.canJump()) {
                 this.jumpKeyPressed = true;
                 this.jump();
-            } else if ((event.key === "s" || event.key === "ArrowDown")) {
+            } else if (event.isPlayerDrop) {
                 this.jumpDown = true;
             }
+        }
+    }
+
+    // Used in dev mode to enable some special keys that can only be triggered
+    // by using a keyboard.
+    private handleKeyDown(event: KeyboardEvent): void {
+        if (this.scene.paused) {
+            return;
+        }
+        if (!this.scene.camera.isOnTarget() || event.repeat) {
+            return;
         }
 
         if (this.scene.dev) {
@@ -422,17 +435,17 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private handleKeyUp(event: KeyboardEvent) {
+    private handleButtonUp(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
         }
-        if (event.key === "ArrowRight" || event.key === "d") {
+        if (event.isPlayerMoveRight) {
             this.moveRight = false;
-        } else if (event.key === "ArrowLeft" || event.key === "a") {
+        } else if (event.isPlayerMoveLeft) {
             this.moveLeft = false;
-        } else if (event.key === " " || event.key === "w" || event.key === "ArrowUp") {
+        } else if (event.isPlayerJump) {
             this.jumpKeyPressed = false;
-        } else if (event.key === "s" || event.key === "ArrowDown") {
+        } else if (event.isPlayerDrop) {
             this.jumpDown = false;
         }
     }

@@ -1,5 +1,15 @@
+/**
+ * Enumeration of the different intents that may be emitted by a single button,
+ * whereas a button might either be a physical key on a keyboard, a mapped axis
+ * on a gamepad or a touch screen event.
+ *
+ * Right now, these events are stored in a bit mask to be extra efficient,...
+ * ... maybe that's not really necessary and should be changed to improve
+ * readability at some point...
+ */
 export enum ControllerIntent {
 
+    /** Used for unknown / unmapped buttons. */
     NONE = 0,
 
     /** Player movement: left */

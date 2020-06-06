@@ -1,4 +1,3 @@
-import { VirtualKeyboardEvent } from "./GamepadInput";
 import { ControllerEvent } from "./ControllerEvent";
 import { ControllerFamily } from "./ControllerFamily";
 import { Signal } from "../Signal";
@@ -20,13 +19,9 @@ export class ControllerManager {
     private [currentControllerFamilySymbol]: ControllerFamily;
     private constructor(initialControllerFamily: ControllerFamily = ControllerFamily.KEYBOARD) {
         this.currentControllerFamily = initialControllerFamily;
-        document.addEventListener("keydown", (e: KeyboardEvent) => {
-            if (e instanceof VirtualKeyboardEvent) {
-                if (this.currentControllerFamily !== ControllerFamily.GAMEPAD) {
-                    this.currentControllerFamily = ControllerFamily.GAMEPAD;
-                }
-            } else if (this.currentControllerFamily !== ControllerFamily.KEYBOARD) {
-                this.currentControllerFamily = ControllerFamily.KEYBOARD;
+        this.onButtonDown.connect(e => {
+            if (this.currentControllerFamily !== e.controllerFamily) {
+                this.currentControllerFamily = e.controllerFamily;
             }
         });
     }

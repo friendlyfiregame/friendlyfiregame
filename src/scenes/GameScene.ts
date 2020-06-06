@@ -143,16 +143,13 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private handleButtonDown(event: ControllerEvent): void {
-        if (event.isAbort) {
+        if (event.isAbort || event.isPause) {
             if (this.player.getDance()) {
                 this.player.getDance()?.resetMusic();
                 this.player.cancelDance();
             }
-        } else if (event.isPause) {
-            if (this.player.getDance()) {
-                this.player.getDance()?.resetMusic();
-                this.player.cancelDance();
-            }
+        }
+        if (event.isPause) {
             this.scenes.pushScene(PauseScene);
         }
     }

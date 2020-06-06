@@ -1,6 +1,7 @@
 import { Conversation, Interaction } from './Conversation';
 import { Player } from './Player';
 import { NPC } from './NPC';
+import { ControllerEvent } from './input/ControllerEvent';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;
@@ -16,7 +17,7 @@ export class PlayerConversation {
         this.setSelectedOption(0);
         this.setBubblesContent();
         this.interaction?.npcLine?.executeBeforeLine();
-        
+
         // Ensure safe distance to NPC
         if (this.autoMove) {
             const minDis = 20;
@@ -72,13 +73,13 @@ export class PlayerConversation {
         return this.selectedOption;
     }
 
-    public handleKey(e: KeyboardEvent) {
+    public handleButton(e: ControllerEvent) {
         if (!e.repeat) {
             // Enter to proceed
-            if (e.key == "Enter" || e.key == "e") {
+            if (e.isPlayerInteract) {
                 this.proceed();
             }
-            const upDown = (["s", "ArrowDown"].includes(e.key) ? 1 : 0) - (["w", "ArrowUp"].includes(e.key) ? 1 : 0);
+            const upDown = (e.isMenuDown ? 1 : 0) - (e.isMenuUp ? 1 : 0);
             if (upDown !== 0) {
                 this.setSelectedOption(this.selectedOption + upDown);
             }
