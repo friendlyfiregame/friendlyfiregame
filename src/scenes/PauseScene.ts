@@ -61,7 +61,7 @@ export class PauseScene extends Scene<FriendlyFire> {
     }
 
     private handleButtonDown(event: ControllerEvent): void {
-        if (event.isAbort) {
+        if (event.isAbort || event.isPause) {
             this.scenes.popScene();
         } else if (event.isConfirm) {
             this.menu.executeAction();
