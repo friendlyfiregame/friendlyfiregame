@@ -90,7 +90,7 @@ class GamepadAxisWrapper {
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
      * might lead to button flibber flubber...
      */
-    private threshold = 0.3;
+    private threshold = 0.5;
 
     public readonly index: number;
     private value: number = 0.0;
@@ -108,7 +108,7 @@ class GamepadAxisWrapper {
             // Virtual button 1 released
             emulatedButtonId = axisMapping.get(this.index)?.button1;
             if (emulatedButtonId != null) {
-                controllerManager.onButtonDown.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
+                controllerManager.onButtonUp.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
             }
         } else if (oldValue > -this.threshold && newValue <= -this.threshold) {
             // Virtual button 1 pressed
@@ -122,7 +122,7 @@ class GamepadAxisWrapper {
             // Virtual button 2 released
             emulatedButtonId = axisMapping.get(this.index)?.button2;
             if (emulatedButtonId != null) {
-                controllerManager.onButtonDown.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
+                controllerManager.onButtonUp.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
             }
         } else if (oldValue < this.threshold && newValue >= this.threshold) {
             // Virtual button 2 pressed
