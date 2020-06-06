@@ -100,7 +100,7 @@ export enum Gender {
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
 
-const startingGender = Gender.MALE;
+const startingGender = Math.random() >= 0.5 ? Gender.MALE : Gender.FEMALE;
 Conversation.setGlobal("ismale", "true");
 
 interface PlayerSpriteMetadata {
