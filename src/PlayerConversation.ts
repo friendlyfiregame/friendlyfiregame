@@ -74,9 +74,11 @@ export class PlayerConversation {
     }
 
     public handleButton(e: ControllerEvent) {
-        if (!e.repeat) {
+        if (e.isAbort && !e.isPause) {
+            this.endConversation();
+        } else if (!e.repeat) {
             // Enter to proceed
-            if (e.isPlayerInteract) {
+            if (e.isPlayerInteract || e.isConfirm) {
                 this.proceed();
             }
             const upDown = (e.isMenuDown ? 1 : 0) - (e.isMenuUp ? 1 : 0);
