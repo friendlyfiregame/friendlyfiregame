@@ -56,8 +56,37 @@ export class CreditsScene extends Scene<FriendlyFire> {
         ctx.font = "20px sans-serif";
         ctx.fillStyle = "white";
 
-        CreditsScene.headlineFont.drawText(ctx, 'Friendly Fire', textOffsetX + 32, 25, "black");
-        CreditsScene.standardFont.drawText(ctx, `Version ${CreditsScene.appInfo.version}`, textOffsetX + 168, 32, "black");
+        const lineSpacing = 4;
+        let headlineCharSize = CreditsScene.headlineFont.measureText(" ");
+        let standardCharSize = CreditsScene.standardFont.measureText(" ");
+
+        const titleText = "Friendly Fire";
+        const titleTextSize = CreditsScene.headlineFont.measureText(titleText);
+
+        const versionText = this.dev ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
+        const versionTextSize = CreditsScene.standardFont.measureText(versionText);
+
+        let txtPosY = 25;
+        CreditsScene.headlineFont.drawText(ctx, titleText, CreditsScene.panelImage.width / 2 - titleTextSize.width / 2, txtPosY, "black");
+        txtPosY += headlineCharSize.height + lineSpacing;
+        CreditsScene.standardFont.drawText(ctx, versionText, CreditsScene.panelImage.width / 2 - versionTextSize.width / 2, txtPosY, "black");
+        txtPosY += standardCharSize.height * 2 + lineSpacing * 2;
+
+        // TODO Read / generate authors list from package.json or something else.
+        // TODO Improve the appearance of the creators list
+        CreditsScene.standardFont.drawTextWithOutline(ctx, "Created by:", textOffsetX, txtPosY, "white", "black");
+        txtPosY += standardCharSize.height + lineSpacing + lineSpacing / 2;
+        CreditsScene.standardFont.drawText(ctx, "Eduard But     Nico Huelscher    Benjamin Jung", textOffsetX, txtPosY, "black");
+        txtPosY += standardCharSize.height + lineSpacing;
+        CreditsScene.standardFont.drawText(ctx, "Nils Kreutzer   Bastian Lang     Ranjit Mevius", textOffsetX, txtPosY, "black");
+        txtPosY += standardCharSize.height + lineSpacing;
+        CreditsScene.standardFont.drawText(ctx, "Markus Over   Klaus Reimer   Jennifer van Veen", textOffsetX, txtPosY, "black");
+
+        // Shortened Git commit hash to provide support.
+        const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
+        const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
+        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.panelImage.width - shortenedGitCommitHashTextSize.width- textOffsetX, CreditsScene.panelImage.height - shortenedGitCommitHashTextSize.height- textOffsetX, "black");
+
         ctx.restore();
     }
 

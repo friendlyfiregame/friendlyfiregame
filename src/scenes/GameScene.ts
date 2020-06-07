@@ -42,8 +42,6 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
-    public dev = window.location.port === "8000";
-
     /* Total game time (time passed while game not paused) */
     public gameTime = 0;
 

@@ -8,6 +8,7 @@ import { MenuList, MenuItem } from '../Menu';
 import { ControlsScene } from './ControlsScene';
 import { TitleScene } from "./TitleScene";
 import { ControllerEvent } from "../input/ControllerEvent";
+import { AppInfoJSON } from 'appinfo.json';
 
 enum MenuItemKey {
     RESUME = 'resume',
@@ -21,6 +22,9 @@ export class PauseScene extends Scene<FriendlyFire> {
 
     @asset("fonts/headline.font.json")
     private static headlineFont: BitmapFont;
+
+    @asset("appinfo.json")
+    private static appInfo: AppInfoJSON;
 
     private menu = new MenuList();
 
@@ -72,12 +76,15 @@ export class PauseScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
         ctx.globalAlpha = 0.8;
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
         PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
+        const versionText = this.dev ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
+        const versionTextSize = PauseScene.font.measureText(versionText);
+        PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 4, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
         ctx.restore();
         this.menu.draw(ctx);
     }

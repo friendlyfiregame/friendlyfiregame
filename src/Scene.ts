@@ -8,6 +8,9 @@ export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
 export type SceneProperties = Record<string, string | number | boolean> | null;
 
 export abstract class Scene<T extends Game> {
+
+    public dev = window.location.port === "8000";
+
     public zIndex: number = 0;
     public currentTransition: Transition | null = null;
     public inTransition: Transition | null = null;
