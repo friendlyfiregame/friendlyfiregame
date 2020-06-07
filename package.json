@@ -22,55 +22,7 @@
     "make": "electron-forge make"
   },
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "friendlyfire"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "./assets/appicon/256x256.png",
-            "productName": "Friendly Fire",
-            "genericName": "Friendly Fire",
-            "categories": [
-              "Game"
-            ]
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "js": "./lib/FriendlyFire.js",
-                  "name": "./"
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    }
+    "forge": "electron-forge.config.js"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.51",
