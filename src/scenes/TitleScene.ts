@@ -10,6 +10,7 @@ import { ControlsScene } from "./ControlsScene";
 import { MenuList, MenuItem } from '../Menu';
 import { isElectron } from "../util";
 import { ControllerEvent } from "../input/ControllerEvent";
+import { CreditsScene } from './CreditsScene';
 
 const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
     "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
@@ -57,7 +58,7 @@ export class TitleScene extends Scene<FriendlyFire> {
                 this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.CREDITS:
-                console.log('TODO: show credits')
+                this.game.scenes.pushScene(CreditsScene);
                 break;
             case MenuItemKey.EXIT:
                 window.close();

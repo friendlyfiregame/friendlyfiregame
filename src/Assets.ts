@@ -2,6 +2,7 @@ import { Aseprite } from "./Aseprite";
 import { Sound } from "./Sound";
 import { loadImage } from "./graphics";
 import { BitmapFont } from "./BitmapFont";
+import { AppInfoJSON } from 'appinfo.json';
 
 const assets = new Map<string, unknown>();
 
@@ -44,6 +45,8 @@ export class Assets {
                 asset = await loadImage(src);
             } else if (src.endsWith(".mp3")) {
                 asset = await Sound.load("assets/" + src);
+            } else if (src === "appinfo.json") {
+                asset = await (await fetch("appinfo.json")).json() as AppInfoJSON
             } else {
                 throw new Error("Unknown asset format: " + src);
             }

@@ -1,6 +1,9 @@
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const GenerateJsonPlugin = require("generate-json-webpack-plugin");
+const GitRevisionPlugin = require("git-revision-webpack-plugin")
+const gitRevisionPlugin = new GitRevisionPlugin()
 
 module.exports = {
     entry: `./lib/FriendlyFire.js`,
@@ -48,6 +51,11 @@ module.exports = {
         ]
     },
     plugins: [
+        gitRevisionPlugin,
+        new GenerateJsonPlugin("appinfo.json", {
+            version: process.env.npm_package_version,
+            gitCommitHash: gitRevisionPlugin.commithash()
+        }),
         new CopyWebpackPlugin([
             { from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
