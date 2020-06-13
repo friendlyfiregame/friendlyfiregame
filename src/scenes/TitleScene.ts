@@ -26,7 +26,6 @@ export class TitleScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
-    private time: number = 0;
     private menu = new MenuList();
 
     public setup(): void {
@@ -81,10 +80,6 @@ export class TitleScene extends Scene<FriendlyFire> {
         } else if (event.isMenuDown) {
             this.menu.next();
         }
-    }
-
-    public update(dt: number) {
-        this.time += dt;
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
