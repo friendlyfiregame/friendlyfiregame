@@ -23,7 +23,7 @@ export abstract class Scene<T extends Game> {
         return this.game.keyboard;
     }
 
-    public get controllerManager(): ControllerManager {
+    public get input(): ControllerManager {
         return ControllerManager.getInstance();
     }
 

@@ -43,11 +43,11 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
-        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
     private async handleButtonDown(event: ControllerEvent): Promise<void> {

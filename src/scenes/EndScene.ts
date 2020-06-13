@@ -18,11 +18,11 @@ export class EndScene extends Scene<FriendlyFire> {
     private static font: BitmapFont;
 
     public activate(): void {
-        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
-        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
     private handleButtonDown(event: ControllerEvent): void {
@@ -40,7 +40,7 @@ export class EndScene extends Scene<FriendlyFire> {
         ctx.restore();
 
         // Inform the user, that it's possible to return to the title...
-        const txt = `Press any ${this.controllerManager.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to return to title.`;
+        const txt = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to return to title.`;
         const txtSize = EndScene.font.measureText(txt);
         EndScene.font.drawTextWithOutline(ctx, txt, width / 2 - txtSize.width / 2 , height - txtSize.height - 4, "white", "black");
 

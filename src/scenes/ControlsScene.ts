@@ -22,12 +22,12 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         console.log('control scene is activated');
-        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
         console.log('control scene is deactivate');
-        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
     private handleButtonDown(event: ControllerEvent): void {

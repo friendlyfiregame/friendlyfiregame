@@ -62,13 +62,13 @@ export class TitleScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this)
         this.playMusicTrack();
     }
 
     public deactivate(): void {
-        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 

@@ -6,18 +6,17 @@ export class LoadingScene extends Scene<FriendlyFire> {
     private total = 100;
     private loaded = 50;
 
-    public activate(): void {
-        this.game.assets.load(this.updateProgress.bind(this)).then(() => {
-            this.game.scenes.setScene(TitleScene);
-        });
+    public async activate(): Promise<void> {
+        await this.game.assets.load(this.updateProgress.bind(this));
+        this.game.scenes.setScene(TitleScene);
     }
 
-    private updateProgress(total: number, loaded: number) {
+    private updateProgress(total: number, loaded: number): void {
         this.total = total;
         this.loaded = loaded;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         if (this.loaded !== this.total) {
             const progressWidth = 200;
             const progressHeight = 8;
