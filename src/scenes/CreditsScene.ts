@@ -33,7 +33,6 @@ export class CreditsScene extends Scene<FriendlyFire> {
     private totalCrawlHeight = 0;
 
     public async setup(): Promise<void> {
-        console.log(CreditsScene.appInfo);
         this.time = 0;
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
