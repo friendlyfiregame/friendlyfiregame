@@ -86,7 +86,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         let y = posY;
         const gap = 5;
         CreditsScene.creditsFont.drawText(ctx, title, posX, y, "white");
-        y += this.creditsFontHeight + this.lineSpacing + gap; 
+        y += this.creditsFontHeight + this.lineSpacing + gap;
 
         names.forEach(name => {
             CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
@@ -167,7 +167,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         ]);
 
         posY = this.drawCredit(ctx, posY, posX, 'MUSIC', ['Bastian Lang']);
-        posY = this.drawCredit(ctx, posY, posX, 'Q&A', ['Jennifer van Veen']);
+        posY = this.drawCredit(ctx, posY, posX, 'QA', ['Jennifer van Veen']);
         posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
 
         if (this.totalCrawlHeight === 0) this.totalCrawlHeight = posY;
