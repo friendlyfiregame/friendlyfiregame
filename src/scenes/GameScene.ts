@@ -1,6 +1,6 @@
 import { Scene } from "../Scene";
 import { FriendlyFire } from "../FriendlyFire";
-import { EndScene } from "./EndScene";
+import { CreditsScene } from "./CreditsScene";
 import { Camera } from "../Camera";
 import { World } from "../World";
 import { MapInfo } from "../MapInfo";
@@ -153,7 +153,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public gameOver() {
-        this.game.scenes.setScene(EndScene);
+        this.game.scenes.setScene(CreditsScene);
     }
 
     public isActive(): boolean {

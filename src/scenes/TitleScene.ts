@@ -12,10 +12,6 @@ import { isElectron } from "../util";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { CreditsScene } from './CreditsScene';
 
-const credits = "Friendly Fire is a contribution to Ludum Dare Game Jam Contest #46. " +
-    "Created by Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
-    "Klaus Reimer and Jennifer van Veen, within 72 hours.";
-
 enum MenuItemKey {
     START = 'start',
     CONTROLS = 'controls',
@@ -95,9 +91,6 @@ export class TitleScene extends Scene<FriendlyFire> {
         ctx.save();
         ctx.beginPath();
         ctx.drawImage(TitleScene.titleImage, 0, 0);
-        const off = (this.time * 1000 / 12) % 2000;
-        const cx = Math.round(width + 100 - off);
-        TitleScene.font.drawText(ctx, credits, cx, ctx.canvas.height - 20, "white", 0);
         ctx.restore();
         this.menu.draw(ctx);
     }

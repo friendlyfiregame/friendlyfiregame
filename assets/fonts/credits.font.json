@@ -1,0 +1,13 @@
+{
+    "image": "credits.png",
+    "characters": "abcdefghijklmnopqrstuvwxyz &0123456789",
+    "widths": [
+        5, 5, 5, 5, 5, 5, 5, 5, 1, 5, 5, 5, 7, 5, 5, 5, 5, 5, 5, 5, 5, 5, 7, 5, 5, 5,
+        3, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5
+    ],
+    "margin": 1,
+    "colors": {
+        "white": "#ffffff",
+        "black": "#000000"
+    }
+}

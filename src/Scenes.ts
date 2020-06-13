@@ -38,6 +38,10 @@ export class Scenes<T extends Game> {
         this.activeScene = scene;
     }
 
+    public getPreviousScene (): Scene<T> | null {
+        return this.scenes[this.scenes.length - 2] ?? null;
+    }
+
     public async popScene({ noTransition = false }: { noTransition?: boolean} = {}): Promise<Scene<T> | null> {
         const activeScene = this.activeScene;
         if (activeScene != null) {
