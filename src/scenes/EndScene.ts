@@ -39,8 +39,8 @@ export class EndScene extends Scene<FriendlyFire> {
         ctx.restore();
         ctx.restore();
 
-        // Inform the user, that it's possible to return to the main menu...
-        const txt = `Press any ${this.controllerManager.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to return to the main menu.`;
+        // Inform the user, that it's possible to return to the title...
+        const txt = `Press any ${this.controllerManager.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to return to title.`;
         const txtSize = EndScene.font.measureText(txt);
         EndScene.font.drawTextWithOutline(ctx, txt, width / 2 - txtSize.width / 2 , height - txtSize.height - 4, "white", "black");
 
