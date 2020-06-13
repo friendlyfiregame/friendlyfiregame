@@ -7,10 +7,10 @@ import { ControllerFamily } from "./ControllerFamily";
 
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
 keyToIntentMappings.set(" ", [ControllerIntent.PLAYER_JUMP]);
-keyToIntentMappings.set("w", [ControllerIntent.PLAYER_JUMP]);
-keyToIntentMappings.set("a", [ControllerIntent.PLAYER_MOVE_LEFT]);
-keyToIntentMappings.set("s", [ControllerIntent.PLAYER_DROP]);
-keyToIntentMappings.set("d", [ControllerIntent.PLAYER_MOVE_RIGHT]);
+keyToIntentMappings.set("w", [ControllerIntent.PLAYER_JUMP, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("a", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
+keyToIntentMappings.set("s", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
+keyToIntentMappings.set("d", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
 keyToIntentMappings.set("ArrowUp", [ControllerIntent.PLAYER_JUMP, ControllerIntent.MENU_UP]);
 keyToIntentMappings.set("ArrowDown", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
 keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
