@@ -1,9 +1,11 @@
 import { Scene } from "../Scene";
 import { FriendlyFire } from "../FriendlyFire";
 import { asset } from "../Assets";
-import { CurtainTransition } from "../transitions/CurtainTransition";
-import { easeOutSine } from "../easings";
 import { Aseprite } from "../Aseprite";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { TitleScene } from "./TitleScene";
+import { ControllerFamily } from "../input/ControllerFamily";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset("images/end.png")
@@ -12,12 +14,22 @@ export class EndScene extends Scene<FriendlyFire> {
     @asset("sprites/flameboy2.aseprite.json")
     private static endBoy: Aseprite;
 
-    public setup(): void {
-        this.zIndex = 1;
-        this.inTransition = new CurtainTransition({ reverse: true, easing: easeOutSine });
+    @asset("fonts/standard.font.json")
+    private static font: BitmapFont;
+
+    public activate(): void {
+        this.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public deactivate(): void {
+        this.controllerManager.onButtonDown.disconnect(this.handleButtonDown, this);
+    }
+
+    private handleButtonDown(event: ControllerEvent): void {
+        this.game.scenes.setScene(TitleScene);
+    }
+
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
         ctx.beginPath();
         ctx.drawImage(EndScene.endImage, 0, 0);
@@ -26,5 +38,12 @@ export class EndScene extends Scene<FriendlyFire> {
         EndScene.endBoy.drawTag(ctx, "idle", -EndScene.endBoy.width >> 1, -EndScene.endBoy.height);
         ctx.restore();
         ctx.restore();
+
+        // Inform the user, that it's possible to return to the main menu...
+        const txt = `Press any ${this.controllerManager.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to return to the main menu.`;
+        const txtSize = EndScene.font.measureText(txt);
+        EndScene.font.drawTextWithOutline(ctx, txt, width / 2 - txtSize.width / 2 , height - txtSize.height - 4, "white", "black");
+
     }
+
 }
