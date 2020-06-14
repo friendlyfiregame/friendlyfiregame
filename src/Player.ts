@@ -163,8 +163,6 @@ export class Player extends PhysicsEntity {
     public jumpDown: boolean = false;
     private jumpKeyPressed: boolean | null = false;
     private drowning = 0;
-    private readonly startX: number;
-    private readonly startY: number;
     private dance: Dance | null = null;
     private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
@@ -186,8 +184,6 @@ export class Player extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
-        this.startX = x;
-        this.startY = y;
         scene.game.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
         scene.game.controllerManager.onButtonUp.connect(this.handleButtonUp, this);
         document.addEventListener("keydown", event => this.handleKeyDown(event));

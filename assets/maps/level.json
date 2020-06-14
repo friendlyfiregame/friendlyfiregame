@@ -165,8 +165,20 @@
                  "type":"entity",
                  "visible":true,
                  "width":0,
-                 "x":1416,
+                 "x":1411,
                  "y":2600
+                }, 
+                {
+                 "height":0,
+                 "id":29,
+                 "name":"campfire",
+                 "point":true,
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":1392,
+                 "y":2615
                 }, 
                 {
                  "height":0,
@@ -360,10 +372,10 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":29,
+ "nextobjectid":30,
  "orientation":"orthogonal",
  "renderorder":"left-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"1.3.5",
  "tileheight":24,
  "tilesets":[
         {

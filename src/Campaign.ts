@@ -1,6 +1,7 @@
 import { NPC } from './NPC';
 import { FaceModes } from './Face';
 import type { DialogJSON } from "*.dialog.json";
+import caveman from '../assets/dialog/caveman.dialog.json';
 import fire0 from '../assets/dialog/fire0.dialog.json';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
@@ -24,6 +25,7 @@ import { GameScene } from "./scenes/GameScene";
 export type CampaignState = "start" | "finished";
 
 const allDialogs: Record<string, DialogJSON> = {
+    "caveman": caveman,
     "fire0": fire0,
     "fire1": fire1,
     "fire2": fire2,
@@ -52,6 +54,7 @@ export class Campaign {
 
     private begin() {
         // Setup initial NPC dialogs
+        this.runAction("enable", null, ["caveman", "caveman"]);
         this.runAction("enable", null, ["fire", "fire0"]);
         this.runAction("enable", null, ["tree", "tree0"]);
         this.runAction("enable", null, ["stone", "stone1"]);
@@ -202,7 +205,8 @@ export class Campaign {
                     "seed": this.scene.seed,
                     "flameboy": this.scene.flameboy,
                     "wing": this.scene.wing,
-                    "spider": this.scene.spider
+                    "spider": this.scene.spider,
+                    "caveman": this.scene.caveman
                 };
                 const targetNpc = npcMap[char];
                 const dialog = allDialogs[dialogName];
@@ -219,7 +223,8 @@ export class Campaign {
                     "seed": this.scene.seed,
                     "flameboy": this.scene.flameboy,
                     "wing": this.scene.wing,
-                    "spider": this.scene.spider
+                    "spider": this.scene.spider,
+                    "caveman": this.scene.caveman
                 };
                 const targetNpc1 = npcMap1[char1];
                 if (targetNpc1) {

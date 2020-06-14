@@ -25,6 +25,7 @@ import { PauseScene } from "./PauseScene";
 import { MapObjectJSON } from '*/level.json';
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
+import { Campfire } from '../Campfire';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -60,6 +61,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public wing!: Wing;
     public spider!: Spider;
     public caveman!: Caveman;
+    public campfire!: Campfire;
     public campaign!: Campaign;
     public particles!: Particles;
     public fire!: Fire;
@@ -95,6 +97,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.wing = this.getGameObject(Wing);
         this.spider = this.getGameObject(Spider);
         this.caveman = this.getGameObject(Caveman);
+        this.campfire = this.getGameObject(Campfire);
 
         this.camera = new Camera(this, this.player);
         this.fpsInterval = setInterval(() => {

@@ -30,17 +30,18 @@
     ],
     "powerup": [
         "Yeah, I'm assigned to distribute the flying ability. It's popular amongst school children... and birds.",
-        "> Nice, flying!",
+        ">Nice, flying!",
         "Don't expect too much. It's more of a multi jump if you ask me. But you know... marketing.",
-        "> I'll take one",
+        ">I'll take one",
         "Sure, here you go !multijump",
         "I'm obligated by my employer to tell you, that you should visit the cloud world. I personally wouldn't go there. The people there are really annoying.",
         "But that's just my opinion @visited !end"
     ],
     "visited": [
         "Sorry, we have a strict no return policy!",
-        "> I just wanted to talk more @more",
-        "> Damn...",
+        ">[$metcaveman]Did you know there's someone living in the caves? @caveman",
+        ">I just wanted to talk more @more",
+        ">Damn...",
         "Come on man! You didn't even pay anything. @finished !end"
     ],
     "more": [
@@ -48,7 +49,20 @@
     ],
     "finished": [
         "Just let me do my job in peace. Go irritate the cloud people. They love that",
-        "> fine @finished !end"
+        ">[$metcaveman] Did you know there's someone living in the caves? @caveman",
+        ">fine @finished !end"
+    ],
+    "caveman": [
+        "Yeah, the best kind of neighbor: Quiet and seclusive.",
+        ">Can't you just give him a free flying powerup?",
+        "No, that's not how this works. He broke the sequence and messed up the triggers.",
+        "Too bad for him, but that's not my problem",
+        ">Sequence? Triggers? What does all that mean?",
+        "Whops, don't mind me sying stupid stuff. Just giving away power ups here",
+        ">But...",
+        "Byee @nodialog !end"
+    ],
+    "nodialog": [
+        "Error: No dialog found @nodialog !end"
     ]
-
 }

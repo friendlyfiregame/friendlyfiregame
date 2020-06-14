@@ -1,0 +1,64 @@
+{
+    "entry": [
+        "Holy Macaroni, another human! !set $metcaveman",
+        "[$ismale] I thought I'd never see another dude anytime soon.",
+        "[not $ismale] I thought I'd never see a woman every again.",
+        "Did you spawn on this side of the river after falling into the water as well?",
+        ">No, I came here regulary. @regulary",
+        ">You spawend here? @spawend"
+    ],
+    "visitedEntry": [
+        "[$ismale]Hey pal!",
+        "[not $ismale]Greetings my lady.",
+        ">Can I ask you some questions? @questions",
+        ">I'm on my way. @visitedEntry !end"
+    ],
+    "regulary": [
+        "Does that mean you managed to defeat the tree? !set visited",
+        ">You mean the dancing bit?",
+        "Yeah, that. I'm not much of dancer and got stuck on the first quest.",
+        "Since there wasn't anything better to do, I tried to find out more about this world. @bug"
+    ],
+    "spawend": [
+        "Yeah, very strange indeed. !set visited",
+        "I guess you already found out how the water works here.",
+        "After I got stuck trying to dance for that stupid tree, I tried to find out more about this world. @bug"
+    ],
+    "bug": [
+        "As I was experimenting with the water, one time I wasn't teleported back to the east side of the river.",
+        "I found myself on this side and couldn't get back. The fire up top wasn't very helpful either. @strange"
+    ],
+    "strange": [
+        "But that's not all.",
+        "There is something very strange going on here.",
+        "> What do you mean?",
+        "Don't you see it? Spider fairies, dancing trees, the very supspicious fire that feels out of place?",
+        "It's like a feverish nightmare from which you can't wake up.",
+        "I conducted some experimentes down here and the results are alarming. @questions"
+    ],
+    "questions": [
+        "What do you want to know about?",
+        ">How did you get here? @memories",
+        ">Why the open fire in the cave? @fire",
+        ">Nevermind @visitedEntry !end"
+    ],
+    "fire": [
+        "Good question! First of all, carbon monoxide poisoning is not something that happens here.",
+        "Death in general seems to be impossible. Trust me, I tried.",
+        "But the fire itself very interesting.",
+        "I made a lot of camp fires since I came here and they all look alike.",
+        "I mean, practically identical. And not only that, they even resemble the fire in the entrance.",
+        "Isn't that strange? It's like god got really lazy and just made everything from a single template.",
+        ">You're right, but the fire in the beginning looked different.",
+        "Yeah, I remember. It looked really strange, like an entity from a different dimension.",
+        ">I have other question @questions"
+    ],
+    "memories": [
+        "My memories are very hazy, I can't remember anything from before my arrival here.",
+        "What about you?",
+        "> No, it's all blank.",
+        "Thought so... There's something sinister going on here behind the curtains.",
+        "There's always a lingering feeling of being watched from the shadows.",
+        "> Creepy. I got other questions @questions"
+    ]
+}
