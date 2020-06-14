@@ -33,8 +33,14 @@ const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
 };
 
 export class TitleScene extends Scene<FriendlyFire> {
-    @asset("images/title.png")
-    private static titleImage: HTMLImageElement;
+    @asset("images/title/layer1.png")
+    private static titleLayer1: HTMLImageElement;
+
+    @asset("images/title/layer2.png")
+    private static titleLayer2: HTMLImageElement;
+
+    @asset("images/title/layer3.png")
+    private static titleLayer3: HTMLImageElement;
 
     @asset("images/logo.png")
     private static logoImage: HTMLImageElement;
@@ -47,11 +53,17 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     private menu = new MenuList(MenuAlignment.CENTER);
     private time = 0;
+    private animationProgress = 0;
+    private logoAlphaProgress = 0;
+    private animationDuration = 3;
 
     private titleBasePosition = {
         x: this.game.width / 2 - TitleScene.logoImage.width / 2,
         y: 60
     }
+    private titleLayer1Position = { x: 0, y: 70 }
+    private titleLayer2Position = { x: 0, y: 163 }
+    private titleLayer3Position = { x: 0, y: -125 }
 
     private menuBasePosition = {
         x: this.game.width / 2,
@@ -63,6 +75,8 @@ export class TitleScene extends Scene<FriendlyFire> {
     public setup(): void {
         this.zIndex = 1;
         this.time = 0;
+        this.animationProgress = 0;
+        this.logoAlphaProgress = 0;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
 
@@ -115,14 +129,34 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     public update(dt: number) {
         this.time += dt;
+
+        if (this.time < this.animationDuration) {
+            this.animationProgress = -Math.pow((1/this.animationDuration * this.time - 1), 2) + 1;
+            this.logoAlphaProgress = -Math.pow((1/(this.animationDuration / 2) * this.time - 2), 2) + 1;
+        } else {
+           this.animationProgress = 1;
+           this.logoAlphaProgress = 1; 
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
         ctx.save();
         ctx.beginPath();
-        ctx.drawImage(TitleScene.titleImage, 0, 0);
-        ctx.drawImage(TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y);
-        TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10, this.time * 1000);
+
+        const layer3OffY = (1 - this.animationProgress) * 100;
+        ctx.drawImage(TitleScene.titleLayer3, this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY);
+
+        const layer2OffY = (1 - this.animationProgress) * 200;
+        ctx.drawImage(TitleScene.titleLayer2, this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY);
+
+        const layer1OffY = (1 - this.animationProgress) * 300;
+        ctx.drawImage(TitleScene.titleLayer1, this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY);
+
+        ctx.globalAlpha = Math.max(this.logoAlphaProgress, 0);
+        const menuOffY = (1 - this.animationProgress) * 150;
+        ctx.drawImage(TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y + menuOffY);
+        TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10 + menuOffY, this.time * 1000);
+
         ctx.restore();
         this.menu.draw(ctx);
     }
