@@ -101,7 +101,7 @@ export enum Gender {
 const HINT_TIMEOUT = 90;
 
 const startingGender = Math.random() >= 0.5 ? Gender.MALE : Gender.FEMALE;
-Conversation.setGlobal("ismale", "true");
+Conversation.setGlobal("ismale", startingGender === Gender.MALE ? "true" : "false");
 
 interface PlayerSpriteMetadata {
     carryOffsetFrames?: number[];
@@ -544,14 +544,8 @@ export class Player extends PhysicsEntity {
     }
 
     private respawn() {
-        if (this.x > this.startX - 242) {
-            this.x = this.startX;
-            this.direction = -1;
-        } else {
-            this.x = this.startX - 485;
-            this.direction = 1;
-        }
-        this.y = this.startY;
+        this.x = this.lastGroundPosition.x;
+        this.y = this.lastGroundPosition.y + 10;
         this.setVelocity(0, 0);
     }
 
@@ -567,6 +561,7 @@ export class Player extends PhysicsEntity {
 
     update(dt: number): void {
         super.update(dt);
+
         this.speechBubble.update(this.x, this.y);
         if (this.thinkBubble) {
             this.thinkBubble.update(this.x, this.y);
