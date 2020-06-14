@@ -7,6 +7,7 @@ import { ControllerEvent } from '../input/ControllerEvent';
 import { AppInfoJSON } from "appinfo.json";
 import { FadeTransition } from '../transitions/FadeTransition';
 import { TitleScene } from './TitleScene';
+import { isDev } from '../util';
 
 export class CreditsScene extends Scene<FriendlyFire> {
 
@@ -66,7 +67,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
     private drawTitle(ctx: CanvasRenderingContext2D, posY: number, posX: number): number {
         const gap = 5;
         const titleText = "Friendly Fire";
-        const versionText = this.dev ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
+        const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
         CreditsScene.headlineFont.drawText(ctx, titleText, posX, posY, "white");
         CreditsScene.standardFont.drawText(ctx, versionText, posX, posY + this.headlineCharHeight + gap, "white");
         return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20

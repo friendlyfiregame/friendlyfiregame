@@ -9,6 +9,7 @@ import { ControlsScene } from './ControlsScene';
 import { TitleScene } from "./TitleScene";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { AppInfoJSON } from 'appinfo.json';
+import { isDev } from '../util';
 
 enum MenuItemKey {
     RESUME = 'resume',
@@ -82,7 +83,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
         PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
-        const versionText = this.dev ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
+        const versionText = isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
         const versionTextSize = PauseScene.font.measureText(versionText);
         PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 4, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
         ctx.restore();

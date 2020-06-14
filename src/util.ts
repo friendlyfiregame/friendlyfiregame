@@ -103,3 +103,17 @@ export function boundsFromMapObject(o: MapObjectJSON, margin = 0): Bounds {
 export function isElectron(): boolean {
     return !!navigator.userAgent.match(/\belectron\b/i);
 }
+
+/**
+ * Figures out if development mode is enabled or not.
+ */
+export function isDev(): boolean {
+    // Legacy behavior.
+    if (window.location.port === "8000") {
+        return true;
+    }
+    if (!!window.location.search) {
+        return !!window.location.search.substr(1).split("&").find(key => key.toLowerCase().startsWith("dev"));
+    }
+    return false;
+}

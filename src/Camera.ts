@@ -1,4 +1,4 @@
-import { Vector2, clamp, shiftValue, rnd } from './util';
+import { Vector2, clamp, shiftValue, rnd, isDev } from './util';
 import { ValueCurve, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { GameScene } from "./scenes/GameScene";
@@ -43,7 +43,7 @@ export class Camera {
             throw new Error("Camera interpolation time may not exceed 1");
         }
         this.interpolationTime = interpolationTime / 2;
-        if (scene.dev) {
+        if (isDev()) {
             console.log("Dev mode, press TAB to zoom out & click somewhere to teleport there");
             document.addEventListener("keydown", this.handleKeyDown.bind(this));
             document.addEventListener("keyup", this.handleKeyUp.bind(this));

@@ -8,7 +8,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, sleep, rndInt } from './util';
+import { rnd, rndItem, timedRnd, sleep, rndInt, isDev } from './util';
 import { entity } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
@@ -191,7 +191,7 @@ export class Player extends PhysicsEntity {
         scene.game.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
         scene.game.controllerManager.onButtonUp.connect(this.handleButtonUp, this);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
-        if (this.scene.dev) {
+        if (isDev()) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
         }
@@ -357,7 +357,7 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        if (this.scene.dev) {
+        if (isDev()) {
             if (event.key === "c") {
                 // TODO Just for debugging. Real dancing is with action key on rain cloud
                 this.startDance(3);

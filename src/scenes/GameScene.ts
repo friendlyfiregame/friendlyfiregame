@@ -19,7 +19,7 @@ import { Seed } from "../Seed";
 import { FireGfx } from "../FireGfx";
 import { Cloud } from "../Cloud";
 import { asset } from "../Assets";
-import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject } from "../util";
+import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject, isDev } from "../util";
 import { BitmapFont } from "../BitmapFont";
 import { PauseScene } from "./PauseScene";
 import { MapObjectJSON } from '*/level.json';
@@ -99,7 +99,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.frameCounter = 0;
         }, 1000);
 
-        Conversation.setGlobal("devmode", this.dev + "");
+        Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
     }
 
@@ -214,7 +214,7 @@ export class GameScene extends Scene<FriendlyFire> {
         ctx.restore();
 
         // Display FPS counter
-        if (this.dev) {
+        if (isDev()) {
             GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;
