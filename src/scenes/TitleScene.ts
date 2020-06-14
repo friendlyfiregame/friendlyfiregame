@@ -33,11 +33,17 @@ const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
 };
 
 export class TitleScene extends Scene<FriendlyFire> {
-    @asset("images/title/layer1.png")
-    private static titleLayer1: HTMLImageElement;
+    @asset("images/title/layer1.aseprite.json")
+    private static titleLayer1: Aseprite;
 
-    @asset("images/title/layer2.png")
-    private static titleLayer2: HTMLImageElement;
+    @asset("images/title/layer2.aseprite.json")
+    private static titleLayer2: Aseprite;
+
+    @asset("images/title/island1.aseprite.json")
+    private static titleIsland1: Aseprite;
+
+    @asset("images/title/island2.aseprite.json")
+    private static titleIsland2: Aseprite;
 
     @asset("images/title/layer3.png")
     private static titleLayer3: HTMLImageElement;
@@ -147,10 +153,14 @@ export class TitleScene extends Scene<FriendlyFire> {
         ctx.drawImage(TitleScene.titleLayer3, this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY);
 
         const layer2OffY = (1 - this.animationProgress) * 200;
-        ctx.drawImage(TitleScene.titleLayer2, this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY);
+        TitleScene.titleLayer2.drawTag(ctx, "idle", this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY, this.time * 1000);
+
+        const islandOffY = (1 - this.animationProgress) * 250;
+        TitleScene.titleIsland1.drawTag(ctx, "idle", 90, 168 + islandOffY, this.time * 1000);
+        TitleScene.titleIsland2.drawTag(ctx, "idle", 323, 178 + islandOffY, this.time * 1000);
 
         const layer1OffY = (1 - this.animationProgress) * 300;
-        ctx.drawImage(TitleScene.titleLayer1, this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY);
+        TitleScene.titleLayer1.drawTag(ctx, "idle", this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY, this.time * 1000);
 
         ctx.globalAlpha = Math.max(this.logoAlphaProgress, 0);
         const menuOffY = (1 - this.animationProgress) * 150;
