@@ -7,10 +7,16 @@ import { easeInSine } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { GameScene } from "./GameScene";
 import { ControlsScene } from "./ControlsScene";
-import { MenuList, MenuItem } from '../Menu';
+import { MenuList, MenuItem, MenuAlignment } from '../Menu';
 import { isElectron } from "../util";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { CreditsScene } from './CreditsScene';
+import { Aseprite } from '../Aseprite';
+
+type MainMenuParams = {
+    label: string;
+    electronOnly?: boolean;
+}
 
 enum MenuItemKey {
     START = 'start',
@@ -19,29 +25,54 @@ enum MenuItemKey {
     EXIT = 'exit'
 }
 
+const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
+    [MenuItemKey.START]: { label: "Start Game" },
+    [MenuItemKey.CONTROLS]: { label: "Controls" },
+    [MenuItemKey.CREDITS]: { label: "Credits" },
+    [MenuItemKey.EXIT]: { label: "Exit Game", electronOnly: true },
+};
+
 export class TitleScene extends Scene<FriendlyFire> {
     @asset("images/title.png")
     private static titleImage: HTMLImageElement;
 
+    @asset("images/logo.png")
+    private static logoImage: HTMLImageElement;
+
+    @asset("sprites/flameicon.aseprite.json")
+    private static flameicon: Aseprite;
+
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
-    private menu = new MenuList();
+    private menu = new MenuList(MenuAlignment.CENTER);
+    private time = 0;
+
+    private titleBasePosition = {
+        x: this.game.width / 2 - TitleScene.logoImage.width / 2,
+        y: 60
+    }
+
+    private menuBasePosition = {
+        x: this.game.width / 2,
+        y: 190,
+        gap: 15,
+    }
+
 
     public setup(): void {
         this.zIndex = 1;
+        this.time = 0;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
-        this.menu.setItems(
-            new MenuItem(MenuItemKey.START, "Start Game", TitleScene.font, "white", 75, 160),
-            new MenuItem(MenuItemKey.CONTROLS, "Controls", TitleScene.font, "white", 75, 175),
-            new MenuItem(MenuItemKey.CREDITS, "Credits", TitleScene.font, "white", 75, 190),
-        )
-        if (isElectron() || window.opener) {
-            this.menu.addItems(
-                new MenuItem(MenuItemKey.EXIT, "Exit", TitleScene.font, "white", 75, 205)
-            );
-        }
+
+        Object.values(MenuItemKey).forEach((key, index) => {
+            if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {
+                this.menu.addItems(
+                    new MenuItem(key, MenuLabels[key].label, TitleScene.font, "white", this.menuBasePosition.x, this.menuBasePosition.y + this.menuBasePosition.gap * index)
+                );
+            }
+        });
     }
 
     public handleMenuAction (buttonId: string) {
@@ -82,10 +113,16 @@ export class TitleScene extends Scene<FriendlyFire> {
         }
     }
 
+    public update(dt: number) {
+        this.time += dt;
+    }
+
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
         ctx.save();
         ctx.beginPath();
         ctx.drawImage(TitleScene.titleImage, 0, 0);
+        ctx.drawImage(TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y);
+        TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10, this.time * 1000);
         ctx.restore();
         this.menu.draw(ctx);
     }

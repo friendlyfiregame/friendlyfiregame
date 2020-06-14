@@ -1,5 +1,8 @@
 import { BitmapFont } from './BitmapFont';
 import { Signal } from './Signal';
+import { asset } from './Assets';
+
+export enum MenuAlignment { LEFT, CENTER, RIGHT };
 
 /**
  * Simple MenuItem Class for usage in a MenuList.
@@ -16,6 +19,9 @@ export class MenuItem {
   public y: number;
   public enabled: boolean;
   public focused: boolean;
+
+  @asset("images/menu_selector.png")
+  private static selectorImage: HTMLImageElement;
 
   public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, enabled = true) {
     this.id = id;
@@ -34,10 +40,24 @@ export class MenuItem {
    * 
    * @param ctx CanvasRenderingContext2D
    */
-  public draw(ctx: CanvasRenderingContext2D) {
+  public draw(ctx: CanvasRenderingContext2D, align: MenuAlignment) {
     ctx.save();
     const alpha = this.enabled ? 1 : 0.35;
-    this.font.drawText(ctx, (this.focused ? "> " : "") + this.label, this.x, this.y, this.color, 0, alpha);
+
+    let x = this.x;
+    let y = this.y;
+
+    const text = this.label;
+    const width = this.font.measureText(text).width;
+
+    if (align === MenuAlignment.CENTER) {
+      x -= Math.round(width / 2);
+    }
+
+    this.font.drawText(ctx, text, x, y, this.color, 0, alpha);
+    if (this.focused) {
+      ctx.drawImage(MenuItem.selectorImage, x - 13, y - 1);
+    }
     ctx.restore();
   }
 }
@@ -49,8 +69,13 @@ export class MenuItem {
  * The draw method of the list instance has to be called to have all contianing buttons be drawn automatically.
  */
 export class MenuList {
+  private align: MenuAlignment;
   private items: MenuItem[] = [];
   public onActivated = new Signal<string>();
+
+  public constructor(align = MenuAlignment.LEFT) {
+    this.align = align;
+  }
 
   /**
    * Adds an arbitray number of menu items to the menu list
@@ -141,7 +166,7 @@ export class MenuList {
 
   public draw(ctx: CanvasRenderingContext2D) {
     this.items.forEach(item => {
-      item.draw(ctx);
+      item.draw(ctx, this.align);
     })
   }
 }
