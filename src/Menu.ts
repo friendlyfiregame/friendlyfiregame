@@ -20,7 +20,7 @@ export class MenuItem {
   public enabled: boolean;
   public focused: boolean;
 
-  @asset("images/menu_selector.png")
+  @asset("sprites/menu_selector.png")
   private static selectorImage: HTMLImageElement;
 
   public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, enabled = true) {
@@ -37,7 +37,7 @@ export class MenuItem {
   /**
    * Draw method for a single ListItem. Is automatically called when the parent
    * MenuList's draw method is called.
-   * 
+   *
    * @param ctx CanvasRenderingContext2D
    */
   public draw(ctx: CanvasRenderingContext2D, align: MenuAlignment) {
@@ -80,7 +80,7 @@ export class MenuList {
   /**
    * Adds an arbitray number of menu items to the menu list
    * The first available menu item will be focused automatically
-   * @param items 
+   * @param items
    */
   public addItems(...items: MenuItem[]) {
     this.items.push(...items);
@@ -90,7 +90,7 @@ export class MenuList {
   /**
    * Sets an arbitray number of menu items to the menu list and overrides
    * any previously added items. The first available menu item will be focused automatically
-   * @param items 
+   * @param items
    */
   public setItems(...items: MenuItem[]) {
     this.items = [...items];
