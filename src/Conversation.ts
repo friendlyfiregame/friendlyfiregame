@@ -101,7 +101,7 @@ export class Conversation {
     }
 
     private setVariable(name = "", value = "true"): void {
-        console.log("Setting conversation variable", name, "to", value);
+        // console.log("Setting conversation variable", name, "to", value);
         if (name.startsWith("$")) {
             // Global variable
             globalVariables[name] = value;
@@ -115,7 +115,6 @@ export class Conversation {
         if (!varname.startsWith("$")) {
             varname = "$" + varname;
         }
-        console.log("Setting global conversation variable", varname, "to", value);
         globalVariables[varname] = value;
     }
 
@@ -145,6 +144,7 @@ export class Conversation {
             return null;
         }
         let line = this.data[this.state][this.stateIndex++];
+        // console.log(line.condition);
         if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {
             this.skippedLines++;
             return this.getNextLine(ignoreDisabled);
@@ -155,8 +155,9 @@ export class Conversation {
     private testCondition(condition: string): boolean {
         const self = this;
         const subconditions = condition.split(',');
+        // console.log(subconditions);
         const result = subconditions.some(evaluateFragment);
-        console.log("Condition ", condition, " yields ", result);
+        // console.log("Condition ", condition, " yields ", result);
         return result;
 
         function evaluateFragment(s: string): boolean {
@@ -263,6 +264,7 @@ export class ConversationLine {
 
     private static extractCondition(line: string): string | null {
         const conditionString = line.match(/\[[a-zA-Z0-9\_\<\>\!\=\$ ]+\]/g);
+        // console.log(conditionString);
         if (conditionString && conditionString[0]) {
             return conditionString[0].substr(1, conditionString[0].length - 2);
         }
