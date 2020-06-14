@@ -95,6 +95,15 @@ export class TitleScene extends Scene<FriendlyFire> {
         });
     }
 
+    public animationIsDone(): boolean {
+        return this.animationProgress === 1;
+    }
+
+    public finishAnimation(): void {
+        this.animationProgress = 1;
+        this.logoAlphaProgress = 1;
+    }
+
     public handleMenuAction (buttonId: string) {
         switch(buttonId) {
             case MenuItemKey.START:
@@ -124,24 +133,30 @@ export class TitleScene extends Scene<FriendlyFire> {
     }
 
     private handleButtonDown(event: ControllerEvent): void {
-        if (event.isConfirm) {
-            this.menu.executeAction();
-        } else if (event.isMenuUp) {
-            this.menu.prev();
-        } else if (event.isMenuDown) {
-            this.menu.next();
+        if (this.animationIsDone()) {
+            if (event.isConfirm) {
+                this.menu.executeAction();
+            } else if (event.isMenuUp) {
+                this.menu.prev();
+            } else if (event.isMenuDown) {
+                this.menu.next();
+            }
+        } else {
+            if (event.isConfirm) {
+                this.finishAnimation();
+            }
         }
+
     }
 
     public update(dt: number) {
         this.time += dt;
 
-        if (this.time < this.animationDuration) {
+        if (this.time < this.animationDuration && !this.animationIsDone()) {
             this.animationProgress = -Math.pow((1/this.animationDuration * this.time - 1), 2) + 1;
             this.logoAlphaProgress = -Math.pow((1/(this.animationDuration / 2) * this.time - 2), 2) + 1;
         } else {
-           this.animationProgress = 1;
-           this.logoAlphaProgress = 1; 
+            this.finishAnimation();
         }
     }
 
@@ -168,7 +183,9 @@ export class TitleScene extends Scene<FriendlyFire> {
         TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10 + menuOffY, this.time * 1000);
 
         ctx.restore();
-        this.menu.draw(ctx);
+        if (this.animationIsDone()) {
+            this.menu.draw(ctx);
+        }
     }
 
     private playMusicTrack(): void {
