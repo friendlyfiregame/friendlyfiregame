@@ -1,48 +1,54 @@
 {
     "entry": [
-        "How did you get up here...?",
-        ">Via jumping @jumping",
-        ">You.. look like a flying ability power up @pickup",
-        ">Do you know anything about growing seeds? @seed",
-        ">What a strange person... ",
-        "Whatever @entry !end"
+        "[visited]You again...",
+        "[not visited]How did you get up here...?",
+        ">[not visited]Via jumping. @jumping",
+        ">You.. look like a flying ability power up. @pickup",
+        ">[$seedplanted]Do you know anything about growing seeds? @seed",
+        ">[$seedgrown]I did it, the seed has grown. @grown",
+        ">[not visited]What a strange person... ",
+        ">[visited]Bye Power up.",
+        "Whatever. @entry !end"
     ],
     "jumping": [
-        "Aw man, another one of the multi jump gang. Flying is better and you know it.",
-        "> There was no flying ability available @noflying",
-        "> I like the multi jump",
-        "Yeah, you look like someone who would @acquainted !end"
+        "Aw man, another one of the multi jump gang. Flying is better and you know it. !set visited",
+        ">There was no flying ability available. @noflying",
+        ">I like the multi jump.",
+        "Yeah, you look like someone who would. @entry"
     ],
     "noflying": [
-        "That's because I'm up here and don't let strangers touch me. That includes you! @acquainted !end"
+        "That's because I'm up here and don't let strangers touch me. That includes you! @entry !end"
     ],
     "pickup": [
-        "And you look like a generic action hero. Go be generic somewhere else, it's unbearable",
-        ">Don't change the subject. You're even glowing",
-        ">Ouch! @acquainted !end",
-        "Yeah so? That's none of your business and as if you needed a flying ability in the first place! I bet you got one of those multi jump things! Even birds are falling for this scam nowadays",
-        ">Guilty as charged",
-        "I guessed so. @acquainted !end"
+        "[$ismale]And you look like generic action guy. !set visited",
+        "[not $ismale]And you look like a random japanese school girl.",
+        " Go be generic somewhere else, it's unbearable.",
+        ">Don't change the subject. You're even glowing.",
+        ">Ouch! The truth hurts. @entry",
+        "Yeah so? That's none of your business and as if you needed a flying ability in the first place!",
+        "I bet you got one of those multi jump things! Even birds are falling for this scam nowadays.",
+        ">Guilty as charged.",
+        "I guessed so. @entry"
     ],
     "seed": [
-        "Seeds? What is there to know? Just put the thing in dirt and pour some water over it",
-        "If you need water, just use the rain cloud there.",
+        "Seeds? What is there to know? Just put the thing in dirt and pour some water over it !set visited",
+        "If you need water, just use the rain cloud to your left.",
         ">How?",
         "I usually just punch the thing right in the face. Psychological abuse works as well.",
         ">Are there peaceful options as well?",
-        "Yeah, I heard something about rain dancing on top of the cloud. But that's for people without anger issues",
+        "Yeah, I heard something about rain dancing on top of the cloud to your left. But that's for people without anger issues.",
         ">Thanks... seek help",
-        "Great advice, mom! @acquainted !end"
+        "Great advice, mom! @entry"
     ],
-    "acquainted": [
-        "Go away please?",
-        ">Sure buddy",
-        ">I really need help with the seed @seed",
-        "Thanks @exhausted !end"
+    "grown": [
+        "What a great achievement. I'm so proud of you. !set visited",
+        ">Thanks!",
+        ">Are you being sarcastic? @sarcastic",
+        "That was sarcasm. I couldn't care less. @entry"
     ],
-    "exhausted": [
-        "you again...",
-        ">I'm on my way! @acquainted !end",
-        ">I really need help with the seed @seed"
+    "sarcastic": [
+        "Oh no, I have been found out!",
+        ">Shame on you!",
+        "I couldn't care less. @entry"
     ]
 }

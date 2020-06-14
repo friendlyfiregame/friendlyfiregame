@@ -73,6 +73,7 @@ export class Seed extends NPC {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
             this.scene.seed = this;
+            Conversation.setGlobal("seedgrown", "true");
             this.scene.campaign.runAction("enable", null, ["tree", "tree2"]);
             this.scene.campaign.runAction("enable", null, ["seed", "seed1"]);
         }
