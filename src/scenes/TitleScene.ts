@@ -45,8 +45,8 @@ export class TitleScene extends Scene<FriendlyFire> {
     @asset("images/title/island2.aseprite.json")
     private static titleIsland2: Aseprite;
 
-    @asset("images/title/layer3.png")
-    private static titleLayer3: HTMLImageElement;
+    @asset("images/title/layer3.aseprite.json")
+    private static titleLayer3: Aseprite;
 
     @asset("images/logo.png")
     private static logoImage: HTMLImageElement;
@@ -165,7 +165,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         ctx.beginPath();
 
         const layer3OffY = (1 - this.animationProgress) * 100;
-        ctx.drawImage(TitleScene.titleLayer3, this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY);
+        TitleScene.titleLayer3.drawTag(ctx, "idle", this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY, this.time * 1000);
 
         const layer2OffY = (1 - this.animationProgress) * 200;
         TitleScene.titleLayer2.drawTag(ctx, "idle", this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY, this.time * 1000);
