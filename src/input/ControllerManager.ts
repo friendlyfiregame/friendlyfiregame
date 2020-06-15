@@ -28,7 +28,6 @@ export class ControllerManager {
 
     public set currentControllerFamily(controllerFamily: ControllerFamily) {
         this[currentControllerFamilySymbol] = controllerFamily;
-        console.info(`New active controller family: ${this.currentControllerFamily}`);
     }
 
     /**
