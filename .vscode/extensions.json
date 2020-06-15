@@ -1,6 +1,9 @@
 {
     "recommendations": [
         "editorconfig.editorconfig",
-        "msjsdiag.debugger-for-chrome"
+        "github.vscode-pull-request-github",
+        "msjsdiag.debugger-for-chrome",
+        "firefox-devtools.vscode-firefox-debug",
+        "msjsdiag.debugger-for-edge"
     ]
 }
