@@ -5,11 +5,11 @@ import { NPC } from './NPC';
 import { Sound } from './Sound';
 import { entity } from "./Entity";
 import { now } from "./util";
-import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
 import { MapObjectJSON } from '*/level.json';
+import { EndingATrigger } from './Endings';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -42,8 +42,8 @@ export class Stone extends NPC implements CollidableGameObject {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.player.getMilestone() >= Milestone.PLANTED_SEED &&
-            this.scene.player.getMilestone() < Milestone.GOT_STONE
+            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.PLANTED_SEED &&
+            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_STONE
         );
     }
 
@@ -68,7 +68,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
-                this.scene.player.achieveMilestone(Milestone.THROWN_STONE_INTO_WATER);
+                this.scene.campaign.endingA.trigger(EndingATrigger.THROWN_STONE_INTO_WATER);
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);

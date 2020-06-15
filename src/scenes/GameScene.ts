@@ -6,7 +6,7 @@ import { World } from "../World";
 import { MapInfo } from "../MapInfo";
 import { Campaign } from "../Campaign";
 import { createEntity } from "../Entity";
-import { Player, Milestone } from "../Player";
+import { Player } from "../Player";
 import { Fire } from "../Fire";
 import { Stone } from "../Stone";
 import { Tree } from "../Tree";
@@ -26,6 +26,7 @@ import { MapObjectJSON } from '*/level.json';
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
+import { EndingATrigger } from '../Endings';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -243,7 +244,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.apocalypseFactor = 0;
                 this.apocalypse = false;
                 this.fire.angry = false;
-                this.player.achieveMilestone(Milestone.BEAT_FIRE);
+                this.campaign.endingA.trigger(EndingATrigger.BEAT_FIRE);
                 this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
                 FriendlyFire.music[1].stop()

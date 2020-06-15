@@ -3,8 +3,8 @@ import { NPC } from './NPC';
 import { Face, EyeType, FaceModes } from './Face';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
-import { Milestone } from './Player';
 import { GameScene } from "./scenes/GameScene";
+import { EndingATrigger, EndingBTrigger } from './Endings';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -20,9 +20,13 @@ export class FlameBoy extends NPC {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.player.getMilestone() >= Milestone.THROWN_STONE_INTO_WATER &&
-            this.scene.player.getMilestone() < Milestone.GOT_MULTIJUMP
+            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.THROWN_STONE_INTO_WATER &&
+            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_MULTIJUMP
         );
+    }
+
+    private isCorrupted (): boolean {
+        return this.scene.campaign.endingB.isTriggered(EndingBTrigger.FLAMEBOY_CORRUPTED);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -31,7 +35,7 @@ export class FlameBoy extends NPC {
         if (this.direction < 0) {
             ctx.scale(-1, 1);
         }
-        FlameBoy.sprite.drawTag(ctx, "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height,
+        FlameBoy.sprite.drawTag(ctx, this.isCorrupted() ? "corrupt" : "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
         if (this.scene.showBounds) this.drawBounds(ctx);

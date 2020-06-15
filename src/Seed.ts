@@ -5,12 +5,12 @@ import { Environment } from "./World";
 import { now } from "./util";
 import { Sound } from './Sound';
 import { Wood } from "./Wood";
-import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { Conversation } from './Conversation';
 import { MapObjectJSON } from '*/level.json';
+import { EndingATrigger } from './Endings';
 
 export enum SeedState {
     FREE = 0,
@@ -97,7 +97,7 @@ export class Seed extends NPC {
                 if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
 
                 this.state = SeedState.PLANTED;
-                this.scene.player.achieveMilestone(Milestone.PLANTED_SEED);
+                this.scene.campaign.endingA.trigger(EndingATrigger.PLANTED_SEED);
                 this.setFloating(true);
                 this.x = seedPosition.x;
                 this.y = seedPosition.y;

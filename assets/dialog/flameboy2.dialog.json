@@ -55,12 +55,12 @@
     "caveman": [
         "Yeah, the best kind of neighbor: Quiet and seclusive.",
         ">Can't you just give him a free flying powerup?",
-        "No, that's not how this works. He broke the sequence and messed up the triggers.",
-        "Too bad for him, but that's not my problem",
+        "No, that's not how this works. He broke the sequence and messed up some triggers.",
+        "That's irreversible, but not my problem",
         ">Sequence? Triggers? What does all that mean?",
-        "Whops, don't mind me sying stupid stuff. Just giving away power ups here",
+        "Whoops, don't mind me. Just giving away power ups here",
         ">But...",
-        "Byee @nodialog !end"
+        "Byee @nodialog !corruptFlameboy !end"
     ],
     "nodialog": [
         "Error: No dialog found @nodialog !end"

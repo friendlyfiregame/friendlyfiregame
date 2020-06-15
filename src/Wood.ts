@@ -3,11 +3,11 @@ import { Environment } from "./World";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Sound } from "./Sound";
-import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { MapObjectJSON } from '*/level.json';
+import { EndingATrigger } from './Endings';
 
 export enum WoodState {
     FREE = 0,
@@ -68,7 +68,7 @@ export class Wood extends PhysicsEntity {
         }
         if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
             this.scene.fire.feed(this);
-            this.scene.player.achieveMilestone(Milestone.THROWN_WOOD_INTO_FIRE);
+            this.scene.campaign.endingA.trigger(EndingATrigger.THROWN_WOOD_INTO_FIRE);
             Wood.successSound.play();
         }
     }

@@ -25,6 +25,7 @@ import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
 import { ControllerEvent } from './input/ControllerEvent';
+import { EndingATrigger } from './Endings';
 
 const groundColors = [
     "#806057",
@@ -69,28 +70,6 @@ const drowningThoughts = [
     { message: "Ieeh!", duration: 1000 },
     { message: "Argh!", duration: 1000 }
 ];
-
-export enum Milestone {
-    JUST_ARRIVED,
-    TALKED_TO_FIRE,
-    GOT_QUEST_FROM_FIRE,
-    TALKED_TO_TREE,
-    GOT_QUEST_FROM_TREE,
-    GOT_SEED,
-    PLANTED_SEED,
-    TALKED_TO_STONE,
-    GOT_STONE,
-    THROWN_STONE_INTO_WATER,
-    GOT_MULTIJUMP,
-    MADE_RAIN,
-    TREE_DROPPED_WOOD,
-    GOT_WOOD,
-    TALKED_TO_FIRE_WITH_WOOD,
-    THROWN_WOOD_INTO_FIRE,
-    APOCALYPSE_STARTED,
-    BEAT_FIRE,
-    BEAT_GAME
-}
 
 export enum Gender {
     FEMALE = 0,
@@ -151,7 +130,6 @@ export class Player extends PhysicsEntity {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
-    private milestone = Milestone.JUST_ARRIVED;
     private lastHint = Date.now();
     private flying = false;
     private gender = startingGender;
@@ -311,7 +289,7 @@ export class Player extends PhysicsEntity {
 
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
-                    this.achieveMilestone(Milestone.MADE_RAIN);
+                    this.scene.campaign.endingA.trigger(EndingATrigger.MADE_RAIN);
                 } else {
                     if (this.carrying instanceof Stone) {
                         if (this.canThrowStoneIntoWater()) {
@@ -847,15 +825,15 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            if (object instanceof Seed && this.milestone < Milestone.GOT_SEED) {
-                this.achieveMilestone(Milestone.GOT_SEED);
+            if (object instanceof Seed && this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_SEED) {
+                this.scene.campaign.endingA.trigger(EndingATrigger.GOT_SEED);
             }
-            if (object instanceof Wood && this.milestone < Milestone.GOT_WOOD) {
-                this.achieveMilestone(Milestone.GOT_WOOD);
+            if (object instanceof Wood && this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_WOOD) {
+                this.scene.campaign.endingA.trigger(EndingATrigger.GOT_WOOD);
                 this.scene.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
-            if (object instanceof Stone && this.milestone < Milestone.GOT_STONE) {
-                this.achieveMilestone(Milestone.GOT_STONE);
+            if (object instanceof Stone && this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_STONE) {
+                this.scene.campaign.endingA.trigger(EndingATrigger.GOT_STONE);
             }
             this.carrying = object;
             object.setFloating(false);
@@ -882,55 +860,48 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public achieveMilestone(milestone: Milestone): void {
-        this.milestone = Math.max(this.milestone, milestone);
-        this.lastHint = Date.now();
-    }
-
-    public getMilestone(): Milestone {
-        return this.milestone;
-    }
+    // this.lastHint = Date.now();
 
     public showHint(): void {
         if (this.playerConversation === null) {
-            switch (this.milestone) {
-                case Milestone.JUST_ARRIVED:
+            switch (this.scene.campaign.endingA.getHighestTriggerIndex()) {
+                case EndingATrigger.JUST_ARRIVED:
                     this.think("I should talk to someone.", 3000);
                     break;
-                case Milestone.TALKED_TO_FIRE:
+                case EndingATrigger.TALKED_TO_FIRE:
                     this.think("I think the fire needs my help", 3000);
                     break;
-                case Milestone.GOT_QUEST_FROM_FIRE:
+                case EndingATrigger.GOT_QUEST_FROM_FIRE:
                     this.think("The fire told me to visit the tree in the east", 3000);
                     break;
-                case Milestone.TALKED_TO_TREE:
+                case EndingATrigger.TALKED_TO_TREE:
                     this.think("Maybe I should talk to the tree again", 3000);
                     break;
-                case Milestone.GOT_QUEST_FROM_TREE:
+                case EndingATrigger.GOT_QUEST_FROM_TREE:
                     this.think("I need to pick up the seed by the tree", 3000);
                     break;
-                case Milestone.GOT_SEED:
+                case EndingATrigger.GOT_SEED:
                     this.think("I should check the mountains for a good place for the seed", 3000);
                     break;
-                case Milestone.PLANTED_SEED:
+                case EndingATrigger.PLANTED_SEED:
                     this.think("The seed needs something to grow, I think", 3000);
                     break;
-                case Milestone.TALKED_TO_STONE:
+                case EndingATrigger.TALKED_TO_STONE:
                     this.think("I should talk to that crazy stone again", 3000);
                     break;
-                case Milestone.GOT_STONE:
+                case EndingATrigger.GOT_STONE:
                     this.think("My arms get heavy. I really should throw that thing in the river", 3000);
                     break;
-                case Milestone.THROWN_STONE_INTO_WATER:
+                case EndingATrigger.THROWN_STONE_INTO_WATER:
                     this.think("There must be something interesting west of the river", 3000);
                     break;
-                case Milestone.GOT_MULTIJUMP:
+                case EndingATrigger.GOT_MULTIJUMP:
                     this.think("I should check the clouds. The seed still needs something to grow", 3000);
                     break;
-                case Milestone.MADE_RAIN:
+                case EndingATrigger.MADE_RAIN:
                     this.think("I should talk to that singing tree again", 3000);
                     break;
-                case Milestone.GOT_WOOD:
+                case EndingATrigger.GOT_WOOD:
                     this.think("Quick! The fire needs wood!", 3000);
                     break;
             }

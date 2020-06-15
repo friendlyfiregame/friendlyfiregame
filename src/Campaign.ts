@@ -19,8 +19,8 @@ import wing1 from '../assets/dialog/wing1.dialog.json';
 import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
-import { Milestone } from './Player';
 import { GameScene } from "./scenes/GameScene";
+import { EndingA, EndingATrigger, EndingB, EndingBTrigger } from './Endings';
 
 export type CampaignState = "start" | "finished";
 
@@ -46,11 +46,22 @@ export class Campaign {
     public onStatesChanged = new Signal<CampaignState[]>();
     public states: CampaignState[] = ["start"];
 
+    public readonly endingA = new EndingA(this, "Apocalypse");
+    public readonly endingB = new EndingB(this, "Corruption");
+
     constructor(public scene: GameScene) {
+        this.endingA.trigger(EndingATrigger.JUST_ARRIVED);
         setTimeout(() => {
             this.begin();
         });
     }
+
+    // public getMilestoneA(): MilestoneA {
+    //     return this.milestone;
+    // }
+    // public achieveMilestoneA(milestone: MilestoneA): void {
+    //     this.milestone = Math.max(this.milestone, milestone);
+    // }
 
     private begin() {
         // Setup initial NPC dialogs
@@ -129,7 +140,7 @@ export class Campaign {
                 }
                 break;
             case "crazyzoom":
-                this.scene.player.achieveMilestone(Milestone.APOCALYPSE_STARTED);
+                this.endingA.trigger(EndingATrigger.APOCALYPSE_STARTED);
                 const duration = 12;
                 this.scene.camera.focusOn(duration, this.scene.fire.x, this.scene.fire.y + 15, 8,
                     -2 * Math.PI, valueCurves.cubic).then(() => this.scene.beginApocalypse());
@@ -137,20 +148,20 @@ export class Campaign {
                 this.scene.fireFuryEndTime = this.scene.gameTime + duration + 8;
                 break;
             case  "talkedtofire":
-                this.scene.player.achieveMilestone(Milestone.TALKED_TO_FIRE);
+                this.endingA.trigger(EndingATrigger.TALKED_TO_FIRE);
                 break;
             case  "talkedtotree":
-                this.scene.player.achieveMilestone(Milestone.TALKED_TO_TREE);
+                this.endingA.trigger(EndingATrigger.TALKED_TO_TREE);
                 break;
             case "gotFireQuest":
-                this.scene.player.achieveMilestone(Milestone.GOT_QUEST_FROM_FIRE);
+                this.endingA.trigger(EndingATrigger.GOT_QUEST_FROM_FIRE);
                 this.scene.campaign.runAction("enable", null, ["tree", "tree1"]);
                 break;
             case "givebeard":
                 this.scene.player.setBeard(true);
                 break;
             case "endgame":
-                this.scene.player.achieveMilestone(Milestone.BEAT_GAME);
+                this.endingA.trigger(EndingATrigger.BEAT_GAME);
                 this.scene.fire.conversation = null;
                 setTimeout(() => {
                     this.scene.gameOver();
@@ -161,31 +172,31 @@ export class Campaign {
                 this.addState(params[0] as any);
                 break;
             case "doublejump":
-                this.scene.player.achieveMilestone(Milestone.GOT_QUEST_FROM_TREE);
+                this.endingA.trigger(EndingATrigger.GOT_QUEST_FROM_TREE);
                 this.scene.player.enableDoubleJump();
                 break;
             case "multijump":
-                this.scene.player.achieveMilestone(Milestone.GOT_MULTIJUMP);
+                this.endingA.trigger(EndingATrigger.GOT_MULTIJUMP);
                 this.scene.player.enableMultiJump();
                 break;
             case "spawnseed":
                 this.scene.tree.spawnSeed();
                 break;
             case "spawnwood":
-                this.scene.player.achieveMilestone(Milestone.TREE_DROPPED_WOOD);
+                this.endingA.trigger(EndingATrigger.TREE_DROPPED_WOOD);
                 this.scene.tree.spawnWood();
                 break;
             case "talkedToStone":
-                if (this.scene.player.getMilestone() === Milestone.PLANTED_SEED) {
-                    this.scene.player.achieveMilestone(Milestone.TALKED_TO_STONE);
+                if (this.endingA.getHighestTriggerIndex() === EndingATrigger.PLANTED_SEED) {
+                    this.endingA.trigger(EndingATrigger.TALKED_TO_STONE);
                 }
                 break;
             case "pickupstone":
                 this.scene.stone.pickUp();
                 break;
             case "talkedToFireWithWood":
-                if (this.scene.player.getMilestone() === Milestone.GOT_WOOD) {
-                    this.scene.player.achieveMilestone(Milestone.TALKED_TO_FIRE_WITH_WOOD);
+                if (this.endingA.getHighestTriggerIndex() === EndingATrigger.GOT_WOOD) {
+                    this.endingA.trigger(EndingATrigger.TALKED_TO_FIRE_WITH_WOOD);
                 }
                 break;
             case "dance":
@@ -195,6 +206,9 @@ export class Campaign {
                 break;
             case "togglegender":
                 this.scene.player.toggleGender();
+                break;
+            case "corruptFlameboy":
+                this.endingB.trigger(EndingBTrigger.FLAMEBOY_CORRUPTED);
                 break;
             case "enable":
                 const char = params[0], dialogName = params[1];

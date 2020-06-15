@@ -2,8 +2,8 @@ import { entity } from "./Entity";
 import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
-import { Milestone } from './Player';
 import { GameScene } from "./scenes/GameScene";
+import { EndingATrigger } from './Endings';
 
 @entity("wing")
 export class Wing extends NPC {
@@ -21,8 +21,8 @@ export class Wing extends NPC {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.player.getMilestone() >= Milestone.GOT_MULTIJUMP &&
-            this.scene.player.getMilestone() < Milestone.MADE_RAIN
+            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.GOT_MULTIJUMP &&
+            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.MADE_RAIN
         );
     }
 

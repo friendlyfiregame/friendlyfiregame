@@ -6,8 +6,8 @@ import { Seed } from "./Seed";
 import { Wood } from './Wood';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
-import { Milestone } from './Player';
 import { GameScene } from "./scenes/GameScene";
+import { EndingATrigger } from './Endings';
 
 @entity("tree")
 export class Tree extends NPC {
@@ -27,11 +27,11 @@ export class Tree extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.scene.player.getMilestone() >= Milestone.GOT_QUEST_FROM_FIRE &&
-            this.scene.player.getMilestone() < Milestone.GOT_QUEST_FROM_TREE
+            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.GOT_QUEST_FROM_FIRE &&
+            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_QUEST_FROM_TREE
         ) || (
-            this.scene.player.getMilestone() >= Milestone.MADE_RAIN &&
-            this.scene.player.getMilestone() < Milestone.TREE_DROPPED_WOOD
+            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.MADE_RAIN &&
+            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.TREE_DROPPED_WOOD
         );
     }
 

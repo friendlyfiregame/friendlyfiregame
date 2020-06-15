@@ -7,9 +7,9 @@ import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
 import { Wood } from "./Wood";
 import { asset } from "./Assets";
-import { Milestone } from './Player';
 import { GameScene } from "./scenes/GameScene";
 import { FriendlyFire } from "./FriendlyFire";
+import { EndingATrigger } from './Endings';
 
 // const fireColors = [
 //     "#603015",
@@ -92,13 +92,13 @@ export class Fire extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.scene.player.getMilestone() === Milestone.JUST_ARRIVED ||
+            this.scene.campaign.endingA.getHighestTriggerIndex() === EndingATrigger.JUST_ARRIVED ||
             (
-                this.scene.player.getMilestone() >= Milestone.GOT_WOOD &&
-                this.scene.player.getMilestone() < Milestone.TALKED_TO_FIRE_WITH_WOOD
+                this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.GOT_WOOD &&
+                this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.TALKED_TO_FIRE_WITH_WOOD
             ) ||
-            this.scene.player.getMilestone() === Milestone.THROWN_WOOD_INTO_FIRE ||
-            this.scene.player.getMilestone() === Milestone.BEAT_FIRE
+            this.scene.campaign.endingA.getHighestTriggerIndex() === EndingATrigger.THROWN_WOOD_INTO_FIRE ||
+            this.scene.campaign.endingA.getHighestTriggerIndex() === EndingATrigger.BEAT_FIRE
         );
     }
 
