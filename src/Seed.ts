@@ -10,7 +10,7 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { Conversation } from './Conversation';
 import { MapObjectJSON } from '*/level.json';
-import { EndingATrigger } from './Endings';
+import { QuestATrigger, QuestKey } from './Quests';
 
 export enum SeedState {
     FREE = 0,
@@ -97,7 +97,7 @@ export class Seed extends NPC {
                 if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
 
                 this.state = SeedState.PLANTED;
-                this.scene.campaign.endingA.trigger(EndingATrigger.PLANTED_SEED);
+                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
                 this.setFloating(true);
                 this.x = seedPosition.x;
                 this.y = seedPosition.y;

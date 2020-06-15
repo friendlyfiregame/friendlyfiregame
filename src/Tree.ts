@@ -7,7 +7,7 @@ import { Wood } from './Wood';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { EndingATrigger } from './Endings';
+import { QuestATrigger, QuestKey } from './Quests';
 
 @entity("tree")
 export class Tree extends NPC {
@@ -27,11 +27,11 @@ export class Tree extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.GOT_QUEST_FROM_FIRE &&
-            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_QUEST_FROM_TREE
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE &&
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
         ) || (
-            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.MADE_RAIN &&
-            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.TREE_DROPPED_WOOD
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.MADE_RAIN &&
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TREE_DROPPED_WOOD
         );
     }
 

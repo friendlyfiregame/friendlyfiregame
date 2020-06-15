@@ -9,7 +9,7 @@ import { Wood } from "./Wood";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { FriendlyFire } from "./FriendlyFire";
-import { EndingATrigger } from './Endings';
+import { QuestATrigger, QuestKey } from './Quests';
 
 // const fireColors = [
 //     "#603015",
@@ -92,13 +92,13 @@ export class Fire extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.endingA.getHighestTriggerIndex() === EndingATrigger.JUST_ARRIVED ||
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
             (
-                this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.GOT_WOOD &&
-                this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.TALKED_TO_FIRE_WITH_WOOD
+                this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_WOOD &&
+                this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TALKED_TO_FIRE_WITH_WOOD
             ) ||
-            this.scene.campaign.endingA.getHighestTriggerIndex() === EndingATrigger.THROWN_WOOD_INTO_FIRE ||
-            this.scene.campaign.endingA.getHighestTriggerIndex() === EndingATrigger.BEAT_FIRE
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.THROWN_WOOD_INTO_FIRE ||
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.BEAT_FIRE
         );
     }
 

@@ -1,6 +1,11 @@
 import { Campaign } from './Campaign';
 
-export enum EndingATrigger {
+export enum QuestKey {
+  A = 'questA',
+  B = 'questB'
+}
+
+export enum QuestATrigger {
   JUST_ARRIVED,
   TALKED_TO_FIRE,
   GOT_QUEST_FROM_FIRE,
@@ -22,7 +27,7 @@ export enum EndingATrigger {
   BEAT_GAME
 }
 
-export enum EndingBTrigger {
+export enum QuestBTrigger {
   FLAMEBOY_CORRUPTED,
   WING_CORRUPTED,
   TREE_CORRUPTED,
@@ -37,14 +42,17 @@ type TriggerDefinition = {
   isTriggered: boolean;
 }
 
-export abstract class Ending {
-  public name: string;
-  public campaign: Campaign;
-  protected triggers: TriggerDefinition[] = []
+export abstract class Quest {
+  public readonly key: QuestKey;
+  public readonly campaign: Campaign;
+  protected readonly triggers: TriggerDefinition[] = [];
+  public readonly title: string;
+  private finished = false;
 
-  public constructor(campaign: Campaign, name: string, triggerIndices: number[]) {
-    this.name = name;
+  public constructor(key: QuestKey, campaign: Campaign, title: string, triggerIndices: number[]) {
+    this.key = key;
     this.campaign = campaign;
+    this.title = title;
     this.triggers = triggerIndices.map(index => ({
       index,
       isTriggered: false
@@ -78,24 +86,39 @@ export abstract class Ending {
   public getHighestTriggerIndex (): number {
     return Math.max(...this.triggers.filter(t => t.isTriggered).map(t => t.index), -1);
   }
-}
 
-/**
- * Standard Ending A. Follow the questline and beat the fire at the end (Apocalypse)
- */
-export class EndingA extends Ending {
-  public constructor (campaign: Campaign, name: string) {
-    const triggerIndices = Object.values(EndingATrigger).filter((i):i is number => typeof i === 'number')
-    super(campaign, name, triggerIndices);
+  public finish() {
+    this.finished = true;
+  }
+  public isFinished(): boolean {
+    return this.finished;
   }
 }
 
 /**
- * Ending B. Meet cave man and corrupt all npcs to end game ()
+ * Standard Ending A. Follow the questline and beat the fire at the end
  */
-export class EndingB extends Ending {
-  public constructor (campaign: Campaign, name: string) {
-    const triggerIndices = Object.values(EndingBTrigger).filter((i):i is number => typeof i === 'number')
-    super(campaign, name, triggerIndices);
+export class QuestA extends Quest {
+  public constructor (campaign: Campaign) {
+    super(
+      QuestKey.A,
+      campaign,
+      '[A]pocalypse not now',
+      Object.values(QuestATrigger).filter((i):i is number => typeof i === 'number')
+    );
+  }
+}
+
+/**
+ * Ending B. Meet cave man and corrupt all npcs to end game
+ */
+export class QuestB extends Quest {
+  public constructor (campaign: Campaign) {
+    super(
+      QuestKey.A,
+      campaign,
+      'Stuck [B]etween worlds',
+      Object.values(QuestBTrigger).filter((i):i is number => typeof i === 'number')
+    );
   }
 }

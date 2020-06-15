@@ -3,7 +3,7 @@ import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { EndingATrigger } from './Endings';
+import { QuestATrigger, QuestKey } from './Quests';
 
 @entity("wing")
 export class Wing extends NPC {
@@ -21,8 +21,8 @@ export class Wing extends NPC {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.GOT_MULTIJUMP &&
-            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.MADE_RAIN
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_MULTIJUMP &&
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.MADE_RAIN
         );
     }
 

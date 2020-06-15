@@ -9,7 +9,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
 import { MapObjectJSON } from '*/level.json';
-import { EndingATrigger } from './Endings';
+import { QuestATrigger, QuestKey } from './Quests';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -42,8 +42,8 @@ export class Stone extends NPC implements CollidableGameObject {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.PLANTED_SEED &&
-            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_STONE
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
         );
     }
 
@@ -68,7 +68,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
-                this.scene.campaign.endingA.trigger(EndingATrigger.THROWN_STONE_INTO_WATER);
+                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_STONE_INTO_WATER);
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);

@@ -20,7 +20,7 @@ import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
 import { GameScene } from "./scenes/GameScene";
-import { EndingA, EndingATrigger, EndingB, EndingBTrigger } from './Endings';
+import { QuestA, QuestB, QuestKey, Quest, QuestATrigger, QuestBTrigger } from './Quests';
 
 export type CampaignState = "start" | "finished";
 
@@ -45,23 +45,23 @@ const allDialogs: Record<string, DialogJSON> = {
 export class Campaign {
     public onStatesChanged = new Signal<CampaignState[]>();
     public states: CampaignState[] = ["start"];
-
-    public readonly endingA = new EndingA(this, "Apocalypse");
-    public readonly endingB = new EndingB(this, "Corruption");
+    public readonly quests = [
+        new QuestA(this),
+        new QuestB(this)
+    ];
 
     constructor(public scene: GameScene) {
-        this.endingA.trigger(EndingATrigger.JUST_ARRIVED);
+        this.getQuest(QuestKey.A).trigger(QuestATrigger.JUST_ARRIVED);
         setTimeout(() => {
             this.begin();
         });
     }
 
-    // public getMilestoneA(): MilestoneA {
-    //     return this.milestone;
-    // }
-    // public achieveMilestoneA(milestone: MilestoneA): void {
-    //     this.milestone = Math.max(this.milestone, milestone);
-    // }
+    public getQuest(key: QuestKey): Quest {
+        const ending = this.quests.find(ending => ending.key === key);
+        if (!ending) throw new Error(`Cannot find quest with key ${key}`);
+        return ending;
+    }
 
     private begin() {
         // Setup initial NPC dialogs
@@ -140,7 +140,7 @@ export class Campaign {
                 }
                 break;
             case "crazyzoom":
-                this.endingA.trigger(EndingATrigger.APOCALYPSE_STARTED);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                 const duration = 12;
                 this.scene.camera.focusOn(duration, this.scene.fire.x, this.scene.fire.y + 15, 8,
                     -2 * Math.PI, valueCurves.cubic).then(() => this.scene.beginApocalypse());
@@ -148,20 +148,20 @@ export class Campaign {
                 this.scene.fireFuryEndTime = this.scene.gameTime + duration + 8;
                 break;
             case  "talkedtofire":
-                this.endingA.trigger(EndingATrigger.TALKED_TO_FIRE);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
                 break;
             case  "talkedtotree":
-                this.endingA.trigger(EndingATrigger.TALKED_TO_TREE);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
                 break;
             case "gotFireQuest":
-                this.endingA.trigger(EndingATrigger.GOT_QUEST_FROM_FIRE);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_FIRE);
                 this.scene.campaign.runAction("enable", null, ["tree", "tree1"]);
                 break;
             case "givebeard":
                 this.scene.player.setBeard(true);
                 break;
             case "endgame":
-                this.endingA.trigger(EndingATrigger.BEAT_GAME);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                 this.scene.fire.conversation = null;
                 setTimeout(() => {
                     this.scene.gameOver();
@@ -172,31 +172,31 @@ export class Campaign {
                 this.addState(params[0] as any);
                 break;
             case "doublejump":
-                this.endingA.trigger(EndingATrigger.GOT_QUEST_FROM_TREE);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
                 this.scene.player.enableDoubleJump();
                 break;
             case "multijump":
-                this.endingA.trigger(EndingATrigger.GOT_MULTIJUMP);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
                 this.scene.player.enableMultiJump();
                 break;
             case "spawnseed":
                 this.scene.tree.spawnSeed();
                 break;
             case "spawnwood":
-                this.endingA.trigger(EndingATrigger.TREE_DROPPED_WOOD);
+                this.getQuest(QuestKey.A).trigger(QuestATrigger.TREE_DROPPED_WOOD);
                 this.scene.tree.spawnWood();
                 break;
             case "talkedToStone":
-                if (this.endingA.getHighestTriggerIndex() === EndingATrigger.PLANTED_SEED) {
-                    this.endingA.trigger(EndingATrigger.TALKED_TO_STONE);
+                if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_STONE);
                 }
                 break;
             case "pickupstone":
                 this.scene.stone.pickUp();
                 break;
             case "talkedToFireWithWood":
-                if (this.endingA.getHighestTriggerIndex() === EndingATrigger.GOT_WOOD) {
-                    this.endingA.trigger(EndingATrigger.TALKED_TO_FIRE_WITH_WOOD);
+                if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE_WITH_WOOD);
                 }
                 break;
             case "dance":
@@ -208,7 +208,7 @@ export class Campaign {
                 this.scene.player.toggleGender();
                 break;
             case "corruptFlameboy":
-                this.endingB.trigger(EndingBTrigger.FLAMEBOY_CORRUPTED);
+                this.getQuest(QuestKey.B).trigger(QuestBTrigger.FLAMEBOY_CORRUPTED);
                 break;
             case "enable":
                 const char = params[0], dialogName = params[1];

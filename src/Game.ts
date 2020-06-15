@@ -6,6 +6,7 @@ import { Keyboard } from "./input/Keyboard";
 import { GamepadInput } from "./input/GamepadInput";
 import { Scenes } from "./Scenes";
 import { Assets } from "./Assets";
+import { Campaign } from './Campaign';
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump
@@ -26,6 +27,7 @@ export abstract class Game {
     public backgroundColor: string = "black";
 
     public canvas: HTMLCanvasElement;
+    public campaign!: Campaign;
     private readonly ctx: CanvasRenderingContext2D;
     private readonly gameLoopCallback = this.gameLoop.bind(this);
     private gameLoopId: number | null = null;

@@ -25,7 +25,7 @@ import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
 import { ControllerEvent } from './input/ControllerEvent';
-import { EndingATrigger } from './Endings';
+import { QuestATrigger, QuestKey } from './Quests';
 
 const groundColors = [
     "#806057",
@@ -289,7 +289,7 @@ export class Player extends PhysicsEntity {
 
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
-                    this.scene.campaign.endingA.trigger(EndingATrigger.MADE_RAIN);
+                    this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
                 } else {
                     if (this.carrying instanceof Stone) {
                         if (this.canThrowStoneIntoWater()) {
@@ -825,15 +825,15 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            if (object instanceof Seed && this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_SEED) {
-                this.scene.campaign.endingA.trigger(EndingATrigger.GOT_SEED);
+            if (object instanceof Seed && this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
+                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }
-            if (object instanceof Wood && this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_WOOD) {
-                this.scene.campaign.endingA.trigger(EndingATrigger.GOT_WOOD);
+            if (object instanceof Wood && this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD) {
+                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_WOOD);
                 this.scene.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
-            if (object instanceof Stone && this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_STONE) {
-                this.scene.campaign.endingA.trigger(EndingATrigger.GOT_STONE);
+            if (object instanceof Stone && this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE) {
+                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_STONE);
             }
             this.carrying = object;
             object.setFloating(false);
@@ -864,44 +864,44 @@ export class Player extends PhysicsEntity {
 
     public showHint(): void {
         if (this.playerConversation === null) {
-            switch (this.scene.campaign.endingA.getHighestTriggerIndex()) {
-                case EndingATrigger.JUST_ARRIVED:
+            switch (this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex()) {
+                case QuestATrigger.JUST_ARRIVED:
                     this.think("I should talk to someone.", 3000);
                     break;
-                case EndingATrigger.TALKED_TO_FIRE:
+                case QuestATrigger.TALKED_TO_FIRE:
                     this.think("I think the fire needs my help", 3000);
                     break;
-                case EndingATrigger.GOT_QUEST_FROM_FIRE:
+                case QuestATrigger.GOT_QUEST_FROM_FIRE:
                     this.think("The fire told me to visit the tree in the east", 3000);
                     break;
-                case EndingATrigger.TALKED_TO_TREE:
+                case QuestATrigger.TALKED_TO_TREE:
                     this.think("Maybe I should talk to the tree again", 3000);
                     break;
-                case EndingATrigger.GOT_QUEST_FROM_TREE:
+                case QuestATrigger.GOT_QUEST_FROM_TREE:
                     this.think("I need to pick up the seed by the tree", 3000);
                     break;
-                case EndingATrigger.GOT_SEED:
+                case QuestATrigger.GOT_SEED:
                     this.think("I should check the mountains for a good place for the seed", 3000);
                     break;
-                case EndingATrigger.PLANTED_SEED:
+                case QuestATrigger.PLANTED_SEED:
                     this.think("The seed needs something to grow, I think", 3000);
                     break;
-                case EndingATrigger.TALKED_TO_STONE:
+                case QuestATrigger.TALKED_TO_STONE:
                     this.think("I should talk to that crazy stone again", 3000);
                     break;
-                case EndingATrigger.GOT_STONE:
+                case QuestATrigger.GOT_STONE:
                     this.think("My arms get heavy. I really should throw that thing in the river", 3000);
                     break;
-                case EndingATrigger.THROWN_STONE_INTO_WATER:
+                case QuestATrigger.THROWN_STONE_INTO_WATER:
                     this.think("There must be something interesting west of the river", 3000);
                     break;
-                case EndingATrigger.GOT_MULTIJUMP:
+                case QuestATrigger.GOT_MULTIJUMP:
                     this.think("I should check the clouds. The seed still needs something to grow", 3000);
                     break;
-                case EndingATrigger.MADE_RAIN:
+                case QuestATrigger.MADE_RAIN:
                     this.think("I should talk to that singing tree again", 3000);
                     break;
-                case EndingATrigger.GOT_WOOD:
+                case QuestATrigger.GOT_WOOD:
                     this.think("Quick! The fire needs wood!", 3000);
                     break;
             }

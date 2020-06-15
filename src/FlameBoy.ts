@@ -4,7 +4,7 @@ import { Face, EyeType, FaceModes } from './Face';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { EndingATrigger, EndingBTrigger } from './Endings';
+import { QuestATrigger, QuestBTrigger, QuestKey } from './Quests';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -20,13 +20,13 @@ export class FlameBoy extends NPC {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.endingA.getHighestTriggerIndex() >= EndingATrigger.THROWN_STONE_INTO_WATER &&
-            this.scene.campaign.endingA.getHighestTriggerIndex() < EndingATrigger.GOT_MULTIJUMP
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.THROWN_STONE_INTO_WATER &&
+            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_MULTIJUMP
         );
     }
 
     private isCorrupted (): boolean {
-        return this.scene.campaign.endingB.isTriggered(EndingBTrigger.FLAMEBOY_CORRUPTED);
+        return this.scene.campaign.getQuest(QuestKey.B).isTriggered(QuestBTrigger.FLAMEBOY_CORRUPTED);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
