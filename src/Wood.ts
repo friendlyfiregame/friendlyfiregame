@@ -68,7 +68,7 @@ export class Wood extends PhysicsEntity {
         }
         if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
             this.scene.fire.feed(this);
-            this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_WOOD_INTO_FIRE);
+            this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_WOOD_INTO_FIRE);
             Wood.successSound.play();
         }
     }

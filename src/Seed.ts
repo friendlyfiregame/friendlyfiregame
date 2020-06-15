@@ -74,8 +74,8 @@ export class Seed extends NPC {
             this.state = SeedState.GROWN;
             this.scene.seed = this;
             Conversation.setGlobal("seedgrown", "true");
-            this.scene.campaign.runAction("enable", null, ["tree", "tree2"]);
-            this.scene.campaign.runAction("enable", null, ["seed", "seed1"]);
+            this.scene.game.campaign.runAction("enable", null, ["tree", "tree2"]);
+            this.scene.game.campaign.runAction("enable", null, ["seed", "seed1"]);
         }
     }
 
@@ -97,7 +97,7 @@ export class Seed extends NPC {
                 if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
 
                 this.state = SeedState.PLANTED;
-                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
                 this.setFloating(true);
                 this.x = seedPosition.x;
                 this.y = seedPosition.y;

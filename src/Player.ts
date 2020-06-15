@@ -289,7 +289,7 @@ export class Player extends PhysicsEntity {
 
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
-                    this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
+                    this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
                 } else {
                     if (this.carrying instanceof Stone) {
                         if (this.canThrowStoneIntoWater()) {
@@ -825,15 +825,15 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            if (object instanceof Seed && this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
-                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
+            if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }
-            if (object instanceof Wood && this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD) {
-                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_WOOD);
-                this.scene.campaign.runAction("enable", null, ["fire", "fire1"]);
+            if (object instanceof Wood && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_WOOD);
+                this.scene.game.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
-            if (object instanceof Stone && this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE) {
-                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_STONE);
+            if (object instanceof Stone && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_STONE);
             }
             this.carrying = object;
             object.setFloating(false);
@@ -864,7 +864,7 @@ export class Player extends PhysicsEntity {
 
     public showHint(): void {
         if (this.playerConversation === null) {
-            switch (this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex()) {
+            switch (this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex()) {
                 case QuestATrigger.JUST_ARRIVED:
                     this.think("I should talk to someone.", 3000);
                     break;

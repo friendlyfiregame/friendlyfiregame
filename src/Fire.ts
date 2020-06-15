@@ -92,13 +92,13 @@ export class Fire extends NPC {
 
     public showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
             (
-                this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_WOOD &&
-                this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TALKED_TO_FIRE_WITH_WOOD
+                this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_WOOD &&
+                this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TALKED_TO_FIRE_WITH_WOOD
             ) ||
-            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.THROWN_WOOD_INTO_FIRE ||
-            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.BEAT_FIRE
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.THROWN_WOOD_INTO_FIRE ||
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.BEAT_FIRE
         );
     }
 
@@ -180,7 +180,7 @@ export class Fire extends NPC {
         }, (line[1] as number) * 1000));
         // Give fire new dialog
         setTimeout(() => {
-            this.scene.campaign.runAction("enable", null, ["fire", "fire2"]);
+            this.scene.game.campaign.runAction("enable", null, ["fire", "fire2"]);
         }, 13500);
     }
 }

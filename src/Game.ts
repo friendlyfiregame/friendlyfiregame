@@ -35,6 +35,7 @@ export abstract class Game {
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
     public constructor(public readonly width: number = 480, public readonly height: number = 270) {
+        this.campaign = new Campaign(this);
         const canvas = this.canvas = createCanvas(width, height);
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
         // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.

@@ -1,10 +1,8 @@
 import { Scene } from "../Scene";
 import { FriendlyFire } from "../FriendlyFire";
-import { CreditsScene } from "./CreditsScene";
 import { Camera } from "../Camera";
 import { World } from "../World";
 import { MapInfo } from "../MapInfo";
-import { Campaign } from "../Campaign";
 import { createEntity } from "../Entity";
 import { Player } from "../Player";
 import { Fire } from "../Fire";
@@ -26,7 +24,8 @@ import { MapObjectJSON } from '*/level.json';
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
-import { EndingATrigger } from '../Endings';
+import { QuestATrigger, QuestKey } from '../Quests';
+import { EndScene } from './EndScene';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -63,7 +62,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public spider!: Spider;
     public caveman!: Caveman;
     public campfire!: Campfire;
-    public campaign!: Campaign;
+    // public campaign!: Campaign;
     public particles!: Particles;
     public fire!: Fire;
     public fireFuryEndTime = 0;
@@ -81,7 +80,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         this.mapInfo = new MapInfo();
-        this.campaign = new Campaign(this);
+        // this.campaign = new Campaign(this);
         this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
@@ -105,6 +104,8 @@ export class GameScene extends Scene<FriendlyFire> {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
+
+        this.game.campaign.begin(this);
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
@@ -160,7 +161,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public gameOver() {
-        this.game.scenes.setScene(CreditsScene);
+        this.game.scenes.setScene(EndScene);
     }
 
     public isActive(): boolean {
@@ -244,8 +245,8 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.apocalypseFactor = 0;
                 this.apocalypse = false;
                 this.fire.angry = false;
-                this.campaign.endingA.trigger(EndingATrigger.BEAT_FIRE);
-                this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
+                this.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_FIRE);
+                this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
                 FriendlyFire.music[1].stop()
             }

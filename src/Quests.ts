@@ -115,7 +115,7 @@ export class QuestA extends Quest {
 export class QuestB extends Quest {
   public constructor (campaign: Campaign) {
     super(
-      QuestKey.A,
+      QuestKey.B,
       campaign,
       'Stuck [B]etween worlds',
       Object.values(QuestBTrigger).filter((i):i is number => typeof i === 'number')

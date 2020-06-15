@@ -21,6 +21,7 @@ import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
 import { GameScene } from "./scenes/GameScene";
 import { QuestA, QuestB, QuestKey, Quest, QuestATrigger, QuestBTrigger } from './Quests';
+import { Game } from './Game';
 
 export type CampaignState = "start" | "finished";
 
@@ -49,13 +50,9 @@ export class Campaign {
         new QuestA(this),
         new QuestB(this)
     ];
+    public gameScene?: GameScene | undefined;
 
-    constructor(public scene: GameScene) {
-        this.getQuest(QuestKey.A).trigger(QuestATrigger.JUST_ARRIVED);
-        setTimeout(() => {
-            this.begin();
-        });
-    }
+    constructor(public game: Game) {}
 
     public getQuest(key: QuestKey): Quest {
         const ending = this.quests.find(ending => ending.key === key);
@@ -63,7 +60,14 @@ export class Campaign {
         return ending;
     }
 
-    private begin() {
+    /**
+     * Init campaign. Assign Game Scene and enable all initial dialog trees
+     * @param gameScene Game Scene
+     */
+    public begin(gameScene: GameScene) {;
+        this.gameScene = gameScene;
+        this.getQuest(QuestKey.A).trigger(QuestATrigger.JUST_ARRIVED);
+
         // Setup initial NPC dialogs
         this.runAction("enable", null, ["caveman", "caveman"]);
         this.runAction("enable", null, ["fire", "fire0"]);
@@ -97,154 +101,162 @@ export class Campaign {
         }
     }
 
+    /**
+     * Run action is only allowed when active scene is GameScene
+     * @param action - action string
+     * @param npc    - targeted npc
+     * @param params - params consisting of string array
+     */
     public runAction(action: string, npc?: NPC | null, params: string[] = []): void {
-        switch(action) {
-            case "angry":
-                npc?.face?.setMode(FaceModes.ANGRY);
-                break;
-            case "neutral":
-                npc?.face?.setMode(FaceModes.NEUTRAL);
-                break;
-            case "bored":
-                npc?.face?.setMode(FaceModes.BORED);
-                break;
-            case "amused":
-                npc?.face?.setMode(FaceModes.AMUSED);
-                break;
-            case "sad":
-                npc?.face?.setMode(FaceModes.SAD);
-                break;
-
-            case "zoomin":
-                this.scene.camera.zoom += 1
-                break;
-            case "zoomout":
-                this.scene.camera.zoom -= 1
-                break;
-            case "treezoom":
-                const forestPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'forest');
-                if (forestPointer) {
-                    this.scene.camera.focusOn(8, forestPointer.x, forestPointer.y, 1, 0, valueCurves.cos(0.35));
-                }
-                break;
-            case "mountainzoom":
-                const mountainPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'mountain');
-                if (mountainPointer) {
-                    this.scene.camera.focusOn(8, mountainPointer.x, mountainPointer.y, 1, 0, valueCurves.cos(0.35));
-                }
-                break;
-            case "riverzoom":
-                const riverPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'river');
-                if (riverPointer) {
-                    this.scene.camera.focusOn(8, riverPointer.x, riverPointer.y, 1, 0, valueCurves.cos(0.35));
-                }
-                break;
-            case "crazyzoom":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
-                const duration = 12;
-                this.scene.camera.focusOn(duration, this.scene.fire.x, this.scene.fire.y + 15, 8,
-                    -2 * Math.PI, valueCurves.cubic).then(() => this.scene.beginApocalypse());
-                this.scene.fire.conversation = null;
-                this.scene.fireFuryEndTime = this.scene.gameTime + duration + 8;
-                break;
-            case  "talkedtofire":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
-                break;
-            case  "talkedtotree":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
-                break;
-            case "gotFireQuest":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_FIRE);
-                this.scene.campaign.runAction("enable", null, ["tree", "tree1"]);
-                break;
-            case "givebeard":
-                this.scene.player.setBeard(true);
-                break;
-            case "endgame":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
-                this.scene.fire.conversation = null;
-                setTimeout(() => {
-                    this.scene.gameOver();
-                }, 2000);
-                break;
-
-            case "game":
-                this.addState(params[0] as any);
-                break;
-            case "doublejump":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
-                this.scene.player.enableDoubleJump();
-                break;
-            case "multijump":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
-                this.scene.player.enableMultiJump();
-                break;
-            case "spawnseed":
-                this.scene.tree.spawnSeed();
-                break;
-            case "spawnwood":
-                this.getQuest(QuestKey.A).trigger(QuestATrigger.TREE_DROPPED_WOOD);
-                this.scene.tree.spawnWood();
-                break;
-            case "talkedToStone":
-                if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {
-                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_STONE);
-                }
-                break;
-            case "pickupstone":
-                this.scene.stone.pickUp();
-                break;
-            case "talkedToFireWithWood":
-                if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
-                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE_WITH_WOOD);
-                }
-                break;
-            case "dance":
-                setTimeout(() => {
-                    this.scene.player.startDance(+params[0] || 1);
-                }, 500);
-                break;
-            case "togglegender":
-                this.scene.player.toggleGender();
-                break;
-            case "corruptFlameboy":
-                this.getQuest(QuestKey.B).trigger(QuestBTrigger.FLAMEBOY_CORRUPTED);
-                break;
-            case "enable":
-                const char = params[0], dialogName = params[1];
-                const npcMap: Record<string, NPC> = {
-                    "fire": this.scene.fire,
-                    "stone": this.scene.stone,
-                    "tree": this.scene.tree,
-                    "seed": this.scene.seed,
-                    "flameboy": this.scene.flameboy,
-                    "wing": this.scene.wing,
-                    "spider": this.scene.spider,
-                    "caveman": this.scene.caveman
-                };
-                const targetNpc = npcMap[char];
-                const dialog = allDialogs[dialogName];
-                if (targetNpc && dialog) {
-                    targetNpc.conversation = new Conversation(dialog, targetNpc);
-                }
-                break;
-            case "disable":
-                const char1 = params[0];
-                const npcMap1: Record<string, NPC> = {
-                    "fire": this.scene.fire,
-                    "stone": this.scene.stone,
-                    "tree": this.scene.tree,
-                    "seed": this.scene.seed,
-                    "flameboy": this.scene.flameboy,
-                    "wing": this.scene.wing,
-                    "spider": this.scene.spider,
-                    "caveman": this.scene.caveman
-                };
-                const targetNpc1 = npcMap1[char1];
-                if (targetNpc1) {
-                    targetNpc1.conversation = null;
-                }
-                break;
+        if (this.gameScene) {
+            switch(action) {
+                case "angry":
+                    npc?.face?.setMode(FaceModes.ANGRY);
+                    break;
+                case "neutral":
+                    npc?.face?.setMode(FaceModes.NEUTRAL);
+                    break;
+                case "bored":
+                    npc?.face?.setMode(FaceModes.BORED);
+                    break;
+                case "amused":
+                    npc?.face?.setMode(FaceModes.AMUSED);
+                    break;
+                case "sad":
+                    npc?.face?.setMode(FaceModes.SAD);
+                    break;
+    
+                case "zoomin":
+                    this.gameScene.camera.zoom += 1
+                    break;
+                case "zoomout":
+                    this.gameScene.camera.zoom -= 1
+                    break;
+                case "treezoom":
+                    const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'forest');
+                    if (forestPointer) {
+                        this.gameScene.camera.focusOn(8, forestPointer.x, forestPointer.y, 1, 0, valueCurves.cos(0.35));
+                    }
+                    break;
+                case "mountainzoom":
+                    const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'mountain');
+                    if (mountainPointer) {
+                        this.gameScene.camera.focusOn(8, mountainPointer.x, mountainPointer.y, 1, 0, valueCurves.cos(0.35));
+                    }
+                    break;
+                case "riverzoom":
+                    const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'river');
+                    if (riverPointer) {
+                        this.gameScene.camera.focusOn(8, riverPointer.x, riverPointer.y, 1, 0, valueCurves.cos(0.35));
+                    }
+                    break;
+                case "crazyzoom":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
+                    const duration = 12;
+                    this.gameScene.camera.focusOn(duration, this.gameScene.fire.x, this.gameScene.fire.y + 15, 8,
+                        -2 * Math.PI, valueCurves.cubic).then(() => this.gameScene!.beginApocalypse());
+                        this.gameScene.fire.conversation = null;
+                        this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
+                    break;
+                case  "talkedtofire":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
+                    break;
+                case  "talkedtotree":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
+                    break;
+                case "gotFireQuest":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_FIRE);
+                    this.runAction("enable", null, ["tree", "tree1"]);
+                    break;
+                case "givebeard":
+                    this.gameScene.player.setBeard(true);
+                    break;
+                case "endgame":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
+                    this.gameScene.fire.conversation = null;
+                    setTimeout(() => {
+                        this.gameScene!.gameOver();
+                    }, 2000);
+                    break;
+    
+                case "game":
+                    this.addState(params[0] as any);
+                    break;
+                case "doublejump":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
+                    this.gameScene.player.enableDoubleJump();
+                    break;
+                case "multijump":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
+                    this.gameScene.player.enableMultiJump();
+                    break;
+                case "spawnseed":
+                    this.gameScene.tree.spawnSeed();
+                    break;
+                case "spawnwood":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.TREE_DROPPED_WOOD);
+                    this.gameScene.tree.spawnWood();
+                    break;
+                case "talkedToStone":
+                    if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {
+                        this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_STONE);
+                    }
+                    break;
+                case "pickupstone":
+                    this.gameScene.stone.pickUp();
+                    break;
+                case "talkedToFireWithWood":
+                    if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
+                        this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE_WITH_WOOD);
+                    }
+                    break;
+                case "dance":
+                    setTimeout(() => {
+                        this.gameScene!.player.startDance(+params[0] || 1);
+                    }, 500);
+                    break;
+                case "togglegender":
+                    this.gameScene.player.toggleGender();
+                    break;
+                case "corruptFlameboy":
+                    this.getQuest(QuestKey.B).trigger(QuestBTrigger.FLAMEBOY_CORRUPTED);
+                    break;
+                case "enable":
+                    const char = params[0], dialogName = params[1];
+                    const npcMap: Record<string, NPC> = {
+                        "fire": this.gameScene.fire,
+                        "stone": this.gameScene.stone,
+                        "tree": this.gameScene.tree,
+                        "seed": this.gameScene.seed,
+                        "flameboy": this.gameScene.flameboy,
+                        "wing": this.gameScene.wing,
+                        "spider": this.gameScene.spider,
+                        "caveman": this.gameScene.caveman
+                    };
+                    const targetNpc = npcMap[char];
+                    const dialog = allDialogs[dialogName];
+                    if (targetNpc && dialog) {
+                        targetNpc.conversation = new Conversation(dialog, targetNpc);
+                    }
+                    break;
+                case "disable":
+                    const char1 = params[0];
+                    const npcMap1: Record<string, NPC> = {
+                        "fire": this.gameScene.fire,
+                        "stone": this.gameScene.stone,
+                        "tree": this.gameScene.tree,
+                        "seed": this.gameScene.seed,
+                        "flameboy": this.gameScene.flameboy,
+                        "wing": this.gameScene.wing,
+                        "spider": this.gameScene.spider,
+                        "caveman": this.gameScene.caveman
+                    };
+                    const targetNpc1 = npcMap1[char1];
+                    if (targetNpc1) {
+                        targetNpc1.conversation = null;
+                    }
+                    break;
+            }
         }
     }
 }

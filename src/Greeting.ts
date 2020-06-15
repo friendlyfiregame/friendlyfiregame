@@ -24,7 +24,7 @@ export class Greeting implements GameObject {
     }
 
     public get campaign(): Campaign {
-        return this.scene.campaign;
+        return this.scene.game.campaign;
     }
 
     constructor(private scene: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {

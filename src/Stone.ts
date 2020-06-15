@@ -42,8 +42,8 @@ export class Stone extends NPC implements CollidableGameObject {
 
     private showDialoguePrompt (): boolean {
         return (
-            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
-            this.scene.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
         );
     }
 
@@ -68,14 +68,14 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
-                this.scene.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_STONE_INTO_WATER);
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_STONE_INTO_WATER);
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
                 this.y = this.floatingPosition.y;
                 Stone.successSound.play();
-                this.scene.campaign.runAction("enable", null, ["stone", "stone2"]);
-                this.scene.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
+                this.scene.game.campaign.runAction("enable", null, ["stone", "stone2"]);
+                this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {
             const diffX = this.floatingPosition.x - this.x;
