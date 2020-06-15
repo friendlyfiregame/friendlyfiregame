@@ -8,11 +8,44 @@ import { AppInfoJSON } from "appinfo.json";
 import { FadeTransition } from '../transitions/FadeTransition';
 import { TitleScene } from './TitleScene';
 import { isDev } from '../util';
+import { Aseprite } from '../Aseprite';
 
 export class CreditsScene extends Scene<FriendlyFire> {
+    @asset([
+        "sprites/stars/star1.aseprite.json",
+        "sprites/stars/star2.aseprite.json",
+        "sprites/stars/star3.aseprite.json",
+        "sprites/stars/star4.aseprite.json",
+        "sprites/stars/star5.aseprite.json"
+    ])
+    private static stars: Aseprite[];
 
-    @asset("images/credits_bg.png")
+    @asset("sprites/credits/leaf.aseprite.json")
+    private static leaf: Aseprite;
+
+    private starPositions: number[][] = [
+        [318, 10],
+        [288, 19],
+        [260, 100],
+        [370, 91],
+        [409, 49],
+        [446, 19],
+        [436, 97],
+        [185, 93],
+        [159, 49],
+        [322, 72],
+        [153, 10],
+        [211, 20],
+        [59, 22],
+        [17, 11],
+        [102, 108]
+    ];
+
+    @asset("images/credits/bg.png")
     private static backgroundImage: HTMLImageElement;
+
+    @asset("images/credits/overlay.png")
+    private static overlayImage: HTMLImageElement;
 
     @asset("fonts/headline.font.json")
     private static headlineFont: BitmapFont;
@@ -100,6 +133,19 @@ export class CreditsScene extends Scene<FriendlyFire> {
         ctx.save();
         ctx.drawImage(CreditsScene.backgroundImage, 0, 0);
 
+        // Stars
+        this.starPositions.forEach((pos, index) => {
+            const starIndex = index % CreditsScene.stars.length;
+            CreditsScene.stars[starIndex].drawTag(ctx, "idle", pos[0], pos[1], this.time * 1000);
+        });
+
+        // Leaf
+        CreditsScene.leaf.drawTag(ctx, "idle", 414, 163, this.time * 1000);
+
+        ctx.globalAlpha = .75;
+        ctx.drawImage(CreditsScene.overlayImage, 0, 0);
+
+        ctx.globalAlpha = 1;
         const posX = 20;
         let posY = CreditsScene.backgroundImage.height - (this.time * 1000 / 36);
 
