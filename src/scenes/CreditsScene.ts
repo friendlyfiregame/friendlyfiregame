@@ -147,7 +147,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
         ctx.globalAlpha = 1;
         const posX = 20;
-        let posY = CreditsScene.backgroundImage.height - (this.time * 1000 / 36);
+        let posY = CreditsScene.backgroundImage.height + 50 - (this.time * 1000 / 36);
 
         // Reset Credits Crawl when it's over
         if (this.totalCrawlHeight > 0 && posY <= -this.totalCrawlHeight + CreditsScene.backgroundImage.height) {

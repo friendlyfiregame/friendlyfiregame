@@ -174,9 +174,7 @@ export class Campaign {
                 case "endgame":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                     this.gameScene.fire.conversation = null;
-                    setTimeout(() => {
-                        this.gameScene!.gameOver();
-                    }, 2000);
+                    this.gameScene!.gameOver();
                     break;
     
                 case "game":

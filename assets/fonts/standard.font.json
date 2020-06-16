@@ -8,6 +8,8 @@
     "margin": 1,
     "colors": {
         "white": "#ffffff",
-        "black": "#000000"
+        "black": "#000000",
+        "red": "#b70000",
+        "darkgrey": "#3d3d3d"
     }
 }

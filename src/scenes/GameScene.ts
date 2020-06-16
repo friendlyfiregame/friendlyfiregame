@@ -26,6 +26,7 @@ import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
 import { QuestATrigger, QuestKey } from '../Quests';
 import { EndScene } from './EndScene';
+import { Sound } from '../Sound';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -43,6 +44,9 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 export class GameScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
+
+    @asset("sounds/ending/swell.mp3")
+    private static swell: Sound;
 
     /* Total game time (time passed while game not paused) */
     public gameTime = 0;
@@ -161,7 +165,14 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public gameOver() {
-        this.game.scenes.setScene(EndScene);
+        FriendlyFire.music[0].setVolume(0);
+        FriendlyFire.music[1].setVolume(0);
+        GameScene.swell.setVolume(0.5);
+        GameScene.swell.play();
+
+        setTimeout(() => {
+            this.game.scenes.setScene(EndScene);
+        }, 2000);
     }
 
     public isActive(): boolean {
