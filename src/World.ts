@@ -16,6 +16,8 @@ export enum Environment {
     RAINCLOUD = 0xff00ff00
 }
 
+export const validEnvironments = Object.values(Environment);
+
 export class World implements GameObject {
     @asset("maps/level.png")
     private static foreground: HTMLImageElement;
@@ -116,7 +118,7 @@ export class World implements GameObject {
             return 0;
         }
         const environment = this.getEnvironment(x, y);
-        if (ignore && ignore.includes(environment)) {
+        if ((!validEnvironments.includes(environment)) || (ignore && ignore.includes(environment))) {
             return Environment.AIR;
         }
         return World.collisionMap[index];
