@@ -7,8 +7,11 @@
         ">[$seedplanted]Do you know anything about growing seeds? @seed",
         ">[$seedgrown]I did it, the seed has grown. @grown",
         ">[not visited]What a strange person... ",
-        ">[visited]Bye Power up.",
+        ">[visited]Bye Power up. @dontcallmethat",
         "Whatever. @entry !end"
+    ],
+    "dontcallmethat": [
+        "Don't call me that! @entry !end"
     ],
     "jumping": [
         "Aw man, another one of the multi jump gang. Flying is better and you know it. !set visited",
@@ -20,9 +23,9 @@
         "That's because I'm up here and don't let strangers touch me. That includes you! @entry !end"
     ],
     "pickup": [
-        "[$ismale]And you look like generic action guy. !set visited",
+        "[$ismale]And you look like generic action guy.",
         "[not $ismale]And you look like a random japanese school girl.",
-        " Go be generic somewhere else, it's unbearable.",
+        "Go be generic somewhere else, it's unbearable. !set visited",
         ">Don't change the subject. You're even glowing.",
         ">Ouch! The truth hurts. @entry",
         "Yeah so? That's none of your business and as if you needed a flying ability in the first place!",

@@ -48,8 +48,9 @@
     "questions": [
         "What do you want to know about?",
         ">How did you get here? @memories",
+        ">Anything interesting about this cave? @cave",
         ">Why the open fire in the cave? @fire",
-        ">Nevermind @visitedEntry !end"
+        ">Nevermind. @visitedEntry !end"
     ],
     "fire": [
         "Good question! First of all, carbon monoxide poisoning is not something that happens here.",
@@ -57,11 +58,20 @@
         "But the fire itself very interesting.",
         "I made a lot of camp fires since I came here and they all look alike.",
         "I mean, practically identical. And not only that, they even resemble the fire in the entrance.",
-        "Isn't that strange? It's like god got really lazy and just made everything from a single template.",
+        "Isn't that strange? It's like someone got really lazy and just made everything from the same template.",
         ">You're right, but the fire in the beginning looked different.",
         "Yeah, I remember. It looked really strange.",
-        "As if it consisted a material not of this world",
-        ">I have other question @questions"
+        "As if it consisted a material not of this world.",
+        ">I have other questions. @questions"
+    ],
+    "cave": [
+        "Yes! This cave is strange as well.",
+        "It's the only place around here, where you have to drop down through platforms.",
+        "And still, there is nothing here of interest. Very suspicios if you ask me.",
+        ">Well, you are here.",
+        "Yeah, good call. But that only counts for you. When I arrived, it was just an ordinary empty cave.",
+        "I kinda have the feeling that this places holds more importance than it appears.",
+        ">We will see. I have other questions. @questions"
     ],
     "memories": [
         "My memories are very hazy, I can't remember anything from before my arrival here.",
@@ -69,6 +79,6 @@
         "> No, it's all blank.",
         "Thought so... There's something sinister going on here behind the curtains.",
         "There's always a lingering feeling of being watched from the shadows.",
-        "> Creepy. I got other questions @questions"
+        "> Creepy. I got other questions. @questions"
     ]
 }
