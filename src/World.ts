@@ -133,7 +133,7 @@ export class World implements GameObject {
     public getEntityCollisions (sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
         const collidesWith: Entity[] = [];
         for (const gameObject of this.scene.gameObjects) {
-            if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && !ignoreEntities.includes(gameObject)) {
+            if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && gameObject.isTrigger && !ignoreEntities.includes(gameObject)) {
                 const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(margin), gameObject.getBounds(margin));
                 if (colliding) {
                     collidesWith.push(gameObject);

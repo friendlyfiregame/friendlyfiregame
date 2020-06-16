@@ -39,7 +39,8 @@ export abstract class Entity implements GameObject {
         public x: number,
         public y: number,
         public width = 0,
-        public height = 0
+        public height = 0,
+        public isTrigger = true
     ) {}
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
