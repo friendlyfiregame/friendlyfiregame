@@ -17,7 +17,8 @@ keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, Control
 keyToIntentMappings.set("ArrowRight", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
 keyToIntentMappings.set("Enter", [ControllerIntent.CONFIRM, ControllerIntent.PLAYER_INTERACT]);
 keyToIntentMappings.set("Escape", [ControllerIntent.ABORT, ControllerIntent.PAUSE]);
-keyToIntentMappings.set("e", [ControllerIntent.PLAYER_INTERACT]);
+keyToIntentMappings.set("e", [ControllerIntent.PLAYER_ACTION]);
+keyToIntentMappings.set("f", [ControllerIntent.PLAYER_INTERACT]);
 keyToIntentMappings.set("1", [ControllerIntent.PLAYER_DANCE_1]);
 keyToIntentMappings.set("2", [ControllerIntent.PLAYER_DANCE_2]);
 

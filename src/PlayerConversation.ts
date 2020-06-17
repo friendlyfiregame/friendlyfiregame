@@ -78,7 +78,7 @@ export class PlayerConversation {
             this.endConversation();
         } else if (!e.repeat) {
             // Enter to proceed
-            if (e.isPlayerInteract || e.isConfirm) {
+            if (e.isConfirm) {
                 this.proceed();
             }
             const upDown = (e.isMenuDown ? 1 : 0) - (e.isMenuUp ? 1 : 0);

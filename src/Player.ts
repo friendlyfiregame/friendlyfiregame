@@ -302,6 +302,27 @@ export class Player extends PhysicsEntity {
             } else if (event.isPlayerMoveLeft) {
                 this.moveLeft = true;
                 this.moveRight = false;
+            } else if (event.isPlayerAction) {
+                if (this.carrying instanceof Stone) {
+                    if (this.canThrowStoneIntoWater()) {
+                        this.carrying.setVelocity(10 * this.direction, 10);
+                        this.carrying = null;
+                        Player.throwingSound.stop();
+                        Player.throwingSound.play();
+                    } else {
+                        // TODO Say something when wrong place to throw
+                    }
+                } else if (this.carrying instanceof Seed) {
+                    this.carrying.setVelocity(5 * this.direction, 5);
+                    this.carrying = null;
+                    Player.throwingSound.stop();
+                    Player.throwingSound.play();
+                } else if (this.carrying instanceof Wood) {
+                    this.carrying.setVelocity(5 * this.direction, 5);
+                    this.carrying = null;
+                    Player.throwingSound.stop();
+                    Player.throwingSound.play();
+                }
             } else if (event.isPlayerInteract) {
                 if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
                     const conversation = this.closestNPC.conversation;
@@ -312,27 +333,6 @@ export class Player extends PhysicsEntity {
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
                     this.achieveMilestone(Milestone.MADE_RAIN);
-                } else {
-                    if (this.carrying instanceof Stone) {
-                        if (this.canThrowStoneIntoWater()) {
-                            this.carrying.setVelocity(10 * this.direction, 10);
-                            this.carrying = null;
-                            Player.throwingSound.stop();
-                            Player.throwingSound.play();
-                        } else {
-                            // TODO Say something when wrong place to throw
-                        }
-                    } else if (this.carrying instanceof Seed) {
-                        this.carrying.setVelocity(5 * this.direction, 5);
-                        this.carrying = null;
-                        Player.throwingSound.stop();
-                        Player.throwingSound.play();
-                    } else if (this.carrying instanceof Wood) {
-                        this.carrying.setVelocity(5 * this.direction, 5);
-                        this.carrying = null;
-                        Player.throwingSound.stop();
-                        Player.throwingSound.play();
-                    }
                 }
             } else if (event.isPlayerJump && this.canJump()) {
                 this.jumpKeyPressed = true;
@@ -446,7 +446,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, controller: ControllerFamily = this.scene.game.currentControllerFamily, buttonTag = "action") {
+    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, buttonTag = "action", controller: ControllerFamily = this.scene.game.currentControllerFamily) {
         const measure = Player.font.measureText(text);
         const gap = 4;
         const offsetY = 12;
@@ -483,7 +483,7 @@ export class Player extends PhysicsEntity {
 
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
                 && !this.playerConversation && !this.dance) {
-            this.drawTooltip(ctx, "Talk");
+            this.drawTooltip(ctx, "Talk", "interact");
         }
 
         if (this.canThrowStoneIntoWater()) {
