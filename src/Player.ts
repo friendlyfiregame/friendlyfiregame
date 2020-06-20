@@ -1,7 +1,7 @@
 import { SpeechBubble } from "./SpeechBubble";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY
+    PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED
 } from "./constants";
 import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -160,6 +160,12 @@ export class Player extends PhysicsEntity {
     public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
+
+    private doubleTapThreshold = 0.5;
+    private doubleTapTimestamp = 0;
+    // private doubleTapTimer = this.doubleTapThreshold;
+    private running: boolean = false;
+
     public jumpDown: boolean = false;
     private jumpKeyPressed: boolean | null = false;
     private drowning = 0;
@@ -191,7 +197,7 @@ export class Player extends PhysicsEntity {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
         }
-        this.setMaxVelocity(MAX_PLAYER_SPEED);
+        this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
         this.dustEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
@@ -279,6 +285,19 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
+    private handleRunningCheck (direction: number) {
+        if (this.direction === direction) {
+            if (this.scene.gameTime <= this.doubleTapTimestamp + this.doubleTapThreshold) {
+                this.running = true;
+            } else {
+                this.doubleTapTimestamp = this.scene.gameTime;
+            }
+        } else {
+            this.doubleTapTimestamp = this.scene.gameTime;
+            this.running = false;
+        }
+    }
+
     private async handleButtonDown(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
@@ -299,10 +318,13 @@ export class Player extends PhysicsEntity {
             if (event.isPlayerMoveRight) {
                 this.moveRight = true;
                 this.moveLeft = false;
+                this.handleRunningCheck(1);
             } else if (event.isPlayerMoveLeft) {
                 this.moveLeft = true;
                 this.moveRight = false;
+                this.handleRunningCheck(-1);
             } else if (event.isPlayerAction) {
+
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
                         this.carrying.setVelocity(10 * this.direction, 10);
@@ -532,11 +554,6 @@ export class Player extends PhysicsEntity {
             !this.scene.apocalypse) ||
             (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
         );
-
-        // const ground = this.getGround();
-        // return !this.dance && !this.scene.world.isRaining() && this.carrying === null &&
-        //     (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.scene.apocalypse ||
-        //     ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain());
     }
 
     private respawn() {
@@ -635,6 +652,11 @@ export class Player extends PhysicsEntity {
         }
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
         if (!isDrowning) {
+            if(this.running) {
+                this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED)
+            } else {
+                this.setMaxVelocity(MAX_PLAYER_SPEED)
+            }
             if (this.moveRight) {
                 this.direction = 1;
                 if (!this.flying) {

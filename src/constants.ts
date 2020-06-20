@@ -16,6 +16,9 @@ export const DROWNING_VELOCITY = -1;
 /** Maximum movement speed of the player in m/s */
 export const MAX_PLAYER_SPEED = 5;
 
+/** Maximum movement speed of the player in m/s */
+export const MAX_PLAYER_RUNNING_SPEED = 7;
+
 /** Player movement acceleration on ground in m/s² */
 export const PLAYER_ACCELERATION = 30;
 
