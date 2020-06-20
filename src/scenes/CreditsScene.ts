@@ -67,6 +67,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
     private totalCrawlHeight = 0;
 
     public async setup(): Promise<void> {
+        FriendlyFire.music[0].stop();
         this.time = 0;
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
@@ -77,10 +78,14 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
+        FriendlyFire.music[2].setLoop(true);
+        FriendlyFire.music[2].setVolume(0.4);
+        FriendlyFire.music[2].play();
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
+        FriendlyFire.music[2].stop();
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
