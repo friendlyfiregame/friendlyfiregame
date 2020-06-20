@@ -459,8 +459,10 @@ export class Player extends PhysicsEntity {
         }
         if (event.isPlayerMoveRight) {
             this.moveRight = false;
+            this.running = false;
         } else if (event.isPlayerMoveLeft) {
             this.moveLeft = false;
+            this.running = false;
         } else if (event.isPlayerJump) {
             this.jumpKeyPressed = false;
         } else if (event.isPlayerDrop) {
