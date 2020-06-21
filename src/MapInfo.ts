@@ -96,11 +96,4 @@ export class MapInfo {
             height: json.height * json.tileheight
         }
     }
-
-    // public getMapSize(): { width: number, height: number } {
-    //     return {
-    //         width: json.width * json.tilewidth,
-    //         height: json.height * json.tileheight
-    //     }
-    // }
 }
