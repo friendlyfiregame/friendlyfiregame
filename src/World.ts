@@ -4,7 +4,7 @@ import { rnd, rndInt, boundsFromMapObject } from "./util";
 import { asset } from "./Assets";
 import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 import { Entity, Bounds } from './Entity';
-import { MapObjectJSON } from '*/level.json';
+import { GameObjectInfo } from './MapInfo';
 
 export enum Environment {
     AIR = 0,
@@ -149,8 +149,8 @@ export class World implements GameObject {
      * Returns all triggers that do collide with the provided entity
      * @param sourceEntity Entity to check collisions against trigger boxes
      */
-    public getTriggerCollisions (sourceEntity: Entity): MapObjectJSON[] {
-        const collidesWith: MapObjectJSON[] = [];
+    public getTriggerCollisions (sourceEntity: Entity): GameObjectInfo[] {
+        const collidesWith: GameObjectInfo[] = [];
         for (const triggerObject of this.scene.triggerObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
             if (colliding) {
@@ -160,8 +160,19 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    public getCameraBounds (sourceEntity: Entity): MapObjectJSON[] {
-        const collidesWith: MapObjectJSON[] = [];
+    public getGateCollisions (sourceEntity: Entity): GameObjectInfo[] {
+        const collidesWith: GameObjectInfo[] = [];
+        for (const gateObject of this.scene.gateObjects) {
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0));
+            if (colliding) {
+                collidesWith.push(gateObject);
+            }
+        }
+        return collidesWith;
+    }
+
+    public getCameraBounds (sourceEntity: Entity): GameObjectInfo[] {
+        const collidesWith: GameObjectInfo[] = [];
         for (const triggerObject of this.scene.boundObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
             if (colliding) {

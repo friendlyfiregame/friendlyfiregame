@@ -3,7 +3,7 @@ import { FriendlyFire } from "../FriendlyFire";
 import { CreditsScene } from "./CreditsScene";
 import { Camera } from "../Camera";
 import { World } from "../World";
-import { MapInfo } from "../MapInfo";
+import { MapInfo, GameObjectInfo } from "../MapInfo";
 import { Campaign } from "../Campaign";
 import { createEntity } from "../Entity";
 import { Player, Milestone } from "../Player";
@@ -22,7 +22,6 @@ import { asset } from "../Assets";
 import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject, isDev } from "../util";
 import { BitmapFont } from "../BitmapFont";
 import { PauseScene } from "./PauseScene";
-import { MapObjectJSON } from '*/level.json';
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
@@ -48,9 +47,10 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    public pointsOfInterest: MapObjectJSON[] = [];
-    public triggerObjects: MapObjectJSON[] = [];
-    public boundObjects: MapObjectJSON[] = [];
+    public pointsOfInterest: GameObjectInfo[] = [];
+    public triggerObjects: GameObjectInfo[] = [];
+    public boundObjects: GameObjectInfo[] = [];
+    public gateObjects: GameObjectInfo[] = [];
     public paused = false;
     public world!: World;
     public camera!: Camera;
@@ -86,11 +86,13 @@ export class GameScene extends Scene<FriendlyFire> {
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
+        this.gateObjects = this.mapInfo.getGateObjects();
+        console.log(this.gateObjects);
 
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            ...this.mapInfo.getGameObjectInfos().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
+            ...this.mapInfo.getEntities().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
         ];
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);

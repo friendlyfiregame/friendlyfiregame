@@ -25,6 +25,7 @@ import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
 import { ControllerEvent } from './input/ControllerEvent';
+import { GameObjectInfo } from './MapInfo';
 
 const groundColors = [
     "#806057",
@@ -329,6 +330,16 @@ export class Player extends PhysicsEntity {
                 this.handleRunningCheck(-1);
             } else if (event.isPlayerAction) {
 
+                // Check for gates / doors
+                if (!this.flying) {
+                    const gate = this.scene.world.getGateCollisions(this)[0];
+                    if (gate) {
+                        this.enterGate(gate);
+                        return;
+                    }
+                }
+
+
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
                         this.carrying.setVelocity(10 * this.direction, 10);
@@ -437,6 +448,16 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    private enterGate(gate: GameObjectInfo): void {
+        if (gate && gate.properties.target) {
+            const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
+            if (targetGate) {
+                this.x = targetGate.x;
+                this.y = targetGate.y - targetGate.height;
+            }
+        }
+    }
+
     private canJump(): boolean {
         if (this.multiJump) {
             return true;
@@ -511,18 +532,14 @@ export class Player extends PhysicsEntity {
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
                 && !this.playerConversation && !this.dance) {
             this.drawTooltip(ctx, "Talk", "interact");
-        }
-
-        if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip(ctx, "Throw stone");
-        }
-
-        if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip(ctx, "Plant seed");
-        }
-
-        if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance");
+        } else if (this.isInFrontOfDoor()) {
+            this.drawTooltip(ctx, "Enter", "interact");
+        } else if (this.canThrowStoneIntoWater()) {
+            this.drawTooltip(ctx, "Throw stone", "interact");
+        } else if (this.canThrowSeedIntoSoil()) {
+            this.drawTooltip(ctx, "Plant seed", "interact");
+        } else if (this.canDanceToMakeRain()) {
+            this.drawTooltip(ctx, "Dance", "interact");
         }
 
         if (this.dance) {
@@ -548,6 +565,7 @@ export class Player extends PhysicsEntity {
     public debugCollisions(): void {
         console.log('Entities: ',this.scene.world.getEntityCollisions(this));
         console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
+        console.log('Gates: ',this.scene.world.getGateCollisions(this));
     }
 
     private canDanceToMakeRain(): boolean {
@@ -559,6 +577,10 @@ export class Player extends PhysicsEntity {
             !this.scene.apocalypse) ||
             (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
         );
+    }
+
+    private isInFrontOfDoor(): boolean {
+        return !this.flying && this.scene.world.getGateCollisions(this).length > 0;
     }
 
     public getCurrentMapBounds (): Bounds | undefined {

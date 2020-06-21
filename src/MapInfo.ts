@@ -1,18 +1,30 @@
 import { Vector2 } from "./util";
 import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
 
+export enum MapObjectType {
+    ENTITY = 'entity',
+    TRIGGER = 'trigger',
+    POINTER = 'pointer',
+    GATE = 'gate',
+    BOUNDS = 'bounds'
+}
+
 export interface GameObjectProperties {
     direction?: "up" | "down" | "left" | "right",
     distance: number;
 
     /** */
     velocity: number;
+    target?: string;
 }
 
 export interface GameObjectInfo {
     x: number;
     y: number;
     name: string;
+    type: string;
+    width: number;
+    height: number;
     properties: GameObjectProperties;
 }
 
@@ -30,7 +42,7 @@ export class MapInfo {
     }
 
     public getPlayerStart(): Vector2 {
-        const mapHeight = this.getMapSize().height;
+        const mapHeight = MapInfo.getMapSize().height;
         const object = this.getObject("player");
         if (object) {
             return { x: object.x, y: mapHeight - object.y }
@@ -39,12 +51,15 @@ export class MapInfo {
         }
     }
 
-    public getGameObjectInfos(): GameObjectInfo[] {
-        const mapHeight = this.getMapSize().height;
-        return this.getObjects('entity').map(object => ({
+    public getGameObjectInfos(type: MapObjectType): GameObjectInfo[] {
+        const mapHeight = MapInfo.getMapSize().height;
+        return this.getObjects(type).map(object => ({
             name: object.name,
             x: object.x,
             y: mapHeight - object.y,
+            type: object.type,
+            width: object.width,
+            height: object.height,
             properties: (object.properties ?? []).reduce((props, property) => {
                 props[property.name] = property.value;
                 return props;
@@ -52,31 +67,40 @@ export class MapInfo {
         }));
     }
 
-    public getPointers(): MapObjectJSON[] {
-        const mapHeight = this.getMapSize().height;
-        const objects = this.getObjects('pointer');
-        objects.forEach(o => o.y = mapHeight - o.y);
-        return objects;
+    public getEntities(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.ENTITY);
     }
 
-    public getTriggerObjects(): MapObjectJSON[] {
-        const mapHeight = this.getMapSize().height;
-        const objects = this.getObjects('trigger');
-        objects.forEach(o => o.y = mapHeight - o.y);
-        return objects;
+    public getPointers(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.POINTER);
     }
-    public getBoundObjects(): MapObjectJSON[] {
-        const mapHeight = this.getMapSize().height;
-        const objects = this.getObjects('bounds');
+    public getTriggerObjects(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.TRIGGER);
+    }
+    public getBoundObjects(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.BOUNDS);
+    }
+    public getGateObjects(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.GATE);
+    }
+
+    public static normalizeCoordinates(objects: MapObjectJSON[]): MapObjectJSON[] {
+        const mapHeight = MapInfo.getMapSize().height;
         objects.forEach(o => o.y = mapHeight - o.y);
         return objects;
     }
     
-
-    public getMapSize(): { width: number, height: number } {
+    public static getMapSize(): { width: number, height: number } {
         return {
             width: json.width * json.tilewidth,
             height: json.height * json.tileheight
         }
     }
+
+    // public getMapSize(): { width: number, height: number } {
+    //     return {
+    //         width: json.width * json.tilewidth,
+    //         height: json.height * json.tileheight
+    //     }
+    // }
 }

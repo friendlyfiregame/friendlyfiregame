@@ -9,7 +9,7 @@ import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
-import { MapObjectJSON } from '*/level.json';
+import { GameObjectInfo } from './MapInfo';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -25,7 +25,7 @@ export class Stone extends NPC implements CollidableGameObject {
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
 
-    private floatingPosition: MapObjectJSON;
+    private floatingPosition: GameObjectInfo;
 
     public state: StoneState = StoneState.DEFAULT;
 

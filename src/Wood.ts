@@ -7,7 +7,7 @@ import { Milestone } from "./Player";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { MapObjectJSON } from '*/level.json';
+import { GameObjectInfo } from './MapInfo';
 
 export enum WoodState {
     FREE = 0,
@@ -21,7 +21,7 @@ export class Wood extends PhysicsEntity {
 
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
-    private floatingPosition: MapObjectJSON;
+    private floatingPosition: GameObjectInfo;
 
     public state = WoodState.FREE;
 
