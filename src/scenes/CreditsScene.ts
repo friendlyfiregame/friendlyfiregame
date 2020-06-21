@@ -191,7 +191,8 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Nils Kreutzer',
             'Ranjit Mevius',
             'Markus Over',
-            'Klaus Reimer'
+            'Klaus Reimer',
+            'Eduard But'
         ]);
         posY = this.drawCredit(ctx, posY, posX, 'ART DIRECTION', ['Eduard But']);
         posY = this.drawCredit(ctx, posY, posX, '2D ART', [
@@ -202,22 +203,26 @@ export class CreditsScene extends Scene<FriendlyFire> {
         ]);
 
         posY = this.drawCredit(ctx, posY, posX, 'WRITING', [
-            'Eduard But',
             'Markus Over',
-            'Jennifer van Veen'
+            'Jennifer van Veen',
+            'Eduard But'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'Level Design', [
+        posY = this.drawCredit(ctx, posY, posX, 'LEVEL DESIGN', [
             'Eduard But',
             'Nils Kreutzer',
             'Jennifer van Veen'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'Distribution', [
+        posY = this.drawCredit(ctx, posY, posX, 'DISTRIBUTION', [
             'Benjamin Jung',
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'MUSIC', ['Bastian Lang']);
+        posY = this.drawCredit(ctx, posY, posX, 'MUSIC', [
+            'Bastian Lang',
+            'Benjamin Jung',
+            'Eduard But'
+        ]);
         posY = this.drawCredit(ctx, posY, posX, 'QA', ['Jennifer van Veen']);
         posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
 
