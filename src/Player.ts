@@ -286,6 +286,10 @@ export class Player extends PhysicsEntity {
     }
 
     private handleRunningCheck (direction: number) {
+        if (this.carrying) {
+            this.running = false;
+            return;
+        }
         if (this.direction === direction) {
             if (this.scene.gameTime <= this.doubleTapTimestamp + this.doubleTapThreshold) {
                 this.running = true;
@@ -492,8 +496,7 @@ export class Player extends PhysicsEntity {
 
         const sprite = Player.playerSprites[this.gender];
         let animation = this.animation;
-        if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump"
-                || animation === "fall")) {
+        if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
             animation = animation + "-carry";
         }
         if (this.hasBeard) {
@@ -588,6 +591,10 @@ export class Player extends PhysicsEntity {
             this.showHint();
         }
         if (this.carrying) {
+            if (this.running) {
+                this.running = false;
+                this.animation = 'walk';
+            }
             this.carrying.x = this.x;
             const currentFrameIndex = Player.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry",
                 this.scene.gameTime * 1000);
@@ -694,7 +701,7 @@ export class Player extends PhysicsEntity {
                 this.animation = "fall";
                 this.flying = true;
             } else {
-                this.animation = "walk";
+                this.animation = (this.running && !this.carrying) ? "run" : "walk";
                 this.flying = false;
                 this.usedDoubleJump = false;
             }
