@@ -348,17 +348,17 @@ export class Player extends PhysicsEntity {
                     this.carrying = null;
                     Player.throwingSound.stop();
                     Player.throwingSound.play();
-                }
-            } else if (event.isPlayerInteract) {
-                if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
-                    const conversation = this.closestNPC.conversation;
-                    // Disable auto movement to a safe talking distance for the stone in the river
-                    const autoMove = this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT ? false : true;
-                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
-
-                } else if (this.canDanceToMakeRain()) {
-                    this.startDance(this.scene.apocalypse ? 3 : 2);
-                    this.achieveMilestone(Milestone.MADE_RAIN);
+                } else {
+                    if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                        const conversation = this.closestNPC.conversation;
+                        // Disable auto movement to a safe talking distance for the stone in the river
+                        const autoMove = this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT ? false : true;
+                        this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+    
+                    } else if (this.canDanceToMakeRain()) {
+                        this.startDance(this.scene.apocalypse ? 3 : 2);
+                        this.achieveMilestone(Milestone.MADE_RAIN);
+                    }
                 }
             } else if (event.isPlayerJump && this.canJump()) {
                 this.jumpKeyPressed = true;

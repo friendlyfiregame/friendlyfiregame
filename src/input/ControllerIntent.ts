@@ -21,8 +21,7 @@ export enum ControllerIntent {
     /** Player movement: DROP (or: duck/crouch) */
     PLAYER_DROP = 0b0000_0000_0000_1000,
 
-    /** Interact with NPC, enter doors etc */
-    PLAYER_INTERACT = 0b0000_0000_0001_0000,
+    UNUSED_1 = 0b0000_0000_0001_0000,
 
     /** Action, throw stuff, run, shoot */
     PLAYER_ACTION = 0b0000_0000_0010_0000,
