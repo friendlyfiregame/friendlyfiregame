@@ -119,7 +119,7 @@ export class Player extends PhysicsEntity {
         "sounds/jumping/jumping_female.mp3",
         "sounds/jumping/jumping.mp3"
     ])
-    private static jumpingSounds: Sound[] = [];
+    private static jumpingSounds: Sound[];
 
     @asset("sounds/jumping/landing.mp3")
     private static landingSound: Sound;
