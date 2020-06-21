@@ -50,6 +50,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameObjects: GameObject[] = [];
     public pointsOfInterest: MapObjectJSON[] = [];
     public triggerObjects: MapObjectJSON[] = [];
+    public boundObjects: MapObjectJSON[] = [];
     public paused = false;
     public world!: World;
     public camera!: Camera;
@@ -84,6 +85,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
+        this.boundObjects = this.mapInfo.getBoundObjects();
+
         this.gameObjects = [
             this.world = new World(this),
             particles,
@@ -100,6 +103,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.campfire = this.getGameObject(Campfire);
 
         this.camera = new Camera(this, this.player);
+        this.camera.setBounds(this.player.getCurrentMapBounds());
+
         this.fpsInterval = setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
@@ -198,6 +203,11 @@ export class GameScene extends Scene<FriendlyFire> {
             for (const obj of this.triggerObjects) {
                 const bounds = boundsFromMapObject(obj);
                 ctx.strokeStyle = "blue";
+                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
+            }
+            for (const obj of this.boundObjects) {
+                const bounds = boundsFromMapObject(obj);
+                ctx.strokeStyle = "yellow";
                 ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
             }
         }

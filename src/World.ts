@@ -160,6 +160,17 @@ export class World implements GameObject {
         return collidesWith;
     }
 
+    public getCameraBounds (sourceEntity: Entity): MapObjectJSON[] {
+        const collidesWith: MapObjectJSON[] = [];
+        for (const triggerObject of this.scene.boundObjects) {
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+            if (colliding) {
+                collidesWith.push(triggerObject);
+            }
+        }
+        return collidesWith;
+    }
+
     /**
      * Checks if the two provided bounding boxes are touching each other
      * @param box1 first bounding box

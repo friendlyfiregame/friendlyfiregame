@@ -65,6 +65,13 @@ export class MapInfo {
         objects.forEach(o => o.y = mapHeight - o.y);
         return objects;
     }
+    public getBoundObjects(): MapObjectJSON[] {
+        const mapHeight = this.getMapSize().height;
+        const objects = this.getObjects('bounds');
+        objects.forEach(o => o.y = mapHeight - o.y);
+        return objects;
+    }
+    
 
     public getMapSize(): { width: number, height: number } {
         return {

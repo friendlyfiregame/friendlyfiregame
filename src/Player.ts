@@ -8,8 +8,8 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, sleep, rndInt, isDev } from './util';
-import { entity } from "./Entity";
+import { rnd, rndItem, timedRnd, sleep, rndInt, isDev, boundsFromMapObject } from './util';
+import { entity, Bounds } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
 import { Stone, StoneState } from "./Stone";
@@ -559,6 +559,12 @@ export class Player extends PhysicsEntity {
             !this.scene.apocalypse) ||
             (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
         );
+    }
+
+    public getCurrentMapBounds (): Bounds | undefined {
+        const collisions = this.scene.world.getCameraBounds(this);
+        if (collisions.length === 0) return undefined;
+        return boundsFromMapObject(collisions[0]);
     }
 
     private respawn() {
