@@ -51,7 +51,7 @@ intentMappings.set(GamePadButtonId.D_PAD_LEFT, [ControllerIntent.PLAYER_MOVE_LEF
 intentMappings.set(GamePadButtonId.D_PAD_RIGHT, [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
 intentMappings.set(GamePadButtonId.BUTTON_1, [ControllerIntent.PLAYER_JUMP, ControllerIntent.CONFIRM]);
 intentMappings.set(GamePadButtonId.BUTTON_2, [ControllerIntent.ABORT]);
-intentMappings.set(GamePadButtonId.BUTTON_3, [ControllerIntent.PLAYER_INTERACT]);
+intentMappings.set(GamePadButtonId.BUTTON_3, [ControllerIntent.PLAYER_ACTION]);
 intentMappings.set(GamePadButtonId.SHOULDER_TOP_LEFT, [ControllerIntent.PLAYER_DANCE_1]);
 intentMappings.set(GamePadButtonId.SHOULDER_TOP_RIGHT, [ControllerIntent.PLAYER_DANCE_2]);
 intentMappings.set(GamePadButtonId.START, [ControllerIntent.PAUSE]);

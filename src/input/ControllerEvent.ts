@@ -65,8 +65,8 @@ export class ControllerEvent extends Object {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_DROP) === ControllerIntent.PLAYER_DROP;
     }
 
-    get isPlayerInteract(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_INTERACT) === ControllerIntent.PLAYER_INTERACT;
+    get isPlayerAction(): boolean {
+        return (this[intentsSymbol] & ControllerIntent.PLAYER_ACTION) === ControllerIntent.PLAYER_ACTION;
     }
 
     get isPlayerDance1(): boolean {
