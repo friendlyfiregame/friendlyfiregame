@@ -26,7 +26,7 @@ export class Wood extends PhysicsEntity {
     public state = WoodState.FREE;
 
     public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 24, 24);
+        super(scene, x, y, 26, 16);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
         if (!floatingPosition) throw new Error ('Could not find "recover_floating_position" point of interest in game scene');

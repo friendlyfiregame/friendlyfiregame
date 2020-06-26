@@ -19,7 +19,7 @@
    },
    {
     "filename": "2",
-    "frame": { "x": 152, "y": 0, "w": 72, "h": 24 },
+    "frame": { "x": 0, "y": 24, "w": 72, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 3, "y": 0, "w": 72, "h": 24 },
@@ -29,10 +29,10 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18-x64",
+  "version": "1.2.19.2",
   "image": "cloud3.png",
   "format": "I8",
-  "size": { "w": 224, "h": 24 },
+  "size": { "w": 152, "h": 48 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 2, "direction": "forward" }
