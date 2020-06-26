@@ -79,7 +79,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         FriendlyFire.music[2].setLoop(true);
-        FriendlyFire.music[2].setVolume(0.4);
+        FriendlyFire.music[2].setVolume(1);
         FriendlyFire.music[2].play();
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
