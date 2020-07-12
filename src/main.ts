@@ -1,3 +1,4 @@
+import { GAME_CANVAS_WIDTH, GAME_CANVAS_HEIGHT } from "./constants";
 import { app, BrowserWindow } from "electron";
 import path from "path";
 
@@ -12,8 +13,8 @@ app.allowRendererProcessReuse = true;
 const createWindow = () => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 480,
-        height: 270,
+        width: GAME_CANVAS_WIDTH,
+        height: GAME_CANVAS_HEIGHT,
         fullscreen: true,
         title: "Friendly Fire",
         icon: path.join(__dirname, "../renderer/assets/appicon/256x256.png")
