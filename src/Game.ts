@@ -1,3 +1,4 @@
+import { GAME_CANVAS_WIDTH, GAME_CANVAS_HEIGHT } from "./constants";
 import { createCanvas, getRenderingContext } from "./graphics";
 import { clamp } from "./util";
 import { ControllerFamily } from "./input/ControllerFamily";
@@ -32,7 +33,7 @@ export abstract class Game {
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
-    public constructor(public readonly width: number = 480, public readonly height: number = 270) {
+    public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = createCanvas(width, height);
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
         // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.
