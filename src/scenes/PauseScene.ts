@@ -10,6 +10,7 @@ import { TitleScene } from "./TitleScene";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { AppInfoJSON } from 'appinfo.json';
 import { isDev } from '../util';
+import { Sound } from '../Sound';
 
 enum MenuItemKey {
     RESUME = 'resume',
@@ -18,6 +19,9 @@ enum MenuItemKey {
 }
 
 export class PauseScene extends Scene<FriendlyFire> {
+    @asset("music/pause.mp3")
+    private static music: Sound;
+
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
@@ -32,6 +36,10 @@ export class PauseScene extends Scene<FriendlyFire> {
     public setup(): void {
         this.inTransition = new SlideTransition({ duration: 1, direction: "top", easing: easeOutBounce });
         this.outTransition = new SlideTransition({ duration: 0.25 });
+
+        PauseScene.music.setLoop(true);
+        PauseScene.music.setVolume(0.5);
+        PauseScene.music.play();
 
         this.menu.setItems(
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
@@ -53,12 +61,14 @@ export class PauseScene extends Scene<FriendlyFire> {
     public async handleMenuAction (buttonId: string): Promise<void> {
         switch(buttonId) {
             case MenuItemKey.RESUME:
+                PauseScene.music.stop();
                 this.scenes.popScene();
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.EXIT:
+                PauseScene.music.stop();
                 await this.game.scenes.popScene({ noTransition: true });
                 this.game.scenes.setScene(TitleScene);
                 break;

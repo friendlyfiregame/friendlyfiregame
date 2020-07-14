@@ -2,7 +2,6 @@ import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { FriendlyFire } from "./FriendlyFire";
 import { Aseprite } from './Aseprite';
 import { ControllerEvent } from './input/ControllerEvent';
 import { ControllerFamily } from './input/ControllerFamily';
