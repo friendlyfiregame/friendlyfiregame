@@ -77,6 +77,7 @@ export class PauseScene extends Scene<FriendlyFire> {
 
     private handleButtonDown(event: ControllerEvent): void {
         if (event.isAbort || event.isPause) {
+            PauseScene.music.stop();
             this.scenes.popScene();
         } else if (event.isConfirm) {
             this.menu.executeAction();
