@@ -26,6 +26,7 @@ import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
 import { Sound } from '../Sound';
+import { MenuList } from '../Menu';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -369,6 +370,8 @@ export class GameScene extends Scene<FriendlyFire> {
     public pause() {
         GameScene.bgm1.setVolume(0);
         GameScene.bgm2.setVolume(0);
+        MenuList.pause.stop();
+        MenuList.pause.play();
         this.togglePause(true);
     }
 
