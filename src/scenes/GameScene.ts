@@ -25,6 +25,7 @@ import { PauseScene } from "./PauseScene";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
+import { Sound } from '../Sound';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -40,6 +41,14 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 }
 
 export class GameScene extends Scene<FriendlyFire> {
+    @asset("music/theme_01.mp3")
+    public static bgm1: Sound;
+    private bgm1BaseVolume = 0.25;
+
+    @asset("music/inferno.mp3")
+    public static bgm2: Sound;
+    private bgm2BaseVolume = 0.15;
+
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
@@ -87,7 +96,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
-        console.log(this.gateObjects);
 
         this.gameObjects = [
             this.world = new World(this),
@@ -111,6 +119,15 @@ export class GameScene extends Scene<FriendlyFire> {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
+
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        GameScene.bgm1.setLoop(true);
+        GameScene.bgm1.stop();
+        GameScene.bgm2.stop();
+        GameScene.bgm2.setLoop(true);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+
+        GameScene.bgm1.play();
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
@@ -150,6 +167,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public deactivate(): void {
         this.pause();
+        console.log('deactivate');
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
@@ -166,6 +184,8 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public gameOver() {
+        GameScene.bgm1.stop();
+        GameScene.bgm2.stop();
         this.game.scenes.setScene(CreditsScene);
     }
 
@@ -238,6 +258,21 @@ export class GameScene extends Scene<FriendlyFire> {
         this.frameCounter++;
     }
 
+    public startApocalypseMusic(): void {
+        GameScene.bgm1.stop();
+        GameScene.bgm2.play();
+    }
+
+    public resetMusicVolumes(): void {
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+    }
+
+    public fadeMusic (fade: number): void {
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume * fade);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume * fade);
+    }
+
     private updateApocalypse() {
         this.fireEmitter.setPosition(this.player.x, this.player.y);
         this.fireEffects.forEach(e => e.update(this.dt));
@@ -249,7 +284,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.fire.intensity < 6) {
             this.fire.intensity = Math.max(this.fire.intensity, 4);
             this.apocalypseFactor = clamp((this.fire.intensity - 4) / 2, 0, 1);
-            FriendlyFire.music[1].setVolume(0.25 * this.apocalypseFactor);
+            GameScene.bgm2.setVolume(this.bgm2BaseVolume * this.apocalypseFactor);
             if (this.apocalypseFactor <= 0.001) {
                 // End apocalypse
                 this.apocalypseFactor = 0;
@@ -258,7 +293,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.player.achieveMilestone(Milestone.BEAT_FIRE);
                 this.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
-                FriendlyFire.music[1].stop()
+                GameScene.bgm2.stop()
             }
         }
     }
@@ -332,10 +367,14 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public pause() {
+        GameScene.bgm1.setVolume(0);
+        GameScene.bgm2.setVolume(0);
         this.togglePause(true);
     }
 
     public resume() {
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
         this.togglePause(false);
     }
 }

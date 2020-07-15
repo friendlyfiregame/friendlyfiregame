@@ -15,7 +15,8 @@
         ">Are you done yet?",
         "Rude! !angry",
         "I'll talk to you after you prove you're worthy",
-        "Show me your moves, boy!",
+        "[$ismale]Show me your moves, boy!",
+        "[not $ismale]Show me your moves, girl!",
         "You'll need your 1 and 2 keys for this exercise. Get ready! @danced !end !dance 1"
     ],
     "danced": [

@@ -12,6 +12,7 @@ import { isElectron } from "../util";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { CreditsScene } from './CreditsScene';
 import { Aseprite } from '../Aseprite';
+import { Sound } from '../Sound';
 
 type MainMenuParams = {
     label: string;
@@ -33,6 +34,9 @@ const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
 };
 
 export class TitleScene extends Scene<FriendlyFire> {
+    @asset("music/cerulean-expanse.mp3")
+    private static music: Sound;
+
     @asset("images/title/layer1.aseprite.json")
     private static titleLayer1: Aseprite;
 
@@ -110,12 +114,14 @@ export class TitleScene extends Scene<FriendlyFire> {
     public handleMenuAction (buttonId: string) {
         switch(buttonId) {
             case MenuItemKey.START:
+                this.stopMusicTrack();
                 this.game.scenes.setScene(GameScene);
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.CREDITS:
+                this.stopMusicTrack();
                 this.game.scenes.pushScene(CreditsScene);
                 break;
             case MenuItemKey.EXIT:
@@ -194,12 +200,13 @@ export class TitleScene extends Scene<FriendlyFire> {
         }
     }
 
+    private stopMusicTrack(): void {
+        TitleScene.music.stop();
+    }
+
     private playMusicTrack(): void {
-        const music = FriendlyFire.music[0];
-        FriendlyFire.music.forEach(music => music.stop());
-        music.setLoop(true);
-        music.setVolume(0.25);
-        FriendlyFire.music[1].setVolume(0.25);
-        music.play();
+        TitleScene.music.setLoop(true);
+        TitleScene.music.setVolume(0.30);
+        TitleScene.music.play();
     }
 }

@@ -9,7 +9,6 @@ import { Wood } from "./Wood";
 import { asset } from "./Assets";
 import { Milestone } from './Player';
 import { GameScene } from "./scenes/GameScene";
-import { FriendlyFire } from "./FriendlyFire";
 
 // const fireColors = [
 //     "#603015",
@@ -157,10 +156,9 @@ export class Fire extends NPC {
         this.angry = true;
         this.growthTarget = 14;
         this.face?.setMode(FaceModes.ANGRY);
-        FriendlyFire.music[0].setVolume(0);
-        FriendlyFire.music[0].stop();
-        FriendlyFire.music[1].setLoop(true);
-        FriendlyFire.music[1].play();
+
+        this.scene.startApocalypseMusic();
+
         // Disable remaining dialogs
         this.conversation = null;
         // Disable all other characters

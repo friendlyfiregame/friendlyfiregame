@@ -2,7 +2,6 @@ import { valueCurves, ValueCurve } from './Particles';
 import { Sound } from './Sound';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { FriendlyFire } from "./FriendlyFire";
 import { Aseprite } from './Aseprite';
 import { ControllerEvent } from './input/ControllerEvent';
 import { ControllerFamily } from './input/ControllerFamily';
@@ -219,18 +218,20 @@ export class Dance {
         }
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            FriendlyFire.music[0].setVolume(0.25 * fade);
+            this.scene.fadeMusic(fade);
         } else {
             // own music paused
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
                 Dance.treedance_music.setVolume(0.8);
                 Dance.treedance_music.play();
-                FriendlyFire.music[0].setVolume(0);
+                GameScene.bgm1.setVolume(0);
+                GameScene.bgm2.setVolume(0);
             }
             if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
                 Dance.raindance_music.setVolume(0.8);
                 Dance.raindance_music.play();
-                FriendlyFire.music[0].setVolume(0);
+                GameScene.bgm1.setVolume(0);
+                GameScene.bgm2.setVolume(0);
             }
         }
     }
@@ -238,7 +239,7 @@ export class Dance {
     public resetMusic() {
         Dance.raindance_music.stop();
         Dance.treedance_music.stop();
-        FriendlyFire.music[0].setVolume(0.25);
+        this.scene.resetMusicVolumes();
     }
 
     public draw(ctx: CanvasRenderingContext2D, controller: ControllerFamily = this.scene.game.currentControllerFamily) {
