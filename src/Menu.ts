@@ -74,6 +74,8 @@ export class MenuList {
   public static click: Sound;
   @asset("sounds/interface/confirm.mp3")
   public static confirm: Sound;
+  @asset("sounds/interface/select.mp3")
+  public static select: Sound;
   @asset("sounds/interface/bass.mp3")
   public static pause: Sound;
 
