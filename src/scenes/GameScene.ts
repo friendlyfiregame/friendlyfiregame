@@ -163,13 +163,16 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.player.handleButtonDown, this.player);
+        this.input.onButtonUp.connect(this.player.handleButtonUp, this.player);
         this.resume();
     }
 
     public deactivate(): void {
         this.pause();
-        console.log('deactivate');
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.player.handleButtonDown, this.player);
+        this.input.onButtonUp.disconnect(this.player.handleButtonUp, this.player);
     }
 
     private handleButtonDown(event: ControllerEvent): void {
