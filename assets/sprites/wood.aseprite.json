@@ -1,20 +1,20 @@
 { "frames": [
    {
     "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 24, "h": 13 },
+    "frame": { "x": 0, "y": 0, "w": 26, "h": 16 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 11, "w": 24, "h": 13 },
-    "sourceSize": { "w": 24, "h": 24 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 16 },
+    "sourceSize": { "w": 26, "h": 16 },
     "duration": 100
    }
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18-x64",
+  "version": "1.2.19.2",
   "image": "wood.png",
   "format": "I8",
-  "size": { "w": 24, "h": 13 },
+  "size": { "w": 26, "h": 16 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 0, "direction": "forward" }

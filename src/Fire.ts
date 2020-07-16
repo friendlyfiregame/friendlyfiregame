@@ -8,7 +8,6 @@ import { entity } from "./Entity";
 import { Wood } from "./Wood";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { FriendlyFire } from "./FriendlyFire";
 import { QuestATrigger, QuestKey } from './Quests';
 
 // const fireColors = [
@@ -157,10 +156,9 @@ export class Fire extends NPC {
         this.angry = true;
         this.growthTarget = 14;
         this.face?.setMode(FaceModes.ANGRY);
-        FriendlyFire.music[0].setVolume(0);
-        FriendlyFire.music[0].stop();
-        FriendlyFire.music[1].setLoop(true);
-        FriendlyFire.music[1].play();
+
+        this.scene.startApocalypseMusic();
+
         // Disable remaining dialogs
         this.conversation = null;
         // Disable all other characters

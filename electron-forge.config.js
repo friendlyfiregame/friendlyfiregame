@@ -1,8 +1,12 @@
-const path = require("path")
+const os = require("os");
+const path = require("path");
+
+// Package name for macOS should be different.
+const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
 
 module.exports = {
     packagerConfig: {
-        name: "friendlyfire",
+        name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
         win32metadata: {
             FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",

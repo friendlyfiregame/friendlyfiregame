@@ -9,8 +9,15 @@ import { FadeTransition } from '../transitions/FadeTransition';
 import { TitleScene } from './TitleScene';
 import { isDev } from '../util';
 import { Aseprite } from '../Aseprite';
+import { Sound } from '../Sound';
 
 export class CreditsScene extends Scene<FriendlyFire> {
+    @asset([
+        "music/a-vision-of-fire.mp3",
+        "music/a-vision-of-fire-acoustic.mp3"
+    ])
+    public static music: Sound[];
+    private songIndex = 1;
     @asset([
         "sprites/stars/star1.aseprite.json",
         "sprites/stars/star2.aseprite.json",
@@ -67,7 +74,6 @@ export class CreditsScene extends Scene<FriendlyFire> {
     private totalCrawlHeight = 0;
 
     public async setup(): Promise<void> {
-        FriendlyFire.music[0].stop();
         this.time = 0;
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
@@ -78,14 +84,14 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        FriendlyFire.music[2].setLoop(true);
-        FriendlyFire.music[2].setVolume(0.4);
-        FriendlyFire.music[2].play();
+        CreditsScene.music[this.songIndex].setLoop(true);
+        CreditsScene.music[this.songIndex].setVolume(0.5);
+        CreditsScene.music[this.songIndex].play();
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
-        FriendlyFire.music[2].stop();
+        CreditsScene.music[this.songIndex].stop();
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
@@ -191,7 +197,8 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Nils Kreutzer',
             'Ranjit Mevius',
             'Markus Over',
-            'Klaus Reimer'
+            'Klaus Reimer',
+            'Eduard But'
         ]);
         posY = this.drawCredit(ctx, posY, posX, 'ART DIRECTION', ['Eduard But']);
         posY = this.drawCredit(ctx, posY, posX, '2D ART', [
@@ -202,22 +209,27 @@ export class CreditsScene extends Scene<FriendlyFire> {
         ]);
 
         posY = this.drawCredit(ctx, posY, posX, 'WRITING', [
-            'Eduard But',
             'Markus Over',
-            'Jennifer van Veen'
+            'Jennifer van Veen',
+            'Eduard But'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'Level Design', [
+        posY = this.drawCredit(ctx, posY, posX, 'LEVEL DESIGN', [
             'Eduard But',
             'Nils Kreutzer',
             'Jennifer van Veen'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'Distribution', [
+        posY = this.drawCredit(ctx, posY, posX, 'DISTRIBUTION', [
             'Benjamin Jung',
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'MUSIC', ['Bastian Lang']);
+        posY = this.drawCredit(ctx, posY, posX, 'MUSIC', [
+            'Bastian Lang',
+            'Benjamin Jung',
+            'Eduard But',
+            'Matthias Wetter'
+        ]);
         posY = this.drawCredit(ctx, posY, posX, 'QA', ['Jennifer van Veen']);
         posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
 

@@ -1,7 +1,8 @@
 {
+    "lang": "en-US",
     "name": "Friendly Fire",
     "short_name": "Friendly Fire",
-    "start_url": ".",
+    "start_url": "./?utm_source=web_app_manifest",
     "display": "standalone",
     "background_color": "#cecece",
     "theme_color": "#e56026",
@@ -9,7 +10,7 @@
         "games"
     ],
     "orientation": "landscape",
-    "description": "Ludum Dare 46 Submission",
+    "description": "Can you save the world from an unknown destiny?",
     "icons": [
         {
             "src": "assets/appicon.iconset/icon_16x16.png",
@@ -76,5 +77,15 @@
             "sizes": "1024x1024",
             "type": "image/png"
         }
-    ]
+    ],
+    "related_applications": [
+        {
+            "platform": "Web"
+        },
+        {
+            "platform": "steam",
+            "url": "https://store.steampowered.com/app/1311660/Friendly_Fire/"
+        }
+    ],
+    "prefer_related_applications": false
 }

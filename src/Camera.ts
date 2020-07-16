@@ -2,6 +2,7 @@ import { Vector2, clamp, shiftValue, rnd, isDev } from './util';
 import { ValueCurve, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { GameScene } from "./scenes/GameScene";
+import { Bounds } from './Entity';
 
 export interface camFocus {
     x: number;
@@ -37,6 +38,7 @@ export class Camera {
     private visibleRect: Rectangle;
     private currentBarTarget = 0;
     private currentBarHeight = 0;
+    private bounds?: Bounds;
 
     constructor(protected scene: GameScene, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.1) {
         if (interpolationTime > 1) {
@@ -52,6 +54,10 @@ export class Camera {
         this.visibleRect = this.getVisibleRect();
         this.currentBarTarget = 0;
         this.currentBarHeight = 0;
+    }
+
+    public setBounds (bounds: Bounds | undefined) {
+        this.bounds = bounds;
     }
 
     private handleKeyDown(e: KeyboardEvent) {
@@ -87,13 +93,13 @@ export class Camera {
         }
     }
 
-    public getVisibleRect() {
+    public getVisibleRect(x = this.x, y = this.y) {
         const cnv = this.scene.game.canvas;
         const cw = cnv.width, ch = cnv.height;
         const offx = cw / 2 / this.zoom, offy = ch / 2 / this.zoom;
         return {
-            x: this.x - offx,
-            y: this.y - offy,
+            x: x - offx,
+            y: y - offy,
             width: offx * 2,
             height: offy * 2
         };
@@ -108,11 +114,47 @@ export class Camera {
         this.currentBarTarget = target;
     }
 
+    private getBaseCameraTarget () {
+        // Base position always on target (player)
+        let xTarget = this.target.x;
+        let yTarget = this.target.y + 30;
+
+        if (this.bounds) {
+            const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
+
+            // Bound clip left / right
+            if (targetVisibleRect.x < this.bounds.x) {
+                const diff = this.bounds.x - targetVisibleRect.x;
+                xTarget += diff;
+            } else if ((targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.x + this.bounds.width)) {
+                const diff = (this.bounds.x + this.bounds.width) - (targetVisibleRect.x + targetVisibleRect.width);
+                xTarget += diff;
+            }
+
+            // Bound clip top / bottom
+            if ((targetVisibleRect.y + targetVisibleRect.height) > this.bounds.y) {
+                const diff = this.bounds.y - (targetVisibleRect.y + targetVisibleRect.height);
+                yTarget += diff;
+            } else  if (targetVisibleRect.y < (this.bounds.y - this.bounds.height)) {
+                const diff = (this.bounds.y - this.bounds.height) - targetVisibleRect.y;
+                yTarget += diff;
+            }
+        }
+
+        return {
+            x: xTarget,
+            y: yTarget
+        }
+    }
+
     public update(dt: number, time: number) {
         this.time = time;
+
         // Base position always on target (player)
-        this.x = this.target.x;
-        this.y = this.target.y + 30;
+        const baseCamTarget = this.getBaseCameraTarget();
+        this.x = baseCamTarget.x;
+        this.y = baseCamTarget.y;
+
         // Cam Shake during apocalypse
         if (this.scene.fire.angry || this.scene.apocalypse) {
             this.applyApocalypticShake(this.scene.fire);

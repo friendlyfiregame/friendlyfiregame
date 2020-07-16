@@ -8,8 +8,8 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, sleep, rndInt, isDev } from './util';
-import { entity } from "./Entity";
+import { rnd, rndItem, timedRnd, sleep, rndInt, isDev, boundsFromMapObject } from './util';
+import { entity, Bounds } from "./Entity";
 import { Sound } from "./Sound";
 import { Dance } from './Dance';
 import { Stone, StoneState } from "./Stone";
@@ -26,6 +26,7 @@ import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
 import { ControllerEvent } from './input/ControllerEvent';
 import { QuestATrigger, QuestKey } from './Quests';
+import { GameObjectInfo } from './MapInfo';
 
 const groundColors = [
     "#806057",
@@ -168,9 +169,8 @@ export class Player extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
-        scene.game.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
-        scene.game.controllerManager.onButtonUp.connect(this.handleButtonUp, this);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
+
         if (isDev()) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
@@ -280,7 +280,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private async handleButtonDown(event: ControllerEvent) {
+    public async handleButtonDown(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
         }
@@ -306,6 +306,15 @@ export class Player extends PhysicsEntity {
                 this.moveRight = false;
                 this.handleRunningCheck(-1);
             } else if (event.isPlayerAction) {
+
+                // Check for gates / doors
+                if (!this.flying) {
+                    const gate = this.scene.world.getGateCollisions(this)[0];
+                    if (gate) {
+                        this.enterGate(gate);
+                        return;
+                    }
+                }
 
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
@@ -349,7 +358,7 @@ export class Player extends PhysicsEntity {
 
     // Used in dev mode to enable some special keys that can only be triggered
     // by using a keyboard.
-    private handleKeyDown(event: KeyboardEvent): void {
+    public handleKeyDown(event: KeyboardEvent): void {
         if (this.scene.paused) {
             return;
         }
@@ -415,6 +424,16 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    private enterGate(gate: GameObjectInfo): void {
+        if (gate && gate.properties.target) {
+            const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
+            if (targetGate) {
+                this.x = targetGate.x;
+                this.y = targetGate.y - targetGate.height;
+            }
+        }
+    }
+
     private canJump(): boolean {
         if (this.multiJump) {
             return true;
@@ -435,7 +454,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private handleButtonUp(event: ControllerEvent) {
+    public handleButtonUp(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
         }
@@ -489,18 +508,14 @@ export class Player extends PhysicsEntity {
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
                 && !this.playerConversation && !this.dance) {
             this.drawTooltip(ctx, "Talk", "interact");
-        }
-
-        if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip(ctx, "Throw stone");
-        }
-
-        if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip(ctx, "Plant seed");
-        }
-
-        if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance");
+        } else if (this.isInFrontOfDoor()) {
+            this.drawTooltip(ctx, "Enter", "interact");
+        } else if (this.canThrowStoneIntoWater()) {
+            this.drawTooltip(ctx, "Throw stone", "interact");
+        } else if (this.canThrowSeedIntoSoil()) {
+            this.drawTooltip(ctx, "Plant seed", "interact");
+        } else if (this.canDanceToMakeRain()) {
+            this.drawTooltip(ctx, "Dance", "interact");
         }
 
         if (this.dance) {
@@ -526,6 +541,7 @@ export class Player extends PhysicsEntity {
     public debugCollisions(): void {
         console.log('Entities: ',this.scene.world.getEntityCollisions(this));
         console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
+        console.log('Gates: ',this.scene.world.getGateCollisions(this));
     }
 
     private canDanceToMakeRain(): boolean {
@@ -537,6 +553,16 @@ export class Player extends PhysicsEntity {
             !this.scene.apocalypse) ||
             (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
         );
+    }
+
+    private isInFrontOfDoor(): boolean {
+        return !this.flying && this.scene.world.getGateCollisions(this).length > 0;
+    }
+
+    public getCurrentMapBounds (): Bounds | undefined {
+        const collisions = this.scene.world.getCameraBounds(this);
+        if (collisions.length === 0) return undefined;
+        return boundsFromMapObject(collisions[0]);
     }
 
     private respawn() {

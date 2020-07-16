@@ -1,16 +1,7 @@
 import { Game } from "./Game";
 import { LoadingScene } from "./scenes/LoadingScene";
-import { asset } from "./Assets";
-import { Sound } from "./Sound";
 
 export class FriendlyFire extends Game {
-    @asset([
-        "music/theme_01.mp3",
-        "music/inferno.mp3",
-        "music/a-vision-of-fire.mp3"
-    ])
-    public static music: Sound[];
-
     public constructor() {
         super();
     }

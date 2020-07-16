@@ -9,8 +9,8 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { Conversation } from './Conversation';
-import { MapObjectJSON } from '*/level.json';
 import { QuestATrigger, QuestKey } from './Quests';
+import { GameObjectInfo } from './MapInfo';
 
 export enum SeedState {
     FREE = 0,
@@ -29,7 +29,7 @@ export class Seed extends NPC {
 
     public state = SeedState.FREE;
     private wood: Wood;
-    private floatingPosition: MapObjectJSON;
+    private floatingPosition: GameObjectInfo;
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 24, 24);

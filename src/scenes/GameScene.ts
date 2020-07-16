@@ -2,7 +2,7 @@ import { Scene } from "../Scene";
 import { FriendlyFire } from "../FriendlyFire";
 import { Camera } from "../Camera";
 import { World } from "../World";
-import { MapInfo } from "../MapInfo";
+import { MapInfo, GameObjectInfo } from "../MapInfo";
 import { createEntity } from "../Entity";
 import { Player } from "../Player";
 import { Fire } from "../Fire";
@@ -20,13 +20,13 @@ import { asset } from "../Assets";
 import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject, isDev } from "../util";
 import { BitmapFont } from "../BitmapFont";
 import { PauseScene } from "./PauseScene";
-import { MapObjectJSON } from '*/level.json';
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
 import { QuestATrigger, QuestKey } from '../Quests';
 import { EndScene } from './EndScene';
 import { Sound } from '../Sound';
+import { MenuList } from '../Menu';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -42,6 +42,14 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 }
 
 export class GameScene extends Scene<FriendlyFire> {
+    @asset("music/theme_01.mp3")
+    public static bgm1: Sound;
+    private bgm1BaseVolume = 0.25;
+
+    @asset("music/inferno.mp3")
+    public static bgm2: Sound;
+    private bgm2BaseVolume = 0.15;
+
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
@@ -52,8 +60,10 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    public pointsOfInterest: MapObjectJSON[] = [];
-    public triggerObjects: MapObjectJSON[] = [];
+    public pointsOfInterest: GameObjectInfo[] = [];
+    public triggerObjects: GameObjectInfo[] = [];
+    public boundObjects: GameObjectInfo[] = [];
+    public gateObjects: GameObjectInfo[] = [];
     public paused = false;
     public world!: World;
     public camera!: Camera;
@@ -88,10 +98,13 @@ export class GameScene extends Scene<FriendlyFire> {
         this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
+        this.boundObjects = this.mapInfo.getBoundObjects();
+        this.gateObjects = this.mapInfo.getGateObjects();
+
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            ...this.mapInfo.getGameObjectInfos().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
+            ...this.mapInfo.getEntities().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
         ];
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
@@ -104,12 +117,22 @@ export class GameScene extends Scene<FriendlyFire> {
         this.campfire = this.getGameObject(Campfire);
 
         this.camera = new Camera(this, this.player);
+        this.camera.setBounds(this.player.getCurrentMapBounds());
+
         this.fpsInterval = setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
 
         this.game.campaign.begin(this);
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        GameScene.bgm1.setLoop(true);
+        GameScene.bgm1.stop();
+        GameScene.bgm2.stop();
+        GameScene.bgm2.setLoop(true);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+
+        GameScene.bgm1.play();
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
@@ -144,12 +167,16 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.player.handleButtonDown, this.player);
+        this.input.onButtonUp.connect(this.player.handleButtonUp, this.player);
         this.resume();
     }
 
     public deactivate(): void {
         this.pause();
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.player.handleButtonDown, this.player);
+        this.input.onButtonUp.disconnect(this.player.handleButtonUp, this.player);
     }
 
     private handleButtonDown(event: ControllerEvent): void {
@@ -165,8 +192,8 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public gameOver() {
-        FriendlyFire.music[0].setVolume(0);
-        FriendlyFire.music[1].setVolume(0);
+        GameScene.bgm1.stop();
+        GameScene.bgm2.stop();
         GameScene.swell.setVolume(0.5);
         GameScene.swell.play();
 
@@ -213,6 +240,11 @@ export class GameScene extends Scene<FriendlyFire> {
                 ctx.strokeStyle = "blue";
                 ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
             }
+            for (const obj of this.boundObjects) {
+                const bounds = boundsFromMapObject(obj);
+                ctx.strokeStyle = "yellow";
+                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
+            }
         }
 
         // Apocalypse
@@ -239,6 +271,21 @@ export class GameScene extends Scene<FriendlyFire> {
         this.frameCounter++;
     }
 
+    public startApocalypseMusic(): void {
+        GameScene.bgm1.stop();
+        GameScene.bgm2.play();
+    }
+
+    public resetMusicVolumes(): void {
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+    }
+
+    public fadeMusic (fade: number): void {
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume * fade);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume * fade);
+    }
+
     private updateApocalypse() {
         this.fireEmitter.setPosition(this.player.x, this.player.y);
         this.fireEffects.forEach(e => e.update(this.dt));
@@ -250,7 +297,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.fire.intensity < 6) {
             this.fire.intensity = Math.max(this.fire.intensity, 4);
             this.apocalypseFactor = clamp((this.fire.intensity - 4) / 2, 0, 1);
-            FriendlyFire.music[1].setVolume(0.25 * this.apocalypseFactor);
+            GameScene.bgm2.setVolume(this.bgm2BaseVolume * this.apocalypseFactor);
             if (this.apocalypseFactor <= 0.001) {
                 // End apocalypse
                 this.apocalypseFactor = 0;
@@ -259,7 +306,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_FIRE);
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
-                FriendlyFire.music[1].stop()
+                GameScene.bgm2.stop()
             }
         }
     }
@@ -333,10 +380,16 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public pause() {
+        GameScene.bgm1.setVolume(0);
+        GameScene.bgm2.setVolume(0);
+        MenuList.pause.stop();
+        MenuList.pause.play();
         this.togglePause(true);
     }
 
     public resume() {
+        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
         this.togglePause(false);
     }
 }
