@@ -26,6 +26,7 @@ import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
 import { Campfire } from '../Campfire';
 import { Sound } from '../Sound';
+import { MenuList } from '../Menu';
 
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
@@ -162,13 +163,16 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
+        this.input.onButtonDown.connect(this.player.handleButtonDown, this.player);
+        this.input.onButtonUp.connect(this.player.handleButtonUp, this.player);
         this.resume();
     }
 
     public deactivate(): void {
         this.pause();
-        console.log('deactivate');
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.player.handleButtonDown, this.player);
+        this.input.onButtonUp.disconnect(this.player.handleButtonUp, this.player);
     }
 
     private handleButtonDown(event: ControllerEvent): void {
@@ -369,6 +373,8 @@ export class GameScene extends Scene<FriendlyFire> {
     public pause() {
         GameScene.bgm1.setVolume(0);
         GameScene.bgm2.setVolume(0);
+        MenuList.pause.stop();
+        MenuList.pause.play();
         this.togglePause(true);
     }
 

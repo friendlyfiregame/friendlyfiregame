@@ -1,6 +1,7 @@
 import { BitmapFont } from './BitmapFont';
 import { Signal } from './Signal';
 import { asset } from './Assets';
+import { Sound } from './Sound';
 
 export enum MenuAlignment { LEFT, CENTER, RIGHT };
 
@@ -69,6 +70,15 @@ export class MenuItem {
  * The draw method of the list instance has to be called to have all contianing buttons be drawn automatically.
  */
 export class MenuList {
+  @asset("sounds/interface/click.mp3")
+  public static click: Sound;
+  @asset("sounds/interface/confirm.mp3")
+  public static confirm: Sound;
+  @asset("sounds/interface/select.mp3")
+  public static select: Sound;
+  @asset("sounds/interface/bass.mp3")
+  public static pause: Sound;
+
   private align: MenuAlignment;
   private items: MenuItem[] = [];
   public onActivated = new Signal<string>();
@@ -141,6 +151,8 @@ export class MenuList {
     } else {
       this.findAndFocusNextItem(nextIndex, direction);
     }
+    MenuList.click.stop();
+    MenuList.click.play();
   }
 
   /**
@@ -157,9 +169,11 @@ export class MenuList {
     this.findAndFocusNextItem(this.getFocusedItemIndex(), -1)
   }
 
-  public executeAction(): void {
+  public executeAction(sound: Sound = MenuList.confirm): void {
     const focusedButton = this.getFocusedItem();
     if (focusedButton && focusedButton.enabled) {
+      sound.stop();
+      sound.play();
       this.onActivated.emit(focusedButton.id);
     }
   }

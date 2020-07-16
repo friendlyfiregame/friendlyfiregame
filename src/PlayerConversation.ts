@@ -2,6 +2,7 @@ import { Conversation, Interaction } from './Conversation';
 import { Player } from './Player';
 import { NPC } from './NPC';
 import { ControllerEvent } from './input/ControllerEvent';
+import { MenuList } from './Menu';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;
@@ -83,6 +84,8 @@ export class PlayerConversation {
             }
             const upDown = (e.isMenuDown ? 1 : 0) - (e.isMenuUp ? 1 : 0);
             if (upDown !== 0) {
+                MenuList.click.stop();
+                MenuList.click.play();
                 this.setSelectedOption(this.selectedOption + upDown);
             }
         }
@@ -100,6 +103,7 @@ export class PlayerConversation {
                 const index = (options.length === 1) ? 0 : this.selectedOption;
                 const option = options[index];
                 if (option) {
+                    MenuList.select.play();
                     option.execute();
                 } else {
                     console.error("Tried to execute invalid option at index " + index + " in interaction around line: "

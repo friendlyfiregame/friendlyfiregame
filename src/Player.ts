@@ -191,9 +191,8 @@ export class Player extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
-        scene.game.controllerManager.onButtonDown.connect(this.handleButtonDown, this);
-        scene.game.controllerManager.onButtonUp.connect(this.handleButtonUp, this);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
+
         if (isDev()) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
@@ -303,7 +302,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private async handleButtonDown(event: ControllerEvent) {
+    public async handleButtonDown(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
         }
@@ -338,7 +337,6 @@ export class Player extends PhysicsEntity {
                         return;
                     }
                 }
-
 
                 if (this.carrying instanceof Stone) {
                     if (this.canThrowStoneIntoWater()) {
@@ -382,7 +380,7 @@ export class Player extends PhysicsEntity {
 
     // Used in dev mode to enable some special keys that can only be triggered
     // by using a keyboard.
-    private handleKeyDown(event: KeyboardEvent): void {
+    public handleKeyDown(event: KeyboardEvent): void {
         if (this.scene.paused) {
             return;
         }
@@ -478,7 +476,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private handleButtonUp(event: ControllerEvent) {
+    public handleButtonUp(event: ControllerEvent) {
         if (this.scene.paused) {
             return;
         }
