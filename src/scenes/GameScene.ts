@@ -28,6 +28,8 @@ import { Campfire } from '../Campfire';
 import { Sound } from '../Sound';
 import { MenuList } from '../Menu';
 
+export enum FadeDirection { FADE_IN, FADE_OUT }
+
 export interface GameObject {
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
     update(dt: number): void;
@@ -88,6 +90,10 @@ export class GameScene extends Scene<FriendlyFire> {
     private mapInfo!: MapInfo;
     public dt: number = 0;
     private fpsInterval: any = null;
+    private fadeToBlackEndTime = 0;
+    private fadeToBlackStartTime = 0;
+    private fadeToBlackFactor = 0;
+    private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
 
     public setup(): void {
         this.mapInfo = new MapInfo();
@@ -207,6 +213,14 @@ export class GameScene extends Scene<FriendlyFire> {
             obj.update(dt);
         }
         this.camera.update(dt, this.gameTime);
+
+        if (this.fadeToBlackEndTime > this.gameTime) {
+            let fade = (this.gameTime - this.fadeToBlackStartTime) / (this.fadeToBlackEndTime - this.fadeToBlackStartTime);
+            if (this.faceToBlackDirection === FadeDirection.FADE_IN) {
+                fade = 1 - fade;
+            }
+            this.fadeToBlackFactor = fade;
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -236,6 +250,11 @@ export class GameScene extends Scene<FriendlyFire> {
                 ctx.strokeStyle = "yellow";
                 ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
             }
+            for (const obj of this.gateObjects) {
+                const bounds = boundsFromMapObject(obj);
+                ctx.strokeStyle = "green";
+                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
+            }
         }
 
         // Apocalypse
@@ -250,6 +269,12 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.apocalypse) {
             this.drawApocalypseOverlay(ctx);
         }
+
+        // Gate Fade
+        if (this.fadeToBlackFactor > 0) {
+            this.drawFade(ctx, this.fadeToBlackFactor, "black");
+        }
+
         // Cinematic bars
         this.camera.renderCinematicBars(ctx);
 
@@ -275,6 +300,22 @@ export class GameScene extends Scene<FriendlyFire> {
     public fadeMusic (fade: number): void {
         GameScene.bgm1.setVolume(this.bgm1BaseVolume * fade);
         GameScene.bgm2.setVolume(this.bgm2BaseVolume * fade);
+    }
+
+    public fadeToBlack(duration: number, direction: FadeDirection): Promise<void> {
+        return new Promise((resolve) => {
+            this.fadeToBlackStartTime = this.gameTime;
+            this.fadeToBlackEndTime = this.gameTime + duration;
+            this.faceToBlackDirection = direction;
+            setTimeout(() => {
+                if (direction === FadeDirection.FADE_OUT) {
+                    this.fadeToBlackFactor = 1;
+                } else {
+                    this.fadeToBlackFactor = 0;
+                }
+                resolve();
+            }, duration * 1000);
+        });
     }
 
     private updateApocalypse() {

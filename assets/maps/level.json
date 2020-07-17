@@ -375,15 +375,49 @@
                  "width":3168,
                  "x":288,
                  "y":96
+                }, 
+                {
+                 "height":48,
+                 "id":36,
+                 "name":"door_1",
+                 "properties":[
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"door_2"
+                        }],
+                 "rotation":0,
+                 "type":"gate",
+                 "visible":true,
+                 "width":24,
+                 "x":1488,
+                 "y":1872
+                }, 
+                {
+                 "height":48,
+                 "id":37,
+                 "name":"door_2",
+                 "properties":[
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"door_1"
+                        }],
+                 "rotation":0,
+                 "type":"gate",
+                 "visible":true,
+                 "width":24,
+                 "x":1584,
+                 "y":1848
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":36,
+ "nextobjectid":38,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.0",
