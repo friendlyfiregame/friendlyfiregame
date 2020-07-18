@@ -453,6 +453,12 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    /**
+     * Teleport the player fromt he source gate to it's corresponding target gate.
+     * The teleport is not instand but accompanied by a fade to black to obscure the teleportation.
+     * Also sets the camera bounds to the target position
+     * @param gate the source the player enters
+     */
     private enterGate(gate: GameObjectInfo): void {
         if (gate && gate.properties.target) {
             this.isControllable = false;
@@ -468,6 +474,7 @@ export class Player extends PhysicsEntity {
                     Player.leaveGateSound.play();
                     this.x = targetGate.x + (targetGate.width / 2);
                     this.y = targetGate.y - targetGate.height;
+                    this.scene.camera.setBounds(this.getCurrentMapBounds())
                     this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
                         this.isControllable = true;
                     });
