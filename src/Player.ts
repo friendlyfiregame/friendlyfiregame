@@ -20,7 +20,7 @@ import { Wood, WoodState } from "./Wood";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
-import { GameScene } from "./scenes/GameScene";
+import { GameScene, FadeDirection } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
@@ -116,6 +116,12 @@ export class Player extends PhysicsEntity {
     @asset("sounds/genderswapping/fairydust.mp3")
     private static genderSwapSound: Sound;
 
+    @asset("sounds/gate/door_open.mp3")
+    private static enterGateSound: Sound;
+
+    @asset("sounds/gate/door_close.mp3")
+    private static leaveGateSound: Sound;
+
     @asset([
         "sounds/jumping/jumping_female.mp3",
         "sounds/jumping/jumping.mp3"
@@ -156,6 +162,7 @@ export class Player extends PhysicsEntity {
     private usedDoubleJump = false;
     private hasBeard = false;
     private autoMove: AutoMove | null = null;
+    private isControllable: boolean = true;
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
@@ -224,6 +231,7 @@ export class Player extends PhysicsEntity {
 
     public startAutoMove (x: number, turnAround: boolean) {
         if (!this.autoMove) {
+            this.isControllable = false;
             this.autoMove = {
                 destinationX: x,
                 lastX: this.x,
@@ -239,6 +247,7 @@ export class Player extends PhysicsEntity {
         this.autoMove = null;
         this.moveRight = false;
         this.moveLeft = false;
+        this.isControllable = true;
     }
 
     public enableDoubleJump () {
@@ -281,7 +290,7 @@ export class Player extends PhysicsEntity {
     }
 
     public async handleButtonDown(event: ControllerEvent) {
-        if (this.scene.paused) {
+        if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
         if (this.dance) {
@@ -296,63 +305,61 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        if (!this.autoMove) {
-            if (event.isPlayerMoveRight) {
-                this.moveRight = true;
-                this.moveLeft = false;
-                this.handleRunningCheck(1);
-            } else if (event.isPlayerMoveLeft) {
-                this.moveLeft = true;
-                this.moveRight = false;
-                this.handleRunningCheck(-1);
-            } else if (event.isPlayerAction) {
+        if (event.isPlayerMoveRight) {
+            this.moveRight = true;
+            this.moveLeft = false;
+            this.handleRunningCheck(1);
+        } else if (event.isPlayerMoveLeft) {
+            this.moveLeft = true;
+            this.moveRight = false;
+            this.handleRunningCheck(-1);
+        } else if (event.isPlayerAction) {
 
-                // Check for gates / doors
-                if (!this.flying) {
-                    const gate = this.scene.world.getGateCollisions(this)[0];
-                    if (gate) {
-                        this.enterGate(gate);
-                        return;
-                    }
+            // Check for gates / doors
+            if (!this.flying) {
+                const gate = this.scene.world.getGateCollisions(this)[0];
+                if (gate) {
+                    this.enterGate(gate);
+                    return;
                 }
+            }
 
-                if (this.carrying instanceof Stone) {
-                    if (this.canThrowStoneIntoWater()) {
-                        this.carrying.setVelocity(10 * this.direction, 10);
-                        this.carrying = null;
-                        Player.throwingSound.stop();
-                        Player.throwingSound.play();
-                    } else {
-                        // TODO Say something when wrong place to throw
-                    }
-                } else if (this.carrying instanceof Seed) {
-                    this.carrying.setVelocity(5 * this.direction, 5);
-                    this.carrying = null;
-                    Player.throwingSound.stop();
-                    Player.throwingSound.play();
-                } else if (this.carrying instanceof Wood) {
-                    this.carrying.setVelocity(5 * this.direction, 5);
+            if (this.carrying instanceof Stone) {
+                if (this.canThrowStoneIntoWater()) {
+                    this.carrying.setVelocity(10 * this.direction, 10);
                     this.carrying = null;
                     Player.throwingSound.stop();
                     Player.throwingSound.play();
                 } else {
-                    if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
-                        const conversation = this.closestNPC.conversation;
-                        // Disable auto movement to a safe talking distance for the stone in the river
-                        const autoMove = this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT ? false : true;
-                        this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
-    
-                    } else if (this.canDanceToMakeRain()) {
-                        this.startDance(this.scene.apocalypse ? 3 : 2);
-                        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
-                    }
+                    // TODO Say something when wrong place to throw
                 }
-            } else if (event.isPlayerJump && this.canJump()) {
-                this.jumpKeyPressed = true;
-                this.jump();
-            } else if (event.isPlayerDrop) {
-                this.jumpDown = true;
+            } else if (this.carrying instanceof Seed) {
+                this.carrying.setVelocity(5 * this.direction, 5);
+                this.carrying = null;
+                Player.throwingSound.stop();
+                Player.throwingSound.play();
+            } else if (this.carrying instanceof Wood) {
+                this.carrying.setVelocity(5 * this.direction, 5);
+                this.carrying = null;
+                Player.throwingSound.stop();
+                Player.throwingSound.play();
+            } else {
+                if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                    const conversation = this.closestNPC.conversation;
+                    // Disable auto movement to a safe talking distance for the stone in the river
+                    const autoMove = this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT ? false : true;
+                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+
+                } else if (this.canDanceToMakeRain()) {
+                    this.startDance(this.scene.apocalypse ? 3 : 2);
+                    this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
+                }
             }
+        } else if (event.isPlayerJump && this.canJump()) {
+            this.jumpKeyPressed = true;
+            this.jump();
+        } else if (event.isPlayerDrop) {
+            this.jumpDown = true;
         }
     }
 
@@ -424,12 +431,32 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    /**
+     * Teleport the player fromt he source gate to it's corresponding target gate.
+     * The teleport is not instand but accompanied by a fade to black to obscure the teleportation.
+     * Also sets the camera bounds to the target position
+     * @param gate the source the player enters
+     */
     private enterGate(gate: GameObjectInfo): void {
         if (gate && gate.properties.target) {
+            this.isControllable = false;
+            this.moveRight = false;
+            this.moveLeft = false;
             const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
             if (targetGate) {
-                this.x = targetGate.x;
-                this.y = targetGate.y - targetGate.height;
+                Player.enterGateSound.stop();
+                Player.enterGateSound.play();
+                this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
+                .then(() => {
+                    Player.leaveGateSound.stop();
+                    Player.leaveGateSound.play();
+                    this.x = targetGate.x + (targetGate.width / 2);
+                    this.y = targetGate.y - targetGate.height;
+                    this.scene.camera.setBounds(this.getCurrentMapBounds())
+                    this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
+                        this.isControllable = true;
+                    });
+                });
             }
         }
     }
@@ -455,7 +482,7 @@ export class Player extends PhysicsEntity {
     }
 
     public handleButtonUp(event: ControllerEvent) {
-        if (this.scene.paused) {
+        if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
         if (event.isPlayerMoveRight) {
