@@ -24,11 +24,11 @@ export abstract class Game {
     public readonly gamepad = new GamepadInput();
     public readonly scenes = new Scenes(this);
     public readonly assets = new Assets();
+    public readonly campaign = new Campaign(this);
 
     public backgroundColor: string = "black";
 
     public canvas: HTMLCanvasElement;
-    public campaign!: Campaign;
     private readonly ctx: CanvasRenderingContext2D;
     private readonly gameLoopCallback = this.gameLoop.bind(this);
     private gameLoopId: number | null = null;
@@ -36,7 +36,6 @@ export abstract class Game {
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
-        this.campaign = new Campaign(this);
         const canvas = this.canvas = createCanvas(width, height);
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
         // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.

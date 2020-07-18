@@ -59,6 +59,11 @@ export abstract class Quest {
     }));
   }
 
+  public reset (): void {
+    this.finished = false;
+    this.triggers.forEach((t, i) => { this.unTrigger(i) })
+  }
+
   public trigger(index: number) {
     if (this.triggers[index]) {
       this.triggers[index].isTriggered = true;

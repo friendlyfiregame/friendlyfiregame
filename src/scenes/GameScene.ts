@@ -78,7 +78,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public spider!: Spider;
     public caveman!: Caveman;
     public campfire!: Campfire;
-    // public campaign!: Campaign;
     public particles!: Particles;
     public fire!: Fire;
     public fireFuryEndTime = 0;
@@ -100,12 +99,15 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         this.mapInfo = new MapInfo();
-        // this.campaign = new Campaign(this);
         this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
+
+        this.gameTime = 0;
+        this.apocalypse = false;
+        this.fireFuryEndTime = 0;
 
         this.gameObjects = [
             this.world = new World(this),

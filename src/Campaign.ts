@@ -64,8 +64,14 @@ export class Campaign {
      * Init campaign. Assign Game Scene and enable all initial dialog trees
      * @param gameScene Game Scene
      */
-    public begin(gameScene: GameScene) {;
+    public begin(gameScene: GameScene) {
         this.gameScene = gameScene;
+
+        // Rest quest progress
+        this.quests.forEach(q => {
+            q.reset();
+        })
+
         this.getQuest(QuestKey.A).trigger(QuestATrigger.JUST_ARRIVED);
 
         // Setup initial NPC dialogs
