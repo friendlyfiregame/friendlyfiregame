@@ -2,8 +2,9 @@ import { sleep } from "./util";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
+import { GAME_CANVAS_WIDTH } from './constants';
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false):
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
         CanvasRenderingContext2D {
     if (w < 2 * r) {r = w / 2};
     if (h < 2 * r) {r = h / 2};
@@ -17,9 +18,9 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
     ctx.arcTo(x + w, y, x + w, y + h, r);
     ctx.arcTo(x + w, y + h, x, y + h, r);
     if (!up) {
-        ctx.lineTo(x + w / 2 - 4, y + h);
-        ctx.lineTo(x + w / 2, y + h + 4);
-        ctx.lineTo(x + w / 2 + 4, y + h);
+        ctx.lineTo(x + w / 2 - 4 + tipOffset, y + h);
+        ctx.lineTo(x + w / 2 + tipOffset, y + h + 4);
+        ctx.lineTo(x + w / 2 + 4 + tipOffset, y + h);
     }
     ctx.arcTo(x, y + h, x, y, r);
     ctx.arcTo(x, y, x + w, y, r);
@@ -134,15 +135,27 @@ export class SpeechBubble {
 
         let posX = this.x;
         let posY = this.y;
+        let offsetX = 0;
         if (this.relativeToScreen) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             posX = ctx.canvas.width / 2;
             posY = - ctx.canvas.height * 0.63 - this.height;
+        } else {
+            // Check if Speech Bubble clips the viewport and correct position
+            const visibleRect = this.scene.camera.getVisibleRect()
+            const relativeX = posX - visibleRect.x;
+            const clipAmount = Math.max((metrics.width / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (metrics.width / 2), 0);
+
+            if (clipAmount !== 0) {
+                offsetX = clipAmount + (10 * Math.sign(clipAmount));
+            }
         }
+
+        posX -= offsetX;
 
         ctx.beginPath();
         ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
-            this.relativeToScreen);
+            this.relativeToScreen, offsetX);
         ctx.fillStyle = this.color;
         ctx.fill();
 
