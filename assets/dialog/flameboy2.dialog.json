@@ -60,7 +60,7 @@
         ">Sequence? Triggers? What does all that mean?",
         "Whoops, don't mind me. Just giving away power ups here",
         ">But...",
-        "Byee @nodialog !corruptFlameboy !end"
+        "Byee @nodialog !end"
     ],
     "nodialog": [
         "Error: No dialog found @nodialog !end"

@@ -197,7 +197,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public gameOver() {
+    public gameOver(questKey?: QuestKey) {
         GameScene.bgm1.stop();
         GameScene.bgm2.stop();
         GameScene.swell.setVolume(0.5);

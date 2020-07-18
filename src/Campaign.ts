@@ -173,6 +173,7 @@ export class Campaign {
                     break;
                 case "endgame":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
+                    this.getQuest(QuestKey.A).finish();
                     this.gameScene.fire.conversation = null;
                     this.gameScene!.gameOver();
                     break;
