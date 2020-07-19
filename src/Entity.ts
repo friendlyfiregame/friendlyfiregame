@@ -7,7 +7,6 @@ export interface EntityDistance {
     distance: number;
 }
 
-
 export type Bounds = {
     x: number;
     y: number;

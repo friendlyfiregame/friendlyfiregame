@@ -16,6 +16,7 @@ import { Particles, ParticleEmitter, particles, valueCurves } from "../Particles
 import { Seed } from "../Seed";
 import { FireGfx } from "../FireGfx";
 import { Cloud } from "../Cloud";
+import { MovingPlatform } from '../MovingPlatform';
 import { asset } from "../Assets";
 import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject, isDev } from "../util";
 import { BitmapFont } from "../BitmapFont";
@@ -104,6 +105,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
+
+        // Force execution of entity decorator
+        if (this instanceof MovingPlatform)
 
         this.gameTime = 0;
         this.apocalypse = false;

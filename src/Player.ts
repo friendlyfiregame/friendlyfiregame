@@ -316,7 +316,7 @@ export class Player extends PhysicsEntity {
         } else if (event.isPlayerAction) {
 
             // Check for gates / doors
-            if (!this.flying) {
+            if (!this.flying && !this.carrying) {
                 const gate = this.scene.world.getGateCollisions(this)[0];
                 if (gate) {
                     this.enterGate(gate);
@@ -535,7 +535,7 @@ export class Player extends PhysicsEntity {
         if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
                 && !this.playerConversation && !this.dance) {
             this.drawTooltip(ctx, "Talk", "interact");
-        } else if (this.isInFrontOfDoor()) {
+        } else if (this.canEnterDoor()) {
             this.drawTooltip(ctx, "Enter", "interact");
         } else if (this.canThrowStoneIntoWater()) {
             this.drawTooltip(ctx, "Throw stone", "interact");
@@ -557,7 +557,7 @@ export class Player extends PhysicsEntity {
 
     private canThrowStoneIntoWater(): boolean {
         return this.carrying instanceof Stone && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER);
+            this.scene.world.collidesWith(this.x - 30, this.y - 20) === Environment.WATER);
     }
 
     private canThrowSeedIntoSoil(): boolean {
@@ -582,8 +582,8 @@ export class Player extends PhysicsEntity {
         );
     }
 
-    private isInFrontOfDoor(): boolean {
-        return !this.flying && this.scene.world.getGateCollisions(this).length > 0;
+    private canEnterDoor(): boolean {
+        return !this.flying && !this.carrying && this.scene.world.getGateCollisions(this).length > 0;
     }
 
     public getCurrentMapBounds (): Bounds | undefined {
