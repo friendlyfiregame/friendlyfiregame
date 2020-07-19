@@ -1,7 +1,8 @@
 import { SpeechBubble } from "./SpeechBubble";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED
+    PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
+    PLAYER_JUMP_TIMING_THRESHOLD
 } from "./constants";
 import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -148,8 +149,9 @@ export class Player extends PhysicsEntity {
 
     private doubleTapThreshold = 0.5;
     private doubleTapTimestamp = 0;
-    // private doubleTapTimer = this.doubleTapThreshold;
     private running: boolean = false;
+
+    private jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
 
     public jumpDown: boolean = false;
     private jumpKeyPressed: boolean | null = false;
@@ -157,8 +159,10 @@ export class Player extends PhysicsEntity {
     private dance: Dance | null = null;
     private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
+    private canRun = false;
     private doubleJump = false;
     private multiJump = false;
+    private usedJump = false;
     private usedDoubleJump = false;
     private hasBeard = false;
     private autoMove: AutoMove | null = null;
@@ -274,7 +278,9 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
-    private handleRunningCheck (direction: number) {
+    private handleRunningCheck (direction: number): void {
+        if (!this.canRun) return;
+
         if (this.carrying) {
             this.running = false;
             return;
@@ -466,6 +472,8 @@ export class Player extends PhysicsEntity {
     private canJump(): boolean {
         if (this.multiJump) {
             return true;
+        } else if (!this.usedJump && this.jumpThresholdTimer > 0) {
+            return true;
         } else if (this.doubleJump) {
             return !this.usedDoubleJump;
         }
@@ -476,11 +484,13 @@ export class Player extends PhysicsEntity {
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
         Player.jumpingSounds[this.gender].stop();
         Player.jumpingSounds[this.gender].play();
-        if (this.flying) {
+
+        if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
             this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
             this.doubleJumpEmitter.emit(20);
         }
+        this.usedJump = true;
     }
 
     public handleButtonUp(event: ControllerEvent) {
@@ -611,6 +621,12 @@ export class Player extends PhysicsEntity {
         return this.playerSpriteMetadata;
     }
 
+    private resetJumps (): void {
+        this.usedJump = false;
+        this.usedDoubleJump = false;
+        this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
+    }
+
     update(dt: number): void {
         super.update(dt);
 
@@ -726,24 +742,31 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityX() === 0 && this.getVelocityY() === 0) {
             this.animation = "idle";
             this.flying = false;
-            this.usedDoubleJump = false;
+            this.resetJumps();
         } else {
             if (this.getVelocityY() > 0) {
                 this.animation = "jump";
                 this.flying = true;
             } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
-                this.animation = "fall";
+                if (this.jumpThresholdTimer < 0) {
+                    this.animation = "fall";
+                }
                 this.flying = true;
             } else {
                 this.animation = (this.running && !this.carrying) ? "run" : "walk";
                 this.flying = false;
-                this.usedDoubleJump = false;
+                this.resetJumps();
             }
         }
 
-        if(wasFlying && !this.flying) {
+        if (wasFlying && !this.flying) {
             Player.landingSound.stop();
             Player.landingSound.play();
+        }
+
+        // Reduce jump threshold timer when player did not jump yet when falling off an edge
+        if (this.flying && !this.usedJump && this.jumpThresholdTimer > 0) {
+            this.jumpThresholdTimer -= dt;
         }
 
         // Check for NPC's that can be interacted with
