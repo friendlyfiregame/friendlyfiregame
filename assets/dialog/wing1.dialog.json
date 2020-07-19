@@ -41,7 +41,7 @@
         ">Are there peaceful options as well?",
         "Yeah, I heard something about rain dancing on top of the cloud to your left. But that's for people without anger issues.",
         ">Thanks... seek help",
-        "Great advice, mom! @entry"
+        "Great advice, mom! @entry !learnraindance"
     ],
     "grown": [
         "What a great achievement. I'm so proud of you. !set visited",

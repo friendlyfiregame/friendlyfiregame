@@ -251,6 +251,7 @@ export class Player extends PhysicsEntity {
     }
 
     public enableDoubleJump () {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
         if (!this.doubleJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
             this.doubleJump = true;
@@ -258,6 +259,7 @@ export class Player extends PhysicsEntity {
     }
 
     public enableMultiJump () {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
         if (!this.multiJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
             this.multiJump = true;
@@ -572,6 +574,7 @@ export class Player extends PhysicsEntity {
     }
 
     private canDanceToMakeRain(): boolean {
+        if (!this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)) return false;
         const ground = this.getGround();
         return (
             (this.isCollidingWithTrigger('raincloud_sky') &&

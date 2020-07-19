@@ -188,7 +188,6 @@ export class Campaign {
                     this.addState(params[0] as any);
                     break;
                 case "doublejump":
-                    this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
                     this.gameScene.player.enableDoubleJump();
                     break;
                 case "multijump":
@@ -209,6 +208,9 @@ export class Campaign {
                     break;
                 case "pickupstone":
                     this.gameScene.stone.pickUp();
+                    break;
+                case "learnraindance":
+                    this.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
                     break;
                 case "talkedToFireWithWood":
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
