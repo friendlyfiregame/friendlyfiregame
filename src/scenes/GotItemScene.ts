@@ -6,7 +6,7 @@ import { BitmapFont } from "../BitmapFont";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
 
-export enum Item { DOUBLEJUMP, MULTIJUMP }
+export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP }
 
 export class GotItemScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
@@ -19,6 +19,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private static sound: Sound;
 
     @asset([
+        "sprites/powerup_running.png",
         "sprites/powerup_doublejump.png",
         "sprites/powerup_multijump.png"
     ])
@@ -35,11 +36,18 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private floatSpeed = 4;
 
     private titles = [
+        "Fear of the Dark",
         "Double Jump Boots",
         "Flying Wings"
     ]
 
     private subtitles = [
+        [
+            "Gotta go fast!",
+            "Never look back",
+            "An exceptional ally",
+            "There is someone in that dark corner"
+        ],
         [
             "Not suitable for step dancing",
             "An all time classic",
@@ -58,8 +66,10 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         GotItemScene.sound.play();
-        if (this.properties?.item) {
+        console.log(this.properties);
+        if (this.properties?.item !== undefined) {
             this.targetItem = this.properties.item as Item;
+            console.log(this.targetItem);
         }
         this.selectedSubtitle = "'" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "'";
         this.stopped = false;

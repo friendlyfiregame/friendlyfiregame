@@ -254,6 +254,14 @@ export class Player extends PhysicsEntity {
         this.isControllable = true;
     }
 
+    public enableRunning () {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
+        if (!this.canRun) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.RUNNING });
+            this.canRun = true;
+        }
+    }
+
     public enableDoubleJump () {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
         if (!this.doubleJump) {
