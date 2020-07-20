@@ -41,5 +41,8 @@ export const PLAYER_JUMP_HEIGHT = 3.75;
 /** Player jump height in meters. */
 export const PLAYER_BOUNCE_HEIGHT = 10;
 
+/** Terminal velocity in m/s */
+export const TERMINAL_VELOCITY = -30;
+
 /** Threshold in seconds for allowing a jump after entering falling state  */
 export const PLAYER_JUMP_TIMING_THRESHOLD = 0.1;

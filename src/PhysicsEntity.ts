@@ -1,5 +1,5 @@
 import { Entity } from './Entity';
-import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
+import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY, TERMINAL_VELOCITY } from "./constants";
 import { Environment } from "./World";
 import { Player } from "./Player";
 import { GameObject } from "./scenes/GameScene";
@@ -141,6 +141,11 @@ export abstract class PhysicsEntity extends Entity {
                     this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
             if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
+
+                // Apply terminal velocity to falling entities
+                if (this.velocityY < 0) {
+                    this.velocityY = Math.max(this.velocityY, TERMINAL_VELOCITY);
+                }
             } else if (environment === Environment.WATER) {
                 this.velocityY = DROWNING_VELOCITY;
                 this.velocityX = 0;
