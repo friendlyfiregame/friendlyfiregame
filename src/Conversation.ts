@@ -101,7 +101,6 @@ export class Conversation {
     }
 
     private setVariable(name = "", value = "true"): void {
-        // console.log("Setting conversation variable", name, "to", value);
         if (name.startsWith("$")) {
             // Global variable
             globalVariables[name] = value;

@@ -16,6 +16,7 @@ import spider1 from '../assets/dialog/spider1.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import wing1 from '../assets/dialog/wing1.dialog.json';
+import shadowpresence1 from '../assets/dialog/shadowpresence1.dialog.json';
 import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
@@ -41,6 +42,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
     "wing1": wing1,
+    "shadowpresence1": shadowpresence1,
 };
 
 export class Campaign {
@@ -82,6 +84,7 @@ export class Campaign {
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
         this.runAction("enable", null, ["wing", "wing1"]);
         this.runAction("enable", null, ["spider", "spider1"]);
+        this.runAction("enable", null, ["shadowpresence", "shadowpresence1"]);
     }
 
     public hasState(state: CampaignState) {
@@ -172,6 +175,7 @@ export class Campaign {
                     break;
                 case "gotFireQuest":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_FIRE);
+                    Conversation.setGlobal("gotFireQuest", "true");
                     this.runAction("enable", null, ["tree", "tree1"]);
                     break;
                 case "givebeard":
@@ -186,6 +190,9 @@ export class Campaign {
     
                 case "game":
                     this.addState(params[0] as any);
+                    break;
+                case "enableRunning":
+                    this.gameScene.player.enableRunning();
                     break;
                 case "doublejump":
                     this.gameScene.player.enableDoubleJump();
@@ -238,7 +245,8 @@ export class Campaign {
                         "flameboy": this.gameScene.flameboy,
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
-                        "caveman": this.gameScene.caveman
+                        "caveman": this.gameScene.caveman,
+                        "shadowpresence": this.gameScene.shadowPresence
                     };
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
@@ -256,7 +264,8 @@ export class Campaign {
                         "flameboy": this.gameScene.flameboy,
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
-                        "caveman": this.gameScene.caveman
+                        "caveman": this.gameScene.caveman,
+                        "shadowpresence": this.gameScene.shadowPresence
                     };
                     const targetNpc1 = npcMap1[char1];
                     if (targetNpc1) {

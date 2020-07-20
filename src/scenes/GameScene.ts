@@ -28,6 +28,7 @@ import { QuestATrigger, QuestKey } from '../Quests';
 import { EndScene } from './EndScene';
 import { Sound } from '../Sound';
 import { MenuList } from '../Menu';
+import { ShadowPresence } from '../ShadowPresence';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -77,6 +78,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public flameboy!: FlameBoy;
     public wing!: Wing;
     public spider!: Spider;
+    public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
     public campfire!: Campfire;
     public particles!: Particles;
@@ -124,6 +126,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.tree = this.getGameObject(Tree);
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
+        this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
         this.caveman = this.getGameObject(Caveman);
         this.campfire = this.getGameObject(Campfire);
