@@ -29,6 +29,7 @@ import { EndScene } from './EndScene';
 import { Sound } from '../Sound';
 import { MenuList } from '../Menu';
 import { ShadowPresence } from '../ShadowPresence';
+import { StoneDisciple } from '../StoneDisciple';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -73,6 +74,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public camera!: Camera;
     public player!: Player;
     public stone!: Stone;
+    public stoneDisciple!: StoneDisciple;
     public tree!: Tree;
     public seed!: Seed;
     public flameboy!: FlameBoy;
@@ -123,6 +125,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
+        this.stoneDisciple! = this.getGameObject(StoneDisciple);
         this.tree = this.getGameObject(Tree);
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
