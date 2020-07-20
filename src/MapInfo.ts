@@ -12,10 +12,10 @@ export enum MapObjectType {
 export interface GameObjectProperties {
     direction?: "up" | "down" | "left" | "right",
     distance: number;
-
-    /** */
     velocity: number;
     target?: string;
+    teleportY?: number;
+    disableParticles?: boolean;
 }
 
 export interface GameObjectInfo {

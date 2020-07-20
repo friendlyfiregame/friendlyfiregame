@@ -66,10 +66,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         GotItemScene.sound.play();
-        console.log(this.properties);
         if (this.properties?.item !== undefined) {
             this.targetItem = this.properties.item as Item;
-            console.log(this.targetItem);
         }
         this.selectedSubtitle = "'" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "'";
         this.stopped = false;

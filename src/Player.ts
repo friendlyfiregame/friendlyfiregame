@@ -177,6 +177,7 @@ export class Player extends PhysicsEntity {
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
     private genderSwapEmitter: ParticleEmitter;
+    private disableParticles = false;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
@@ -495,8 +496,10 @@ export class Player extends PhysicsEntity {
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
-            this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
-            this.doubleJumpEmitter.emit(20);
+            if (!this.disableParticles) {
+                this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+                this.doubleJumpEmitter.emit(20);
+            }
         }
         this.usedJump = true;
     }
@@ -637,6 +640,7 @@ export class Player extends PhysicsEntity {
 
     update(dt: number): void {
         super.update(dt);
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         this.speechBubble.update(this.x, this.y);
         if (this.thinkBubble) {
@@ -790,11 +794,13 @@ export class Player extends PhysicsEntity {
         }
 
         // Spawn random dust particles while walking
-        if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
-            if (timedRnd(dt, 0.2) || wasFlying) {
-                this.dustEmitter.setPosition(this.x, this.y);
-                const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
-                this.dustEmitter.emit(count);
+        if (!this.disableParticles) {
+            if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
+                if (timedRnd(dt, 0.2) || wasFlying) {
+                    this.dustEmitter.setPosition(this.x, this.y);
+                    const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
+                    this.dustEmitter.emit(count);
+                }
             }
         }
 
@@ -840,6 +846,24 @@ export class Player extends PhysicsEntity {
                 }
                 this.dance = null;
             }
+        }
+
+        this.disableParticles = false;
+
+        // Logic from Triggers
+        if (triggerCollisions.length > 0) {
+            triggerCollisions.forEach(trigger => {
+                // Handle teleport logic
+                const teleportY = trigger.properties.teleportY;
+                if (teleportY) {
+                    this.y -= teleportY;
+                }
+
+                const disableParticles = trigger.properties.disableParticles;
+                if (disableParticles) {
+                    this.disableParticles = true;
+                }
+            })
         }
     }
 
