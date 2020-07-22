@@ -222,7 +222,7 @@ export class Campaign {
                     this.gameScene.stone.pickUp();
                     break;
                 case "learnraindance":
-                    this.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
+                    this.gameScene.player.enableRainDance();
                     break;
                 case "talkedToFireWithWood":
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {

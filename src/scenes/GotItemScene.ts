@@ -6,7 +6,7 @@ import { BitmapFont } from "../BitmapFont";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
 
-export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP }
+export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE }
 
 export class GotItemScene extends Scene<FriendlyFire> {
     @asset("fonts/standard.font.json")
@@ -21,7 +21,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
     @asset([
         "sprites/powerup_running.png",
         "sprites/powerup_doublejump.png",
-        "sprites/powerup_multijump.png"
+        "sprites/powerup_multijump.png",
+        "sprites/powerup_raindance.png"
     ])
     private static itemImages: HTMLImageElement[];
     private itemPosition = {
@@ -38,7 +39,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private titles = [
         "Fear of the Dark",
         "Double Jump Boots",
-        "Flying Wings"
+        "Flying Wings",
+        "The Lost Cause"
     ]
 
     private subtitles = [
@@ -60,6 +62,9 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Feels like cheating",
             "Free stuff is the best",
             "m-m-m-m-multijump"
+        ],
+        [
+            "Like tears in the rain"
         ],
     ]
     private selectedSubtitle = '';

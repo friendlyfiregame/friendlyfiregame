@@ -22,6 +22,7 @@ export interface GameObjectProperties {
     setDialogValue?: string;
     content?: string;
     bgm?: string;
+    identifier?: string;
 }
 
 export interface GameObjectInfo {

@@ -47,10 +47,9 @@ export class ShadowPresence extends NPC {
 
     checkPlayerDistance (): void {
         this.isNearPlayer = false;
-        const player = this.scene.player;
-        if (Math.hypot(this.x - player.x, (this.y + (this.height / 2) ) - (player.y + player.height / 2)) < 60) {
+        if (this.distanceTo(this.scene.player) < 60) {
             this.isNearPlayer = true;
-        };
+        }
     }
 
     update(dt: number): void {

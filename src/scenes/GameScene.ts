@@ -31,6 +31,7 @@ import { MenuList } from '../Menu';
 import { ShadowPresence } from '../ShadowPresence';
 import { StoneDisciple } from '../StoneDisciple';
 import { Sign } from '../Sign';
+import { Wall } from '../Wall';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -49,7 +50,8 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 
 export enum BgmId {
     OVERWORLD = 'overworld',
-    INFERNO = 'inferno'
+    INFERNO = 'inferno',
+    CAVE = 'cave'
 }
 
 export type BackgroundTrack = {
@@ -66,12 +68,21 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("music/inferno.mp3")
     public static bgm2: Sound;
 
+    @asset("music/cave.mp3")
+    public static bgmCave: Sound;
+
     private backgroundTracks: BackgroundTrack[] = [
         {
             active: false,
             id: BgmId.OVERWORLD,
             sound: GameScene.bgm1,
             baseVolume: 0.25
+        },
+        {
+            active: false,
+            id: BgmId.CAVE,
+            sound: GameScene.bgmCave,
+            baseVolume: 1
         },
         {
             active: false,
@@ -139,6 +150,7 @@ export class GameScene extends Scene<FriendlyFire> {
         // Force execution of entity decorator
         if (this instanceof MovingPlatform)
         if (this instanceof Sign)
+        if (this instanceof Wall)
 
         this.gameTime = 0;
         this.apocalypse = false;
@@ -171,15 +183,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         this.game.campaign.begin(this);
 
-        this.playBackgroundTrack(BgmId.OVERWORLD);
-        // GameScene.bgm1.setVolume(this.bgm1BaseVolume);
-        // GameScene.bgm1.setLoop(true);
-        // GameScene.bgm1.stop();
-        // GameScene.bgm2.stop();
-        // GameScene.bgm2.setLoop(true);
-        // GameScene.bgm2.setVolume(this.bgm2BaseVolume);
-
-        // GameScene.bgm1.play();
+        this.playBackgroundTrack(BgmId.CAVE);
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
@@ -376,7 +380,9 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public resetMusicVolumes(): void {
-        this.backgroundTracks.forEach(t => t.sound.setVolume(t.baseVolume));
+        this.backgroundTracks.forEach(t => {
+            if (t.active) t.sound.setVolume(t.baseVolume);
+        });
     }
 
     public fadeMusic (fade: number): void {
@@ -476,20 +482,33 @@ export class GameScene extends Scene<FriendlyFire> {
         this.apocalypse = true;
         this.world.stopRain();
 
+        const bossPosition = this.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
         const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === 'bosscloud');
-        cloudPositions.forEach(pos => {
-            const cloud = new Cloud(this, pos.x, pos.y, {
-                velocity: 0,
-                distance: 1
-            }, true);
-            this.gameObjects.push(cloud);
-        })
 
-        this.player.enableMultiJump();
+        if (bossPosition && cloudPositions.length > 0) {
+            cloudPositions.forEach(pos => {
+                const cloud = new Cloud(this, pos.x, pos.y, {
+                    velocity: 0,
+                    distance: 1
+                }, true);
+                this.gameObjects.push(cloud);
+            })
 
-        // Some helpful thoughts
-        setTimeout(() => this.player.think("This is not over...", 2000), 9000);
-        setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
+            // Teleport player and fire to boss spawn position
+            this.player.x = bossPosition.x - 36;
+            this.player.y = bossPosition.y;
+            this.fire.x = bossPosition.x;
+            this.fire.y = bossPosition.y;
+            this.camera.setBounds(this.player.getCurrentMapBounds())
+    
+            // this.player.enableMultiJump();
+    
+            // Some helpful thoughts
+            setTimeout(() => this.player.think("This is not over...", 2000), 9000);
+            setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
+        } else {
+            throw new Error('cannot begin apocalypse because. boss_spawn or bosscloud trigger in map missing');
+        }
     }
 
     private togglePause(paused = !this.paused) {

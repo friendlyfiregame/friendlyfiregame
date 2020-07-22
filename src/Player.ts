@@ -21,7 +21,7 @@ import { Wood, WoodState } from "./Wood";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
-import { GameScene, FadeDirection } from "./scenes/GameScene";
+import { GameScene, FadeDirection, BgmId } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
 import { ControllerFamily } from "./input/ControllerFamily";
@@ -30,6 +30,7 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
 import { Skull } from './Skull';
+import { Wall } from './Wall';
 
 const groundColors = [
     "#806057",
@@ -162,6 +163,7 @@ export class Player extends PhysicsEntity {
     private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
     private canRun = false;
+    private canRainDance = false;
     private doubleJump = false;
     private multiJump = false;
     private usedJump = false;
@@ -262,6 +264,14 @@ export class Player extends PhysicsEntity {
         if (!this.canRun) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.RUNNING });
             this.canRun = true;
+        }
+    }
+
+    public enableRainDance () {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
+        if (!this.canRainDance) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.RAINDANCE });
+            this.canRainDance = true;
         }
     }
 
@@ -466,6 +476,12 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
             this.moveLeft = false;
             const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
+            const targetBgmId = gate.properties.bgm;
+
+            if (targetBgmId) {
+                this.scene.fadeToBackgroundTrack(targetBgmId as BgmId);
+            }
+
             if (targetGate) {
                 Player.enterGateSound.stop();
                 Player.enterGateSound.play();
@@ -604,7 +620,8 @@ export class Player extends PhysicsEntity {
     }
 
     private canDanceToMakeRain(): boolean {
-        if (!this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)) return false;
+        // if (!this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)) return false;
+        if (!this.canRainDance) return false;
         const ground = this.getGround();
         return (
             (this.isCollidingWithTrigger('raincloud_sky') &&
@@ -848,6 +865,20 @@ export class Player extends PhysicsEntity {
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
+
+                        // Camera focus to boss for each triggered rain cloud
+                        const bossPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
+                        if (bossPointer) {
+                            this.scene.camera.focusOn(3, bossPointer.x, bossPointer.y + 60, 1, 0, valueCurves.cos(0.35));
+                        }
+
+                        // Remove a single boss fight barrier
+                        const rainingCloudCount = this.scene.gameObjects.filter(o => o instanceof Cloud && o.isRaining()).length;
+                        const wallIdentifier = `wall${rainingCloudCount - 1}`;
+                        const targetWall = this.scene.gameObjects.find(o => o instanceof Wall && o.identifier === wallIdentifier) as Wall | undefined;
+                        if (targetWall) {
+                            targetWall.crumble()
+                        }
                     }
                     if (this.isCollidingWithTrigger('raincloud_sky')) {
                         this.scene.world.startRain();
