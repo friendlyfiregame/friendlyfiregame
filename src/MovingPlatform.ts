@@ -19,7 +19,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     private velocity: number;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 68, 10);
+        super(scene, x, y, 68, 12);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
@@ -44,6 +44,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         ctx.translate(this.x, -this.y);
         MovingPlatform.sprite.drawTag(ctx, "idle", -MovingPlatform.sprite.width >> 1, -MovingPlatform.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
+        if (this.scene.showBounds) this.drawBounds(ctx);
     }
 
     update(dt: number): void {

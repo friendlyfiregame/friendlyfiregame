@@ -16,6 +16,12 @@ export interface GameObjectProperties {
     target?: string;
     teleportY?: number;
     disableParticles?: boolean;
+    setGlobalKey?: string;
+    setGlobalVal?: string;
+    setDialogEntity?: string;
+    setDialogValue?: string;
+    content?: string;
+    bgm?: string;
 }
 
 export interface GameObjectInfo {

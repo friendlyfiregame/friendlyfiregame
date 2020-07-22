@@ -69,7 +69,7 @@
     "trimmed": true,
     "spriteSourceSize": { "x": 1, "y": 2, "w": 14, "h": 44 },
     "sourceSize": { "w": 16, "h": 46 },
-    "duration": 300
+    "duration": 700
    },
    {
     "filename": "8",
@@ -96,7 +96,7 @@
     "trimmed": true,
     "spriteSourceSize": { "x": 1, "y": 0, "w": 14, "h": 46 },
     "sourceSize": { "w": 16, "h": 46 },
-    "duration": 300
+    "duration": 500
    }
  ],
  "meta": {

@@ -30,6 +30,7 @@ import { Sound } from '../Sound';
 import { MenuList } from '../Menu';
 import { ShadowPresence } from '../ShadowPresence';
 import { StoneDisciple } from '../StoneDisciple';
+import { Sign } from '../Sign';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -46,14 +47,39 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
     return typeof (object as CollidableGameObject).collidesWith === "function";
 }
 
+export enum BgmId {
+    OVERWORLD = 'overworld',
+    INFERNO = 'inferno'
+}
+
+export type BackgroundTrack = {
+    active: boolean;
+    id: BgmId;
+    sound: Sound,
+    baseVolume: number;
+}
+
 export class GameScene extends Scene<FriendlyFire> {
     @asset("music/theme_01.mp3")
     public static bgm1: Sound;
-    private bgm1BaseVolume = 0.25;
 
     @asset("music/inferno.mp3")
     public static bgm2: Sound;
-    private bgm2BaseVolume = 0.15;
+
+    private backgroundTracks: BackgroundTrack[] = [
+        {
+            active: false,
+            id: BgmId.OVERWORLD,
+            sound: GameScene.bgm1,
+            baseVolume: 0.25
+        },
+        {
+            active: false,
+            id: BgmId.INFERNO,
+            sound: GameScene.bgm2,
+            baseVolume: 0.15
+        },
+    ]
 
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
@@ -112,6 +138,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Force execution of entity decorator
         if (this instanceof MovingPlatform)
+        if (this instanceof Sign)
 
         this.gameTime = 0;
         this.apocalypse = false;
@@ -125,7 +152,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
-        this.stoneDisciple! = this.getGameObject(StoneDisciple);
+        this.stoneDisciple = this.getGameObject(StoneDisciple);
         this.tree = this.getGameObject(Tree);
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
@@ -143,14 +170,16 @@ export class GameScene extends Scene<FriendlyFire> {
         }, 1000);
 
         this.game.campaign.begin(this);
-        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
-        GameScene.bgm1.setLoop(true);
-        GameScene.bgm1.stop();
-        GameScene.bgm2.stop();
-        GameScene.bgm2.setLoop(true);
-        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
 
-        GameScene.bgm1.play();
+        this.playBackgroundTrack(BgmId.OVERWORLD);
+        // GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        // GameScene.bgm1.setLoop(true);
+        // GameScene.bgm1.stop();
+        // GameScene.bgm2.stop();
+        // GameScene.bgm2.setLoop(true);
+        // GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+
+        // GameScene.bgm1.play();
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
@@ -172,6 +201,36 @@ export class GameScene extends Scene<FriendlyFire> {
         if (index >= 0) {
             this.gameObjects.splice(index, 1);
         }
+    }
+
+    public getBackgroundTrack (id: BgmId): BackgroundTrack {
+        const found = this.backgroundTracks.find(track => track.id === id);
+        if (!found) {
+            console.error(`Missing background track with id '${id}'`);
+            return this.backgroundTracks[0];
+        }
+        return found;
+    }
+
+    public fadeToBackgroundTrack (id: BgmId): void {
+        const track = this.getBackgroundTrack(id);
+        this.muteMusic();
+        this.backgroundTracks.forEach(t => t.active = false);
+        track.active = true;
+        track.sound.setVolume(track.baseVolume);
+        if (!track.sound.isPlaying()) {
+            track.sound.setLoop(true);
+            track.sound.play();
+        }
+    }
+
+    public playBackgroundTrack (id: BgmId): void {
+        const track = this.getBackgroundTrack(id);
+        this.backgroundTracks.forEach(t => t.sound.stop());
+        track.active = true;
+        track.sound.setVolume(track.baseVolume);
+        track.sound.setLoop(true);
+        track.sound.play();
     }
 
     private getGameObject<T>(type: new (...args: any[]) => T): T {
@@ -309,18 +368,23 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public startApocalypseMusic(): void {
-        GameScene.bgm1.stop();
-        GameScene.bgm2.play();
+        this.playBackgroundTrack(BgmId.INFERNO);
+    }
+
+    public muteMusic(): void {
+        this.backgroundTracks.forEach(t => t.sound.setVolume(0));
     }
 
     public resetMusicVolumes(): void {
-        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
-        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+        this.backgroundTracks.forEach(t => t.sound.setVolume(t.baseVolume));
     }
 
     public fadeMusic (fade: number): void {
-        GameScene.bgm1.setVolume(this.bgm1BaseVolume * fade);
-        GameScene.bgm2.setVolume(this.bgm2BaseVolume * fade);
+        this.backgroundTracks.forEach(t => {
+            if (t.active) {
+                t.sound.setVolume(t.baseVolume * fade)
+            }
+        });
     }
 
     public fadeToBlack(duration: number, direction: FadeDirection): Promise<void> {
@@ -350,7 +414,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.fire.intensity < 6) {
             this.fire.intensity = Math.max(this.fire.intensity, 4);
             this.apocalypseFactor = clamp((this.fire.intensity - 4) / 2, 0, 1);
-            GameScene.bgm2.setVolume(this.bgm2BaseVolume * this.apocalypseFactor);
+            // GameScene.bgm2.setVolume(this.bgm2BaseVolume * this.apocalypseFactor);
             if (this.apocalypseFactor <= 0.001) {
                 // End apocalypse
                 this.apocalypseFactor = 0;
@@ -433,16 +497,16 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public pause() {
-        GameScene.bgm1.setVolume(0);
-        GameScene.bgm2.setVolume(0);
+        this.muteMusic();
         MenuList.pause.stop();
         MenuList.pause.play();
         this.togglePause(true);
     }
 
     public resume() {
-        GameScene.bgm1.setVolume(this.bgm1BaseVolume);
-        GameScene.bgm2.setVolume(this.bgm2BaseVolume);
+        this.resetMusicVolumes()
+        // GameScene.bgm1.setVolume(this.bgm1BaseVolume);
+        // GameScene.bgm2.setVolume(this.bgm2BaseVolume);
         this.togglePause(false);
     }
 }

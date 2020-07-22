@@ -16,7 +16,8 @@ export enum EyeType {
     STANDARD = 0,
     TREE = 1,
     STONE = 2,
-    FLAMEBOY = 3
+    FLAMEBOY = 3,
+    STONEDISCIPLE = 4
 }
 
 export class Face {
@@ -25,6 +26,7 @@ export class Face {
         "sprites/eyes/tree.aseprite.json",
         "sprites/eyes/stone.aseprite.json",
         "sprites/eyes/flameboy.aseprite.json",
+        "sprites/eyes/stonedisciple.aseprite.json",
     ])
     private static sprites: Aseprite[];
 

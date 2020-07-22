@@ -8,6 +8,8 @@ import fire2 from '../assets/dialog/fire2.dialog.json';
 import fire3 from '../assets/dialog/fire3.dialog.json';
 import stone1 from '../assets/dialog/stone1.dialog.json';
 import stone2 from '../assets/dialog/stone2.dialog.json';
+import stonedisciple1 from '../assets/dialog/stonedisciple1.dialog.json';
+import stonedisciple2 from '../assets/dialog/stonedisciple2.dialog.json';
 import seed1 from '../assets/dialog/seed1.dialog.json';
 import tree0 from '../assets/dialog/tree0.dialog.json';
 import tree1 from '../assets/dialog/tree1.dialog.json';
@@ -34,6 +36,8 @@ const allDialogs: Record<string, DialogJSON> = {
     "fire3": fire3,
     "stone1": stone1,
     "stone2": stone2,
+    "stonedisciple1": stonedisciple1,
+    "stonedisciple2": stonedisciple2,
     "seed1": seed1,
     "tree0": tree0,
     "tree1": tree1,
@@ -81,6 +85,7 @@ export class Campaign {
         this.runAction("enable", null, ["fire", "fire0"]);
         this.runAction("enable", null, ["tree", "tree0"]);
         this.runAction("enable", null, ["stone", "stone1"]);
+        this.runAction("enable", null, ["stonedisciple", "stonedisciple1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
         this.runAction("enable", null, ["wing", "wing1"]);
         this.runAction("enable", null, ["spider", "spider1"]);
@@ -240,6 +245,7 @@ export class Campaign {
                     const npcMap: Record<string, NPC> = {
                         "fire": this.gameScene.fire,
                         "stone": this.gameScene.stone,
+                        "stonedisciple": this.gameScene.stoneDisciple,
                         "tree": this.gameScene.tree,
                         "seed": this.gameScene.seed,
                         "flameboy": this.gameScene.flameboy,
@@ -259,6 +265,7 @@ export class Campaign {
                     const npcMap1: Record<string, NPC> = {
                         "fire": this.gameScene.fire,
                         "stone": this.gameScene.stone,
+                        "stonedisciple": this.gameScene.stoneDisciple,
                         "tree": this.gameScene.tree,
                         "seed": this.gameScene.seed,
                         "flameboy": this.gameScene.flameboy,

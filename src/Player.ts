@@ -28,6 +28,8 @@ import { ControllerFamily } from "./input/ControllerFamily";
 import { ControllerEvent } from './input/ControllerEvent';
 import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
+import { Sign } from './Sign';
+import { Skull } from './Skull';
 
 const groundColors = [
     "#806057",
@@ -360,13 +362,17 @@ export class Player extends PhysicsEntity {
                 this.carrying = null;
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
+            } else if (this.carrying instanceof Skull) {
+                this.carrying.setVelocity(5 * this.direction, 5);
+                this.carrying = null;
+                Player.throwingSound.stop();
+                Player.throwingSound.play();
             } else {
                 if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
                     const conversation = this.closestNPC.conversation;
                     // Disable auto movement to a safe talking distance for the stone in the river
-                    const autoMove = this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT ? false : true;
+                    const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
                     this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
-
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
                     this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
@@ -555,9 +561,12 @@ export class Player extends PhysicsEntity {
 
         if (this.scene.showBounds) this.drawBounds(ctx);
 
-        if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
-                && !this.playerConversation && !this.dance) {
-            this.drawTooltip(ctx, "Talk", "interact");
+        if (!this.isCarrying() && this.closestNPC && !this.dance && !this.playerConversation) {
+            if (this.closestNPC instanceof Sign) {
+                this.drawTooltip(ctx, "Read", "interact");
+            } else if (this.closestNPC.isReadyForConversation()) {
+                this.drawTooltip(ctx, "Talk", "interact");
+            }
         } else if (this.canEnterDoor()) {
             this.drawTooltip(ctx, "Enter", "interact");
         } else if (this.canThrowStoneIntoWater()) {
@@ -857,11 +866,31 @@ export class Player extends PhysicsEntity {
                 const teleportY = trigger.properties.teleportY;
                 if (teleportY) {
                     this.y -= teleportY;
+                    Conversation.setGlobal("gotTeleported", "true");
                 }
 
+                // Disable particle effects while in trigger
                 const disableParticles = trigger.properties.disableParticles;
                 if (disableParticles) {
                     this.disableParticles = true;
+                }
+
+                // Set Global Conversation Variables from map triggers
+                const globalConversationProps = {
+                    key: trigger.properties.setGlobalKey,
+                    value: trigger.properties.setGlobalVal
+                }
+                if (globalConversationProps.key && globalConversationProps.value) {
+                    Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
+                }
+
+                // Enable Conversion Trees from map triggers
+                const enableConversationProps = {
+                    key: trigger.properties.setDialogEntity,
+                    value: trigger.properties.setDialogValue
+                }
+                if (enableConversationProps.key && enableConversationProps.value) {
+                    this.scene.game.campaign.runAction("enable", null, [enableConversationProps.key, enableConversationProps.value]);
                 }
             })
         }
