@@ -497,6 +497,8 @@ export class GameScene extends Scene<FriendlyFire> {
             // Teleport player and fire to boss spawn position
             this.player.x = bossPosition.x - 36;
             this.player.y = bossPosition.y;
+            this.player.removePowerUps();
+            this.player.enableRainDance();
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
             this.camera.setBounds(this.player.getCurrentMapBounds())

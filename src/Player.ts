@@ -249,7 +249,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public stopAutoMove () {
+    public stopAutoMove (): void {
         if (this.autoMove?.turnAround) {
             this.direction = this.direction * -1;
         }
@@ -259,7 +259,7 @@ export class Player extends PhysicsEntity {
         this.isControllable = true;
     }
 
-    public enableRunning () {
+    public enableRunning (): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
         if (!this.canRun) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.RUNNING });
@@ -267,7 +267,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public enableRainDance () {
+    public enableRainDance (): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
         if (!this.canRainDance) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.RAINDANCE });
@@ -275,7 +275,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public enableDoubleJump () {
+    public enableDoubleJump (): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
         if (!this.doubleJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
@@ -283,12 +283,18 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public enableMultiJump () {
+    public enableMultiJump (): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
         if (!this.multiJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
             this.multiJump = true;
         }
+    }
+
+    public removePowerUps (): void {
+        this.multiJump = false;
+        this.doubleJump = false;
+        this.canRun = false;
     }
 
     public getDance (): Dance | null {

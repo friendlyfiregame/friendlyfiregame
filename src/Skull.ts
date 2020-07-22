@@ -10,7 +10,7 @@ export class Skull extends PhysicsEntity {
     private static sprite: Aseprite;
 
     public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 26, 16);
+        super(scene, x, y, 16, 16);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

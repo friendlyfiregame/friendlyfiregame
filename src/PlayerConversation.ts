@@ -111,6 +111,8 @@ export class PlayerConversation {
                 }
             }
             if (this.interaction.npcLine) {
+                MenuList.click.stop();
+                MenuList.click.play();
                 // NPC said something, player proceeds without any options
                 this.interaction.npcLine.execute();
             }
