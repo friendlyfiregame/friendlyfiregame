@@ -15,7 +15,7 @@
     ],
     "looking": [
         "And you think this is an accepted behaviour?",
-        "Nevermind, it's apparent what you standards are.",
+        "Nevermind, it's apparent what your standards are.",
         "How did you get up here in the first place?",
         ">Via jumping. @jumping"
     ],
@@ -80,9 +80,21 @@
         "Let's see...",
         "...",
         "Yeah... Dave! That little misift is nothing but trouble.",
-        "You can have him. !learnraindance",
-        ">Thanks. I will take care of him.",
-        "Whatever. Just don't bring him back!",
+        "You can have him.",
+        ">Are you really just giving away your child? @giveaway",
+        ">Thanks. I will take care of him. @takecare"
+    ],
+    "giveaway": [
+        "Don't worry. I have plenty more where this one comes from.",
+        "Also, this might be the only oppertunity for him to actually be of importance.",
+        "Plus, you have no idea how annoying he can be.",
+        "So, win win I guess? !learnraindance @use"
+    ],
+    "takecare": [
+        "Whatever. Just don't bring him back! !learnraindance @use"
+    ],
+    "use": [
+        "Where was I? Ah...",
         "Using the power is easy: Stand on top of the cloud and Dave should give you a hint on what to do.",
         ">I'm on my way then!",
         "Close the door on your way out. !end !set deal true @entry"

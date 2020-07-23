@@ -32,6 +32,7 @@ import { ShadowPresence } from '../ShadowPresence';
 import { StoneDisciple } from '../StoneDisciple';
 import { Sign } from '../Sign';
 import { Wall } from '../Wall';
+import { Table } from '../Table';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -151,6 +152,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this instanceof MovingPlatform)
         if (this instanceof Sign)
         if (this instanceof Wall)
+        if (this instanceof Table)
 
         this.gameTime = 0;
         this.apocalypse = false;

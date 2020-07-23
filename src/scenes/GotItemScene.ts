@@ -39,8 +39,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private titles = [
         "Fear of the Dark",
         "Double Jump Boots",
-        "Flying Wings",
-        "The Lost Cause"
+        "Flying Wings Knockoff",
+        "THe Useless Son"
     ]
 
     private subtitles = [
@@ -61,7 +61,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Birds love it!",
             "Feels like cheating",
             "Free stuff is the best",
-            "m-m-m-m-multijump"
+            "m-m-m-m-multijump",
+            ""
         ],
         [
             "Like tears in the rain"
