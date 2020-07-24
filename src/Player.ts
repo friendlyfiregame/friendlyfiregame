@@ -484,15 +484,12 @@ export class Player extends PhysicsEntity {
             const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
             const targetBgmId = gate.properties.bgm;
 
-            if (targetBgmId) {
-                this.scene.fadeToBackgroundTrack(targetBgmId as BgmId);
-            }
-
             if (targetGate) {
                 Player.enterGateSound.stop();
                 Player.enterGateSound.play();
                 this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
                 .then(() => {
+                    if (targetBgmId) this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                     Player.leaveGateSound.stop();
                     Player.leaveGateSound.play();
                     this.x = targetGate.x + (targetGate.width / 2);

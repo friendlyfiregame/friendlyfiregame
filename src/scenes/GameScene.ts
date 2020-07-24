@@ -218,6 +218,25 @@ export class GameScene extends Scene<FriendlyFire> {
         return found;
     }
 
+    private setActiveBgmVolume (factor: number): void {
+        const track = this.backgroundTracks.find(t => t.active === true);
+        if (track) {
+            track.sound.setVolume(track.baseVolume * (1 - factor));
+        }
+    }
+
+    public setActiveBgmTrack (id: BgmId): void {
+        this.backgroundTracks.forEach(t => t.active = false);
+        const track = this.backgroundTracks.find(t => t.id === id);
+        if (track) {
+            track.active = true;
+            if (!track.sound.isPlaying()) {
+                track.sound.setLoop(true);
+                track.sound.play();
+            }
+        }
+    }
+
     public fadeToBackgroundTrack (id: BgmId): void {
         const track = this.getBackgroundTrack(id);
         this.muteMusic();
@@ -358,6 +377,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Gate Fade
         if (this.fadeToBlackFactor > 0) {
+            this.setActiveBgmVolume(this.fadeToBlackFactor);
             this.drawFade(ctx, this.fadeToBlackFactor, "black");
         }
 
