@@ -45,6 +45,8 @@ export class Assets {
                 asset = await loadImage(src);
             } else if (src.endsWith(".mp3")) {
                 asset = await Sound.load("assets/" + src);
+            } else if (src.endsWith(".ogg")) {
+                asset = await Sound.load("assets/" + src);
             } else if (src === "appinfo.json") {
                 asset = await (await fetch("appinfo.json")).json() as AppInfoJSON
             } else {

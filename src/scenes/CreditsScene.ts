@@ -14,7 +14,7 @@ import { Sound } from '../Sound';
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([
         "music/a-vision-of-fire.mp3",
-        "music/a-vision-of-fire-acoustic.mp3"
+        "music/a-vision-of-fire-acoustic.ogg"
     ])
     public static music: Sound[];
     private songIndex = 1;

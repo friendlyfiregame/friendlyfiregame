@@ -63,10 +63,10 @@ export type BackgroundTrack = {
 }
 
 export class GameScene extends Scene<FriendlyFire> {
-    @asset("music/theme_01.mp3")
+    @asset("music/theme_01.ogg")
     public static bgm1: Sound;
 
-    @asset("music/inferno.mp3")
+    @asset("music/inferno.ogg")
     public static bgm2: Sound;
 
     @asset("music/cave.mp3")

@@ -19,7 +19,7 @@ enum MenuItemKey {
 }
 
 export class PauseScene extends Scene<FriendlyFire> {
-    @asset("music/pause.mp3")
+    @asset("music/pause.ogg")
     private static music: Sound;
 
     @asset("fonts/standard.font.json")
