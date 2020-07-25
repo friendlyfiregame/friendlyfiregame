@@ -789,7 +789,7 @@ export class Player extends PhysicsEntity {
                 this.animation = "jump";
                 this.flying = true;
             } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
-                if (this.jumpThresholdTimer < 0) {
+                if (this.jumpThresholdTimer < 0 || this.usedJump) {
                     this.animation = "fall";
                 }
                 this.flying = true;

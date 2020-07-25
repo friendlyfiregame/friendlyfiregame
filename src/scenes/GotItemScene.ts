@@ -40,29 +40,27 @@ export class GotItemScene extends Scene<FriendlyFire> {
         "Fear of the Dark",
         "Double Jump Boots",
         "Flying Wings Knockoff",
-        "THe Useless Son"
+        "Dancing Dave"
     ]
 
     private subtitles = [
         [
-            "Gotta go fast!",
-            "Never look back",
+            "Run and Never look back",
             "An exceptional ally",
-            "There is someone in that dark corner"
+            "There is something in that dark corner"
         ],
         [
             "Not suitable for step dancing",
             "An all time classic",
             "Still in mint condition",
             "Even works without wearing them",
-            "Why would a tree have those?",
+            "Why would a tree have those?"
         ],
         [
             "Birds love it!",
             "Feels like cheating",
             "Free stuff is the best",
-            "m-m-m-m-multijump",
-            ""
+            "m-m-m-m-multijump"
         ],
         [
             "Like tears in the rain"
