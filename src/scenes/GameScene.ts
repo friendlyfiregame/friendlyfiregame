@@ -44,11 +44,11 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 }
 
 export class GameScene extends Scene<FriendlyFire> {
-    @asset("music/theme_01.mp3")
+    @asset("music/theme_01.ogg")
     public static bgm1: Sound;
     private bgm1BaseVolume = 0.25;
 
-    @asset("music/inferno.mp3")
+    @asset("music/inferno.ogg")
     public static bgm2: Sound;
     private bgm2BaseVolume = 0.15;
 

@@ -34,7 +34,7 @@ const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
 };
 
 export class TitleScene extends Scene<FriendlyFire> {
-    @asset("music/cerulean-expanse.mp3")
+    @asset("music/cerulean-expanse.ogg")
     private static music: Sound;
 
     @asset("images/title/layer1.aseprite.json")

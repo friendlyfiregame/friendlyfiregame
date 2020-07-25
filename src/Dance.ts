@@ -13,10 +13,10 @@ export class Dance {
     @asset("sounds/dancing/fail.mp3")
     private static failSound: Sound;
 
-    @asset("music/raindance.mp3")
+    @asset("music/raindance.ogg")
     private static raindance_music: Sound;
 
-    @asset("music/dancing_queen.mp3")
+    @asset("music/dancing_queen.ogg")
     private static treedance_music: Sound;
 
     @asset("sprites/dancing_ui_bar.png")
