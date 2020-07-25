@@ -69,7 +69,7 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("music/inferno.ogg")
     public static bgm2: Sound;
 
-    @asset("music/cave.mp3")
+    @asset("music/cave.ogg")
     public static bgmCave: Sound;
 
     private backgroundTracks: BackgroundTrack[] = [

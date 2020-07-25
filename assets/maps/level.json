@@ -506,6 +506,11 @@
                  "name":"forrest_door_left_1",
                  "properties":[
                         {
+                         "name":"bgm",
+                         "type":"string",
+                         "value":"cave"
+                        }, 
+                        {
                          "name":"target",
                          "type":"string",
                          "value":"forrest_door_left_2"
@@ -522,6 +527,11 @@
                  "id":49,
                  "name":"forrest_door_right_1",
                  "properties":[
+                        {
+                         "name":"bgm",
+                         "type":"string",
+                         "value":"cave"
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1236,12 +1246,12 @@
                  "type":"entity",
                  "visible":true,
                  "width":0,
-                 "x":3576,
-                 "y":522
+                 "x":3252,
+                 "y":438
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }],

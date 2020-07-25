@@ -39,22 +39,14 @@
         "Aye @entry"
     ],
     "whatsgoingon": [
-        "Oh you know, the usual. Some unresolved cataclysmic quarrels between some fire elementals.",
-        "You'll find one of them just around the corner to the east",
-        ">That sounds kinda dangerous @dangerous",
-        ">I like fire @likefire"
-    ],
-    "dangerous": [
-        "Not really. How dangerous can a sentient fire elemental be...?",
-        "he... he hmmm",
-        "Nevermind.",
-        ">Okay... @entry"
-    ],
-    "likefire": [
-        "Please don't touch the fire... We cannot deal with another lawsuit. And not to speak of the smell...",
-        ">I was just joking...",
-        "What a great comedian you are!",
-        ">Back to topic please! @entry"
+        "[not talkedAboutQuest]Nothing really. Just make yourself at home. You're part of our world now.",
+        ">[not talkedAboutQuest]Really? There's nothing to do?",
+        "[not talkedAboutQuest]You can always approach the other habitants and have interesting chats with them.",
+        "[not talkedAboutQuest]The one downstairs might even need some help",
+        "[talkedAboutQuest]Like I said, we just live our lives in peace here. There isn't really much to do.",
+        "[talkedAboutQuest]You can go and meet the other habitants. You can start downstairs.",
+        ">Sure, I'll give it a try.",
+        "Great! !set talkedAboutQuest true @entry."
     ],
     "spider": [
         "[not isracist]What, don't you see the fairy wings on my back? My golden hair and cute make up?",

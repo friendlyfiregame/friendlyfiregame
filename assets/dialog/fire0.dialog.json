@@ -45,22 +45,14 @@
         "Well yes, I'm impressed too. Took me some time to get used to it. @help !amused"
     ],
     "how": [
-        "I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
+        "[not $ismale]I really need some wood. Surely a strong and marvelous woman like you can help an old fire out.",
+        "[$ismale]I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
         ">Sounds boring. Maybe later @bye",
         ">I'm in. @details",
-        ">I'm not a man @notaman",
         ">What do we say to the god of Fire?",
         "I don't know, what?",
         ">Not today!",
         "But if you don't help me out, there may not be a tomorrow @why"
-    ],
-    "notaman": [
-        "Neither am I, we have so much in common! So will you help me? With the wood? !amused",
-        ">Of course! @details",
-        ">I'd rather not get involved",
-        "Yes you do !angry",
-        "Sorry, I mean, you should really help me because otherwise your existence here would be boring !amused",
-        ">Why? @existence"
     ],
     "why": [
         "Because I am the essence of life. If I die, everything dies. Do you want everything to die?",

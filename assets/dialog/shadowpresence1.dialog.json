@@ -50,11 +50,10 @@
     ],
     "pokemon": [
         "I'm hooked on pokemon go since last year.",
-        "This bridge is a popular poke-stop...",
-        "Don't ask me why, the community is a little strange.",
-        "I waste too much time with this... ",
-        "> Can't you just stop?",
-        "I'm not a huge fan of the sunken cost fallacy... so... no.",
+        "This bridge used to be a popular poke-stop, but the folks around here stopped playing.",
+        "I might be so last one playing. Finishing raids like this is nearly impossible.",
+        ">Can't you just stop playing as well?",
+        "I already invested so much time and effort. How could I stop now?",
         ">Suit yourself. !set pokemon @visited"
     ]
 }
