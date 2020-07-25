@@ -218,11 +218,16 @@ export class GameScene extends Scene<FriendlyFire> {
         return found;
     }
 
-    private setActiveBgmVolume (factor: number): void {
-        const track = this.backgroundTracks.find(t => t.active === true);
-        if (track) {
-            track.sound.setVolume(track.baseVolume * (1 - factor));
-        }
+    public fadeActiveBackgroundTrack (fade: number, inverse = false): void {
+        this.backgroundTracks.forEach(t => {
+            if (t.active) {
+                if (inverse) {
+                    t.sound.setVolume(t.baseVolume * (1 - fade))
+                } else {
+                    t.sound.setVolume(t.baseVolume * fade)
+                }
+            }
+        });
     }
 
     public setActiveBgmTrack (id: BgmId): void {
@@ -377,7 +382,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Gate Fade
         if (this.fadeToBlackFactor > 0) {
-            this.setActiveBgmVolume(this.fadeToBlackFactor);
+            this.fadeActiveBackgroundTrack(this.fadeToBlackFactor, true);
             this.drawFade(ctx, this.fadeToBlackFactor, "black");
         }
 
@@ -404,14 +409,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public resetMusicVolumes(): void {
         this.backgroundTracks.forEach(t => {
             if (t.active) t.sound.setVolume(t.baseVolume);
-        });
-    }
-
-    public fadeMusic (fade: number): void {
-        this.backgroundTracks.forEach(t => {
-            if (t.active) {
-                t.sound.setVolume(t.baseVolume * fade)
-            }
         });
     }
 
@@ -548,8 +545,6 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public resume() {
         this.resetMusicVolumes()
-        // GameScene.bgm1.setVolume(this.bgm1BaseVolume);
-        // GameScene.bgm2.setVolume(this.bgm2BaseVolume);
         this.togglePause(false);
     }
 }

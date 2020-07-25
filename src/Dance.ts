@@ -218,7 +218,7 @@ export class Dance {
         }
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            this.scene.fadeMusic(fade);
+            this.scene.fadeActiveBackgroundTrack(fade);
         } else {
             // own music paused
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
