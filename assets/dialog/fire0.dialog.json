@@ -49,7 +49,7 @@
         ">Sounds boring. Maybe later @bye",
         ">I'm in. @details",
         ">I'm not a man @notaman",
-        ">What do we say to the god of Fire?",
+        ">What do we say to the god of fire?",
         "I don't know, what?",
         ">Not today!",
         "But if you don't help me out, there may not be a tomorrow @why"
@@ -88,10 +88,10 @@
     "details": [
         "Great! I knew I could rely on you. I know a good person when I see one!",
         ">So what exactly should I do?",
-        "It's easy! I just need a little firewood so I can keep burning for some longer.",
+        "It's easy! I just need a little firewood so I can keep burning a little longer.",
         ">I can get you some wood!",
         "Yes yes! But it needs to be special kind of wood.",
-        "There's a good tree in the East. His wood is good. !treezoom",
+        "There's a good tree in the east. His wood is good. !treezoom",
         "Go get it! !gotFireQuest",
         ">Sure thing! @reminder !end"
     ],
@@ -99,7 +99,7 @@
         "Hello again!",
         ">What do I need to do?",
         ">Bye @reminder !end",
-        "Go to East. Ask tree for wood. Bring me wood. Soon!",
+        "Go east. Ask tree for wood. Bring me wood. Soon!",
         ">On my way! @reminder !end"
     ]
 }

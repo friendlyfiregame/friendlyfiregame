@@ -16,7 +16,7 @@
         "The nerve! @rejected !end"
     ],
     "rejected": [
-        "Look who cames crawling back",
+        "Look who comes crawling back",
         ">Sorry, I actually do need some guidance @entry",
         ">I just pressed the wrong button!",
         "Jerk! @rejected !end"
@@ -30,11 +30,11 @@
         "Suuuure @entry"
     ],
     "chosenone": [
-        "It wasn't a pretty sight. Lot's of misunderstandings, some disrespectful verbal exchanges.",
+        "It wasn't a pretty sight. Lots of misunderstandings, some disrespectful verbal exchanges.",
         "Long story short, you won't see him anytime soon. Trust me.",
         "Some would say, he 'burned' to 'death'",
         "...",
-        "Subtelty is not my strong suit",
+        "Subtlety is not my strong suit",
         ">I can see that. Back to topic!",
         "Aye @entry"
     ],
@@ -84,7 +84,7 @@
         ">[not askedformoregenders]Aren't there more? @moregenders",
         ">Is that all...?",
         "Ha! Not in the least. I have the power to accidentally change the gender of humans against their will",
-        "Abra cadabra and it is done! ",
+        "Abracadabra and it is done! ",
         ">What... WAIT !set toggledgender !togglegender",
         "You are very welcome, gender swapped human!",
         ">It's not that bad, actually @entry",

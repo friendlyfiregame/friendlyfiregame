@@ -1,7 +1,7 @@
 {
     "entry": [
-        "You are the dancing Tree,\nOld and Rough !amused !talkedtotree",
-        "One hundred and seventeen,\nDancing Tree !amused",
+        "You are the dancing tree,\nOld and rough !amused !talkedtotree",
+        "One hundred and seventeen,\ndancing tree !amused",
         "Feel the beat from the tree topsee, oh yeah !amused",
         ">Hello?",
         ">Wait.. what?",
@@ -11,7 +11,7 @@
         ">What is this?",
         ">I know that song!",
         "Ooh, see that birch\nWatch that tribe !amused",
-        "Digging the dancing Tree !amused",
+        "Digging the dancing tree !amused",
         ">Are you done yet?",
         "Rude! !angry",
         "I'll talk to you after you prove you're worthy",
@@ -28,7 +28,7 @@
     "dare": [
         "Oh you pesky human! Can't even take a compliment! @request !end"
     ],
-    "nothelpfull": [
+    "nothelpful": [
         "Oh you gnarly individual. I should have never trusted you in the first place... @request !end"
     ],
     "smile": [
@@ -63,7 +63,7 @@
         ">Isn't that a little... weird? @weird",
         ">Why do you want offspring so badly? @sobadly",
         ">Oh no! What happens to your pine cones? @pinecones",
-        ">Nah I'm not really the helpful kind. @nothelpfull"
+        ">Nah I'm not really the helpful kind. @nothelpful"
     ],
     "pinecones": [
         "Well that's a super long story.",
@@ -73,7 +73,7 @@
     ],
     "lovethat": [
         "I figured it all out.",
-        "The only way I can get a son is if you plant one of my pine cones on the mountain in the West. !mountainzoom",
+        "The only way I can get a son is if you plant one of my pine cones on the mountain in the west. !mountainzoom",
         "Would you do that for me?",
         ">Definitely! @definitely",
         ">Ain't nobody got time for that! @notime"
@@ -85,7 +85,7 @@
         "Oh you nosy little meat sack! Mind your own business! @request !end"
     ],
     "notime": [
-        "Oh you are not a very helpful lifeform! @request !end"
+        "Oh you are not a very helpful life-form! @request !end"
     ],
     "nevermind": [
         "Oh you rude leafless imposter! Won't even listen to my sad, sad story. @request !end"

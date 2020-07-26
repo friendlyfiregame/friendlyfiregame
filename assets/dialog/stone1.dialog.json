@@ -8,7 +8,7 @@
         ">Nevermind. @entry !end"
     ],
     "tips": [
-        "You can use the the sacred garden of course. Just throw the seed directly onto the soil.",
+        "You can use the sacred garden of course. Just throw the seed directly onto the soil.",
         "The item will be absorbed by the blessed and fertile ground to help create new life",
         "What a miracle!",
         ">It's just a gardening...",
@@ -34,11 +34,11 @@
         "Fool! Out of my sight! @visitedentry !end"
     ],
     "getthisdone": [
-        "[$ismale]A bit more respect, young boy. Start by calling me Master!",
-        "[not $ismale]A bit more respect, young girl. Start by calling me Master!",
-        ">I am the only Master I acknowledge! @ionlymaster",
-        ">Fine, what can you teach me... Master? @yesmaster",
-        ">Forgive me, Master. I am willing to learn. @yesmaster",
+        "[$ismale]A bit more respect, young boy. Start by calling me master!",
+        "[not $ismale]A bit more respect, young girl. Start by calling me master!",
+        ">I am the only master I acknowledge! @ionlymaster",
+        ">Fine, what can you teach me... master? @yesmaster",
+        ">Forgive me, master. I am willing to learn. @yesmaster",
         ">[$ismale]When do you beings stop calling me 'boy' for once!",
         ">[not $ismale]When do you beings stop calling me 'girl' for once!",
         "[$ismale]What are you saying, boy?",
@@ -130,7 +130,7 @@
         "Beyond the river, you will find the answer to your quest in a sacred cave.",
         ">I am not sure if I really want to touch you... @nottouchyou",
         ">By the power of Grayskull! @lift",
-        ">Yes Master. @lift",
+        ">Yes master. @lift",
         ">On second thought, I don't like this... at all",
         "What a hard disappointment... @visitedentry !end"
     ],
