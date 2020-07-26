@@ -26,12 +26,12 @@
         ">You said something about power-ups? @powerup",
         "Hah! That's just fantastic! Do whatever you like, just leave me out of it. And don't come back complaining after you get scorched.",
         ">Whatever. I need answers! @answers",
-        ">Okay... You said something about power-ups? @powerup"
+        ">Okay… You said something about power-ups? @powerup"
     ],
     "powerup": [
-        "Yeah, I'm assigned to distribute the flying ability. It's popular amongst school children... and birds.",
+        "Yeah, I'm assigned to distribute the flying ability. It's popular amongst school children… and birds.",
         ">Nice, flying!",
-        "Don't expect too much. It's more of a multi-jump if you ask me. But you know... marketing.",
+        "Don't expect too much. It's more of a multi-jump if you ask me. But you know… marketing.",
         ">I'll take one",
         "Sure, here you go !multijump",
         "No refunds!",
@@ -43,11 +43,11 @@
         "Sorry, we have a strict no return policy!",
         ">[$metcaveman]Did you know there's someone living in the caves? @caveman",
         ">I just wanted to talk some more @more",
-        ">Damn...",
+        ">Damn…",
         "Come on man! You didn't even pay anything. @finished !end"
     ],
     "more": [
-        "I already have a headache, thanks. Can't you just do like a bird... and multi-jump out of here? @finished !end"
+        "I already have a headache, thanks. Can't you just do like a bird… and multi-jump out of here? @finished !end"
     ],
     "finished": [
         "Just let me do my job in peace. Go irritate the cloud people. They love that",
@@ -61,7 +61,7 @@
         "That's irreversible, but not my problem",
         ">Sequence? Triggers? What does all that mean?",
         "Whoops, don't mind me. Just giving away power-ups here",
-        ">But...",
+        ">But…",
         "Bye @nodialog !end"
     ],
     "nodialog": [

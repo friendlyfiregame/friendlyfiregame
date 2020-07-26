@@ -4,14 +4,14 @@
         "[not met]I oversee the sacred garden up that hill. What wisdom do you seek? !set met",
         "[met]Welcome back young human. What wisdom do you seek?",
         ">[not $seedplanted]I need to plant a seed. Any tips? @tips",
-        ">[$seedplanted]I planted the seed but nothing happened... @introduction",
+        ">[$seedplanted]I planted the seed but nothing happened… @introduction",
         ">Nevermind. @entry !end"
     ],
     "tips": [
         "You can use the sacred garden of course. Just throw the seed directly onto the soil.",
         "The item will be absorbed by the blessed and fertile ground to help create new life",
         "What a miracle!",
-        ">It's just a gardening...",
+        ">It's just a gardening…",
         ">Will do.",
         "Good Luck! @entry !end"
     ],
@@ -37,7 +37,7 @@
         "[$ismale]A bit more respect, young boy. Start by calling me master!",
         "[not $ismale]A bit more respect, young girl. Start by calling me master!",
         ">I am the only master I acknowledge! @ionlymaster",
-        ">Fine, what can you teach me... master? @yesmaster",
+        ">Fine, what can you teach me… master? @yesmaster",
         ">Forgive me, master. I am willing to learn. @yesmaster",
         ">[$ismale]When do you beings stop calling me 'boy' for once!",
         ">[not $ismale]When do you beings stop calling me 'girl' for once!",
@@ -69,7 +69,7 @@
         "So impatient. I'll bless you with my teachings once you've demonstrated your willingness to accept them!",
         ">Okay, master, you win. @yesmaster",
         ">Just tell me!",
-        "Well, let me help you help yourself then...",
+        "Well, let me help you help yourself then…",
         ">Master master master master!",
         "See, easy! @yesmaster"
     ],
@@ -83,36 +83,36 @@
         "Aren't there more important things right now?",
         ">Yes, master. Let's discuss those instead. @yesmaster",
         ">No, I really want a beard!",
-        "Well... I guess I could lend you a piece of mine. But please call me master first.",
+        "Well… I guess I could lend you a piece of mine. But please call me master first.",
         ">Master master master!",
         "Here you go. !givebeard",
         "But don't complain! I can only do white ones. This is your life now.",
         ">Thank you, master. Now back to your teachings. @yesmaster",
         ">Mphffpfhffhfpf.",
-        "Takes some getting used to. But, where were we... right. @yesmaster"
+        "Takes some getting used to. But, where were we… right. @yesmaster"
     ],
     "genderswap": [
         "Well I guess even my immense wisdom has its limits.",
-        "Maybe you should have a chat with your designated gender fairy then...",
-        "... I have no idea where mine is. Haven't seen her for a while.",
+        "Maybe you should have a chat with your designated gender fairy then…",
+        "… I have no idea where mine is. Haven't seen her for a while.",
         "> All righty. Maybe I'll do that.",
         "Where were we? Ah yes! @getthisdone"
     ],
     "touche": [
-        "...",
-        ">...touche, master. @yesmaster"
+        "…",
+        ">… touche, master. @yesmaster"
     ],
     "human": [
-        "This... exceeds my expertise. Umm. Where were we. Ah yes. @yesmaster"
+        "This… exceeds my expertise. Umm. Where were we. Ah yes. @yesmaster"
     ],
     "onmyown": [
         "Good luck, fool. @visitedentry !end"
     ],
     "yesmaster": [
-        "So, let an old and wise stone tell you: Basic gardening requires water. So...",
-        ">Soooo...? @soo",
-        ">I think I need a drink...a hard one. @drink",
-        ">Wait... I want to talk about something else first. @introduction"
+        "So, let an old and wise stone tell you: Basic gardening requires water. So…",
+        ">Soooo…? @soo",
+        ">I think I need a drink… a hard one. @drink",
+        ">Wait… I want to talk about something else first. @introduction"
     ],
     "soo": [
         "This is harder than I thought. @rain"
@@ -124,19 +124,19 @@
         "[$ismale]You need some rain of course, you foolish man. Magical rain from the clouds above!",
         "[not $ismale]You need some rain of course, you foolish woman. Magical rain from the clouds above!",
         "You need to grow as person to get access to the cloud world. Not literally, but metaphorically.",
-        "Though... literally might also work, but I digress.",
+        "Though… literally might also work, but I digress.",
         "As a part of this trial, you have to bring me down to the river and toss me in. !riverzoom",
         "I will grant you incredible strength so you are able to carry me down the mountain.",
         "Beyond the river, you will find the answer to your quest in a sacred cave.",
-        ">I am not sure if I really want to touch you... @nottouchyou",
+        ">I am not sure if I really want to touch you… @nottouchyou",
         ">By the power of Grayskull! @lift",
         ">Yes master. @lift",
-        ">On second thought, I don't like this... at all",
-        "What a hard disappointment... @visitedentry !end"
+        ">On second thought, I don't like this… at all",
+        "What a hard disappointment… @visitedentry !end"
     ],
     "nottouchyou": [
         "This is the beauty about power, and now lift me up!",
-        ">I... need... to... lift... my... master... @lift"
+        ">I… need… to… lift… my… master… @lift"
     ],
     "lift": [
         "You are wooooorthy! @remember !pickupstone !end"

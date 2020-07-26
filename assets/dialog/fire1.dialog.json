@@ -5,12 +5,12 @@
         "Good job on scalping that piece of junk",
         "Just take the wood and throw it into my fire, just as we agreed.",
         ">Got it",
-        ">I have second thoughts... @secondthoughts",
+        ">I have second thoughts… @secondthoughts",
         "Just do it! @holdup !end"
     ],
     "holdup": [
         "What's the holdup? !angry",
-        "Just take the wood and throw it into me! Seriously...",
+        "Just take the wood and throw it into me! Seriously…",
         ">Got it @holdup !end"
     ],
     "secondthoughts": [

@@ -176,7 +176,7 @@ export class Fire extends NPC {
         }
         // Player thoughts
         [
-            ["What...", 2, 2],
+            ["What…", 2, 2],
             ["What have I done?", 6, 3],
             ["I trusted you! I helped you!", 10, 3]
         ].forEach(line => setTimeout(() => {

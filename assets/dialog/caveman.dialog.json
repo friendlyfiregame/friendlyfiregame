@@ -70,7 +70,7 @@
         "It's the only cave I've seen so far that has nothing of interest in it.",
         "Very suspicios if you ask me.",
         ">Well, you are here.",
-        "I don't like the tone of that...",
+        "I don't like the tone of that…",
         "I'm a living person and not some kind of pawn that only exists to chat with anyone who enters this cave.",
         "As soon as I have the means to leave, I will.",
         ">We will see. I have other questions. @questions"
@@ -79,7 +79,7 @@
         "My memories are very hazy, I can't remember anything from before my arrival here.",
         "What about you?",
         ">No, it's all blank.",
-        "Thought so... There's something sinister going on here behind the curtains.",
+        "Thought so… There's something sinister going on here behind the curtains.",
         "There's always a lingering feeling of being watched from the shadows.",
         ">Yeah, I met that guy under the bridge. @shadows",
         ">Creepy. I got other questions. @questions"
@@ -87,7 +87,7 @@
     "shadows": [
         "What guy?",
         ">The shadow person. He taught me how to run.",
-        "You seem to have had a very different experience than I did...",
+        "You seem to have had a very different experience than I did…",
         ">Apperently. I got other questions. @questions"
     ]
 }

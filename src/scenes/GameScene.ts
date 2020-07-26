@@ -524,11 +524,11 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
             this.camera.setBounds(this.player.getCurrentMapBounds())
-    
+
             // this.player.enableMultiJump();
-    
+
             // Some helpful thoughts
-            setTimeout(() => this.player.think("This is not over...", 2000), 9000);
+            setTimeout(() => this.player.think("This is not over…", 2000), 9000);
             setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
         } else {
             throw new Error('cannot begin apocalypse because. boss_spawn or bosscloud trigger in map missing');
