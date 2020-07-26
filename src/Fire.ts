@@ -101,6 +101,10 @@ export class Fire extends NPC {
         );
     }
 
+    public isRendererd (): boolean {
+        return this.isVisible;
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible) {
             return;
@@ -126,10 +130,12 @@ export class Fire extends NPC {
         if (this.intensity !== this.growthTarget) {
             this.intensity = shiftValue(this.intensity, this.growthTarget, this.growth * dt);
         }
+
         if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
             this.isVisible = false;
             return;
         }
+
         this.isVisible = true;
         let particleChance = dt - rnd() * this.averageParticleDelay;
         while (particleChance > 0) {
@@ -145,7 +151,6 @@ export class Fire extends NPC {
             this.fireGfx.update(dt);
         }
         if (this.showDialoguePrompt()) {
-            // console.log(dt);
             this.dialoguePrompt.update(dt, this.x, this.y + 32);
         }
         this.speechBubble.update(this.x, this.y);

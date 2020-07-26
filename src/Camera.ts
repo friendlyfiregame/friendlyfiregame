@@ -42,7 +42,6 @@ export class Camera {
     private time = 0;
     private interpolationTime!: number;
     private zoomingOut = false;
-    private visibleRect: Rectangle;
     private currentBarTarget = 0;
     private currentBarHeight = 0;
     private bounds?: Bounds;
@@ -58,7 +57,6 @@ export class Camera {
             document.addEventListener("keyup", this.handleKeyUp.bind(this));
             this.scene.game.canvas.addEventListener("click", this.handleClick.bind(this));
         }
-        this.visibleRect = this.getVisibleRect();
         this.currentBarTarget = 0;
         this.currentBarHeight = 0;
     }
@@ -100,7 +98,7 @@ export class Camera {
         }
     }
 
-    public getVisibleRect(x = this.x, y = this.y) {
+    public getVisibleRect(x = this.x, y = this.y): Rectangle {
         const cnv = this.scene.game.canvas;
         const cw = cnv.width, ch = cnv.height;
         const offx = cw / 2 / this.zoom, offy = ch / 2 / this.zoom;
@@ -113,8 +111,9 @@ export class Camera {
     }
 
     public isPointVisible(x: number, y: number, radius = 0): boolean {
-        return x >= this.visibleRect.x - radius && y >= this.visibleRect.y - radius && x <= this.visibleRect.x +
-                this.visibleRect.width + radius && y <= this.visibleRect.y + this.visibleRect.height + radius;
+        const visibleRect = this.getVisibleRect();
+        return x >= visibleRect.x - radius && y >= visibleRect.y - radius && x <= visibleRect.x +
+                visibleRect.width + radius && y <= visibleRect.y + visibleRect.height + radius;
     }
 
     public setCinematicBar(target: number) {
@@ -186,7 +185,6 @@ export class Camera {
         }
         this.zoom = this.zoomingOut ? 0.2 : 1;
         this.rotation = 0;
-        this.visibleRect = this.getVisibleRect();
         // On top of that, apply cam focus(es)
         for (const focus of this.focuses) {
             this.updateAndApplyFocus(focus);
