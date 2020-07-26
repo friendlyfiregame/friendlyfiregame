@@ -240,8 +240,9 @@ export class Player extends PhysicsEntity {
                 turnAround
             };
         }
+        // Failsafe to stop automove after 1 second.
         setTimeout(() => {
-            this.stopAutoMove();
+            if (this.autoMove) this.stopAutoMove();
         }, 1000);
     }
 
