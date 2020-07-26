@@ -7,6 +7,8 @@ import { particles, valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem } from './util';
 import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
 import { Environment } from './World';
+import conversation from '../assets/dialog/bird.dialog.json';
+import { Conversation } from './Conversation';
 
 enum BirdState {
     WAITING_LEFT,
@@ -21,7 +23,7 @@ const MAX_SPEED = 4;
 
 @entity("bird")
 export class Bird extends NPC {
-    @asset("sprites/skull.aseprite.json")
+    @asset("sprites/bird.aseprite.json")
     private static sprite: Aseprite;
     private doubleJumpEmitter: ParticleEmitter;
     private move: 0 | 1 | -1  = 1;
@@ -32,8 +34,9 @@ export class Bird extends NPC {
     private jumpTimer = 0;
 
     public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 16, 16);
+        super(scene, x, y, 28, 24);
         this.minAltitude = y;
+        this.conversation = new Conversation(conversation, this);
 
         this.doubleJumpEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
