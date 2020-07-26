@@ -90,6 +90,7 @@ export class Campaign {
         this.runAction("enable", null, ["wing", "wing1"]);
         this.runAction("enable", null, ["spider", "spider1"]);
         this.runAction("enable", null, ["shadowpresence", "shadowpresence1"]);
+        this.runAction("enable", null, ["bird", "shadowpresence1"]);
     }
 
     public hasState(state: CampaignState) {
@@ -252,7 +253,8 @@ export class Campaign {
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
-                        "shadowpresence": this.gameScene.shadowPresence
+                        "shadowpresence": this.gameScene.shadowPresence,
+                        "bird": this.gameScene.bird
                     };
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
@@ -272,7 +274,8 @@ export class Campaign {
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
-                        "shadowpresence": this.gameScene.shadowPresence
+                        "shadowpresence": this.gameScene.shadowPresence,
+                        "bird": this.gameScene.bird
                     };
                     const targetNpc1 = npcMap1[char1];
                     if (targetNpc1) {

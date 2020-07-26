@@ -14,15 +14,16 @@
         ">I'm on my way. @visitedEntry !end"
     ],
     "regulary": [
-        "Does that mean you managed to defeat the tree? !set visited",
-        ">You mean the dancing bit?",
-        "Yeah, that. I'm not much of dancer and got stuck on the first quest.",
+        "So there is a regular way to cross the river? !set visited",
+        ">Yeah, it's a long story.",
+        "I couldn't cross the broken bridge after falling down from the sky.",
+        "I tried many times but I couldn't jump far enough",
         "Since there wasn't anything better to do, I tried to find out more about this world. @bug"
     ],
     "spawend": [
         "Yeah, funny story. !set visited",
         "I guess you already found out how the water works here.",
-        "After I got stuck trying to dance for that stupid tree, I tried to find out more about this world. @bug"
+        "After I got stuck at the broken bridge, I tried to find out more about this world. @bug"
     ],
     "bug": [
         "As I was experimenting with the water, one time I wasn't teleported back to the east side of the river.",
@@ -41,7 +42,7 @@
         "But that's not all.",
         "There is something very strange going on here.",
         "> What do you mean?",
-        "Don't you see it? Spider fairies, dancing trees, the very supspicious fire that feels out of place?",
+        "Don't you see it? The strange shrine in the clouds, spider fairies, the very supspicious fire people?",
         "It's like a feverish nightmare from which you can't wake up.",
         "I conducted some experimentes down here and the results are alarming. @questions"
     ],
@@ -61,24 +62,32 @@
         "Isn't that strange? It's like someone got really lazy and just made everything from the same template.",
         ">You're right, but the fire in the beginning looked different.",
         "Yeah, I remember. It looked really strange.",
-        "As if it consisted a material not of this world.",
+        "As if it consisted a material not of this world. Very organic and alien.",
         ">I have other questions. @questions"
     ],
     "cave": [
         "Yes! This cave is strange as well.",
-        "It's the only place around here, where you have to drop down through platforms.",
-        "And still, there is nothing here of interest. Very suspicios if you ask me.",
+        "It's the only cave I've seen so far, that has nothing of interest in it.",
+        "Very suspicios if you ask me.",
         ">Well, you are here.",
-        "Yeah, good call. But that only counts for you. When I arrived, it was just an ordinary empty cave.",
-        "I kinda have the feeling that this places holds more importance than this.",
+        "I don't like the tone of that...",
+        "I'm a living person and not some kind of pawn that only exists to chat with anyone who enters this cave.",
+        "As soon as I have the means to leave, I will.",
         ">We will see. I have other questions. @questions"
     ],
     "memories": [
         "My memories are very hazy, I can't remember anything from before my arrival here.",
         "What about you?",
-        "> No, it's all blank.",
+        ">No, it's all blank.",
         "Thought so... There's something sinister going on here behind the curtains.",
         "There's always a lingering feeling of being watched from the shadows.",
-        "> Creepy. I got other questions. @questions"
+        ">Yeah, I met that guy under the bridge. @shadows",
+        ">Creepy. I got other questions. @questions"
+    ],
+    "shadows": [
+        "What guy?",
+        ">The shadow person. He taught me how to run.",
+        "You seem to have had a very different experience than I did...",
+        ">Apperently. I got other questions. @questions"
     ]
 }

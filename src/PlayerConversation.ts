@@ -10,7 +10,7 @@ export class PlayerConversation {
 
     constructor(
         private readonly player: Player,
-        private readonly npc: NPC,
+        public readonly npc: NPC,
         private readonly conversation: Conversation,
         private readonly autoMove = true
     ) {

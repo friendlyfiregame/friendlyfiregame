@@ -33,6 +33,7 @@ import { StoneDisciple } from '../StoneDisciple';
 import { Sign } from '../Sign';
 import { Wall } from '../Wall';
 import { Table } from '../Table';
+import { Bird } from '../Bird';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -117,6 +118,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public seed!: Seed;
     public flameboy!: FlameBoy;
     public wing!: Wing;
+    public bird!: Bird;
     public spider!: Spider;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
@@ -170,6 +172,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.tree = this.getGameObject(Tree);
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
+        this.bird = this.getGameObject(Bird);
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
         this.caveman = this.getGameObject(Caveman);

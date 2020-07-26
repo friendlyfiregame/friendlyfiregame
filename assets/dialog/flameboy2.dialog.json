@@ -34,7 +34,9 @@
         "Don't expect too much. It's more of a multi jump if you ask me. But you know... marketing.",
         ">I'll take one",
         "Sure, here you go !multijump",
-        "I'm obligated by my employer to tell you, that you should visit the cloud world. I personally wouldn't go there. The people there are really annoying.",
+        "No refunds!",
+        "Also, I'm obligated to tell you, that you should visit the cloud world.",
+        "I personally wouldn't go there. The people there are really annoying.",
         "But that's just my opinion @visited !end"
     ],
     "visited": [
@@ -63,6 +65,6 @@
         "Byee @nodialog !end"
     ],
     "nodialog": [
-        "Error: No dialog found @nodialog !end"
+        "I really don't want to talk to you. !end"
     ]
 }

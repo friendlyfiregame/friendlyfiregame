@@ -2,7 +2,7 @@ import { SpeechBubble } from "./SpeechBubble";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
-    PLAYER_JUMP_TIMING_THRESHOLD
+    PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS
 } from "./constants";
 import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -43,13 +43,6 @@ const bounceColors = [
     "#f06060",
     "#e87f7f",
     "#ff7070"
-];
-
-
-const doubleJumpColors = [
-    "#ffffff",
-    "#cccccc",
-    "#aaaaaa"
 ];
 
 const genderSwapColors = [
@@ -213,7 +206,7 @@ export class Player extends PhysicsEntity {
         this.doubleJumpEmitter = particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
-            color: () => rndItem(doubleJumpColors),
+            color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1.5, 3),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),

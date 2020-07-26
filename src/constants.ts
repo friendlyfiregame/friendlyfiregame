@@ -46,3 +46,6 @@ export const TERMINAL_VELOCITY = -30;
 
 /** Threshold in seconds for allowing a jump after entering falling state  */
 export const PLAYER_JUMP_TIMING_THRESHOLD = 0.1;
+
+/** Color array containing all double jump particle colors */
+export const DOUBLE_JUMP_COLORS = [ "#ffffff", "#cccccc", "#aaaaaa" ];

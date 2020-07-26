@@ -53,6 +53,10 @@ export abstract class NPC extends PhysicsEntity {
         return this.conversation && this.scene.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION;
     }
 
+    public hasActiveConversation(): boolean {
+        return (this.scene.player.playerConversation !== null && this.scene.player.playerConversation.npc === this);
+    }
+
     public toggleDirection(direction = this.direction > 0 ? -1 : 1) {
         if (direction !== this.direction) {
             this.direction = direction;
