@@ -3,11 +3,11 @@
         "[visited]You again... Breaking into my home.",
         "[not visited]Who are you? Why are you breaking into my house...?",
         ">[not visited]I was just looking around. @looking",
-        ">You.. look like a flying ability power up. @pickup",
+        ">You.. look like a flying ability power-up. @pickup",
         ">[$seedplanted]Do you know anything about growing seeds? @seed",
         ">[$seedgrown]I did it, the seed has grown. @grown",
         ">[not visited]What a strange person... ",
-        ">[visited]Bye Power up. @dontcallmethat",
+        ">[visited]Bye power-up. @dontcallmethat",
         "Whatever. @entry !end"
     ],
     "dontcallmethat": [
@@ -20,9 +20,9 @@
         ">Via jumping. @jumping"
     ],
     "jumping": [
-        "Aw man, another one of the multi jump gang. Flying is better and you know it. !set visited",
+        "Aw man, another one of the multi-jump gang. Flying is better and you know it. !set visited",
         ">There was no flying ability available. @noflying",
-        ">I like the multi jump.",
+        ">I like the multi-jump.",
         "Yeah, you look like someone who would. @entry"
     ],
     "noflying": [
@@ -35,7 +35,7 @@
         ">Don't change the subject. You're even glowing.",
         ">Ouch! The truth hurts. @entry",
         "Yeah so? That's none of your business and as if you needed a flying ability in the first place!",
-        "I bet you got one of those multi jump things! Even birds are falling for this scam nowadays.",
+        "I bet you got one of those multi-jump things! Even birds are falling for this scam nowadays.",
         ">Guilty as charged.",
         "I guessed so. @entry"
     ],

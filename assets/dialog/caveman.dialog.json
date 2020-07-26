@@ -1,10 +1,10 @@
 {
     "entry": [
-        "Holy Macaroni, another human! !set $metcaveman",
+        "Holy macaroni, another human! !set $metcaveman",
         "[$ismale] I thought I'd never see another dude anytime soon.",
-        "[not $ismale] I thought I'd never see a woman every again.",
+        "[not $ismale] I thought I'd never see a woman ever again.",
         "Did you spawn on this side of the river after falling into the water as well?",
-        ">No, I came here regulary. @regulary",
+        ">No, I come here regulary. @regulary",
         ">You spawend here? @spawend"
     ],
     "visitedEntry": [
@@ -28,7 +28,7 @@
     "bug": [
         "As I was experimenting with the water, one time I wasn't teleported back to the east side of the river.",
         "I found myself on this side and couldn't get back. The fire up top wasn't very helpful either.",
-        ">The power up fire? He gave me the ability to fly. @powerup",
+        ">The power-up fire? He gave me the ability to fly. @powerup",
         ">Keep going. @strange"
     ],
     "powerup": [
@@ -36,7 +36,7 @@
         "He was just repeating lines and blabbing about broken sequences",
         "Maybe you can go talk to him?",
         ">If I have the time. Continue.",
-        "Where was I? ah! @strange"
+        "Where was I? Ah! @strange"
     ],
     "strange": [
         "But that's not all.",
@@ -44,7 +44,7 @@
         "> What do you mean?",
         "Don't you see it? The strange shrine in the clouds, spider fairies, the very supspicious fire people?",
         "It's like a feverish nightmare from which you can't wake up.",
-        "I conducted some experimentes down here and the results are alarming. @questions"
+        "I conducted some experiments down here and the results are alarming. @questions"
     ],
     "questions": [
         "What do you want to know about?",
@@ -67,7 +67,7 @@
     ],
     "cave": [
         "Yes! This cave is strange as well.",
-        "It's the only cave I've seen so far, that has nothing of interest in it.",
+        "It's the only cave I've seen so far that has nothing of interest in it.",
         "Very suspicios if you ask me.",
         ">Well, you are here.",
         "I don't like the tone of that...",
