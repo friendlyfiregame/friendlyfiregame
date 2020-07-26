@@ -1,6 +1,6 @@
 {
     "entry": [
-        "Greetings human",
+        "Greetings, human!",
         "[not $gotFireQuest]You might wanna talk to the flame first.",
         "[not $gotFireQuest]My hands are tied until then.",
         ">[$gotFireQuest]Oh my god, what are you? @what",
