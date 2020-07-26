@@ -61,7 +61,6 @@
         "I could really need your help. With procreation.",
         ">I'd love that! @lovethat",
         ">Isn't that a little... weird? @weird",
-        ">Why do you want offspring so badly? @sobadly",
         ">Oh no! What happens to your pine cones? @pinecones",
         ">Nah I'm not really the helpful kind. @nothelpful"
     ],
@@ -80,9 +79,6 @@
     ],
     "weird": [
         "Oh you judgemental humanoid! Show some empathy! @request !end"
-    ],
-    "sobadly": [
-        "Oh you nosy little meat sack! Mind your own business! @request !end"
     ],
     "notime": [
         "Oh you are not a very helpful life-form! @request !end"
