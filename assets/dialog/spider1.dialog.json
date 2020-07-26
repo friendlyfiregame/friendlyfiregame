@@ -1,7 +1,7 @@
 {
     "entry": [
         "[not visited]Greetings, adventurer. Welcome to this ancient and mysterious land. !set $talkedToSpider true",
-        "[not visited]I am your designated magical gender fairy and will guide you on your quest. I bet you have a lot of questions !set visited",
+        "[not visited]I am your designated magical gender fairy and will guide you on your quest. I bet you have a lot of questions. !set visited",
         "[visited]How can I help?",
         ">[not option_nicetomeet]It's nice to meet you @nicetomeet",
         ">What's going on here? @whatsgoingon",
