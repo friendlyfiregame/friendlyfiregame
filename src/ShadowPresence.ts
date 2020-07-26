@@ -12,7 +12,7 @@ enum AnimationTag {
 
 @entity("shadowpresence")
 export class ShadowPresence extends NPC {
-    @asset("sprites/shadowPresence.aseprite.json")
+    @asset("sprites/shadowpresence.aseprite.json")
     private static sprite: Aseprite;
     private isNearPlayer = false;
 
