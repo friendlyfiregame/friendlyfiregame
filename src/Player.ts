@@ -240,6 +240,9 @@ export class Player extends PhysicsEntity {
                 turnAround
             };
         }
+        setTimeout(() => {
+            this.stopAutoMove();
+        }, 1000);
     }
 
     public stopAutoMove (): void {
