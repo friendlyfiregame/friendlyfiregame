@@ -105,7 +105,7 @@ export class SpeechBubble {
         this.isCurrentlyWriting = false;
         setTimeout(() => {
             this.preventUnwantedSelection = false;
-        }, 500);
+        }, 300);
     }
 
     setOptions(options: string[], partnersBubble: SpeechBubble) {
