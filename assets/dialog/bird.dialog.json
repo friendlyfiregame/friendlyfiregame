@@ -1,6 +1,6 @@
 {
     "entry": [
-        "Chirp.",
+        "♪ Chirp!",
         ">Who are you? @who",
         ">What are you up to? @what",
         ">[not chirp]Did you just say 'Chirp'? @chirp",
@@ -8,14 +8,14 @@
         ">Bye, bird. @bye"
     ],
     "chirp": [
-        "Yes, I did. Chirp. That's what birds say!. !set chirp true @entry"
+        "Yes, I did. ♪ Chirp. That's what birds say!. !set chirp true @entry"
     ],
     "who": [
         "I'm the bird around these parts. @entry"
     ],
     "what": [
         "I do bird stuff, mostly.",
-        "I fly from my nest to some bushes to find food. Chirp.",
+        "I fly from my nest to some bushes to find food. ♪ Chirp.",
         "There isn't any, though. @entry"
     ],
     "multijump": [
@@ -26,7 +26,7 @@
         "But I don't care much. At least I don't have to flap my wings anymore. @entry"
     ],
     "bye": [
-        "Bye, human",
-        "Chirp! @entry !end"
+        "Bye, human.",
+        "♪ Chirp! @entry !end"
     ]
 }
