@@ -1,4 +1,3 @@
-import { rndInt } from "./util.js";
 import { loadImage } from "./graphics.js";
 import { FontJSON } from "*.font.json";
 
@@ -78,18 +77,10 @@ export class BitmapFont {
 
     private getCharIndex(char: string): number {
         let charIndex = this.charReverseMap[char];
+
         if (charIndex == null) {
-            // Maybe other case is available
-            charIndex = this.charReverseMap[char.toLowerCase()];
-            if (charIndex == null) {
-                // Maybe other case is available
-                charIndex = this.charReverseMap[char.toUpperCase()];
-                if (charIndex == null) {
-                    // To signalize error, use random character
-                    charIndex = rndInt(0, this.charCount);
-                }
-            }
         }
+
         return charIndex;
     }
 

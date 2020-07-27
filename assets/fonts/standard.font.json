@@ -2,11 +2,107 @@
     "image": "standard.png",
     "characterMapping": [
         {
-            "char": "a",
+            "char": "A",
             "width": 5
         },
         {
-            "char": "b",
+            "char": "B",
+            "width": 5
+        },
+        {
+            "char": "C",
+            "width": 5
+        },
+        {
+            "char": "D",
+            "width": 5
+        },
+        {
+            "char": "E",
+            "width": 5
+        },
+        {
+            "char": "F",
+            "width": 5
+        },
+        {
+            "char": "G",
+            "width": 5
+        },
+        {
+            "char": "H",
+            "width": 5
+        },
+        {
+            "char": "I",
+            "width": 3
+        },
+        {
+            "char": "J",
+            "width": 5
+        },
+        {
+            "char": "K",
+            "width": 5
+        },
+        {
+            "char": "L",
+            "width": 5
+        },
+        {
+            "char": "M",
+            "width": 5
+        },
+        {
+            "char": "N",
+            "width": 5
+        },
+        {
+            "char": "O",
+            "width": 5
+        },
+        {
+            "char": "P",
+            "width": 5
+        },
+        {
+            "char": "Q",
+            "width": 5
+        },
+        {
+            "char": "R",
+            "width": 5
+        },
+        {
+            "char": "S",
+            "width": 5
+        },
+        {
+            "char": "T",
+            "width": 5
+        },
+        {
+            "char": "U",
+            "width": 5
+        },
+        {
+            "char": "V",
+            "width": 5
+        },
+        {
+            "char": "W",
+            "width": 5
+        },
+        {
+            "char": "X",
+            "width": 5
+        },
+        {
+            "char": "Y",
+            "width": 5
+        },
+        {
+            "char": "Z",
             "width": 5
         },
         {
@@ -14,19 +110,7 @@
             "width": 5
         },
         {
-            "char": "d",
-            "width": 5
-        },
-        {
-            "char": "e",
-            "width": 5
-        },
-        {
-            "char": "f",
-            "width": 5
-        },
-        {
-            "char": "g",
+            "char": "é",
             "width": 5
         },
         {
@@ -34,75 +118,11 @@
             "width": 5
         },
         {
-            "char": "i",
-            "width": 3
-        },
-        {
-            "char": "j",
-            "width": 5
-        },
-        {
-            "char": "k",
-            "width": 5
-        },
-        {
-            "char": "l",
-            "width": 5
-        },
-        {
-            "char": "m",
-            "width": 5
-        },
-        {
-            "char": "n",
-            "width": 5
-        },
-        {
             "char": "o",
             "width": 5
         },
         {
-            "char": "p",
-            "width": 5
-        },
-        {
-            "char": "q",
-            "width": 5
-        },
-        {
-            "char": "r",
-            "width": 5
-        },
-        {
-            "char": "s",
-            "width": 5
-        },
-        {
-            "char": "t",
-            "width": 5
-        },
-        {
             "char": "u",
-            "width": 5
-        },
-        {
-            "char": "v",
-            "width": 5
-        },
-        {
-            "char": "w",
-            "width": 5
-        },
-        {
-            "char": "x",
-            "width": 5
-        },
-        {
-            "char": "y",
-            "width": 5
-        },
-        {
-            "char": "z",
             "width": 5
         },
         {
