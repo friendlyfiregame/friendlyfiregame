@@ -22,7 +22,8 @@
         "Jerk! @rejected !end"
     ],
     "nicetomeet": [
-        "Ho ho ho, what a friendly fella you are. The last one wasn't of the talkative kind. !set option_nicetomeet",
+        "[not $ismale]Ho ho ho, what a sweet gal you are. The last one wasn't of the talkative kind. !set option_nicetomeet",
+        "[$ismale]Ho ho ho, what a friendly fella you are. The last one wasn't of the talkative kind. !set option_nicetomeet",
         "He had the WORST time!",
         "But you and I will get along just fine.",
         "►What happened to the last one? @chosenone",
