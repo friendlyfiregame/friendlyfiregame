@@ -345,17 +345,26 @@ export class Player extends PhysicsEntity {
             this.moveLeft = true;
             this.moveRight = false;
             this.handleRunningCheck(-1);
-        } else if (event.isPlayerAction) {
-
+        } else if (event.isPlayerInteract) {
             // Check for gates / doors
-            if (!this.flying && !this.carrying) {
+            if (!this.flying) {
                 const gate = this.scene.world.getGateCollisions(this)[0];
-                if (gate) {
+                if (gate && !this.carrying) {
                     this.enterGate(gate);
                     return;
+                } else {
+                    if (this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                        const conversation = this.closestNPC.conversation;
+                        // Disable auto movement to a safe talking distance for the stone in the river
+                        const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
+                        this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+                    } else if (this.canDanceToMakeRain()) {
+                        this.startDance(this.scene.apocalypse ? 3 : 2);
+                        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
+                    }
                 }
             }
-
+        } else if (event.isPlayerAction) {
             if (this.carrying instanceof Stone) {
                 if (this.canThrowStoneIntoWater()) {
                     this.carrying.setVelocity(10 * this.direction, 10);
@@ -380,16 +389,6 @@ export class Player extends PhysicsEntity {
                 this.carrying = null;
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
-            } else {
-                if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
-                    const conversation = this.closestNPC.conversation;
-                    // Disable auto movement to a safe talking distance for the stone in the river
-                    const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
-                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
-                } else if (this.canDanceToMakeRain()) {
-                    this.startDance(this.scene.apocalypse ? 3 : 2);
-                    this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
-                }
             }
         } else if (event.isPlayerJump && this.canJump()) {
             this.jumpKeyPressed = true;
@@ -577,14 +576,14 @@ export class Player extends PhysicsEntity {
 
         if (this.scene.showBounds) this.drawBounds(ctx);
 
-        if (!this.isCarrying() && this.closestNPC && !this.dance && !this.playerConversation) {
+        if (this.closestNPC && !this.dance && !this.playerConversation) {
             if (this.closestNPC instanceof Sign) {
-                this.drawTooltip(ctx, "Read", "interact");
+                this.drawTooltip(ctx, "Read", "up");
             } else if (this.closestNPC.isReadyForConversation()) {
-                this.drawTooltip(ctx, "Talk", "interact");
+                this.drawTooltip(ctx, "Talk", "up");
             }
         } else if (this.canEnterDoor()) {
-            this.drawTooltip(ctx, "Enter", "interact");
+            this.drawTooltip(ctx, "Enter", "up");
         } else if (this.canThrowStoneIntoWater()) {
             this.drawTooltip(ctx, "Throw stone", "interact");
         } else if (this.canThrowSeedIntoSoil()) {
