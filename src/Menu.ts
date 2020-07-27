@@ -8,7 +8,7 @@ export enum MenuAlignment { LEFT, CENTER, RIGHT };
 /**
  * Simple MenuItem Class for usage in a MenuList.
  * Currently, each item is only rendered as simple text. The focused state is visualized via
- * an additional `>` character as prefix. The item instances don't need to be manually drawn,
+ * an additional `►` character as prefix. The item instances don't need to be manually drawn,
  * since the MenuList class' draw method will take care of it
  */
 export class MenuItem {

@@ -5,9 +5,9 @@
         "[not $mountainRiddleExplained]You rock!",
         "[not $mountainRiddleExplained]I have nothing left to teach to.",
         "[$mountainRiddleExplained]It was fairly easy with my help, wasn't it?",
-        ">[not $mountainRiddleExplained]You didn't really teach me anything. @teaching",
-        ">[$mountainRiddleExplained]Yeah. @easy",
-        ">[$mountainRiddleExplained]I still struggled. @struggled"
+        "►[not $mountainRiddleExplained]You didn't really teach me anything. @teaching",
+        "►[$mountainRiddleExplained]Yeah. @easy",
+        "►[$mountainRiddleExplained]I still struggled. @struggled"
     ],
     "teaching": [
         "Don't be like that…",

@@ -18,7 +18,7 @@ One dialog is a JSON file, containing an object with any number of keys, which r
 states that can be jumped to. There should always be an "entry" key, which is the state the conversation
 will start with when the player starts it for the very first time.
 Each of these keys holds an array of strings, which are twofold: Either a player option (marked by an
-initial ">"), or an NPC line. Each line may end with a state change and or an action.
+initial "►"), or an NPC line. Each line may end with a state change and or an action.
 
 ### State Changes
 
@@ -44,13 +44,13 @@ It's possible to have one player option lead to more player options using state 
     ...
     "myState": [
         "I'm NPC XY and say stuff",
-        ">Greet",
-        ">Leave !end",
-        ">Insult @insults"
+        "►Greet",
+        "►Leave !end",
+        "►Insult @insults"
     ],
     "insults": [
-        ">You're heavy!",
-        ">I don't like you"
+        "►You're heavy!",
+        "►I don't like you"
     ]
 ```
 
@@ -62,13 +62,13 @@ but stay mostly in a single one linearly:
     ...
     "entry": [
         "Hello you!",
-        ">Hi", /* all these lead to the same line below, mere illusion of choice! */
-        ">Hello you too!",
-        ">Who are you?",
+        "►Hi", /* all these lead to the same line below, mere illusion of choice! */
+        "►Hello you too!",
+        "►Who are you?",
         "I'm Steve the sentient stone!",
-        ">Whoa! A talking stone!",
-        ">You rock!",
-        ">What do you want from me? @want",
+        "►Whoa! A talking stone!",
+        "►You rock!",
+        "►What do you want from me? @want",
         "Well yes, thank you! And you are?",
         ...
     ]

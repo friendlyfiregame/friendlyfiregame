@@ -203,7 +203,7 @@ export class ConversationLine {
         public readonly full: string,
         public readonly conversation: Conversation
     ) {
-        this.isNpc = !full.startsWith(">");
+        this.isNpc = !full.startsWith("►");
         this.line = ConversationLine.extractText(full, this.isNpc);
         this.condition = ConversationLine.extractCondition(full);
         this.targetState = ConversationLine.extractState(full);
@@ -245,7 +245,7 @@ export class ConversationLine {
 
     private static extractText(line: string, autoWrap = false): string {
         // Remove player option sign
-        if (line.startsWith(">")) { line = line.substr(1); }
+        if (line.startsWith("►")) { line = line.substr(1); }
         // Remove conditions
         if (line.trim().startsWith("[") && line.includes("]")) { line = line.substr(line.indexOf("]") + 1).trim(); }
         // Remove actions and state changes

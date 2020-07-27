@@ -167,7 +167,7 @@ export class SpeechBubble {
         }
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const selectionIndicator = isSelected ? ">" : " ";
+            const selectionIndicator = isSelected ? "►" : " ";
             font.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2),
                 Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight)), "black");
         }
