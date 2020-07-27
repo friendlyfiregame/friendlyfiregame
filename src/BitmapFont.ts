@@ -120,18 +120,21 @@ export class BitmapFont {
     }
 
     public drawTextWithOutline(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, outlineColor: string, align = 0) {
-        const outlineWidth = 1;
+        const OUTLINE_WIDTH = 1;
 
-        this.drawText(ctx, text, x - outlineWidth, y - outlineWidth, outlineColor, align);
-        this.drawText(ctx, text, x, y - outlineWidth, outlineColor, align);
-        this.drawText(ctx, text, x + outlineWidth, y - outlineWidth, outlineColor, align);
+        const OUTLINE_TOP_POS = y - OUTLINE_WIDTH
+        const OUTLINE_RIGHT_POS = x + OUTLINE_WIDTH
+        const OUTLINE_BOTTOM_POS = y + OUTLINE_WIDTH
+        const OUTLINE_LEFT_POS = x - OUTLINE_WIDTH
 
-        this.drawText(ctx, text, x - outlineWidth, y, outlineColor, align);
-        this.drawText(ctx, text, x + outlineWidth, y, outlineColor, align);
-
-        this.drawText(ctx, text, x - outlineWidth, y + outlineWidth, outlineColor, align);
-        this.drawText(ctx, text, x, y + outlineWidth, outlineColor, align);
-        this.drawText(ctx, text, x + outlineWidth, y + outlineWidth, outlineColor, align);
+        this.drawText(ctx, text, x, OUTLINE_TOP_POS, outlineColor, align);
+        this.drawText(ctx, text, OUTLINE_RIGHT_POS, OUTLINE_TOP_POS, outlineColor, align);
+        this.drawText(ctx, text, OUTLINE_RIGHT_POS, y, outlineColor, align);
+        this.drawText(ctx, text, OUTLINE_RIGHT_POS, OUTLINE_BOTTOM_POS, outlineColor, align);
+        this.drawText(ctx, text, x, OUTLINE_BOTTOM_POS, outlineColor, align);
+        this.drawText(ctx, text, OUTLINE_LEFT_POS, OUTLINE_BOTTOM_POS, outlineColor, align);
+        this.drawText(ctx, text, OUTLINE_LEFT_POS, y, outlineColor, align);
+        this.drawText(ctx, text, OUTLINE_LEFT_POS, OUTLINE_TOP_POS, outlineColor, align);
 
         this.drawText(ctx, text, x, y, color, align);
     };
