@@ -41,7 +41,9 @@ export class BitmapFont {
         const json = await (await fetch(source)).json() as FontJSON;
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.image, baseURL));
-        return new BitmapFont(image, json.colors, json.characters, json.widths, json.margin);
+        const characters = json.characterMapping.map(charDef => charDef.char).join('');
+        const widths = json.characterMapping.map(charDef => charDef.width)
+        return new BitmapFont(image, json.colors, characters, widths, json.margin);
     }
 
     private prepareColors(colorMap: { [x: string]: string; }): { [x: string]: number } {

@@ -3,6 +3,7 @@ declare module "*.font.json" {
         image: string;
         characters: string;
         widths: number[];
+        characterMapping: Record<string, number>[]
         margin: number;
         colors: Record<string, string>;
     }
