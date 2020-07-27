@@ -581,7 +581,7 @@ export class Player extends PhysicsEntity {
             if (this.closestNPC instanceof Sign) {
                 this.drawTooltip(ctx, "Read", "up");
             } else if (this.closestNPC.isReadyForConversation()) {
-                this.drawTooltip(ctx, "Talk", "up");
+                this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
             }
         } else if (this.canEnterDoor()) {
             this.drawTooltip(ctx, "Enter", "up");

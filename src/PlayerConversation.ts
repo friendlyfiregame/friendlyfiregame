@@ -18,6 +18,7 @@ export class PlayerConversation {
         this.setSelectedOption(0);
         this.setBubblesContent();
         this.interaction?.npcLine?.executeBeforeLine();
+        npc.meet();
 
         // Ensure safe distance to NPC
         if (this.autoMove) {

@@ -34,6 +34,7 @@ import { Sign } from '../Sign';
 import { Wall } from '../Wall';
 import { Table } from '../Table';
 import { Bird } from '../Bird';
+import { SuperThrow } from '../SuperThrow';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -155,6 +156,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this instanceof Sign)
         if (this instanceof Wall)
         if (this instanceof Table)
+        if (this instanceof SuperThrow)
 
         this.gameTime = 0;
         this.apocalypse = false;
