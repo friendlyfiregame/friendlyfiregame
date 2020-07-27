@@ -164,6 +164,7 @@ export class Player extends PhysicsEntity {
     private hasBeard = false;
     private autoMove: AutoMove | null = null;
     private isControllable: boolean = true;
+    private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
@@ -674,8 +675,10 @@ export class Player extends PhysicsEntity {
         if (this.playerConversation) {
             this.playerConversation.update(dt);
         }
-        if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
-            this.showHint();
+        if (this.showHints) {
+            if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
+                this.showHint();
+            }
         }
         if (this.carrying) {
             if (this.running) {
