@@ -79,7 +79,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Hold 'down' to fall through platforms"
+                         "value":"Hold 'down' to fall through platforms."
                         }],
                  "rotation":0,
                  "type":"entity",
