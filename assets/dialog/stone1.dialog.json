@@ -9,11 +9,11 @@
     ],
     "tips": [
         "You can use the sacred garden of course. Just throw the seed directly onto the soil.",
-        "The item will be absorbed by the blessed and fertile ground to help create new life",
+        "The item will be absorbed by the blessed and fertile ground to help create new life.",
         "What a miracle!",
         ">It's just a gardening…",
         ">Will do.",
-        "Good Luck! @entry !end"
+        "Good luck! @entry !end"
     ],
     "visitedentry": [
         "I see that you still struggle with your task.",
@@ -103,7 +103,7 @@
         ">… touche, master. @yesmaster"
     ],
     "human": [
-        "This… exceeds my expertise. Umm. Where were we. Ah yes. @yesmaster"
+        "This… exceeds my expertise. Umm. Where were we. Ah, yes. @yesmaster"
     ],
     "onmyown": [
         "Good luck, fool. @visitedentry !end"
@@ -131,7 +131,7 @@
         ">I am not sure if I really want to touch you… @nottouchyou",
         ">By the power of Grayskull! @lift",
         ">Yes master. @lift",
-        ">On second thought, I don't like this… at all",
+        ">On second thought, I don't like this… at all.",
         "What a hard disappointment… @visitedentry !end"
     ],
     "nottouchyou": [

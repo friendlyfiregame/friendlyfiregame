@@ -17,7 +17,7 @@
         "So there is a regular way to cross the river? !set visited",
         ">Yeah, it's a long story.",
         "I couldn't cross the broken bridge after falling down from the sky.",
-        "I tried many times but I couldn't jump far enough",
+        "I tried many times but I couldn't jump far enough.",
         "Since there wasn't anything better to do, I tried to find out more about this world. @bug"
     ],
     "spawend": [
@@ -33,7 +33,7 @@
     ],
     "powerup": [
         "Oh really? You can actually fly now?",
-        "He was just repeating lines and blabbing about broken sequences",
+        "He was just repeating lines and blabbing about broken sequences.",
         "Maybe you can go talk to him?",
         ">If I have the time. Continue.",
         "Where was I? Ah! @strange"

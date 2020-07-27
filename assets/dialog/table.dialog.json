@@ -13,12 +13,12 @@
         "Firstly, I'll fill up you health bar by five points. !set touchDialog true",
         "Secondly, I'm gonna reward you with salmonella.",
         "So, go right ahead.",
-        ">I'm good, thanks",
+        ">I'm good, thanks.",
         "[$ismale] Good boy. @entry !end",
         "[not $ismale] Clever girl. @entry !end"
     ],
     "living": [
-        "Apperently. Living the life to it's fullest !set livingDialog true",
+        "Apparently. Living the life to it's fullest. !set livingDialog true",
         "I spent enough time just slaving my life away, being burried inside walls…",
         "waiting for someone to accidentally free me from my prison.",
         "Just to be consumed for a cheap health buff.",
@@ -26,8 +26,8 @@
         ">Woah, that's kinda dark.",
         "It is. But we power ups can live in peace here…",
         "The people tend to lack health bars, so I'm off the wanted list.",
-        "But apprently I seem to be on the 'being asked stupid questions' list",
-        ">I get the hint",
+        "But apparently I seem to be on the 'being asked stupid questions' list.",
+        ">I get the hint.",
         "Good. @entry !end"
     ]
 }

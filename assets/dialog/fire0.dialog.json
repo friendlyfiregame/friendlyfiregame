@@ -2,18 +2,18 @@
 {
     "entry": [
         "Hey, person! !talkedtofire",
-        ">[$devmode]Hey",
-        ">[$devmode]I'm a dev, show me variables example @variableExample",
+        ">[$devmode]Hey!",
+        ">[$devmode]I'm a dev, show me variables example! @variableExample",
         "I am starving, I fear to die very soon and my light will go out forever. @help !sad"
     ],
     "variableExample": [
-        "This example demonstrates variables !set exampleSeen",
-        "[exampleSeen]It's pretty cool",
+        "This example demonstrates variables. !set exampleSeen",
+        "[exampleSeen]It's pretty cool!",
         "It is not perfect yet and a little buggy, some things don't work yet… sorry",
-        "[exampleSeen]This line is conditional, and you should see it !set fail",
-        "[not fail]This line unfortunately is visible due to a bug, where conditions are evaluated one line too early",
+        "[exampleSeen]This line is conditional, and you should see it. !set fail",
+        "[not fail]This line unfortunately is visible due to a bug, where conditions are evaluated one line too early.",
         "variables sometimes only take effect after another sentence has been spoken. A little weird. Hopefully fixed in future.",
-        "Variables also work with player options",
+        "Variables also work with player options.",
         ">Say 'hello' !set hello 1",
         ">Say 'howdy' !set hello 0",
         "…",
@@ -24,20 +24,20 @@
         ">[not hello=1]hello!",
         ">I don't know… !set idk",
         "…",
-        "[idk]You're a little forgetful",
-        "[not idk]Ah right",
-        "Also, now setting a global variable which could be accessed from other dialogs !set $test 42",
-        "which can be accessed using a dollar sign",
+        "[idk]You're a little forgetful…",
+        "[not idk]Ah, right!",
+        "Also, now setting a global variable which could be accessed from other dialogs. !set $test 42",
+        "which can be accessed using a dollar sign.",
         "[$test]Isn't that cool?",
-        ">Yes",
-        "Bye @entry !end"
+        ">Yes!",
+        "Bye! @entry !end"
     ],
     "help": [
         "Would you help me out, kind stranger?",
         ">Oh my God, a talking fire?! @impressed",
         ">Why should I help you? @why",
         ">How can I help you? @how",
-        ">I don't care !angry",
+        ">I don't care! !angry",
         "Oh you son of a …! No, sorry, I get it. Well, maybe another time. !neutral",
         "Just be aware this whole game is pretty pointless if you don't help me out… @help !end"
     ],
@@ -47,18 +47,18 @@
     "how": [
         "[not $ismale]I really need some wood. Surely a strong and marvelous woman like you can help an old fire out.",
         "[$ismale]I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
-        ">Sounds boring. Maybe later @bye",
+        ">Sounds boring. Maybe later… @bye",
         ">I'm in. @details",
         ">What do we say to the god of fire?",
         "I don't know, what?",
         ">Not today!",
-        "But if you don't help me out, there may not be a tomorrow @why"
+        "But if you don't help me out, there may not be a tomorrow. @why"
     ],
     "why": [
         "Because I am the essence of life. If I die, everything dies. Do you want everything to die?",
         ">Oh, I wouldn't want to be responsible for that! @details",
         ">I don't know, do I?",
-        ">Yes",
+        ">Yes!",
         "No!",
         ">OK",
         "So you'll help me then?",
@@ -72,7 +72,7 @@
         "Because your sole existence in this world hinges on helping to keep me alive.",
         "That's why you're here. There's nothing else to do for you anyway.",
         ">Cool! I'll help you. @details",
-        ">I'd rather think about this in private @bye"
+        ">I'd rather think about this in private. @bye"
     ],
     "bye": [
         "Sure, take your time. You'll come back eventually! @help !end"
@@ -90,7 +90,7 @@
     "reminder": [
         "Hello again!",
         ">What do I need to do?",
-        ">Bye @reminder !end",
+        ">Bye! @reminder !end",
         "Go east. Ask tree for wood. Bring me wood. Soon!",
         ">On my way! @reminder !end"
     ]

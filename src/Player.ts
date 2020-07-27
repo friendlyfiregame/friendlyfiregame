@@ -1071,37 +1071,37 @@ export class Player extends PhysicsEntity {
                     this.think("I should talk to someone.", 3000);
                     break;
                 case QuestATrigger.TALKED_TO_FIRE:
-                    this.think("I think the fire needs my help", 3000);
+                    this.think("I think the fire needs my help.", 3000);
                     break;
                 case QuestATrigger.GOT_QUEST_FROM_FIRE:
-                    this.think("The fire told me to visit the tree in the east", 3000);
+                    this.think("The fire told me to visit the tree in the east.", 3000);
                     break;
                 case QuestATrigger.TALKED_TO_TREE:
-                    this.think("Maybe I should talk to the tree again", 3000);
+                    this.think("Maybe I should talk to the tree again.", 3000);
                     break;
                 case QuestATrigger.GOT_QUEST_FROM_TREE:
-                    this.think("I need to pick up the seed by the tree", 3000);
+                    this.think("I need to pick up the seed by the tree.", 3000);
                     break;
                 case QuestATrigger.GOT_SEED:
-                    this.think("I should check the mountains for a good place for the seed", 3000);
+                    this.think("I should check the mountains for a good place for the seed.", 3000);
                     break;
                 case QuestATrigger.PLANTED_SEED:
-                    this.think("The seed needs something to grow, I think", 3000);
+                    this.think("The seed needs something to grow, I think.", 3000);
                     break;
                 case QuestATrigger.TALKED_TO_STONE:
-                    this.think("I should talk to that crazy stone again", 3000);
+                    this.think("I should talk to that crazy stone again.", 3000);
                     break;
                 case QuestATrigger.GOT_STONE:
-                    this.think("My arms get heavy. I really should throw that thing in the river", 3000);
+                    this.think("My arms get heavy. I really should throw that thing in the river.", 3000);
                     break;
                 case QuestATrigger.THROWN_STONE_INTO_WATER:
-                    this.think("There must be something interesting west of the river", 3000);
+                    this.think("There must be something interesting west of the river.", 3000);
                     break;
                 case QuestATrigger.GOT_MULTIJUMP:
-                    this.think("I should check the clouds. The seed still needs something to grow", 3000);
+                    this.think("I should check the clouds. The seed still needs something to grow.", 3000);
                     break;
                 case QuestATrigger.MADE_RAIN:
-                    this.think("I should talk to that singing tree again", 3000);
+                    this.think("I should talk to that singing tree again.", 3000);
                     break;
                 case QuestATrigger.GOT_WOOD:
                     this.think("Quick! The fire needs wood!", 3000);

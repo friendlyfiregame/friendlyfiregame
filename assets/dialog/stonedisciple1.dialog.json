@@ -1,23 +1,23 @@
 {
     "entry": [
-        "Hello !set $talkedToStoneDisciple true",
-        "I'm a stone monk and student of the wise stone atop the mountain peak",
+        "Hello! !set $talkedToStoneDisciple true",
+        "I'm a stone monk and student of the wise stone atop the mountain peak.",
         "Are you here to climb the mountain?",
         ">Yes. @yes",
         ">Is there any other way to get up there? @no"
     ],
     "no": [
         "No.",
-        "Maybe flying, but you don't look like a bird man or man bird",
+        "Maybe flying, but you don't look like a bird man or man bird.",
         ">Damn… then yes. @yes"
     ],
     "yes": [
-        "Good",
+        "Good.",
         "In order to get up, just jump up the platforms here…",
-        "It's easy. Just jump and that's it",
-        "… pfftttt !amused",
-        "Nothing special to consider",
-        "… hehe !amused",
+        "It's easy. Just jump and that's it.",
+        "… pfftttt. !amused",
+        "Nothing special to consider.",
+        "… hehe! !amused",
         ">Why the suspicious act? @suspicious",
         ">I'm on my way then. @onmyway"
     ],
@@ -27,20 +27,20 @@
     ],
     "onmyway": [
         "Pffttttt… !amused",
-        "Good Luck!@visited !end"
+        "Good luck!@visited !end"
     ],
     "visited": [
-        "[not $gotTeleported]Go on, I'll wait here !end",
+        "[not $gotTeleported]Go on, I'll wait here. !end",
         "[$gotTeleported]Welcome back… @introduction !set $talkedToStoneDiscipleAgain true"
     ],
     "introduction": [
-        "How far did you get? pftttt… hihi !amused",
+        "How far did you get? Pftttt… hihi! !amused",
         ">Not so far according to your reaction.",
         "Yes, very true.",
-        "Just say a word if you need help",
+        "Just say a word if you need help.",
         ">I'm in a hurry, give me something to work with. @explaination",
         ">Riddles are my strong suit. I'll do it myself!",
-        "Respectable. Good Luck then! @onmyown !end"
+        "Respectable. Good luck then! @onmyown !end"
     ],
     "onmyown": [
         "How goes the riddling?",
@@ -68,11 +68,11 @@
         "… whoops.",
         "I got the wrong tip sheet here.",
         "Well, good luck nontheless.",
-        "> I'll try my best @end !end"
+        "> I'll try my best. @end !end"
     ],
     "end": [
         "Still not finished?",
         "Remeber the tip: The solution is represented outside on the wall to the right.",
-        "> Yeah, thanks @end !end"
+        "> Yeah, thanks. @end !end"
     ]
 }

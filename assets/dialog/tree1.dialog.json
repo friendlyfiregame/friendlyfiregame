@@ -1,20 +1,20 @@
 {
     "entry": [
-        "You are the dancing tree,\nOld and rough !amused !talkedtotree",
-        "One hundred and seventeen,\ndancing tree !amused",
-        "Feel the beat from the tree topsee, oh yeah !amused",
+        "You are the dancing tree,\nOld and rough. !amused !talkedtotree",
+        "One hundred and seventeen,\ndancing tree. !amused",
+        "Feel the beat from the tree topsee, oh yeah! !amused",
         ">Hello?",
-        ">Wait.. what?",
-        "You can dance\nYou can grow !amused",
-        "Having the root of your life !amused",
+        ">Wait… what?",
+        "You can dance\nYou can grow. !amused",
+        "Having the root of your life. !amused",
         ">Can you hear me?",
         ">What is this?",
         ">I know that song!",
-        "Ooh, see that birch\nWatch that tribe !amused",
-        "Digging the dancing tree !amused",
+        "Ooh, see that birch\nWatch that tribe. !amused",
+        "Digging the dancing tree. !amused",
         ">Are you done yet?",
         "Rude! !angry",
-        "I'll talk to you after you prove you're worthy",
+        "I'll talk to you after you prove you're worthy.",
         "[$ismale]Show me your moves, boy!",
         "[not $ismale]Show me your moves, girl!",
         "You'll need your 1 and 2 keys for this exercise. Get ready! @danced !end !dance 1"
@@ -33,17 +33,17 @@
     ],
     "smile": [
         "You seem like a decent lad! Maybe you can help me out with something.",
-        ">Actually, I was about to ask you for something",
+        ">Actually, I was about to ask you for something.",
         "Huh? You came here just for me? How nice! @request"
     ],
     "request": [
         "What is it that made you come all this way?",
-        ">I'd like to humbly ask you for a piece of your wood @wood",
-        ">I'm gonna cut you down",
+        ">I'd like to humbly ask you for a piece of your wood. @wood",
+        ">I'm gonna cut you down.",
         "You… and what army?! !angry",
         ">Haha, it's just a prank bro! @prank",
-        ">You're right, stupid idea @request",
-        ">Maybe we can help each other out",
+        ">You're right, stupid idea. @request",
+        ">Maybe we can help each other out.",
         "How? Why are you here?",
         ">I need a piece of you. @wood"
     ],
@@ -87,7 +87,7 @@
         "Oh you rude leafless imposter! Won't even listen to my sad, sad story. @request !end"
     ],
     "definitely": [
-        "awesome @missinggear"
+        "Awesome. @missinggear"
     ],
     "missinggear": [
         "Oh, and I almost forgot!",
@@ -106,7 +106,7 @@
         ">Ain't nobody got time for that! @notime"
     ],
     "reminder": [
-        "You know, you wanted to help me procreate. Bring my cone to the highest place in this area",
+        "You know, you wanted to help me procreate. Bring my cone to the highest place in this area.",
         ">Got it! @reminder !end",
         ">Sorry, I lost your cone!",
         "You did… what? Thank god I have an unlimited supply of them. @reminder !spawnseed !end"

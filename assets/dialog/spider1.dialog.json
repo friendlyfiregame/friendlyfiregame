@@ -10,14 +10,14 @@
         ">Seriously? Magical FAIRY? @spider",
         ">[not visited]I got no time for this… @nerve",
         ">[visited]Gonna go…",
-        "Byeeee @entry !end"
+        "Byeeee! @entry !end"
     ],
     "nerve": [
         "The nerve! @rejected !end"
     ],
     "rejected": [
-        "Look who comes crawling back",
-        ">Sorry, I actually do need some guidance @entry",
+        "Look who comes crawling back…",
+        ">Sorry, I actually do need some guidance. @entry",
         ">I just pressed the wrong button!",
         "Jerk! @rejected !end"
     ],
@@ -26,23 +26,23 @@
         "He had the WORST time!",
         "But you and I will get along just fine.",
         ">What happened to the last one? @chosenone",
-        ">Yeah sure, back to topic",
-        "Suuuure @entry"
+        ">Yeah sure, back to topic.",
+        "Suuuure… @entry"
     ],
     "chosenone": [
         "It wasn't a pretty sight. Lots of misunderstandings, some disrespectful verbal exchanges.",
         "Long story short, you won't see him anytime soon. Trust me.",
-        "Some would say, he 'burned' to 'death'",
+        "Some would say, he 'burned' to 'death'.",
         "…",
-        "Subtlety is not my strong suit",
+        "Subtlety is not my strong suit.",
         ">I can see that. Back to topic!",
-        "Aye @entry"
+        "Aye! @entry"
     ],
     "whatsgoingon": [
         "[not talkedAboutQuest]Nothing really. Just make yourself at home. You're part of our world now.",
         ">[not talkedAboutQuest]Really? There's nothing to do?",
         "[not talkedAboutQuest]You can always approach the other habitants and have interesting chats with them.",
-        "[not talkedAboutQuest]The one downstairs might even need some help",
+        "[not talkedAboutQuest]The one downstairs might even need some help.",
         "[talkedAboutQuest]Like I said, we just live our lives in peace here. There isn't really much to do.",
         "[talkedAboutQuest]You can go and meet the other habitants. You can start downstairs.",
         ">Sure, I'll give it a try.",
@@ -54,14 +54,14 @@
         "[isracist]…",
         ">Can anyone become a fairy? @fairyschool",
         ">[not isracist]Since when are spiders allowed to be fairies? @racist",
-        ">Nevermind @entry"
+        ">Nevermind. @entry"
     ],
     "fairyschool": [
         "Are you kidding me?",
-        "Of course not. Only the best of the best can become fairies",
-        "I went through six years of fairy university and another two years of unpaid internships as fairy assistant",
+        "Of course not. Only the best of the best can become fairies.",
+        "I went through six years of fairy university and another two years of unpaid internships as fairy assistant.",
         "Can't wait until I get my new pink fairy dress. The one I got at graduation didn't fit.",
-        ">I cannot guess why… Back to topic @entry"
+        ">I cannot guess why… Back to topic. @entry"
     ],
     "racist": [
         "I will ignore your racist remark in good faith… you racist! !set isracist !set askedaboutspider",
@@ -69,27 +69,27 @@
     ],
     "magic": [
         "[not askedformoregenders]Great that you ask!",
-        "[not askedformoregenders]I'm not just a normal fairy, but one with an academic background",
-        "[not askedformoregenders]With my bachelor degree in gender studies, I know everything about genders",
+        "[not askedformoregenders]I'm not just a normal fairy, but one with an academic background.",
+        "[not askedformoregenders]With my bachelor degree in gender studies, I know everything about genders.",
         "[not askedformoregenders]I can instantly tell that you've been born to be at least one of two genders!",
         "[askedformoregenders] Like I said, you have a gender!",
         ">[not askedformoregenders]Aren't there more? @moregenders",
         ">Is that all…?",
-        "Ha! Not in the least. I have the power to accidentally change the gender of humans against their will",
-        "Abracadabra and it is done! ",
+        "Ha! Not in the least. I have the power to accidentally change the gender of humans against their will.",
+        "Abracadabra and it is done!",
         ">What… WAIT !set toggledgender !togglegender",
         "You are very welcome, gender swapped human!",
-        ">It's not that bad, actually @entry",
-        ">You even changed the clothes, nice @entry"
+        ">It's not that bad, actually. @entry",
+        ">You even changed the clothes, nice. @entry"
     ],
     "moregenders": [
         "There's only so much you can do with this kind of pixel resolution…",
         "Also, don't question my bachelor knowledge!",
-        ">Two genders is fine !set askedformoregenders @magic"
+        ">Two genders is fine. !set askedformoregenders @magic"
     ],
     "swapgender": [
         "Why? Don't you like your current gender?",
-        "Whoops, there we go again !togglegender",
-        ">I feel sick @entry"
+        "Whoops, there we go again. !togglegender",
+        ">I feel sick. @entry"
     ]
 }

@@ -5,7 +5,7 @@
         ">What are you up to? @what",
         ">[not chirp]Did you just say 'Chirp'? @chirp",
         ">You have strange flying technique. @multijump",
-        ">Bye bird. @bye"
+        ">Bye, bird. @bye"
     ],
     "chirp": [
         "Yes, I did. Chirp. That's what birds say!. !set chirp true @entry"
