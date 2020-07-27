@@ -79,6 +79,8 @@ export class BitmapFont {
         let charIndex = this.charReverseMap[char];
 
         if (charIndex == null) {
+            // To signalize missing char, use last char, which is a non-def glyph
+            charIndex = this.charCount - 1;
         }
 
         return charIndex;
