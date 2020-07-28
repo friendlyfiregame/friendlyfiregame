@@ -19,7 +19,8 @@ export class Wing extends NPC {
         super(scene, x, y, 24, 24);
     }
 
-    private showDialoguePrompt (): boolean {
+    protected showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.PLANTED_SEED) &&
             !this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)

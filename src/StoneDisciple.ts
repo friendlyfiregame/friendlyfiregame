@@ -18,7 +18,8 @@ export class StoneDisciple extends NPC {
         this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);
     }
 
-    private showDialoguePrompt (): boolean {
+    protected showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         const talkedToStoneDisciple = Conversation.getGlobals()['$talkedToStoneDisciple'];
         const talkedToStoneDiscipleAgain = Conversation.getGlobals()['$talkedToStoneDiscipleAgain'];
         const gotTeleported = Conversation.getGlobals()['$gotTeleported'];

@@ -46,6 +46,11 @@ export abstract class NPC extends PhysicsEntity {
         return "Talk";
     }
 
+    protected showDialoguePrompt (): boolean {
+        if (this.hasActiveConversation()) return false;
+        return true;
+    }
+
     protected drawDialoguePrompt (ctx: CanvasRenderingContext2D): void {
         this.dialoguePrompt.draw(ctx);
     }

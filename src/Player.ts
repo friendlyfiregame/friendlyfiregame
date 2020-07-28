@@ -171,6 +171,7 @@ export class Player extends PhysicsEntity {
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
+    private readableTrigger?: GameObjectInfo;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
@@ -359,6 +360,9 @@ export class Player extends PhysicsEntity {
                         // Disable auto movement to a safe talking distance for the stone in the river
                         const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
                         this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+                    } else if (this.readableTrigger) {
+                        const content = this.readableTrigger.properties.content || 'Nothing...';
+                        this.think(content, 3000);
                     } else if (this.canDanceToMakeRain()) {
                         this.startDance(this.scene.apocalypse ? 3 : 2);
                         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
@@ -577,12 +581,10 @@ export class Player extends PhysicsEntity {
 
         if (this.scene.showBounds) this.drawBounds(ctx);
 
-        if (this.closestNPC && !this.dance && !this.playerConversation) {
-            if (this.closestNPC instanceof Sign) {
-                this.drawTooltip(ctx, "Read", "up");
-            } else if (this.closestNPC.isReadyForConversation()) {
-                this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
-            }
+        if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
+            this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
+        } else if (this.readableTrigger) {
+            this.drawTooltip(ctx, "Examine", "up");
         } else if (this.canEnterDoor()) {
             this.drawTooltip(ctx, "Enter", "up");
         } else if (this.canThrowStoneIntoWater()) {
@@ -617,6 +619,12 @@ export class Player extends PhysicsEntity {
         console.log('Entities: ',this.scene.world.getEntityCollisions(this));
         console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
         console.log('Gates: ',this.scene.world.getGateCollisions(this));
+    }
+
+    private getReadableTrigger (): GameObjectInfo | undefined {
+        const triggers = this.scene.world.getTriggerCollisions(this);
+        if (triggers.length === 0) return undefined;
+        return triggers.find(t => t.name === 'readable');
     }
 
     private canDanceToMakeRain(): boolean {
@@ -821,6 +829,9 @@ export class Player extends PhysicsEntity {
             }
         }
 
+        // Check for readables in player trigger collisions
+        this.readableTrigger = this.getReadableTrigger();
+
         // Spawn random dust particles while walking
         if (!this.disableParticles) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
@@ -895,11 +906,35 @@ export class Player extends PhysicsEntity {
         // Logic from Triggers
         if (triggerCollisions.length > 0) {
             triggerCollisions.forEach(trigger => {
-                // Handle teleport logic
-                const teleportY = trigger.properties.teleportY;
-                if (teleportY) {
-                    this.y -= teleportY;
-                    Conversation.setGlobal("gotTeleported", "true");
+
+                // Handle Mountain Riddle Logic
+                if (trigger.name === 'reset_mountain') {
+                    this.scene.mountainRiddle.resetRiddle();
+                }
+                if (trigger.name === 'mountaingate') {
+                    const row = trigger.properties.row;
+                    const col = trigger.properties.col;
+                    if (col != null && row != null) {
+                        this.scene.mountainRiddle.checkGate(col, row);
+                    }
+                }
+                if (trigger.name === 'teleporter' && this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
+                    const teleportY = trigger.properties.teleportY;
+                    if (teleportY) {
+                        this.y -= teleportY;
+                    }
+                }
+                if (trigger.name === 'finish_mountain_riddle') {
+                    console.log('finish_mountain_riddle');
+                    this.scene.mountainRiddle.clearRiddle();
+                }
+
+                // Logic when in front of a readable trigger
+                if (trigger.name === 'readable') {
+                    const content = trigger.properties.content;
+                    if (content) {
+                        // console.log(content);
+                    }
                 }
 
                 // Disable particle effects while in trigger

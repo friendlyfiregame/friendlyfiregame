@@ -18,7 +18,8 @@ export class FlameBoy extends NPC {
         this.face.setMode(this.defaultFaceMode);
     }
 
-    private showDialoguePrompt (): boolean {
+    protected showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.THROWN_STONE_INTO_WATER &&
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_MULTIJUMP

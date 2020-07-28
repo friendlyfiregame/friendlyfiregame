@@ -23,6 +23,8 @@ export interface GameObjectProperties {
     content?: string;
     bgm?: string;
     identifier?: string;
+    col?: number;
+    row?: number;
 }
 
 export interface GameObjectInfo {

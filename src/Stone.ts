@@ -40,7 +40,8 @@ export class Stone extends NPC implements CollidableGameObject {
         this.floatingPosition = floatingPosition;
     }
 
-    private showDialoguePrompt (): boolean {
+    protected showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
