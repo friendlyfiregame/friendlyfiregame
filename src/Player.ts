@@ -362,7 +362,8 @@ export class Player extends PhysicsEntity {
                         this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
                     } else if (this.readableTrigger) {
                         const content = this.readableTrigger.properties.content || 'Nothing...';
-                        this.think(content, 3000);
+                        const duration = this.readableTrigger.properties.duration ? this.readableTrigger.properties.duration * 1000 : 3000
+                        this.think(content, duration);
                     } else if (this.canDanceToMakeRain()) {
                         this.startDance(this.scene.apocalypse ? 3 : 2);
                         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);

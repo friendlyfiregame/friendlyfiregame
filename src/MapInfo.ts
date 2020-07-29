@@ -14,6 +14,7 @@ export interface GameObjectProperties {
     distance: number;
     velocity: number;
     target?: string;
+    duration?: number;
     teleportY?: number;
     disableParticles?: boolean;
     setGlobalKey?: string;
