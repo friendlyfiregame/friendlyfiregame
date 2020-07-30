@@ -15,18 +15,15 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         this.zIndex = 2;
-        console.log('control scene is setup');
         this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
         this.outTransition = new SlideTransition({ duration: 0.25 });
     }
 
     public activate(): void {
-        console.log('control scene is activated');
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
-        console.log('control scene is deactivate');
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 

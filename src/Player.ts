@@ -929,16 +929,7 @@ export class Player extends PhysicsEntity {
                     }
                 }
                 if (trigger.name === 'finish_mountain_riddle') {
-                    console.log('finish_mountain_riddle');
                     this.scene.mountainRiddle.clearRiddle();
-                }
-
-                // Logic when in front of a readable trigger
-                if (trigger.name === 'readable') {
-                    const content = trigger.properties.content;
-                    if (content) {
-                        // console.log(content);
-                    }
                 }
 
                 // Disable particle effects while in trigger
