@@ -7,12 +7,12 @@
     "sorry": [
         "No hard feelings.",
         "Just keep your hands where I can see them. @greetings",
-        "►Sure don't worry... @greetings"
+        "►Sure don't worry… @greetings"
     ],
     "collectible": [
         "I am, that's why you shouldn't just go around touching me!",
         "You really don't want to own a power-up that hates you!.",
-        "►I guess... @greetings"
+        "►I guess… @greetings"
     ],
     "hey": [
         "Hey there! @greetings"
@@ -21,9 +21,9 @@
         "Need anyting?",
         "►Who are you? @who",
         "►What are you up to? @what",
-        "►[not talkedAboutSeed]I have this seed problem... @seed",
-        "►[talkedAboutSeed]I still have this seed problem... @seed2",
-        "►I'm off... @bye"
+        "►[not talkedAboutSeed]I have this seed problem… @seed",
+        "►[talkedAboutSeed]I still have this seed problem… @seed2",
+        "►I'm off… @bye"
     ],
     "who": [
         "I'm the almighty super throw!",
@@ -35,19 +35,19 @@
     ],
     "clouds": [
         "Can you live there any other way?",
-        "►Nevermind... @greetings"
+        "►Nevermind… @greetings"
     ],
     "down": [
-        "I'm excercising my throw arm...",
+        "I'm excercising my throwing arm…",
         "Also, Dad has company over. I don't like the smell.",
-        "►I really don't want any details... @greetings"
+        "►I really don't want any details… @greetings"
     ],
     "what": [
         "I'm throwing stuff up the mountain to excercise.",
         "This is practically the best spot to do so in the entire world.",
         "►Any success?",
         "No, I ran out of stuff pretty quickly.",
-        "►Too bad... @greetings"
+        "►Too bad… @greetings"
     ],
     "seed": [
         "What kind of problem?",

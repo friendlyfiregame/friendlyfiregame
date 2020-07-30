@@ -18,12 +18,12 @@ export class Sign extends NPC {
     }
 
     private prepareContent (content?: string ): string[] {
-        if (!content) return ['The sign is empty'];
+        if (!content) return ['The sign is empty.'];
         return content.split(":::");
     }
 
     public getInteractionText (): string {
-        return "Read Sign";
+        return "Read sign";
     }
 
     private generateConversation (lines: string[]): Conversation {
