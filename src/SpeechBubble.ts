@@ -159,17 +159,24 @@ export class SpeechBubble {
         ctx.fillStyle = this.color;
         ctx.fill();
 
+        const leftPos = Math.round(posX - metrics.width / 2);
         let messageLineOffset = 4;
+        const textColor = "black";
+
         for (let i = 0; i < this.messageLines.length; i++) {
-            font.drawText(ctx, this.messageLines[i], Math.round(posX - metrics.width / 2),
-                Math.round(-posY - this.height + 4 + (i * this.lineHeight)), "black");
+            font.drawText(ctx, this.messageLines[i], leftPos,
+                Math.round(-posY - this.height + 4 + (i * this.lineHeight)), textColor);
             messageLineOffset += 4;
         }
         for (let i = 0; i < this.options.length; i++) {
+            const topPos = Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight));
             const isSelected = this.selectedOptionIndex === i;
-            const selectionIndicator = isSelected ? "►" : " ";
-            font.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2),
-                Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight)), "black");
+
+            if (isSelected) {
+                font.drawText(ctx, "►", leftPos, topPos, textColor)
+            }
+
+            font.drawText(ctx, this.options[i], leftPos + 11, topPos, textColor);
         }
 
         ctx.restore();
