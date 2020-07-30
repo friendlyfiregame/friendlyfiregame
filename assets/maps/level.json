@@ -2014,18 +2014,6 @@
                  "y":1897
                 }, 
                 {
-                 "height":0,
-                 "id":47,
-                 "name":"player",
-                 "point":true,
-                 "rotation":0,
-                 "type":"entity",
-                 "visible":true,
-                 "width":0,
-                 "x":3252,
-                 "y":404
-                }, 
-                {
                  "height":24,
                  "id":151,
                  "name":"readable",
@@ -2033,7 +2021,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A strange device of unknown use"
+                         "value":"A strange device. There is no manual available."
                         }],
                  "rotation":0,
                  "type":"trigger",
@@ -2080,6 +2068,30 @@
                  "width":30,
                  "x":3558,
                  "y":2162
+                }, 
+                {
+                 "height":0,
+                 "id":154,
+                 "name":"portal",
+                 "point":true,
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":3252,
+                 "y":439
+                }, 
+                {
+                 "height":0,
+                 "id":47,
+                 "name":"player",
+                 "point":true,
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":3252,
+                 "y":427
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2088,7 +2100,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":154,
+ "nextobjectid":155,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",

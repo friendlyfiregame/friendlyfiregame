@@ -38,6 +38,7 @@ import { SuperThrow } from '../SuperThrow';
 import { MountainRiddle } from '../MountainRiddle';
 import { RiddleStone } from '../RiddleStone';
 import { Skull } from '../Skull';
+import { Portal } from '../Portal';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -166,6 +167,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this instanceof SuperThrow)
         if (this instanceof RiddleStone)
         if (this instanceof Skull)
+        if (this instanceof Portal)
 
         this.gameTime = 0;
         this.apocalypse = false;
