@@ -51,7 +51,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ControlsScene.font.drawText(ctx, 'Walk around and', textOffsetX, 25, "black");
         ControlsScene.font.drawText(ctx, 'Navigate menus', textOffsetX, 35, "black");
         ControlsScene.font.drawText(ctx, 'Jump', textOffsetX, 70, "black");
-        ControlsScene.font.drawText(ctx, 'Interact And Confirm', textOffsetX, 110, "black");
+        ControlsScene.font.drawText(ctx, 'Interact and Confirm', textOffsetX, 110, "black");
         ControlsScene.font.drawText(ctx, 'Pause and Cancel', textOffsetX, 135, "black");
         ctx.restore();
     }

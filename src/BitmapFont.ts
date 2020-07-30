@@ -23,6 +23,7 @@ export class BitmapFont {
         this.charStartPoints = [];
         this.charCount = charMap.length;
         this.charReverseMap = {};
+
         for (var i = 0; i < this.charCount; i++) {
             this.charStartPoints[i] = (i == 0) ? 0 : this.charStartPoints[i - 1] + this.charWidths[i - 1] + charMargin;
             const char = this.charMap[i];
@@ -79,7 +80,7 @@ export class BitmapFont {
         let charIndex = this.charReverseMap[char];
 
         if (charIndex == null) {
-            // To signalize missing char, use last char, which is a non-def glyph
+            // To signalize missing char, use last char, which is a not-def glyph
             charIndex = this.charCount - 1;
         }
 
@@ -102,6 +103,7 @@ export class BitmapFont {
             const index = this.getCharIndex(char);
             width += this.charWidths[index] + 1;
         }
+
         const offX = Math.round(-align * width);
         for (let i = 0; i < text.length; i++) {
             const index = this.getCharIndex(text[i]);

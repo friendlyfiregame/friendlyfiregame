@@ -44,7 +44,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         this.menu.setItems(
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
             new MenuItem(MenuItemKey.CONTROLS, "Controls", PauseScene.font, "white", 75, 145),
-            new MenuItem(MenuItemKey.EXIT, "Back to Title", PauseScene.font, "white", 75, 160),
+            new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 160),
         )
     }
 

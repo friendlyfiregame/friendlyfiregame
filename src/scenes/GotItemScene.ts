@@ -116,7 +116,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         ctx.scale(2, 2);
         const image = GotItemScene.itemImages[this.targetItem];
         ctx.drawImage(image, this.itemPosition.x / 2, this.itemPosition.y / 2);
-        
+
         ctx.restore();
     }
 }
