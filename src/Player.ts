@@ -1,6 +1,6 @@
 import { SpeechBubble } from "./SpeechBubble";
 import {
-    PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
+    GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
     PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_PADDING
 } from "./constants";
@@ -141,6 +141,7 @@ export class Player extends PhysicsEntity {
     public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
+    private visible = false;
 
     private doubleTapThreshold = 0.5;
     private doubleTapTimestamp = 0;
@@ -179,6 +180,15 @@ export class Player extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        this.isControllable = false;
+
+        setTimeout(() => {
+            this.x = x;
+            this.y = y;
+            this.isControllable = true;
+            this.visible = true;
+        }, 1800);
+
         document.addEventListener("keydown", event => this.handleKeyDown(event));
 
         if (isDev()) {
@@ -515,7 +525,7 @@ export class Player extends PhysicsEntity {
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
-            if (!this.disableParticles) {
+            if (!this.disableParticles && this.visible) {
                 this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
                 this.doubleJumpEmitter.emit(20);
             }
@@ -552,6 +562,8 @@ export class Player extends PhysicsEntity {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        if (!this.visible) return;
+
         ctx.save();
         ctx.beginPath();
 
@@ -825,7 +837,7 @@ export class Player extends PhysicsEntity {
         this.readableTrigger = this.getReadableTrigger();
 
         // Spawn random dust particles while walking
-        if (!this.disableParticles) {
+        if (!this.disableParticles && this.visible) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
                     this.dustEmitter.setPosition(this.x, this.y);
@@ -917,16 +929,7 @@ export class Player extends PhysicsEntity {
                     }
                 }
                 if (trigger.name === 'finish_mountain_riddle') {
-                    console.log('finish_mountain_riddle');
                     this.scene.mountainRiddle.clearRiddle();
-                }
-
-                // Logic when in front of a readable trigger
-                if (trigger.name === 'readable') {
-                    const content = trigger.properties.content;
-                    if (content) {
-                        // console.log(content);
-                    }
                 }
 
                 // Disable particle effects while in trigger

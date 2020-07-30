@@ -120,6 +120,20 @@ export class Aseprite {
     }
 
     /**
+     * Return the full animation duration for a specific animation tag.
+     *
+     * @param tag - The animation tag to get the duration from.
+     * @return The animation duration.
+     */
+    public getAnimationDurationByTag(tag: string): number {
+        const duration = this.frameTagDurations[tag];
+        if (duration == null) {
+            throw new Error("Frame tag not found: " + tag);
+        }
+        return duration;
+    }
+
+    /**
      * Draws a tagged sprite animation.
      *
      * @param ctx  - The canvas context to draw to.

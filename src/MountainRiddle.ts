@@ -20,7 +20,6 @@ export class MountainRiddle {
     for (let index = 0; index < AMOUNT_GATE_ROWS; index++) {
       solution.push(Math.floor(Math.random() * Math.floor(AMOUNT_GATE_COLS)))
     }
-    console.log('new solution', solution);
     return solution;
   }
 
@@ -40,11 +39,9 @@ export class MountainRiddle {
 
   public registerAttempt (): void {
     this.attemptCount++;
-    console.log('register attempt. new count', this.attemptCount);
   }
 
   public failRiddle (): void {
-    console.log('fail riddle');
     Conversation.setGlobal("gotTeleported", "true");
     this.failed = true;
     this.registerAttempt();

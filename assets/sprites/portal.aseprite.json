@@ -151,11 +151,20 @@
     "spriteSourceSize": { "x": 5, "y": 8, "w": 21, "h": 36 },
     "sourceSize": { "w": 32, "h": 50 },
     "duration": 150
+   },
+   {
+    "filename": "17",
+    "frame": { "x": 111, "y": 0, "w": 1, "h": 1 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
+    "sourceSize": { "w": 32, "h": 50 },
+    "duration": 150
    }
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18",
+  "version": "1.2.21-x64",
   "image": "portal.png",
   "format": "RGBA8888",
   "size": { "w": 112, "h": 140 },
@@ -163,7 +172,8 @@
   "frameTags": [
    { "name": "idle", "from": 0, "to": 3, "direction": "forward" },
    { "name": "fadeout", "from": 4, "to": 10, "direction": "forward" },
-   { "name": "fadein", "from": 11, "to": 16, "direction": "forward" }
+   { "name": "fadein", "from": 11, "to": 16, "direction": "forward" },
+   { "name": "empty", "from": 17, "to": 17, "direction": "forward" }
   ]
  }
 }
