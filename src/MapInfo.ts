@@ -14,6 +14,7 @@ export interface GameObjectProperties {
     distance: number;
     velocity: number;
     target?: string;
+    duration?: number;
     teleportY?: number;
     disableParticles?: boolean;
     setGlobalKey?: string;
@@ -23,6 +24,8 @@ export interface GameObjectProperties {
     content?: string;
     bgm?: string;
     identifier?: string;
+    col?: number;
+    row?: number;
 }
 
 export interface GameObjectInfo {

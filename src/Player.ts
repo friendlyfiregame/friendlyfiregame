@@ -2,7 +2,7 @@ import { SpeechBubble } from "./SpeechBubble";
 import {
     PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
-    PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS
+    PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_PADDING
 } from "./constants";
 import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -29,7 +29,6 @@ import { ControllerEvent } from './input/ControllerEvent';
 import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
-import { Skull } from './Skull';
 import { Wall } from './Wall';
 
 const groundColors = [
@@ -164,12 +163,14 @@ export class Player extends PhysicsEntity {
     private hasBeard = false;
     private autoMove: AutoMove | null = null;
     private isControllable: boolean = true;
+    private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
+    private readableTrigger?: GameObjectInfo;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
@@ -177,7 +178,7 @@ export class Player extends PhysicsEntity {
     private disableParticles = false;
 
     public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 0.5 * PIXEL_PER_METER, 1.60 * PIXEL_PER_METER);
+        super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         document.addEventListener("keydown", event => this.handleKeyDown(event));
 
         if (isDev()) {
@@ -345,58 +346,54 @@ export class Player extends PhysicsEntity {
             this.moveLeft = true;
             this.moveRight = false;
             this.handleRunningCheck(-1);
-        } else if (event.isPlayerAction) {
-
+        } else if (event.isPlayerInteract) {
             // Check for gates / doors
-            if (!this.flying && !this.carrying) {
+            if (!this.flying) {
                 const gate = this.scene.world.getGateCollisions(this)[0];
-                if (gate) {
+                if (gate && !this.carrying) {
                     this.enterGate(gate);
                     return;
-                }
-            }
-
-            if (this.carrying instanceof Stone) {
-                if (this.canThrowStoneIntoWater()) {
-                    this.carrying.setVelocity(10 * this.direction, 10);
-                    this.carrying = null;
-                    Player.throwingSound.stop();
-                    Player.throwingSound.play();
                 } else {
-                    // TODO Say something when wrong place to throw
-                }
-            } else if (this.carrying instanceof Seed) {
-                this.carrying.setVelocity(5 * this.direction, 5);
-                this.carrying = null;
-                Player.throwingSound.stop();
-                Player.throwingSound.play();
-            } else if (this.carrying instanceof Wood) {
-                this.carrying.setVelocity(5 * this.direction, 5);
-                this.carrying = null;
-                Player.throwingSound.stop();
-                Player.throwingSound.play();
-            } else if (this.carrying instanceof Skull) {
-                this.carrying.setVelocity(5 * this.direction, 5);
-                this.carrying = null;
-                Player.throwingSound.stop();
-                Player.throwingSound.play();
-            } else {
-                if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
-                    const conversation = this.closestNPC.conversation;
-                    // Disable auto movement to a safe talking distance for the stone in the river
-                    const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
-                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
-                } else if (this.canDanceToMakeRain()) {
-                    this.startDance(this.scene.apocalypse ? 3 : 2);
-                    this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
+                    if (this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                        const conversation = this.closestNPC.conversation;
+                        // Disable auto movement to a safe talking distance for the stone in the river
+                        const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
+                        this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+                    } else if (this.readableTrigger) {
+                        const content = this.readableTrigger.properties.content || 'Nothing...';
+                        const duration = this.readableTrigger.properties.duration ? this.readableTrigger.properties.duration * 1000 : 3000
+                        this.think(content, duration);
+                    } else if (this.canDanceToMakeRain()) {
+                        this.startDance(this.scene.apocalypse ? 3 : 2);
+                        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
+                    }
                 }
             }
+        } else if (event.isPlayerAction) {
+            if (this.isCarrying()) this.throw();
         } else if (event.isPlayerJump && this.canJump()) {
             this.jumpKeyPressed = true;
             this.jump();
         } else if (event.isPlayerDrop) {
             this.jumpDown = true;
         }
+    }
+
+    public throw (): void {
+        if (!this.carrying || (this.carrying instanceof Stone && !this.canThrowStoneIntoWater())) {
+            return;
+        }
+        
+        if (this.carrying instanceof Stone) {
+            this.carrying.setVelocity(10 * this.direction, 10);
+        } else {
+            this.carrying.setVelocity(5 * this.direction, 5);
+        }
+
+        this.height = PLAYER_HEIGHT;
+        this.carrying = null;
+        Player.throwingSound.stop();
+        Player.throwingSound.play();
     }
 
     // Used in dev mode to enable some special keys that can only be triggered
@@ -577,14 +574,12 @@ export class Player extends PhysicsEntity {
 
         if (this.scene.showBounds) this.drawBounds(ctx);
 
-        if (!this.isCarrying() && this.closestNPC && !this.dance && !this.playerConversation) {
-            if (this.closestNPC instanceof Sign) {
-                this.drawTooltip(ctx, "Read", "interact");
-            } else if (this.closestNPC.isReadyForConversation()) {
-                this.drawTooltip(ctx, "Talk", "interact");
-            }
+        if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
+            this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
+        } else if (this.readableTrigger) {
+            this.drawTooltip(ctx, "Examine", "up");
         } else if (this.canEnterDoor()) {
-            this.drawTooltip(ctx, "Enter", "interact");
+            this.drawTooltip(ctx, "Enter", "up");
         } else if (this.canThrowStoneIntoWater()) {
             this.drawTooltip(ctx, "Throw stone", "interact");
         } else if (this.canThrowSeedIntoSoil()) {
@@ -617,6 +612,12 @@ export class Player extends PhysicsEntity {
         console.log('Entities: ',this.scene.world.getEntityCollisions(this));
         console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
         console.log('Gates: ',this.scene.world.getGateCollisions(this));
+    }
+
+    private getReadableTrigger (): GameObjectInfo | undefined {
+        const triggers = this.scene.world.getTriggerCollisions(this);
+        if (triggers.length === 0) return undefined;
+        return triggers.find(t => t.name === 'readable');
     }
 
     private canDanceToMakeRain(): boolean {
@@ -675,8 +676,10 @@ export class Player extends PhysicsEntity {
         if (this.playerConversation) {
             this.playerConversation.update(dt);
         }
-        if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
-            this.showHint();
+        if (this.showHints) {
+            if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
+                this.showHint();
+            }
         }
         if (this.carrying) {
             if (this.running) {
@@ -688,8 +691,7 @@ export class Player extends PhysicsEntity {
                 this.scene.gameTime * 1000);
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
-            this.carrying.y = this.y + this.height - offset;
-            this.carrying.y += 4;
+            this.carrying.y = this.y + (this.height - PLAYER_CARRY_PADDING) - offset + 4;
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }
@@ -819,6 +821,9 @@ export class Player extends PhysicsEntity {
             }
         }
 
+        // Check for readables in player trigger collisions
+        this.readableTrigger = this.getReadableTrigger();
+
         // Spawn random dust particles while walking
         if (!this.disableParticles) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
@@ -893,11 +898,35 @@ export class Player extends PhysicsEntity {
         // Logic from Triggers
         if (triggerCollisions.length > 0) {
             triggerCollisions.forEach(trigger => {
-                // Handle teleport logic
-                const teleportY = trigger.properties.teleportY;
-                if (teleportY) {
-                    this.y -= teleportY;
-                    Conversation.setGlobal("gotTeleported", "true");
+
+                // Handle Mountain Riddle Logic
+                if (trigger.name === 'reset_mountain') {
+                    this.scene.mountainRiddle.resetRiddle();
+                }
+                if (trigger.name === 'mountaingate') {
+                    const row = trigger.properties.row;
+                    const col = trigger.properties.col;
+                    if (col != null && row != null) {
+                        this.scene.mountainRiddle.checkGate(col, row);
+                    }
+                }
+                if (trigger.name === 'teleporter' && this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
+                    const teleportY = trigger.properties.teleportY;
+                    if (teleportY) {
+                        this.y -= teleportY;
+                    }
+                }
+                if (trigger.name === 'finish_mountain_riddle') {
+                    console.log('finish_mountain_riddle');
+                    this.scene.mountainRiddle.clearRiddle();
+                }
+
+                // Logic when in front of a readable trigger
+                if (trigger.name === 'readable') {
+                    const content = trigger.properties.content;
+                    if (content) {
+                        // console.log(content);
+                    }
                 }
 
                 // Disable particle effects while in trigger
@@ -1027,6 +1056,7 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
+            this.height = PLAYER_HEIGHT + PLAYER_CARRY_PADDING;
             if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }

@@ -22,7 +22,8 @@ export class ShadowPresence extends NPC {
         this.lookAtPlayer = false;
     }
 
-    private showDialoguePrompt (): boolean {
+    protected showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return (
             this.isNearPlayer &&
             this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.TALKED_TO_FIRE) &&

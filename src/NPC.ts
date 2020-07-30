@@ -18,6 +18,7 @@ export abstract class NPC extends PhysicsEntity {
     public lookAtPlayer = true;
     public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
     private lastEndedConversation = -Infinity;
+    protected met = false;
 
     protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {
         if (this.face) {
@@ -31,6 +32,23 @@ export abstract class NPC extends PhysicsEntity {
                 this.face.draw(ctx);
             }
         }
+    }
+
+    public hasMet(): boolean {
+        return false;
+    }
+
+    public meet(): void {
+        this.met = true;
+    }
+
+    public getInteractionText (): string {
+        return "Talk";
+    }
+
+    protected showDialoguePrompt (): boolean {
+        if (this.hasActiveConversation()) return false;
+        return true;
     }
 
     protected drawDialoguePrompt (ctx: CanvasRenderingContext2D): void {

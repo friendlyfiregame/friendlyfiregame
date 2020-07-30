@@ -22,6 +22,10 @@ export class Sign extends NPC {
         return content.split(":::");
     }
 
+    public getInteractionText (): string {
+        return "Read Sign";
+    }
+
     private generateConversation (lines: string[]): Conversation {
         const json: Record<string, string[]> = { "entry": [] }
         lines.forEach((line, index) => {

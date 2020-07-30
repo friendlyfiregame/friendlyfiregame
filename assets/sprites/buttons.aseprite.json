@@ -1,6 +1,5 @@
-{ "frames": [
-   {
-    "filename": "0",
+{ "frames": {
+   "0": {
     "frame": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -8,17 +7,15 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "1",
+   "1": {
     "frame": { "x": 14, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
-    "duration": 100
+    "duration": 1
    },
-   {
-    "filename": "2",
+   "2": {
     "frame": { "x": 28, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
@@ -26,71 +23,66 @@
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "3",
-    "frame": { "x": 0, "y": 14, "w": 14, "h": 14 },
+   "3": {
+    "frame": { "x": 42, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "4",
-    "frame": { "x": 14, "y": 14, "w": 14, "h": 14 },
+   "4": {
+    "frame": { "x": 56, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "5",
-    "frame": { "x": 28, "y": 14, "w": 14, "h": 14 },
+   "5": {
+    "frame": { "x": 70, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "6",
-    "frame": { "x": 28, "y": 28, "w": 12, "h": 13 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 1, "w": 12, "h": 13 },
-    "sourceSize": { "w": 14, "h": 14 },
-    "duration": 100
-   },
-   {
-    "filename": "7",
-    "frame": { "x": 0, "y": 28, "w": 14, "h": 14 },
+   "6": {
+    "frame": { "x": 84, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    },
-   {
-    "filename": "8",
-    "frame": { "x": 14, "y": 28, "w": 14, "h": 14 },
+   "7": {
+    "frame": { "x": 98, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "8": {
+    "frame": { "x": 112, "y": 0, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
     "sourceSize": { "w": 14, "h": 14 },
     "duration": 100
    }
- ],
+ },
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.19.2",
+  "version": "1.2.21-x64",
   "image": "buttons.png",
   "format": "RGBA8888",
-  "size": { "w": 42, "h": 42 },
+  "size": { "w": 126, "h": 14 },
   "scale": "1",
   "frameTags": [
    { "name": "keyboard-action", "from": 0, "to": 0, "direction": "forward" },
    { "name": "keyboard-interact", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "keyboard-up", "from": 1, "to": 1, "direction": "forward" },
    { "name": "gamepad-jump", "from": 2, "to": 2, "direction": "forward" },
    { "name": "gamepad-button-a", "from": 2, "to": 2, "direction": "forward" },
    { "name": "gamepad-back", "from": 3, "to": 3, "direction": "forward" },
@@ -100,6 +92,7 @@
    { "name": "gamepad-interact", "from": 4, "to": 4, "direction": "forward" },
    { "name": "gamepad-button-y", "from": 5, "to": 6, "direction": "forward" },
    { "name": "gamepad-button-up", "from": 6, "to": 6, "direction": "forward" },
+   { "name": "gamepad-up", "from": 6, "to": 6, "direction": "forward" },
    { "name": "gamepad-button-lb", "from": 7, "to": 7, "direction": "forward" },
    { "name": "gamepad-dance1", "from": 7, "to": 7, "direction": "forward" },
    { "name": "gamepad-button-rb", "from": 8, "to": 8, "direction": "forward" },

@@ -34,6 +34,10 @@ import { Sign } from '../Sign';
 import { Wall } from '../Wall';
 import { Table } from '../Table';
 import { Bird } from '../Bird';
+import { SuperThrow } from '../SuperThrow';
+import { MountainRiddle } from '../MountainRiddle';
+import { RiddleStone } from '../RiddleStone';
+import { Skull } from '../Skull';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -100,6 +104,9 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("sounds/ending/swell.mp3")
     private static swell: Sound;
 
+    @asset("sounds/gate/wrong.ogg")
+    public static wrong: Sound;
+
     /* Total game time (time passed while game not paused) */
     public gameTime = 0;
 
@@ -141,6 +148,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
     private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
+    public readonly mountainRiddle: MountainRiddle = new MountainRiddle();
 
     public setup(): void {
         this.mapInfo = new MapInfo();
@@ -155,6 +163,9 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this instanceof Sign)
         if (this instanceof Wall)
         if (this instanceof Table)
+        if (this instanceof SuperThrow)
+        if (this instanceof RiddleStone)
+        if (this instanceof Skull)
 
         this.gameTime = 0;
         this.apocalypse = false;

@@ -16,7 +16,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private static headlineFont: BitmapFont;
 
     @asset("sounds/item/fanfare.mp3")
-    private static sound: Sound;
+    public static sound: Sound;
 
     @asset([
         "sprites/powerup_running.png",
@@ -69,6 +69,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private selectedSubtitle = '';
 
     public setup(): void {
+        GotItemScene.sound.setVolume(0.7);
         GotItemScene.sound.play();
         if (this.properties?.item !== undefined) {
             this.targetItem = this.properties.item as Item;

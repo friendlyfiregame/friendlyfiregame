@@ -3,6 +3,7 @@
         "♪ Chirp!",
         "►Who are you? @who",
         "►What are you up to? @what",
+        "►[relevant]Can you help me in my quest? @quest",
         "►[not chirp]Did you just say 'Chirp'? @chirp",
         "►You have strange flying technique. @multijump",
         "►Bye, bird. @bye"
@@ -16,7 +17,12 @@
     "what": [
         "I do bird stuff, mostly.",
         "I fly from my nest to some bushes to find food. ♪ Chirp.",
-        "There isn't any, though. @entry"
+        "There isn't any, though. !set relevant true @entry"
+    ],
+    "quest": [
+        "What Quest? I'm a bird!",
+        "Whatever you're up to is not my concern, really.",
+        "♪ Chirp. I'm just doing my daily bird things. @entry"
     ],
     "multijump": [
         "I'm not actually flying, though.",
