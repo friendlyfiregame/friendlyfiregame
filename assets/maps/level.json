@@ -1137,7 +1137,7 @@
                         {
                          "name":"bgm",
                          "type":"string",
-                         "value":"cave"
+                         "value":"riddle"
                         }, 
                         {
                          "name":"target",
@@ -1159,7 +1159,7 @@
                         {
                          "name":"bgm",
                          "type":"string",
-                         "value":"cave"
+                         "value":"riddle"
                         }, 
                         {
                          "name":"target",
@@ -1292,7 +1292,7 @@
                         {
                          "name":"bgm",
                          "type":"string",
-                         "value":"cave"
+                         "value":"riddle"
                         }, 
                         {
                          "name":"target",
@@ -1336,7 +1336,7 @@
                         {
                          "name":"bgm",
                          "type":"string",
-                         "value":"cave"
+                         "value":"riddle"
                         }, 
                         {
                          "name":"target",
