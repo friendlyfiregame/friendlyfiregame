@@ -5,9 +5,10 @@ import { easeOutCubic } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { asset } from "../Assets";
 import { ControllerEvent } from "../input/ControllerEvent";
+import { DIALOG_FONT } from "../constants";
 
 export class ControlsScene extends Scene<FriendlyFire> {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("images/controls.png")

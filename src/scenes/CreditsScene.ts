@@ -10,6 +10,7 @@ import { TitleScene } from './TitleScene';
 import { isDev } from '../util';
 import { Aseprite } from '../Aseprite';
 import { Sound } from '../Sound';
+import { DIALOG_FONT } from "../constants";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([
@@ -57,7 +58,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
     @asset("fonts/headline.font.json")
     private static headlineFont: BitmapFont;
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static standardFont: BitmapFont;
 
     @asset("fonts/credits.font.json")

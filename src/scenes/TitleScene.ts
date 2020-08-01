@@ -13,6 +13,7 @@ import { ControllerEvent } from "../input/ControllerEvent";
 import { CreditsScene } from './CreditsScene';
 import { Aseprite } from '../Aseprite';
 import { Sound } from '../Sound';
+import { DIALOG_FONT } from "../constants";
 
 type MainMenuParams = {
     label: string;
@@ -61,7 +62,7 @@ export class TitleScene extends Scene<FriendlyFire> {
     @asset("sprites/flameicon.aseprite.json")
     private static flameicon: Aseprite;
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     private menu = new MenuList(MenuAlignment.CENTER);

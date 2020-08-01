@@ -7,9 +7,10 @@ import { Quest } from '../Quests';
 import { CreditsScene } from './CreditsScene';
 import { Sound } from '../Sound';
 import { ControllerFamily } from '../input/ControllerFamily';
+import { DIALOG_FONT } from "../constants";
 
 export class EndScene extends Scene<FriendlyFire> {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("images/ending/ff.png")

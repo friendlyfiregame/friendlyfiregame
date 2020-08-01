@@ -1,6 +1,6 @@
 import { SpeechBubble } from "./SpeechBubble";
 import {
-    GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
+    DIALOG_FONT, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
     PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_PADDING
 } from "./constants";
@@ -130,7 +130,7 @@ export class Player extends PhysicsEntity {
     @asset("sounds/jumping/squish.mp3")
     private static bouncingSound: Sound;
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     private lastHint = Date.now();
@@ -393,7 +393,7 @@ export class Player extends PhysicsEntity {
         if (!this.carrying || (this.carrying instanceof Stone && !this.canThrowStoneIntoWater())) {
             return;
         }
-        
+
         if (this.carrying instanceof Stone) {
             this.carrying.setVelocity(10 * this.direction, 10);
         } else {

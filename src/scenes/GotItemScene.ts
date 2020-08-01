@@ -5,11 +5,12 @@ import { easeOutExpo, easeInExpo } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
+import { DIALOG_FONT } from "../constants";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE }
 
 export class GotItemScene extends Scene<FriendlyFire> {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("fonts/headline.font.json")

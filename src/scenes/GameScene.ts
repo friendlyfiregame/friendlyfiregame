@@ -39,6 +39,7 @@ import { MountainRiddle } from '../MountainRiddle';
 import { RiddleStone } from '../RiddleStone';
 import { Skull } from '../Skull';
 import { Portal } from '../Portal';
+import { DIALOG_FONT } from "../constants";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -99,7 +100,7 @@ export class GameScene extends Scene<FriendlyFire> {
         },
     ]
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("sounds/ending/swell.mp3")

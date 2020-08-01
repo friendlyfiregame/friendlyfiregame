@@ -1,8 +1,8 @@
-import { sleep } from "./util";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
 import { GameScene } from "./scenes/GameScene";
-import { GAME_CANVAS_WIDTH } from './constants';
+import { sleep } from "./util";
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
         CanvasRenderingContext2D {
@@ -41,7 +41,7 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   }
 
 export class SpeechBubble {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     private messageLines: string[] = [];
