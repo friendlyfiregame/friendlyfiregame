@@ -187,7 +187,7 @@ export class Player extends PhysicsEntity {
             this.isControllable = true;
             this.visible = true;
             this.setFloating(false);
-        }, 1800);
+        }, 2200);
 
         document.addEventListener("keydown", event => this.handleKeyDown(event));
 
