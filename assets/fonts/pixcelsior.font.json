@@ -139,7 +139,8 @@
         },
         {
             "char": "f",
-            "width": 4
+            "width": 4,
+            "compactablePrecursors": [".", ",", "_"]
         },
         {
             "char": "g",
@@ -310,12 +311,40 @@
             "width": 5
         },
         {
+            "char": ":",
+            "width": 1
+        },
+        {
+            "char": "-",
+            "width": 5
+        },
+        {
             "char": "…",
             "width": 5
         },
         {
+            "char": "\"",
+            "width": 3
+        },
+        {
+            "char": "“",
+            "width": 4
+        },
+        {
+            "char": "”",
+            "width": 4
+        },
+        {
             "char": "'",
             "width": 1
+        },
+        {
+            "char": "‘",
+            "width": 2
+        },
+        {
+            "char": "’",
+            "width": 2
         },
         {
             "char": "↑",
@@ -336,6 +365,10 @@
         {
             "char": "►",
             "width": 6
+        },
+        {
+            "char": "♪",
+            "width": 5
         },
         {
             "char": "�",
