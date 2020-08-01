@@ -39,6 +39,7 @@ import { MountainRiddle } from '../MountainRiddle';
 import { RiddleStone } from '../RiddleStone';
 import { Skull } from '../Skull';
 import { Portal } from '../Portal';
+import { Mimic } from '../Mimic';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -140,7 +141,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public spider!: Spider;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
-    public campfire!: Campfire;
     public particles!: Particles;
     public fire!: Fire;
     public fireFuryEndTime = 0;
@@ -169,7 +169,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
 
-        // Force execution of entity decorator
+        // Force execution of entity decorator on classes that are not referenced compiled code anywhere
+        // Todo: Find better solution?
         if (this instanceof MovingPlatform)
         if (this instanceof Sign)
         if (this instanceof Wall)
@@ -178,6 +179,8 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this instanceof RiddleStone)
         if (this instanceof Skull)
         if (this instanceof Portal)
+        if (this instanceof Campfire)
+        if (this instanceof Mimic)
 
         this.gameTime = 0;
         this.apocalypse = false;
@@ -199,7 +202,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
         this.caveman = this.getGameObject(Caveman);
-        this.campfire = this.getGameObject(Campfire);
 
         this.camera = new Camera(this, this.player);
         this.camera.setBounds(this.player.getCurrentMapBounds());

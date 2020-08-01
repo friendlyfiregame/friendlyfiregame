@@ -563,7 +563,6 @@ export class Player extends PhysicsEntity {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
-
         ctx.save();
         ctx.beginPath();
 
