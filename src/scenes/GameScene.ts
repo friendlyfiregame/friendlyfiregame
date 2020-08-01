@@ -59,7 +59,8 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 export enum BgmId {
     OVERWORLD = 'overworld',
     INFERNO = 'inferno',
-    CAVE = 'cave'
+    CAVE = 'cave',
+    RIDDLE = 'riddle'
 }
 
 export type BackgroundTrack = {
@@ -79,6 +80,9 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("music/cave.ogg")
     public static bgmCave: Sound;
 
+    @asset("music/riddle.ogg")
+    public static bgmRiddle: Sound;
+
     private backgroundTracks: BackgroundTrack[] = [
         {
             active: false,
@@ -97,6 +101,12 @@ export class GameScene extends Scene<FriendlyFire> {
             id: BgmId.INFERNO,
             sound: GameScene.bgm2,
             baseVolume: 0.15
+        },
+        {
+            active: false,
+            id: BgmId.RIDDLE,
+            sound: GameScene.bgmRiddle,
+            baseVolume: 1
         },
     ]
 
