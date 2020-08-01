@@ -47,14 +47,15 @@ export class SpeechBubble {
     private messageLines: string[] = [];
     private options: string[] = [];
     public selectedOptionIndex = -1;
-    public fontSize = 10;
-    public lineHeight = 15;
-    public height = 0;
-    public offset = { x: 0, y: 40 };
-    public messageVelocity = 20;
+    private fontSize = SpeechBubble.font.charHeight;
+    private lineHeightFactor = 1;
+    private lineHeight = this.fontSize * this.lineHeightFactor
+    private height = 0;
+    private offset = { x: 0, y: 40 };
+    private messageVelocity = 20;
 
-    public x: number;
-    public y: number;
+    private x: number;
+    private y: number;
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
@@ -151,7 +152,7 @@ export class SpeechBubble {
         if (this.relativeToScreen) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             posX = ctx.canvas.width / 2;
-            posY = - ctx.canvas.height * 0.63 - this.height;
+            posY = -ctx.canvas.height * 0.63 - this.height;
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()

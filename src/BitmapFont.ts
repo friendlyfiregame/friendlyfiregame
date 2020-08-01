@@ -10,7 +10,7 @@ export class BitmapFont {
     private charStartPoints: number[];
     private charCount: number;
     private charReverseMap: Record<string, number>;
-    private charHeight!: number;
+    public charHeight!: number;
 
     private constructor(sourceImage: HTMLImageElement, colors: Record<string, string>, charMap: string,
             charWidths: number[], charMargin = 1) {
