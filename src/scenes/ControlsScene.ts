@@ -45,11 +45,13 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
         // ctx.translate((width / 2) - ControlsScene.panelImage.width, (height / 2) - ControlsScene.panelImage.height);
 
-        ControlsScene.font.drawText(ctx, 'Walk around and', textOffsetX, 25, "black");
-        ControlsScene.font.drawText(ctx, 'Navigate menus', textOffsetX, 35, "black");
-        ControlsScene.font.drawText(ctx, 'Jump', textOffsetX, 70, "black");
-        ControlsScene.font.drawText(ctx, 'Interact and Confirm', textOffsetX, 110, "black");
-        ControlsScene.font.drawText(ctx, 'Pause and Cancel', textOffsetX, 135, "black");
+        const fontColor = "black";
+
+        ControlsScene.font.drawText(ctx, 'Walk around and', textOffsetX, 25, fontColor);
+        ControlsScene.font.drawText(ctx, 'Navigate menus', textOffsetX, 35, fontColor);
+        ControlsScene.font.drawText(ctx, 'Jump', textOffsetX, 70, fontColor);
+        ControlsScene.font.drawText(ctx, 'Interact and Confirm', textOffsetX, 110, fontColor);
+        ControlsScene.font.drawText(ctx, 'Pause and Cancel', textOffsetX, 135, fontColor);
         ctx.restore();
     }
 }

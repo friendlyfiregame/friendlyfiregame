@@ -99,8 +99,9 @@ export class BitmapFont {
         text = "" + text;
         ctx.globalAlpha = alpha;
         let width = 0;
-        for (var char of text) {
-            const index = this.getCharIndex(char);
+
+        for (var currentChar of text) {
+            const index = this.getCharIndex(currentChar);
             width += this.charWidths[index] + 1;
         }
 

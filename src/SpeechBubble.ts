@@ -6,25 +6,37 @@ import { GAME_CANVAS_WIDTH } from './constants';
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
         CanvasRenderingContext2D {
-    if (w < 2 * r) {r = w / 2};
-    if (h < 2 * r) {r = h / 2};
+    const halfWidth = w / 2
+    const halfHeight = h / 2
+    const middlePos = x + halfWidth
+    const rightPos = x + w
+    const bottomPos = y + h
+
+    if (w < 2 * r) {r = halfWidth};
+    if (h < 2 * r) {r = halfHeight};
+
     ctx.beginPath();
     ctx.moveTo(x + r, y);
+
     if (up) {
-        ctx.lineTo(x + w / 2 - 4, y);
-        ctx.lineTo(x + w / 2, y - 4);
-        ctx.lineTo(x + w / 2 + 4, y);
+        ctx.lineTo(middlePos - 4, y);
+        ctx.lineTo(middlePos, y - 4);
+        ctx.lineTo(middlePos + 4, y);
     }
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
+
+    ctx.arcTo(rightPos, y, rightPos, bottomPos, r);
+    ctx.arcTo(rightPos, bottomPos, x, bottomPos, r);
+
     if (!up) {
-        ctx.lineTo(x + w / 2 - 4 + tipOffset, y + h);
-        ctx.lineTo(x + w / 2 + tipOffset, y + h + 4);
-        ctx.lineTo(x + w / 2 + 4 + tipOffset, y + h);
+        ctx.lineTo(middlePos - 4 + tipOffset, bottomPos);
+        ctx.lineTo(middlePos + tipOffset, bottomPos + 4);
+        ctx.lineTo(middlePos + 4 + tipOffset, bottomPos);
     }
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
+
+    ctx.arcTo(x, bottomPos, x, y, r);
+    ctx.arcTo(x, y, rightPos, y, r);
     ctx.closePath();
+
     return ctx;
   }
 
@@ -32,7 +44,7 @@ export class SpeechBubble {
     @asset("fonts/standard.font.json")
     private static font: BitmapFont;
 
-    private messageLines :string[] = [];
+    private messageLines: string[] = [];
     private options: string[] = [];
     public selectedOptionIndex = -1;
     public fontSize = 10;
@@ -168,6 +180,7 @@ export class SpeechBubble {
                 Math.round(-posY - this.height + 4 + (i * this.lineHeight)), textColor);
             messageLineOffset += 4;
         }
+
         for (let i = 0; i < this.options.length; i++) {
             const topPos = Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight));
             const isSelected = this.selectedOptionIndex === i;
