@@ -165,7 +165,6 @@ export class SpeechBubble {
 
         posX -= offsetX;
 
-        ctx.beginPath();
         ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
             this.relativeToScreen, offsetX);
         ctx.fillStyle = this.color;
