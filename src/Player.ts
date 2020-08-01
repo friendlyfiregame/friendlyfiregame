@@ -181,12 +181,12 @@ export class Player extends PhysicsEntity {
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         this.isControllable = false;
+        this.setFloating(true);
 
         setTimeout(() => {
-            this.x = x;
-            this.y = y;
             this.isControllable = true;
             this.visible = true;
+            this.setFloating(false);
         }, 1800);
 
         document.addEventListener("keydown", event => this.handleKeyDown(event));

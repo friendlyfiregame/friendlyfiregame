@@ -8,7 +8,8 @@
     ],
     "no": [
         "No.",
-        "Maybe flying, but you don't look like a bird man or man bird.",
+        "[$ismale]Maybe flying, but you don't look like a bird man or man bird.",
+        "[not $ismale]Maybe flying, but you don't look like a bird woman or woman bird.",
         "►Damn… then yes. @yes"
     ],
     "yes": [
