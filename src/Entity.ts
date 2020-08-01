@@ -1,5 +1,6 @@
 import { GameObjectProperties } from "./MapInfo";
 import { GameScene, GameObject } from "./scenes/GameScene";
+import { Animator } from './Animator';
 
 export interface EntityDistance {
     source: Entity;
@@ -33,6 +34,8 @@ export function createEntity(name: string, scene: GameScene, x: number, y: numbe
 }
 
 export abstract class Entity implements GameObject {
+    protected timeAlive = 0;
+    protected animator = new Animator(this);
     constructor(
         public scene: GameScene,
         public x: number,
@@ -44,7 +47,9 @@ export abstract class Entity implements GameObject {
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
 
-    abstract update(dt: number): void;
+    public update(dt: number): void {
+        this.timeAlive += dt;
+    };
 
     public distanceTo(entity: Entity) {
         const a = this.x - entity.x;

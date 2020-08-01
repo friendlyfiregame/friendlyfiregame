@@ -10,7 +10,6 @@ import { Conversation } from './Conversation';
 export class SuperThrow extends NPC {
     @asset("sprites/superthrow.aseprite.json")
     private static sprite: Aseprite;
-    private timeAlive = 0;
     private floatAmount = 4;
     private floatSpeed = 2;
 
@@ -44,7 +43,6 @@ export class SuperThrow extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.timeAlive += dt;
         this.speechBubble.update(this.x, this.y);
     }
 }

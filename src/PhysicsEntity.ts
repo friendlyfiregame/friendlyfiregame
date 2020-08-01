@@ -121,6 +121,7 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     public update(dt: number): void {
+        super.update(dt);
         const world = this.scene.world;
 
         const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);

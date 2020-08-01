@@ -10,8 +10,6 @@ export class Wing extends NPC {
     @asset("sprites/wing.aseprite.json")
     private static sprite: Aseprite;
 
-    private timeAlive = 0;
-
     private floatAmount = 4;
     private floatSpeed = 2;
 
@@ -42,7 +40,6 @@ export class Wing extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.timeAlive += dt;
         this.dialoguePrompt.update(dt, this.x, this.y + 16);
         this.speechBubble.update(this.x, this.y);
     }

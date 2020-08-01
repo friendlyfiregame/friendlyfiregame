@@ -18,7 +18,7 @@ export type CurrentAnimationState = {
  */
 export class Animator {
   private entity: Entity;
-  private sprite: Aseprite;
+  private sprite?: Aseprite;
   private time: number = 0;
 
   private currentAnimation: CurrentAnimationState = {
@@ -28,8 +28,11 @@ export class Animator {
     finished: false
   }
 
-  public constructor (entity: Entity, sprite: Aseprite) {
+  public constructor (entity: Entity) {
     this.entity = entity;
+  }
+
+  public assignSprite (sprite: Aseprite): void {
     this.sprite = sprite;
   }
 
@@ -41,6 +44,7 @@ export class Animator {
    */
   private updateAnimation (tag: string, config?: AnimationConfig) {
     // Early out if animation tag is already set as current animation
+    if (!this.sprite) return;
     if (this.currentAnimation.tag === tag) return;
 
     // If current animation has a fixed duration, check if it was reached.
@@ -75,6 +79,8 @@ export class Animator {
   }
 
   private draw (ctx: CanvasRenderingContext2D, animationTime: number): void {
-    this.sprite.drawTag(ctx, this.currentAnimation.tag, -this.sprite.width >> 1, -this.sprite.height, animationTime);
+    if (this.sprite) {
+      this.sprite.drawTag(ctx, this.currentAnimation.tag, -this.sprite.width >> 1, -this.sprite.height, animationTime);
+    }
   }
 }

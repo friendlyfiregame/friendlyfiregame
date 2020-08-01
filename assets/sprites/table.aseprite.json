@@ -1,6 +1,6 @@
 { "frames": [
    {
-    "filename": "table 0.aseprite",
+    "filename": "0",
     "frame": { "x": 0, "y": 0, "w": 48, "h": 37 },
     "rotated": false,
     "trimmed": true,
@@ -9,7 +9,7 @@
     "duration": 175
    },
    {
-    "filename": "table 1.aseprite",
+    "filename": "1",
     "frame": { "x": 48, "y": 0, "w": 48, "h": 37 },
     "rotated": false,
     "trimmed": true,
@@ -18,7 +18,7 @@
     "duration": 175
    },
    {
-    "filename": "table 2.aseprite",
+    "filename": "2",
     "frame": { "x": 0, "y": 37, "w": 48, "h": 37 },
     "rotated": false,
     "trimmed": true,
@@ -27,7 +27,7 @@
     "duration": 175
    },
    {
-    "filename": "table 3.aseprite",
+    "filename": "3",
     "frame": { "x": 48, "y": 37, "w": 48, "h": 37 },
     "rotated": false,
     "trimmed": true,

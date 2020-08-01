@@ -240,6 +240,9 @@ export class Campaign {
                 case "corruptFlameboy":
                     this.getQuest(QuestKey.B).trigger(QuestBTrigger.FLAMEBOY_CORRUPTED);
                     break;
+                case "wakeupchest":
+                    this.gameScene.mimic.nextState();
+                    break;
                 case "enable":
                     const char = params[0], dialogName = params[1];
                     const npcMap: Record<string, NPC> = {

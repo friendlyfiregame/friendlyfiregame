@@ -86,7 +86,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         CreditsScene.music[this.songIndex].setLoop(true);
-        CreditsScene.music[this.songIndex].setVolume(0.5);
+        CreditsScene.music[this.songIndex].setVolume(1);
         CreditsScene.music[this.songIndex].play();
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
@@ -201,12 +201,17 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Klaus Reimer',
             'Eduard But'
         ]);
+        posY = this.drawCredit(ctx, posY, posX, 'SCRIPTING', [
+            'Markus Over',
+            'Eduard But'
+        ]);
         posY = this.drawCredit(ctx, posY, posX, 'ART DIRECTION', ['Eduard But']);
         posY = this.drawCredit(ctx, posY, posX, '2D ART', [
             'Eduard But',
             'Nils Kreutzer',
             'Christina Schneider',
-            'Jennifer van Veen'
+            'Jennifer van Veen',
+            'Matthias Wetter'
         ]);
 
         posY = this.drawCredit(ctx, posY, posX, 'WRITING', [
@@ -231,7 +236,10 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Eduard But',
             'Matthias Wetter'
         ]);
-        posY = this.drawCredit(ctx, posY, posX, 'QA', ['Jennifer van Veen']);
+        posY = this.drawCredit(ctx, posY, posX, 'QA', [
+            'Jennifer van Veen',
+            'Matthias Wetter'
+        ]);
         posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
 
         if (this.totalCrawlHeight === 0) this.totalCrawlHeight = posY;

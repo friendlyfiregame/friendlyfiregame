@@ -181,13 +181,13 @@ export class Player extends PhysicsEntity {
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         this.isControllable = false;
+        this.setFloating(true);
 
         setTimeout(() => {
-            this.x = x;
-            this.y = y;
             this.isControllable = true;
             this.visible = true;
-        }, 1800);
+            this.setFloating(false);
+        }, 2200);
 
         document.addEventListener("keydown", event => this.handleKeyDown(event));
 
@@ -563,7 +563,6 @@ export class Player extends PhysicsEntity {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
-
         ctx.save();
         ctx.beginPath();
 
@@ -597,7 +596,7 @@ export class Player extends PhysicsEntity {
         } else if (this.canThrowSeedIntoSoil()) {
             this.drawTooltip(ctx, "Plant seed", "interact");
         } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance", "interact");
+            this.drawTooltip(ctx, "Dance", "up");
         }
 
         if (this.dance) {
