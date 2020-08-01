@@ -1,7 +1,7 @@
 {
     "entry": [
-        "...",
-        "...zZzZZ...",
+        "…",
+        "…zZzZZ…",
         "(Someone seems to be asleep in there)",
         "►I better force the chest open. @wakeup !wakeupchest !end",
         "►I better leave the chest alone. @entry !end"
@@ -9,7 +9,7 @@
     "wakeup": [
         "Oh my, was I asleep?",
         "What time is it?",
-        "►I have not the slightest idea...",
+        "►I have not the slightest idea…",
         "Well, no worries. @who"
     ],
     "who": [
@@ -18,7 +18,7 @@
         "Ahh, one of those. @questions"
     ],
     "main": [
-        "Hello Friend! @questions"
+        "Hello friend! @questions"
     ],
     "questions": [
         "►What are you? @what",
@@ -36,7 +36,7 @@
     ],
     "items": [
         "No, we mimics usually don't carry items. !set asked_about_items true",
-        "Some do, but that only incentivises unecessary violence.",
+        "Some do, but that only incentivises unnecessary violence.",
         "There's no need to attack a mimic who doesn't hold items, no?",
         "►True",
         "Yes, yes. @questions"
@@ -49,14 +49,14 @@
     ],
     "sleeping_questions": [
         "►What do you eat then? @eat",
-        "►Lucky me... @lucky"
+        "►Lucky me… @lucky"
     ],
     "eat": [
-        "Vegetables, rice and tofu.",
+        "Vegetables, rice, and tofu.",
         "Or whatever is prepared when I'm around. I can't really cook for myself. @sleeping_questions"
     ],
     "lucky": [
         "Indeed!",
-        "If you met me when I was still working as a trap for adventures, you would be crushed and dismembered by now. @questions"
+        "If you had met me when I was still working as a trap for adventures, you would be crushed and dismembered by now. @questions"
     ]
 }
