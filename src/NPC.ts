@@ -14,7 +14,7 @@ export abstract class NPC extends PhysicsEntity {
     public defaultFaceMode = FaceModes.NEUTRAL;
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
-    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white");
+    public speechBubble = new SpeechBubble(this.scene, this.x, this.y);
     public lookAtPlayer = true;
     public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
     private lastEndedConversation = -Infinity;

@@ -167,7 +167,7 @@ export class Player extends PhysicsEntity {
     private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
+    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, undefined, true);
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
@@ -445,7 +445,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y, "white", false)
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y)
         thinkBubble.setMessage(message);
         thinkBubble.show();
         await sleep(time);

@@ -70,7 +70,7 @@ export class SpeechBubble {
         private scene: GameScene,
         public anchorX: number,
         public anchorY: number,
-        private color = "#FFBBBB",
+        private color = "white",
         private relativeToScreen = false
     ) {
         this.x = anchorX + this.offset.x;
