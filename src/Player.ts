@@ -596,7 +596,7 @@ export class Player extends PhysicsEntity {
         } else if (this.canThrowSeedIntoSoil()) {
             this.drawTooltip(ctx, "Plant seed", "interact");
         } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance", "interact");
+            this.drawTooltip(ctx, "Dance", "up");
         }
 
         if (this.dance) {
