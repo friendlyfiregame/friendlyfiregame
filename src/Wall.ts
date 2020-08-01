@@ -29,7 +29,7 @@ export class Wall extends Entity implements CollidableGameObject {
         Wall.sprite.drawTag(ctx, animationTag, -Wall.sprite.width >> 1, -Wall.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {}

@@ -30,6 +30,7 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
 import { Wall } from './Wall';
+import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
 
 const groundColors = [
     "#806057",
@@ -161,7 +162,7 @@ export class Player extends PhysicsEntity {
     private multiJump = false;
     private usedJump = false;
     private usedDoubleJump = false;
-    private hasBeard = false;
+    // private hasBeard = false;
     private autoMove: AutoMove | null = null;
     private isControllable: boolean = true;
     private showHints = false;
@@ -556,34 +557,58 @@ export class Player extends PhysicsEntity {
         const offsetY = 12;
         const textPositionX = Math.round(this.x - ((measure.width - Player.buttons.width + gap) / 2));
         const textPositionY = -this.y + offsetY;
-        Player.buttons.drawTag(ctx, controller + "-" + buttonTag, textPositionX - Player.buttons.width - gap, textPositionY - 3);
-        Player.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY,
-            "white", "black");
+
+        RenderingQueue.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.UI,
+            position: {
+                x: textPositionX - Player.buttons.width - gap,
+                y: textPositionY - 3
+            },
+            asset: Player.buttons,
+            animationTag: controller + "-" + buttonTag,
+        })
+
+        RenderingQueue.add({
+            type: RenderingType.TEXT,
+            layer: RenderingLayer.UI,
+            text,
+            textColor: "white",
+            outlineColor: "black",
+            position: {
+                x: textPositionX,
+                y: textPositionY
+            },
+            asset: Player.font,
+        })
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
-        ctx.save();
-        ctx.beginPath();
-
-        ctx.translate(this.x, -this.y + 1);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
+        // ctx.beginPath();
+        let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
 
         const sprite = Player.playerSprites[this.gender];
         let animation = this.animation;
         if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
             animation = animation + "-carry";
         }
-        if (this.hasBeard) {
-            // TODO
-        }
-        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height, this.scene.gameTime * 1000);
 
-        ctx.restore();
+        RenderingQueue.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.PLAYER,
+            translation: { x: this.x, y: -this.y + 1 },
+            position: {
+                x: -sprite.width >> 1,
+                y: -sprite.height
+            },
+            scale,
+            asset: Player.playerSprites[this.gender],
+            animationTag: animation,
+            time: this.scene.gameTime * 1000
+        })
 
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
 
         if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
             this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
@@ -994,7 +1019,7 @@ export class Player extends PhysicsEntity {
     }
 
     public setBeard(beard: boolean) {
-        this.hasBeard = beard;
+        // this.hasBeard = beard;
     }
 
     /**

@@ -37,7 +37,7 @@ export class SuperThrow extends NPC {
         SuperThrow.sprite.drawTag(ctx, "idle", -SuperThrow.sprite.width >> 1, -SuperThrow.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

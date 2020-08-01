@@ -40,7 +40,7 @@ export class ShadowPresence extends NPC {
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
         ShadowPresence.sprite.drawTag(ctx, animationTag, -ShadowPresence.sprite.width >> 1, -ShadowPresence.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }

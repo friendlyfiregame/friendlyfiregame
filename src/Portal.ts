@@ -39,7 +39,7 @@ export class Portal extends Entity {
         }
 
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {

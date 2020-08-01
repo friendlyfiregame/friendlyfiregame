@@ -18,7 +18,7 @@ export class Skull extends PhysicsEntity {
         ctx.translate(this.x, -this.y + 1);
         Skull.sprite.drawTag(ctx, "idle", -Skull.sprite.width >> 1, -Skull.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     public isCarried(): boolean {

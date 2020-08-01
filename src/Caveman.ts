@@ -22,7 +22,7 @@ export class Caveman extends NPC {
         Caveman.sprite.drawTag(ctx, "idle", -Caveman.sprite.width >> 1, -Caveman.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

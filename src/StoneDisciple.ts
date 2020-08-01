@@ -38,7 +38,7 @@ export class StoneDisciple extends NPC {
         StoneDisciple.sprite.drawTag(ctx, "idle", -StoneDisciple.sprite.width >> 1, -StoneDisciple.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
         this.drawFace(ctx, false);
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }

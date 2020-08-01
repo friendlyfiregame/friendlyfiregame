@@ -144,7 +144,7 @@ export class Bird extends NPC {
         }
         Bird.sprite.drawTag(ctx, "idle", -Bird.sprite.width >> 1, -Bird.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

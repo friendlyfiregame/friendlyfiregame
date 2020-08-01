@@ -58,7 +58,7 @@ export class Seed extends NPC {
         Seed.sprite.drawTag(ctx, this.getSpriteTag(), -Seed.sprite.width >> 1, -Seed.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }

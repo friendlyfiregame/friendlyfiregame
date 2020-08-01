@@ -50,7 +50,7 @@ export class Mimic extends NPC {
             case MimicState.IDLE: this.animator.play("idle", ctx);
         }
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

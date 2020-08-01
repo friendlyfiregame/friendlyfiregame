@@ -120,7 +120,7 @@ export class Fire extends NPC {
             this.drawDialoguePrompt(ctx);
         }
         this.speechBubble.draw(ctx);
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {

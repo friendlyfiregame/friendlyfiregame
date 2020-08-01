@@ -23,7 +23,7 @@ export class RiddleStone extends Entity {
             RiddleStone.sprite.drawTag(ctx, "idle", -RiddleStone.sprite.width >> 1, -RiddleStone.sprite.height,
                 this.scene.gameTime * 1000);
             ctx.restore();
-            if (this.scene.showBounds) this.drawBounds(ctx);
+            if (this.scene.showBounds) this.drawBounds();
         }
     }
 

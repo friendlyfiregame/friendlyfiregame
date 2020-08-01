@@ -3,6 +3,7 @@ import { ValueCurve, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { GameScene } from "./scenes/GameScene";
 import { Bounds } from './Entity';
+import { RenderingLayer, RenderingQueue, RenderingType } from './RenderingQueue';
 
 export interface camFocus {
     x: number;
@@ -279,13 +280,22 @@ export class Camera {
 
     public renderCinematicBars(ctx: CanvasRenderingContext2D, force = this.getFocusForce()): void {
         force = Math.max(force, this.getFocusForce(), this.currentBarHeight);
-        ctx.save();
-        ctx.fillStyle = "black";
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        const f = 0.5 - 0.5 * Math.cos(Math.PI * force);
-        const h = ctx.canvas.height * this.barHeight * f;
-        ctx.fillRect(0, 0, ctx.canvas.width, h);
-        ctx.fillRect(0, ctx.canvas.height - h, ctx.canvas.width, h);
-        ctx.restore();
+
+        RenderingQueue.add({
+            type: RenderingType.BLACK_BARS,
+            layer: RenderingLayer.BLACK_BARS,
+            color: "black",
+            height: this.barHeight,
+            force
+        })
+
+        // ctx.save();
+        // ctx.fillStyle = "black";
+        // ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // const f = 0.5 - 0.5 * Math.cos(Math.PI * force);
+        // const h = ctx.canvas.height * this.barHeight * f;
+        // ctx.fillRect(0, 0, ctx.canvas.width, h);
+        // ctx.fillRect(0, ctx.canvas.height - h, ctx.canvas.width, h);
+        // ctx.restore();
     }
 }

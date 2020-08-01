@@ -38,6 +38,7 @@ import { Table } from '../Table';
 import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
 import { Mimic } from '../Mimic';
+import { RenderingQueue } from '../RenderingQueue';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -411,6 +412,9 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fadeActiveBackgroundTrack(this.fadeToBlackFactor, true);
             this.drawFade(ctx, this.fadeToBlackFactor, "black");
         }
+
+        // Draw stuff from Rendering queue
+        RenderingQueue.draw(ctx);
 
         // Cinematic bars
         this.camera.renderCinematicBars(ctx);

@@ -18,7 +18,7 @@ export class Campfire extends Entity {
         Campfire.sprite.drawTag(ctx, "idle", -Campfire.sprite.width >> 1, -Campfire.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {}

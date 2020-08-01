@@ -56,7 +56,7 @@ export class Stone extends NPC implements CollidableGameObject {
         }
         Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

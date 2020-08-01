@@ -5,6 +5,7 @@ import { asset } from "./Assets";
 import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 import { Entity, Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
+import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
 
 export enum Environment {
     AIR = 0,
@@ -26,9 +27,9 @@ export class World implements GameObject {
     private static collisionMap: Uint32Array;
 
     @asset([
-        "maps/bg.png",
-        "maps/bg2.png",
-        "maps/bg3.png"
+        "maps/bg.png"
+        // "maps/bg2.png",
+        // "maps/bg3.png"
     ])
     private static backgrounds: HTMLImageElement[];
 
@@ -76,15 +77,41 @@ export class World implements GameObject {
         const camX = this.scene.camera.x;
         const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
-        ctx.save();
-        ctx.translate(camX, -camY);
+
+        RenderingQueue.add({
+            type: RenderingType.DRAW_IMAGE,
+            layer: RenderingLayer.TILEMAP_MAP,
+            translation: { x: camX, y: -camY },
+            position: { x: -camX, y: -this.getHeight() + camY },
+            asset: World.foreground
+        })
+
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
-            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
+            // ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
+            RenderingQueue.add({
+                type: RenderingType.DRAW_IMAGE,
+                layer: RenderingLayer.TILEMAP_BACKGROUND,
+                translation: { x: camX, y: -camY },
+                position: {
+                    x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                    y: (-this.getHeight() + camY) / bgY
+                },
+                asset: background
+            })
         }
-        ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
-        ctx.restore();
+
+        // ctx.save();
+        // ctx.translate(camX, -camY);
+        // for (const background of World.backgrounds) {
+        //     const bgX = this.getWidth() / background.width;
+        //     const bgY = this.getHeight() / background.height;
+        //     ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
+        // }
+        // ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
+        // ctx.restore();
+
     }
 
     public getEnvironment(x: number, y: number): Environment {

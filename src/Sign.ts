@@ -5,6 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
 import { GameObjectProperties } from './MapInfo';
 import { Conversation } from './Conversation';
+import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
 
 @entity("sign")
 export class Sign extends NPC {
@@ -38,12 +39,20 @@ export class Sign extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        Sign.sprite.drawTag(ctx, "idle", -Sign.sprite.width >> 1, -Sign.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        RenderingQueue.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.ENTITIES,
+            translation: { x: this.x, y: -this.y },
+            position: {
+                x: -Sign.sprite.width >> 1,
+                y: -Sign.sprite.height
+            },
+            asset: Sign.sprite,
+            animationTag: "idle",
+            time: this.scene.gameTime * 1000
+        })
+        
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

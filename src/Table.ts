@@ -26,7 +26,7 @@ export class Table extends NPC {
         Table.sprite.drawTag(ctx, "idle", -Table.sprite.width >> 1, -Table.sprite.height,
             this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

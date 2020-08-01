@@ -40,7 +40,7 @@ export class Tree extends NPC {
         ctx.translate(this.x, -this.y + 1);
         Tree.sprite.drawTag(ctx, "idle", -Tree.sprite.width >> 1, -Tree.sprite.height, this.scene.gameTime * 1000);
         ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
