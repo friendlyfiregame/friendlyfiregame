@@ -424,7 +424,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Use 'jump' to overcome obstacles.:::The longer you press, the higher the jump."
+                         "value":"Use “jump” to overcome obstacles.:::The longer you press, the higher the jump."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -442,7 +442,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press 'interact' to throw your item."
+                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press “interact” to throw your item."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -622,7 +622,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Hold 'down' to fall through platforms."
+                         "value":"Hold “down” to fall through platforms."
                         }],
                  "rotation":0,
                  "type":"entity",

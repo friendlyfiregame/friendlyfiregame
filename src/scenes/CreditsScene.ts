@@ -175,14 +175,14 @@ export class CreditsScene extends Scene<FriendlyFire> {
         posY = this.drawTitle(ctx, posY, posX);
         posY = this.drawParagraph(ctx, posY, posX, [
             'Originally made as a team',
-            'effort for ludum dare 46',
+            'effort for Ludum Dare 46',
             'in three days by'
         ]);
         posY = this.drawParagraph(ctx, posY, posX, [
             'Eduard But, Nico Huelscher,',
             'Benjamin Jung, Nils Kreutzer,',
             'Bastian Lang, Ranjit Mevius,',
-            'Markus Over, Klaus Reimer and',
+            'Markus Over, Klaus Reimer, and',
             'Jennifer van Veen'
         ], 50);
         posY = this.drawCredit(ctx, posY, posX, 'GAME DESIGN', ['Everyone']);
@@ -243,5 +243,4 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
         ctx.restore();
     }
-
 }
