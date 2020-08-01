@@ -2,107 +2,107 @@
     "image": "credits.png",
     "characterMapping": [
         {
-            "char": "a",
+            "char": "A",
             "width": 5
         },
         {
-            "char": "b",
+            "char": "B",
             "width": 5
         },
         {
-            "char": "c",
+            "char": "C",
             "width": 5
         },
         {
-            "char": "d",
+            "char": "D",
             "width": 5
         },
         {
-            "char": "e",
+            "char": "E",
             "width": 5
         },
         {
-            "char": "f",
+            "char": "F",
             "width": 5
         },
         {
-            "char": "g",
+            "char": "G",
             "width": 5
         },
         {
-            "char": "h",
+            "char": "H",
             "width": 5
         },
         {
-            "char": "i",
+            "char": "I",
             "width": 1
         },
         {
-            "char": "j",
+            "char": "J",
             "width": 5
         },
         {
-            "char": "k",
+            "char": "K",
             "width": 5
         },
         {
-            "char": "l",
+            "char": "L",
             "width": 5
         },
         {
-            "char": "m",
+            "char": "M",
             "width": 7
         },
         {
-            "char": "n",
+            "char": "N",
             "width": 5
         },
         {
-            "char": "o",
+            "char": "O",
             "width": 5
         },
         {
-            "char": "p",
+            "char": "P",
             "width": 5
         },
         {
-            "char": "q",
+            "char": "Q",
             "width": 5
         },
         {
-            "char": "r",
+            "char": "R",
             "width": 5
         },
         {
-            "char": "s",
+            "char": "S",
             "width": 5
         },
         {
-            "char": "t",
+            "char": "T",
             "width": 5
         },
         {
-            "char": "u",
+            "char": "U",
             "width": 5
         },
         {
-            "char": "v",
+            "char": "V",
             "width": 5
         },
         {
-            "char": "w",
+            "char": "W",
             "width": 7
         },
         {
-            "char": "x",
+            "char": "X",
             "width": 5
         },
         {
-            "char": "y",
+            "char": "Y",
             "width": 5
         },
         {
-            "char": "z",
+            "char": "Z",
             "width": 5
         },
         {
