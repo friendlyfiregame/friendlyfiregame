@@ -12,8 +12,10 @@ export class BitmapFont {
     private charReverseMap: Record<string, number>;
     public charHeight!: number;
 
-    private constructor(sourceImage: HTMLImageElement, colors: Record<string, string>, charMap: string,
-            charWidths: number[], charMargin = 1) {
+    private constructor(
+        sourceImage: HTMLImageElement, colors: Record<string, string>, charMap: string,
+        charWidths: number[], charMargin = 1
+    ) {
         this.sourceImage = sourceImage;
         this.canvas = document.createElement("canvas");
 
@@ -87,7 +89,9 @@ export class BitmapFont {
         return charIndex;
     }
 
-    private drawCharacter(ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string) {
+    private drawCharacter(
+        ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string
+    ) {
         const colorIndex = this.colorMap[color];
         const charIndex = (typeof char == "number") ? char : this.getCharIndex(char);
         const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
@@ -95,7 +99,10 @@ export class BitmapFont {
             Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight);
     };
 
-    public drawText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0, alpha = 1) {
+    public drawText(
+        ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
+        alpha = 1
+    ) {
         text = "" + text;
         ctx.globalAlpha = alpha;
         let width = 0;

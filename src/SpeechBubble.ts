@@ -4,8 +4,10 @@ import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
 import { GameScene } from "./scenes/GameScene";
 import { sleep } from "./util";
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
-        CanvasRenderingContext2D {
+function roundRect(
+    ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
+    up = false, tipOffset = 0
+): CanvasRenderingContext2D {
     const halfWidth = w / 2
     const halfHeight = h / 2
     const middlePos = x + halfWidth
@@ -149,6 +151,7 @@ export class SpeechBubble {
         let posX = this.x;
         let posY = this.y;
         let offsetX = 0;
+
         if (this.relativeToScreen) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             posX = ctx.canvas.width / 2;
@@ -166,8 +169,13 @@ export class SpeechBubble {
 
         posX -= offsetX;
 
-        ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
-            this.relativeToScreen, offsetX);
+        ctx = roundRect(
+            ctx,
+            posX - metrics.width / 2 - 4, -posY - this.height,
+            metrics.width + 8, this.height,
+            5, this.relativeToScreen, offsetX
+        );
+
         ctx.fillStyle = this.color;
         ctx.fill();
 
@@ -176,13 +184,18 @@ export class SpeechBubble {
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            font.drawText(ctx, this.messageLines[i], leftPos,
-                Math.round(-posY - this.height + 4 + (i * this.lineHeight)), textColor);
-            messageLineOffset += 4;
+            font.drawText(
+                ctx,
+                this.messageLines[i],
+                leftPos,
+                Math.round(-posY - this.height - 1 + (i * this.lineHeight)),
+                textColor
+            );
+            //messageLineOffset += 4;
         }
 
         for (let i = 0; i < this.options.length; i++) {
-            const topPos = Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight));
+            const topPos = Math.round(-posY - this.height + (i * this.lineHeight));
             const isSelected = this.selectedOptionIndex === i;
 
             if (isSelected) {
