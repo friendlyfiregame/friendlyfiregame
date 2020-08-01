@@ -51,7 +51,7 @@ export class SpeechBubble {
     public selectedOptionIndex = -1;
     private fontSize = SpeechBubble.font.charHeight;
     private lineHeightFactor = 1;
-    private lineHeight = this.fontSize * this.lineHeightFactor
+    private lineHeight = Math.round(this.fontSize * this.lineHeightFactor)
     private height = 0;
     private offset = { x: 0, y: 40 };
     private messageVelocity = 20;
@@ -135,7 +135,7 @@ export class SpeechBubble {
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.height = this.content.length * this.lineHeight;
+        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
