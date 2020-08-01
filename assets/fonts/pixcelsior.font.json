@@ -319,6 +319,22 @@
             "width": 5
         },
         {
+            "char": "(",
+            "width": 2
+        },
+        {
+            "char": ")",
+            "width": 2
+        },
+        {
+            "char": "[",
+            "width": 2
+        },
+        {
+            "char": "]",
+            "width": 2
+        },
+        {
             "char": "…",
             "width": 5
         },
