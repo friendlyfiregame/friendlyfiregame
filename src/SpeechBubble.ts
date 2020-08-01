@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { GAME_CANVAS_WIDTH } from './constants';
-import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './RenderingQueue';
 
 export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
         CanvasRenderingContext2D {
@@ -150,7 +150,7 @@ export class SpeechBubble {
         }
         posX -= offsetX;
 
-        RenderingQueue.add({
+        this.scene.renderer.add({
             type: RenderingType.ROUND_RECT,
             layer: RenderingLayer.UI,
             fillColor: this.color,
@@ -169,7 +169,7 @@ export class SpeechBubble {
 
         let messageLineOffset = 4;
         for (let i = 0; i < this.messageLines.length; i++) {
-            RenderingQueue.add({
+            this.scene.renderer.add({
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
                 text: this.messageLines[i],
@@ -186,7 +186,7 @@ export class SpeechBubble {
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
             const selectionIndicator = isSelected ? "►" : " ";
-            RenderingQueue.add({
+            this.scene.renderer.add({
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
                 text: selectionIndicator + this.options[i],

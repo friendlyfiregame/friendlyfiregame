@@ -5,7 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
 import { GameObjectProperties } from './MapInfo';
 import { Conversation } from './Conversation';
-import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './RenderingQueue';
 
 @entity("sign")
 export class Sign extends NPC {
@@ -39,7 +39,7 @@ export class Sign extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        RenderingQueue.add({
+        this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
             translation: { x: this.x, y: -this.y },

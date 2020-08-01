@@ -1,7 +1,7 @@
 import { GameObjectProperties } from "./MapInfo";
 import { GameScene, GameObject } from "./scenes/GameScene";
 import { Animator } from './Animator';
-import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './RenderingQueue';
 
 export interface EntityDistance {
     source: Entity;
@@ -101,7 +101,7 @@ export abstract class Entity implements GameObject {
     }
 
     protected drawBounds(): void {
-        RenderingQueue.add({
+        this.scene.renderer.add({
             type: RenderingType.STROKE_RECT,
             layer: RenderingLayer.DEBUG,
             position: {

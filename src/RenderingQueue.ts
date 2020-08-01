@@ -1,6 +1,7 @@
 import { Aseprite } from './Aseprite'
 import { BitmapFont } from './BitmapFont'
 import { roundRect } from './SpeechBubble';
+import { GameScene } from './scenes/GameScene';
 
 export enum RenderingType {
   BLACK_BARS,
@@ -100,24 +101,21 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
 
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | StrokeRectRenderingItem | TextRenderingItem | RoundRectRenderingItem;
 
-
 export class RenderingQueue {
-  public static layers = LAYER_ORDER;
-  public static queue: RenderingItem[] = [];
+  private scene: GameScene;
+  private layers = LAYER_ORDER;
+  private queue: RenderingItem[] = [];
 
-  public static draw(ctx: CanvasRenderingContext2D): void {
-    [...RenderingQueue.layers].reverse().forEach(layer => {
-      const itemsInLayer = RenderingQueue.queue.filter(item => item.layer === layer);
+  public constructor(scene: GameScene) {
+    this.scene = scene;
+  }
+
+  public draw(ctx: CanvasRenderingContext2D): void {
+    [...this.layers].reverse().forEach(layer => {
+      const itemsInLayer = this.queue.filter(item => item.layer === layer);
       itemsInLayer.forEach(item => {
         if (item.type === RenderingType.BLACK_BARS) {
-          ctx.save();
-          ctx.fillStyle = "black";
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          const f = 0.5 - 0.5 * Math.cos(Math.PI * item.force);
-          const h = ctx.canvas.height * item.height * f;
-          ctx.fillRect(0, 0, ctx.canvas.width, h);
-          ctx.fillRect(0, ctx.canvas.height - h, ctx.canvas.width, h);
-          ctx.restore();
+          this.scene.camera.drawBars(ctx);
         } else {
           ctx.save();
           if (item.translation) ctx.translate(item.translation.x, item.translation.y);
@@ -154,10 +152,10 @@ export class RenderingQueue {
         }
       });
     })
-    RenderingQueue.queue = [];
+    this.queue = [];
   }
 
-  public static add (item: RenderingItem) {
-    RenderingQueue.queue.push(item);
+  public add (item: RenderingItem) {
+    this.queue.push(item);
   }
 }

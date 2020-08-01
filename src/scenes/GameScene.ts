@@ -159,7 +159,8 @@ export class GameScene extends Scene<FriendlyFire> {
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
     private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
-    public readonly mountainRiddle: MountainRiddle = new MountainRiddle();
+    public readonly renderer = new RenderingQueue(this);
+    public readonly mountainRiddle = new MountainRiddle();
     public setup(): void {
 
         this.mapInfo = new MapInfo();
@@ -413,11 +414,11 @@ export class GameScene extends Scene<FriendlyFire> {
             this.drawFade(ctx, this.fadeToBlackFactor, "black");
         }
 
-        // Draw stuff from Rendering queue
-        RenderingQueue.draw(ctx);
-
         // Cinematic bars
-        this.camera.renderCinematicBars(ctx);
+        this.camera.addCinematicBarsToRenderer();
+
+        // Draw stuff from Rendering queue
+        this.renderer.draw(ctx);
 
         ctx.restore();
 

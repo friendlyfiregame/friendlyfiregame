@@ -30,7 +30,7 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
 import { Wall } from './Wall';
-import { RenderingQueue, RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './RenderingQueue';
 
 const groundColors = [
     "#806057",
@@ -558,7 +558,7 @@ export class Player extends PhysicsEntity {
         const textPositionX = Math.round(this.x - ((measure.width - Player.buttons.width + gap) / 2));
         const textPositionY = -this.y + offsetY;
 
-        RenderingQueue.add({
+        this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
             position: {
@@ -569,7 +569,7 @@ export class Player extends PhysicsEntity {
             animationTag: controller + "-" + buttonTag,
         })
 
-        RenderingQueue.add({
+        this.scene.renderer.add({
             type: RenderingType.TEXT,
             layer: RenderingLayer.UI,
             text,
@@ -594,7 +594,7 @@ export class Player extends PhysicsEntity {
             animation = animation + "-carry";
         }
 
-        RenderingQueue.add({
+        this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.PLAYER,
             translation: { x: this.x, y: -this.y + 1 },
