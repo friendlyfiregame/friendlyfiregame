@@ -1,10 +1,9 @@
-import { entity, Entity } from "./Entity";
+import { Entity } from "./Entity";
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { GameObjectProperties } from './MapInfo';
 
-@entity("riddlestone")
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")
     private static sprite: Aseprite;

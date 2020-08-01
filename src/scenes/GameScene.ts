@@ -16,28 +16,26 @@ import { Particles, ParticleEmitter, particles, valueCurves } from "../Particles
 import { Seed } from "../Seed";
 import { FireGfx } from "../FireGfx";
 import { Cloud } from "../Cloud";
-import { MovingPlatform } from '../MovingPlatform';
 import { asset } from "../Assets";
 import { rnd, rndItem, clamp, timedRnd, boundsFromMapObject, isDev } from "../util";
 import { BitmapFont } from "../BitmapFont";
 import { PauseScene } from "./PauseScene";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Caveman } from '../Caveman';
-import { Campfire } from '../Campfire';
 import { QuestATrigger, QuestKey } from '../Quests';
 import { EndScene } from './EndScene';
 import { Sound } from '../Sound';
 import { MenuList } from '../Menu';
 import { ShadowPresence } from '../ShadowPresence';
 import { StoneDisciple } from '../StoneDisciple';
-import { Sign } from '../Sign';
-import { Wall } from '../Wall';
-import { Table } from '../Table';
 import { Bird } from '../Bird';
-import { SuperThrow } from '../SuperThrow';
 import { MountainRiddle } from '../MountainRiddle';
 import { RiddleStone } from '../RiddleStone';
+import { Campfire } from '../Campfire';
+import { MovingPlatform } from '../MovingPlatform';
 import { Skull } from '../Skull';
+import { Table } from '../Table';
+import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
 import { Mimic } from '../Mimic';
 
@@ -139,6 +137,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public wing!: Wing;
     public bird!: Bird;
     public spider!: Spider;
+    public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
     public particles!: Particles;
@@ -160,27 +159,14 @@ export class GameScene extends Scene<FriendlyFire> {
     private fadeToBlackFactor = 0;
     private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
     public readonly mountainRiddle: MountainRiddle = new MountainRiddle();
-
     public setup(): void {
+
         this.mapInfo = new MapInfo();
         this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
-
-        // Force execution of entity decorator on classes that are not referenced compiled code anywhere
-        // Todo: Find better solution?
-        if (this instanceof MovingPlatform)
-        if (this instanceof Sign)
-        if (this instanceof Wall)
-        if (this instanceof Table)
-        if (this instanceof SuperThrow)
-        if (this instanceof RiddleStone)
-        if (this instanceof Skull)
-        if (this instanceof Portal)
-        if (this instanceof Campfire)
-        if (this instanceof Mimic)
 
         this.gameTime = 0;
         this.apocalypse = false;
@@ -189,7 +175,18 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gameObjects = [
             this.world = new World(this),
             particles,
-            ...this.mapInfo.getEntities().map(entity => createEntity(entity.name, this, entity.x, entity.y, entity.properties))
+            ...this.mapInfo.getEntities().map(entity => {
+                switch (entity.name) {
+                    case 'riddlestone': return new RiddleStone(this, entity.x, entity.y, entity.properties);
+                    case 'campfire': return new Campfire(this, entity.x, entity.y);
+                    case 'movingplatform': return new MovingPlatform(this, entity.x, entity.y, entity.properties);
+                    case 'skull': return new Skull(this, entity.x, entity.y);
+                    case 'table': return new Table(this, entity.x, entity.y);
+                    case 'superthrow': return new SuperThrow(this, entity.x, entity.y);
+                    case 'portal': return new Portal(this, entity.x, entity.y);
+                    default: return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
+                }
+            })
         ];
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
@@ -201,6 +198,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.bird = this.getGameObject(Bird);
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
+        this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
 
         this.camera = new Camera(this, this.player);
