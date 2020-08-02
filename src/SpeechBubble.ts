@@ -73,7 +73,7 @@ export class SpeechBubble {
         public anchorY: number,
         private lineHeightFactor = 1,
         private horizontalPadding = 6,
-        private verticalPadding = 3,
+        private verticalPadding = 4,
         private color = "white",
         private relativeToScreen = false
     ) {
