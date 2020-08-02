@@ -90,6 +90,10 @@
             "width": 1
         },
         {
+            "char": ";",
+            "width": 2
+        },
+        {
             "char": "?",
             "width": 5
         },
@@ -144,7 +148,7 @@
         },
         {
             "char": "M",
-            "width": 5
+            "width": 7
         },
         {
             "char": "N",
@@ -250,7 +254,8 @@
         },
         {
             "char": "j",
-            "width": 2
+            "width": 2,
+            "compactablePrecursors": ["n"]
         },
         {
             "char": "k",
@@ -292,7 +297,8 @@
         },
         {
             "char": "t",
-            "width": 3
+            "width": 3,
+            "compactablePrecursors": ["l"]
         },
         {
             "char": "u",
