@@ -11,14 +11,14 @@
     ],
     "collectible": [
         "I am, that's why you shouldn't just go around touching me!",
-        "You really don't want to own a power-up that hates you!.",
+        "You really don't want to own a power-up that hates you!",
         "►I guess… @greetings"
     ],
     "hey": [
         "Hey there! @greetings"
     ],
     "greetings": [
-        "Need anyting?",
+        "Need anything?",
         "►Who are you? @who",
         "►What are you up to? @what",
         "►[not talkedAboutSeed]I have this seed problem… @seed",
