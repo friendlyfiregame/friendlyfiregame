@@ -179,7 +179,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'in three days by'
         ]);
         posY = this.drawParagraph(ctx, posY, posX, [
-            'Eduard But, Nico Huelscher,',
+            'Eduard But, Nico Hülscher,',
             'Benjamin Jung, Nils Kreutzer,',
             'Bastian Lang, Ranjit Mevius,',
             'Markus Over, Klaus Reimer, and',
@@ -193,7 +193,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Nils Kreutzer'
         ]);
         posY = this.drawCredit(ctx, posY, posX, 'PROGRAMMING', [
-            'Nico Huelscher',
+            'Nico Hülscher',
             'Benjaming Jung',
             'Nils Kreutzer',
             'Ranjit Mevius',

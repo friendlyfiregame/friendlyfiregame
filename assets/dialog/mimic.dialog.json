@@ -36,7 +36,7 @@
     ],
     "items": [
         "No, we mimics usually don't carry items. !set asked_about_items true",
-        "Some do, but that only incentivises unnecessary violence.",
+        "Some do, but that only incentivizes unnecessary violence.",
         "There's no need to attack a mimic who doesn't hold items, no?",
         "►True",
         "Yes, yes. @questions"
