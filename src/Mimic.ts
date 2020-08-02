@@ -22,6 +22,7 @@ export class Mimic extends NPC {
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 46, 24);
         this.lookAtPlayer = false;
+        this.direction = 1;
         this.conversation = new Conversation(conversation, this);
         this.animator.assignSprite(Mimic.sprite);
     }
@@ -39,23 +40,19 @@ export class Mimic extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        switch (this.state) {
-            case MimicState.SLEEPING: this.animator.play("sleeping", ctx); break;
-            case MimicState.OPEN_UP: this.animator.play("open", ctx, { playUntilFinished: true }); this.nextState(); break;
-            case MimicState.IDLE: this.animator.play("idle", ctx);
-        }
-        ctx.restore();
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
+
+        switch (this.state) {
+            case MimicState.SLEEPING: this.animator.play("sleeping", this.direction); break;
+            case MimicState.OPEN_UP: this.animator.play("open", this.direction, { playUntilFinished: true }); this.nextState(); break;
+            case MimicState.IDLE: this.animator.play("idle", this.direction);
+        }
+
         if (this.state === MimicState.OPEN_UP) Mimic.openingSound.play();
         this.speechBubble.update(this.x, this.y);
     }

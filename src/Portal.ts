@@ -27,18 +27,6 @@ export class Portal extends Entity {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-
-        switch (this.animationState) {
-            case PortalAnimationState.WAITING: this.animator.play("empty", ctx); break;
-            case PortalAnimationState.FADEIN: this.animator.play("fadein", ctx, { playUntilFinished: true }); break;
-            case PortalAnimationState.IDLE: this.animator.play("idle", ctx); break;
-            case PortalAnimationState.FADEOUT: this.animator.play("fadeout", ctx, { playUntilFinished: true }); break;
-            case PortalAnimationState.GONE: this.animator.play("empty", ctx); break;
-        }
-
-        ctx.restore();
         if (this.scene.showBounds) this.drawBounds();
     }
 
@@ -46,6 +34,14 @@ export class Portal extends Entity {
         super.update(dt);
         if (this.timeAlive >= this.maxAge) {
             this.scene.removeGameObject(this);
+        }
+
+        switch (this.animationState) {
+            case PortalAnimationState.WAITING: this.animator.play("empty", 1); break;
+            case PortalAnimationState.FADEIN: this.animator.play("fadein", 1, { playUntilFinished: true }); break;
+            case PortalAnimationState.IDLE: this.animator.play("idle", 1); break;
+            case PortalAnimationState.FADEOUT: this.animator.play("fadeout", 1, { playUntilFinished: true }); break;
+            case PortalAnimationState.GONE: this.animator.play("empty", 1); break;
         }
 
         if (this.animationState === PortalAnimationState.WAITING) {

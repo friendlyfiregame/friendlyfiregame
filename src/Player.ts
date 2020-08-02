@@ -585,8 +585,6 @@ export class Player extends PhysicsEntity {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
-        // ctx.beginPath();
-        // let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
 
         const sprite = Player.playerSprites[this.gender];
         let animation = this.animation;
@@ -613,7 +611,7 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.dance) {
-            this.dance.draw(ctx);
+            this.dance.addDanceToRenderQueue();
         }
 
         this.speechBubble.draw(ctx);

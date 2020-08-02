@@ -3,9 +3,13 @@ import { BitmapFont } from './BitmapFont'
 import { roundRect } from './SpeechBubble';
 import { GameScene } from './scenes/GameScene';
 import { ParticleEmitter } from './Particles';
+import { Fire } from './Fire';
+import { Dance } from './Dance';
 
 export enum RenderingType {
   PARTICLE_EMITTER,
+  FIRE,
+  DANCE,
   BLACK_BARS,
   DRAW_IMAGE,
   ASEPRITE,
@@ -68,6 +72,18 @@ export type ParticleEmitterRenderingItem = {
   emitter: ParticleEmitter;
 }
 
+export type FireRenderingItem = {
+  type: RenderingType.FIRE;
+  layer: RenderingLayer;
+  entity: Fire;
+}
+
+export type DanceRenderingItem = {
+  type: RenderingType.DANCE;
+  layer: RenderingLayer;
+  dance: Dance;
+}
+
 export type BlackBarsRenderingItem = {
   type: RenderingType.BLACK_BARS;
   layer: RenderingLayer;
@@ -113,7 +129,7 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
 }
 
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
-                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem;
+                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | FireRenderingItem | DanceRenderingItem;
 
 export class Renderer {
   private scene: GameScene;
@@ -133,6 +149,11 @@ export class Renderer {
           this.scene.camera.drawBars(ctx);
         } else if (item.type === RenderingType.PARTICLE_EMITTER) {
           item.emitter.draw(ctx);
+        } else if (item.type === RenderingType.FIRE) {
+          item.entity.drawToCanvas(ctx);
+        } else if (item.type === RenderingType.DANCE) {
+          console.log('rendering dance');
+          item.dance.draw(ctx);
         } else {
           ctx.save();
           if (item.translation) ctx.translate(item.translation.x, item.translation.y);
@@ -183,7 +204,7 @@ export class Renderer {
     this.queue.push(item);
   }
 
-  public addAseprite (sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer, direction = 1): void {
+  public addAseprite (sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer, direction = 1, time?: number): void {
     const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
 
     this.add({
@@ -200,7 +221,7 @@ export class Renderer {
       scale,
       asset: sprite,
       animationTag,
-      time: this.scene.gameTime * 1000
+      time: time || this.scene.gameTime * 1000
     });
   }
 }

@@ -1,8 +1,9 @@
 import { Entity } from './Entity';
 import { Aseprite } from './Aseprite';
+import { RenderingLayer } from './Renderer';
 
 export type AnimationConfig = {
-  playUntilFinished: boolean;
+  playUntilFinished?: boolean;
 }
 
 export type CurrentAnimationState = {
@@ -11,6 +12,7 @@ export type CurrentAnimationState = {
   finished: boolean;
   duration?: number;
   config?: AnimationConfig;
+  direction?: number;
 }
 
 /**
@@ -25,6 +27,7 @@ export class Animator {
     tag: '',
     start: 0,
     duration: 0,
+    direction: 1,
     finished: false
   }
 
@@ -72,15 +75,18 @@ export class Animator {
    * @param ctx    - The canvas context to draw to.
    * @param config - Optional animation configuration.
    */
-  public play (tag: string, ctx: CanvasRenderingContext2D, config?: AnimationConfig) {
+  public play (tag: string, direction: number, config?: AnimationConfig) {
     this.time = (this.entity.scene.gameTime * 1000);
+    this.currentAnimation.direction = direction;
     this.updateAnimation(tag, config);
-    this.draw(ctx, this.time - this.currentAnimation.start);
+    this.draw(this.time - this.currentAnimation.start);
   }
 
-  private draw (ctx: CanvasRenderingContext2D, animationTime: number): void {
+  private draw (animationTime: number): void {
     if (this.sprite) {
-      this.sprite.drawTag(ctx, this.currentAnimation.tag, -this.sprite.width >> 1, -this.sprite.height, animationTime);
+      this.entity.scene.renderer.addAseprite(
+        this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y, RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
+      )
     }
   }
 }

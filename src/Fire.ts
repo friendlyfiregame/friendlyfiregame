@@ -9,6 +9,7 @@ import { Wood } from "./Wood";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 // const fireColors = [
 //     "#603015",
@@ -105,16 +106,18 @@ export class Fire extends NPC {
         return this.isVisible;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isVisible) {
-            return;
-        }
+    public drawToCanvas (ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
         this.fireGfx.draw(ctx, 0, 0);
-
         ctx.restore();
+    }
+
+    public draw(ctx: CanvasRenderingContext2D): void {
+        if (!this.isVisible) return;
+        this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this })
+
         this.drawFace(ctx);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
