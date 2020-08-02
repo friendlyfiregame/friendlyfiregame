@@ -50,8 +50,7 @@ export class SpeechBubble {
     private options: string[] = [];
     public selectedOptionIndex = -1;
     private fontSize = SpeechBubble.font.charHeight;
-    private lineHeightFactor = 1;
-    private lineHeight = Math.round(this.fontSize * this.lineHeightFactor)
+    private lineHeight = this.fontSize;
     private height = 0;
     private offset = { x: 0, y: 40 };
     private messageVelocity = 20;
@@ -72,11 +71,15 @@ export class SpeechBubble {
         private scene: GameScene,
         public anchorX: number,
         public anchorY: number,
+        private lineHeightFactor = 1,
+        private horizontalPadding = 6,
+        private verticalPadding = 3,
         private color = "white",
         private relativeToScreen = false
     ) {
         this.x = anchorX + this.offset.x;
         this.y = anchorY + this.offset.y;
+        this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
     }
 
     public show() {
@@ -96,7 +99,7 @@ export class SpeechBubble {
         this.messageLines = [""];
         this.isCurrentlyWriting = true;
         const font = SpeechBubble.font;
-        this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) =>
+        this.contentLinesByLength = message.split("\n").concat(this.options).sort((a, b) =>
             font.measureText(b).width - font.measureText(a).width);
         let index = 0;
         for (let char of message) {
@@ -135,7 +138,7 @@ export class SpeechBubble {
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize;
+        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.verticalPadding * 2;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -171,38 +174,38 @@ export class SpeechBubble {
 
         ctx = roundRect(
             ctx,
-            posX - metrics.width / 2 - 4, -posY - this.height,
-            metrics.width + 8, this.height,
+            posX - metrics.width / 2 - this.horizontalPadding, -posY - this.height,
+            metrics.width + this.horizontalPadding * 2, this.height,
             5, this.relativeToScreen, offsetX
         );
 
         ctx.fillStyle = this.color;
         ctx.fill();
 
-        const leftPos = Math.round(posX - metrics.width / 2);
-        let messageLineOffset = 4;
+        const textXPos = Math.round(posX - metrics.width / 2);
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.verticalPadding);
+
             font.drawText(
                 ctx,
                 this.messageLines[i],
-                leftPos,
-                Math.round(-posY - this.height - 1 + (i * this.lineHeight)),
+                textXPos,
+                textYPos,
                 textColor
             );
-            //messageLineOffset += 4;
         }
 
         for (let i = 0; i < this.options.length; i++) {
-            const topPos = Math.round(-posY - this.height + (i * this.lineHeight));
             const isSelected = this.selectedOptionIndex === i;
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.verticalPadding);
 
             if (isSelected) {
-                font.drawText(ctx, "►", leftPos, topPos, textColor)
+                font.drawText(ctx, "►", textXPos, textYPos, textColor)
             }
 
-            font.drawText(ctx, this.options[i], leftPos + 11, topPos, textColor);
+            font.drawText(ctx, this.options[i], textXPos + 11, textYPos, textColor);
         }
 
         ctx.restore();

@@ -167,7 +167,9 @@ export class Player extends PhysicsEntity {
     private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, undefined, true);
+    public speechBubble = new SpeechBubble(
+        this.scene, this.x, this.y, undefined, undefined, undefined, undefined, true
+    );
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
