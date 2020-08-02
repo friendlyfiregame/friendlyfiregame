@@ -3,7 +3,8 @@
     "characterMapping": [
         {
             "char": "A",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["W"]
         },
         {
             "char": "B",
@@ -119,7 +120,8 @@
         },
         {
             "char": "a",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["T"]
         },
         {
             "char": "b",
@@ -135,12 +137,12 @@
         },
         {
             "char": "e",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["Y"]
         },
         {
             "char": "f",
-            "width": 4,
-            "compactablePrecursors": [".", ",", "_"]
+            "width": 4
         },
         {
             "char": "g",
@@ -176,7 +178,8 @@
         },
         {
             "char": "o",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["T", "Y"]
         },
         {
             "char": "p",
@@ -188,7 +191,8 @@
         },
         {
             "char": "r",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["T"]
         },
         {
             "char": "s",
@@ -216,7 +220,8 @@
         },
         {
             "char": "y",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["l"]
         },
         {
             "char": "z",
@@ -296,7 +301,11 @@
         },
         {
             "char": ".",
-            "width": 1
+            "width": 1,
+            "compactablePrecursors": [
+                "F", "P", "T", "V", "Y", "f", "r", "y", "4", "7", "?", "-", "+", "}", "\"", "“",
+                "”", "'", "‘", "’"
+            ]
         },
         {
             "char": ",",
@@ -343,8 +352,17 @@
             "width": 2
         },
         {
+            "char": "{",
+            "width": 3
+        },
+        {
+            "char": "}",
+            "width": 3
+        },
+        {
             "char": "…",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["y"]
         },
         {
             "char": "\"",
