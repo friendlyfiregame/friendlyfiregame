@@ -3,7 +3,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
-import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem } from './util';
 import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
 import { Environment } from './World';
@@ -38,7 +38,7 @@ export class Bird extends NPC {
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
 
-        this.doubleJumpEmitter = particles.createEmitter({
+        this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),

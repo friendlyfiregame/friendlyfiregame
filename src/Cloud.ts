@@ -3,7 +3,7 @@ import { Environment } from "./World";
 import { entity } from "./Entity";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { GameObjectProperties } from "./MapInfo";
-import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, timedRnd, rndInt } from './util';
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
@@ -47,7 +47,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             this.targetY = y - properties.distance;
             this.setVelocityY(-this.velocity);
         }
-        this.rainEmitter = particles.createEmitter({
+        this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,

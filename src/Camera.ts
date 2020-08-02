@@ -3,7 +3,7 @@ import { ValueCurve, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { GameScene } from "./scenes/GameScene";
 import { Bounds } from './Entity';
-import { RenderingLayer, RenderingType } from './RenderingQueue';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export interface camFocus {
     x: number;

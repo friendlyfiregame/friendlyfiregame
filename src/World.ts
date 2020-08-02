@@ -1,11 +1,11 @@
 import { getImageData } from "./graphics";
-import { ParticleEmitter, particles, valueCurves, Particles } from "./Particles";
+import { ParticleEmitter, valueCurves, Particles } from "./Particles";
 import { rnd, rndInt, boundsFromMapObject } from "./util";
 import { asset } from "./Assets";
 import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 import { Entity, Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
-import { RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 export enum Environment {
     AIR = 0,
@@ -27,9 +27,9 @@ export class World implements GameObject {
     private static collisionMap: Uint32Array;
 
     @asset([
-        "maps/bg.png"
-        // "maps/bg2.png",
-        // "maps/bg3.png"
+        "maps/bg.png",
+        "maps/bg2.png",
+        "maps/bg3.png"
     ])
     private static backgrounds: HTMLImageElement[];
 
@@ -46,7 +46,7 @@ export class World implements GameObject {
         const rainSpawnPosition = this.scene.pointsOfInterest.find(o => o.name === 'rain_spawn_position');
         if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
 
-        this.rainEmitter = particles.createEmitter({
+        this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
@@ -89,7 +89,6 @@ export class World implements GameObject {
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
-            // ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
@@ -101,17 +100,6 @@ export class World implements GameObject {
                 asset: background
             })
         }
-
-        // ctx.save();
-        // ctx.translate(camX, -camY);
-        // for (const background of World.backgrounds) {
-        //     const bgX = this.getWidth() / background.width;
-        //     const bgY = this.getHeight() / background.height;
-        //     ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
-        // }
-        // ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
-        // ctx.restore();
-
     }
 
     public getEnvironment(x: number, y: number): Environment {

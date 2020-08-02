@@ -1,7 +1,7 @@
 import { NPC } from './NPC';
 import { PIXEL_PER_METER } from './constants';
 import { rnd, rndInt, shiftValue } from './util';
-import { particles, ParticleEmitter, valueCurves } from './Particles';
+import { ParticleEmitter, valueCurves } from './Particles';
 import { Face, EyeType, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
 import { entity } from "./Entity";
@@ -50,7 +50,7 @@ export class Fire extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
-        this.smokeEmitter = particles.createEmitter({
+        this.smokeEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
             velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
@@ -75,7 +75,7 @@ export class Fire extends NPC {
         //     blendMode: "screen",
         //     alphaCurve: valueCurves.trapeze(0.05, 0.1)
         // });
-        this.sparkEmitter = particles.createEmitter({
+        this.sparkEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
             color: () => FireGfx.gradient.getCss(rnd() ** 0.5),

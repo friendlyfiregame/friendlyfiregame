@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { GAME_CANVAS_WIDTH } from './constants';
-import { RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
         CanvasRenderingContext2D {
@@ -151,7 +151,7 @@ export class SpeechBubble {
         posX -= offsetX;
 
         this.scene.renderer.add({
-            type: RenderingType.ROUND_RECT,
+            type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
             position: {

@@ -5,7 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
 import { GameObjectProperties } from './MapInfo';
 import { Conversation } from './Conversation';
-import { RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 @entity("sign")
 export class Sign extends NPC {

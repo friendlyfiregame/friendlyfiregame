@@ -8,7 +8,7 @@ import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
-import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd, sleep, rndInt, isDev, boundsFromMapObject } from './util';
 import { entity, Bounds } from "./Entity";
 import { Sound } from "./Sound";
@@ -30,7 +30,7 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
 import { Wall } from './Wall';
-import { RenderingType, RenderingLayer } from './RenderingQueue';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 const groundColors = [
     "#806057",
@@ -197,7 +197,7 @@ export class Player extends PhysicsEntity {
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
         }
         this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
-        this.dustEmitter = particles.createEmitter({
+        this.dustEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
@@ -206,7 +206,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.bounceEmitter = particles.createEmitter({
+        this.bounceEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
             color: () => rndItem(bounceColors),
@@ -215,7 +215,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.doubleJumpEmitter = particles.createEmitter({
+        this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
@@ -224,7 +224,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.genderSwapEmitter = particles.createEmitter({
+        this.genderSwapEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 45, y: rnd(-1, 1) * 45 }),
             color: () => rndItem(genderSwapColors),
@@ -551,7 +551,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, buttonTag = "action", controller: ControllerFamily = this.scene.game.currentControllerFamily) {
+    private drawTooltip (text: string, buttonTag = "action", controller: ControllerFamily = this.scene.game.currentControllerFamily) {
         const measure = Player.font.measureText(text);
         const gap = 4;
         const offsetY = 12;
@@ -611,17 +611,17 @@ export class Player extends PhysicsEntity {
         if (this.scene.showBounds) this.drawBounds();
 
         if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
-            this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
+            this.drawTooltip(this.closestNPC.getInteractionText(), "up");
         } else if (this.readableTrigger) {
-            this.drawTooltip(ctx, "Examine", "up");
+            this.drawTooltip("Examine", "up");
         } else if (this.canEnterDoor()) {
-            this.drawTooltip(ctx, "Enter", "up");
+            this.drawTooltip("Enter", "up");
         } else if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip(ctx, "Throw stone", "interact");
+            this.drawTooltip("Throw stone", "interact");
         } else if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip(ctx, "Plant seed", "interact");
+            this.drawTooltip("Plant seed", "interact");
         } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance", "up");
+            this.drawTooltip("Dance", "up");
         }
 
         if (this.dance) {
