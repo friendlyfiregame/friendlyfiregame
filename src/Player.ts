@@ -552,13 +552,16 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, text: string, buttonTag = "action", controller: ControllerFamily = this.scene.game.currentControllerFamily) {
+    private drawTooltip (
+        ctx: CanvasRenderingContext2D, text: string, buttonTag = "action",
+        controller: ControllerFamily = this.scene.game.currentControllerFamily
+    ) {
         const measure = Player.font.measureText(text);
-        const gap = 4;
+        const gap = 6;
         const offsetY = 12;
         const textPositionX = Math.round(this.x - ((measure.width - Player.buttons.width + gap) / 2));
         const textPositionY = -this.y + offsetY;
-        Player.buttons.drawTag(ctx, controller + "-" + buttonTag, textPositionX - Player.buttons.width - gap, textPositionY - 3);
+        Player.buttons.drawTag(ctx, controller + "-" + buttonTag, textPositionX - Player.buttons.width - gap, textPositionY);
         Player.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY,
             "white", "black");
     }
