@@ -1,19 +1,19 @@
-import { Scene } from "../Scene";
-import { FriendlyFire } from "../FriendlyFire";
-import { asset } from "../Assets";
-import { FadeTransition } from "../transitions/FadeTransition";
-import { CurtainTransition } from "../transitions/CurtainTransition";
-import { easeInSine } from "../easings";
-import { BitmapFont } from "../BitmapFont";
-import { GameScene } from "./GameScene";
-import { ControlsScene } from "./ControlsScene";
-import { MenuList, MenuItem, MenuAlignment } from '../Menu';
-import { isElectron } from "../util";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { CreditsScene } from './CreditsScene';
 import { Aseprite } from '../Aseprite';
-import { Sound } from '../Sound';
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { ControlsScene } from "./ControlsScene";
+import { CreditsScene } from './CreditsScene';
+import { CurtainTransition } from "../transitions/CurtainTransition";
 import { DIALOG_FONT } from "../constants";
+import { easeInSine } from "../easings";
+import { FadeTransition } from "../transitions/FadeTransition";
+import { FriendlyFire } from "../FriendlyFire";
+import { GameScene } from "./GameScene";
+import { isElectron } from "../util";
+import { MenuAlignment, MenuItem, MenuList } from '../Menu';
+import { Scene } from "../Scene";
+import { Sound } from '../Sound';
 
 type MainMenuParams = {
     label: string;
@@ -84,7 +84,6 @@ export class TitleScene extends Scene<FriendlyFire> {
         y: 190,
         gap: 15,
     }
-
 
     public setup(): void {
         this.zIndex = 1;
