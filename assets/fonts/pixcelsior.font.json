@@ -2,6 +2,98 @@
     "image": "pixcelsior.png",
     "characterMapping": [
         {
+            "char": " ",
+            "width": 4
+        },
+        {
+            "char": "!",
+            "width": 1
+        },
+        {
+            "char": "\"",
+            "width": 3
+        },
+        {
+            "char": "'",
+            "width": 1
+        },
+        {
+            "char": "(",
+            "width": 2
+        },
+        {
+            "char": ")",
+            "width": 2
+        },
+        {
+            "char": "+",
+            "width": 5
+        },
+        {
+            "char": ",",
+            "width": 2
+        },
+        {
+            "char": "-",
+            "width": 4
+        },
+        {
+            "char": ".",
+            "width": 1,
+            "compactablePrecursors": [
+                "F", "P", "T", "V", "Y", "f", "r", "y", "4", "7", "?", "-", "+", "}", "\"", "“",
+                "”", "'", "‘", "’"
+            ]
+        },
+        {
+            "char": "0",
+            "width": 5
+        },
+        {
+            "char": "1",
+            "width": 3
+        },
+        {
+            "char": "2",
+            "width": 5
+        },
+        {
+            "char": "3",
+            "width": 5
+        },
+        {
+            "char": "4",
+            "width": 5
+        },
+        {
+            "char": "5",
+            "width": 5
+        },
+        {
+            "char": "6",
+            "width": 5
+        },
+        {
+            "char": "7",
+            "width": 5
+        },
+        {
+            "char": "8",
+            "width": 5
+        },
+        {
+            "char": "9",
+            "width": 5
+        },
+        {
+            "char": ":",
+            "width": 1
+        },
+        {
+            "char": "?",
+            "width": 5
+        },
+        {
             "char": "A",
             "width": 5,
             "compactablePrecursors": ["W"]
@@ -107,15 +199,15 @@
             "width": 5
         },
         {
-            "char": "Ä",
-            "width": 5
+            "char": "[",
+            "width": 2
         },
         {
-            "char": "Ö",
-            "width": 5
+            "char": "]",
+            "width": 2
         },
         {
-            "char": "Ü",
+            "char": "_",
             "width": 5
         },
         {
@@ -142,7 +234,7 @@
         },
         {
             "char": "f",
-            "width": 4
+            "width": 3
         },
         {
             "char": "g",
@@ -228,11 +320,15 @@
             "width": 5
         },
         {
-            "char": "ä",
+            "char": "Ä",
             "width": 5
         },
         {
-            "char": "á",
+            "char": "Ö",
+            "width": 5
+        },
+        {
+            "char": "Ü",
             "width": 5
         },
         {
@@ -240,11 +336,19 @@
             "width": 5
         },
         {
-            "char": "é",
+            "char": "á",
+            "width": 5
+        },
+        {
+            "char": "ä",
             "width": 5
         },
         {
             "char": "è",
+            "width": 5
+        },
+        {
+            "char": "é",
             "width": 5
         },
         {
@@ -256,102 +360,6 @@
             "width": 5
         },
         {
-            "char": "0",
-            "width": 5
-        },
-        {
-            "char": "1",
-            "width": 3
-        },
-        {
-            "char": "2",
-            "width": 5
-        },
-        {
-            "char": "3",
-            "width": 5
-        },
-        {
-            "char": "4",
-            "width": 5
-        },
-        {
-            "char": "5",
-            "width": 5
-        },
-        {
-            "char": "6",
-            "width": 5
-        },
-        {
-            "char": "7",
-            "width": 5
-        },
-        {
-            "char": "8",
-            "width": 5
-        },
-        {
-            "char": "9",
-            "width": 5
-        },
-        {
-            "char": " ",
-            "width": 4
-        },
-        {
-            "char": ".",
-            "width": 1,
-            "compactablePrecursors": [
-                "F", "P", "T", "V", "Y", "f", "r", "y", "4", "7", "?", "-", "+", "}", "\"", "“",
-                "”", "'", "‘", "’"
-            ]
-        },
-        {
-            "char": ",",
-            "width": 2
-        },
-        {
-            "char": "!",
-            "width": 1
-        },
-        {
-            "char": "?",
-            "width": 5
-        },
-        {
-            "char": ":",
-            "width": 1
-        },
-        {
-            "char": "_",
-            "width": 5
-        },
-        {
-            "char": "-",
-            "width": 5
-        },
-        {
-            "char": "+",
-            "width": 5
-        },
-        {
-            "char": "(",
-            "width": 2
-        },
-        {
-            "char": ")",
-            "width": 2
-        },
-        {
-            "char": "[",
-            "width": 2
-        },
-        {
-            "char": "]",
-            "width": 2
-        },
-        {
             "char": "{",
             "width": 3
         },
@@ -360,13 +368,12 @@
             "width": 3
         },
         {
-            "char": "…",
-            "width": 5,
-            "compactablePrecursors": ["y"]
+            "char": "‘",
+            "width": 2
         },
         {
-            "char": "\"",
-            "width": 3
+            "char": "’",
+            "width": 2
         },
         {
             "char": "“",
@@ -377,16 +384,13 @@
             "width": 4
         },
         {
-            "char": "'",
-            "width": 1
+            "char": "…",
+            "width": 5,
+            "compactablePrecursors": ["y"]
         },
         {
-            "char": "‘",
-            "width": 2
-        },
-        {
-            "char": "’",
-            "width": 2
+            "char": "←",
+            "width": 7
         },
         {
             "char": "↑",
@@ -398,10 +402,6 @@
         },
         {
             "char": "↓",
-            "width": 7
-        },
-        {
-            "char": "←",
             "width": 7
         },
         {
