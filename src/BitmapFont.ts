@@ -7,6 +7,7 @@ export class BitmapFont {
     private colorMap: Record<string, number>;
     private charMap: string;
     private charWidths: number[];
+    private compactablePrecursors: string[][];
     private charStartPoints: number[];
     private charCount: number;
     private charReverseMap: Record<string, number>;
@@ -14,7 +15,7 @@ export class BitmapFont {
 
     private constructor(
         sourceImage: HTMLImageElement, colors: Record<string, string>, charMap: string,
-        charWidths: number[], charMargin = 1
+        charWidths: number[], compactablePrecursors: string[][], charMargin = 1
     ) {
         this.sourceImage = sourceImage;
         this.canvas = document.createElement("canvas");
@@ -22,6 +23,7 @@ export class BitmapFont {
         this.colorMap = this.prepareColors(colors);
         this.charMap = charMap;
         this.charWidths = charWidths;
+        this.compactablePrecursors = compactablePrecursors;
         this.charStartPoints = [];
         this.charCount = charMap.length;
         this.charReverseMap = {};
@@ -45,7 +47,8 @@ export class BitmapFont {
         const image = await loadImage(new URL(json.image, baseURL));
         const characters = json.characterMapping.map(charDef => charDef.char).join('');
         const widths = json.characterMapping.map(charDef => charDef.width)
-        return new BitmapFont(image, json.colors, characters, widths, json.margin);
+        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || [])
+        return new BitmapFont(image, json.colors, characters, widths, compactablePrecursors, json.margin);
     }
 
     private prepareColors(colorMap: { [x: string]: string; }): { [x: string]: number } {
@@ -106,17 +109,34 @@ export class BitmapFont {
         text = "" + text;
         ctx.globalAlpha = alpha;
         let width = 0;
+        let precursorChar = null
 
         for (var currentChar of text) {
             const index = this.getCharIndex(currentChar);
             width += this.charWidths[index] + 1;
+            const compactablePrecursors = this.compactablePrecursors[index];
+
+            if (precursorChar && compactablePrecursors.includes(precursorChar)) {
+                width -= 1
+            }
+
+            precursorChar = currentChar
         }
 
         const offX = Math.round(-align * width);
+        precursorChar = null
+
         for (let i = 0; i < text.length; i++) {
-            const index = this.getCharIndex(text[i]);
-            this.drawCharacter(ctx, index, Math.round(x + offX), Math.round(y), color);
-            x += this.charWidths[index] + 1;
+            const currentChar = text[i];
+            const index = this.getCharIndex(currentChar);
+            const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
+
+            let xPos = Math.round(x + offX) - spaceReduction;
+
+            this.drawCharacter(ctx, index, xPos, Math.round(y), color);
+            x += this.charWidths[index] - spaceReduction + 1;
+
+            precursorChar = currentChar;
         }
     }
 
