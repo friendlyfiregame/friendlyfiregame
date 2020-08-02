@@ -8,6 +8,7 @@ import { rnd, timedRnd, rndInt } from './util';
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
@@ -74,10 +75,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        Cloud.sprite.drawTag(ctx, "idle", -Cloud.sprite.width >> 1, -Cloud.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES)
     }
 
     update(dt: number): void {

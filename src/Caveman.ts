@@ -3,6 +3,7 @@ import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 @entity("caveman")
 export class Caveman extends NPC {
@@ -14,14 +15,7 @@ export class Caveman extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        Caveman.sprite.drawTag(ctx, "idle", -Caveman.sprite.width >> 1, -Caveman.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Caveman.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }

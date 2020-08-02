@@ -5,6 +5,7 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import conversation from '../assets/dialog/superthrow.dialog.json';
 import { Conversation } from './Conversation';
+import { RenderingLayer } from './Renderer';
 
 @entity("superthrow")
 export class SuperThrow extends NPC {
@@ -28,15 +29,8 @@ export class SuperThrow extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        ctx.translate(this.x, -this.y - floatOffsetY);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        SuperThrow.sprite.drawTag(ctx, "idle", -SuperThrow.sprite.width >> 1, -SuperThrow.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(SuperThrow.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES, this.direction);
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }

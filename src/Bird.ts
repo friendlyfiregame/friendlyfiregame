@@ -9,6 +9,7 @@ import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constant
 import { Environment } from './World';
 import conversation from '../assets/dialog/bird.dialog.json';
 import { Conversation } from './Conversation';
+import { RenderingLayer } from './Renderer';
 
 enum BirdState {
     WAITING_LEFT,
@@ -137,13 +138,7 @@ export class Bird extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        Bird.sprite.drawTag(ctx, "idle", -Bird.sprite.width >> 1, -Bird.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }

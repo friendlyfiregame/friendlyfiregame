@@ -3,6 +3,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 @entity("skull")
 export class Skull extends PhysicsEntity {
@@ -14,10 +15,7 @@ export class Skull extends PhysicsEntity {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        Skull.sprite.drawTag(ctx, "idle", -Skull.sprite.width >> 1, -Skull.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Skull.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
     }
 

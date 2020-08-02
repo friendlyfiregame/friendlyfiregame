@@ -586,7 +586,7 @@ export class Player extends PhysicsEntity {
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
         // ctx.beginPath();
-        let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
+        // let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
 
         const sprite = Player.playerSprites[this.gender];
         let animation = this.animation;
@@ -594,19 +594,7 @@ export class Player extends PhysicsEntity {
             animation = animation + "-carry";
         }
 
-        this.scene.renderer.add({
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.PLAYER,
-            translation: { x: this.x, y: -this.y + 1 },
-            position: {
-                x: -sprite.width >> 1,
-                y: -sprite.height
-            },
-            scale,
-            asset: Player.playerSprites[this.gender],
-            animationTag: animation,
-            time: this.scene.gameTime * 1000
-        })
+        this.scene.renderer.addAseprite(sprite, animation, this.x, this.y - 1, RenderingLayer.PLAYER, this.direction)
 
         if (this.scene.showBounds) this.drawBounds();
 

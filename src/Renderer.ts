@@ -140,7 +140,7 @@ export class Renderer {
           if (item.relativeToScreen) ctx.setTransform(1, 0, 0, 1, 0, 0);
           if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
           if (item.alpha) ctx.globalAlpha = item.alpha;
-  
+
           switch(item.type) {
             case RenderingType.DRAW_IMAGE:
               ctx.drawImage(item.asset, item.position.x, item.position.y);
@@ -181,5 +181,26 @@ export class Renderer {
 
   public add (item: RenderingItem) {
     this.queue.push(item);
+  }
+
+  public addAseprite (sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer, direction = 1): void {
+    const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
+
+    this.add({
+      type: RenderingType.ASEPRITE,
+      layer,
+      translation: {
+        x: x,
+        y: -y
+      },
+      position: {
+        x: -sprite.width >> 1,
+        y: -sprite.height
+      },
+      scale,
+      asset: sprite,
+      animationTag,
+      time: this.scene.gameTime * 1000
+    });
   }
 }

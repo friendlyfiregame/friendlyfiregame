@@ -11,6 +11,7 @@ import { GameScene } from "./scenes/GameScene";
 import { Conversation } from './Conversation';
 import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
+import { RenderingLayer } from './Renderer';
 
 export enum SeedState {
     FREE = 0,
@@ -53,11 +54,8 @@ export class Seed extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        Seed.sprite.drawTag(ctx, this.getSpriteTag(), -Seed.sprite.width >> 1, -Seed.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Seed.sprite, this.getSpriteTag(), this.x, this.y - 1, RenderingLayer.ENTITIES, undefined)
+
         if (this.scene.showBounds) this.drawBounds();
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);

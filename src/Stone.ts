@@ -10,6 +10,7 @@ import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
+import { RenderingLayer } from './Renderer';
 
 export enum StoneState {
     DEFAULT = 0,
@@ -49,13 +50,7 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Stone.sprite, "idle", this.x, this.y - 1, RenderingLayer.ENTITIES, this.direction);
         if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {

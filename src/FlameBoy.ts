@@ -5,6 +5,7 @@ import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestBTrigger, QuestKey } from './Quests';
+import { RenderingLayer } from './Renderer';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -31,14 +32,8 @@ export class FlameBoy extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        FlameBoy.sprite.drawTag(ctx, this.isCorrupted() ? "corrupt" : "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
+        const animationTag = this.isCorrupted() ? "corrupt" : "idle";
+        this.scene.renderer.addAseprite(FlameBoy.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES, this.direction);
         if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx, false);
         if (this.showDialoguePrompt()) {

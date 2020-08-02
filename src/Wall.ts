@@ -4,6 +4,7 @@ import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
 import { Environment } from './World';
 import { GameObjectProperties } from './MapInfo';
+import { RenderingLayer } from './Renderer';
 
 enum WallState { SOLID, CRUMBLED }
 
@@ -21,14 +22,8 @@ export class Wall extends Entity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-
         const animationTag = this.state === WallState.SOLID ? 'solid' : 'crumbled'
-
-        Wall.sprite.drawTag(ctx, animationTag, -Wall.sprite.width >> 1, -Wall.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Wall.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
     }
 
