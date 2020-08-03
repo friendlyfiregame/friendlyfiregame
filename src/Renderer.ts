@@ -154,7 +154,6 @@ export class Renderer {
         } else if (item.type === RenderingType.FIRE) {
           item.entity.drawToCanvas(ctx);
         } else if (item.type === RenderingType.DANCE) {
-          console.log('rendering dance');
           item.dance.draw(ctx);
         } else {
           ctx.save();
@@ -162,7 +161,7 @@ export class Renderer {
           if (item.scale) ctx.scale(item.scale.x, item.scale.y);
           if (item.relativeToScreen) ctx.setTransform(1, 0, 0, 1, 0, 0);
           if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
-          if (item.alpha) ctx.globalAlpha = item.alpha;
+          if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
           switch(item.type) {
             case RenderingType.DRAW_IMAGE:

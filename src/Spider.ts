@@ -28,6 +28,7 @@ export class Spider extends NPC {
     }
 
     public showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return Conversation.getGlobals()["$talkedToSpider"] === "false";
     }
 

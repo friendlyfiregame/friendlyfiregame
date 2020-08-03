@@ -3,8 +3,8 @@ import { Aseprite } from './Aseprite';
 import { RenderingLayer } from './Renderer';
 
 export type AnimationConfig = {
-    loop?: boolean;
-    callback?: Function;
+  loop?: boolean;
+  callback?: Function;
 }
 
 export type CurrentAnimationState = {
@@ -52,15 +52,13 @@ export class Animator {
     // If current animation has a fixed duration, check if it was reached.
     // If so, the animation is set to finished.
     if (!this.currentAnimation.finished && this.currentAnimation.duration > 0) {
-        const animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
-        if (animationTime + (this.entity.scene.dt * 1000) >= this.currentAnimation.duration) {
-           this.currentAnimation.finished = true;
-           console.log('finished!');
-           if (this.currentAnimation.config?.callback) {
-               console.log('calling callback');
-               this.currentAnimation.config.callback();
-           }
+      const animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
+      if (animationTime + (this.entity.scene.dt * 1000) >= this.currentAnimation.duration) {
+        this.currentAnimation.finished = true;
+        if (this.currentAnimation.config?.callback) {
+          this.currentAnimation.config.callback();
         }
+      }
     }
 
     // Leave function if the provided animation tag is the one that is already playing
@@ -68,13 +66,11 @@ export class Animator {
     if (this.currentAnimation.tag === tag) return;
 
     // Update Animation with new payload
-    console.log('updating current animation with tag', tag);
     this.currentAnimation.tag = tag;
     this.currentAnimation.start = this.entity.scene.gameTime * 1000;
     this.currentAnimation.config = config;
     this.currentAnimation.finished = false;
     this.currentAnimation.duration = this.sprite.getAnimationDurationByTag(tag) || 0;
-    console.log('New animation duration is', this.currentAnimation.duration);
   }
 
   /**
@@ -96,8 +92,8 @@ export class Animator {
      * will play frame 1 of the animation.
      */
     if (config?.loop === false) {
-        const lastFrameTime = this.currentAnimation.duration - 1;
-        animationTime = Math.min(lastFrameTime, animationTime);
+      const lastFrameTime = this.currentAnimation.duration - 1;
+      animationTime = Math.min(lastFrameTime, animationTime);
     }
 
     /**
@@ -111,10 +107,9 @@ export class Animator {
 
   private draw (animationTime: number): void {
     if (this.sprite) {
-        console.log(`Drawing Aseprite of tag ${this.currentAnimation.tag} with Animation Time of ${animationTime}`);
-        this.entity.scene.renderer.addAseprite(
-            this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y, RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
-        )
+      this.entity.scene.renderer.addAseprite(
+        this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y, RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
+      )
     }
   }
 }

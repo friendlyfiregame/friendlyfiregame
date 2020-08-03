@@ -91,6 +91,7 @@ export class Fire extends NPC {
     }
 
     public showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
             (
@@ -170,13 +171,14 @@ export class Fire extends NPC {
 
         // Disable remaining dialogs
         this.conversation = null;
-        // Disable all other characters
-        for (const npc of [this.scene.tree, this.scene.stone, this.scene.seed, this.scene.flameboy]) {
+
+        // Remove any reachable NPCs
+        for (const npc of [this.scene.spider, this.scene.shadowPresence]) {
             if (npc) {
-                npc.conversation = null;
-                npc.face = null;
+                this.scene.removeGameObject(npc);
             }
         }
+
         // Player thoughts
         [
             ["What…", 2, 2],
