@@ -8,6 +8,7 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestKey, QuestATrigger } from './Quests';
 import { GameObjectInfo } from './MapInfo';
+import { RenderingLayer } from './Renderer';
 
 export enum WoodState {
     FREE = 0,
@@ -34,11 +35,8 @@ export class Wood extends PhysicsEntity {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        Wood.sprite.drawTag(ctx, "idle", -Wood.sprite.width >> 1, -Wood.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     public isCarried(): boolean {

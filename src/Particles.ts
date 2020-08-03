@@ -1,5 +1,7 @@
 import { GRAVITY } from './constants';
 import { Vector2 } from './util';
+import { GameScene } from './scenes/GameScene';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
@@ -28,15 +30,29 @@ export interface ParticleEmitterArguments {
 };
 
 export class Particles {
+    private scene: GameScene;
     private emitters: ParticleEmitter[] = [];
+
+    public constructor(scene: GameScene) {
+        this.scene = scene;    
+    }
 
     public update(dt: number): void {
         this.emitters.forEach(emitter => emitter.update(dt));
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        this.emitters.forEach(emitter => emitter.draw(ctx));
+    public addEmittersToRenderingQueue (): void {
+        this.emitters.forEach(emitter => {
+            this.scene.renderer.add({
+                type: RenderingType.PARTICLE_EMITTER,
+                layer: RenderingLayer.PARTICLES,
+                emitter
+            })
+        });
     }
+
+    // Direct drawing of particles is deactivated since it's handled via rendering engine
+    public draw(ctx: CanvasRenderingContext2D): void {}
 
     public addEmitter(emitter: ParticleEmitter): void {
         this.emitters.push(emitter);
@@ -58,7 +74,6 @@ export class Particles {
     }
 
 }
-export const particles = new Particles();
 
 export class ParticleEmitter {
     private particles: Particle[];
@@ -167,7 +182,6 @@ export class ParticleEmitter {
 }
 
 export class Particle {
-
     private halfSize: number;
     private originalLifetime: number;
     private progress: number = 0;

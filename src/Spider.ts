@@ -4,6 +4,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { Conversation } from './Conversation';
 import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer, RenderingType } from './Renderer';
 
 interface SpiderSpriteMetadata {
     eyeOffsetFrames?: number[];
@@ -27,6 +28,7 @@ export class Spider extends NPC {
     }
 
     public showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return Conversation.getGlobals()["$talkedToSpider"] === "false";
     }
 
@@ -39,19 +41,29 @@ export class Spider extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.beginPath();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        Spider.sprite.drawTag(ctx, 'idle', -Spider.sprite.width >> 1, -Spider.sprite.height, this.scene.gameTime * 1000);
-        Spider.eyes.drawTag(ctx, 'blink', (-Spider.eyes.width >> 1) + 5, -Spider.eyes.height - 10 - this.eyeOffsetY,
-            this.scene.gameTime * 1000);
+        this.scene.renderer.addAseprite(Spider.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
 
-        ctx.restore();
+        const scale = (this.direction < 0) ? { x: -1, y: 1 } : undefined;
+        const totalOffsetY = -10 - this.eyeOffsetY;
+        const totalOffsetX = 5;
+        this.scene.renderer.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.ENTITIES,
+            asset: Spider.eyes,
+            scale,
+            translation: {
+                x: this.x,
+                y: -this.y,
+            },
+            position: {
+                x: (-Spider.eyes.width >> 1) + totalOffsetX,
+                y: -Spider.eyes.height + totalOffsetY
+            },
+            animationTag: "blink",
+            time: this.scene.gameTime * 1000
+        });
 
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
 
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

@@ -1,10 +1,11 @@
 import { getImageData } from "./graphics";
-import { ParticleEmitter, particles, valueCurves, Particles } from "./Particles";
+import { ParticleEmitter, valueCurves, Particles } from "./Particles";
 import { rnd, rndInt, boundsFromMapObject } from "./util";
 import { asset } from "./Assets";
 import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
 import { Entity, Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 export enum Environment {
     AIR = 0,
@@ -45,7 +46,7 @@ export class World implements GameObject {
         const rainSpawnPosition = this.scene.pointsOfInterest.find(o => o.name === 'rain_spawn_position');
         if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
 
-        this.rainEmitter = particles.createEmitter({
+        this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
@@ -76,15 +77,29 @@ export class World implements GameObject {
         const camX = this.scene.camera.x;
         const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
-        ctx.save();
-        ctx.translate(camX, -camY);
+
+        this.scene.renderer.add({
+            type: RenderingType.DRAW_IMAGE,
+            layer: RenderingLayer.TILEMAP_MAP,
+            translation: { x: camX, y: -camY },
+            position: { x: -camX, y: -this.getHeight() + camY },
+            asset: World.foreground
+        })
+
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
-            ctx.drawImage(background, (-camX / bgX) + (-posXMultiplier * (width / 2)), (-this.getHeight() + camY) / bgY);
+            this.scene.renderer.add({
+                type: RenderingType.DRAW_IMAGE,
+                layer: RenderingLayer.TILEMAP_BACKGROUND,
+                translation: { x: camX, y: -camY },
+                position: {
+                    x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                    y: (-this.getHeight() + camY) / bgY
+                },
+                asset: background
+            })
         }
-        ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
-        ctx.restore();
     }
 
     public getEnvironment(x: number, y: number): Environment {

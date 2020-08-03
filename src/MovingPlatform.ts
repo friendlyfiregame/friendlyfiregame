@@ -6,6 +6,7 @@ import { GameObjectProperties } from "./MapInfo";
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 @entity("movingplatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {
@@ -40,11 +41,8 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        MovingPlatform.sprite.drawTag(ctx, "idle", -MovingPlatform.sprite.width >> 1, -MovingPlatform.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        this.scene.renderer.addAseprite(MovingPlatform.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {

@@ -3,11 +3,12 @@ import { Environment } from "./World";
 import { entity } from "./Entity";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { GameObjectProperties } from "./MapInfo";
-import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, timedRnd, rndInt } from './util';
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene, CollidableGameObject } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
@@ -47,7 +48,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             this.targetY = y - properties.distance;
             this.setVelocityY(-this.velocity);
         }
-        this.rainEmitter = particles.createEmitter({
+        this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
@@ -74,10 +75,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        Cloud.sprite.drawTag(ctx, "idle", -Cloud.sprite.width >> 1, -Cloud.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS)
     }
 
     update(dt: number): void {

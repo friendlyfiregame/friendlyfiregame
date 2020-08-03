@@ -8,7 +8,7 @@ import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
-import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, timedRnd, sleep, rndInt, isDev, boundsFromMapObject } from './util';
 import { entity, Bounds } from "./Entity";
 import { Sound } from "./Sound";
@@ -30,6 +30,8 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
 import { Wall } from './Wall';
+import { RenderingType, RenderingLayer } from './Renderer';
+import { ConversationProxy } from './ConversationProxy';
 
 const groundColors = [
     "#806057",
@@ -161,7 +163,7 @@ export class Player extends PhysicsEntity {
     private multiJump = false;
     private usedJump = false;
     private usedDoubleJump = false;
-    private hasBeard = false;
+    // private hasBeard = false;
     private autoMove: AutoMove | null = null;
     private isControllable: boolean = true;
     private showHints = false;
@@ -198,7 +200,7 @@ export class Player extends PhysicsEntity {
                 "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
         }
         this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
-        this.dustEmitter = particles.createEmitter({
+        this.dustEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
@@ -207,7 +209,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.bounceEmitter = particles.createEmitter({
+        this.bounceEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
             color: () => rndItem(bounceColors),
@@ -216,7 +218,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.doubleJumpEmitter = particles.createEmitter({
+        this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
@@ -225,7 +227,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.genderSwapEmitter = particles.createEmitter({
+        this.genderSwapEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 45, y: rnd(-1, 1) * 45 }),
             color: () => rndItem(genderSwapColors),
@@ -372,9 +374,8 @@ export class Player extends PhysicsEntity {
                         const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
                         this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
                     } else if (this.readableTrigger) {
-                        const content = this.readableTrigger.properties.content || 'Nothing...';
-                        const duration = this.readableTrigger.properties.duration ? this.readableTrigger.properties.duration * 1000 : 3000
-                        this.think(content, duration);
+                        const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
+                        this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
                     } else if (this.canDanceToMakeRain()) {
                         this.startDance(this.scene.apocalypse ? 3 : 2);
                         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
@@ -553,7 +554,7 @@ export class Player extends PhysicsEntity {
     }
 
     private drawTooltip (
-        ctx: CanvasRenderingContext2D, text: string, buttonTag = "action",
+        text: string, buttonTag = "action",
         controller: ControllerFamily = this.scene.game.currentControllerFamily
     ) {
         const measure = Player.font.measureText(text);
@@ -561,51 +562,61 @@ export class Player extends PhysicsEntity {
         const offsetY = 12;
         const textPositionX = Math.round(this.x - ((measure.width - Player.buttons.width + gap) / 2));
         const textPositionY = -this.y + offsetY;
-        Player.buttons.drawTag(ctx, controller + "-" + buttonTag, textPositionX - Player.buttons.width - gap, textPositionY);
-        Player.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY,
-            "white", "black");
+
+        this.scene.renderer.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.UI,
+            position: {
+                x: textPositionX - Player.buttons.width - gap,
+                y: textPositionY
+            },
+            asset: Player.buttons,
+            animationTag: controller + "-" + buttonTag,
+        })
+
+        this.scene.renderer.add({
+            type: RenderingType.TEXT,
+            layer: RenderingLayer.UI,
+            text,
+            textColor: "white",
+            outlineColor: "black",
+            position: {
+                x: textPositionX,
+                y: textPositionY
+            },
+            asset: Player.font,
+        })
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
-        ctx.save();
-        ctx.beginPath();
-
-        ctx.translate(this.x, -this.y + 1);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
 
         const sprite = Player.playerSprites[this.gender];
         let animation = this.animation;
         if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
             animation = animation + "-carry";
         }
-        if (this.hasBeard) {
-            // TODO
-        }
-        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height, this.scene.gameTime * 1000);
 
-        ctx.restore();
+        this.scene.renderer.addAseprite(sprite, animation, this.x, this.y - 1, RenderingLayer.PLAYER, this.direction)
 
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
 
         if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
-            this.drawTooltip(ctx, this.closestNPC.getInteractionText(), "up");
+            this.drawTooltip(this.closestNPC.getInteractionText(), "up");
         } else if (this.readableTrigger) {
-            this.drawTooltip(ctx, "Examine", "up");
+            this.drawTooltip("Examine", "up");
         } else if (this.canEnterDoor()) {
-            this.drawTooltip(ctx, "Enter", "up");
+            this.drawTooltip("Enter", "up");
         } else if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip(ctx, "Throw stone", "interact");
+            this.drawTooltip("Throw stone", "interact");
         } else if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip(ctx, "Plant seed", "interact");
+            this.drawTooltip("Plant seed", "interact");
         } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance", "up");
+            this.drawTooltip("Dance", "up");
         }
 
         if (this.dance) {
-            this.dance.draw(ctx);
+            this.dance.addDanceToRenderQueue();
         }
 
         this.speechBubble.draw(ctx);
@@ -999,7 +1010,7 @@ export class Player extends PhysicsEntity {
     }
 
     public setBeard(beard: boolean) {
-        this.hasBeard = beard;
+        // this.hasBeard = beard;
     }
 
     /**

@@ -22,12 +22,17 @@ export class Mimic extends NPC {
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 46, 24);
         this.lookAtPlayer = false;
+        this.direction = 1;
         this.conversation = new Conversation(conversation, this);
         this.animator.assignSprite(Mimic.sprite);
     }
 
     public nextState (): void {
         this.state++;
+
+        if (this.state === MimicState.OPEN_UP) {
+            Mimic.openingSound.play();
+        }
     }
 
     public getInteractionText(): string {
@@ -39,24 +44,17 @@ export class Mimic extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
+        if (this.scene.showBounds) this.drawBounds();
         switch (this.state) {
-            case MimicState.SLEEPING: this.animator.play("sleeping", ctx); break;
-            case MimicState.OPEN_UP: this.animator.play("open", ctx, { playUntilFinished: true }); this.nextState(); break;
-            case MimicState.IDLE: this.animator.play("idle", ctx);
+            case MimicState.SLEEPING: this.animator.play("sleeping", this.direction); break;
+            case MimicState.OPEN_UP: this.animator.play("open", this.direction, { loop: false, callback: this.nextState.bind(this) }); break;
+            case MimicState.IDLE: this.animator.play("idle", this.direction); break;
         }
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
-        if (this.state === MimicState.OPEN_UP) Mimic.openingSound.play();
         this.speechBubble.update(this.x, this.y);
     }
 }

@@ -8,6 +8,7 @@ import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingLayer } from './Renderer';
 
 @entity("tree")
 export class Tree extends NPC {
@@ -26,6 +27,7 @@ export class Tree extends NPC {
     }
 
     public showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE &&
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
@@ -36,11 +38,8 @@ export class Tree extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        Tree.sprite.drawTag(ctx, "idle", -Tree.sprite.width >> 1, -Tree.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx);
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);

@@ -4,6 +4,7 @@ import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingLayer } from './Renderer';
 
 @entity("wing")
 export class Wing extends NPC {
@@ -26,12 +27,9 @@ export class Wing extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        ctx.translate(this.x, -this.y - floatOffsetY);
-        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        this.scene.renderer.addAseprite(Wing.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES);
+        if (this.scene.showBounds) this.drawBounds();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }

@@ -4,6 +4,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingType, RenderingLayer } from './Renderer';
 
 enum AnimationTag {
     INVISIBLE = "invisible",
@@ -32,15 +33,24 @@ export class ShadowPresence extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
+        let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
-        ShadowPresence.sprite.drawTag(ctx, animationTag, -ShadowPresence.sprite.width >> 1, -ShadowPresence.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+
+        this.scene.renderer.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.ENTITIES,
+            translation: { x: this.x, y: -this.y },
+            position: {
+                x: -ShadowPresence.sprite.width >> 1,
+                y: -ShadowPresence.sprite.height
+            },
+            scale,
+            asset: ShadowPresence.sprite,
+            animationTag,
+            time: this.scene.gameTime * 1000
+        });
+
+        if (this.scene.showBounds) this.drawBounds();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }

@@ -184,7 +184,7 @@ export class Campaign {
                     this.runAction("enable", null, ["tree", "tree1"]);
                     break;
                 case "givebeard":
-                    this.gameScene.player.setBeard(true);
+                    // this.gameScene.player.setBeard(true);
                     break;
                 case "endgame":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);

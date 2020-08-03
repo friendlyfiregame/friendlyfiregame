@@ -3,12 +3,13 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
-import { particles, valueCurves, ParticleEmitter } from './Particles';
+import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem } from './util';
 import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
 import { Environment } from './World';
 import conversation from '../assets/dialog/bird.dialog.json';
 import { Conversation } from './Conversation';
+import { RenderingLayer } from './Renderer';
 
 enum BirdState {
     WAITING_LEFT,
@@ -38,7 +39,7 @@ export class Bird extends NPC {
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
 
-        this.doubleJumpEmitter = particles.createEmitter({
+        this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
@@ -137,14 +138,8 @@ export class Bird extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        Bird.sprite.drawTag(ctx, "idle", -Bird.sprite.width >> 1, -Bird.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
+        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

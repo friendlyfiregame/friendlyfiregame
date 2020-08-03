@@ -2021,7 +2021,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A strange device. There is no manual available."
+                         "value":"A strange device…:::There is no manual available."
                         }],
                  "rotation":0,
                  "type":"trigger",
@@ -2113,7 +2113,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A pretty normal mailbox. Feels out of place."
+                         "value":"A pretty normal mailbox.:::Kinda stupid."
                         }],
                  "rotation":0,
                  "type":"trigger",

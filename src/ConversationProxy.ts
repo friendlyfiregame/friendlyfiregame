@@ -1,30 +1,20 @@
-import { entity } from "./Entity";
-import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
 import { GameObjectProperties } from './MapInfo';
 import { Conversation } from './Conversation';
-import { RenderingType, RenderingLayer } from './Renderer';
 
-@entity("sign")
-export class Sign extends NPC {
-    @asset("sprites/sign.aseprite.json")
-    private static sprite: Aseprite;
+export class ConversationProxy extends NPC {
     public conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y:number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
+        this.scene.addGameObject(this);
     }
 
     private prepareContent (content?: string ): string[] {
-        if (!content) return ['The sign is empty.'];
+        if (!content) return ['Nothing...'];
         return content.split(":::");
-    }
-
-    public getInteractionText (): string {
-        return "Read sign";
     }
 
     private generateConversation (lines: string[]): Conversation {
@@ -39,22 +29,13 @@ export class Sign extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.add({
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
-            position: {
-                x: -Sign.sprite.width >> 1,
-                y: -Sign.sprite.height
-            },
-            asset: Sign.sprite,
-            animationTag: "idle",
-            time: this.scene.gameTime * 1000
-        })
-        
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {}
+    update(dt: number): void {
+        if (!this.hasActiveConversation()) {
+            this.scene.removeGameObject(this);
+        }
+    }
 }

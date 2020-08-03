@@ -1,16 +1,19 @@
 import { Entity } from './Entity';
 import { Aseprite } from './Aseprite';
+import { RenderingLayer } from './Renderer';
 
 export type AnimationConfig = {
-  playUntilFinished: boolean;
+  loop?: boolean;
+  callback?: Function;
 }
 
 export type CurrentAnimationState = {
   tag: string;
   start: number;
   finished: boolean;
-  duration?: number;
+  duration: number;
   config?: AnimationConfig;
+  direction?: number;
 }
 
 /**
@@ -19,13 +22,12 @@ export type CurrentAnimationState = {
 export class Animator {
   private entity: Entity;
   private sprite?: Aseprite;
-  private time: number = 0;
 
   private currentAnimation: CurrentAnimationState = {
     tag: '',
     start: 0,
     duration: 0,
-    finished: false
+    finished: false,
   }
 
   public constructor (entity: Entity) {
@@ -38,31 +40,37 @@ export class Animator {
 
   /**
    * Updates the animation if all conditions are met regarding the currently playing animation.
-   * 
+   *
    * @param tag    - The animation tag to draw.
    * @param config - Optional animation configuration.
    */
-  private updateAnimation (tag: string, config?: AnimationConfig) {
+  private updateAnimation (tag: string, config?: AnimationConfig): void {
     // Early out if animation tag is already set as current animation
     if (!this.sprite) return;
-    if (this.currentAnimation.tag === tag) return;
 
+    // Animation Update Logic
     // If current animation has a fixed duration, check if it was reached.
     // If so, the animation is set to finished.
-    if (this.currentAnimation.duration) {
-      const animationTime = this.time - this.currentAnimation.start;
-      if (animationTime >= this.currentAnimation.duration) {
-         this.currentAnimation.finished = true;
+    if (!this.currentAnimation.finished && this.currentAnimation.duration > 0) {
+      const animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
+      if (animationTime + (this.entity.scene.dt * 1000) >= this.currentAnimation.duration) {
+        this.currentAnimation.finished = true;
+        if (this.currentAnimation.config?.callback) {
+          this.currentAnimation.config.callback();
+        }
       }
     }
 
-    if (!this.currentAnimation.duration || this.currentAnimation.finished) {
-      this.currentAnimation.tag = tag;
-      this.currentAnimation.start = this.entity.scene.gameTime * 1000;
-      this.currentAnimation.config = config;
-      this.currentAnimation.finished = false;
-      this.currentAnimation.duration = config?.playUntilFinished ? this.sprite.getAnimationDurationByTag(tag) : 0;
-    }
+    // Leave function if the provided animation tag is the one that is already playing
+    // since there is no need to update the current animation settings.
+    if (this.currentAnimation.tag === tag) return;
+
+    // Update Animation with new payload
+    this.currentAnimation.tag = tag;
+    this.currentAnimation.start = this.entity.scene.gameTime * 1000;
+    this.currentAnimation.config = config;
+    this.currentAnimation.finished = false;
+    this.currentAnimation.duration = this.sprite.getAnimationDurationByTag(tag) || 0;
   }
 
   /**
@@ -72,15 +80,36 @@ export class Animator {
    * @param ctx    - The canvas context to draw to.
    * @param config - Optional animation configuration.
    */
-  public play (tag: string, ctx: CanvasRenderingContext2D, config?: AnimationConfig) {
-    this.time = (this.entity.scene.gameTime * 1000);
+  public play (tag: string, direction: number, config?: AnimationConfig) {
+    this.currentAnimation.direction = direction;
     this.updateAnimation(tag, config);
-    this.draw(ctx, this.time - this.currentAnimation.start);
+
+    let animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
+
+    /**
+     * Forcefully stop the loop at the last frame, if looping is disabled.
+     * We substract an arbitrary small number the animation duration, since the exact animation duration time
+     * will play frame 1 of the animation.
+     */
+    if (config?.loop === false) {
+      const lastFrameTime = this.currentAnimation.duration - 1;
+      animationTime = Math.min(lastFrameTime, animationTime);
+    }
+
+    /**
+     * Zero Aniamtion timer fix.
+     * Sometimes (?), an animation time of zero does not play the first but the last frame, thus we just skip 0.
+     */
+    if (animationTime === 0) animationTime += 1;
+
+    this.draw(animationTime);
   }
 
-  private draw (ctx: CanvasRenderingContext2D, animationTime: number): void {
+  private draw (animationTime: number): void {
     if (this.sprite) {
-      this.sprite.drawTag(ctx, this.currentAnimation.tag, -this.sprite.width >> 1, -this.sprite.height, animationTime);
+      this.entity.scene.renderer.addAseprite(
+        this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y, RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
+      )
     }
   }
 }

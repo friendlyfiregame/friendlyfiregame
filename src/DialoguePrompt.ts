@@ -1,6 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 export class DialoguePrompt {
     @asset("sprites/dialogue.aseprite.json")
@@ -20,12 +21,8 @@ export class DialoguePrompt {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        ctx.translate(this.x, -this.y - floatOffsetY);
-        DialoguePrompt.sprite.drawTag(ctx, "idle", -DialoguePrompt.sprite.width >> 1, -DialoguePrompt.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(DialoguePrompt.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES)
     }
 
     update(dt: number, anchorX: number, anchorY: number): void {

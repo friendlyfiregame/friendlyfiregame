@@ -2,6 +2,7 @@ import { NPC } from './NPC';
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
+import { RenderingType, RenderingLayer } from './Renderer';
 
 export enum FaceModes {
     BLINK = "blink",
@@ -46,14 +47,26 @@ export class Face {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.owner.x + this.offX, -this.owner.y - this.offY);
-        ctx.scale(this.direction, 1);
-        const isBlinking = ((<any>window).game?.gameTime % 5) < 0.6;
-        const frame = isBlinking ? FaceModes.BLINK : this.mode;
         const sprite = Face.sprites[this.eyeType];
-        sprite.drawTag(ctx, frame, -sprite.width >> 1, -sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.ENTITIES,
+            asset: sprite,
+            scale: {
+                x: this.direction,
+                y: 1
+            },
+            translation: {
+                x: this.owner.x + this.offX,
+                y: -this.owner.y - this.offY
+            },
+            position: {
+                x: -sprite.width >> 1,
+                y: -sprite.height
+            },
+            animationTag: this.mode,
+            time: this.scene.gameTime * 1000
+        });
     }
 
     public toggleDirection(direction = this.direction > 0 ? -1 : 1) {

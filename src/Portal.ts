@@ -15,7 +15,6 @@ export class Portal extends Entity {
     private static sound: Sound;
 
     private animationState = PortalAnimationState.WAITING;
-    private maxAge = 10;
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 32, 50, false);
@@ -27,40 +26,39 @@ export class Portal extends Entity {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-
         switch (this.animationState) {
-            case PortalAnimationState.WAITING: this.animator.play("empty", ctx); break;
-            case PortalAnimationState.FADEIN: this.animator.play("fadein", ctx, { playUntilFinished: true }); break;
-            case PortalAnimationState.IDLE: this.animator.play("idle", ctx); break;
-            case PortalAnimationState.FADEOUT: this.animator.play("fadeout", ctx, { playUntilFinished: true }); break;
-            case PortalAnimationState.GONE: this.animator.play("empty", ctx); break;
+            case PortalAnimationState.WAITING:
+                this.animator.play("empty", 1);
+                break;
+            case PortalAnimationState.FADEIN:
+                this.animator.play("fadein", 1, { loop: false, callback: this.nextAnimationState.bind(this) });
+                break;
+            case PortalAnimationState.IDLE:
+                this.animator.play("idle", 1);
+                break;
+            case PortalAnimationState.FADEOUT:
+                this.animator.play("fadeout", 1, { loop: false, callback: this.nextAnimationState.bind(this) });
+                break;
+            case PortalAnimationState.GONE:
+                this.animator.play("empty", 1);
+                break;
         }
-
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {
         super.update(dt);
-        if (this.timeAlive >= this.maxAge) {
-            this.scene.removeGameObject(this);
-        }
-
         if (this.animationState === PortalAnimationState.WAITING) {
             if (this.timeAlive >= 1) {
                 this.nextAnimationState();
                 Portal.sound.play();
             }
-        } else if (this.animationState === PortalAnimationState.FADEIN) {
-            this.nextAnimationState();
         } else if (this.animationState === PortalAnimationState.IDLE) {
             if (this.timeAlive >= 4) {
                 this.nextAnimationState();
             }
-        } else if (this.animationState === PortalAnimationState.FADEOUT) {
-            this.nextAnimationState();
+        } else if (this.animationState === PortalAnimationState.GONE) {
+            this.scene.removeGameObject(this);
         }
     }
 }

@@ -5,6 +5,7 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { Conversation } from './Conversation';
 import { Face, EyeType } from './Face';
+import { RenderingLayer } from './Renderer';
 
 @entity("stonedisciple")
 export class StoneDisciple extends NPC {
@@ -30,15 +31,9 @@ export class StoneDisciple extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        StoneDisciple.sprite.drawTag(ctx, "idle", -StoneDisciple.sprite.width >> 1, -StoneDisciple.sprite.height, this.scene.gameTime * 1000);
-        ctx.restore();
+        this.scene.renderer.addAseprite(StoneDisciple.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
         this.drawFace(ctx, false);
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        if (this.scene.showBounds) this.drawBounds();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }

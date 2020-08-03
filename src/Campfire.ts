@@ -2,6 +2,7 @@ import { entity, Entity } from "./Entity";
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer } from './Renderer';
 
 @entity("campfire")
 export class Campfire extends Entity {
@@ -13,12 +14,8 @@ export class Campfire extends Entity {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 3);
-        Campfire.sprite.drawTag(ctx, "idle", -Campfire.sprite.width >> 1, -Campfire.sprite.height,
-            this.scene.gameTime * 1000);
-        ctx.restore();
-        if (this.scene.showBounds) this.drawBounds(ctx);
+        this.scene.renderer.addAseprite(Campfire.sprite, "idle", this.x, this.y - 2, RenderingLayer.ENTITIES)
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {}

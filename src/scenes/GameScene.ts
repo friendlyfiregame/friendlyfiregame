@@ -3,7 +3,7 @@ import { FriendlyFire } from "../FriendlyFire";
 import { Camera } from "../Camera";
 import { World } from "../World";
 import { MapInfo, GameObjectInfo } from "../MapInfo";
-import { createEntity } from "../Entity";
+import { createEntity, Bounds } from "../Entity";
 import { Player } from "../Player";
 import { Fire } from "../Fire";
 import { Stone } from "../Stone";
@@ -12,7 +12,7 @@ import { FlameBoy } from "../FlameBoy";
 import { Wing } from "../Wing";
 import { Spider } from "../Spider";
 import { Conversation } from "../Conversation";
-import { Particles, ParticleEmitter, particles, valueCurves } from "../Particles";
+import { Particles, ParticleEmitter, valueCurves } from "../Particles";
 import { Seed } from "../Seed";
 import { FireGfx } from "../FireGfx";
 import { Cloud } from "../Cloud";
@@ -39,6 +39,7 @@ import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
 import { DIALOG_FONT } from "../constants";
 import { Mimic } from '../Mimic';
+import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -141,7 +142,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
-    public particles!: Particles;
+    public particles = new Particles(this);
     public fire!: Fire;
     public fireFuryEndTime = 0;
     public apocalypse = false;
@@ -159,11 +160,11 @@ export class GameScene extends Scene<FriendlyFire> {
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
     private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
-    public readonly mountainRiddle: MountainRiddle = new MountainRiddle();
+    public readonly renderer = new Renderer(this);
+    public readonly mountainRiddle = new MountainRiddle();
     public setup(): void {
 
         this.mapInfo = new MapInfo();
-        this.particles = particles;
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
@@ -175,7 +176,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         this.gameObjects = [
             this.world = new World(this),
-            particles,
+            this.particles,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
                     case 'riddlestone': return new RiddleStone(this, entity.x, entity.y, entity.properties);
@@ -371,28 +372,16 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Draw stuff
         this.camera.applyTransform(ctx);
+
         for (const obj of this.gameObjects) {
             obj.draw(ctx, width, height);
         }
 
-        if (this.showBounds) {
-            // Draw trigger bounds for collisions
-            for (const obj of this.triggerObjects) {
-                const bounds = boundsFromMapObject(obj);
-                ctx.strokeStyle = "blue";
-                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
-            }
-            for (const obj of this.boundObjects) {
-                const bounds = boundsFromMapObject(obj);
-                ctx.strokeStyle = "yellow";
-                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
-            }
-            for (const obj of this.gateObjects) {
-                const bounds = boundsFromMapObject(obj);
-                ctx.strokeStyle = "green";
-                ctx.strokeRect(bounds.x, -bounds.y, bounds.width, bounds.height);
-            }
-        }
+        // Add all particle emitters to rendering queue
+        this.particles.addEmittersToRenderingQueue();
+
+        // Add all debug bounds to rendering queue
+        this.addAllDebugBoundsToRenderingQueue();
 
         // Apocalypse
         if (this.fireFuryEndTime) {
@@ -414,7 +403,10 @@ export class GameScene extends Scene<FriendlyFire> {
         }
 
         // Cinematic bars
-        this.camera.renderCinematicBars(ctx);
+        this.camera.addCinematicBarsToRenderer();
+
+        // Draw stuff from Rendering queue
+        this.renderer.draw(ctx);
 
         ctx.restore();
 
@@ -423,6 +415,40 @@ export class GameScene extends Scene<FriendlyFire> {
             GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
         }
         this.frameCounter++;
+    }
+
+    private addSingleDebugBoundsToRenderingQueue(bounds: Bounds, color: string): void {
+        this.renderer.add({
+            type: RenderingType.RECT,
+            layer: RenderingLayer.DEBUG,
+            position: {
+                x: bounds.x,
+                y: -bounds.y
+            },
+            lineColor: color,
+            dimension: {
+               width: bounds.width,
+               height: bounds.height
+            }
+        })
+    }
+
+    private addAllDebugBoundsToRenderingQueue(): void {
+        if (this.showBounds) {
+            // Draw trigger bounds for collisions
+            for (const obj of this.triggerObjects) {
+                const bounds = boundsFromMapObject(obj);
+                this.addSingleDebugBoundsToRenderingQueue(bounds, "blue");
+            }
+            for (const obj of this.boundObjects) {
+                const bounds = boundsFromMapObject(obj);
+                this.addSingleDebugBoundsToRenderingQueue(bounds, "yellow");
+            }
+            for (const obj of this.gateObjects) {
+                const bounds = boundsFromMapObject(obj);
+                this.addSingleDebugBoundsToRenderingQueue(bounds, "green");
+            }
+        }
     }
 
     public startApocalypseMusic(): void {
@@ -482,29 +508,35 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
         this.updateApocalypse();
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.camera.setCinematicBar(this.apocalypseFactor);
-        // Red overlay
-        ctx.fillStyle = "darkred";
-        ctx.globalCompositeOperation = "color";
-        ctx.globalAlpha = 0.7 * this.apocalypseFactor;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.restore();
+
+        this.renderer.add({
+            type: RenderingType.RECT,
+            layer: RenderingLayer.FULLSCREEN_FX,
+            position: { x: 0, y: 0 },
+            fillColor: "darkred",
+            globalCompositeOperation: "color",
+            alpha: 0.7 * this.apocalypseFactor,
+            relativeToScreen: true,
+            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
+        })
     }
 
     private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black") {
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = color;
-        ctx.globalAlpha = alpha;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.restore();
+        this.renderer.add({
+            type: RenderingType.RECT,
+            layer: RenderingLayer.FULLSCREEN_FX,
+            position: { x: 0, y: 0 },
+            fillColor: color,
+            alpha,
+            relativeToScreen: true,
+            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
+        })
     }
 
     public loadApocalypse() {
         this.fireEffects = [1, 2].map(num =>  new FireGfx(32, 24, true, 2));
-        this.fireEmitter = particles.createEmitter({
+        this.fireEmitter = this.particles.createEmitter({
             position: {x: this.player.x, y: this.player.y},
             offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
             velocity: () => ({ x: 0, y: -25}),

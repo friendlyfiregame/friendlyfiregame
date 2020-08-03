@@ -3,6 +3,7 @@ import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { GameObjectProperties } from './MapInfo';
+import { RenderingLayer } from './Renderer';
 
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")
@@ -18,12 +19,8 @@ export class RiddleStone extends Entity {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
-            ctx.save();
-            ctx.translate(this.x, -this.y);
-            RiddleStone.sprite.drawTag(ctx, "idle", -RiddleStone.sprite.width >> 1, -RiddleStone.sprite.height,
-                this.scene.gameTime * 1000);
-            ctx.restore();
-            if (this.scene.showBounds) this.drawBounds(ctx);
+            this.scene.renderer.addAseprite(RiddleStone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES)
+            if (this.scene.showBounds) this.drawBounds();
         }
     }
 

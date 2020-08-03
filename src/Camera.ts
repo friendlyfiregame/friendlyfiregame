@@ -3,6 +3,7 @@ import { ValueCurve, valueCurves } from './Particles';
 import { Fire } from './Fire';
 import { GameScene } from "./scenes/GameScene";
 import { Bounds } from './Entity';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export interface camFocus {
     x: number;
@@ -277,7 +278,18 @@ export class Camera {
         }
     }
 
-    public renderCinematicBars(ctx: CanvasRenderingContext2D, force = this.getFocusForce()): void {
+    public addCinematicBarsToRenderer(force = this.getFocusForce()): void {
+        force = Math.max(force, this.getFocusForce(), this.currentBarHeight);
+        this.scene.renderer.add({
+            type: RenderingType.BLACK_BARS,
+            layer: RenderingLayer.BLACK_BARS,
+            color: "black",
+            height: this.barHeight,
+            force
+        })
+    }
+
+    public drawBars(ctx: CanvasRenderingContext2D, force = this.getFocusForce()): void {
         force = Math.max(force, this.getFocusForce(), this.currentBarHeight);
         ctx.save();
         ctx.fillStyle = "black";
