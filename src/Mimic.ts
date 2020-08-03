@@ -29,6 +29,10 @@ export class Mimic extends NPC {
 
     public nextState (): void {
         this.state++;
+
+        if (this.state === MimicState.OPEN_UP) {
+            Mimic.openingSound.play();
+        }
     }
 
     public getInteractionText(): string {
@@ -41,19 +45,16 @@ export class Mimic extends NPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (this.scene.showBounds) this.drawBounds();
+        switch (this.state) {
+            case MimicState.SLEEPING: this.animator.play("sleeping", this.direction); break;
+            case MimicState.OPEN_UP: this.animator.play("open", this.direction, { loop: false, callback: this.nextState.bind(this) }); break;
+            case MimicState.IDLE: this.animator.play("idle", this.direction); break;
+        }
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
-
-        switch (this.state) {
-            case MimicState.SLEEPING: this.animator.play("sleeping", this.direction); break;
-            case MimicState.OPEN_UP: this.animator.play("open", this.direction, { playUntilFinished: true }); this.nextState(); break;
-            case MimicState.IDLE: this.animator.play("idle", this.direction);
-        }
-
-        if (this.state === MimicState.OPEN_UP) Mimic.openingSound.play();
         this.speechBubble.update(this.x, this.y);
     }
 }
