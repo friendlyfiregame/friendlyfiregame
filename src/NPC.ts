@@ -68,7 +68,7 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     public isReadyForConversation() {
-        return this.conversation && this.scene.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION;
+        return (this.conversation && !this.scene.player.isCarrying(this) && this.scene.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION);
     }
 
     public hasActiveConversation(): boolean {
