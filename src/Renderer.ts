@@ -26,6 +26,7 @@ export enum RenderingLayer {
   TILEMAP_FOREGROUND = "tilemapForeground",
   PLAYER = "player",
   ENTITIES = "entities",
+  PLATFORMS = "platforms",
   TILEMAP_MAP = "tilemapMap",
   TILEMAP_BACKGROUND = "tilemapBackground",
   PARTICLES = "particles"
@@ -38,8 +39,9 @@ export const LAYER_ORDER: RenderingLayer[] = [
   RenderingLayer.BLACK_BARS,
   RenderingLayer.TILEMAP_FOREGROUND,
   RenderingLayer.PLAYER,
-  RenderingLayer.PARTICLES,
   RenderingLayer.ENTITIES,
+  RenderingLayer.PARTICLES,
+  RenderingLayer.PLATFORMS,
   RenderingLayer.TILEMAP_MAP,
   RenderingLayer.TILEMAP_BACKGROUND,
 ]

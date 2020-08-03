@@ -75,7 +75,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES)
+        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS)
     }
 
     update(dt: number): void {
