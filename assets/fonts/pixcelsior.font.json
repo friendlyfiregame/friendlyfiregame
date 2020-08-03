@@ -9,7 +9,7 @@
         {
             "char": "!",
             "width": 1,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "\"",
@@ -79,7 +79,7 @@
         {
             "char": "0",
             "width": 5,
-            "compactablePrecursors": ["_", "‘", "“"]
+            "compactablePrecursors": ["[", "_", "{", "‘", "“"]
         },
         {
             "char": "1",
@@ -91,12 +91,12 @@
         {
             "char": "2",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "3",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "4",
@@ -109,12 +109,12 @@
         {
             "char": "5",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "6",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "7",
@@ -128,12 +128,12 @@
         {
             "char": "8",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "9",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": ":",
@@ -163,43 +163,47 @@
         {
             "char": "A",
             "width": 5,
-            "compactablePrecursors": ["W"]
+            "compactablePrecursors": ["\"", "'", "7", "T", "Y", "[", "{", "‘", "’", "“", "”"]
         },
         {
             "char": "B",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "C",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["[", "_", "{", "‘", "“"]
         },
         {
             "char": "D",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "E",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "F",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "G",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["[", "_", "{", "‘", "“"]
         },
         {
             "char": "H",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "I",
             "width": 1,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "J",
@@ -208,43 +212,47 @@
         {
             "char": "K",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "L",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "M",
             "width": 7,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "N",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "O",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["[", "_", "{", "‘", "“"]
         },
         {
             "char": "P",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "Q",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["[", "_", "{", "‘", "“"]
         },
         {
             "char": "R",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "S",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "T",
@@ -265,7 +273,7 @@
         {
             "char": "X",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "Y",
@@ -274,7 +282,7 @@
         {
             "char": "Z",
             "width": 5,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "[",
@@ -295,7 +303,8 @@
         },
         {
             "char": "b",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "c",
@@ -320,12 +329,13 @@
         },
         {
             "char": "h",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "i",
             "width": 1,
-            "compactablePrecursors": []
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "j",
@@ -334,11 +344,13 @@
         },
         {
             "char": "k",
-            "width": 4
+            "width": 4,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "l",
-            "width": 2
+            "width": 2,
+            "compactablePrecursors": ["{"]
         },
         {
             "char": "m",
@@ -406,7 +418,8 @@
         },
         {
             "char": "Ö",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["[", "_", "{", "‘", "“"]
         },
         {
             "char": "Ü",
