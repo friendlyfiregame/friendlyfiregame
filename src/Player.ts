@@ -893,7 +893,7 @@ export class Player extends PhysicsEntity {
             if (done) {
                 // On cloud -> make it rain
                 if (this.dance.wasSuccessful()) {
-                    // (Useless because wrong cloud but hey...)
+                    // (Useless because wrong cloud but hey…)
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
