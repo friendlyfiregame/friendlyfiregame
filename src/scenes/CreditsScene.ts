@@ -182,8 +182,8 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Eduard But, Nico Hülscher,',
             'Benjamin Jung, Nils Kreutzer,',
             'Bastian Lang, Ranjit Mevius,',
-            'Markus Over, Klaus Reimer, and',
-            'Jennifer van Veen'
+            'Markus Over, Klaus Reimer,',
+            'and Jennifer van Veen'
         ], 50);
         posY = this.drawCredit(ctx, posY, posX, 'GAME DESIGN', ['Everyone']);
         posY = this.drawCredit(ctx, posY, posX, 'STORY', [
