@@ -31,6 +31,7 @@ import { GameObjectInfo } from './MapInfo';
 import { Sign } from './Sign';
 import { Wall } from './Wall';
 import { RenderingType, RenderingLayer } from './Renderer';
+import { ConversationProxy } from './ConversationProxy';
 
 const groundColors = [
     "#806057",
@@ -371,9 +372,8 @@ export class Player extends PhysicsEntity {
                         const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
                         this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
                     } else if (this.readableTrigger) {
-                        const content = this.readableTrigger.properties.content || 'Nothing...';
-                        const duration = this.readableTrigger.properties.duration ? this.readableTrigger.properties.duration * 1000 : 3000
-                        this.think(content, duration);
+                        const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
+                        this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
                     } else if (this.canDanceToMakeRain()) {
                         this.startDance(this.scene.apocalypse ? 3 : 2);
                         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
@@ -394,7 +394,7 @@ export class Player extends PhysicsEntity {
         if (!this.carrying || (this.carrying instanceof Stone && !this.canThrowStoneIntoWater())) {
             return;
         }
-        
+
         if (this.carrying instanceof Stone) {
             this.carrying.setVelocity(10 * this.direction, 10);
         } else {
