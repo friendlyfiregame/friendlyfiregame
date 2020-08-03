@@ -550,7 +550,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Popular bird feeding spot"
+                         "value":"◊ Popular bird feeding spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -604,7 +604,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Popular seed throwing spot"
+                         "value":"◊ Popular seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -640,7 +640,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Advanced seed throwing spot"
+                         "value":"◊ Advanced seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
