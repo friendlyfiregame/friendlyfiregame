@@ -56,8 +56,8 @@
                 ":", "?", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
                 "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f",
                 "h", "i", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-                "Ä", "Ö", "Ü", "à", "á", "ä", "è", "é", "ö", "ü", "‘", "’", "“", "”", "…", "←", "↑",
-                "→", "↓", "►", "♪", "◊"
+                "Ä", "Ö", "Ü", "à", "á", "ä", "è", "é", "ö", "ü", "}", "‘", "’", "“", "”", "…", "←",
+                "↑", "→", "↓", "►", "♪", "◊"
             ]
         },
         {
@@ -78,55 +78,87 @@
         },
         {
             "char": "0",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["_", "‘", "“"]
         },
         {
             "char": "1",
-            "width": 3
+            "width": 3,
+            "compactablePrecursors": [
+                ",", ".", "4", "K", "L", "T", "[", "_", "l", "{", "‘", "“", "…"
+            ]
         },
         {
             "char": "2",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "3",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "4",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": [
+                "\"", "'", "(", ",", ".", "7", "K", "L", "T", "Y", "Z", "[", "_", "l", "{", "‘",
+                "’", "“", "”", "…"
+            ]
         },
         {
             "char": "5",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "6",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "7",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": [
+                "+", ",", "-", ".", "4", ":", ";", "A", "L", "_", "a", "b", "c", "e", "g", "h", "k",
+                "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ä", "à",
+                "á", "ä", "è", "é", "ö", "ü", "{", "}", "…", "←", "↑", "→", "↓", "►"
+            ]
         },
         {
             "char": "8",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "9",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": ":",
-            "width": 1
+            "width": 1,
+            "compactablePrecursors": ["\"", "'", "7", "T", "Y", "[", "{", "‘", "’", "“", "”"]
         },
         {
             "char": ";",
-            "width": 2
+            "width": 2,
+            "compactablePrecursors":  [
+                "!", "\"", "'", "+", "-", ".", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                ":", "?", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+                "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f",
+                "h", "i", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+                "Ä", "Ö", "Ü", "à", "á", "ä", "è", "é", "ö", "ü", "}", "‘", "’", "“", "”", "…", "←",
+                "↑", "→", "↓", "►", "♪", "◊"
+            ]
         },
         {
             "char": "?",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": [
+                "+", ",", "-", ".", "4", ":", ";", "A", "L", "_", "l", "Ä", "{", "}", "…", "↑", "→",
+                "↓", "►"
+            ]
         },
         {
             "char": "A",
@@ -135,7 +167,8 @@
         },
         {
             "char": "B",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "C",
@@ -147,7 +180,8 @@
         },
         {
             "char": "E",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "F",
@@ -159,11 +193,13 @@
         },
         {
             "char": "H",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "I",
-            "width": 1
+            "width": 1,
+            "compactablePrecursors": []
         },
         {
             "char": "J",
@@ -171,7 +207,8 @@
         },
         {
             "char": "K",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "L",
@@ -179,11 +216,13 @@
         },
         {
             "char": "M",
-            "width": 7
+            "width": 7,
+            "compactablePrecursors": []
         },
         {
             "char": "N",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "O",
@@ -199,11 +238,13 @@
         },
         {
             "char": "R",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "S",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "T",
@@ -223,7 +264,8 @@
         },
         {
             "char": "X",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "Y",
@@ -231,7 +273,8 @@
         },
         {
             "char": "Z",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": []
         },
         {
             "char": "[",
@@ -281,7 +324,8 @@
         },
         {
             "char": "i",
-            "width": 1
+            "width": 1,
+            "compactablePrecursors": []
         },
         {
             "char": "j",
