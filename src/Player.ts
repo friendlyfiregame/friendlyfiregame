@@ -560,7 +560,7 @@ export class Player extends PhysicsEntity {
         const measure = Player.font.measureText(text);
         const gap = 6;
         const offsetY = 12;
-        const textPositionX = Math.round(this.x - ((measure.width - Player.buttons.width + gap) / 2));
+        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - Player.buttons.width + gap) / 2));
         const textPositionY = -this.y + offsetY;
 
         this.scene.renderer.add({

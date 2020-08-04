@@ -32,9 +32,10 @@ import { Bird } from '../Bird';
 import { MountainRiddle } from '../MountainRiddle';
 import { RiddleStone } from '../RiddleStone';
 import { Campfire } from '../Campfire';
+import { Radio } from '../Radio';
 import { MovingPlatform } from '../MovingPlatform';
 import { Skull } from '../Skull';
-import { Table } from '../Table';
+import { Chicken } from '../Chicken';
 import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
 import { DIALOG_FONT } from "../constants";
@@ -60,7 +61,8 @@ export enum BgmId {
     OVERWORLD = 'overworld',
     INFERNO = 'inferno',
     CAVE = 'cave',
-    RIDDLE = 'riddle'
+    RIDDLE = 'riddle',
+    RADIO = 'radio'
 }
 
 export type BackgroundTrack = {
@@ -82,6 +84,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
     @asset("music/riddle.ogg")
     public static bgmRiddle: Sound;
+
+    @asset("music/radio.ogg")
+    public static bgmRadio: Sound;
 
     private backgroundTracks: BackgroundTrack[] = [
         {
@@ -106,6 +111,12 @@ export class GameScene extends Scene<FriendlyFire> {
             active: false,
             id: BgmId.RIDDLE,
             sound: GameScene.bgmRiddle,
+            baseVolume: 1
+        },
+        {
+            active: false,
+            id: BgmId.RADIO,
+            sound: GameScene.bgmRadio,
             baseVolume: 1
         },
     ]
@@ -181,9 +192,10 @@ export class GameScene extends Scene<FriendlyFire> {
                 switch (entity.name) {
                     case 'riddlestone': return new RiddleStone(this, entity.x, entity.y, entity.properties);
                     case 'campfire': return new Campfire(this, entity.x, entity.y);
+                    case 'radio': return new Radio(this, entity.x, entity.y);
                     case 'movingplatform': return new MovingPlatform(this, entity.x, entity.y, entity.properties);
                     case 'skull': return new Skull(this, entity.x, entity.y);
-                    case 'table': return new Table(this, entity.x, entity.y);
+                    case 'chicken': return new Chicken(this, entity.x, entity.y);
                     case 'superthrow': return new SuperThrow(this, entity.x, entity.y);
                     case 'portal': return new Portal(this, entity.x, entity.y);
                     default: return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
