@@ -36,9 +36,8 @@
             "char": ")",
             "width": 2,
             "compactablePrecursors": [
-                "+", "-", "4", "r", "v", "w", "y", "}", "←", "↑", "→", "↓", "►", "♪"
-            ],
-            "temp": ["O", "Ö"]
+                "+", "-", "4", "O", "r", "v", "w", "y", "Ö", "}", "←", "↑", "→", "↓", "►", "♪"
+            ]
         },
         {
             "char": "+",
@@ -207,7 +206,11 @@
         },
         {
             "char": "J",
-            "width": 4
+            "width": 4,
+            "compactablePrecursors": [
+                "\"", "'", "+", "-", "7", "?", "F", "P", "T", "V", "Y", "[", "f", "r", "v", "y",
+                "{", "}", "‘", "’", "“", "”", "↑", "→", "↓", "►"
+            ]
         },
         {
             "char": "K",
@@ -256,19 +259,27 @@
         },
         {
             "char": "T",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": [
+                "+", ",", "-", ".", "4", ":", ";", "A", "L", "_", "a", "b", "c", "e", "g", "h", "k",
+                "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ä", "à",
+                "á", "ä", "è", "é", "ö", "ü", "{", "}", "…", "←", "↑", "→", "↓", "►"
+            ]
         },
         {
             "char": "U",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": ["_", "{"]
         },
         {
             "char": "V",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": [",", ".", "4", "L", "_", "l", "{", "…"]
         },
         {
             "char": "W",
-            "width": 7
+            "width": 7,
+            "compactablePrecursors": [",", ".", "L", "_", "l", "{", "…"]
         },
         {
             "char": "X",
@@ -277,7 +288,11 @@
         },
         {
             "char": "Y",
-            "width": 5
+            "width": 5,
+            "compactablePrecursors": [
+                "+", ",", "-", ".", "4", ":", ";", "A", "L", "_", "l", "Ä", "{", "}", "…", "↑", "→",
+                "↓", "►"
+            ]
         },
         {
             "char": "Z",
@@ -286,7 +301,8 @@
         },
         {
             "char": "[",
-            "width": 2
+            "width": 2,
+            "compactablePrecursors": []
         },
         {
             "char": "]",
@@ -316,8 +332,7 @@
         },
         {
             "char": "e",
-            "width": 5,
-            "compactablePrecursors": ["Y"]
+            "width": 5
         },
         {
             "char": "f",
