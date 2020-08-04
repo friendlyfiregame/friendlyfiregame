@@ -412,7 +412,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Display FPS counter
         if (isDev()) {
-            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
+            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale - 3, "white");
         }
         this.frameCounter++;
     }
