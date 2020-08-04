@@ -568,7 +568,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Bouncy mushrooms ahead"
+                         "value":"Bouncy mushrooms ahead →"
                         }],
                  "rotation":0,
                  "type":"entity",
