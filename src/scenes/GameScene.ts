@@ -40,6 +40,8 @@ import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
 import { Mimic } from '../Mimic';
 import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
+import { Bone } from '../Bone';
+import { Shiba } from '../Shiba';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -145,9 +147,11 @@ export class GameScene extends Scene<FriendlyFire> {
     public stoneDisciple!: StoneDisciple;
     public tree!: Tree;
     public seed!: Seed;
+    public bone!: Bone;
     public flameboy!: FlameBoy;
     public wing!: Wing;
     public bird!: Bird;
+    public shiba!: Shiba;
     public spider!: Spider;
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
@@ -209,10 +213,12 @@ export class GameScene extends Scene<FriendlyFire> {
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
         this.bird = this.getGameObject(Bird);
+        this.shiba = this.getGameObject(Shiba);
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
+        this.bone = this.getGameObject(Bone);
 
         this.camera = new Camera(this, this.player);
         this.camera.setBounds(this.player.getCurrentMapBounds());

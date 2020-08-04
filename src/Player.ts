@@ -2,7 +2,7 @@ import { SpeechBubble } from "./SpeechBubble";
 import {
     GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
-    PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_PADDING
+    PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_HEIGHT
 } from "./constants";
 import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -713,7 +713,7 @@ export class Player extends PhysicsEntity {
                 this.scene.gameTime * 1000);
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
-            this.carrying.y = this.y + (this.height - PLAYER_CARRY_PADDING) - offset + 4;
+            this.carrying.y = this.y + (this.height - this.carrying.carryHeight) - offset;
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }
@@ -1069,7 +1069,7 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            this.height = PLAYER_HEIGHT + PLAYER_CARRY_PADDING;
+            this.height = PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT;
             if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }

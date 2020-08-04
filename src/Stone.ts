@@ -35,6 +35,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.direction = -1;
         this.face = new Face(scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
+        this.carryHeight = 16;
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'stone_floating_position');
         if (!floatingPosition) throw new Error ('Could not find "stone_floating_position" point of interest in game scene');
