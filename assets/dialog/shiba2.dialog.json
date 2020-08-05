@@ -1,0 +1,7 @@
+{
+    "entry": [
+        "You found Bone! !set $talkedToShibaWithBone true",
+        "Bring to Friend!",
+        "Go! !end @entry"
+    ]
+}

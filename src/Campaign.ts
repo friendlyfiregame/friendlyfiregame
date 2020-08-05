@@ -255,7 +255,8 @@ export class Campaign {
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
-                        "shadowpresence": this.gameScene.shadowPresence
+                        "shadowpresence": this.gameScene.shadowPresence,
+                        "shiba": this.gameScene.shiba
                     };
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
@@ -275,7 +276,8 @@ export class Campaign {
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
-                        "shadowpresence": this.gameScene.shadowPresence
+                        "shadowpresence": this.gameScene.shadowPresence,
+                        "shiba": this.gameScene.shiba
                     };
                     const targetNpc1 = npcMap1[char1];
                     if (targetNpc1) {

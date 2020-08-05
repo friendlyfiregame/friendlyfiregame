@@ -42,6 +42,7 @@ import { Mimic } from '../Mimic';
 import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
 import { Bone } from '../Bone';
 import { Shiba } from '../Shiba';
+import { PowerShiba } from '../PowerShiba';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -152,6 +153,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public wing!: Wing;
     public bird!: Bird;
     public shiba!: Shiba;
+    public powerShiba!: PowerShiba;
     public spider!: Spider;
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
@@ -214,6 +216,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.wing = this.getGameObject(Wing);
         this.bird = this.getGameObject(Bird);
         this.shiba = this.getGameObject(Shiba);
+        this.powerShiba = this.getGameObject(PowerShiba);
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
         this.mimic = this.getGameObject(Mimic);

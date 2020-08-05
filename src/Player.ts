@@ -426,6 +426,8 @@ export class Player extends PhysicsEntity {
                 this.carry(this.scene.stone);
             } else if (event.key === "o" && !this.carrying) {
                 this.carry(this.scene.tree.spawnSeed());
+            } else if (event.key === "u" && !this.carrying) {
+                this.carry(this.scene.bone);
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {

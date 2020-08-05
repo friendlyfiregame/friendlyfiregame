@@ -4,6 +4,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { SpeechBubble } from './SpeechBubble';
 import { Conversation } from './Conversation';
 import { DialoguePrompt } from './DialoguePrompt';
+import { sleep } from './util';
 
 // Seconds where NPC can't be talked to after an ended conversation
 const PAUSE_AFTER_CONVERSATION = 1.5;
@@ -15,6 +16,7 @@ export abstract class NPC extends PhysicsEntity {
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white");
+    public thinkBubble: SpeechBubble | null = null;
     public lookAtPlayer = true;
     public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
     private lastEndedConversation = -Infinity;
@@ -31,6 +33,23 @@ export abstract class NPC extends PhysicsEntity {
                 this.face.setDirection(this.direction);
                 this.face.draw(ctx);
             }
+        }
+    }
+
+
+    public async think(message: string, time: number): Promise<void> {
+        console.log('think!');
+        if (this.thinkBubble) {
+            this.thinkBubble.hide();
+            this.thinkBubble = null;
+        }
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y, "white", false)
+        thinkBubble.setMessage(message);
+        thinkBubble.show();
+        await sleep(time);
+        if (this.thinkBubble === thinkBubble) {
+            thinkBubble.hide();
+            this.thinkBubble = null;
         }
     }
 
