@@ -9,11 +9,11 @@ export function roundRect(
     ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
     up = false, tipOffset = 0
 ): CanvasRenderingContext2D {
-    const halfWidth = w / 2
-    const halfHeight = h / 2
-    const middlePos = x + halfWidth
-    const rightPos = x + w
-    const bottomPos = y + h
+    const halfWidth = w / 2;
+    const halfHeight = h / 2;
+    const middlePos = x + halfWidth;
+    const rightPos = x + w;
+    const bottomPos = y + h;
 
     if (w < 2 * r) { r = halfWidth };
     if (h < 2 * r) { r = halfHeight };
@@ -82,8 +82,8 @@ export class SpeechBubble {
         private color = "white",
         private relativeToScreen = false
     ) {
-        this.x = anchorX + this.offset.x;
-        this.y = anchorY + this.offset.y;
+        this.x = Math.round(anchorX + this.offset.x);
+        this.y = Math.round(anchorY + this.offset.y);
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
         this.paddingHorizontal = this.paddingLeft + this.paddingRight;
         this.paddingVertical = this.paddingTop + this.paddingBottom;
@@ -160,8 +160,8 @@ export class SpeechBubble {
         let offsetX = 0;
 
         if (this.relativeToScreen) {
-            posX = ctx.canvas.width / 2;
-            posY = -ctx.canvas.height * 0.63 - this.height;
+            posX = Math.round(ctx.canvas.width / 2);
+            posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
@@ -179,7 +179,7 @@ export class SpeechBubble {
             layer: RenderingLayer.UI,
             fillColor: this.color,
             position: {
-                x: Math.round(posX - metrics.width / 2 - this.paddingLeft),
+                x: posX - Math.round(metrics.width / 2) - this.paddingLeft,
                 y: -posY - this.height
             },
             dimension: {
@@ -298,7 +298,7 @@ export class SpeechBubble {
     // }
 
     update(anchorX: number, anchorY: number): void {
-        this.x = anchorX + this.offset.x;
-        this.y = anchorY + this.offset.y;
+        this.x = Math.round(anchorX + this.offset.x);
+        this.y = Math.round(anchorY + this.offset.y);
     }
 }
