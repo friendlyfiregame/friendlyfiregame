@@ -58,6 +58,8 @@ export class SpeechBubble {
 
     private x: number;
     private y: number;
+    private paddingHorizontal: number;
+    private paddingVertical: number;
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
@@ -73,14 +75,18 @@ export class SpeechBubble {
         public anchorX: number,
         public anchorY: number,
         private lineHeightFactor = 1,
-        private horizontalPadding = 6,
-        private verticalPadding = 4,
+        private paddingTop = 3,
+        private paddingBottom = 4,
+        private paddingLeft = 6,
+        private paddingRight = 6,
         private color = "white",
         private relativeToScreen = false
     ) {
         this.x = anchorX + this.offset.x;
         this.y = anchorY + this.offset.y;
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
+        this.paddingHorizontal = this.paddingLeft + this.paddingRight;
+        this.paddingVertical = this.paddingTop + this.paddingBottom;
     }
 
     public show() {
@@ -139,7 +145,7 @@ export class SpeechBubble {
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.verticalPadding * 2;
+        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -173,11 +179,11 @@ export class SpeechBubble {
             layer: RenderingLayer.UI,
             fillColor: this.color,
             position: {
-                x: posX - metrics.width / 2 - this.horizontalPadding,
+                x: Math.round(posX - metrics.width / 2 - this.paddingLeft),
                 y: -posY - this.height
             },
             dimension: {
-                width: metrics.width + this.horizontalPadding * 2,
+                width: metrics.width + this.paddingHorizontal,
                 height: this.height
             },
             radius: 5,
@@ -189,7 +195,7 @@ export class SpeechBubble {
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.verticalPadding);
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
 
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
@@ -207,7 +213,7 @@ export class SpeechBubble {
 
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.verticalPadding);
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
 
             if (isSelected) {
                 this.scene.renderer.add({
