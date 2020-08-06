@@ -1,9 +1,8 @@
 import { NPC } from './NPC';
 import { Environment } from './World';
-import { PLAYER_ACCELERATION } from './constants';
 
 export abstract class ScriptableNPC extends NPC {
-    private move: 0 | 1 | -1  = 1;
+    protected move: 0 | 1 | -1  = 0;
 
     protected updatePosition(newX: number, newY: number): void {
         this.x = newX;
@@ -65,21 +64,5 @@ export abstract class ScriptableNPC extends NPC {
 
     public update(dt: number): void {
         super.update(dt);
-
-        this.move = 0;
-        // Triggers
-        // const triggerCollisions = this.scene.world.getTriggerCollisions(this);
-
-        if (this.move !== 0) {
-            this.direction = this.move;
-            this.accelerateX(PLAYER_ACCELERATION * dt * this.move);
-        } else {
-            if (this.getVelocityX() > 0) {
-                this.decelerateX(PLAYER_ACCELERATION * dt);
-            } else {
-                this.decelerateX(-PLAYER_ACCELERATION * dt);
-            }
-        }
-
     }
 }
