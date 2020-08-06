@@ -185,6 +185,7 @@ export class Renderer {
               ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width), Math.round(item.dimension.height), item.radius, item.relativeToScreen, Math.round(item.offsetX));
               ctx.fillStyle = item.fillColor;
               ctx.fill();
+              ctx.closePath();
               break;
             case RenderingType.TEXT:
               if (item.outlineColor) {

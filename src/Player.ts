@@ -437,6 +437,8 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
+                this.canRun = true;
+                this.canRainDance = true;
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
             }
