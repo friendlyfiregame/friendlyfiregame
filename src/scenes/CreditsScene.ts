@@ -122,7 +122,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         let y = posY;
         lines.forEach(line => {
             CreditsScene.standardFont.drawText(ctx, line, posX, y, "white");
-            y += this.standardCharHeight + this.lineSpacing;
+            y += this.standardCharHeight;
         })
         return y + marginBotton;
     }
@@ -135,7 +135,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
         names.forEach(name => {
             CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
-            y += this.standardCharHeight + this.lineSpacing;
+            y += this.standardCharHeight;
         })
         return y + 40;
     }
@@ -247,7 +247,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Shortened Git commit hash to provide support.
         const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
         const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 5, color);
+        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
 
         ctx.restore();
     }
