@@ -141,31 +141,33 @@ export class BitmapFont {
     }
 
     public measureText(text: string): { width: number, height: number } {
+        const CHAR_SPACING = 1;
         let width = 0;
+
         for (var char of text) {
             const index = this.getCharIndex(char);
-            width += this.charWidths[index] + 1;
+            width += this.charWidths[index] + CHAR_SPACING;
         }
+
+        if (text.length > 0) {
+            width -= CHAR_SPACING;
+        }
+
         return { width, height: this.charHeight };
     }
 
-    public drawTextWithOutline(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, outlineColor: string, align = 0) {
-        const OUTLINE_WIDTH = 1;
+    public drawTextWithOutline(
+        ctx: CanvasRenderingContext2D, text: string, xPos: number, yPos: number, textColor: string,
+        outlineColor: string, align = 0
+    ) {
+        for (let yOffset = yPos - 1; yOffset <= yPos + 1; yOffset++) {
+            for (let xOffset = xPos - 1; xOffset <= xPos + 1; xOffset++) {
+                if (xOffset != xPos || yOffset != yPos) {
+                    this.drawText(ctx, text, xOffset, yOffset, outlineColor, align);
+                }
+            }
+        }
 
-        const OUTLINE_TOP_POS = y - OUTLINE_WIDTH
-        const OUTLINE_RIGHT_POS = x + OUTLINE_WIDTH
-        const OUTLINE_BOTTOM_POS = y + OUTLINE_WIDTH
-        const OUTLINE_LEFT_POS = x - OUTLINE_WIDTH
-
-        this.drawText(ctx, text, x, OUTLINE_TOP_POS, outlineColor, align);
-        this.drawText(ctx, text, OUTLINE_RIGHT_POS, OUTLINE_TOP_POS, outlineColor, align);
-        this.drawText(ctx, text, OUTLINE_RIGHT_POS, y, outlineColor, align);
-        this.drawText(ctx, text, OUTLINE_RIGHT_POS, OUTLINE_BOTTOM_POS, outlineColor, align);
-        this.drawText(ctx, text, x, OUTLINE_BOTTOM_POS, outlineColor, align);
-        this.drawText(ctx, text, OUTLINE_LEFT_POS, OUTLINE_BOTTOM_POS, outlineColor, align);
-        this.drawText(ctx, text, OUTLINE_LEFT_POS, y, outlineColor, align);
-        this.drawText(ctx, text, OUTLINE_LEFT_POS, OUTLINE_TOP_POS, outlineColor, align);
-
-        this.drawText(ctx, text, x, y, color, align);
+        this.drawText(ctx, text, xPos, yPos, textColor, align);
     };
 }
