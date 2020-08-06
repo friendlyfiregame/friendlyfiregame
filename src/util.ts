@@ -124,7 +124,12 @@ export function isDev(): boolean {
     }
 
     if (!!window.location.search) {
-        return !!window.location.search.substr(1).split("&").find(key => key.toLowerCase().startsWith("dev"));
+        return !!window.location.search.substr(1).split("&").find(key => {
+            if (key.toLowerCase().startsWith("dev")) {
+                return key.length === 3 || key.endsWith("=true");
+            }
+            return false;
+        });
     }
 
     return false;
