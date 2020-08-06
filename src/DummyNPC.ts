@@ -5,10 +5,11 @@ import dialogData from "../assets/dummy.texts.json";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
+import { DIALOG_FONT } from "./constants";
 
 @entity("tree")
 export class DummyNPC extends NPC {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     public constructor(scene: GameScene, x: number, y:number) {

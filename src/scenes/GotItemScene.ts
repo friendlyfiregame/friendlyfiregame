@@ -5,11 +5,12 @@ import { easeOutExpo, easeInExpo } from "../easings";
 import { BitmapFont } from "../BitmapFont";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
+import { DIALOG_FONT } from "../constants";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE }
 
 export class GotItemScene extends Scene<FriendlyFire> {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("fonts/headline.font.json")
@@ -117,7 +118,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         ctx.scale(2, 2);
         const image = GotItemScene.itemImages[this.targetItem];
         ctx.drawImage(image, this.itemPosition.x / 2, this.itemPosition.y / 2);
-        
+
         ctx.restore();
     }
 }

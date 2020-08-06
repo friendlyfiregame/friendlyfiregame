@@ -424,7 +424,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Use 'jump' to overcome obstacles.:::The longer you press, the higher the jump."
+                         "value":"Use “jump” to overcome obstacles.:::The longer you press, the higher the jump."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -442,7 +442,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press 'interact' to throw your item."
+                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press “interact” to throw your item."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -550,7 +550,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Popular bird feeding spot"
+                         "value":"◊ Popular bird feeding spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -568,7 +568,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Bouncy mushrooms ahead"
+                         "value":"Bouncy mushrooms ahead →"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -604,7 +604,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Popular seed throwing spot"
+                         "value":"◊ Popular seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -622,7 +622,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Hold 'down' to fall through platforms."
+                         "value":"Hold “down” to fall through platforms."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -640,7 +640,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Advanced seed throwing spot"
+                         "value":"◊ Advanced seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -2031,7 +2031,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A strange device...:::There is no manual available."
+                         "value":"A strange device…:::There is no manual available."
                         }],
                  "rotation":0,
                  "type":"trigger",
@@ -2123,7 +2123,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A pretty normal mail box.:::Kinda stupid."
+                         "value":"A pretty normal mailbox.:::Kinda stupid."
                         }],
                  "rotation":0,
                  "type":"trigger",

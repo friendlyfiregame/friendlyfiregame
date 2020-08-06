@@ -9,14 +9,13 @@ export class Greeting implements GameObject {
     public greetingRange = 120;
     private currentMatchingGreetings: string[] = [];
     private greetingActive = false;
-    /* used to prevent multiple greetings, e.g after a dialog has ended */
+    /* used to prevent multiple greetings, e.g. after a dialog has ended. */
     private greetingAlreadyShown = false;
 
     private speechBubble = new SpeechBubble(
         this.scene,
         this.npc.x,
-        this.npc.y,
-        "white"
+        this.npc.y
     );
 
     public get dialogActive(): boolean {

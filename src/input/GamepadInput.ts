@@ -4,7 +4,7 @@ import { ControllerEventType } from "./ControllerEventType";
 import { ControllerFamily } from "./ControllerFamily";
 import { ControllerEvent } from "./ControllerEvent";
 
-// TODO Possibily these constants are for XBox gamepads only...
+// TODO Possibly these constants are for XBox gamepads only…
 enum GamePadButtonId {
     /** Button A */
     BUTTON_1 = 0,
@@ -88,7 +88,7 @@ class GamepadAxisWrapper {
      * 0.9 (much force needed) can be used here.
      *
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
-     * might lead to button flibber flubber...
+     * might lead to button flibber flubber…
      */
     private threshold = 0.5;
 

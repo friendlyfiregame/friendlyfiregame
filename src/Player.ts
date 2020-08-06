@@ -1,6 +1,6 @@
 import { SpeechBubble } from "./SpeechBubble";
 import {
-    GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
+    DIALOG_FONT, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
     PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
     PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_PADDING
 } from "./constants";
@@ -132,7 +132,7 @@ export class Player extends PhysicsEntity {
     @asset("sounds/jumping/squish.mp3")
     private static bouncingSound: Sound;
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     private lastHint = Date.now();
@@ -169,7 +169,15 @@ export class Player extends PhysicsEntity {
     private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, "white", true);
+
+    public speechBubble = new SpeechBubble(
+        this.scene,
+        this.x, this.y,
+        undefined,
+        undefined, undefined, undefined, undefined,
+        undefined,
+        true
+    );
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
@@ -446,7 +454,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y, "white", false)
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y)
         thinkBubble.setMessage(message);
         thinkBubble.show();
         await sleep(time);
@@ -551,9 +559,12 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip (text: string, buttonTag = "action", controller: ControllerFamily = this.scene.game.currentControllerFamily) {
+    private drawTooltip (
+        text: string, buttonTag = "action",
+        controller: ControllerFamily = this.scene.game.currentControllerFamily
+    ) {
         const measure = Player.font.measureText(text);
-        const gap = 4;
+        const gap = 6;
         const offsetY = 12;
         const textPositionX = Math.round(Math.round(this.x) - ((measure.width - Player.buttons.width + gap) / 2));
         const textPositionY = -this.y + offsetY;
@@ -563,7 +574,7 @@ export class Player extends PhysicsEntity {
             layer: RenderingLayer.UI,
             position: {
                 x: textPositionX - Player.buttons.width - gap,
-                y: textPositionY - 3
+                y: textPositionY
             },
             asset: Player.buttons,
             animationTag: controller + "-" + buttonTag,
@@ -888,7 +899,7 @@ export class Player extends PhysicsEntity {
             if (done) {
                 // On cloud -> make it rain
                 if (this.dance.wasSuccessful()) {
-                    // (Useless because wrong cloud but hey...)
+                    // (Useless because wrong cloud but hey…)
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);

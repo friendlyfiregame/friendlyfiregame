@@ -44,7 +44,7 @@ export const PLAYER_BOUNCE_HEIGHT = 10;
 /** Terminal velocity in m/s */
 export const TERMINAL_VELOCITY = -30;
 
-/** Threshold in seconds for allowing a jump after entering falling state  */
+/** Threshold in seconds for allowing a jump after entering falling state */
 export const PLAYER_JUMP_TIMING_THRESHOLD = 0.1;
 
 /** Color array containing all double jump particle colors */
@@ -54,3 +54,6 @@ export const DOUBLE_JUMP_COLORS = [ "#ffffff", "#cccccc", "#aaaaaa" ];
 export const PLAYER_HEIGHT = 1.60 * PIXEL_PER_METER;
 export const PLAYER_WIDTH = 0.5 * PIXEL_PER_METER;
 export const PLAYER_CARRY_PADDING = 1 * PIXEL_PER_METER;
+
+/** Fonts */
+export const DIALOG_FONT = "fonts/pixcelsior.font.json";

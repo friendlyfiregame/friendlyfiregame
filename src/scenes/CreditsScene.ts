@@ -10,6 +10,7 @@ import { TitleScene } from './TitleScene';
 import { isDev } from '../util';
 import { Aseprite } from '../Aseprite';
 import { Sound } from '../Sound';
+import { DIALOG_FONT } from "../constants";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([
@@ -57,7 +58,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
     @asset("fonts/headline.font.json")
     private static headlineFont: BitmapFont;
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static standardFont: BitmapFont;
 
     @asset("fonts/credits.font.json")
@@ -121,7 +122,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         let y = posY;
         lines.forEach(line => {
             CreditsScene.standardFont.drawText(ctx, line, posX, y, "white");
-            y += this.standardCharHeight + this.lineSpacing;
+            y += this.standardCharHeight;
         })
         return y + marginBotton;
     }
@@ -134,7 +135,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
         names.forEach(name => {
             CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
-            y += this.standardCharHeight + this.lineSpacing;
+            y += this.standardCharHeight;
         })
         return y + 40;
     }
@@ -174,15 +175,15 @@ export class CreditsScene extends Scene<FriendlyFire> {
         posY = this.drawTitle(ctx, posY, posX);
         posY = this.drawParagraph(ctx, posY, posX, [
             'Originally made as a team',
-            'effort for ludum dare 46',
+            'effort for Ludum Dare 46',
             'in three days by'
         ]);
         posY = this.drawParagraph(ctx, posY, posX, [
-            'Eduard But, Nico Huelscher,',
+            'Eduard But, Nico Hülscher,',
             'Benjamin Jung, Nils Kreutzer,',
             'Bastian Lang, Ranjit Mevius,',
-            'Markus Over, Klaus Reimer and',
-            'Jennifer van Veen'
+            'Markus Over, Klaus Reimer,',
+            'and Jennifer van Veen'
         ], 50);
         posY = this.drawCredit(ctx, posY, posX, 'GAME DESIGN', ['Everyone']);
         posY = this.drawCredit(ctx, posY, posX, 'STORY', [
@@ -192,7 +193,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Nils Kreutzer'
         ]);
         posY = this.drawCredit(ctx, posY, posX, 'PROGRAMMING', [
-            'Nico Huelscher',
+            'Nico Hülscher',
             'Benjaming Jung',
             'Nils Kreutzer',
             'Ranjit Mevius',
@@ -246,9 +247,8 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Shortened Git commit hash to provide support.
         const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
         const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 5, color);
+        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
 
         ctx.restore();
     }
-
 }

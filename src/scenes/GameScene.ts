@@ -38,6 +38,7 @@ import { Skull } from '../Skull';
 import { Chicken } from '../Chicken';
 import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
+import { DIALOG_FONT } from "../constants";
 import { Mimic } from '../Mimic';
 import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
 
@@ -120,7 +121,7 @@ export class GameScene extends Scene<FriendlyFire> {
         },
     ]
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("sounds/ending/swell.mp3")
@@ -423,7 +424,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Display FPS counter
         if (isDev()) {
-            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale, "white");
+            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale - 3, "white");
         }
         this.frameCounter++;
     }
