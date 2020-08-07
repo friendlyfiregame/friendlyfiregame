@@ -1,11 +1,12 @@
-import { entity } from "./Entity";
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from './NPC';
-import { GameObjectProperties } from './MapInfo';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { entity } from './Entity';
+import { GameObjectProperties } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { Point } from './Geometry';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 @entity("sign")
 export class Sign extends NPC {
@@ -42,16 +43,16 @@ export class Sign extends NPC {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
-            position: {
-                x: -Sign.sprite.width >> 1,
-                y: -Sign.sprite.height
-            },
+            translation: new Point(this.x, -this.y),
+            position: new Point(
+                -Sign.sprite.width >> 1,
+                -Sign.sprite.height
+            ),
             asset: Sign.sprite,
             animationTag: "idle",
             time: this.scene.gameTime * 1000
         })
-        
+
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }

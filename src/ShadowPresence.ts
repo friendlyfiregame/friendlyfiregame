@@ -1,10 +1,11 @@
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { Point } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 enum AnimationTag {
     INVISIBLE = "invisible",
@@ -33,17 +34,17 @@ export class ShadowPresence extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
+        let scale = this.direction < 0 ? new Point(-1, 1) : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
-            position: {
-                x: -ShadowPresence.sprite.width >> 1,
-                y: -ShadowPresence.sprite.height
-            },
+            translation: new Point(this.x, -this.y),
+            position: new Point(
+                -ShadowPresence.sprite.width >> 1,
+                -ShadowPresence.sprite.height
+            ),
             scale,
             asset: ShadowPresence.sprite,
             animationTag,

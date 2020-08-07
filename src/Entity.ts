@@ -2,6 +2,7 @@ import { GameObjectProperties } from "./MapInfo";
 import { GameScene, GameObject } from "./scenes/GameScene";
 import { Animator } from './Animator';
 import { RenderingType, RenderingLayer } from './Renderer';
+import { Point, Size } from './Geometry';
 
 export interface EntityDistance {
     source: Entity;
@@ -104,15 +105,12 @@ export abstract class Entity implements GameObject {
         this.scene.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.DEBUG,
-            position: {
-                x: this.getBounds().x,
-                y: -this.getBounds().y
-            },
+            position: new Point(this.getBounds().x, -this.getBounds().y),
             lineColor: "red",
-            dimension: {
-               width: this.getBounds().width,
-               height: this.getBounds().height
-            }
+            size: new Size(
+               this.getBounds().width,
+               this.getBounds().height
+            )
         })
     }
 

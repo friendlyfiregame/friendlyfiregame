@@ -2,6 +2,7 @@ import { MapObjectJSON } from '*/level.json';
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
 
+// TODO: unite with Point
 export type Vector2 = {x: number, y: number};
 
 export function rnd(minOrMax = 1, max?: number): number {

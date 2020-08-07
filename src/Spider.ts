@@ -5,6 +5,7 @@ import { asset } from "./Assets";
 import { Conversation } from './Conversation';
 import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Point } from './Geometry';
 
 interface SpiderSpriteMetadata {
     eyeOffsetFrames?: number[];
@@ -43,7 +44,7 @@ export class Spider extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(Spider.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
 
-        const scale = (this.direction < 0) ? { x: -1, y: 1 } : undefined;
+        const scale = (this.direction < 0) ? new Point(-1, 1) : undefined;
         const totalOffsetY = -10 - this.eyeOffsetY;
         const totalOffsetX = 5;
         this.scene.renderer.add({
@@ -51,14 +52,11 @@ export class Spider extends NPC {
             layer: RenderingLayer.ENTITIES,
             asset: Spider.eyes,
             scale,
-            translation: {
-                x: this.x,
-                y: -this.y,
-            },
-            position: {
-                x: (-Spider.eyes.width >> 1) + totalOffsetX,
-                y: -Spider.eyes.height + totalOffsetY
-            },
+            translation: new Point(this.x, -this.y),
+            position: new Point(
+                (-Spider.eyes.width >> 1) + totalOffsetX,
+                -Spider.eyes.height + totalOffsetY
+            ),
             animationTag: "blink",
             time: this.scene.gameTime * 1000
         });

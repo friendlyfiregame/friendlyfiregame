@@ -1,9 +1,10 @@
-import { NPC } from './NPC';
-import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
-import { SpeechBubble } from './SpeechBubble';
-import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
-import { GameScene, GameObject } from "./scenes/GameScene";
+import { GameScene, GameObject } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { Point } from './Geometry';
+import { rndItem } from './util';
+import { ScriptedDialogJSON } from '../assets/dummy.texts.json';
+import { SpeechBubble } from './SpeechBubble';
 
 export class Greeting implements GameObject {
     public greetingRange = 120;
@@ -14,8 +15,7 @@ export class Greeting implements GameObject {
 
     private speechBubble = new SpeechBubble(
         this.scene,
-        this.npc.x,
-        this.npc.y
+        new Point(this.npc.x, this.npc.y)
     );
 
     public get dialogActive(): boolean {

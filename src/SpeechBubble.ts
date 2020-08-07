@@ -2,33 +2,34 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
 import { GameScene } from "./scenes/GameScene";
+import { Padding, Point, Size } from "./Geometry";
 import { RenderingType, RenderingLayer } from './Renderer';
 import { sleep } from "./util";
 
 export function roundRect(
-    ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
+    ctx: CanvasRenderingContext2D, position: Point, size: Size, r: number,
     up = false, tipOffset = 0
 ): CanvasRenderingContext2D {
-    const halfWidth = w / 2;
-    const halfHeight = h / 2;
-    const middlePos = x + halfWidth;
-    const rightPos = x + w;
-    const bottomPos = y + h;
+    const halfWidth = size.width / 2;
+    const halfHeight = size.height / 2;
+    const middlePos = position.x + halfWidth;
+    const rightPos = position.x + size.width;
+    const bottomPos = position.y + size.height;
 
-    if (w < 2 * r) { r = halfWidth };
-    if (h < 2 * r) { r = halfHeight };
+    if (size.width < 2 * r) { r = halfWidth };
+    if (size.height < 2 * r) { r = halfHeight };
 
     ctx.beginPath();
-    ctx.moveTo(x + r, y);
+    ctx.moveTo(position.x + r, position.y);
 
     if (up) {
-        ctx.lineTo(middlePos - 4, y);
-        ctx.lineTo(middlePos, y - 4);
-        ctx.lineTo(middlePos + 4, y);
+        ctx.lineTo(middlePos - 4, position.y);
+        ctx.lineTo(middlePos, position.y - 4);
+        ctx.lineTo(middlePos + 4, position.y);
     }
 
-    ctx.arcTo(rightPos, y, rightPos, bottomPos, r);
-    ctx.arcTo(rightPos, bottomPos, x, bottomPos, r);
+    ctx.arcTo(rightPos, position.y, rightPos, bottomPos, r);
+    ctx.arcTo(rightPos, bottomPos, position.y, bottomPos, r);
 
     if (!up) {
         ctx.lineTo(middlePos - 4 + tipOffset, bottomPos);
@@ -36,8 +37,8 @@ export function roundRect(
         ctx.lineTo(middlePos + 4 + tipOffset, bottomPos);
     }
 
-    ctx.arcTo(x, bottomPos, x, y, r);
-    ctx.arcTo(x, y, rightPos, y, r);
+    ctx.arcTo(position.x, bottomPos, position.x, position.y, r);
+    ctx.arcTo(position.x, position.y, rightPos, position.y, r);
     ctx.closePath();
 
     return ctx;
@@ -58,8 +59,6 @@ export class SpeechBubble {
 
     private x: number;
     private y: number;
-    private paddingHorizontal: number;
-    private paddingVertical: number;
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
@@ -72,21 +71,15 @@ export class SpeechBubble {
 
     constructor(
         private scene: GameScene,
-        public anchorX: number,
-        public anchorY: number,
+        public anchor: Point,
         private lineHeightFactor = 1,
-        private paddingTop = 3,
-        private paddingBottom = 4,
-        private paddingLeft = 6,
-        private paddingRight = 6,
+        private padding = new Padding(3, 6, 4, 6),
         private color = "white",
         private relativeToScreen = false
     ) {
-        this.x = Math.round(anchorX + this.offset.x);
-        this.y = Math.round(anchorY + this.offset.y);
+        this.x = Math.round(anchor.x + this.offset.x);
+        this.y = Math.round(anchor.y + this.offset.y);
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
-        this.paddingHorizontal = this.paddingLeft + this.paddingRight;
-        this.paddingVertical = this.paddingTop + this.paddingBottom;
     }
 
     public show() {
@@ -145,7 +138,7 @@ export class SpeechBubble {
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
+        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.padding.vertical;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -178,14 +171,14 @@ export class SpeechBubble {
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
-            position: {
-                x: posX - Math.round(metrics.width / 2) - this.paddingLeft,
-                y: -posY - this.height
-            },
-            dimension: {
-                width: metrics.width + this.paddingHorizontal,
-                height: this.height
-            },
+            position: new Point(
+                posX - Math.round(metrics.width / 2) - this.padding.left,
+                -posY - this.height
+            ),
+            size: new Size(
+                metrics.width + this.padding.horizontal,
+                this.height
+            ),
             radius: 5,
             relativeToScreen: this.relativeToScreen,
             offsetX
@@ -195,7 +188,7 @@ export class SpeechBubble {
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.padding.top);
 
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
@@ -203,17 +196,14 @@ export class SpeechBubble {
                 text: this.messageLines[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: {
-                    x: textXPos,
-                    y: textYPos
-                },
+                position: new Point(textXPos, textYPos),
                 asset: font,
             })
         }
 
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.padding.top);
 
             if (isSelected) {
                 this.scene.renderer.add({
@@ -222,10 +212,7 @@ export class SpeechBubble {
                     text: "►",
                     textColor: textColor,
                     relativeToScreen: this.relativeToScreen,
-                    position: {
-                        x: textXPos,
-                        y: textYPos
-                    },
+                    position: new Point(textXPos, textYPos),
                     asset: font
                 })
             }
@@ -236,66 +223,11 @@ export class SpeechBubble {
                 text: this.options[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: {
-                    x: textXPos + 11,
-                    y: textYPos
-                },
+                position: new Point(textXPos + 11, textYPos),
                 asset: font
             })
         }
     }
-
-    // draw2(ctx: CanvasRenderingContext2D): void {
-    //     if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
-    //         return;
-    //     }
-
-    //     ctx.save();
-    //     const font = SpeechBubble.font;
-    //     const longestLine = this.contentLinesByLength[0];
-    //     const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
-
-    //     let posX = this.x;
-    //     let posY = this.y;
-    //     let offsetX = 0;
-    //     if (this.relativeToScreen) {
-    //         ctx.setTransform(1, 0, 0, 1, 0, 0);
-    //         posX = ctx.canvas.width / 2;
-    //         posY = - ctx.canvas.height * 0.63 - this.height;
-    //     } else {
-    //         // Check if Speech Bubble clips the viewport and correct position
-    //         const visibleRect = this.scene.camera.getVisibleRect()
-    //         const relativeX = posX - visibleRect.x;
-    //         const clipAmount = Math.max((metrics.width / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (metrics.width / 2), 0);
-
-    //         if (clipAmount !== 0) {
-    //             offsetX = clipAmount + (10 * Math.sign(clipAmount));
-    //         }
-    //     }
-
-    //     posX -= offsetX;
-
-    //     ctx.beginPath();
-    //     ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
-    //         this.relativeToScreen, offsetX);
-    //     ctx.fillStyle = this.color;
-    //     ctx.fill();
-
-    //     let messageLineOffset = 4;
-    //     for (let i = 0; i < this.messageLines.length; i++) {
-    //         font.drawText(ctx, this.messageLines[i], Math.round(posX - metrics.width / 2),
-    //             Math.round(-posY - this.height + 4 + (i * this.lineHeight)), "black");
-    //         messageLineOffset += 4;
-    //     }
-    //     for (let i = 0; i < this.options.length; i++) {
-    //         const isSelected = this.selectedOptionIndex === i;
-    //         const selectionIndicator = isSelected ? "►" : " ";
-    //         font.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2),
-    //             Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight)), "black");
-    //     }
-
-    //     ctx.restore();
-    // }
 
     update(anchorX: number, anchorY: number): void {
         this.x = Math.round(anchorX + this.offset.x);

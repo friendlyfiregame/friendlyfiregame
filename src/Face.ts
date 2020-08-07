@@ -1,8 +1,9 @@
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { RenderingType, RenderingLayer } from './Renderer';
+import { RenderingLayer, RenderingType } from './Renderer';
+import { Point } from './Geometry';
 
 export enum FaceModes {
     BLINK = "blink",
@@ -52,18 +53,15 @@ export class Face {
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
             asset: sprite,
-            scale: {
-                x: this.direction,
-                y: 1
-            },
-            translation: {
-                x: this.owner.x + this.offX,
-                y: -this.owner.y - this.offY
-            },
-            position: {
-                x: -sprite.width >> 1,
-                y: -sprite.height
-            },
+            scale: new Point(this.direction, 1),
+            translation: new Point(
+                this.owner.x + this.offX,
+                -this.owner.y - this.offY
+            ),
+            position: new Point(
+                -sprite.width >> 1,
+                -sprite.height
+            ),
             animationTag: this.mode,
             time: this.scene.gameTime * 1000
         });

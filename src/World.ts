@@ -1,11 +1,12 @@
-import { getImageData } from "./graphics";
-import { ParticleEmitter, valueCurves, Particles } from "./Particles";
-import { rnd, rndInt, boundsFromMapObject } from "./util";
-import { asset } from "./Assets";
-import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
-import { Entity, Bounds } from './Entity';
+import { asset } from './Assets';
+import { Bounds, Entity } from './Entity';
+import { boundsFromMapObject, rnd, rndInt } from './util';
+import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScene';
 import { GameObjectInfo } from './MapInfo';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { getImageData } from './graphics';
+import { ParticleEmitter, Particles, valueCurves } from './Particles';
+import { Point } from './Geometry';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export enum Environment {
     AIR = 0,
@@ -81,8 +82,8 @@ export class World implements GameObject {
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
             layer: RenderingLayer.TILEMAP_MAP,
-            translation: { x: camX, y: -camY },
-            position: { x: -camX, y: -this.getHeight() + camY },
+            translation: new Point(camX, -camY),
+            position: new Point(-camX, -this.getHeight() + camY),
             asset: World.foreground
         })
 
@@ -92,11 +93,11 @@ export class World implements GameObject {
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
-                translation: { x: camX, y: -camY },
-                position: {
-                    x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
-                    y: (-this.getHeight() + camY) / bgY
-                },
+                translation: new Point(camX, -camY),
+                position: new Point(
+                    (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                    (-this.getHeight() + camY) / bgY
+                ),
                 asset: background
             })
         }

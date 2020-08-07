@@ -6,6 +6,7 @@ import {
 } from "./constants";
 import { NPC } from './NPC';
 import { PhysicsEntity } from "./PhysicsEntity";
+import { Point } from './Geometry';
 import { Snowball } from "./Snowball";
 import { Environment } from "./World";
 import { valueCurves, ParticleEmitter } from './Particles';
@@ -172,9 +173,9 @@ export class Player extends PhysicsEntity {
 
     public speechBubble = new SpeechBubble(
         this.scene,
-        this.x, this.y,
+        new Point(this.x, this.y),
         undefined,
-        undefined, undefined, undefined, undefined,
+        undefined,
         undefined,
         true
     );
@@ -454,7 +455,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y)
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, new Point(this.x, this.y));
         thinkBubble.setMessage(message);
         thinkBubble.show();
         await sleep(time);
@@ -572,10 +573,10 @@ export class Player extends PhysicsEntity {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
-            position: {
-                x: textPositionX - Player.buttons.width - gap,
-                y: textPositionY
-            },
+            position: new Point(
+                textPositionX - Player.buttons.width - gap,
+                textPositionY
+            ),
             asset: Player.buttons,
             animationTag: controller + "-" + buttonTag,
         })
@@ -586,10 +587,7 @@ export class Player extends PhysicsEntity {
             text,
             textColor: "white",
             outlineColor: "black",
-            position: {
-                x: textPositionX,
-                y: textPositionY
-            },
+            position: new Point(textPositionX, textPositionY),
             asset: Player.font,
         })
     }

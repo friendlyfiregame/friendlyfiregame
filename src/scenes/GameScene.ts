@@ -41,6 +41,7 @@ import { Portal } from '../Portal';
 import { DIALOG_FONT } from "../constants";
 import { Mimic } from '../Mimic';
 import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
+import { Point, Size } from '../Geometry';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -433,15 +434,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.DEBUG,
-            position: {
-                x: bounds.x,
-                y: -bounds.y
-            },
+            position: new Point(bounds.x, -bounds.y),
             lineColor: color,
-            dimension: {
-               width: bounds.width,
-               height: bounds.height
-            }
+            size: new Size(bounds.width, bounds.height)
         })
     }
 
@@ -525,12 +520,12 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
-            position: { x: 0, y: 0 },
+            position: new Point(0, 0),
             fillColor: "darkred",
             globalCompositeOperation: "color",
             alpha: 0.7 * this.apocalypseFactor,
             relativeToScreen: true,
-            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
+            size: new Size(ctx.canvas.width, ctx.canvas.height)
         })
     }
 
@@ -538,16 +533,16 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
-            position: { x: 0, y: 0 },
+            position: new Point(0, 0),
             fillColor: color,
             alpha,
             relativeToScreen: true,
-            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
+            size: new Size(ctx.canvas.width, ctx.canvas.height)
         })
     }
 
     public loadApocalypse() {
-        this.fireEffects = [1, 2].map(num =>  new FireGfx(32, 24, true, 2));
+        this.fireEffects = [1, 2].map(num => new FireGfx(32, 24, true, 2));
         this.fireEmitter = this.particles.createEmitter({
             position: {x: this.player.x, y: this.player.y},
             offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
