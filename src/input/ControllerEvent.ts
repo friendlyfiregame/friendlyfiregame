@@ -65,12 +65,20 @@ export class ControllerEvent extends Object {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_DROP) === ControllerIntent.PLAYER_DROP;
     }
 
+    get isPlayerEnterDoor(): boolean {
+        return (this[intentsSymbol] & ControllerIntent.PLAYER_ENTER_DOOR) === ControllerIntent.PLAYER_ENTER_DOOR;
+    }
+
     get isPlayerInteract(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_INTERACT) === ControllerIntent.PLAYER_INTERACT;
     }
 
     get isPlayerAction(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_ACTION) === ControllerIntent.PLAYER_ACTION;
+    }
+
+    get isPlayerRun(): boolean {
+        return (this[intentsSymbol] & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
     }
 
     get isPlayerDance1(): boolean {

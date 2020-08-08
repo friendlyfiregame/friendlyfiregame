@@ -21,10 +21,10 @@ export enum ControllerIntent {
     /** Player movement: DROP (or: duck/crouch) */
     PLAYER_DROP = 0b0000_0000_0000_1000,
 
-    /** Enter Doors, Read signs etc */
+    /** Talk to NPCs, read Signs etc */
     PLAYER_INTERACT = 0b0000_0000_0001_0000,
 
-    /** Action, throw stuff, run, shoot */
+    /** Action, throw stuff */
     PLAYER_ACTION = 0b0000_0000_0010_0000,
 
     /** Dance move no. 1 */
@@ -41,11 +41,16 @@ export enum ControllerIntent {
 
     /** The key usually known as "enter" or something alike. */
     CONFIRM = 0b0001_0000_0000_0000,
-    UNUSED_2 = 0b0010_0000_0000_0000,
+
+    /** Go through doors */
+    PLAYER_ENTER_DOOR = 0b0010_0000_0000_0000,
 
     /** Pause/unpause. */
     PAUSE = 0b0100_0000_0000_0000,
 
     /** Back / abort / get-me-the-hell-out-of-here. */
-    ABORT = 0b1000_0000_0000_0000
+    ABORT = 0b1000_0000_0000_0000,
+
+    /** Run modifier */
+    PLAYER_RUN = 0b0000_0000_0000_0011,
 }

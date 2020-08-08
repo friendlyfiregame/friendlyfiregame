@@ -145,8 +145,8 @@ export class Player extends PhysicsEntity {
     private moveRight: boolean = false;
     private visible = false;
 
-    private doubleTapThreshold = 0.5;
-    private doubleTapTimestamp = 0;
+    // private doubleTapThreshold = 0.5;
+    // private doubleTapTimestamp = 0;
     private running: boolean = false;
 
     private jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
@@ -323,24 +323,24 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
-    private handleRunningCheck (direction: number): void {
-        if (!this.canRun) return;
+    // private handleRunningCheck (direction: number): void {
+    //     if (!this.canRun) return;
 
-        if (this.carrying) {
-            this.running = false;
-            return;
-        }
-        if (this.direction === direction) {
-            if (this.scene.gameTime <= this.doubleTapTimestamp + this.doubleTapThreshold) {
-                this.running = true;
-            } else {
-                this.doubleTapTimestamp = this.scene.gameTime;
-            }
-        } else {
-            this.doubleTapTimestamp = this.scene.gameTime;
-            this.running = false;
-        }
-    }
+    //     if (this.carrying) {
+    //         this.running = false;
+    //         return;
+    //     }
+    //     if (this.direction === direction) {
+    //         if (this.scene.gameTime <= this.doubleTapTimestamp + this.doubleTapThreshold) {
+    //             this.running = true;
+    //         } else {
+    //             this.doubleTapTimestamp = this.scene.gameTime;
+    //         }
+    //     } else {
+    //         this.doubleTapTimestamp = this.scene.gameTime;
+    //         this.running = false;
+    //     }
+    // }
 
     public async handleButtonDown(event: ControllerEvent) {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
@@ -361,11 +361,11 @@ export class Player extends PhysicsEntity {
         if (event.isPlayerMoveRight) {
             this.moveRight = true;
             this.moveLeft = false;
-            this.handleRunningCheck(1);
+            // this.handleRunningCheck(1);
         } else if (event.isPlayerMoveLeft) {
             this.moveLeft = true;
             this.moveRight = false;
-            this.handleRunningCheck(-1);
+            // this.handleRunningCheck(-1);
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
             if (!this.flying) {

@@ -7,17 +7,19 @@ import { ControllerFamily } from "./ControllerFamily";
 
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
 keyToIntentMappings.set(" ", [ControllerIntent.PLAYER_JUMP]);
-keyToIntentMappings.set("w", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("w", [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
 keyToIntentMappings.set("a", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
 keyToIntentMappings.set("s", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
 keyToIntentMappings.set("d", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
-keyToIntentMappings.set("ArrowUp", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("ArrowUp", [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
 keyToIntentMappings.set("ArrowDown", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
 keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
 keyToIntentMappings.set("ArrowRight", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
-keyToIntentMappings.set("Enter", [ControllerIntent.PLAYER_ACTION, ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("Enter", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
 keyToIntentMappings.set("Escape", [ControllerIntent.ABORT, ControllerIntent.PAUSE]);
-keyToIntentMappings.set("e", [ControllerIntent.PLAYER_ACTION, ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("Shift", [ControllerIntent.PLAYER_RUN]);
+keyToIntentMappings.set("e", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("f", [ControllerIntent.PLAYER_ACTION]);
 keyToIntentMappings.set("1", [ControllerIntent.PLAYER_DANCE_1]);
 keyToIntentMappings.set("2", [ControllerIntent.PLAYER_DANCE_2]);
 
