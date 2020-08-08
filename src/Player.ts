@@ -24,7 +24,7 @@ import { BitmapFont } from "./BitmapFont";
 import { GameScene, FadeDirection, BgmId } from "./scenes/GameScene";
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { Conversation } from './Conversation';
-import { ControllerFamily } from "./input/ControllerFamily";
+import { ControllerSpriteMap, ControllerAnimationTags } from "./input/ControllerFamily";
 import { ControllerEvent } from './input/ControllerEvent';
 import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
@@ -32,6 +32,7 @@ import { Sign } from './Sign';
 import { Wall } from './Wall';
 import { RenderingType, RenderingLayer } from './Renderer';
 import { ConversationProxy } from './ConversationProxy';
+import { ControllerManager } from './input/ControllerManager';
 
 const groundColors = [
     "#806057",
@@ -99,8 +100,17 @@ export class Player extends PhysicsEntity {
     ])
     public static playerSprites: Aseprite[];
 
-    @asset("sprites/buttons.aseprite.json")
-    public static buttons: Aseprite;
+    @asset([
+        "sprites/buttons_keyboard.aseprite.json",
+        "sprites/buttons_xbox.aseprite.json",
+        "sprites/buttons_playstation.aseprite.json"
+    ])
+    public static buttons: Aseprite[];
+    public controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
+        [ControllerSpriteMap.KEYBOARD]: Player.buttons[0],
+        [ControllerSpriteMap.XBOX]: Player.buttons[1],
+        [ControllerSpriteMap.PLAYSTATION]: Player.buttons[2]
+    };
 
     @asset("sounds/drowning/drowning.mp3")
     private static drowningSound: Sound;
@@ -323,25 +333,6 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
-    // private handleRunningCheck (direction: number): void {
-    //     if (!this.canRun) return;
-
-    //     if (this.carrying) {
-    //         this.running = false;
-    //         return;
-    //     }
-    //     if (this.direction === direction) {
-    //         if (this.scene.gameTime <= this.doubleTapTimestamp + this.doubleTapThreshold) {
-    //             this.running = true;
-    //         } else {
-    //             this.doubleTapTimestamp = this.scene.gameTime;
-    //         }
-    //     } else {
-    //         this.doubleTapTimestamp = this.scene.gameTime;
-    //         this.running = false;
-    //     }
-    // }
-
     public async handleButtonDown(event: ControllerEvent) {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
@@ -358,40 +349,34 @@ export class Player extends PhysicsEntity {
             return;
         }
 
+        if (this.canRun && event.isPlayerRun) {
+            this.running = true;
+        }
+
         if (event.isPlayerMoveRight) {
             this.moveRight = true;
             this.moveLeft = false;
-            if (event.isPlayerRun) {
-                console.log('run');
-            }
-            // this.handleRunningCheck(1);
         } else if (event.isPlayerMoveLeft) {
             this.moveLeft = true;
             this.moveRight = false;
-            if (event.isPlayerRun) {
-                console.log('run');
-            }
-            // this.handleRunningCheck(-1);
+        } else if (event.isPlayerEnterDoor) {
+            if (!this.canEnterDoor()) return;
+            const gate = this.scene.world.getGateCollisions(this)[0];
+            this.enterGate(gate);
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
             if (!this.flying) {
-                const gate = this.scene.world.getGateCollisions(this)[0];
-                if (gate && !this.carrying) {
-                    this.enterGate(gate);
-                    return;
-                } else {
-                    if (this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
-                        const conversation = this.closestNPC.conversation;
-                        // Disable auto movement to a safe talking distance for the stone in the river
-                        const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
-                        this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
-                    } else if (this.readableTrigger) {
-                        const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
-                        this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
-                    } else if (this.canDanceToMakeRain()) {
-                        this.startDance(this.scene.apocalypse ? 3 : 2);
-                        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
-                    }
+                if (this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                    const conversation = this.closestNPC.conversation;
+                    // Disable auto movement to a safe talking distance for the stone in the river
+                    const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
+                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+                } else if (this.readableTrigger) {
+                    const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
+                    this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
+                } else if (this.canDanceToMakeRain()) {
+                    this.startDance(this.scene.apocalypse ? 3 : 2);
+                    this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
                 }
             }
         } else if (event.isPlayerAction) {
@@ -449,8 +434,12 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
+                this.canRun = true;
+                this.canRainDance = true;
+                this.think("I can everything now", 1500);
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
+                this.think("Toggling Bounds", 1500);
             }
         }
     }
@@ -554,36 +543,38 @@ export class Player extends PhysicsEntity {
         }
         if (event.isPlayerMoveRight) {
             this.moveRight = false;
-            this.running = false;
         } else if (event.isPlayerMoveLeft) {
             this.moveLeft = false;
-            this.running = false;
         } else if (event.isPlayerJump) {
             this.jumpKeyPressed = false;
         } else if (event.isPlayerDrop) {
             this.jumpDown = false;
+        } else if (event.isPlayerRun) {
+            this.running = false;
         }
     }
 
     private drawTooltip (
-        text: string, buttonTag = "action",
-        controller: ControllerFamily = this.scene.game.currentControllerFamily
+        text: string,
+        buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
     ) {
         const measure = Player.font.measureText(text);
         const gap = 6;
         const offsetY = 12;
-        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - Player.buttons.width + gap) / 2));
+        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap) / 2));
         const textPositionY = -this.y + offsetY;
+
+        const controllerSprite = ControllerManager.getInstance().controllerSprite;
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
             position: {
-                x: textPositionX - Player.buttons.width - gap,
+                x: textPositionX - this.controllerSpriteMapRecords[controllerSprite].width - gap,
                 y: textPositionY
             },
-            asset: Player.buttons,
-            animationTag: controller + "-" + buttonTag,
+            asset: this.controllerSpriteMapRecords[controllerSprite],
+            animationTag: buttonTag,
         })
 
         this.scene.renderer.add({
@@ -614,17 +605,17 @@ export class Player extends PhysicsEntity {
         if (this.scene.showBounds) this.drawBounds();
 
         if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
-            this.drawTooltip(this.closestNPC.getInteractionText(), "up");
+            this.drawTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
         } else if (this.readableTrigger) {
-            this.drawTooltip("Examine", "up");
+            this.drawTooltip("Examine", ControllerAnimationTags.INTERACT);
         } else if (this.canEnterDoor()) {
-            this.drawTooltip("Enter", "up");
+            this.drawTooltip("Enter", ControllerAnimationTags.OPEN_DOOR);
         } else if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip("Throw stone", "interact");
+            this.drawTooltip("Throw stone", ControllerAnimationTags.ACTION);
         } else if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip("Plant seed", "interact");
+            this.drawTooltip("Plant seed", ControllerAnimationTags.ACTION);
         } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip("Dance", "up");
+            this.drawTooltip("Dance", ControllerAnimationTags.INTERACT);
         }
 
         if (this.dance) {

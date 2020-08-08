@@ -1,7 +1,7 @@
 import { GAME_CANVAS_WIDTH, GAME_CANVAS_HEIGHT } from "./constants";
 import { createCanvas, getRenderingContext } from "./graphics";
 import { clamp } from "./util";
-import { ControllerFamily } from "./input/ControllerFamily";
+import { ControllerFamily, GamepadStyle } from "./input/ControllerFamily";
 import { ControllerManager } from "./input/ControllerManager";
 import { Keyboard } from "./input/Keyboard";
 import { GamepadInput } from "./input/GamepadInput";
@@ -125,5 +125,9 @@ export abstract class Game {
      */
     public get currentControllerFamily(): ControllerFamily {
         return this.controllerManager.currentControllerFamily;
+    }
+
+    public get selectedGamepadStyle(): GamepadStyle {
+        return this.controllerManager.selectedGamepadStyle;
     }
 }

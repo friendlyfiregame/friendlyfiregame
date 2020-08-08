@@ -88,9 +88,9 @@
   "size": { "w": 140, "h": 14 },
   "scale": "1",
   "frameTags": [
-   { "name": "keyboard-action", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "keyboard-interact", "from": 0, "to": 0, "direction": "forward" },
    { "name": "keyboard-up", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "keyboard-interact", "from": 2, "to": 2, "direction": "forward" },
+   { "name": "keyboard-action", "from": 2, "to": 2, "direction": "forward" },
    { "name": "gamepad-jump", "from": 3, "to": 3, "direction": "forward" },
    { "name": "gamepad-button-a", "from": 3, "to": 3, "direction": "forward" },
    { "name": "gamepad-back", "from": 4, "to": 4, "direction": "forward" },

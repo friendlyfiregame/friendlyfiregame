@@ -1,5 +1,5 @@
 import { ControllerEvent } from "./ControllerEvent";
-import { ControllerFamily } from "./ControllerFamily";
+import { ControllerFamily, GamepadStyle, ControllerSpriteMap } from "./ControllerFamily";
 import { Signal } from "../Signal";
 
 /** Symbol to identify the current/active controller family */
@@ -15,6 +15,8 @@ export class ControllerManager {
     public readonly onButtonDown = new Signal<ControllerEvent>();
     public readonly onButtonUp = new Signal<ControllerEvent>();
     public readonly onButtonPress = new Signal<ControllerEvent>();
+
+    public selectedGamepadStyle = GamepadStyle.PLAYSTATION;
 
     private [currentControllerFamilySymbol]: ControllerFamily;
     private constructor(initialControllerFamily: ControllerFamily = ControllerFamily.KEYBOARD) {
@@ -37,6 +39,17 @@ export class ControllerManager {
      */
     public get currentControllerFamily(): ControllerFamily {
         return this[currentControllerFamilySymbol];
+    }
+
+    public get controllerSprite (): ControllerSpriteMap {
+        if (this.currentControllerFamily === ControllerFamily.GAMEPAD) {
+            switch(ControllerManager.getInstance().selectedGamepadStyle) {
+                case GamepadStyle.PLAYSTATION: return ControllerSpriteMap.PLAYSTATION;
+                case GamepadStyle.XBOX: return ControllerSpriteMap.XBOX;
+            }
+        }
+        // Fallback to Keyboard
+        return ControllerSpriteMap.KEYBOARD
     }
 
 }

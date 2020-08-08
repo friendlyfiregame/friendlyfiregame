@@ -17,11 +17,12 @@ keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, Control
 keyToIntentMappings.set("ArrowRight", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
 keyToIntentMappings.set("Enter", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
 keyToIntentMappings.set("Escape", [ControllerIntent.ABORT, ControllerIntent.PAUSE]);
-keyToIntentMappings.set("Shift", [ControllerIntent.PLAYER_RUN]);
+keyToIntentMappings.set("ShiftLeft", [ControllerIntent.PLAYER_RUN]);
+keyToIntentMappings.set("ShiftRight", [ControllerIntent.PLAYER_RUN]);
 keyToIntentMappings.set("KeyE", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
 keyToIntentMappings.set("KeyF", [ControllerIntent.PLAYER_ACTION]);
-keyToIntentMappings.set("Key1", [ControllerIntent.PLAYER_DANCE_1]);
-keyToIntentMappings.set("Key2", [ControllerIntent.PLAYER_DANCE_2]);
+keyToIntentMappings.set("Digit1", [ControllerIntent.PLAYER_DANCE_1]);
+keyToIntentMappings.set("Digit2", [ControllerIntent.PLAYER_DANCE_2]);
 
 export class Keyboard {
     public readonly onKeyDown = new Signal<KeyboardEvent>();
@@ -41,7 +42,6 @@ export class Keyboard {
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
-        console.log(event);
         if (!event.repeat) {
             this.pressed.add(event.key);
         }
