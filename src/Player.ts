@@ -361,10 +361,16 @@ export class Player extends PhysicsEntity {
         if (event.isPlayerMoveRight) {
             this.moveRight = true;
             this.moveLeft = false;
+            if (event.isPlayerRun) {
+                console.log('run');
+            }
             // this.handleRunningCheck(1);
         } else if (event.isPlayerMoveLeft) {
             this.moveLeft = true;
             this.moveRight = false;
+            if (event.isPlayerRun) {
+                console.log('run');
+            }
             // this.handleRunningCheck(-1);
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
