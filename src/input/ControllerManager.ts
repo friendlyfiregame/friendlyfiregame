@@ -16,7 +16,7 @@ export class ControllerManager {
     public readonly onButtonUp = new Signal<ControllerEvent>();
     public readonly onButtonPress = new Signal<ControllerEvent>();
 
-    public selectedGamepadStyle = GamepadStyle.PLAYSTATION;
+    public selectedGamepadStyle = GamepadStyle.XBOX;
 
     private [currentControllerFamilySymbol]: ControllerFamily;
     private constructor(initialControllerFamily: ControllerFamily = ControllerFamily.KEYBOARD) {
