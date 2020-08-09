@@ -1,7 +1,6 @@
 import { GAME_CANVAS_WIDTH, GAME_CANVAS_HEIGHT } from "./constants";
 import { createCanvas, getRenderingContext } from "./graphics";
 import { clamp } from "./util";
-import { ControllerFamily, GamepadStyle } from "./input/ControllerFamily";
 import { ControllerManager } from "./input/ControllerManager";
 import { Keyboard } from "./input/Keyboard";
 import { GamepadInput } from "./input/GamepadInput";
@@ -117,17 +116,5 @@ export abstract class Game {
             cancelAnimationFrame(this.gameLoopId);
             this.gameLoopId = null;
         }
-    }
-
-    /**
-     * Returns the current controller family type (Gamepad, Keyboard) that
-     * is being used to play the game.
-     */
-    public get currentControllerFamily(): ControllerFamily {
-        return this.controllerManager.currentControllerFamily;
-    }
-
-    public get selectedGamepadStyle(): GamepadStyle {
-        return this.controllerManager.selectedGamepadStyle;
     }
 }
