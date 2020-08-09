@@ -17,7 +17,7 @@
         "I'll talk to you after you prove you're worthy.",
         "[$ismale]Show me your moves, boy!",
         "[not $ismale]Show me your moves, girl!",
-        "You'll need your 1 and 2 keys for this exercise. Get ready! @danced !end !dance 1"
+        "Follow the beat! Get ready! @danced !end !dance 1"
     ],
     "danced": [
         "Your little dance amuses me. You're keeping the beat alive! !amused",

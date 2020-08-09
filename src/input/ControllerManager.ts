@@ -6,7 +6,6 @@ import { Signal } from "../Signal";
 const currentControllerFamilySymbol = Symbol("currentControllerFamily");
 
 export class ControllerManager {
-
     private static readonly INSTANCE = new ControllerManager();
     public static getInstance(): ControllerManager {
         return ControllerManager.INSTANCE;
@@ -39,6 +38,10 @@ export class ControllerManager {
      */
     public get currentControllerFamily(): ControllerFamily {
         return this[currentControllerFamilySymbol];
+    }
+
+    public toggleSelectedGamepadStyle (): void {
+        this.selectedGamepadStyle = this.selectedGamepadStyle === GamepadStyle.XBOX ? GamepadStyle.PLAYSTATION : GamepadStyle.XBOX;
     }
 
     public get controllerSprite (): ControllerSpriteMap {

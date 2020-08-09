@@ -29,5 +29,6 @@ export enum ControllerSpriteMap {
 export enum ControllerAnimationTags {
     ACTION = 'action',
     INTERACT = 'interact',
-    OPEN_DOOR = 'up'
+    OPEN_DOOR = 'up',
+    BACK = 'back'
 }
