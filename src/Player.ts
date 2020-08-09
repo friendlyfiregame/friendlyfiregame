@@ -556,13 +556,13 @@ export class Player extends PhysicsEntity {
         text: string,
         buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
     ) {
+        const controllerSprite = ControllerManager.getInstance().controllerSprite;
         const measure = Player.font.measureText(text);
         const gap = 6;
         const offsetY = 12;
-        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap) / 2));
+        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
         const textPositionY = -this.y + offsetY;
 
-        const controllerSprite = ControllerManager.getInstance().controllerSprite;
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
