@@ -155,8 +155,6 @@ export class Player extends PhysicsEntity {
     private moveRight: boolean = false;
     private visible = false;
 
-    // private doubleTapThreshold = 0.5;
-    // private doubleTapTimestamp = 0;
     private running: boolean = false;
 
     private jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
