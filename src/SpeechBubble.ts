@@ -175,6 +175,7 @@ export class SpeechBubble {
         posX -= offsetX;
 
         const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.paddingLeft;
+        const bubbleYPos = -posY - this.height;
 
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,
@@ -182,7 +183,7 @@ export class SpeechBubble {
             fillColor: this.color,
             position: {
                 x: bubbleXPos,
-                y: -posY - this.height
+                y: bubbleYPos
             },
             dimension: {
                 width: this.longestLine + this.paddingHorizontal,
@@ -197,7 +198,7 @@ export class SpeechBubble {
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
+            const textYPos = Math.round(bubbleYPos + this.paddingTop + i * this.lineHeight);
 
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
@@ -215,7 +216,7 @@ export class SpeechBubble {
 
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
+            const textYPos = Math.round(bubbleYPos + this.paddingTop + i * this.lineHeight);
 
             if (isSelected) {
                 this.scene.renderer.add({
