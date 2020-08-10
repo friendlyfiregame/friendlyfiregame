@@ -174,12 +174,14 @@ export class SpeechBubble {
 
         posX -= offsetX;
 
+        const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.paddingLeft;
+
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
             position: {
-                x: posX - Math.round(this.longestLine / 2) - this.paddingLeft,
+                x: bubbleXPos,
                 y: -posY - this.height
             },
             dimension: {
@@ -191,7 +193,7 @@ export class SpeechBubble {
             offsetX
         });
 
-        const textXPos = Math.round(posX - this.longestLine / 2);
+        const textXPos = bubbleXPos + this.paddingLeft;
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
