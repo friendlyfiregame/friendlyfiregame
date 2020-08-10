@@ -1,5 +1,6 @@
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { ConversationLine } from './Conversation';
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
 import { GameScene } from "./scenes/GameScene";
 import { RenderingType, RenderingLayer } from './Renderer';
@@ -218,7 +219,7 @@ export class SpeechBubble {
                 this.scene.renderer.add({
                     type: RenderingType.TEXT,
                     layer: RenderingLayer.UI,
-                    text: "►",
+                    text: ConversationLine.OPTION_MARKER,
                     textColor: textColor,
                     relativeToScreen: this.relativeToScreen,
                     position: {

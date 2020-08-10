@@ -192,6 +192,7 @@ export class Conversation {
 const MAX_CHARS_PER_LINE = 50;
 
 export class ConversationLine {
+    public static OPTION_MARKER = '►';
     public readonly line: string;
     public readonly condition: string | null;
     public readonly targetState: string | null;
@@ -245,7 +246,7 @@ export class ConversationLine {
 
     private static extractText(line: string, autoWrap = false): string {
         // Remove player option sign
-        if (line.startsWith("►")) { line = line.substr(1); }
+        if (line.startsWith(ConversationLine.OPTION_MARKER)) { line = line.substr(1); }
 
         // Remove conditions
         if (line.trim().startsWith("[") && line.includes("]")) {
