@@ -246,13 +246,19 @@ export class ConversationLine {
     private static extractText(line: string, autoWrap = false): string {
         // Remove player option sign
         if (line.startsWith("►")) { line = line.substr(1); }
+
         // Remove conditions
-        if (line.trim().startsWith("[") && line.includes("]")) { line = line.substr(line.indexOf("]") + 1).trim(); }
+        if (line.trim().startsWith("[") && line.includes("]")) {
+            line = line.substr(line.indexOf("]") + 1).trim();
+        }
+
         // Remove actions and state changes
-        const atPos = line.indexOf("@"), exclPos = line.search(/\![a-zA-Z]/);
+        const atPos = line.indexOf("@")
+        const exclPos = line.search(/\![a-zA-Z]/);
+
         if (atPos >= 0 || exclPos >= 0) {
             const minPos = (atPos >= 0 && exclPos >= 0) ? Math.min(atPos, exclPos) : (atPos >= 0) ? atPos : exclPos;
-            line = line.substr(0, minPos);
+            line = line.substr(0, minPos).trim();
         }
         // Auto wrap to some character count
         if (autoWrap) {
