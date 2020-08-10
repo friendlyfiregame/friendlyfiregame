@@ -41,7 +41,7 @@ export function roundRect(
     ctx.closePath();
 
     return ctx;
-  }
+}
 
 export class SpeechBubble {
     @asset(DIALOG_FONT)
@@ -244,58 +244,6 @@ export class SpeechBubble {
             })
         }
     }
-
-    // draw2(ctx: CanvasRenderingContext2D): void {
-    //     if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
-    //         return;
-    //     }
-
-    //     ctx.save();
-    //     const font = SpeechBubble.font;
-    //     const longestLine = this.contentLinesByLength[0];
-    //     const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
-
-    //     let posX = this.x;
-    //     let posY = this.y;
-    //     let offsetX = 0;
-    //     if (this.relativeToScreen) {
-    //         ctx.setTransform(1, 0, 0, 1, 0, 0);
-    //         posX = ctx.canvas.width / 2;
-    //         posY = - ctx.canvas.height * 0.63 - this.height;
-    //     } else {
-    //         // Check if Speech Bubble clips the viewport and correct position
-    //         const visibleRect = this.scene.camera.getVisibleRect()
-    //         const relativeX = posX - visibleRect.x;
-    //         const clipAmount = Math.max((metrics.width / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (metrics.width / 2), 0);
-
-    //         if (clipAmount !== 0) {
-    //             offsetX = clipAmount + (10 * Math.sign(clipAmount));
-    //         }
-    //     }
-
-    //     posX -= offsetX;
-
-    //     ctx.beginPath();
-    //     ctx = roundRect(ctx, posX - metrics.width / 2 - 4, - posY - this.height, metrics.width + 8, this.height, 5,
-    //         this.relativeToScreen, offsetX);
-    //     ctx.fillStyle = this.color;
-    //     ctx.fill();
-
-    //     let messageLineOffset = 4;
-    //     for (let i = 0; i < this.messageLines.length; i++) {
-    //         font.drawText(ctx, this.messageLines[i], Math.round(posX - metrics.width / 2),
-    //             Math.round(-posY - this.height + 4 + (i * this.lineHeight)), "black");
-    //         messageLineOffset += 4;
-    //     }
-    //     for (let i = 0; i < this.options.length; i++) {
-    //         const isSelected = this.selectedOptionIndex === i;
-    //         const selectionIndicator = isSelected ? "►" : " ";
-    //         font.drawText(ctx, selectionIndicator + this.options[i], Math.round(posX - metrics.width / 2),
-    //             Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight)), "black");
-    //     }
-
-    //     ctx.restore();
-    // }
 
     update(anchorX: number, anchorY: number): void {
         this.x = Math.round(anchorX + this.offset.x);
