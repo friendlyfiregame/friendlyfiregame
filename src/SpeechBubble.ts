@@ -104,13 +104,14 @@ export class SpeechBubble {
             (!this.partnersBubble || !this.partnersBubble.isCurrentlyWriting && this.selectedOptionIndex > -1);
     }
 
-    async setMessage(message: string): Promise<void> {
-        this.messageLines = [""];
+    public async setMessage(message: string): Promise<void> {
+        this.messageLines = [''];
         this.isCurrentlyWriting = true;
         const font = SpeechBubble.font;
         this.contentLinesByLength = message.split("\n").concat(this.options).sort((a, b) =>
             font.measureText(b).width - font.measureText(a).width);
         let index = 0;
+
         for (let char of message) {
             if (!char) {
                 index++;
@@ -127,15 +128,17 @@ export class SpeechBubble {
             }
             this.updateContent();
         }
+
         this.preventUnwantedSelection = true;
         this.updateContent();
         this.isCurrentlyWriting = false;
+
         setTimeout(() => {
             this.preventUnwantedSelection = false;
         }, 300);
     }
 
-    setOptions(options: string[], partnersBubble: SpeechBubble) {
+    public setOptions(options: string[], partnersBubble: SpeechBubble) {
         this.partnersBubble = partnersBubble;
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
@@ -150,10 +153,11 @@ export class SpeechBubble {
         this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
             return;
         }
+
         const font = SpeechBubble.font;
         const longestLine = this.contentLinesByLength[0];
         const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
@@ -174,6 +178,7 @@ export class SpeechBubble {
                 offsetX = clipAmount + (10 * Math.sign(clipAmount));
             }
         }
+
         posX -= offsetX;
 
         this.scene.renderer.add({
@@ -247,7 +252,7 @@ export class SpeechBubble {
         }
     }
 
-    update(anchorX: number, anchorY: number): void {
+    public update(anchorX: number, anchorY: number): void {
         this.x = Math.round(anchorX + this.offset.x);
         this.y = Math.round(anchorY + this.offset.y);
     }

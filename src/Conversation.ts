@@ -260,10 +260,12 @@ export class ConversationLine {
             const minPos = (atPos >= 0 && exclPos >= 0) ? Math.min(atPos, exclPos) : (atPos >= 0) ? atPos : exclPos;
             line = line.substr(0, minPos).trim();
         }
+
         // Auto wrap to some character count
         if (autoWrap) {
             return ConversationLine.wrapString(line, MAX_CHARS_PER_LINE);
         }
+
         return line;
     }
 
