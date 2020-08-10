@@ -39,8 +39,8 @@
         "►I am the only master I acknowledge! @ionlymaster",
         "►Fine, what can you teach me… master? @yesmaster",
         "►Forgive me, master. I am willing to learn. @yesmaster",
-        "►[$ismale]When do you beings stop calling me 'boy' for once!",
-        "►[not $ismale]When do you beings stop calling me 'girl' for once!",
+        "►[$ismale]When do you beings stop calling me “boy” for once?!",
+        "►[not $ismale]When do you beings stop calling me “girl” for once?!",
         "[$ismale]What are you saying, boy?",
         "[not $ismale]What are you saying, girl?",
         "►[$ismale]I'm a girl! @genderswap",
@@ -55,7 +55,7 @@
     "man": [
         "Ohohoh. Have you looked in a mirror? You have less facial hair than a stone.",
         "►You're right, master. @yesmaster",
-        "►Touche! @touche",
+        "►Touché! @touche",
         "►A man is defined by his actions, not by his beard.",
         "And for now you have neither. But I reckon this may change today.",
         "►You're right, master. @yesmaster",
@@ -100,7 +100,7 @@
     ],
     "touche": [
         "…",
-        "►… touche, master. @yesmaster"
+        "►… touché, master. @yesmaster"
     ],
     "human": [
         "This… exceeds my expertise. Umm. Where were we. Ah, yes. @yesmaster"

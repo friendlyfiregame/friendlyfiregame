@@ -424,7 +424,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Use 'jump' to overcome obstacles.:::The longer you press, the higher the jump."
+                         "value":"Use \u201cjump\u201d to overcome obstacles.:::The longer you press, the higher the jump."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -442,7 +442,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press 'interact' to throw your item."
+                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press \u201cthrow\u201d to throw your current item."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -550,7 +550,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Popular bird feeding spot"
+                         "value":"\u25ca Popular bird feeding spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -568,7 +568,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Bouncy mushrooms ahead"
+                         "value":"Bouncy mushrooms ahead \u2192"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -597,6 +597,24 @@
                 }, 
                 {
                  "height":0,
+                 "id":161,
+                 "name":"sign",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"You can check the controls in the pause menu at any time."
+                        }],
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":3300,
+                 "y":439
+                }, 
+                {
+                 "height":0,
                  "id":112,
                  "name":"sign",
                  "point":true,
@@ -604,7 +622,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Popular seed throwing spot"
+                         "value":"\u25ca Popular seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -622,7 +640,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Hold 'down' to fall through platforms."
+                         "value":"Hold \u201cdown\u201d to fall through platforms."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -640,7 +658,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Advanced seed throwing spot"
+                         "value":"\u25ca Advanced seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -2031,7 +2049,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A strange device...:::There is no manual available."
+                         "value":"A strange device\u2026:::There is no manual available."
                         }],
                  "rotation":0,
                  "type":"trigger",
@@ -2123,7 +2141,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A pretty normal mail box.:::Kinda stupid."
+                         "value":"A pretty normal mailbox.:::Kinda stupid."
                         }],
                  "rotation":0,
                  "type":"trigger",

@@ -7,45 +7,45 @@
     "sorry": [
         "No hard feelings.",
         "Just keep your hands where I can see them. @greetings",
-        "►Sure don't worry... @greetings"
+        "►Sure don't worry… @greetings"
     ],
     "collectible": [
         "I am, that's why you shouldn't just go around touching me!",
-        "You really don't want to own a power-up that hates you!.",
-        "►I guess... @greetings"
+        "You really don't want to own a power-up that hates you!",
+        "►I guess… @greetings"
     ],
     "hey": [
         "Hey there! @greetings"
     ],
     "greetings": [
-        "Need anyting?",
+        "Need anything?",
         "►Who are you? @who",
         "►What are you up to? @what",
-        "►[not talkedAboutSeed]I have this seed problem... @seed",
-        "►[talkedAboutSeed]I still have this seed problem... @seed2",
-        "►[$gotBoneQuest]I have this bone problem... @bone",
-        "►I'm off... @bye"
+        "►[not talkedAboutSeed]I have this seed problem… @seed",
+        "►[talkedAboutSeed]I still have this seed problem… @seed2",
+        "►[$gotBoneQuest]I have this bone problem… @bone",
+        "►I'm off… @bye"
     ],
     "bone": [
-        "A bone problem...?",
+        "A bone problem…?",
         "►[not gotBoneInfo]Yeah, I need to get a bone through a door",
         "►[gotBoneInfo]How did the trick work again? @throw",
-        "Oh... that might be tricky.",
+        "Oh… that might be tricky.",
         "As you know, items won't go through doors.",
         "►Is there really nothing I can do?",
-        "Well... I'll let you in on a little secret.",
+        "Well… I'll let you in on a little secret.",
         "Listen closely!",
         "It's not that items can't go through doors.",
         "They just prevent you from stepping through via some kind of parasitic mind control.",
         "But you can trick them with a precise throw.",
-        "►Parasitic... eww... @parasitic",
+        "►Parasitic… eww… @parasitic",
         "►How would that help? @throw"
     ],
     "parasitic": [
-        "That's really nothing you want to think about...",
+        "That's really nothing you want to think about…",
         "The same applies to your collected powerups.",
         "They are as much a part of you as you are a part of them now.",
-        "►No details please... How would a throw help? @throw"
+        "►No details please… How would a throw help? @throw"
     ],
     "throw": [
         "It's really easy.",
@@ -66,19 +66,19 @@
     ],
     "clouds": [
         "Can you live there any other way?",
-        "►Nevermind... @greetings"
+        "►Nevermind… @greetings"
     ],
     "down": [
-        "I'm excercising my throw arm...",
+        "I'm excercising my throwing arm…",
         "Also, Dad has company over. I don't like the smell.",
-        "►I really don't want any details... @greetings"
+        "►I really don't want any details… @greetings"
     ],
     "what": [
         "I'm throwing stuff up the mountain to excercise.",
         "This is practically the best spot to do so in the entire world.",
         "►Any success?",
         "No, I ran out of stuff pretty quickly.",
-        "►Too bad... @greetings"
+        "►Too bad… @greetings"
     ],
     "seed": [
         "What kind of problem?",

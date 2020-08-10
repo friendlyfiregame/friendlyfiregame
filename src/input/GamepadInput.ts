@@ -4,7 +4,7 @@ import { ControllerEventType } from "./ControllerEventType";
 import { ControllerFamily } from "./ControllerFamily";
 import { ControllerEvent } from "./ControllerEvent";
 
-// TODO Possibily these constants are for XBox gamepads only...
+// TODO Possibly these constants are for XBox gamepads only…
 enum GamePadButtonId {
     /** Button A */
     BUTTON_1 = 0,
@@ -45,15 +45,16 @@ axisMapping.set(StickAxisId.LEFT_LEFT_RIGHT, { button1: GamePadButtonId.D_PAD_LE
 axisMapping.set(StickAxisId.LEFT_UP_DOWN, { button1: GamePadButtonId.D_PAD_UP, button2: GamePadButtonId.D_PAD_DOWN });
 
 const intentMappings = new Map<number, ControllerIntent[]>();
-intentMappings.set(GamePadButtonId.D_PAD_UP, [ControllerIntent.PLAYER_INTERACT, ControllerIntent.MENU_UP]);
+intentMappings.set(GamePadButtonId.D_PAD_UP, [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
 intentMappings.set(GamePadButtonId.D_PAD_DOWN, [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
 intentMappings.set(GamePadButtonId.D_PAD_LEFT, [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
 intentMappings.set(GamePadButtonId.D_PAD_RIGHT, [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
 intentMappings.set(GamePadButtonId.BUTTON_1, [ControllerIntent.PLAYER_JUMP, ControllerIntent.CONFIRM]);
 intentMappings.set(GamePadButtonId.BUTTON_2, [ControllerIntent.ABORT]);
-intentMappings.set(GamePadButtonId.BUTTON_3, [ControllerIntent.PLAYER_ACTION]);
-intentMappings.set(GamePadButtonId.SHOULDER_TOP_LEFT, [ControllerIntent.PLAYER_DANCE_1]);
-intentMappings.set(GamePadButtonId.SHOULDER_TOP_RIGHT, [ControllerIntent.PLAYER_DANCE_2]);
+intentMappings.set(GamePadButtonId.BUTTON_3, [ControllerIntent.PLAYER_RUN]);
+intentMappings.set(GamePadButtonId.BUTTON_4, [ControllerIntent.PLAYER_INTERACT]);
+intentMappings.set(GamePadButtonId.SHOULDER_TOP_LEFT, [ControllerIntent.PLAYER_DANCE_1, ControllerIntent.PLAYER_ACTION]);
+intentMappings.set(GamePadButtonId.SHOULDER_TOP_RIGHT, [ControllerIntent.PLAYER_DANCE_2, ControllerIntent.PLAYER_ACTION]);
 intentMappings.set(GamePadButtonId.START, [ControllerIntent.PAUSE]);
 
 const controllerFamily = ControllerFamily.GAMEPAD;
@@ -88,7 +89,7 @@ class GamepadAxisWrapper {
      * 0.9 (much force needed) can be used here.
      *
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
-     * might lead to button flibber flubber...
+     * might lead to button flibber flubber…
      */
     private threshold = 0.5;
 

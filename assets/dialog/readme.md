@@ -30,7 +30,7 @@ spoken by NPC or player, the dialog will continue in that state (with its first 
 
 Any kind of side effect in the game. Always starts with an exclamation mark, followed by the action name
 and possibly additional parameters. Includes camera behavior (e.g. "!zoomin", "!zoomout", "!zoomto <NPC name>"),
-NPC moods ("!angry", "!scared", ... whatever we support), game progress ("!enabledialog <NPC name> <dialog name>")
+NPC moods ("!angry", "!scared", … whatever we support), game progress ("!enabledialog <NPC name> <dialog name>")
 and more.
 
 ### Interpretation
@@ -41,7 +41,7 @@ see both at the same time. Multiple options after one another will always be vis
 It's possible to have one player option lead to more player options using state changes though:
 
 ```
-    ...
+    …
     "myState": [
         "I'm NPC XY and say stuff",
         "►Greet",
@@ -59,7 +59,7 @@ It's sometimes possible to not use all that many states for every single player 
 but stay mostly in a single one linearly:
 
 ```
-    ...
+    …
     "entry": [
         "Hello you!",
         "►Hi", /* all these lead to the same line below, mere illusion of choice! */
@@ -70,9 +70,9 @@ but stay mostly in a single one linearly:
         "►You rock!",
         "►What do you want from me? @want",
         "Well yes, thank you! And you are?",
-        ...
+        …
     ]
-    ...
+    …
 ```
 
 This way even longer conversations don't need to turn complex.

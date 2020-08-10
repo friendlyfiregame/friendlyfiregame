@@ -4,8 +4,9 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { Aseprite } from './Aseprite';
 import { ControllerEvent } from './input/ControllerEvent';
-import { ControllerFamily } from './input/ControllerFamily';
+import { ControllerSpriteMap } from './input/ControllerFamily';
 import { RenderingType, RenderingLayer } from './Renderer';
+import { ControllerManager } from './input/ControllerManager';
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
@@ -251,7 +252,8 @@ export class Dance {
         });
     }
 
-    public draw(ctx: CanvasRenderingContext2D, controller: ControllerFamily = this.scene.game.currentControllerFamily) {
+    public draw(ctx: CanvasRenderingContext2D) {
+        const controller: ControllerSpriteMap = ControllerManager.getInstance().controllerSprite;
         ctx.save();
         ctx.translate(this.x, -this.y);
 

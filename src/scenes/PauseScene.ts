@@ -11,6 +11,7 @@ import { ControllerEvent } from "../input/ControllerEvent";
 import { AppInfoJSON } from 'appinfo.json';
 import { isDev } from '../util';
 import { Sound } from '../Sound';
+import { DIALOG_FONT } from "../constants";
 
 enum MenuItemKey {
     RESUME = 'resume',
@@ -22,7 +23,7 @@ export class PauseScene extends Scene<FriendlyFire> {
     @asset("music/pause.ogg")
     private static music: Sound;
 
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
     @asset("fonts/headline.font.json")
@@ -43,8 +44,8 @@ export class PauseScene extends Scene<FriendlyFire> {
 
         this.menu.setItems(
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
-            new MenuItem(MenuItemKey.CONTROLS, "Controls", PauseScene.font, "white", 75, 145),
-            new MenuItem(MenuItemKey.EXIT, "Back to Title", PauseScene.font, "white", 75, 160),
+            new MenuItem(MenuItemKey.CONTROLS, "Controls and Options", PauseScene.font, "white", 75, 145),
+            new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 160),
         )
     }
 

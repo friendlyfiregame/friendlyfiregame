@@ -1,49 +1,65 @@
-import { sleep } from "./util";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
 import { GameScene } from "./scenes/GameScene";
-import { GAME_CANVAS_WIDTH } from './constants';
 import { RenderingType, RenderingLayer } from './Renderer';
+import { sleep } from "./util";
 
-export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number, up = false, tipOffset = 0):
-        CanvasRenderingContext2D {
-    if (w < 2 * r) {r = w / 2};
-    if (h < 2 * r) {r = h / 2};
+export function roundRect(
+    ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
+    up = false, tipOffset = 0
+): CanvasRenderingContext2D {
+    const halfWidth = w / 2;
+    const halfHeight = h / 2;
+    const middlePos = x + halfWidth;
+    const rightPos = x + w;
+    const bottomPos = y + h;
+
+    if (w < 2 * r) { r = halfWidth };
+    if (h < 2 * r) { r = halfHeight };
+
     ctx.beginPath();
     ctx.moveTo(x + r, y);
+
     if (up) {
-        ctx.lineTo(x + w / 2 - 4, y);
-        ctx.lineTo(x + w / 2, y - 4);
-        ctx.lineTo(x + w / 2 + 4, y);
+        ctx.lineTo(middlePos - 4, y);
+        ctx.lineTo(middlePos, y - 4);
+        ctx.lineTo(middlePos + 4, y);
     }
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
+
+    ctx.arcTo(rightPos, y, rightPos, bottomPos, r);
+    ctx.arcTo(rightPos, bottomPos, x, bottomPos, r);
+
     if (!up) {
-        ctx.lineTo(x + w / 2 - 4 + tipOffset, y + h);
-        ctx.lineTo(x + w / 2 + tipOffset, y + h + 4);
-        ctx.lineTo(x + w / 2 + 4 + tipOffset, y + h);
+        ctx.lineTo(middlePos - 4 + tipOffset, bottomPos);
+        ctx.lineTo(middlePos + tipOffset, bottomPos + 4);
+        ctx.lineTo(middlePos + 4 + tipOffset, bottomPos);
     }
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
+
+    ctx.arcTo(x, bottomPos, x, y, r);
+    ctx.arcTo(x, y, rightPos, y, r);
     ctx.closePath();
+
     return ctx;
   }
 
 export class SpeechBubble {
-    @asset("fonts/standard.font.json")
+    @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
-    private messageLines :string[] = [];
+    private messageLines: string[] = [];
     private options: string[] = [];
     public selectedOptionIndex = -1;
-    public fontSize = 10;
-    public lineHeight = 15;
-    public height = 0;
-    public offset = { x: 0, y: 40 };
-    public messageVelocity = 20;
+    private fontSize = SpeechBubble.font.charHeight;
+    private lineHeight = this.fontSize;
+    private height = 0;
+    private offset = { x: 0, y: 40 };
+    private messageVelocity = 20;
 
-    public x: number;
-    public y: number;
+    private x: number;
+    private y: number;
+    private paddingHorizontal: number;
+    private paddingVertical: number;
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
@@ -58,11 +74,19 @@ export class SpeechBubble {
         private scene: GameScene,
         public anchorX: number,
         public anchorY: number,
-        private color = "#FFBBBB",
+        private lineHeightFactor = 1,
+        private paddingTop = 3,
+        private paddingBottom = 4,
+        private paddingLeft = 6,
+        private paddingRight = 6,
+        private color = "white",
         private relativeToScreen = false
     ) {
-        this.x = anchorX + this.offset.x;
-        this.y = anchorY + this.offset.y;
+        this.x = Math.round(anchorX + this.offset.x);
+        this.y = Math.round(anchorY + this.offset.y);
+        this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
+        this.paddingHorizontal = this.paddingLeft + this.paddingRight;
+        this.paddingVertical = this.paddingTop + this.paddingBottom;
     }
 
     public show() {
@@ -82,7 +106,7 @@ export class SpeechBubble {
         this.messageLines = [""];
         this.isCurrentlyWriting = true;
         const font = SpeechBubble.font;
-        this.contentLinesByLength = message.split("\n").concat(this.options).slice().sort((a, b) =>
+        this.contentLinesByLength = message.split("\n").concat(this.options).sort((a, b) =>
             font.measureText(b).width - font.measureText(a).width);
         let index = 0;
         for (let char of message) {
@@ -121,7 +145,7 @@ export class SpeechBubble {
 
     private updateContent() {
         this.content = this.messageLines.concat(this.options);
-        this.height = this.content.length * this.lineHeight;
+        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -136,8 +160,8 @@ export class SpeechBubble {
         let offsetX = 0;
 
         if (this.relativeToScreen) {
-            posX = ctx.canvas.width / 2;
-            posY = - ctx.canvas.height * 0.63 - this.height;
+            posX = Math.round(ctx.canvas.width / 2);
+            posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
@@ -155,11 +179,11 @@ export class SpeechBubble {
             layer: RenderingLayer.UI,
             fillColor: this.color,
             position: {
-                x: posX - metrics.width / 2 - 4,
+                x: posX - Math.round(metrics.width / 2) - this.paddingLeft,
                 y: -posY - this.height
             },
             dimension: {
-                width: metrics.width + 8,
+                width: metrics.width + this.paddingHorizontal,
                 height: this.height
             },
             radius: 5,
@@ -167,36 +191,56 @@ export class SpeechBubble {
             offsetX
         });
 
-        let messageLineOffset = 4;
+        const textXPos = Math.round(posX - metrics.width / 2);
+        const textColor = "black";
+
         for (let i = 0; i < this.messageLines.length; i++) {
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
+
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
                 text: this.messageLines[i],
-                textColor: "black",
+                textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
                 position: {
-                    x: Math.round(posX - metrics.width / 2),
-                    y: Math.round(-posY - this.height + 4 + (i * this.lineHeight))
+                    x: textXPos,
+                    y: textYPos
                 },
                 asset: font,
             })
-            messageLineOffset += 4;
         }
+
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const selectionIndicator = isSelected ? "►" : " ";
+            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.paddingTop);
+
+            if (isSelected) {
+                this.scene.renderer.add({
+                    type: RenderingType.TEXT,
+                    layer: RenderingLayer.UI,
+                    text: "►",
+                    textColor: textColor,
+                    relativeToScreen: this.relativeToScreen,
+                    position: {
+                        x: textXPos,
+                        y: textYPos
+                    },
+                    asset: font
+                })
+            }
+
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
-                text: selectionIndicator + this.options[i],
-                textColor: "black",
+                text: this.options[i],
+                textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
                 position: {
-                    x: Math.round(posX - metrics.width / 2),
-                    y: Math.round(-posY - this.height + messageLineOffset + (i * this.lineHeight))
+                    x: textXPos + 11,
+                    y: textYPos
                 },
-                asset: font,
+                asset: font
             })
         }
     }
@@ -254,7 +298,7 @@ export class SpeechBubble {
     // }
 
     update(anchorX: number, anchorY: number): void {
-        this.x = anchorX + this.offset.x;
-        this.y = anchorY + this.offset.y;
+        this.x = Math.round(anchorX + this.offset.x);
+        this.y = Math.round(anchorY + this.offset.y);
     }
 }
