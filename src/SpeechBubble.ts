@@ -79,8 +79,8 @@ export class SpeechBubble {
         private lineHeightFactor = 1,
         private paddingTop = 3,
         private paddingBottom = 4,
-        private paddingLeft = 6,
-        private paddingRight = 6,
+        private paddingLeft = 7,
+        private paddingRight = 7,
         private color = "white",
         private relativeToScreen = false
     ) {
