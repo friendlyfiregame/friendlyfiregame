@@ -5,6 +5,8 @@ import { GameScene } from "./scenes/GameScene";
 import { RenderingType, RenderingLayer } from './Renderer';
 import { sleep } from "./util";
 
+export const OPTION_BUBBLE_INDENTATION = 11;
+
 export function roundRect(
     ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
     up = false, tipOffset = 0
@@ -237,7 +239,7 @@ export class SpeechBubble {
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
                 position: {
-                    x: textXPos + 11,
+                    x: textXPos + OPTION_BUBBLE_INDENTATION,
                     y: textYPos
                 },
                 asset: font
