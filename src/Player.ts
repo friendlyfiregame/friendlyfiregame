@@ -169,6 +169,7 @@ export class Player extends PhysicsEntity {
     private canRainDance = false;
     private doubleJump = false;
     private multiJump = false;
+    private hasFriendship = false;
     private usedJump = false;
     private usedDoubleJump = false;
     // private hasBeard = false;
@@ -314,6 +315,14 @@ export class Player extends PhysicsEntity {
         if (!this.multiJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
             this.multiJump = true;
+        }
+    }
+
+    public enableFriendship (): void {
+        if (!this.hasFriendship) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.FRIENDSHIP });
+            this.hasFriendship = true;
+            this.scene.removeGameObject(this.scene.powerShiba);
         }
     }
 

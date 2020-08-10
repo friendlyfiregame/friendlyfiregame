@@ -14,6 +14,10 @@ import seed1 from '../assets/dialog/seed1.dialog.json';
 import tree0 from '../assets/dialog/tree0.dialog.json';
 import tree1 from '../assets/dialog/tree1.dialog.json';
 import tree2 from '../assets/dialog/tree2.dialog.json';
+import shiba1 from '../assets/dialog/shiba1.dialog.json';
+import shiba2 from '../assets/dialog/shiba2.dialog.json';
+import shiba3 from '../assets/dialog/shiba3.dialog.json';
+import shiba4 from '../assets/dialog/shiba4.dialog.json';
 import spider1 from '../assets/dialog/spider1.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
@@ -23,7 +27,7 @@ import { Conversation } from './Conversation';
 import { valueCurves } from './Particles';
 import { Signal } from "./Signal";
 import { GameScene } from "./scenes/GameScene";
-import { QuestA, QuestB, QuestKey, Quest, QuestATrigger, QuestBTrigger } from './Quests';
+import { QuestA, QuestB, QuestKey, Quest, QuestATrigger } from './Quests';
 import { Game } from './Game';
 
 export type CampaignState = "start" | "finished";
@@ -42,6 +46,10 @@ const allDialogs: Record<string, DialogJSON> = {
     "tree0": tree0,
     "tree1": tree1,
     "tree2": tree2,
+    "shiba1": shiba1,
+    "shiba2": shiba2,
+    "shiba3": shiba3,
+    "shiba4": shiba4,
     "spider1": spider1,
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
@@ -175,6 +183,12 @@ export class Campaign {
                 case  "talkedtofire":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
                     break;
+                case "enableShiba3":
+                    this.runAction("enable", null, ["shiba", "shiba3"]);
+                    break;
+                case "shibaNextState":
+                    this.gameScene!.shiba.nextState();
+                    break;
                 case  "talkedtotree":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
                     break;
@@ -206,6 +220,9 @@ export class Campaign {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
                     this.gameScene.player.enableMultiJump();
                     break;
+                case "friendship":
+                    this.gameScene.player.enableFriendship();
+                    break;
                 case "spawnseed":
                     this.gameScene.tree.spawnSeed();
                     break;
@@ -236,9 +253,6 @@ export class Campaign {
                     break;
                 case "togglegender":
                     this.gameScene.player.toggleGender();
-                    break;
-                case "corruptFlameboy":
-                    this.getQuest(QuestKey.B).trigger(QuestBTrigger.FLAMEBOY_CORRUPTED);
                     break;
                 case "wakeupchest":
                     this.gameScene.mimic.nextState();

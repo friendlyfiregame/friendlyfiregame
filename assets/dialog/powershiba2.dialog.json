@@ -1,5 +1,15 @@
 {
     "entry": [
-        "Thank you Friend! !end @entry"
+        "Thank you Friend!",
+        "Give multi jump away! ",
+        "[not $seedgrown] But wait... @notyet",
+        "go! @go"
+    ],
+    "notyet": [
+        "Not everything finished yet!",
+        "►Ok! !end @entry"
+    ],
+    "go": [
+        "Do it! !enableShiba3 !end @go"
     ]
 }

@@ -1,0 +1,11 @@
+{
+    "entry": [
+        "How did you fare?",
+        "►I give powerup away! @giveaway @entry",
+        "►Nevermind! !end @entry"
+    ],
+    "giveaway": [
+        "thx",
+        "meet me on the mountain! !shibaNextState !end"
+    ]
+}
