@@ -75,7 +75,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         if (this.properties?.item !== undefined) {
             this.targetItem = this.properties.item as Item;
         }
-        this.selectedSubtitle = "'" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "'";
+        this.selectedSubtitle = "“" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "”";
         this.stopped = false;
         this.time = 0;
         this.inTransition = new SlideTransition({ duration: .5, direction: "bottom", easing: easeOutExpo });
