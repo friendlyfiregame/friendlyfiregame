@@ -157,7 +157,6 @@ export class SpeechBubble {
             return;
         }
 
-        const font = SpeechBubble.font;
         const longestLine = this.contentLinesByLength[0];
         const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
         let posX = this.x;
@@ -213,7 +212,7 @@ export class SpeechBubble {
                     x: textXPos,
                     y: textYPos
                 },
-                asset: font,
+                asset: SpeechBubble.font,
             })
         }
 
@@ -232,7 +231,7 @@ export class SpeechBubble {
                         x: textXPos,
                         y: textYPos
                     },
-                    asset: font
+                    asset: SpeechBubble.font
                 })
             }
 
@@ -246,7 +245,7 @@ export class SpeechBubble {
                     x: textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION,
                     y: textYPos
                 },
-                asset: font
+                asset: SpeechBubble.font
             })
         }
     }
