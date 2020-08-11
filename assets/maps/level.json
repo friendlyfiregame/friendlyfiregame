@@ -22,7 +22,7 @@
          "width":190,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "compression":"zlib",
          "data":"eAHtXVlv3UQUvuEVSMrSfwAEWuAf0KYl8IjEE9BAeUslQGwFyluuBIitTco7OzRJ2UFCbIUWyo6EWMRLxS5oyyIeWrE90PKd9o40mYzH47F9PR5\/I32xfWY755vj8Sy+Tq\/HQAbIABkgA2SADJABMkAGyIAwMD\/S6y0Ai0BIkLwKZhnrT+j1diP+7cCyQ\/RhHjKQxcB2zQ\/FL8Vv9wFzmjwrrylXPi9H0++n4PcMZCAWBnYa\/i2+vwcI6ZeV3x8OyL\/F0CMWfqgHGchjQO6X0HtGf+7k1cN4MhAzA2cNlDsJx\/HB+WiGwvT7DGIoroUB8UkVyo41xlRBAUf6fQBpzFIJA036njnPqMQgFkIGImRgstfrR6gWVSIDZIAMkIGSDJSdP5SsntnJQO0M2NZtmpw\/1G4wKyADGQzQ7zOIobgRBvL8UfZwDwGyH1sm5NVTpmzmJQNFGfBZQ1TvLxQtW0\/vU4+enudkIGUGuJ6ZcuvGbdvKIagH\/2YgA8kxIGOhkPc4bURwLmBjhbLUGeBcIPUWHr59+rtoWbWfnBWRI59Gn7+pxLpP2fw56jGaDFTOgLx3PAOf7wMXWkrPut\/095RV\/lWW\/BSRATJABsgAGSADZIAMkAEyQAbIABkgA2SADJABMkAGyAAZIANkgAyQATLQfgaexn7iM8CzwHMAAxlInYG98PN3gfeA94EPADP85PF9C6RhIAOtYeBr+Pk3wLfAd8D3gBmOmALL9X8WWZtEX7VJWepamoE\/4ed\/AX8D\/wD\/AnlB+v\/U+nf6fV6rpxU\/iu+wjwErgFOAU4G8IP1\/2\/v3PBsZnzYD4\/Dzs4FzgFXAaoCBDJABMkAGyAAZIAMpMOCzRpmCnbSBDOgMYH7a1695Tga6xgD7\/q61OO0VBnz2p7rG1IRlfWubxx5H13hqs71r0J5rgQlgXU7bprZvVaTddudwU6Qspm2egcvQnpcDVwAbcto29X2rSW3esxFNc7XWPLZv2WvRPG0ZAzfC128CbgY25\/h9y0yjumQgk4F74ev3AfcDWzvu9\/wfPJluklzE4\/D1J4AngR0d93t+hzU5915m0A8jx9fw34Cv7wLeBN6i3y\/jiQIykDoD7O9Tb2F\/+\/BcWBJewnPiReAF4PnBM0Ml2ICTKeBK4ColbNGR391uUWNVpKrs2wryivsEvv4x8BHwoeH3m5H5FuBW4La8giKKvwi6XByRPlRleAxg37Zf9r2drVB3GzALzA1PddZEBipjAH3\/smCT6Yl24GIeWAAW9Qiek4GWMGB7b8cma4k5VLNDDJjj9bz+ukPU0NQEGVgcrMHImF3ep1L\/X6\/s+zU7wdVTCfJFk9rPwDz8XPl9E9asQKXvAHubqJx1dpYBvX\/vLAk0vDMMrIWlEwNr5X\/q2cKZhnA7rh8wZLwkA2SADJCB9jAwizH+3GBu2x6tqSkZKMfAgja3zfo\/weVqYG4y0CwDk5bqdb+3RFPUIQZ2dchW+n2HGtti6qXaGLdL33zW\/d72PLBQRVFCDFwDv78WuA74IyG78kwRv1d7tK6067XvxKzDOb4b03elLxOH+6+2skP0ugQcqaDO1VHk6lwddZnKF+vxDth2J3CXZmOsulap12GLveLT8O2+Xs+U5ve6HGmPBdvvj8wy9Hw8j4OBB9H+D1l8IA7tmtGiyDcDXL8\/st0TzVjEWk0GXobPH8Rvgg4A+4Gfjd8HmelTuR5zGFKVv\/qUE9vYxkFLUlGfwu9H5NkOHIXPH+mI37saMc9fNyKzfCds3FUI4vLKycnuFf0w2u8R4FHgMSAk4N6zBtu43VdmLZDC6BjYAo1ur1gr2xhI5sYS9PnycUnY31fg668CrwGvB\/q9qvlEdcIjGYicgc\/g658DXwBflvT7yE3ttHryrWlZg2xrmIbumwb6q28UhL4n8SPK+QX4FfgN+B1gSJMB+c2I+L0g5Lcjav1xWOyY8+cZ6N0H2hB8x\/K2dG2wr006lvX72G3l+s5wW2iwZ7Ok0hj3X+S3UocA2Xfy2W9dYhAustYuzHRq3inzUHNdRrgy0zd9rfRtWg\/WXw0D0r+bQXw\/xOfNclzX+j6t6fcqn+89pNLXedT1rbOelMqO+fcXalwTMpZ3tZH5LHON+23rkVllyz2ikJVGl4c8O8z\/I1VX+9nG7b4y3cZYz6v2qSrtFL8PHdNUqYerrMEYsa\/SmM8HGYOY95lKG3I0n4Ext1+IfcPKE8ob3mno7QcOAAeBOsIwxjRK7yLv5ag8tqPp93oaea7gPujrsqLnwoke6h7z6XWldB7q93inoXdU2gBtOQJIOCPjXVrZC8yKO5axwJ8LkHZNgfS+ScVfQ9fS9TryxkUYi\/f19HWdV8l5XTo2We4+tPes+G\/CAXs8\/brMU\/tP6r2duuqRcqfRTmrfS9Vjk6m4vON5jgS+Y3lbOkex0USpfaBoFOqYIngOeocZ+L2576XLXM\/Uc71rST+hzBkFe4Ci4fyiGQLT6+2l6jT7KSUPrMKabTJjzGZNXEBY1TyiQJXLkq5eJumewBzfy9pD0X0Q0w9jYzEm\/Vzz3qZ46+J9IP29GWLbBzkdCur9vqmvGefb\/9vWz2WdUOY7da2Lm7pXfW1yocq33fsrVaTlaBu3+8osxbVOJGtveOZHF3x926a4a81F\/F7mPDLfj933bb5ss5ey5Qzo41iXL9mehdIPpxJkfCf3uKyPyztA4vvmGDBmW239PO+LmFvMrVuRtrO1vSq9SDmqz4\/B7029XWMTZavraOu\/JL2rz3OVp8ddj77iBqAtoQqbm7K1rB+Yeo9CoPzejOO1m4G74fP3tMjvs\/oAt5XNxMo92ub7tChrvrb6pitaP9OTAR8Gys55XGM1n\/qZJpyB2Pt\/c8wbbmkaOX3vFXNMyGdE3O1\/WsXqme1fcfEsLnIG\/gc6gCtt",
@@ -36,7 +36,7 @@
          "width":190,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "compression":"zlib",
          "data":"eAHtXcmuJEcVfcY2IMYFQ9vGNnL3AliADAZbAjZtCTMIm+EDcD37SUyGLRjcomzgBxBgM3vPKEBi+gJgxbgBVhYsMGbYs+CcR53W6ds3IiOzMquyXlVIt29EZMSNiBsnbtyIzFf9z2uOjv5p9C\/Enzk60F7pwOZ\/gXikkyQvlsnSQ+tlslrzAN2m4JhnnLh\/9oH2SgfPYL6FA+Lr0jVHyy7MoswRyixb8Sh5lN1aZ0i5JtCjkMYrTty\/8kB7pYOI+xLevgRcPFygLyJf9bgmFI+8JiOT7XIlK1tvanMd3N+Cfn8XAr4DYvy6AvFZRrci\/2Z75rKy8iX5nu\/1XJ6XUVxllY5cz9fhLjPK8Wcej+W60l53aLyrDT4v4T5i9EGULYUH8CzDqLAqflyRkcmOci+hvmRlPJOR5cnOi9PeK\/wdkX+AvgCKer\/eyql8K5fcBSocg6LsmK61dS364eW9bFe\/1Y\/WfrOc6mhdc43HkLX7pVgI6QWI439gxalrD5kcHysx6+kYz9p0+YpnuCfmazhXXefC6EnFl+mLe8qX3AznMc\/7U4sL7+IXnnV09J\/VXHJuOa\/fhgDZftlyzTdxwHl7sNZIeCa5DyM\/zhXTbs85t95WxIbjT3LVXEm++hvLq16Nt9RxfbH\/HM\/3EqGxf75mWTzKoSyRdKLxK1\/c21xA1jHoaRD1xzljXHpw3F9CG8TSEHxCZBWjlD2FXMc++9ASiPe4nz0X2G8NskmPtFawctFWE\/Nx7q34qe+k+fb8Ulx9y9bWkP6W2hmaH\/vXap\/7thfXl+uDenDcC0ND8cm+3Y95lJzI15Eru4\/1s4xylW7VDXG\/Tl9kk\/rgUX2L8+64X6DQMYg2iTzaeWR1BvXN51nxqTDW2SkroP7RRrt9tiKjRDM9ux6mwr32DmGSfB2sURnCvss8gVylWxW2Lu5b28nKad65ZrRfa\/1EG1XbBzLZzFuAjkGaY+ey9\/LXh\/hrEL0TQXrm+iJJ31prEffA6\/IRlHv7it4BnoV3WhmVJf80SDiMPMP9PQU570J+Fmr7SVY+y9sm7rP+KC\/aqCH2Oa4dx73WUfS1tB7Uj33gEfcRq1wDEfvEfA3fUYbSmayIY647lmfZDPuxvGSTt4a54t5tlOxS65hULq4dx73WEXHPNSD8az1IRon\/CQ\/+bPSXUsGO\/AWeH4OeBg3x5VBt7VDC\/Yn50W7\/u2w68QfsNtv8T6Ks7u7jXWi2P4yF+zimP6IffcIChY9BflfAedRcbsuH8LXD\/V3k6+g76Kf2fT6Xn4Xs01Dq+wtR9kVGL0Y8hgUyjkHShXPdpfiepLUY5Xh6gYRkur4lz8u2xh33wHoRr25Xu7AdyzKtdZRhWX2N\/ntWdizc0+aL3oq7nOeB+gSfO7epMb4NH2KBgRAnxAV5X5t6LXTDcQzpe5deKPNmyOZ687WI7GKoyRzSRzbkuM\/wOnYesfxqtPuawigd+124vwRZ3r+CyKuyhXfxh4D5jyX08cpaEDYizmOaPkTJfl7VsZEyIk5a\/Rg1L1zGfUDPa1x1tc+Qu05iXxYQdgzSvqC1qjS5149xyWvR8Udsjj+KuObfMTRVnFi+iLHcDSoF2nRgetmF+9jHkryYr\/GKE\/eO8QUqDJkLzjFtGP0IzTuxozVC27QAUXZfG4wqzSH6+C2+RLPwAQU1fmJWOJWYuEYjrlXHZXgZydOYW+1\/Zu\/jO53of5eee7kTjDHikunoV9fOrtneMIWf498pcD6GzIX0r\/l0LhvINSDZLE8bJbv2AOJ93v+6\/Bj\/NjK09lp9iShjzLQwSbzGNSjdyE44prO4xqVnkqcxt+5REfe1bxSEucwOu55ULsO953XZ9GxvkOwTO3dLpvehFpedF78Ae6\/vFFgvzoXmxDn1y3Ky79L3AvWPQcRzZtNlt4h7xTWHcT\/QuuCaoEzKK+3ni6SM96NUD9UmD8JkyxqUTjL9uG2R7rNvIVoGFHFfw7QwVyvDNlVOeIzcMZvJUv1HgA3eH\/k9qp5FmUy3BuHdebT5rbJiOdlzYlm2yMtwvvhM8yquPK\/PvBLF\/XxoPe\/bHOK+N8SxZ\/oc2udt4N4xW8O9ynmZqXG\/gCKPQSV73aVn4pr7Qs22yVZxz9a+wTqM1+bdceC2j30aWq9rPJt+rr3B99Yufbb0cYFCxyDNa4b73+L570C\/B3kg5mp+kMpm2DxZ1dUZQPxB5Meg+qxD7Dvu\/b6fMvzOP8oppd3OKy5773ZzTPvCvixAxyD3W5C8ImjeHeNZPPZtaL0rGj\/DCZ9X6tNxfwk+s3wLfXsQfQzHINXE7wxY5j4j4Vb2WjzWLak51q\/V87IleTFfWHcu3LfY6yivNR11H222y3H73Wr76MNna0T1a3uQt30W45pX6cJxL3w6d8wRY56mfkp5LkPxWLekX8rEGrx8H1SrNzbuS30aI9+xTHxGm+1tyH63npdZl3PL8vSf4nnbZR\/iV9p74dM5MSdbTh\/jUyAF2np+pxNxGXErebGc5JD7uyzHMuvW6nlZl1eLu51XXPa+Vm\/dZ8IybU5f2+t7RdwntnlXs65OtlW\/j72PfRTmom9U+matht+LEH73qgHJbVkvLIu9YcmyrUFYd74J3Lf2LyunfZr7RMT9tchjfrzjyeSsm\/czCPg56BfrCtpy\/TFwL3x28bg+dIaIPK6bWj0v26pKx7vic8e9xkaMl3Avn0hlx+Q3QNiNoMdBS9DXQOdAzN+F4N8o8JuU0ncKJysb2oo5x7zsr+cNiaMPl338rvo8D7QGYd35LuOee8GUmHe9\/gCJnwL6P\/TMHYy7ve+Lsy4s1p4Tp7XnQ561qt\/xrviu4H6TGM\/0+Utk\/gr06+zhDuU57odgrVaHmCKenoE+MvLfKHslytFHvcWIaRKfqWwmp5R3B9q9OSFh3fmu4H6HoDXrrjruHT\/Cmbg\/Y1z5xGQkPmMZ4YqYUvnIVZf45r3el01bfu\/n2I8ySukD7k2ZE0c\/A\/nLFT06cVtjiM9wLxwJkyXMMT+z0SrvuHdZHpdN\/y4Gw2+Mvm+D0r2fyni9lvgB96bMNaI6yy4ho0RP4NlXVvQU+NxDCffElWOa8Yg15sV3L7xvYDmuHce9sJvxeD8RdUa7L\/8nq1\/KO+A+arJf+pso\/i0Qz7LCtPPfhPyfYFngzHvEMy\/rPQmaa6jh3vHI85SwJy4b7WMr4V51Mt7nLsJ9nwzvLv+Ae5+Z4XHhnvc4jvtSnLife2jFfdc4no870ReAHPdvRvo5oD6\/RdbVjnwfx7ficf0ccN+lzbbnusP5BorDpl9l+2H3r1gPu4572tPsbycybfFd+dMg1pGfs+07knejP\/cGegvS8r\/Eh\/xdOcTsXfgrRsw7TBLXQGbvv478XbjjjPZeZ1ril3Y02lAMKw3yg+aE+6yj3AOEd\/Ftr8+sn3PP4xoQ7unTK\/63uXd81b8M97TX7tv3GYr7OXPE0wH3fWazXtbtP\/eAXcE8R7Uu7uXXUxZ9Hd35cN+4Db79H8D7\/iYTZU0VDrifSrO7JbeEe\/kr5PTba8QyIvn2\/t4q\/k7HpjR0Exq6dkW3gp8HHXAPJcwgfHDLfchwLx9ftruFqw45Me+435a\/o3Mtz7JvWun5gPsccNm7KX5zOVX40FSCG+VG3AuzjuOWuOo517lRv0fmv80Uu+d\/dxKfrZt+DAIOuK9rkXf08Y5y3ftI2vRzhWbninvH79C4cN9i7y9CP3cXdDRG9vUQUvJz4u\/njNHersnQHT3vZXQfH3HPPaHPHlDD9nu2rCC397VvK4c8E+5bcEVfnD74VIG4Z8j8HPazZW3+X8LZ\/lf3k\/rewEfLPSGuBX8e4zXcx7KbTk+Je50pxYnrkj9DX\/y+NQcP+BbDAfdF1Vz1QLY\/vn\/imsjuKktn1F3G\/SWASba+5XcxWfZkVSd++04f+yJoKn\/mjWEG0Y3Lgbgv+TkHe39ZTYMiJXxv25epDabV3g\/5vaiI+zvREdr+Kf0ZH6uvg4O9d82MG58zvksjbcV97bcQJPv+lZ3X\/hBxr7TuVlRvan4bGjjgfmot75b8Eu7hq5z+NocwPDbu6XOQLmxIXQc\/Z0OK3pFmSrgX3sUj7u+Bbe\/6\/Q\/Zd+dvhl7WPb\/2VS39\/BZ7\/yoUfDULH8KZ18BQ3EefRuvDOTF+b6BNYl4Qpp\/fhXu9W+Nvq9Ter515QJzBAcbfzqn9fo7jl\/czbu9vhG6Ee93dqLzf\/2zajxfONXXxXHu4z5Fm9ptzHcTfjQJul9l9pf8uJrUm3AvvGd807h3nPrMfRkJ9Kb23cnt\/lm2+\/+7BEnrpQ4+i\/FkJmZ\/jtr00zjnivtRXYv2zq4cl3O\/D+1pi\/gmQ\/kakL\/8q6p4V7K+De+4NmZ1XnmzsCnKTsOjbZI3It+ezfcS9vrWMmMd3aMuIff\/bqa9DX\/53hSh\/ROwvA\/X5ZgdVtx7+DdCch6+j72iE1y57\/07U899jVT3n9POJe\/rUpJtAemd1DnEPfDb0XZZj2mV6XGX4jUSG+7P+97X6PQTHOPB9Feb1PPsu7a\/Qnf6m1tcGf0uE3+zwd0MiPYm8OQa39cS+cPsI4vGO0tMZ5uN9P2W5vSfeeJ\/pedLJOt\/mCNOUhSbToDIX8TTD\/Vn3cTLcC+MlTjsfv8\/RdzvaA8RjuXQSZpIZbT1x73cxWgPitWcqE7ljvIb7dVRCTGuvKJ1rhXvuK3eBtL+J7wvu6adkOKfN9vzs2zMUGRy+iZrcC54cLGGcihnm3d5H\/A5Nu5\/juL9unGGcSqFcX19RNNy4y3f33Ff4t1fCu\/hZv8uhvRe2ZaNLvAXzH4W8h0C7Fl4L2\/7yhIhv2vXbARauf7cP0pufdUq6ox9IH9DxKNzT17kFJBuN6FrBcR\/PCUy\/AqS7HDbE8sK7+Fm39\/JPWjBNHXWFz6HA57sKzfC5Y5A4FMmuC\/e+9zFOzLfoTv5kCfdsz58hOTjQhnMd8cxMH8blcpyOeST3Evcc97qBd6DLBnp03YYmrH8L7PmNCUXc+7mduG\/9WxvinnsFMXh+RcSnf7Mw5vcKLpty2eYFUObvZ\/a+5e\/BIG5vAzH\/BCjaQabdJ2D6q6BlhbZ556l3TqWzqtt7+DdLjbcP7lnHbS+SzYH3pH5\/lMXfhTJ9gv7OK8M9\/Z2z7uv00ZWXrWFeuIB9vIwR5UWu9dGKIe\/DWPEHMM\/+\/3zLzou\/FHvByxO6B3kK+h7zA8hbItPpx0gPxX3LuwH2k3etfbB\/EX26G7RPuH8c412uiHZWdyr3Qnf3gTSHsivZXNLOx30\/YlppnQGVzviPIO9R0LZCxD5sf\/XdK\/cGf5+lPaO0Rrhu9PdV9L0j3YXn0rfz7N2A1mPkpfcMd0J2bE\/pu9AXnWedn0V7\/zboQfbLbZYwxzn07wo1l+dQL8MsbHanXY\/14lpgmr7QNrEv7DqeiP\/su7SHoSN+m0Y7QeL\/4cy8SNxHtIZ0Xs7466Fbb3fM+B2QnbWpPMc743N4X3sjsMD7J61P3nedA60THNdusySTzzVXrn\/hX2umlft66dojton9DPctf0crvWXc9xHhLONzwv1cbD19sPfDplJfQ89GPic+v8S9bJa4P3fcD423rBetDZ4JnvLObjDuGNVYM7vQt0vSZ996myof7f2ccE\/Mvxc0Ju6jjyo9a57c1xEOShxlT\/3h6BPUzosui2tD2J\/TGfeAe6Fi85z2XnvjGLh3u5bNq3AvXEYsuw8bcR3lRVmSmXFhf5u45+x6n+N4hsy+5A2pu4k6c7f374MSxsA9dam5yOY1ntEehC9UClxDvg7i3yFR1ups13RuI\/azs3ap\/SnyqRvtdU9gH3sc6S+Dyw9E\/KhPHmScjn2Kvo4hM+J+Lu+txrb31FUN92Po0mX4\/hLtPH0tz1v3HOntDo1TN+pXZhf6ypWu+9bbVPmIe6bn4OMT9\/DtRzvXUp+aizHmtWV+HPuypRHv3Ddqe0tLO2OUkW7YvzH0I3lj9G0KGRnu52Dz+9p7uAqX7z11\/0l+nSlNczHGvJrYatSx75gfC1\/Vxns8lG7G6pfk9ejCRotmuGfetrGf4f42aOY8yO\/2hXF+a7q6\/zndI3Qm1nd6fAegudA7vj7vuFF9cIjnAZ0N4rlgcAMjVJRuiPt98O+FmxIf6xvpvlOT4V4y\/Jnw7Vz3\/p7Hs7HPLec3+77Dv4fKvlW4HxuLv1Mfc+2UfktZ456Su27G2A8lb8o+ryOb2OAduWOEcWFnrLuUvn18zPqkPsjeR9zzzif2X2k+4zkhwz3fz8r2C8v8NkTnu+zd00uAe64ZUbZ2+o6V5Yn50m8pD5HXt45wynHtA+6zb7A971bM87YC8Q3cnmLW+7DK59q8Au\/+bXeM85ts3i\/Sx4j378JwC8\/Op3HtcA313Qf4\/dA27zL3Dfddcz3G2nfM9onLrtNWnwddWFX2vzEQvj\/bQ7DPcdf4W59rj1D5ln3AvwHlPtNH19nfCb4eMoYG18k++Pe195K0jds8eznuh85nVo9zrG8MhFPnXTrRnpHZfpeT7QPyp96BPqz6ceozcd30wb10I3+Oex\/tw5sgh3QnqE9w3PfpR6kNySs933b+GGOcagyPQTDnk99w+33kuu1pThyjihPzLffpuqOJPlNtPakNrhfq3fvR2q7GTtz7uYz73jp\/t+d9GQMTkqf+zo2PMcYpx0TsvwU05t\/fy8\/XfaLzFsz7eDW\/wnTkPDvHPKapd+9HqV36M\/Rf+B32DSvid9pu7\/v4eN53j\/s4xsCE5Hkbc4qPMcapx0Psy57x7n5bd6vZOB27vn6yuH+z06p34lv3Wd6+cJ8983KtceJUa3Qf\/PtM\/7+Fsn4H+n2r0jZYjmda\/3v5DTa9dlPyjbgmSvZdjbwRZWq++hS4176UYUL9auW7YO\/5N6bvAfn9gs5f5P63imP62a06PJS7WgN9cF+aV59j\/5vWfcG9tMo1mp3L9LeKvEunnz0n7D8L\/fF3zXPqm\/Q6BSfu+U6uxc+R7aU9ly8j204e76X2EfeuD8WFe92Z6ZsXx5vH6X+\/NZD88phfS2ff4Xg7jOu7HPaN72Vj30rrwGXfhcXjto9x3jNmf9PLsyXPlbShLLOt0GXv3U8S7jObpjl2vi\/+vfwc6cd1wPjNwMVNIOKK+KpRyQbJL++Dk5VNu6JN3GtekWZf2GapT74OuB5vA10A+e+FvQJji2PusnnUVe1+Pq6jrve3L4M8\/l7lOZCC8mI+n3fhXjLIS\/PKdwZx3Ex3jd1ll+Jqs\/R82\/k+xng34XfTxL6+X+AaEM54v664eMve2zJuzW3WhtqK3O+0fY3cgD77Nxealzjv2vNdL1lfWV9lo4wsXXt\/y7vK14E4ltvBiXOS8mI+n90BYv4bVmVVJ\/LrMW733bO+xbyusWf6iHnSb8yfS7o2xtK341oDjn\/H29i4j9gekuZvVvhYOS98V8S7Fb9fFAa8bDZXmleVb+El7Gt9DxlXVx2Ou2TXS33uGnumj5gn\/cT8uaS7xuh3b27\/qTP5P1H3m8C9r7PYvtIqQ1tPX4ZjlU\/HvU3fYMT1zfXQdc+oeS1hp5QffSOeEYR79Zf9971K42nlvH9Q2SG\/UbNP\/v190D\/vMmshzjXvBuKZN\/oTNXldz+iD+56iuRSP2Cj5+Zr72hr39d2FefY76iLivMXGUn\/sk3CvcWW8NDaW9fXCNOdAPml2don+WexrTU8ce0uQflrKbqNMnzFqLD7Hwr0wGP2JdcbE9iS\/DxZ83jn\/mvs+Y\/V++9+i6Lza12d2nXm8FffZ+Et5nIOIbW+zKz5UT64zYcXz5hTvM0aNxfUWcTkl7rG2rjpDZ3Mv++79ZDz6GMRw1z1L62\/zxrZa02PiXv5Nafx9+iSMyi9UmrwlT1jxenOKd2HhGmDjCPRfkMbi+nPcux89xhjZnsvPMJ7l9Zl3jr+E\/Yh5+iU+9jHifXHva184jzroM\/5sDH1sYWmehZXS823nx3FzbrO1QNuY7e2OS+l7DL1RL9RddnaOvq78W\/e14rhi2v2APuONctZNC\/cYw+WzaMRxS9p9O\/l1Q\/pGX599+gD1H8D5CaQ\/ucrLfD\/5gI6VIGI2ySG68TpT455teRstGND6834yHs9v8fk20sJ9bVxa17UyHHO2H2F9996jSnYgw3WXzmYD9NCRrn7zeU13xKRslfA2pr1n+3pfoDuKLr6Ovcv0URt\/Vr5PnuNe+1UN36Vn0n1L29n69\/0vG29Wp6st1plr6Op713O3xdL92Ljv6sMuP3fclzBdype94XPpflu68HXjfZgr7v8H8pBlMw==",
@@ -50,7 +50,7 @@
          "width":190,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "compression":"zlib",
          "data":"eAHt3btOwzAUAFCXr2Bi5yEECx9AWWCBnbIhHjuMCD4dV4J2apVUqRP7nkhRK+r6ce5tZVmuSclFgAABAgQIECBAgAABAgQIECBAgEALAi+zlF7z7SIQSeA75\/yPvI8UcmMNInB\/kNJDvl37E7jIVV\/ur3o17yDwlnP+Xd7vINf9Lbe56F334koSIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAIFOAvZvdmJSqDEB+zcbC6jhECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgACBCQsc5r4tbxcBAik5m0kW1Cyw67lXY5\/NNM\/nQt04G6rm1Bu177Wee7XIOf8k70fNndoa\/5+zd32sbXz6S4AAAQIECBAgQIAAAQIECBAgQIAAAQIEWhVwbk6rkTWubQLOzdmm4zUCBAgQIECAAAECBAgQIECAQFkBa5RlvbU2DQFrlNOIg14QIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQmIKA39lNIQr6UFrA7+xKi2uPAAECBAiUEzjy\/w\/LYWupqMDzrGhzGiNAgAABAgQIECBAgAABAgQIENizwJW1zD0Lq35sgeWa5pd1zUHCYG\/PIIwqqUzA3p7KAvbXXd\/7dcZNrwkMLXCc54An5oFDs06yPvsY1mG5zjk\/l\/drEM9CCDzmnF\/I+xCx3jTIiPP\/j5zznwHy\/nxT0IP+3ZwnaODzsE8DDd0adKBgG+pKwBr0iiLcky5znbNGVCLO2RsJnWH0FOg7Z\/fZ6AmseJUCfT8XVQ5Sp8ML+D4PnwLNA\/wCuhEc\/g==",
@@ -64,7 +64,7 @@
          "width":190,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "draworder":"topdown",
          "id":7,
@@ -80,7 +80,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -92,7 +92,7 @@
                  "width":0,
                  "x":1980,
                  "y":1742
-                },
+                }, 
                 {
                  "height":0,
                  "id":134,
@@ -103,7 +103,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -115,7 +115,7 @@
                  "width":0,
                  "x":2004,
                  "y":1741
-                },
+                }, 
                 {
                  "height":0,
                  "id":135,
@@ -126,7 +126,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -138,7 +138,7 @@
                  "width":0,
                  "x":2028,
                  "y":1741
-                },
+                }, 
                 {
                  "height":0,
                  "id":136,
@@ -149,7 +149,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -161,7 +161,7 @@
                  "width":0,
                  "x":1980,
                  "y":1718
-                },
+                }, 
                 {
                  "height":0,
                  "id":137,
@@ -172,7 +172,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -184,7 +184,7 @@
                  "width":0,
                  "x":2004,
                  "y":1717
-                },
+                }, 
                 {
                  "height":0,
                  "id":138,
@@ -195,7 +195,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -207,7 +207,7 @@
                  "width":0,
                  "x":2028,
                  "y":1717
-                },
+                }, 
                 {
                  "height":0,
                  "id":139,
@@ -218,7 +218,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -230,7 +230,7 @@
                  "width":0,
                  "x":1980,
                  "y":1694
-                },
+                }, 
                 {
                  "height":0,
                  "id":140,
@@ -241,7 +241,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -253,7 +253,7 @@
                  "width":0,
                  "x":2004,
                  "y":1693
-                },
+                }, 
                 {
                  "height":0,
                  "id":141,
@@ -264,7 +264,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -276,7 +276,7 @@
                  "width":0,
                  "x":2028,
                  "y":1693
-                },
+                }, 
                 {
                  "height":0,
                  "id":142,
@@ -287,7 +287,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -299,7 +299,7 @@
                  "width":0,
                  "x":1980,
                  "y":1670
-                },
+                }, 
                 {
                  "height":0,
                  "id":143,
@@ -310,7 +310,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -322,7 +322,7 @@
                  "width":0,
                  "x":2004,
                  "y":1669
-                },
+                }, 
                 {
                  "height":0,
                  "id":144,
@@ -333,7 +333,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -345,7 +345,7 @@
                  "width":0,
                  "x":2028,
                  "y":1669
-                },
+                }, 
                 {
                  "height":0,
                  "id":145,
@@ -356,7 +356,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -368,7 +368,7 @@
                  "width":0,
                  "x":1980,
                  "y":1646
-                },
+                }, 
                 {
                  "height":0,
                  "id":146,
@@ -379,7 +379,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -391,7 +391,7 @@
                  "width":0,
                  "x":2004,
                  "y":1645
-                },
+                }, 
                 {
                  "height":0,
                  "id":147,
@@ -402,7 +402,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -414,7 +414,7 @@
                  "width":0,
                  "x":2028,
                  "y":1645
-                },
+                }, 
                 {
                  "height":0,
                  "id":85,
@@ -424,7 +424,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Use “jump” to overcome obstacles.:::The longer you press, the higher the jump."
+                         "value":"Use \u201cjump\u201d to overcome obstacles.:::The longer you press, the higher the jump."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -432,7 +432,7 @@
                  "width":0,
                  "x":3432,
                  "y":563
-                },
+                }, 
                 {
                  "height":0,
                  "id":86,
@@ -442,7 +442,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press “interact” to throw your item."
+                         "value":"Walk over items to carry them.:::You cannot interact with doors or other entities when carrying items.:::Press \u201cthrow\u201d to throw your current item."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -450,7 +450,7 @@
                  "width":0,
                  "x":3492,
                  "y":443
-                },
+                }, 
                 {
                  "height":0,
                  "id":88,
@@ -468,7 +468,7 @@
                  "width":0,
                  "x":1140,
                  "y":370
-                },
+                }, 
                 {
                  "height":0,
                  "id":89,
@@ -486,7 +486,7 @@
                  "width":0,
                  "x":120,
                  "y":250
-                },
+                }, 
                 {
                  "height":0,
                  "id":102,
@@ -504,7 +504,7 @@
                  "width":0,
                  "x":1392,
                  "y":1999
-                },
+                }, 
                 {
                  "height":0,
                  "id":103,
@@ -522,7 +522,7 @@
                  "width":0,
                  "x":1668,
                  "y":1977
-                },
+                }, 
                 {
                  "height":0,
                  "id":104,
@@ -540,7 +540,7 @@
                  "width":0,
                  "x":2064,
                  "y":2000
-                },
+                }, 
                 {
                  "height":0,
                  "id":109,
@@ -550,7 +550,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"◊ Popular bird feeding spot"
+                         "value":"\u25ca Popular bird feeding spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -558,7 +558,7 @@
                  "width":0,
                  "x":2016,
                  "y":1235
-                },
+                }, 
                 {
                  "height":0,
                  "id":110,
@@ -568,7 +568,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Bouncy mushrooms ahead →"
+                         "value":"Bouncy mushrooms ahead \u2192"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -576,7 +576,7 @@
                  "width":0,
                  "x":3876,
                  "y":534
-                },
+                }, 
                 {
                  "height":0,
                  "id":111,
@@ -594,7 +594,25 @@
                  "width":0,
                  "x":1788,
                  "y":1714
-                },
+                }, 
+                {
+                 "height":0,
+                 "id":161,
+                 "name":"sign",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"You can check the controls in the pause menu at any time."
+                        }],
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":3300,
+                 "y":439
+                }, 
                 {
                  "height":0,
                  "id":112,
@@ -604,7 +622,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"◊ Popular seed throwing spot"
+                         "value":"\u25ca Popular seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -612,7 +630,7 @@
                  "width":0,
                  "x":2532,
                  "y":1861
-                },
+                }, 
                 {
                  "height":0,
                  "id":82,
@@ -622,7 +640,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Hold “down” to fall through platforms."
+                         "value":"Hold \u201cdown\u201d to fall through platforms."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -630,7 +648,7 @@
                  "width":0,
                  "x":3336,
                  "y":490
-                },
+                }, 
                 {
                  "height":0,
                  "id":148,
@@ -640,7 +658,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"◊ Advanced seed throwing spot"
+                         "value":"\u25ca Advanced seed throwing spot"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -648,7 +666,7 @@
                  "width":0,
                  "x":1573,
                  "y":1735
-                },
+                }, 
                 {
                  "height":0,
                  "id":4,
@@ -660,7 +678,7 @@
                  "width":0,
                  "x":2090,
                  "y":672
-                },
+                }, 
                 {
                  "height":0,
                  "id":2,
@@ -672,7 +690,7 @@
                  "width":0,
                  "x":1212,
                  "y":1968
-                },
+                }, 
                 {
                  "height":0,
                  "id":3,
@@ -684,7 +702,7 @@
                  "width":0,
                  "x":3048,
                  "y":1944
-                },
+                }, 
                 {
                  "height":0,
                  "id":9,
@@ -696,7 +714,7 @@
                  "width":0,
                  "x":156,
                  "y":1930
-                },
+                }, 
                 {
                  "height":0,
                  "id":13,
@@ -708,7 +726,7 @@
                  "width":0,
                  "x":3428,
                  "y":850
-                },
+                }, 
                 {
                  "height":0,
                  "id":16,
@@ -720,7 +738,7 @@
                  "width":0,
                  "x":1288,
                  "y":1680
-                },
+                }, 
                 {
                  "height":0,
                  "id":43,
@@ -732,7 +750,7 @@
                  "width":0,
                  "x":3480,
                  "y":192
-                },
+                }, 
                 {
                  "height":0,
                  "id":42,
@@ -744,7 +762,7 @@
                  "width":0,
                  "x":3499,
                  "y":177
-                },
+                }, 
                 {
                  "height":0,
                  "id":17,
@@ -756,7 +774,7 @@
                  "width":0,
                  "x":864,
                  "y":1945
-                },
+                }, 
                 {
                  "height":0,
                  "id":18,
@@ -768,7 +786,7 @@
                  "width":0,
                  "x":2907,
                  "y":1890
-                },
+                }, 
                 {
                  "height":0,
                  "id":19,
@@ -780,7 +798,7 @@
                  "width":0,
                  "x":2001,
                  "y":605
-                },
+                }, 
                 {
                  "height":0,
                  "id":20,
@@ -792,7 +810,7 @@
                  "width":0,
                  "x":1932,
                  "y":562
-                },
+                }, 
                 {
                  "height":0,
                  "id":24,
@@ -804,7 +822,7 @@
                  "width":0,
                  "x":804,
                  "y":2018
-                },
+                }, 
                 {
                  "height":0,
                  "id":25,
@@ -816,7 +834,7 @@
                  "width":0,
                  "x":929,
                  "y":2010
-                },
+                }, 
                 {
                  "height":131,
                  "id":26,
@@ -827,7 +845,7 @@
                  "width":5,
                  "x":163,
                  "y":1011
-                },
+                }, 
                 {
                  "height":0,
                  "id":27,
@@ -839,7 +857,7 @@
                  "width":0,
                  "x":1933,
                  "y":288
-                },
+                }, 
                 {
                  "height":42,
                  "id":36,
@@ -849,7 +867,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"cave"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -861,7 +879,7 @@
                  "width":24,
                  "x":204,
                  "y":2166
-                },
+                }, 
                 {
                  "height":0,
                  "id":55,
@@ -872,12 +890,12 @@
                          "name":"direction",
                          "type":"string",
                          "value":"up"
-                        },
+                        }, 
                         {
                          "name":"distance",
                          "type":"int",
                          "value":200
-                        },
+                        }, 
                         {
                          "name":"velocity",
                          "type":"int",
@@ -889,7 +907,7 @@
                  "width":0,
                  "x":1585,
                  "y":1172
-                },
+                }, 
                 {
                  "height":0,
                  "id":56,
@@ -900,12 +918,12 @@
                          "name":"direction",
                          "type":"string",
                          "value":"up"
-                        },
+                        }, 
                         {
                          "name":"distance",
                          "type":"int",
                          "value":100
-                        },
+                        }, 
                         {
                          "name":"velocity",
                          "type":"int",
@@ -917,7 +935,7 @@
                  "width":0,
                  "x":2364,
                  "y":842
-                },
+                }, 
                 {
                  "height":44,
                  "id":37,
@@ -927,7 +945,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -939,7 +957,7 @@
                  "width":24,
                  "x":3252,
                  "y":148
-                },
+                }, 
                 {
                  "height":288,
                  "id":39,
@@ -950,7 +968,7 @@
                  "width":480,
                  "x":3168,
                  "y":0
-                },
+                }, 
                 {
                  "height":288,
                  "id":44,
@@ -961,7 +979,7 @@
                  "width":480,
                  "x":3168,
                  "y":336
-                },
+                }, 
                 {
                  "height":0,
                  "id":60,
@@ -973,7 +991,7 @@
                  "width":0,
                  "x":1862,
                  "y":2136
-                },
+                }, 
                 {
                  "height":44,
                  "id":45,
@@ -983,7 +1001,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -995,7 +1013,7 @@
                  "width":24,
                  "x":3540,
                  "y":484
-                },
+                }, 
                 {
                  "height":0,
                  "id":80,
@@ -1007,7 +1025,7 @@
                  "width":0,
                  "x":3480,
                  "y":2204
-                },
+                }, 
                 {
                  "height":44,
                  "id":46,
@@ -1017,7 +1035,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"cave"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1029,7 +1047,7 @@
                  "width":24,
                  "x":60,
                  "y":220
-                },
+                }, 
                 {
                  "height":42,
                  "id":48,
@@ -1039,7 +1057,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"cave"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1051,7 +1069,7 @@
                  "width":24,
                  "x":2604,
                  "y":1998
-                },
+                }, 
                 {
                  "height":42,
                  "id":49,
@@ -1061,7 +1079,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"cave"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1073,7 +1091,7 @@
                  "width":24,
                  "x":2724,
                  "y":1998
-                },
+                }, 
                 {
                  "height":624,
                  "id":50,
@@ -1084,7 +1102,7 @@
                  "width":624,
                  "x":3696,
                  "y":0
-                },
+                }, 
                 {
                  "height":42,
                  "id":51,
@@ -1094,7 +1112,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1106,7 +1124,7 @@
                  "width":24,
                  "x":3804,
                  "y":510
-                },
+                }, 
                 {
                  "height":42,
                  "id":52,
@@ -1116,7 +1134,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1128,7 +1146,7 @@
                  "width":24,
                  "x":4188,
                  "y":510
-                },
+                }, 
                 {
                  "height":42,
                  "id":53,
@@ -1138,7 +1156,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"riddle"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1150,7 +1168,7 @@
                  "width":24,
                  "x":2100,
                  "y":1974
-                },
+                }, 
                 {
                  "height":42,
                  "id":54,
@@ -1160,7 +1178,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"riddle"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1172,7 +1190,7 @@
                  "width":24,
                  "x":2220,
                  "y":1782
-                },
+                }, 
                 {
                  "height":264,
                  "id":57,
@@ -1183,7 +1201,7 @@
                  "width":480,
                  "x":3168,
                  "y":672
-                },
+                }, 
                 {
                  "height":40,
                  "id":58,
@@ -1193,7 +1211,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"radio"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1205,7 +1223,7 @@
                  "width":24,
                  "x":2197,
                  "y":224
-                },
+                }, 
                 {
                  "height":40,
                  "id":59,
@@ -1215,7 +1233,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1227,7 +1245,7 @@
                  "width":24,
                  "x":3348,
                  "y":824
-                },
+                }, 
                 {
                  "height":336,
                  "id":61,
@@ -1238,7 +1256,7 @@
                  "width":480,
                  "x":3168,
                  "y":984
-                },
+                }, 
                 {
                  "height":42,
                  "id":62,
@@ -1248,7 +1266,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1260,7 +1278,7 @@
                  "width":24,
                  "x":3276,
                  "y":1230
-                },
+                }, 
                 {
                  "height":42,
                  "id":63,
@@ -1270,7 +1288,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1282,7 +1300,7 @@
                  "width":24,
                  "x":3492,
                  "y":1063
-                },
+                }, 
                 {
                  "height":960,
                  "id":64,
@@ -1293,7 +1311,7 @@
                  "width":480,
                  "x":3168,
                  "y":1344
-                },
+                }, 
                 {
                  "height":42,
                  "id":65,
@@ -1303,7 +1321,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"riddle"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1315,7 +1333,7 @@
                  "width":24,
                  "x":1741,
                  "y":1686
-                },
+                }, 
                 {
                  "height":42,
                  "id":66,
@@ -1325,7 +1343,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1337,7 +1355,7 @@
                  "width":24,
                  "x":3276,
                  "y":2190
-                },
+                }, 
                 {
                  "height":42,
                  "id":77,
@@ -1347,7 +1365,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"riddle"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1359,7 +1377,7 @@
                  "width":24,
                  "x":1933,
                  "y":1350
-                },
+                }, 
                 {
                  "height":42,
                  "id":78,
@@ -1369,7 +1387,7 @@
                          "name":"bgm",
                          "type":"string",
                          "value":"overworld"
-                        },
+                        }, 
                         {
                          "name":"target",
                          "type":"string",
@@ -1381,7 +1399,7 @@
                  "width":24,
                  "x":3540,
                  "y":1397
-                },
+                }, 
                 {
                  "height":505,
                  "id":79,
@@ -1398,7 +1416,7 @@
                  "width":384,
                  "x":3216,
                  "y":1608
-                },
+                }, 
                 {
                  "height":45,
                  "id":81,
@@ -1408,7 +1426,7 @@
                          "name":"setDialogEntity",
                          "type":"string",
                          "value":"stonedisciple"
-                        },
+                        }, 
                         {
                          "name":"setDialogValue",
                          "type":"string",
@@ -1420,7 +1438,7 @@
                  "width":48,
                  "x":3384,
                  "y":1443
-                },
+                }, 
                 {
                  "height":0,
                  "id":87,
@@ -1432,7 +1450,7 @@
                  "width":0,
                  "x":3528,
                  "y":432
-                },
+                }, 
                 {
                  "height":0,
                  "id":97,
@@ -1450,7 +1468,7 @@
                  "width":0,
                  "x":4260,
                  "y":1464
-                },
+                }, 
                 {
                  "height":0,
                  "id":98,
@@ -1468,7 +1486,7 @@
                  "width":0,
                  "x":4452,
                  "y":1464
-                },
+                }, 
                 {
                  "height":912,
                  "id":90,
@@ -1479,7 +1497,7 @@
                  "width":912,
                  "x":3648,
                  "y":624
-                },
+                }, 
                 {
                  "height":0,
                  "id":91,
@@ -1491,7 +1509,7 @@
                  "width":0,
                  "x":4104,
                  "y":1416
-                },
+                }, 
                 {
                  "height":0,
                  "id":92,
@@ -1503,7 +1521,7 @@
                  "width":0,
                  "x":4089,
                  "y":936
-                },
+                }, 
                 {
                  "height":0,
                  "id":93,
@@ -1515,7 +1533,7 @@
                  "width":0,
                  "x":4056,
                  "y":1293
-                },
+                }, 
                 {
                  "height":0,
                  "id":94,
@@ -1527,7 +1545,7 @@
                  "width":0,
                  "x":4176,
                  "y":1105
-                },
+                }, 
                 {
                  "height":2304,
                  "id":95,
@@ -1538,7 +1556,7 @@
                  "width":3168,
                  "x":0,
                  "y":0
-                },
+                }, 
                 {
                  "height":42,
                  "id":100,
@@ -1555,7 +1573,7 @@
                  "width":24,
                  "x":3684,
                  "y":798
-                },
+                }, 
                 {
                  "height":42,
                  "id":101,
@@ -1572,7 +1590,7 @@
                  "width":24,
                  "x":4451,
                  "y":822
-                },
+                }, 
                 {
                  "height":0,
                  "id":105,
@@ -1584,7 +1602,7 @@
                  "width":0,
                  "x":3504,
                  "y":844
-                },
+                }, 
                 {
                  "height":0,
                  "id":106,
@@ -1596,7 +1614,7 @@
                  "width":0,
                  "x":168,
                  "y":1131
-                },
+                }, 
                 {
                  "height":24,
                  "id":107,
@@ -1607,7 +1625,7 @@
                  "width":72,
                  "x":1897,
                  "y":212
-                },
+                }, 
                 {
                  "height":119,
                  "id":108,
@@ -1618,7 +1636,7 @@
                  "width":33,
                  "x":2132,
                  "y":1067
-                },
+                }, 
                 {
                  "height":0,
                  "id":113,
@@ -1630,7 +1648,7 @@
                  "width":0,
                  "x":2592,
                  "y":1863
-                },
+                }, 
                 {
                  "height":3,
                  "id":114,
@@ -1640,7 +1658,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1652,7 +1670,7 @@
                  "width":48,
                  "x":3264,
                  "y":2090
-                },
+                }, 
                 {
                  "height":3,
                  "id":115,
@@ -1662,7 +1680,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1674,7 +1692,7 @@
                  "width":48,
                  "x":3384,
                  "y":2090
-                },
+                }, 
                 {
                  "height":3,
                  "id":116,
@@ -1684,7 +1702,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1696,7 +1714,7 @@
                  "width":48,
                  "x":3504,
                  "y":2090
-                },
+                }, 
                 {
                  "height":3,
                  "id":117,
@@ -1706,7 +1724,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1718,7 +1736,7 @@
                  "width":48,
                  "x":3264,
                  "y":1994
-                },
+                }, 
                 {
                  "height":3,
                  "id":118,
@@ -1728,7 +1746,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1740,7 +1758,7 @@
                  "width":48,
                  "x":3384,
                  "y":1994
-                },
+                }, 
                 {
                  "height":3,
                  "id":119,
@@ -1750,7 +1768,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1762,7 +1780,7 @@
                  "width":48,
                  "x":3504,
                  "y":1994
-                },
+                }, 
                 {
                  "height":3,
                  "id":120,
@@ -1772,7 +1790,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1784,7 +1802,7 @@
                  "width":48,
                  "x":3264,
                  "y":1898
-                },
+                }, 
                 {
                  "height":3,
                  "id":121,
@@ -1794,7 +1812,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1806,7 +1824,7 @@
                  "width":48,
                  "x":3384,
                  "y":1898
-                },
+                }, 
                 {
                  "height":3,
                  "id":122,
@@ -1816,7 +1834,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1828,7 +1846,7 @@
                  "width":48,
                  "x":3504,
                  "y":1898
-                },
+                }, 
                 {
                  "height":3,
                  "id":123,
@@ -1838,7 +1856,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1850,7 +1868,7 @@
                  "width":48,
                  "x":3264,
                  "y":1802
-                },
+                }, 
                 {
                  "height":3,
                  "id":124,
@@ -1860,7 +1878,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1872,7 +1890,7 @@
                  "width":48,
                  "x":3384,
                  "y":1802
-                },
+                }, 
                 {
                  "height":3,
                  "id":125,
@@ -1882,7 +1900,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1894,7 +1912,7 @@
                  "width":48,
                  "x":3504,
                  "y":1802
-                },
+                }, 
                 {
                  "height":3,
                  "id":126,
@@ -1904,7 +1922,7 @@
                          "name":"col",
                          "type":"int",
                          "value":0
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1916,7 +1934,7 @@
                  "width":48,
                  "x":3264,
                  "y":1706
-                },
+                }, 
                 {
                  "height":3,
                  "id":127,
@@ -1926,7 +1944,7 @@
                          "name":"col",
                          "type":"int",
                          "value":1
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1938,7 +1956,7 @@
                  "width":48,
                  "x":3384,
                  "y":1706
-                },
+                }, 
                 {
                  "height":3,
                  "id":128,
@@ -1948,7 +1966,7 @@
                          "name":"col",
                          "type":"int",
                          "value":2
-                        },
+                        }, 
                         {
                          "name":"row",
                          "type":"int",
@@ -1960,7 +1978,7 @@
                  "width":48,
                  "x":3504,
                  "y":1706
-                },
+                }, 
                 {
                  "height":5,
                  "id":129,
@@ -1971,7 +1989,7 @@
                  "width":384,
                  "x":3216,
                  "y":2140
-                },
+                }, 
                 {
                  "height":1,
                  "id":130,
@@ -1988,7 +2006,7 @@
                  "width":384,
                  "x":3216,
                  "y":1705
-                },
+                }, 
                 {
                  "height":1,
                  "id":131,
@@ -2005,7 +2023,7 @@
                  "width":384,
                  "x":3216,
                  "y":1801
-                },
+                }, 
                 {
                  "height":1,
                  "id":132,
@@ -2022,7 +2040,7 @@
                  "width":384,
                  "x":3216,
                  "y":1897
-                },
+                }, 
                 {
                  "height":24,
                  "id":151,
@@ -2031,7 +2049,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A strange device…:::There is no manual available."
+                         "value":"A strange device\u2026:::There is no manual available."
                         }],
                  "rotation":0,
                  "type":"trigger",
@@ -2039,7 +2057,7 @@
                  "width":24,
                  "x":3240,
                  "y":417
-                },
+                }, 
                 {
                  "height":24,
                  "id":152,
@@ -2056,7 +2074,7 @@
                  "width":24,
                  "x":1920,
                  "y":542
-                },
+                }, 
                 {
                  "height":46,
                  "id":153,
@@ -2066,7 +2084,7 @@
                          "name":"content",
                          "type":"string",
                          "value":"A collection of books regarding non euclidean architecture.:::Just thinking about the contents drives me mad."
-                        },
+                        }, 
                         {
                          "name":"duration",
                          "type":"int",
@@ -2078,7 +2096,7 @@
                  "width":30,
                  "x":3558,
                  "y":2162
-                },
+                }, 
                 {
                  "height":0,
                  "id":154,
@@ -2090,7 +2108,7 @@
                  "width":0,
                  "x":3252,
                  "y":439
-                },
+                }, 
                 {
                  "height":0,
                  "id":156,
@@ -2102,7 +2120,7 @@
                  "width":0,
                  "x":3288,
                  "y":857
-                },
+                }, 
                 {
                  "height":0,
                  "id":47,
@@ -2114,7 +2132,7 @@
                  "width":0,
                  "x":3252,
                  "y":420
-                },
+                }, 
                 {
                  "height":24,
                  "id":157,
@@ -2131,7 +2149,7 @@
                  "width":14,
                  "x":2141,
                  "y":240
-                },
+                }, 
                 {
                  "height":0,
                  "id":158,
@@ -2143,7 +2161,7 @@
                  "width":0,
                  "x":3552,
                  "y":748
-                },
+                }, 
                 {
                  "height":11,
                  "id":159,
@@ -2168,7 +2186,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":160,
+ "nextobjectid":162,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",
