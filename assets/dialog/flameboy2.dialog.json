@@ -65,6 +65,6 @@
         "Bye! @nodialog !end"
     ],
     "nodialog": [
-        "I really don't want to talk to you. !end"
+        "I really don't want to talk to you anymore. !end"
     ]
 }
