@@ -317,6 +317,9 @@ export class Player extends PhysicsEntity {
             this.multiJump = true;
         }
     }
+    public disableMultiJump (): void {
+        this.multiJump = false;
+    }
 
     public enableFriendship (): void {
         if (!this.hasFriendship) {

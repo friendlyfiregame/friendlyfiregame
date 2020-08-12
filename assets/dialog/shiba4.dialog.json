@@ -1,5 +1,14 @@
 {
     "entry": [
-        "Thank you so much? !end @entry"
+        "Hello best friend!",
+        "Thank you for visiting.",
+        "We have the best day.",
+        "Brother is glowing!",
+        "►He sure is. @entry2 !end"
+    ],
+    "entry2": [
+        "♪ Happy bark!",
+        "Play???",
+        "►Later. I still have something to do. @entry2 !end"
     ]
 }

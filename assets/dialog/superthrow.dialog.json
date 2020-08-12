@@ -36,16 +36,9 @@
         "Well… I'll let you in on a little secret.",
         "Listen closely!",
         "It's not that items can't go through doors.",
-        "They just prevent you from stepping through via some kind of parasitic mind control.",
+        "They just don't want to.",
         "But you can trick them with a precise throw.",
-        "►Parasitic… eww… @parasitic",
         "►How would that help? @throw"
-    ],
-    "parasitic": [
-        "That's really nothing you want to think about…",
-        "The same applies to your collected powerups.",
-        "They are as much a part of you as you are a part of them now.",
-        "►No details please… How would a throw help? @throw"
     ],
     "throw": [
         "It's really easy.",

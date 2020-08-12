@@ -65,6 +65,7 @@ export class Shiba extends ScriptableNPC {
 
         if (this.state === ShibaState.FLYING_AWAY) {
             this.lookAtPlayer = false;
+            this.scene.player.disableMultiJump();
             this.setMaxVelocity(3);
         } else if (this.state === ShibaState.ON_MOUNTAIN) {
             this.move = 0;
@@ -107,7 +108,7 @@ export class Shiba extends ScriptableNPC {
 
     public showDialoguePrompt (): boolean {
         if (!super.showDialoguePrompt()) return false;
-        if (Conversation.getGlobals()['$broughtBone'] && !Conversation.getGlobals()['$talkedToShibaWithBone']) return true;
+        // if (Conversation.getGlobals()['$broughtBone'] && !Conversation.getGlobals()['$talkedToShibaWithBone']) return true;
         return false;
     }
 
@@ -183,9 +184,9 @@ export class Shiba extends ScriptableNPC {
         }
 
         // Check if Bone is near
-        if (!Conversation.getGlobals()['$broughtBone'] && this.distanceTo(this.scene.bone) < 100) {
+        if (Conversation.getGlobals()["$gotBoneQuest"] && !Conversation.getGlobals()['$broughtBone'] && this.distanceTo(this.scene.bone) < 100) {
             Conversation.setGlobal('broughtBone', 'true');
-            this.think('Wow! Bone!', 3000);
+            this.think('Wow! Bone!!!', 2000);
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba2"]);
         }
     }

@@ -18,6 +18,7 @@ import shiba1 from '../assets/dialog/shiba1.dialog.json';
 import shiba2 from '../assets/dialog/shiba2.dialog.json';
 import shiba3 from '../assets/dialog/shiba3.dialog.json';
 import shiba4 from '../assets/dialog/shiba4.dialog.json';
+import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
 import spider1 from '../assets/dialog/spider1.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
@@ -50,6 +51,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "shiba2": shiba2,
     "shiba3": shiba3,
     "shiba4": shiba4,
+    "powershiba2": powershiba2,
     "spider1": spider1,
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
@@ -183,8 +185,10 @@ export class Campaign {
                 case  "talkedtofire":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
                     break;
-                case "enableShiba3":
+                case "giveBone":
+                    Conversation.setGlobal('gaveBoneToPowerShiba', 'true');
                     this.runAction("enable", null, ["shiba", "shiba3"]);
+                    this.runAction("enable", null, ["powershiba", "powershiba2"]);
                     break;
                 case "shibaNextState":
                     this.gameScene!.shiba.nextState();
@@ -270,7 +274,8 @@ export class Campaign {
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
                         "shadowpresence": this.gameScene.shadowPresence,
-                        "shiba": this.gameScene.shiba
+                        "shiba": this.gameScene.shiba,
+                        "powershiba": this.gameScene.powerShiba
                     };
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
@@ -291,7 +296,8 @@ export class Campaign {
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
                         "shadowpresence": this.gameScene.shadowPresence,
-                        "shiba": this.gameScene.shiba
+                        "shiba": this.gameScene.shiba,
+                        "powershiba": this.gameScene.powerShiba
                     };
                     const targetNpc1 = npcMap1[char1];
                     if (targetNpc1) {

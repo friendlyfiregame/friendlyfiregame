@@ -6,7 +6,6 @@ import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer } from './Renderer';
 import { Conversation } from './Conversation';
 import powershiba1 from '../assets/dialog/powershiba1.dialog.json';
-import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
 import powershiba3 from '../assets/dialog/powershiba3.dialog.json';
 
 export enum PowerShibaState {
@@ -45,6 +44,8 @@ export class PowerShiba extends NPC {
 
     protected showDialoguePrompt (): boolean {
         if (!super.showDialoguePrompt()) return false;
+        else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && !Conversation.getGlobals()["$seedgrown"]) return true;
+        else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && Conversation.getGlobals()["$seedgrown"] && !Conversation.getGlobals()["$gotPowerShibaQuest"]) return true;
         return false;
     }
 
@@ -52,9 +53,8 @@ export class PowerShiba extends NPC {
     public feed(): void {
         this.floatSpeed = 3;
         this.floatAmount = 5;
-        this.conversation = new Conversation(powershiba2, this);
-        Conversation.setGlobal('gaveBoneToPowerShiba', 'true');
-        this.think('thx', 3000);
+        this.scene.game.campaign.runAction('giveBone');
+        this.think('Oh… I remember…', 3000);
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

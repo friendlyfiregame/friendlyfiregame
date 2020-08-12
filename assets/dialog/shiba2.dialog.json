@@ -1,7 +1,14 @@
 {
     "entry": [
-        "You found Bone! !set $talkedToShibaWithBone true",
-        "Bring to Friend!",
-        "Go! !end @entry"
+        "You found Bone!",
+        "Wow!!!",
+        "Bring to brother please.",
+        "►Sure, I'm on the way! !end @entry2"
+    ],
+    "entry2": [
+        "Friend!",
+        "Go to brother.",
+        "Bring bone. He will rememeber!",
+        "►Sure, I'm on the way! !end @entry2"
     ]
 }

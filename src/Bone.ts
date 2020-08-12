@@ -6,6 +6,7 @@ import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer } from './Renderer';
 import { Environment } from './World';
 import { Sound } from './Sound';
+import { Conversation } from './Conversation';
 
 @entity("bone")
 export class Bone extends PhysicsEntity {
@@ -40,7 +41,7 @@ export class Bone extends PhysicsEntity {
             this.setVelocity(vx, 10);
         }
 
-        if (!this.isCarried() && this.distanceTo(this.scene.powerShiba) < 20) {
+        if (Conversation.getGlobals()["$gotBoneQuest"] && !this.isCarried() && this.distanceTo(this.scene.powerShiba) < 20) {
             Bone.successSound.play();
             this.scene.powerShiba.feed();
             this.scene.removeGameObject(this);
