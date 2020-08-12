@@ -6,20 +6,23 @@ import { ControllerEventType } from "./ControllerEventType";
 import { ControllerFamily } from "./ControllerFamily";
 
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
-keyToIntentMappings.set(" ", [ControllerIntent.PLAYER_JUMP]);
-keyToIntentMappings.set("w", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.MENU_UP]);
-keyToIntentMappings.set("a", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
-keyToIntentMappings.set("s", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
-keyToIntentMappings.set("d", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
-keyToIntentMappings.set("ArrowUp", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("Space", [ControllerIntent.PLAYER_JUMP]);
+keyToIntentMappings.set("KeyW", [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("KeyA", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
+keyToIntentMappings.set("KeyS", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
+keyToIntentMappings.set("KeyD", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
+keyToIntentMappings.set("ArrowUp", [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
 keyToIntentMappings.set("ArrowDown", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
 keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
 keyToIntentMappings.set("ArrowRight", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
-keyToIntentMappings.set("Enter", [ControllerIntent.PLAYER_ACTION, ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("Enter", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
 keyToIntentMappings.set("Escape", [ControllerIntent.ABORT, ControllerIntent.PAUSE]);
-keyToIntentMappings.set("e", [ControllerIntent.PLAYER_ACTION, ControllerIntent.CONFIRM]);
-keyToIntentMappings.set("1", [ControllerIntent.PLAYER_DANCE_1]);
-keyToIntentMappings.set("2", [ControllerIntent.PLAYER_DANCE_2]);
+keyToIntentMappings.set("ShiftLeft", [ControllerIntent.PLAYER_RUN]);
+keyToIntentMappings.set("ShiftRight", [ControllerIntent.PLAYER_RUN]);
+keyToIntentMappings.set("KeyE", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("KeyF", [ControllerIntent.PLAYER_ACTION]);
+keyToIntentMappings.set("Digit1", [ControllerIntent.PLAYER_DANCE_1]);
+keyToIntentMappings.set("Digit2", [ControllerIntent.PLAYER_DANCE_2]);
 
 export class Keyboard {
     public readonly onKeyDown = new Signal<KeyboardEvent>();
@@ -35,7 +38,7 @@ export class Keyboard {
 
     private handleKeyPress(event: KeyboardEvent): void {
         this.onKeyPress.emit(event)
-        this.controllerManager.onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.PRESS, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE], event.repeat))
+        this.controllerManager.onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.PRESS, keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat))
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
@@ -43,7 +46,7 @@ export class Keyboard {
             this.pressed.add(event.key);
         }
         this.onKeyDown.emit(event);
-        this.controllerManager.onButtonDown.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.DOWN, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE], event.repeat))
+        this.controllerManager.onButtonDown.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.DOWN, keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat))
     }
 
     private handleKeyUp(event: KeyboardEvent): void {
@@ -51,7 +54,7 @@ export class Keyboard {
             this.pressed.delete(event.key);
         }
         this.onKeyUp.emit(event);
-        this.controllerManager.onButtonUp.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.UP, keyToIntentMappings.get(event.key) || [ControllerIntent.NONE], event.repeat))
+        this.controllerManager.onButtonUp.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.UP, keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat))
     }
 
     public isPressed(key: string): boolean {

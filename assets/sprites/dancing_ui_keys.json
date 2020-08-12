@@ -1,65 +1,59 @@
-{ "frames": [
-   {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 9, "h": 9 },
+{ "frames": {
+   "0": {
+    "frame": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "sourceSize": { "w": 10, "h": 10 },
     "duration": 100
    },
-   {
-    "filename": "1",
-    "frame": { "x": 9, "y": 0, "w": 9, "h": 9 },
+   "1": {
+    "frame": { "x": 10, "y": 0, "w": 10, "h": 10 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "sourceSize": { "w": 10, "h": 10 },
     "duration": 100
    },
-   {
-    "filename": "2",
-    "frame": { "x": 18, "y": 0, "w": 9, "h": 9 },
+   "2": {
+    "frame": { "x": 20, "y": 0, "w": 10, "h": 10 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "sourceSize": { "w": 10, "h": 10 },
     "duration": 100
    },
-   {
-    "filename": "3",
-    "frame": { "x": 0, "y": 9, "w": 9, "h": 9 },
+   "3": {
+    "frame": { "x": 30, "y": 0, "w": 10, "h": 10 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "sourceSize": { "w": 10, "h": 10 },
     "duration": 100
    },
-   {
-    "filename": "4",
-    "frame": { "x": 9, "y": 9, "w": 9, "h": 9 },
+   "4": {
+    "frame": { "x": 40, "y": 0, "w": 10, "h": 10 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "sourceSize": { "w": 10, "h": 10 },
     "duration": 100
    },
-   {
-    "filename": "5",
-    "frame": { "x": 18, "y": 9, "w": 9, "h": 9 },
+   "5": {
+    "frame": { "x": 50, "y": 0, "w": 10, "h": 10 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 10, "h": 10 },
     "sourceSize": { "w": 10, "h": 10 },
     "duration": 100
    }
- ],
+ },
  "meta": {
   "app": "http://www.aseprite.org/",
   "version": "1.2.21-x64",
   "image": "dancing_ui_keys.png",
   "format": "RGBA8888",
-  "size": { "w": 27, "h": 18 },
+  "size": { "w": 60, "h": 10 },
   "scale": "1",
   "frameTags": [
    { "name": "keyboard-dance1", "from": 0, "to": 0, "direction": "forward" },

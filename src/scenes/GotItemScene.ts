@@ -1,11 +1,11 @@
-import { Scene } from "../Scene";
-import { FriendlyFire } from "../FriendlyFire";
 import { asset } from "../Assets";
-import { easeOutExpo, easeInExpo } from "../easings";
 import { BitmapFont } from "../BitmapFont";
+import { DIALOG_FONT } from "../constants";
+import { easeInExpo, easeOutExpo } from "../easings";
+import { FriendlyFire } from "../FriendlyFire";
+import { Scene } from "../Scene";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
-import { DIALOG_FONT } from "../constants";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE }
 
@@ -46,13 +46,13 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     private subtitles = [
         [
-            "Run and Never look back",
+            "Run and never look back",
             "An exceptional ally",
             "There is something in that dark corner"
         ],
         [
             "Not suitable for step dancing",
-            "An all time classic",
+            "An all-time classic",
             "Still in mint condition",
             "Even works without wearing them",
             "Why would a tree have those?"
@@ -61,7 +61,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Birds love it!",
             "Feels like cheating",
             "Free stuff is the best",
-            "m-m-m-m-multijump"
+            "M-m-m-multi-jump"
         ],
         [
             "Like tears in the rain"

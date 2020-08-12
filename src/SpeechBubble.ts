@@ -1,5 +1,6 @@
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
+import { ConversationLine } from './Conversation';
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
 import { GameScene } from "./scenes/GameScene";
 import { Padding, Point, Size } from "./Geometry";
@@ -42,11 +43,12 @@ export function roundRect(
     ctx.closePath();
 
     return ctx;
-  }
+}
 
 export class SpeechBubble {
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
+    private static OPTION_BUBBLE_INDENTATION = 11;
 
     private messageLines: string[] = [];
     private options: string[] = [];
@@ -65,7 +67,7 @@ export class SpeechBubble {
     private isVisible = false;
 
     private content: string [] = [];
-    private contentLinesByLength: string[] = [];
+    private longestLine: number = 0;
 
     private partnersBubble: SpeechBubble | null = null;
 
@@ -73,7 +75,7 @@ export class SpeechBubble {
         private scene: GameScene,
         public anchor: Point,
         private lineHeightFactor = 1,
-        private padding = new Padding(3, 6, 4, 6),
+        private padding = new Padding(3, 7, 4, 7),
         private color = "white",
         private relativeToScreen = false
     ) {
@@ -95,13 +97,12 @@ export class SpeechBubble {
             (!this.partnersBubble || !this.partnersBubble.isCurrentlyWriting && this.selectedOptionIndex > -1);
     }
 
-    async setMessage(message: string): Promise<void> {
-        this.messageLines = [""];
+    public async setMessage(message: string): Promise<void> {
+        this.messageLines = [''];
         this.isCurrentlyWriting = true;
-        const font = SpeechBubble.font;
-        this.contentLinesByLength = message.split("\n").concat(this.options).sort((a, b) =>
-            font.measureText(b).width - font.measureText(a).width);
+        this.longestLine = this.determineMaxLineLength(message.split('\n'));
         let index = 0;
+
         for (let char of message) {
             if (!char) {
                 index++;
@@ -118,22 +119,22 @@ export class SpeechBubble {
             }
             this.updateContent();
         }
+
         this.preventUnwantedSelection = true;
         this.updateContent();
         this.isCurrentlyWriting = false;
+
         setTimeout(() => {
             this.preventUnwantedSelection = false;
         }, 300);
     }
 
-    setOptions(options: string[], partnersBubble: SpeechBubble) {
+    public setOptions(options: string[], partnersBubble: SpeechBubble) {
         this.partnersBubble = partnersBubble;
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;
         this.updateContent();
-        const font = SpeechBubble.font;
-        this.contentLinesByLength = this.content.slice().sort((a, b) =>
-            font.measureText(b).width - font.measureText(a).width);
+        this.longestLine = this.determineMaxLineLength(this.messageLines);
     }
 
     private updateContent() {
@@ -141,13 +142,11 @@ export class SpeechBubble {
         this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.padding.vertical;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
             return;
         }
-        const font = SpeechBubble.font;
-        const longestLine = this.contentLinesByLength[0];
-        const metrics = longestLine ? font.measureText(longestLine + (!!this.partnersBubble ? " " : "")) : { width: 0, height: 0};
+
         let posX = this.x;
         let posY = this.y;
         let offsetX = 0;
@@ -159,24 +158,28 @@ export class SpeechBubble {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
             const relativeX = posX - visibleRect.x;
-            const clipAmount = Math.max((metrics.width / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (metrics.width / 2), 0);
+            const clipAmount = Math.max((this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (this.longestLine / 2), 0);
 
             if (clipAmount !== 0) {
                 offsetX = clipAmount + (10 * Math.sign(clipAmount));
             }
         }
+
         posX -= offsetX;
+
+        const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.padding.left;
+        const bubbleYPos = -posY - this.height;
 
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
             position: new Point(
-                posX - Math.round(metrics.width / 2) - this.padding.left,
-                -posY - this.height
+                bubbleXPos,
+                bubbleYPos
             ),
             size: new Size(
-                metrics.width + this.padding.horizontal,
+                this.longestLine + this.padding.horizontal,
                 this.height
             ),
             radius: 5,
@@ -184,11 +187,11 @@ export class SpeechBubble {
             offsetX
         });
 
-        const textXPos = Math.round(posX - metrics.width / 2);
+        const textXPos = bubbleXPos + this.padding.left;
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.padding.top);
+            const textYPos = Math.round(bubbleYPos + this.padding.top + i * this.lineHeight);
 
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
@@ -197,23 +200,23 @@ export class SpeechBubble {
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
                 position: new Point(textXPos, textYPos),
-                asset: font,
+                asset: SpeechBubble.font
             })
         }
 
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const textYPos = Math.round(-posY - this.height + i * this.lineHeight + this.padding.top);
+            const textYPos = Math.round(bubbleYPos + this.padding.top + i * this.lineHeight);
 
             if (isSelected) {
                 this.scene.renderer.add({
                     type: RenderingType.TEXT,
                     layer: RenderingLayer.UI,
-                    text: "►",
+                    text: ConversationLine.OPTION_MARKER,
                     textColor: textColor,
                     relativeToScreen: this.relativeToScreen,
                     position: new Point(textXPos, textYPos),
-                    asset: font
+                    asset: SpeechBubble.font
                 })
             }
 
@@ -223,14 +226,28 @@ export class SpeechBubble {
                 text: this.options[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: new Point(textXPos + 11, textYPos),
-                asset: font
+                position: new Point(textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION, textYPos),
+                asset: SpeechBubble.font
             })
         }
     }
 
-    update(anchorX: number, anchorY: number): void {
+    public update(anchorX: number, anchorY: number): void {
         this.x = Math.round(anchorX + this.offset.x);
         this.y = Math.round(anchorY + this.offset.y);
+    }
+
+    private determineMaxLineLength(message: string[]): number {
+        let lineLengths = message.map(
+            line => SpeechBubble.font.measureText(line).width
+        );
+
+        lineLengths = lineLengths.concat(
+            this.options.map(
+                line => SpeechBubble.font.measureText(line).width + SpeechBubble.OPTION_BUBBLE_INDENTATION
+            )
+        );
+
+        return Math.max(...lineLengths);
     }
 }

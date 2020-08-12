@@ -29,7 +29,7 @@ enum MenuItemKey {
 
 const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
     [MenuItemKey.START]: { label: "Start Game" },
-    [MenuItemKey.CONTROLS]: { label: "Controls" },
+    [MenuItemKey.CONTROLS]: { label: "Controls and Options" },
     [MenuItemKey.CREDITS]: { label: "Credits" },
     [MenuItemKey.EXIT]: { label: "Exit Game", electronOnly: true },
 };
