@@ -46,6 +46,7 @@ export class PowerShiba extends NPC {
         if (!super.showDialoguePrompt()) return false;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && !Conversation.getGlobals()["$seedgrown"]) return true;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && Conversation.getGlobals()["$seedgrown"] && !Conversation.getGlobals()["$gotPowerShibaQuest"]) return true;
+        else if (this.state === PowerShibaState.ON_MOUNTAIN) return true;
         return false;
     }
 
