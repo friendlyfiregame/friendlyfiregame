@@ -143,10 +143,19 @@ export class BitmapFont {
     public measureText(text: string): { width: number, height: number } {
         const CHAR_SPACING = 1;
         let width = 0;
+        let precursorChar = null;
 
         for (var char of text) {
             const index = this.getCharIndex(char);
-            width += this.charWidths[index] + CHAR_SPACING;
+            const compactablePrecursors = this.compactablePrecursors[index];
+
+            width += this.charWidths[index];
+
+            if (precursorChar && !(precursorChar in compactablePrecursors)) {
+                width += CHAR_SPACING;
+            }
+
+            precursorChar = char;
         }
 
         if (text.length > 0) {

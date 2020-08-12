@@ -34,7 +34,7 @@
         "Go be generic somewhere else, it's unbearable. !set visited",
         "►Don't change the subject. You're even glowing.",
         "►Ouch! The truth hurts. @entry",
-        "Yeah so? That's none of your business and as if you needed a flying ability in the first place!",
+        "Yeah, so? That's none of your business and as if you needed a flying ability in the first place!",
         "I bet you got one of those multi-jump things! Even birds are falling for this scam nowadays.",
         "►Guilty as charged.",
         "I guessed so. @entry"
@@ -43,7 +43,7 @@
         "[not deal]Seeds? What is there to know? That's basic gardening. !set visited",
         "[not deal]Just put the thing in dirt and pour some liquids over it.",
         "►[not deal]I don't have any water.",
-        "[not deal]Well, that's too bad. But not really my problem, isn't it?",
+        "[not deal]Well, that's too bad. But not really my problem, is it?",
         "►[not deal]Then I will annoy you until it rains naturally. @annoy",
         "[not deal]Don't you have some water? @water",
         "[not $seedgrown]Seriously? I already gave you my stupid son and an instruction on how to get the water.",
@@ -79,16 +79,16 @@
         "I think one of my children holds this kind of useless power.",
         "Let's see…",
         "…",
-        "Yeah… Dave! That little misift is nothing but trouble.",
+        "Yeah… Dave! That little misfit is nothing but trouble.",
         "You can have him.",
         "►Are you really just giving away your child? @giveaway",
         "►Thanks. I will take care of him. @takecare"
     ],
     "giveaway": [
         "Don't worry. I have plenty more where this one comes from.",
-        "Also, this might be the only oppertunity for him to actually be of importance.",
+        "Also, this might be the only opportunity for him to actually be of any importance.",
         "Plus, you have no idea how annoying he can be.",
-        "So, win win I guess? !learnraindance @use"
+        "So, win-win I guess? !learnraindance @use"
     ],
     "takecare": [
         "Whatever. Just don't bring him back! !learnraindance @use"

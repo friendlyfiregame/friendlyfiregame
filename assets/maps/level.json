@@ -2170,7 +2170,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Just a regular old stereo...:::How disappointing."
+                         "value":"Just a regular old stereo…:::How disappointing."
                         }],
                  "rotation":0,
                  "type":"trigger",
