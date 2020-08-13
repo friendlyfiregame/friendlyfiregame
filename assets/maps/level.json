@@ -796,8 +796,8 @@
                  "type":"pointer",
                  "visible":true,
                  "width":0,
-                 "x":2001,
-                 "y":605
+                 "x":1932,
+                 "y":621
                 }, 
                 {
                  "height":0,
@@ -2170,7 +2170,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Just a regular old stereo…:::How disappointing."
+                         "value":"Just a regular old stereo\u2026:::How disappointing."
                         }],
                  "rotation":0,
                  "type":"trigger",
