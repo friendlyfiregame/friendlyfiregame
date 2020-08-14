@@ -36,9 +36,7 @@ export abstract class NPC extends PhysicsEntity {
         }
     }
 
-
     public async think(message: string, time: number): Promise<void> {
-        console.log('think!');
         if (this.thinkBubble) {
             this.thinkBubble.hide();
             this.thinkBubble = null;
