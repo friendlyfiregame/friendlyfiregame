@@ -7,14 +7,15 @@ import { Conversation } from './Conversation';
 import { RenderingLayer } from './Renderer';
 import { ScriptableNPC } from './ScriptableNPC';
 import shiba1 from '../assets/dialog/shiba1.dialog.json';
-import { rndItem, rnd } from './util';
+import { rndItem, rnd, calculateVolume } from './util';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { DOUBLE_JUMP_COLORS, GRAVITY } from './constants';
 import { GameObjectInfo } from './MapInfo';
 import { Environment } from './World';
-import { SHRINK_SIZE } from './Fire';
+import { SHRINK_SIZE, FireState } from './Fire';
 import { FaceModes } from './Face';
 import { QuestKey } from './Quests';
+import { Sound } from './Sound';
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -36,6 +37,10 @@ const JUMP_INTERVAL = 0.3;
 export class Shiba extends ScriptableNPC {
     @asset("sprites/shiba.aseprite.json")
     private static sprite: Aseprite;
+    @asset("sounds/ending/putOut.mp3")
+    private static putOutSound: Sound;
+    @asset("sounds/jumping/jump_neutral.ogg")
+    private static jumpSound: Sound;
     private state = ShibaState.ON_TREE;
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
@@ -108,19 +113,21 @@ export class Shiba extends ScriptableNPC {
             setTimeout(() => (this.direction = 1), 1000);
             setTimeout(() => {
                 this.think('Bad Fire!', 2000);
-                this.scene.fire.beingPutOut = true;
+                this.scene.fire.setState(FireState.BEING_PUT_OUT);
                 this.scene.fire.growthTarget = SHRINK_SIZE;
                 this.peeing = true;
+                Shiba.putOutSound.setVolume(.3);
+                Shiba.putOutSound.play();
             }, 2000);
             setTimeout(() => this.scene.fire.think('Oh God…', 2000), 4500);
             setTimeout(() => this.scene.fire.think('Disgusting…', 3000), 8000);
         } else if (this.state === ShibaState.FIRE_KILLED) {
             this.peeing = false;
+            this.scene.fire.state = FireState.PUT_OUT;
+            Shiba.putOutSound.stop();
             setTimeout(() => (this.direction = -1), 1000);
             setTimeout(() => this.think('I help friend!', 1500), 1500);
             setTimeout(() => {
-                this.scene.fire.beingPutOut = false;
-                this.scene.fire.angry = false;
                 this.scene.fire.think('Yeah, great', 2000);
                 this.scene.fire.face?.setMode(FaceModes.BORED);
                 this.scene.player.isControllable = true;
@@ -138,6 +145,13 @@ export class Shiba extends ScriptableNPC {
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
         this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
         this.doubleJumpEmitter.emit(20);
+
+        const vol = calculateVolume(this.distanceToPlayer, 0.4)
+        if (vol > 0) {
+            Shiba.jumpSound.setVolume(vol)
+            Shiba.jumpSound.stop();
+            Shiba.jumpSound.play();
+        }
     }
 
     protected canJump (): boolean {

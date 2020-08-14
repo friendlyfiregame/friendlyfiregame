@@ -13,6 +13,9 @@ export const GAME_CANVAS_HEIGHT = 270;
  * physics calculations).
  */
 export const PIXEL_PER_METER = 18;
+export const METER_PER_PIXEL = 1 / PIXEL_PER_METER;
+
+export const SOUND_INTENSITY_MULTIPLIER = 50;
 
 /** Gravity in m/s² */
 export const GRAVITY = 35;

@@ -6,11 +6,16 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
+import { calculateVolume } from './util';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
     @asset("sprites/flameboy.aseprite.json")
     private static sprite: Aseprite;
+
+    @asset("sounds/fire/fire2.ogg")
+    private static fireAmbience: Sound;
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 26, 54);
@@ -42,5 +47,15 @@ export class FlameBoy extends NPC {
         super.update(dt);
         this.dialoguePrompt.update(dt, this.x, this.y + 32);
         this.speechBubble.update(this.x, this.y);
+
+        const vol = calculateVolume(this.distanceToPlayer, .7, 0.5);
+        if (vol) {
+            FlameBoy.fireAmbience.setVolume(vol);
+            if (!FlameBoy.fireAmbience.isPlaying()) {
+                FlameBoy.fireAmbience.play();
+            }
+        } else {
+            FlameBoy.fireAmbience.stop();
+        }
     }
 }

@@ -104,7 +104,7 @@ export class QuestA extends Quest {
     super(
       QuestKey.A,
       campaign,
-      '[A]pocalypse not now',
+      '[A]POCALYPSE NOT NOW',
       Object.values(QuestATrigger).filter((i):i is number => typeof i === 'number')
     );
   }
@@ -118,7 +118,7 @@ export class QuestB extends Quest {
     super(
       QuestKey.B,
       campaign,
-      'Good [B]oy',
+      'GOOD [B]OY',
       Object.values(QuestBTrigger).filter((i):i is number => typeof i === 'number')
     );
   }

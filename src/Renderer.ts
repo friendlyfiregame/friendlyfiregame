@@ -71,6 +71,7 @@ export type BaseRenderingItem = {
 export type ParticleEmitterRenderingItem = {
   type: RenderingType.PARTICLE_EMITTER;
   layer: RenderingLayer;
+  zIndex: number;
   emitter: ParticleEmitter;
 }
 

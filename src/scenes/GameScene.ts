@@ -5,7 +5,7 @@ import { World } from "../World";
 import { MapInfo, GameObjectInfo } from "../MapInfo";
 import { createEntity, Bounds } from "../Entity";
 import { Player } from "../Player";
-import { Fire } from "../Fire";
+import { Fire, FireState } from "../Fire";
 import { Stone } from "../Stone";
 import { Tree } from "../Tree";
 import { FlameBoy } from "../FlameBoy";
@@ -527,7 +527,8 @@ export class GameScene extends Scene<FriendlyFire> {
                 // End apocalypse
                 this.apocalypseFactor = 0;
                 this.apocalypse = false;
-                this.fire.angry = false;
+                this.fire.state = FireState.PUT_OUT;
+
                 this.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_FIRE);
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music

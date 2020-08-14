@@ -1,6 +1,7 @@
 import { MapObjectJSON } from '*/level.json';
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
+import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from './constants';
 
 export type Vector2 = {x: number, y: number};
 
@@ -117,4 +118,15 @@ export function isDev(): boolean {
         return !!window.location.search.substr(1).split("&").find(key => key.toLowerCase().startsWith("dev"));
     }
     return false;
+}
+
+/**
+ * Calculates the volume of a sound in regards to a distance and some additional properties.
+ * @param distance  - the distance of the audio source to the audio listener (px)
+ * @param intensity - Defines how "loud" the sound is or in other terms, how far it can be heard. Defaults to 1.
+ * @param maxVolume - Defines the maximum volume of the sound (when distance is 0).
+ *                    The sound will never be louder than this. Defaults to 1.
+ */
+export function calculateVolume(distance: number, maxVolume: number = 1, intensity: number = 1): number {
+    return Math.max(0, maxVolume - ((distance * METER_PER_PIXEL) / (SOUND_INTENSITY_MULTIPLIER * intensity)))
 }

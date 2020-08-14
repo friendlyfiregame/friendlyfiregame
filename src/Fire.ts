@@ -1,6 +1,6 @@
 import { NPC } from './NPC';
 import { PIXEL_PER_METER } from './constants';
-import { rnd, rndInt, shiftValue } from './util';
+import { rnd, rndInt, shiftValue, calculateVolume } from './util';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { Face, EyeType, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
@@ -11,30 +11,31 @@ import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingType, RenderingLayer } from './Renderer';
 import { ShibaState } from './Shiba';
-
-// const fireColors = [
-//     "#603015",
-//     "#601004",
-//     "#604524",
-//     "#500502"
-// ];
-
-/*
-const smokeColors = [
-    "#555",
-    "#444",
-    "#333"
-];
-*/
+import { Sound } from './Sound';
 
 export const SHRINK_SIZE = 2;
+
+export enum FireState {
+    IDLE,
+    ANGRY,
+    BEING_PUT_OUT,
+    PUT_OUT
+}
 
 @entity("fire")
 export class Fire extends NPC {
     @asset("sprites/smoke.png")
     private static smokeImage: HTMLImageElement;
 
+    @asset("sprites/steam.png")
+    private static steamImage: HTMLImageElement;
+
+    @asset("sounds/fire/fire.ogg")
+    private static fireAmbience: Sound;
+
     public intensity = 5;
+
+    public state = FireState.IDLE;
 
     public angry = false; // fire will be angry once wood was fed
 
@@ -45,6 +46,7 @@ export class Fire extends NPC {
     public growth = 1;
 
     private averageParticleDelay = 0.1;
+    private averageSteamDelay = 0.05;
 
     private isVisible = true;
 
@@ -53,9 +55,11 @@ export class Fire extends NPC {
     // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
+    private steamEmitter: ParticleEmitter;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+        Fire.fireAmbience.setLoop(true);
         this.smokeEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
@@ -69,18 +73,24 @@ export class Fire extends NPC {
             blendMode: "source-over",
             alphaCurve: valueCurves.cos(0.1, 0.5),
             breakFactor: 0.85
+        });
+
+        this.steamEmitter = this.scene.particles.createEmitter({
+            position: {x: this.x + 10, y: this.y},
+            offset: () => ({ x: rnd(-1, 1) * 3, y: 0 }),
+            velocity: () => ({ x: rnd(-1, 2) * 5, y: 50 + rnd(3) }),
+            color: () => Fire.steamImage,
+            size: () => rndInt(12, 18),
+            gravity: {x: 0, y: 8},
+            lifetime: () => rnd(1, 3),
+            alpha: () => rnd(0.5, 0.8),
+            angleSpeed: () => rnd(-1, 1) * 3,
+            blendMode: "source-over",
+            alphaCurve: valueCurves.cos(0.1, 0.5),
+            renderingLayer: RenderingLayer.ENTITIES,
+            zIndex: 1,
+            breakFactor: 0.5
         })
-        // this.fireEmitter = particles.createEmitter({
-        //     position: {x: this.x, y: this.y},
-        //     offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-        //     velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(-2, 3) }),
-        //     color: () => rndItem(fireColors),
-        //     size: () => rndInt(10, 15),
-        //     gravity: {x: 0, y: 10},
-        //     lifetime: () => rnd(2, 4),
-        //     blendMode: "screen",
-        //     alphaCurve: valueCurves.trapeze(0.05, 0.1)
-        // });
         this.sparkEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
@@ -112,6 +122,23 @@ export class Fire extends NPC {
         return this.isVisible;
     }
 
+    public isAngry(): boolean {
+        return this.state === FireState.ANGRY;
+    }
+    public isBeingPutOut(): boolean {
+        return this.state === FireState.BEING_PUT_OUT;
+    }
+    public isPutOut(): boolean {
+        return this.state === FireState.PUT_OUT;
+    }
+
+    public setState (state: FireState): void {
+        this.state = state;
+        if (state === FireState.BEING_PUT_OUT || state === FireState.PUT_OUT) {
+            Fire.fireAmbience.stop();
+        }
+    }
+
     public drawToCanvas (ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
@@ -138,9 +165,9 @@ export class Fire extends NPC {
     }
 
     update(dt: number): void {
-        if (this.angry && !this.beingPutOut) {
+        if (this.state === FireState.ANGRY && !this.beingPutOut) {
             this.face?.setMode(FaceModes.ANGRY);
-        } else if (this.beingPutOut) {
+        } else if (this.state === FireState.BEING_PUT_OUT) {
             this.face?.setMode(FaceModes.DISGUSTED);
         }
 
@@ -158,16 +185,36 @@ export class Fire extends NPC {
         }
 
         this.isVisible = true;
-        let particleChance = dt - rnd() * this.averageParticleDelay;
-        while (particleChance > 0) {
-            if (rnd() < 0.5) {
-                this.sparkEmitter.emit();
+
+        if (!this.isBeingPutOut() && !this.isPutOut()) {
+            let particleChance = dt - rnd() * this.averageParticleDelay;
+            while (particleChance > 0) {
+                if (rnd() < 0.5) {
+                    this.sparkEmitter.emit();
+                }
+                if (rnd() < 0.32) {
+                    this.smokeEmitter.emit();
+                }
+                particleChance -= rnd() * this.averageParticleDelay;
             }
-            if (rnd() < 0.32) {
-                this.smokeEmitter.emit();
+
+            const vol = calculateVolume(this.distanceToPlayer, .7, 0.5);
+            if (vol) {
+                Fire.fireAmbience.setVolume(vol);
+                if (!Fire.fireAmbience.isPlaying()) Fire.fireAmbience.play();
+            } else {
+                Fire.fireAmbience.stop();
             }
-            particleChance -= rnd() * this.averageParticleDelay;
         }
+
+        if (this.isBeingPutOut()) {
+            let steamParticleChance = dt - rnd() * this.averageSteamDelay;
+            while (steamParticleChance > 0) {
+                this.steamEmitter.emit();
+                steamParticleChance -= rnd() * this.averageSteamDelay;
+            }
+        }
+
         if (this.isVisible) {
             this.fireGfx.update(dt);
         }
@@ -180,11 +227,10 @@ export class Fire extends NPC {
     public feed(wood: Wood) {
         wood.remove();
         // Handle end of the world
-        this.angry = true;
+        this.state = FireState.ANGRY;
         this.growthTarget = 14;
 
         this.scene.startApocalypseMusic();
-        this.face?.setMode(FaceModes.ANGRY);
 
         // Disable remaining dialogs
         this.conversation = null;
