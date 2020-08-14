@@ -1,15 +1,15 @@
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from './NPC';
-import { valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem } from './util';
-import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
-import { Environment } from './World';
+import { entity } from './Entity';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
 import conversation from '../assets/dialog/bird.dialog.json';
 import { Conversation } from './Conversation';
+import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from './constants';
+import { Environment } from './World';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { ParticleEmitter, valueCurves } from './Particles';
 import { RenderingLayer } from './Renderer';
+import { rnd, rndItem } from './util';
 
 enum BirdState {
     WAITING_LEFT,

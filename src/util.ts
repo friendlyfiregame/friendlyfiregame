@@ -1,6 +1,6 @@
-import { MapObjectJSON } from '*/level.json';
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
+import { MapObjectJSON } from '*/level.json';
 
 // TODO: unite with Point
 export type Vector2 = {x: number, y: number};

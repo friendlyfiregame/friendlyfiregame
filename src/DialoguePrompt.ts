@@ -1,6 +1,6 @@
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { GameScene } from './scenes/GameScene';
 import { RenderingLayer } from './Renderer';
 
 export class DialoguePrompt {

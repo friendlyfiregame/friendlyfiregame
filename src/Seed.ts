@@ -1,17 +1,17 @@
-import { entity } from "./Entity";
-import { Face, EyeType } from './Face';
-import { NPC } from './NPC';
-import { Environment } from "./World";
-import { now } from "./util";
-import { Sound } from './Sound';
-import { Wood } from "./Wood";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
-import { QuestATrigger, QuestKey } from './Quests';
+import { entity } from './Entity';
+import { EyeType, Face } from './Face';
 import { GameObjectInfo } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { Environment } from './World';
+import { now } from './util';
+import { NPC } from './NPC';
+import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
+import { Wood } from './Wood';
 
 export enum SeedState {
     FREE = 0,

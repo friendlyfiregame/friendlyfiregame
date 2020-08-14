@@ -1,7 +1,7 @@
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from './NPC';
-import { GameObjectProperties } from './MapInfo';
 import { Conversation } from './Conversation';
+import { GameObjectProperties } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
 
 export class ConversationProxy extends NPC {
     public conversation: Conversation;

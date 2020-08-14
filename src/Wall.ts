@@ -1,8 +1,8 @@
-import { entity, Entity } from "./Entity";
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
-import { GameScene, CollidableGameObject } from "./scenes/GameScene";
+import { CollidableGameObject, GameScene } from "./scenes/GameScene";
 import { Environment } from './World';
+import { entity, Entity } from "./Entity";
 import { GameObjectProperties } from './MapInfo';
 import { RenderingLayer } from './Renderer';
 

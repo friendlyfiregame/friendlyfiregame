@@ -1,9 +1,9 @@
-import { NPC } from './NPC';
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
-import { GameScene } from "./scenes/GameScene";
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { Point } from './Geometry';
 

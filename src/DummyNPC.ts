@@ -1,11 +1,11 @@
-import { NPC } from './NPC';
-import { entity } from "./Entity";
+import { asset } from './Assets';
+import { BitmapFont } from './BitmapFont';
+import dialogData from '../assets/dummy.texts.json';
+import { DIALOG_FONT } from './constants';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
 import { Greeting } from './Greeting';
-import dialogData from "../assets/dummy.texts.json";
-import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
-import { GameScene } from "./scenes/GameScene";
-import { DIALOG_FONT } from "./constants";
+import { NPC } from './NPC';
 
 @entity("tree")
 export class DummyNPC extends NPC {
