@@ -6,6 +6,7 @@ import fire0 from '../assets/dialog/fire0.dialog.json';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
 import fire3 from '../assets/dialog/fire3.dialog.json';
+import fire4 from '../assets/dialog/fire4.dialog.json';
 import stone1 from '../assets/dialog/stone1.dialog.json';
 import stone2 from '../assets/dialog/stone2.dialog.json';
 import stonedisciple1 from '../assets/dialog/stonedisciple1.dialog.json';
@@ -18,6 +19,7 @@ import shiba1 from '../assets/dialog/shiba1.dialog.json';
 import shiba2 from '../assets/dialog/shiba2.dialog.json';
 import shiba3 from '../assets/dialog/shiba3.dialog.json';
 import shiba4 from '../assets/dialog/shiba4.dialog.json';
+import shiba5 from '../assets/dialog/shiba5.dialog.json';
 import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
 import spider1 from '../assets/dialog/spider1.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
@@ -39,6 +41,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "fire1": fire1,
     "fire2": fire2,
     "fire3": fire3,
+    "fire4": fire4,
     "stone1": stone1,
     "stone2": stone2,
     "stonedisciple1": stonedisciple1,
@@ -51,6 +54,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "shiba2": shiba2,
     "shiba3": shiba3,
     "shiba4": shiba4,
+    "shiba5": shiba5,
     "powershiba2": powershiba2,
     "spider1": spider1,
     "flameboy1": flameboy1,
@@ -182,6 +186,9 @@ export class Campaign {
                         this.gameScene.fire.conversation = null;
                         this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
                     break;
+                case "friendshipEnding":
+                    this.gameScene.beginFriendshipEnding();
+                    break;
                 case  "talkedtofire":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
                     break;
@@ -204,13 +211,17 @@ export class Campaign {
                 case "givebeard":
                     // this.gameScene.player.setBeard(true);
                     break;
-                case "endgame":
+                case "endgameA":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                     this.getQuest(QuestKey.A).finish();
                     this.gameScene.fire.conversation = null;
                     this.gameScene!.gameOver();
                     break;
-    
+                case "endgameB":
+                    this.getQuest(QuestKey.B).finish();
+                    this.gameScene.fire.conversation = null;
+                    this.gameScene!.gameOver();
+                    break;
                 case "game":
                     this.addState(params[0] as any);
                     break;

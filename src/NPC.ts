@@ -66,7 +66,7 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     protected showDialoguePrompt (): boolean {
-        if (this.hasActiveConversation()) return false;
+        if (this.hasActiveConversation() || !this.scene.player.isControllable) return false;
         return true;
     }
 

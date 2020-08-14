@@ -11,6 +11,10 @@ import { rndItem, rnd } from './util';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { DOUBLE_JUMP_COLORS, GRAVITY } from './constants';
 import { GameObjectInfo } from './MapInfo';
+import { Environment } from './World';
+import { SHRINK_SIZE } from './Fire';
+import { FaceModes } from './Face';
+import { QuestKey } from './Quests';
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -20,7 +24,9 @@ export enum ShibaState {
     ON_TREE,
     FLYING_AWAY,
     ON_MOUNTAIN,
-    ENDING_CUTSCENE
+    GOING_TO_FIRE,
+    KILLING_FIRE,
+    FIRE_KILLED
 }
 
 const FLYING_DURATION = 8;
@@ -41,6 +47,7 @@ export class Shiba extends ScriptableNPC {
     private jumpTimer = 0;
     private flyingTime = 0;
     private saidFarewell = false;
+    public peeing = false;
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 28, 24);
@@ -60,6 +67,14 @@ export class Shiba extends ScriptableNPC {
         });
     }
 
+    public setState (state: ShibaState): void {
+        this.state = state;
+    }
+
+    public getState (): ShibaState {
+        return this.state;
+    }
+
     public nextState (): void {
         this.state++;
 
@@ -75,6 +90,46 @@ export class Shiba extends ScriptableNPC {
             this.y = spawn.y;
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
             this.scene.powerShiba.nextState();
+        } else if (this.state === ShibaState.GOING_TO_FIRE) {
+            this.scene.camera.setCinematicBar(1);
+            const shibaSpawnPos = this.scene.pointsOfInterest.find(poi => poi.name === "friendship_shiba_spawn");
+            this.lookAtPlayer = false;
+            this.setMaxVelocity(2);
+
+            this.scene.startFriendshipMusic();
+            
+            if (!shibaSpawnPos) throw new Error(`'friendship_shiba_spawn' point in map is missing`);
+            this.x = shibaSpawnPos.x;
+            this.y = shibaSpawnPos.y;
+        } else if (this.state === ShibaState.KILLING_FIRE) {
+            this.move = 0;
+
+            setTimeout(() => this.think('Wow!', 1500), 500);
+            setTimeout(() => (this.direction = 1), 1000);
+            setTimeout(() => {
+                this.think('Bad Fire!', 2000);
+                this.scene.fire.beingPutOut = true;
+                this.scene.fire.growthTarget = SHRINK_SIZE;
+                this.peeing = true;
+            }, 2000);
+            setTimeout(() => this.scene.fire.think('Oh God…', 2000), 4500);
+            setTimeout(() => this.scene.fire.think('Disgusting…', 3000), 8000);
+        } else if (this.state === ShibaState.FIRE_KILLED) {
+            this.peeing = false;
+            setTimeout(() => (this.direction = -1), 1000);
+            setTimeout(() => this.think('I help friend!', 1500), 1500);
+            setTimeout(() => {
+                this.scene.fire.beingPutOut = false;
+                this.scene.fire.angry = false;
+                this.scene.fire.think('Yeah, great', 2000);
+                this.scene.fire.face?.setMode(FaceModes.BORED);
+                this.scene.player.isControllable = true;
+                this.scene.friendshipCutscene = false;
+                this.lookAtPlayer = true;
+                this.scene.game.campaign.runAction("enable", null, ["fire", "fire4"]);
+                this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba5"]);
+                this.scene.game.campaign.getQuest(QuestKey.B).finish();
+            }, 3500);
         }
     }
 
@@ -91,7 +146,8 @@ export class Shiba extends ScriptableNPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (this.move === 0) {
-            this.scene.renderer.addAseprite(Shiba.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
+            const tag = this.peeing ? "peeing" : "idle";
+            this.scene.renderer.addAseprite(Shiba.sprite, tag, this.x, this.y, RenderingLayer.ENTITIES, this.direction)
         } else {
             this.scene.renderer.addAseprite(Shiba.sprite, "walk", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
         }
@@ -108,7 +164,6 @@ export class Shiba extends ScriptableNPC {
 
     public showDialoguePrompt (): boolean {
         if (!super.showDialoguePrompt()) return false;
-        // if (Conversation.getGlobals()['$broughtBone'] && !Conversation.getGlobals()['$talkedToShibaWithBone']) return true;
         return false;
     }
 
@@ -123,13 +178,12 @@ export class Shiba extends ScriptableNPC {
         } else {
             if (this.state === ShibaState.ON_TREE) {
                 this.onTreeUpdateLogic(triggerCollisions, dt)
-            }
-
-            if (this.state === ShibaState.FLYING_AWAY) {
+            } else if (this.state === ShibaState.FLYING_AWAY) {
                 this.flyingAwayUpdateLogic(triggerCollisions, dt);
+            } else if (this.state === ShibaState.GOING_TO_FIRE) {
+                this.walkToFireLogic(triggerCollisions);
             }
         }
-
 
         if (this.move !== 0) {
             this.direction = this.move;
@@ -154,6 +208,18 @@ export class Shiba extends ScriptableNPC {
         return (superResult && this.state !== ShibaState.FLYING_AWAY);
     }
 
+    private walkToFireLogic (triggerCollisions: GameObjectInfo[]): void {
+        this.move = -1;
+        if (this.scene.world.collidesWithVerticalLine(this.x - (this.width / 2), this.y + this.height, this.height, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            this.jump();
+        }
+        if (triggerCollisions.length > 0) {
+            const event = triggerCollisions.find(t => t.name === 'shiba_stop');
+            if (event) {
+                this.nextState();
+            }
+        }
+    }
     private onTreeUpdateLogic (triggerCollisions: GameObjectInfo[], dt: number): void {
         if (triggerCollisions.length > 0) {
             const event = triggerCollisions.find(t => t.name === 'shiba_action');

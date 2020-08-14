@@ -10,6 +10,7 @@ import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingType, RenderingLayer } from './Renderer';
+import { ShibaState } from './Shiba';
 
 // const fireColors = [
 //     "#603015",
@@ -26,6 +27,8 @@ const smokeColors = [
 ];
 */
 
+export const SHRINK_SIZE = 2;
+
 @entity("fire")
 export class Fire extends NPC {
     @asset("sprites/smoke.png")
@@ -34,6 +37,8 @@ export class Fire extends NPC {
     public intensity = 5;
 
     public angry = false; // fire will be angry once wood was fed
+
+    public beingPutOut = false;
 
     public growthTarget = 5;
 
@@ -123,16 +128,28 @@ export class Fire extends NPC {
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
+        if (this.thinkBubble) {
+            this.thinkBubble.draw(ctx);
+        }
+
         this.speechBubble.draw(ctx);
         if (this.scene.showBounds) this.drawBounds();
     }
 
     update(dt: number): void {
-        if (this.angry) {
+        if (this.angry && !this.beingPutOut) {
             this.face?.setMode(FaceModes.ANGRY);
+        } else if (this.beingPutOut) {
+            this.face?.setMode(FaceModes.DISGUSTED);
         }
+
         if (this.intensity !== this.growthTarget) {
             this.intensity = shiftValue(this.intensity, this.growthTarget, this.growth * dt);
+        }
+
+        if (this.scene.friendshipCutscene && this.scene.shiba.getState() === ShibaState.KILLING_FIRE && this.intensity <= SHRINK_SIZE) {
+            this.scene.shiba.nextState();
         }
 
         if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
@@ -165,9 +182,9 @@ export class Fire extends NPC {
         // Handle end of the world
         this.angry = true;
         this.growthTarget = 14;
-        this.face?.setMode(FaceModes.ANGRY);
 
         this.scene.startApocalypseMusic();
+        this.face?.setMode(FaceModes.ANGRY);
 
         // Disable remaining dialogs
         this.conversation = null;

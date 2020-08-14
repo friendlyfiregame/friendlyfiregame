@@ -30,13 +30,7 @@ export enum QuestATrigger {
 }
 
 export enum QuestBTrigger {
-  FLAMEBOY_CORRUPTED,
-  WING_CORRUPTED,
-  TREE_CORRUPTED,
-  FIRE_CORRUPTED,
-  SPIDER_CORRUPTED,
-  SEED_CORRUPTED,
-  STONE_CORRUPTED
+  ENDING_TRIGGERED
 }
 
 type TriggerDefinition = {
@@ -117,14 +111,14 @@ export class QuestA extends Quest {
 }
 
 /**
- * Ending B. Meet cave man and corrupt all npcs to end game
+ * Ending B. Helped Dog and Beat fire
  */
 export class QuestB extends Quest {
   public constructor (campaign: Campaign) {
     super(
       QuestKey.B,
       campaign,
-      'Stuck [B]etween worlds',
+      'Good [B]oy',
       Object.values(QuestBTrigger).filter((i):i is number => typeof i === 'number')
     );
   }

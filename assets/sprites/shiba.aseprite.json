@@ -1,7 +1,7 @@
 { "frames": [
    {
     "filename": "0",
-    "frame": { "x": 54, "y": 0, "w": 26, "h": 23 },
+    "frame": { "x": 54, "y": 23, "w": 26, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
@@ -28,7 +28,7 @@
    },
    {
     "filename": "3",
-    "frame": { "x": 80, "y": 0, "w": 26, "h": 23 },
+    "frame": { "x": 80, "y": 23, "w": 26, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
@@ -37,7 +37,7 @@
    },
    {
     "filename": "4",
-    "frame": { "x": 0, "y": 23, "w": 26, "h": 23 },
+    "frame": { "x": 0, "y": 46, "w": 26, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
@@ -46,7 +46,7 @@
    },
    {
     "filename": "5",
-    "frame": { "x": 26, "y": 23, "w": 26, "h": 23 },
+    "frame": { "x": 26, "y": 46, "w": 26, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
@@ -55,7 +55,7 @@
    },
    {
     "filename": "6",
-    "frame": { "x": 78, "y": 23, "w": 26, "h": 22 },
+    "frame": { "x": 78, "y": 46, "w": 26, "h": 22 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
@@ -64,7 +64,7 @@
    },
    {
     "filename": "7",
-    "frame": { "x": 78, "y": 45, "w": 26, "h": 22 },
+    "frame": { "x": 78, "y": 68, "w": 26, "h": 22 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
@@ -73,7 +73,7 @@
    },
    {
     "filename": "8",
-    "frame": { "x": 0, "y": 23, "w": 26, "h": 23 },
+    "frame": { "x": 0, "y": 46, "w": 26, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
@@ -82,7 +82,7 @@
    },
    {
     "filename": "9",
-    "frame": { "x": 52, "y": 23, "w": 26, "h": 23 },
+    "frame": { "x": 52, "y": 46, "w": 26, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
@@ -91,7 +91,7 @@
    },
    {
     "filename": "10",
-    "frame": { "x": 0, "y": 46, "w": 26, "h": 22 },
+    "frame": { "x": 0, "y": 69, "w": 26, "h": 22 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
@@ -100,12 +100,48 @@
    },
    {
     "filename": "11",
-    "frame": { "x": 26, "y": 46, "w": 26, "h": 22 },
+    "frame": { "x": 26, "y": 69, "w": 26, "h": 22 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
     "sourceSize": { "w": 30, "h": 24 },
     "duration": 125
+   },
+   {
+    "filename": "12",
+    "frame": { "x": 54, "y": 0, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "13",
+    "frame": { "x": 81, "y": 0, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "14",
+    "frame": { "x": 0, "y": 23, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "15",
+    "frame": { "x": 27, "y": 23, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
    }
  ],
  "meta": {
@@ -113,11 +149,12 @@
   "version": "1.2.21-x64",
   "image": "shiba.png",
   "format": "I8",
-  "size": { "w": 106, "h": 68 },
+  "size": { "w": 108, "h": 91 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 3, "direction": "forward" },
-   { "name": "walk", "from": 4, "to": 11, "direction": "forward" }
+   { "name": "walk", "from": 4, "to": 11, "direction": "forward" },
+   { "name": "peeing", "from": 12, "to": 15, "direction": "forward" }
   ]
  }
 }

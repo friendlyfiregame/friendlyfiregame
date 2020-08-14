@@ -42,7 +42,7 @@ import { DIALOG_FONT } from "../constants";
 import { Mimic } from '../Mimic';
 import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
 import { Bone } from '../Bone';
-import { Shiba } from '../Shiba';
+import { Shiba, ShibaState } from '../Shiba';
 import { PowerShiba } from '../PowerShiba';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
@@ -163,6 +163,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public fire!: Fire;
     public fireFuryEndTime = 0;
     public apocalypse = false;
+    public friendshipCutscene = false;
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
@@ -380,6 +381,10 @@ export class GameScene extends Scene<FriendlyFire> {
             }
             this.fadeToBlackFactor = fade;
         }
+
+        if (this.friendshipCutscene) {
+            this.updateFriendshipEndingCutscene(dt);
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -476,6 +481,10 @@ export class GameScene extends Scene<FriendlyFire> {
         this.playBackgroundTrack(BgmId.INFERNO);
     }
 
+    public startFriendshipMusic(): void {
+        this.playBackgroundTrack(BgmId.RIDDLE);
+    }
+
     public muteMusic(): void {
         this.backgroundTracks.forEach(t => t.sound.setVolume(0));
     }
@@ -527,6 +536,10 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
+    private updateFriendshipEndingCutscene(dt: number) {
+        this.camera.setCinematicBar(1);
+    }
+
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
         this.updateApocalypse();
         this.camera.setCinematicBar(this.apocalypseFactor);
@@ -575,6 +588,18 @@ export class GameScene extends Scene<FriendlyFire> {
                 }
             }
         });
+    }
+
+    public beginFriendshipEnding() {
+        this.friendshipCutscene = true;
+        this.shiba.setState(ShibaState.ON_MOUNTAIN);
+        this.shiba.nextState();
+
+        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position")
+
+        if (!playerTargetPos) throw new Error ('cannot initiate friendship ending because some points of interest are missing');
+        this.player.startAutoMove(playerTargetPos.x, true);
+        this.player.setControllable(false);
     }
 
     public beginApocalypse() {

@@ -4,7 +4,7 @@ import { Face, EyeType, FaceModes } from './Face';
 import { Aseprite } from './Aseprite';
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { QuestATrigger, QuestBTrigger, QuestKey } from './Quests';
+import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 
 @entity("flameboy")
@@ -27,12 +27,8 @@ export class FlameBoy extends NPC {
         );
     }
 
-    private isCorrupted (): boolean {
-        return this.scene.game.campaign.getQuest(QuestKey.B).isTriggered(QuestBTrigger.FLAMEBOY_CORRUPTED);
-    }
-
     draw(ctx: CanvasRenderingContext2D): void {
-        const animationTag = this.isCorrupted() ? "corrupt" : "idle";
+        const animationTag = "idle";
         this.scene.renderer.addAseprite(FlameBoy.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES, this.direction);
         if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx, false);

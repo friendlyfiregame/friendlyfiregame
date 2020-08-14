@@ -174,7 +174,7 @@ export class Player extends PhysicsEntity {
     private usedDoubleJump = false;
     // private hasBeard = false;
     private autoMove: AutoMove | null = null;
-    private isControllable: boolean = true;
+    public isControllable: boolean = true;
     private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
@@ -261,9 +261,17 @@ export class Player extends PhysicsEntity {
         Conversation.setGlobal("ismale", this.gender === Gender.MALE ? "true" : "" );
     }
 
+    public getControllable (): boolean {
+        return this.isControllable;
+    }
+
+    public setControllable (isControllable: boolean): void {
+        this.isControllable = isControllable;
+    }
+
     public startAutoMove (x: number, turnAround: boolean) {
         if (!this.autoMove) {
-            this.isControllable = false;
+            // this.isControllable = false;
             this.autoMove = {
                 destinationX: x,
                 lastX: this.x,
@@ -283,7 +291,7 @@ export class Player extends PhysicsEntity {
         this.autoMove = null;
         this.moveRight = false;
         this.moveLeft = false;
-        this.isControllable = true;
+        // this.isControllable = true;
     }
 
     public enableRunning (): void {
@@ -325,6 +333,7 @@ export class Player extends PhysicsEntity {
         if (!this.hasFriendship) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.FRIENDSHIP });
             this.hasFriendship = true;
+            Conversation.setGlobal("hasFriendship", "true");
             this.scene.removeGameObject(this.scene.powerShiba);
         }
     }

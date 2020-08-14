@@ -15,8 +15,18 @@
         "►Not so fast!",
         "►Stop right there!",
         "What do you want to do, stop me? You got nothing on me! You're a human! I'm literally fire!",
-        "As a cherry on top of the fiery cake, I'm also gonna consume all of your power-ups.",
+        "[not $hasFriendship]As a cherry on top of the fiery cake, I'm also gonna consume all of your power-ups. @noFriendship",
+        "As a cherry on top of the fiery cake, I'm also gonna consume all of your power-ups. @friendship"
+    ],
+    "noFriendship": [
         "All of the useful ones, that is. You can keep that annoying dancing Dave as eternal punishment!",
         "HAHAHAHAHA! !crazyzoom !end"
+    ],
+    "friendship": [
+        "Wait…",
+        "Didn't you have a flying power-up before? Where did that go?",
+        "I was really looking forward to consume it. It tastes like chicken…",
+        "Oh well, doesn't matter.",
+        "HAHAHAHAHA! !friendshipEnding !end"
     ]
 }

@@ -100,6 +100,13 @@ export class MenuList {
     }
 
     /**
+     * Clears all menu items from the menu instance
+     */
+    public reset(): void {
+        this.items = [];
+    }
+
+    /**
      * Sets an arbitray number of menu items to the menu list and overrides
      * any previously added items. The first available menu item will be focused automatically
      * @param items
