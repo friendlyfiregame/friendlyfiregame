@@ -99,7 +99,7 @@ export class MapInfo {
         objects.forEach(o => o.y = mapHeight - o.y);
         return objects;
     }
-    
+
     public static getMapSize(): { width: number, height: number } {
         return {
             width: json.width * json.tilewidth,

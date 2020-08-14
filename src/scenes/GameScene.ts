@@ -38,9 +38,9 @@ import { Skull } from '../Skull';
 import { Chicken } from '../Chicken';
 import { SuperThrow } from '../SuperThrow';
 import { Portal } from '../Portal';
-import { DIALOG_FONT } from "../constants";
+import { DIALOG_FONT } from '../constants';
 import { Mimic } from '../Mimic';
-import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
+import { Renderer, RenderingLayer, RenderingType } from '../Renderer';
 import { Point, Size } from '../Geometry';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }

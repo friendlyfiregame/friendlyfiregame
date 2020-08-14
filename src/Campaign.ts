@@ -139,7 +139,7 @@ export class Campaign {
                 case "sad":
                     npc?.face?.setMode(FaceModes.SAD);
                     break;
-    
+
                 case "zoomin":
                     this.gameScene.camera.zoom += 1
                     break;
@@ -192,7 +192,7 @@ export class Campaign {
                     this.gameScene.fire.conversation = null;
                     this.gameScene!.gameOver();
                     break;
-    
+
                 case "game":
                     this.addState(params[0] as any);
                     break;

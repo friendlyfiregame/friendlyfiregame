@@ -13,7 +13,6 @@ export abstract class PhysicsEntity extends Entity {
     private ground: GameObject | null = null;
     protected lastGroundPosition = { x: 0, y: 0 };
 
-
     public setFloating(floating: boolean): void {
         this.floating = floating;
         if (floating) {

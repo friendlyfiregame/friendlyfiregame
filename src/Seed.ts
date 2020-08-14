@@ -128,6 +128,5 @@ export class Seed extends NPC {
         return this.wood;
     }
 
-    startDialog(): void {
-    }
+    startDialog(): void {}
 }

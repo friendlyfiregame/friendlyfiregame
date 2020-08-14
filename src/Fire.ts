@@ -11,21 +11,6 @@ import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingType, RenderingLayer } from './Renderer';
 
-// const fireColors = [
-//     "#603015",
-//     "#601004",
-//     "#604524",
-//     "#500502"
-// ];
-
-/*
-const smokeColors = [
-    "#555",
-    "#444",
-    "#333"
-];
-*/
-
 @entity("fire")
 export class Fire extends NPC {
     @asset("sprites/smoke.png")
@@ -65,17 +50,6 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.cos(0.1, 0.5),
             breakFactor: 0.85
         })
-        // this.fireEmitter = particles.createEmitter({
-        //     position: {x: this.x, y: this.y},
-        //     offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-        //     velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(-2, 3) }),
-        //     color: () => rndItem(fireColors),
-        //     size: () => rndInt(10, 15),
-        //     gravity: {x: 0, y: 10},
-        //     lifetime: () => rnd(2, 4),
-        //     blendMode: "screen",
-        //     alphaCurve: valueCurves.trapeze(0.05, 0.1)
-        // });
         this.sparkEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),

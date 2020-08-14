@@ -54,7 +54,7 @@ export class Bird extends NPC {
     private isWaiting (): boolean {
         return this.state === BirdState.WAITING_LEFT || this.state === BirdState.WAITING_RIGHT;
     }
-    
+
     protected jump (): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
