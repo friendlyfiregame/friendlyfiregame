@@ -1,24 +1,24 @@
 import { GameScene } from './scenes/GameScene';
 import { GRAVITY } from './constants';
+import { Point } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
-import { Vector2 } from './util';
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
 type NumberGenerator = () => number;
 
-type VectorGenerator = () => Vector2;
+type PointGenerator = () => Point;
 
 type ParticleAppearanceGenerator = () => ParticleAppearance;
 
 export interface ParticleEmitterArguments {
-    position: Vector2;
-    offset?: Vector2 | VectorGenerator;
-    velocity?: Vector2 | VectorGenerator;
+    position: Point;
+    offset?: Point | PointGenerator;
+    velocity?: Point | PointGenerator;
     color?: ParticleAppearance | ParticleAppearanceGenerator;
     alpha?: number | NumberGenerator;
     size?: number | NumberGenerator;
-    gravity?: Vector2 | VectorGenerator;
+    gravity?: Point | PointGenerator;
     lifetime?: number | NumberGenerator;
     breakFactor?: number;
     blendMode?: string;
@@ -78,16 +78,16 @@ export class ParticleEmitter {
     private particles: Particle[];
     private x: number;
     private y: number;
-    private offsetGenerator: VectorGenerator;
-    private velocityGenerator: VectorGenerator;
+    private offsetGenerator: PointGenerator;
+    private velocityGenerator: PointGenerator;
     private colorGenerator: ParticleAppearanceGenerator;
     private sizeGenerator: NumberGenerator;
-    private gravityGenerator: VectorGenerator;
+    private gravityGenerator: PointGenerator;
     private lifetimeGenerator: NumberGenerator;
     private alphaGenerator: NumberGenerator;
     private angleGenerator: NumberGenerator;
     private angleSpeedGenerator: NumberGenerator;
-    public gravity: Vector2;
+    public gravity: Point;
     public breakFactor: number;
     private blendMode: string;
     public alphaCurve: ValueCurve;
@@ -98,12 +98,12 @@ export class ParticleEmitter {
         this.particles = [];
         this.x = args.position.x;
         this.y = args.position.y;
-        this.offsetGenerator = toGenerator(args.offset ?? ({x: 0, y: 0}));
-        this.velocityGenerator = toGenerator(args.velocity ?? ({x: 0, y: 0}));
+        this.offsetGenerator = toGenerator(args.offset ?? new Point(0, 0));
+        this.velocityGenerator = toGenerator(args.velocity ?? new Point(0, 0));
         this.colorGenerator = toGenerator(args.color ?? "white");
         this.alphaGenerator = toGenerator(args.alpha ?? 1);
         this.sizeGenerator = toGenerator(args.size ?? 4);
-        this.gravityGenerator = toGenerator(args.gravity ?? {x: 0, y: GRAVITY});
+        this.gravityGenerator = toGenerator(args.gravity ?? new Point(0, GRAVITY));
         this.lifetimeGenerator = toGenerator(args.lifetime ?? 5);
         this.angleGenerator = toGenerator(args.angle ?? 0);
         this.angleSpeedGenerator = toGenerator(args.angleSpeed ?? 0);

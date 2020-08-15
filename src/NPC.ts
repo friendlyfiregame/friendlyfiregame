@@ -15,9 +15,9 @@ export abstract class NPC extends PhysicsEntity {
     public defaultFaceMode = FaceModes.NEUTRAL;
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
-    public speechBubble = new SpeechBubble(this.scene, new Point(this.x, this.y));
+    public speechBubble = new SpeechBubble(this.scene, new Point(this.position.x, this.position.y));
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
+    public dialoguePrompt = new DialoguePrompt(this.scene, this.position.x, this.position.y);
     private lastEndedConversation = -Infinity;
     protected met = false;
 
@@ -25,7 +25,7 @@ export abstract class NPC extends PhysicsEntity {
         if (this.face) {
             // Look at player
             if (lookAtPlayer) {
-                const dx = this.scene.player.x - this.x;
+                const dx = this.scene.player.position.x - this.position.x;
                 this.face.toggleDirection((dx > 0) ? 1 : -1);
                 this.face.draw(ctx);
             } else {
@@ -84,7 +84,7 @@ export abstract class NPC extends PhysicsEntity {
 
     public update(dt: number): void {
         if (this.lookAtPlayer) {
-            const dx = this.scene.player.x - this.x;
+            const dx = this.scene.player.position.x - this.position.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
         }
         super.update(dt);

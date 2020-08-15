@@ -5,6 +5,7 @@ import { Conversation } from './Conversation';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
+import { Point, Size } from './Geometry';
 import { Sound } from './Sound';
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
@@ -19,8 +20,8 @@ export class Mimic extends NPC {
 
     private state = MimicState.SLEEPING;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 46, 24);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(46, 24));
         this.lookAtPlayer = false;
         this.direction = 1;
         this.conversation = new Conversation(conversation, this);
@@ -55,6 +56,6 @@ export class Mimic extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.speechBubble.update(this.x, this.y);
+        this.speechBubble.update(this.position);
     }
 }

@@ -2,6 +2,7 @@ import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { entity, Entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
+import { Point, Size } from './Geometry';
 import { Sound } from './Sound';
 
 enum PortalAnimationState { WAITING, FADEIN, IDLE, FADEOUT, GONE }
@@ -16,8 +17,8 @@ export class Portal extends Entity {
 
     private animationState = PortalAnimationState.WAITING;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 32, 50, false);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(32, 50), false);
         this.animator.assignSprite(Portal.sprite);
     }
 

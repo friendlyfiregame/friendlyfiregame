@@ -89,16 +89,16 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
-        for (let i = -this.width / 2; i < this.width / 2; i++) {
+        for (let i = -this.size.width / 2; i < this.size.width / 2; i++) {
             let env = this.checkCollision(x + i, y, ignore);
             if (env !== Environment.AIR) return env;
-            env = this.checkCollision(x + i, y + this.height, ignore);
+            env = this.checkCollision(x + i, y + this.size.height, ignore);
             if (env !== Environment.AIR) return env;
         }
-        for (let i = 0; i < this.height; i++) {
-            let env = this.checkCollision(x - this.width / 2, y + i, ignore);
+        for (let i = 0; i < this.size.height; i++) {
+            let env = this.checkCollision(x - this.size.width / 2, y + i, ignore);
             if (env !== Environment.AIR) return env;
-            env = this.checkCollision(x + this.width / 2, y + i, ignore);
+            env = this.checkCollision(x + this.size.width / 2, y + i, ignore);
             if (env !== Environment.AIR) return env;
         }
         return Environment.AIR;
@@ -106,13 +106,11 @@ export abstract class PhysicsEntity extends Entity {
 
     protected updatePosition(newX: number, newY: number): void {
         if (this.floating) {
-            this.x = newX;
-            this.y = newY;
+            this.position.moveTo(newX, newY);
         } else {
-            const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
+            const env = this.checkCollisionBox(newX, newY, newY > this.position.y ? [ Environment.PLATFORM ] : []);
             if (env === Environment.AIR || env === Environment.WATER) {
-                this.x = newX;
-                this.y = newY;
+                this.position.moveTo(newX, newY);
             } else {
                 this.setVelocity(0, 0);
             }
@@ -123,21 +121,23 @@ export abstract class PhysicsEntity extends Entity {
         super.update(dt);
         const world = this.scene.world;
 
-        const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
+        const ground = world.getObjectAt(this.position.x, this.position.y - 5, [ this ]);
         if (ground instanceof PhysicsEntity) {
-            this.x += ground.getVelocityX() * PIXEL_PER_METER * dt;
-            this.y += ground.getVelocityY() * PIXEL_PER_METER * dt;
+            this.position.moveBy(
+                ground.getVelocityX() * PIXEL_PER_METER * dt,
+                ground.getVelocityY() * PIXEL_PER_METER * dt
+            );
         }
         this.ground = ground;
 
         this.updatePosition(
-            this.x + this.velocityX * PIXEL_PER_METER * dt,
-            this.y + this.velocityY * PIXEL_PER_METER * dt
+            this.position.x + this.velocityX * PIXEL_PER_METER * dt,
+            this.position.y + this.velocityY * PIXEL_PER_METER * dt
         );
 
         // Object dropping down when there is no ground below
         if (!this.floating) {
-            const environment = world.collidesWith(this.x, this.y - 1, [ this ],
+            const environment = world.collidesWith(this.position.x, this.position.y - 1, [ this ],
                     this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
             if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
@@ -154,12 +154,15 @@ export abstract class PhysicsEntity extends Entity {
                 if (!(this instanceof Player)) {
                     this.velocityX = 0;
                 }
-                this.x = Math.round(this.x);
-                this.y = Math.round(this.y);
+
+                this.position.moveTo(
+                    this.position.xRounded,
+                    this.position.yRounded
+                )
             } else {
                 // is on ground
-                this.lastGroundPosition.x = this.x;
-                this.lastGroundPosition.y = this.y;
+                this.lastGroundPosition.x = this.position.x;
+                this.lastGroundPosition.y = this.position.y;
             }
         }
     }

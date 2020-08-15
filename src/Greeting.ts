@@ -15,7 +15,7 @@ export class Greeting implements GameObject {
 
     private speechBubble = new SpeechBubble(
         this.scene,
-        new Point(this.npc.x, this.npc.y)
+        new Point(this.npc.position.x, this.npc.position.y)
     );
 
     public get dialogActive(): boolean {
@@ -38,7 +38,7 @@ export class Greeting implements GameObject {
     }
 
     public update(dt: number) {
-        this.speechBubble.update(this.npc.x, this.npc.y);
+        this.speechBubble.update(this.npc.position);
         const isInRange = this.npc.scene.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
             this.setRandomGreeting();

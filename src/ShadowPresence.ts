@@ -3,7 +3,7 @@ import { asset } from './Assets';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point } from './Geometry';
+import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
 
@@ -18,8 +18,8 @@ export class ShadowPresence extends NPC {
     private static sprite: Aseprite;
     private isNearPlayer = false;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 12, 46);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(12, 46));
         this.direction = -1;
         this.lookAtPlayer = false;
     }
@@ -40,7 +40,7 @@ export class ShadowPresence extends NPC {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: new Point(this.x, -this.y),
+            translation: new Point(this.position.x, -this.position.y),
             position: new Point(
                 -ShadowPresence.sprite.width >> 1,
                 -ShadowPresence.sprite.height
@@ -68,7 +68,7 @@ export class ShadowPresence extends NPC {
     update(dt: number): void {
         super.update(dt);
         this.checkPlayerDistance();
-        this.dialoguePrompt.update(dt, this.x, this.y + 48);
-        this.speechBubble.update(this.x, this.y + 12);
+        this.dialoguePrompt.update(dt, this.position.x, this.position.y + 48);
+        this.speechBubble.update(new Point(this.position.x, this.position.y + 12));
     }
 }

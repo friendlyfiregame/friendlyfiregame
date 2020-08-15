@@ -1,9 +1,7 @@
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
 import { MapObjectJSON } from '*/level.json';
-
-// TODO: unite with Point
-export type Vector2 = {x: number, y: number};
+import { Point, Size } from './Geometry';
 
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {
@@ -95,11 +93,17 @@ export function shuffle<T>(array: T[]): T[] {
 }
 
 export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 0): Bounds {
-    const width = o.width + (margin * 2);
-    const height = o.height + (margin * 2);
-    const x = o.x - margin;
-    const y = o.y + margin;
-    return { x, y, width, height };
+    const position = new Point(
+        o.x - margin,
+        o.y + margin
+    );
+
+    const size = new Size(
+        o.width + (margin * 2),
+        o.height + (margin * 2)
+    );
+
+    return { position, size };
 }
 
 export function isElectron(): boolean {

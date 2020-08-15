@@ -7,6 +7,7 @@ import { GameObjectProperties } from './MapInfo';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { PhysicsEntity } from './PhysicsEntity';
 import { PIXEL_PER_METER } from './constants';
+import { Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';
 import { rnd, rndInt, timedRnd } from './util';
 
@@ -28,34 +29,36 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private raining = 0;
     private isRainCloud = false;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties, canRain = false) {
-        super(scene, x, y, 74, 5);
+    public constructor(scene: GameScene, position: Point, properties: GameObjectProperties, canRain = false) {
+        super(scene, position, new Size(74, 5));
         this.setFloating(true);
-        this.startX = this.targetX = x;
-        this.startY = this.targetY = y;
+        this.startX = this.targetX = position.x;
+        this.startY = this.targetY = position.y;
         this.isRainCloud = canRain;
         this.velocity = properties.velocity / PIXEL_PER_METER;
         if (properties.direction === "right") {
-            this.targetX = x + properties.distance;
+            this.targetX = position.x + properties.distance;
             this.setVelocityX(this.velocity);
         } else if (properties.direction === "left") {
-            this.targetX = x - properties.distance;
+            this.targetX = position.x - properties.distance;
             this.setVelocityX(-this.velocity);
         } else if (properties.direction === "up") {
-            this.targetY = y + properties.distance;
+            this.targetY = position.y + properties.distance;
             this.setVelocityY(this.velocity);
         } else if (properties.direction === "down") {
-            this.targetY = y - properties.distance;
+            this.targetY = position.y - properties.distance;
             this.setVelocityY(-this.velocity);
         }
         this.rainEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
-            velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
-                        y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80) }),
+            position: this.position,
+            offset: () => new Point(rnd(-1, 1) * 26, rnd(-1, 1) * 5),
+            velocity: () => new Point(
+                this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
+                this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80)
+            ),
             color: () => Cloud.raindrop,
             size: 4,
-            gravity: {x: 0, y: -100},
+            gravity: new Point(0, -100),
             lifetime: () => rnd(0.7, 1.2),
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
@@ -75,30 +78,30 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS)
+        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.position, RenderingLayer.PLATFORMS)
     }
 
     update(dt: number): void {
         super.update(dt);
         if (this.getVelocityY() > 0) {
-            if (this.y >= Math.max(this.startY, this.targetY)) {
-                this.y = Math.max(this.startY, this.targetY);
+            if (this.position.y >= Math.max(this.startY, this.targetY)) {
+                this.position.moveYTo(Math.max(this.startY, this.targetY));
                 this.setVelocityY(-this.velocity);
             }
         } else if (this.getVelocityY() < 0) {
-            if (this.y <= Math.min(this.startY, this.targetY)) {
-                this.y = Math.min(this.startY, this.targetY);
+            if (this.position.y <= Math.min(this.startY, this.targetY)) {
+                this.position.moveYTo(Math.min(this.startY, this.targetY));
                 this.setVelocityY(this.velocity);
             }
         }
         if (this.getVelocityX() > 0) {
-            if (this.x >= Math.max(this.targetX, this.startX)) {
-                this.x = Math.max(this.targetX, this.startX);
+            if (this.position.x >= Math.max(this.targetX, this.startX)) {
+                this.position.moveXTo(Math.max(this.targetX, this.startX));
                 this.setVelocityX(-this.velocity);
             }
         } else if (this.getVelocityX() < 0) {
-            if (this.x <= Math.min(this.startX, this.targetX)) {
-                this.x = Math.min(this.startX, this.targetX);
+            if (this.position.x <= Math.min(this.startX, this.targetX)) {
+                this.position.moveXTo(Math.min(this.startX, this.targetX));
                 this.setVelocityX(this.velocity);
             }
         }
@@ -108,7 +111,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.raining = 0;
             } else {
                 if (timedRnd(dt, 0.1)) {
-                    this.rainEmitter.setPosition(this.x, this.y);
+                    this.rainEmitter.setPosition(this.position.x, this.position.y);
                     this.rainEmitter.emit(rndInt(1, 4));
                 }
             }
@@ -116,8 +119,8 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     collidesWith(x: number, y: number): number {
-        if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
-                && y >= this.y && y <= this.y + this.height) {
+        if (x >= this.position.x - this.size.width / 2 && x <= this.position.x + this.size.width / 2
+                && y >= this.position.y && y <= this.position.y + this.size.height) {
             return Environment.PLATFORM;
         }
         return Environment.AIR;

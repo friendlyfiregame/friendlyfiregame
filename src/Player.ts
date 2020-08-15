@@ -23,8 +23,8 @@ import { GotItemScene, Item } from './scenes/GotItemScene';
 import { NPC } from './NPC';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { PhysicsEntity } from "./PhysicsEntity";
-import { Point } from './Geometry';
 import { PlayerConversation } from './PlayerConversation';
+import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { Seed, SeedState } from "./Seed";
@@ -182,7 +182,7 @@ export class Player extends PhysicsEntity {
 
     public speechBubble = new SpeechBubble(
         this.scene,
-        new Point(this.x, this.y),
+        new Point(this.position.x, this.position.y),
         undefined,
         undefined,
         undefined,
@@ -198,8 +198,8 @@ export class Player extends PhysicsEntity {
     private genderSwapEmitter: ParticleEmitter;
     private disableParticles = false;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(PLAYER_WIDTH, PLAYER_HEIGHT));
         this.isControllable = false;
         this.setFloating(true);
 
@@ -217,45 +217,45 @@ export class Player extends PhysicsEntity {
         }
         this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
         this.dustEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
+            position: this.position,
+            velocity: () => new Point(rnd(-1, 1) * 26, rnd(0.7, 1) * 45),
             color: () => rndItem(groundColors),
             size: rnd(1, 2),
-            gravity: {x: 0, y: -100},
+            gravity: new Point(0, -100),
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.bounceEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
+            position: this.position,
+            velocity: () => new Point(rnd(-1, 1) * 90, rnd(0.7, 1) * 60),
             color: () => rndItem(bounceColors),
             size: rnd(1.5, 3),
-            gravity: {x: 0, y: -120},
+            gravity: new Point(0, -120),
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.doubleJumpEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
+            position: this.position,
+            velocity: () => new Point(rnd(-1, 1) * 90, rnd(-1, 0) * 100),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1.5, 3),
-            gravity: {x: 0, y: -120},
+            gravity: new Point(0, -120),
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.genderSwapEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 45, y: rnd(-1, 1) * 45 }),
+            position: this.position,
+            velocity: () => new Point(rnd(-1, 1) * 45, rnd(-1, 1) * 45),
             color: () => rndItem(genderSwapColors),
             size: rnd(2, 2),
-            gravity: {x: 0, y: 0},
+            gravity: new Point(0, 0),
             lifetime: () => rnd(0.5, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
     }
 
     public toggleGender () {
-        this.genderSwapEmitter.setPosition(this.x, this.y + Player.playerSprites[this.gender].height / 2);
+        this.genderSwapEmitter.setPosition(this.position.x, this.position.y + Player.playerSprites[this.gender].height / 2);
         this.genderSwapEmitter.emit(20);
         Player.genderSwapSound.play();
         this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
@@ -267,7 +267,7 @@ export class Player extends PhysicsEntity {
             this.isControllable = false;
             this.autoMove = {
                 destinationX: x,
-                lastX: this.x,
+                lastX: this.position.x,
                 turnAround
             };
         }
@@ -372,7 +372,7 @@ export class Player extends PhysicsEntity {
                     const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
                     this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
                 } else if (this.readableTrigger) {
-                    const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
+                    const proxy = new ConversationProxy(this.scene, this.position.x, this.position.y, this.readableTrigger.properties);
                     this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
@@ -400,7 +400,7 @@ export class Player extends PhysicsEntity {
             this.carrying.setVelocity(5 * this.direction, 5);
         }
 
-        this.height = PLAYER_HEIGHT;
+        this.size.resizeHeight(PLAYER_HEIGHT);
         this.carrying = null;
         Player.throwingSound.stop();
         Player.throwingSound.play();
@@ -428,7 +428,7 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.scene.gameObjects.push(new Snowball(this.scene, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+                this.scene.gameObjects.push(new Snowball(this.scene, new Point(this.position.x, this.position.y + this.size.height * 0.75), 20 * this.direction, 10));
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
             } else if (event.key === "k") {
@@ -449,7 +449,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, new Point(this.x, this.y));
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, new Point(this.position.x, this.position.y));
         thinkBubble.setMessage(message);
         thinkBubble.show();
         await sleep(time);
@@ -463,17 +463,45 @@ export class Player extends PhysicsEntity {
         if (!this.dance) {
             switch (difficulty) {
                 case 1:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
-                            1, undefined, true, 0);
+                    this.dance = new Dance(
+                        this.scene,
+                        new Point(this.position.x, this.position.y - 25),
+                        100,
+                        "  1 1 2 2 1 2 1 3",
+                        undefined,
+                        1,
+                        undefined,
+                        true,
+                        0
+                    );
                     break;
                 case 2:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
+                    this.dance = new Dance(
+                        this.scene,
+                        new Point(this.position.x, this.position.y - 25),
+                        192,
+                        "1   2   1 1 2 2 121 212 121 212 3    ",
+                        undefined,
+                        3
+                    );
                     break;
                 case 3:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "112 221 312 123 2121121 111 222 3    ", undefined, 4);
+                    this.dance = new Dance(
+                        this.scene,
+                        new Point(this.position.x, this.position.y - 25),
+                        192,
+                        "112 221 312 123 2121121 111 222 3    ",
+                        undefined,
+                        4
+                    );
                     break;
                 default:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "3");
+                    this.dance = new Dance(
+                        this.scene,
+                        new Point(this.position.x, this.position.y - 25),
+                        192,
+                        "3"
+                    );
             }
         }
     }
@@ -500,8 +528,11 @@ export class Player extends PhysicsEntity {
                     if (targetBgmId) this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                     Player.leaveGateSound.stop();
                     Player.leaveGateSound.play();
-                    this.x = targetGate.x + (targetGate.width / 2);
-                    this.y = targetGate.y - targetGate.height;
+
+                    this.position.moveTo(
+                        targetGate.x + (targetGate.width / 2),
+                        targetGate.y - targetGate.height
+                    )
                     this.scene.camera.setBounds(this.getCurrentMapBounds())
                     this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
                         this.isControllable = true;
@@ -530,7 +561,7 @@ export class Player extends PhysicsEntity {
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
             if (!this.disableParticles && this.visible) {
-                this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+                this.doubleJumpEmitter.setPosition(this.position.x, this.position.y + 20);
                 this.doubleJumpEmitter.emit(20);
             }
         }
@@ -562,16 +593,18 @@ export class Player extends PhysicsEntity {
         const measure = Player.font.measureText(text);
         const gap = 6;
         const offsetY = 12;
-        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
-        const textPositionY = -this.y + offsetY;
+        const textPosition = new Point(
+            Math.round(this.position.xRounded - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2)),
+            -this.position.y + offsetY
+        );
 
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
             position: new Point(
-                textPositionX - this.controllerSpriteMapRecords[controllerSprite].width - gap,
-                textPositionY
+                textPosition.x - this.controllerSpriteMapRecords[controllerSprite].width - gap,
+                textPosition.y
             ),
             asset: this.controllerSpriteMapRecords[controllerSprite],
             animationTag: buttonTag,
@@ -583,7 +616,7 @@ export class Player extends PhysicsEntity {
             text,
             textColor: "white",
             outlineColor: "black",
-            position: new Point(textPositionX, textPositionY),
+            position: textPosition,
             asset: Player.font,
         })
     }
@@ -597,7 +630,7 @@ export class Player extends PhysicsEntity {
             animation = animation + "-carry";
         }
 
-        this.scene.renderer.addAseprite(sprite, animation, this.x, this.y - 1, RenderingLayer.PLAYER, this.direction)
+        this.scene.renderer.addAseprite(sprite, animation, new Point(this.position.x, this.position.y - 1), RenderingLayer.PLAYER, this.direction)
 
         if (this.scene.showBounds) this.drawBounds();
 
@@ -627,12 +660,12 @@ export class Player extends PhysicsEntity {
 
     private canThrowStoneIntoWater(): boolean {
         return this.carrying instanceof Stone && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.x - 30, this.y - 20) === Environment.WATER);
+            this.scene.world.collidesWith(this.position.x - 30, this.position.y - 20) === Environment.WATER);
     }
 
     private canThrowSeedIntoSoil(): boolean {
         return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
+            this.scene.world.collidesWith(this.position.x - 30, this.position.y + 2) === Environment.SOIL);
     }
 
     public debugCollisions(): void {
@@ -671,8 +704,10 @@ export class Player extends PhysicsEntity {
     }
 
     private respawn() {
-        this.x = this.lastGroundPosition.x;
-        this.y = this.lastGroundPosition.y + 10;
+        this.position.moveTo(
+            this.lastGroundPosition.x,
+            this.lastGroundPosition.y + 10
+        )
         this.setVelocity(0, 0);
     }
 
@@ -696,9 +731,10 @@ export class Player extends PhysicsEntity {
         super.update(dt);
         const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
-        this.speechBubble.update(this.x, this.y);
+        this.speechBubble.update(this.position);
+
         if (this.thinkBubble) {
-            this.thinkBubble.update(this.x, this.y);
+            this.thinkBubble.update(this.position);
         }
         if (this.playerConversation) {
             this.playerConversation.update(dt);
@@ -713,18 +749,23 @@ export class Player extends PhysicsEntity {
                 this.running = false;
                 this.animation = 'walk';
             }
-            this.carrying.x = this.x;
+            this.carrying.position.moveXTo(this.position.x);
             const currentFrameIndex = Player.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry",
                 this.scene.gameTime * 1000);
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
-            this.carrying.y = this.y + (this.height - PLAYER_CARRY_PADDING) - offset + 4;
+            this.carrying.position.moveYTo(
+                this.position.y + (this.size.height - PLAYER_CARRY_PADDING) - offset + 4
+            );
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }
         }
 
-        const isDrowning = this.scene.world.collidesWith(this.x, this.y) === Environment.WATER;
+        const isDrowning = this.scene.world.collidesWith(
+            this.position.x, this.position.y
+        ) === Environment.WATER;
+
         if (isDrowning) {
             if (!this.thinkBubble) {
                 const thought = drowningThoughts[rndInt(0, drowningThoughts.length)];
@@ -755,13 +796,13 @@ export class Player extends PhysicsEntity {
 
         // Apply auto movement
         if (this.autoMove) {
-            if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.x - this.autoMove.destinationX) <= 0 ) {
+            if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.position.x - this.autoMove.destinationX) <= 0 ) {
                 // Reached or overreached destination
                 this.stopAutoMove();
             } else {
                 // Not yet reached, keep going
-                this.autoMove.lastX = this.x;
-                if (this.x < this.autoMove.destinationX) {
+                this.autoMove.lastX = this.position.x;
+                if (this.position.x < this.autoMove.destinationX) {
                     this.moveRight = true;
                     this.moveLeft = false;
                 } else {
@@ -814,7 +855,7 @@ export class Player extends PhysicsEntity {
             if (this.getVelocityY() > 0) {
                 this.animation = "jump";
                 this.flying = true;
-            } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
+            } else if (isDrowning || (this.getVelocityY() < 0 && this.position.y - world.getGround(this.position.x, this.position.y) > 10)) {
                 if (this.jumpThresholdTimer < 0 || this.usedJump) {
                     this.animation = "fall";
                 }
@@ -855,7 +896,7 @@ export class Player extends PhysicsEntity {
         if (!this.disableParticles && this.visible) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
-                    this.dustEmitter.setPosition(this.x, this.y);
+                    this.dustEmitter.setPosition(this.position.x, this.position.y);
                     const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
                     this.dustEmitter.emit(count);
                 }
@@ -868,7 +909,7 @@ export class Player extends PhysicsEntity {
         }
 
         // Bounce
-        if (this.scene.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
+        if (this.scene.world.collidesWith(this.position.x, this.position.y - 2, [ this ]) === Environment.BOUNCE) {
             this.bounce();
         }
 
@@ -888,7 +929,7 @@ export class Player extends PhysicsEntity {
                     }
                 }
             }
-            this.dance.setPosition(this.x, this.y - 16);
+            this.dance.setPosition(this.position.x, this.position.y - 16);
             const done = this.dance.update(dt);
             if (done) {
                 // On cloud -> make it rain
@@ -940,7 +981,7 @@ export class Player extends PhysicsEntity {
                 if (trigger.name === 'teleporter' && this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
                     const teleportY = trigger.properties.teleportY;
                     if (teleportY) {
-                        this.y -= teleportY;
+                        this.position.moveYBy(teleportY);
                     }
                 }
                 if (trigger.name === 'finish_mountain_riddle') {
@@ -988,12 +1029,12 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
-            col = world.collidesWith(this.x, this.y, [ this ],
+            col = world.collidesWith(this.position.x, this.position.y, [ this ],
                 this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
-            while (this.y < height && col) {
+            while (this.position.y < height && col) {
                 pulled++;
-                this.y++;
-                col = world.collidesWith(this.x, this.y);
+                this.position.moveYBy(1);
+                col = world.collidesWith(this.position.x, this.position.y);
             }
         }
         return pulled;
@@ -1002,7 +1043,7 @@ export class Player extends PhysicsEntity {
     private bounce(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
         // Nice bouncy particles
-        this.bounceEmitter.setPosition(this.x, this.y - 12);
+        this.bounceEmitter.setPosition(this.position.x, this.position.y - 12);
         this.bounceEmitter.emit(20);
         this.dustEmitter.clear();
         Player.bouncingSound.stop();
@@ -1024,10 +1065,15 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
-                [ Environment.PLATFORM, Environment.WATER ])) {
+        while (
+            this.position.y > 0
+            && world.collidesWith(
+                this.position.x, this.position.y + this.size.height, [ this ],
+                [ Environment.PLATFORM, Environment.WATER ]
+            )
+        ) {
             pulled++;
-            this.y--;
+            this.position.moveYBy(-1);
         }
         return pulled;
     }
@@ -1036,15 +1082,15 @@ export class Player extends PhysicsEntity {
         let pulled = 0;
         const world = this.scene.world;
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
-                this.x--;
+            while (world.collidesWithVerticalLine(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4,
+                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+                this.position.moveXBy(-1);
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
-                this.x++;
+            while (world.collidesWithVerticalLine(this.position.x - this.size.width / 2, this.position.y + this.size.height * 3 / 4,
+                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+                this.position.moveXBy(1);
                 pulled++;
             }
         }
@@ -1052,8 +1098,7 @@ export class Player extends PhysicsEntity {
     }
 
     protected updatePosition(newX: number, newY: number): void {
-        this.x = newX;
-        this.y = newY;
+        this.position.moveTo(newX, newY);
 
         // Check collision with the environment and correct player position and movement
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
@@ -1074,7 +1119,7 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            this.height = PLAYER_HEIGHT + PLAYER_CARRY_PADDING;
+            this.size.resizeHeight(PLAYER_HEIGHT + PLAYER_CARRY_PADDING);
             if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }
@@ -1096,8 +1141,7 @@ export class Player extends PhysicsEntity {
             if (object instanceof Wood) {
                 object.state = WoodState.FREE;
             }
-            object.x = this.x;
-            object.y = this.y + this.height;
+            object.position.moveTo(this.position.x, this.position.y + this.size.height);
             object.setVelocity(0, 0);
         }
     }

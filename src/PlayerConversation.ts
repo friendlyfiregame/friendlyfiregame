@@ -23,11 +23,11 @@ export class PlayerConversation {
         // Ensure safe distance to NPC
         if (this.autoMove) {
             const minDis = 20;
-            if (Math.abs(player.x - npc.x) < minDis) {
-                if (player.x < npc.x) {
-                    player.startAutoMove(npc.x - minDis, true)
+            if (Math.abs(player.position.x - npc.position.x) < minDis) {
+                if (player.position.x < npc.position.x) {
+                    player.startAutoMove(npc.position.x - minDis, true)
                 } else {
-                    player.startAutoMove(npc.x + minDis, true)
+                    player.startAutoMove(npc.position.x + minDis, true)
                 }
             }
         }

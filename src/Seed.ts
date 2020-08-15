@@ -8,6 +8,7 @@ import { GameScene } from './scenes/GameScene';
 import { Environment } from './World';
 import { now } from './util';
 import { NPC } from './NPC';
+import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { Sound } from './Sound';
@@ -32,9 +33,9 @@ export class Seed extends NPC {
     private wood: Wood;
     private floatingPosition: GameObjectInfo;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 24, 24);
-        this.wood = new Wood(scene, x, y);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(24, 24));
+        this.wood = new Wood(scene, position);
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
@@ -54,7 +55,7 @@ export class Seed extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Seed.sprite, this.getSpriteTag(), this.x, this.y - 1, RenderingLayer.ENTITIES, undefined)
+        this.scene.renderer.addAseprite(Seed.sprite, this.getSpriteTag(), new Point(this.position.x, this.position.y - 1), RenderingLayer.ENTITIES, undefined)
 
         if (this.scene.showBounds) this.drawBounds();
         if (this.state === SeedState.GROWN) {
@@ -80,9 +81,9 @@ export class Seed extends NPC {
     update(dt: number): void {
         super.update(dt);
         if (this.state === SeedState.SWIMMING) {
-            const diffX = this.floatingPosition.x - this.x;
+            const diffX = this.floatingPosition.x - this.position.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
-            this.x += moveX * dt;
+            this.position.moveXBy(moveX * dt);
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
         if (this.state === SeedState.FREE || this.state === SeedState.SWIMMING) {
@@ -90,23 +91,27 @@ export class Seed extends NPC {
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
-            if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL) {
+            if (!this.isCarried() && this.scene.world.collidesWith(this.position.x, this.position.y - 8) === Environment.SOIL) {
                 const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'seedposition');
                 if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
 
                 this.state = SeedState.PLANTED;
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
                 this.setFloating(true);
-                this.x = seedPosition.x;
-                this.y = seedPosition.y;
+
+                this.position.moveTo(
+                    seedPosition.x,
+                    seedPosition.y
+                );
+
                 Seed.successSound.play();
                 Conversation.setGlobal("seedplanted", "true");
             }
-            if (!this.isCarried() && this.state !== SeedState.SWIMMING && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+            if (!this.isCarried() && this.state !== SeedState.SWIMMING && this.scene.world.collidesWith(this.position.x, this.position.y - 5) === Environment.WATER) {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.y = this.floatingPosition.y;
+                this.position.moveXTo(this.floatingPosition.y);
             }
         } else if (this.state === SeedState.PLANTED) {
             if (this.scene.world.isRaining()) {
@@ -115,15 +120,19 @@ export class Seed extends NPC {
         } else if (this.state === SeedState.GROWN) {
             // TODO Special update behavior when grown
         }
-        this.speechBubble.update(this.x, this.y);
+        this.speechBubble.update(this.position);
     }
 
     public spawnWood(): Wood {
         if (!this.scene.gameObjects.includes(this.wood)) {
             this.scene.addGameObject(this.wood);
         }
-        this.wood.x = this.x;
-        this.wood.y = this.y + this.height / 2;
+
+        this.wood.position.moveTo(
+            this.position.x,
+            this.position.y + this.size.height / 2
+        );
+
         this.wood.setVelocity(-5, 0);
         return this.wood;
     }

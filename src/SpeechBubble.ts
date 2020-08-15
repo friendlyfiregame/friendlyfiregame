@@ -232,9 +232,9 @@ export class SpeechBubble {
         }
     }
 
-    public update(anchorX: number, anchorY: number): void {
-        this.x = Math.round(anchorX + this.offset.x);
-        this.y = Math.round(anchorY + this.offset.y);
+    public update(anchor: Point): void {
+        this.x = Math.round(anchor.x + this.offset.x);
+        this.y = Math.round(anchor.y + this.offset.y);
     }
 
     private determineMaxLineLength(message: string[]): number {

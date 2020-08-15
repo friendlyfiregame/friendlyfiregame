@@ -5,6 +5,7 @@ import { entity } from './Entity';
 import { EyeType, Face } from './Face';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
+import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { Seed } from './Seed';
@@ -18,11 +19,11 @@ export class Tree extends NPC {
     public seed: Seed;
     private wood: Wood;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 78, 140);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(78, 140));
         this.face = new Face(scene, this, EyeType.TREE, 5, 94);
-        this.seed = new Seed(scene, x, y);
-        this.wood = new Wood(scene, x, y);
+        this.seed = new Seed(scene, position);
+        this.wood = new Wood(scene, position);
         this.startDialog();
     }
 
@@ -38,7 +39,7 @@ export class Tree extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        this.scene.renderer.addAseprite(Tree.sprite, "idle", this.position, RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx);
         if (this.showDialoguePrompt()) {
@@ -50,20 +51,23 @@ export class Tree extends NPC {
     update(dt: number): void {
         super.update(dt);
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x + 4, this.y + 128);
+            this.dialoguePrompt.update(dt, this.position.x + 4, this.position.y + 128);
         }
     }
 
     startDialog(): void {
-        this.speechBubble.update(this.x, this.y);
+        this.speechBubble.update(this.position);
     }
 
     public spawnSeed(): Seed {
         if (!this.scene.gameObjects.includes(this.seed)) {
             this.scene.addGameObject(this.seed);
         }
-        this.seed.x = this.x;
-        this.seed.y = this.y + this.height / 2;
+        this.seed.position.moveTo(
+            this.position.x,
+            this.position.y + this.size.height / 2
+        );
+
         this.seed.setVelocity(5, 0);
         return this.seed;
     }
@@ -72,8 +76,12 @@ export class Tree extends NPC {
         if (!this.scene.gameObjects.includes(this.wood)) {
             this.scene.addGameObject(this.wood);
         }
-        this.wood.x = this.x;
-        this.wood.y = this.y + this.height / 2;
+
+        this.wood.position.moveTo(
+            this.position.x,
+            this.position.y + this.size.height / 2
+        );
+
         this.wood.setVelocity(5, 0);
         return this.wood;
     }

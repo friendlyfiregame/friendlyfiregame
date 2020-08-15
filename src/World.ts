@@ -48,12 +48,13 @@ export class World implements GameObject {
         if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
 
         this.rainEmitter = this.scene.particles.createEmitter({
-            position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
-            offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
-            velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
+            //position: rainSpawnPosition.position,
+            position: new Point(rainSpawnPosition.x, rainSpawnPosition.y),
+            offset: () => new Point(rnd(-1, 1) * 26, rnd(-1, 1) * 5),
+            velocity: () => new Point(rnd(-1, 1) * 5, -rnd(50, 80)),
             color: () => World.raindrop,
             size: 4,
-            gravity: {x: 0, y: -100},
+            gravity: new Point(0, -100),
             lifetime: () => 3,
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
@@ -206,10 +207,10 @@ export class World implements GameObject {
      */
     private boundingBoxesCollide (box1: Bounds, box2: Bounds): boolean {
         return !(
-            ((box1.y - box1.height) > (box2.y)) ||
-            (box1.y < (box2.y - box2.height)) ||
-            ((box1.x + box1.width) < box2.x) ||
-            (box1.x > (box2.x + box2.width))
+            ((box1.position.y - box1.size.height) > (box2.position.y)) ||
+            (box1.position.y < (box2.position.y - box2.size.height)) ||
+            ((box1.position.x + box1.size.width) < box2.position.x) ||
+            (box1.position.x > (box2.position.x + box2.size.width))
         );
     }
 

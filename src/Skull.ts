@@ -3,6 +3,7 @@ import { asset } from './Assets';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { PhysicsEntity } from './PhysicsEntity';
+import { Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';
 
 @entity("skull")
@@ -10,12 +11,12 @@ export class Skull extends PhysicsEntity {
     @asset("sprites/skull.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 16, 16);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(16, 16));
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Skull.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        this.scene.renderer.addAseprite(Skull.sprite, "idle", this.position, RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
     }
 

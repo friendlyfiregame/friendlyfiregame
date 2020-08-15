@@ -3,6 +3,7 @@ import { asset } from './Assets';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
+import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 
@@ -14,8 +15,8 @@ export class Wing extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 24, 24);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(24, 24));
     }
 
     protected showDialoguePrompt (): boolean {
@@ -28,7 +29,7 @@ export class Wing extends NPC {
 
     draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        this.scene.renderer.addAseprite(Wing.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES);
+        this.scene.renderer.addAseprite(Wing.sprite, "idle", new Point(this.position.x, this.position.y - floatOffsetY), RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
@@ -38,7 +39,7 @@ export class Wing extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, this.x, this.y + 16);
-        this.speechBubble.update(this.x, this.y);
+        this.dialoguePrompt.update(dt, this.position.x, this.position.y + 16);
+        this.speechBubble.update(this.position);
     }
 }

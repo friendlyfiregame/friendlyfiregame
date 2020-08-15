@@ -108,7 +108,8 @@ export class Animator {
   private draw (animationTime: number): void {
     if (this.sprite) {
       this.entity.scene.renderer.addAseprite(
-        this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y, RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
+        this.sprite, this.currentAnimation.tag, this.entity.position,
+        RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
       )
     }
   }

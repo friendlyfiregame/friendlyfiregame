@@ -5,7 +5,7 @@ import { entity } from './Entity';
 import { GameObjectProperties } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point } from './Geometry';
+import { Point, Size } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
 
 @entity("sign")
@@ -14,8 +14,8 @@ export class Sign extends NPC {
     private static sprite: Aseprite;
     public conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y:number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16);
+    public constructor(scene: GameScene, position: Point, properties: GameObjectProperties) {
+        super(scene, position, new Size(16, 16));
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
     }
 
@@ -43,7 +43,7 @@ export class Sign extends NPC {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: new Point(this.x, -this.y),
+            translation: new Point(this.position.x, -this.position.y),
             position: new Point(
                 -Sign.sprite.width >> 1,
                 -Sign.sprite.height

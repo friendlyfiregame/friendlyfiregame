@@ -2,12 +2,13 @@ import { Conversation } from './Conversation';
 import { GameObjectProperties } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
+import { Point, Size } from './Geometry';
 
 export class ConversationProxy extends NPC {
     public conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y:number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16);
+        super(scene, new Point(x, y), new Size(16, 16));
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
         this.scene.addGameObject(this);
     }

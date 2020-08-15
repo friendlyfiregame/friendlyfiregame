@@ -55,8 +55,8 @@ export class Face {
             asset: sprite,
             scale: new Point(this.direction, 1),
             translation: new Point(
-                this.owner.x + this.offX,
-                -this.owner.y - this.offY
+                this.owner.position.x + this.offX,
+                -this.owner.position.y - this.offY
             ),
             position: new Point(
                 -sprite.width >> 1,

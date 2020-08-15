@@ -11,13 +11,11 @@ export interface EntityDistance {
 }
 
 export type Bounds = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    position: Point;
+    size: Size;
 }
 
-type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
+type EntityConstructor = new (scene: GameScene, position: Point, properties: GameObjectProperties) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
 
@@ -27,12 +25,12 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties): Entity {
+export function createEntity(name: string, scene: GameScene, position: Point, properties: GameObjectProperties): Entity {
     const constructor = entities.get(name);
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
-    return new constructor(scene, x, y, properties);
+    return new constructor(scene, position, properties);
 }
 
 export abstract class Entity implements GameObject {
@@ -40,10 +38,8 @@ export abstract class Entity implements GameObject {
     protected animator = new Animator(this);
     constructor(
         public scene: GameScene,
-        public x: number,
-        public y: number,
-        public width = 0,
-        public height = 0,
+        public position: Point,
+        public size: Size,
         public isTrigger = true
     ) {}
 
@@ -54,9 +50,9 @@ export abstract class Entity implements GameObject {
     };
 
     public distanceTo(entity: Entity) {
-        const a = this.x - entity.x;
-        const b = this.y - entity.y;
-        return Math.sqrt(a*a + b*b);
+        const a = this.position.x - entity.position.x;
+        const b = this.position.y - entity.position.y;
+        return Math.sqrt(a * a + b * b);
     }
 
     protected getClosestEntityInRange(range: number): Entity | null {
@@ -94,23 +90,25 @@ export abstract class Entity implements GameObject {
     }
 
     public getBounds(margin = 0): Bounds {
-        const width = this.width + (margin * 2);
-        const height = this.height + (margin * 2);
-        const x = this.x - (this.width / 2) - margin;
-        const y = this.y - -this.height + margin;
-        return { x, y, width, height };
+        const position = new Point(
+            this.position.x - (this.size.width / 2) - margin,
+            this.position.y - -this.size.height + margin
+        );
+        const size = new Size(
+            this.size.width + (margin * 2),
+            this.size.height + (margin * 2)
+        );
+
+        return { position, size };
     }
 
     protected drawBounds(): void {
         this.scene.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.DEBUG,
-            position: new Point(this.getBounds().x, -this.getBounds().y),
+            position: new Point(this.getBounds().position.x, -this.getBounds().position.y),
             lineColor: "red",
-            size: new Size(
-               this.getBounds().width,
-               this.getBounds().height
-            )
+            size: this.getBounds().size
         })
     }
 

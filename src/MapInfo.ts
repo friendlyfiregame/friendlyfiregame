@@ -1,5 +1,5 @@
 import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
-import { Vector2 } from './util';
+import { Point } from './Geometry';
 
 export enum MapObjectType {
     ENTITY = 'entity',
@@ -29,12 +29,14 @@ export interface GameObjectProperties {
 }
 
 export interface GameObjectInfo {
-    x: number;
-    y: number;
+    //position: Point,
+    x: number,
+    y: number,
     name: string;
     type: string;
-    width: number;
-    height: number;
+    width: number,
+    height: number,
+    // size: Size;
     properties: GameObjectProperties;
 }
 
@@ -51,13 +53,13 @@ export class MapInfo {
         return this.getLayer("objectgroup", "objects")?.objects.filter(object => !type || object.type === type) ?? [];
     }
 
-    public getPlayerStart(): Vector2 {
+    public getPlayerStart(): Point {
         const mapHeight = MapInfo.getMapSize().height;
         const object = this.getObject("player");
         if (object) {
-            return { x: object.x, y: mapHeight - object.y }
+            return new Point(object.x, mapHeight - object.y);
         } else {
-            return { x: 0, y: 0 };
+            return new Point(0, 0);
         }
     }
 
@@ -67,7 +69,10 @@ export class MapInfo {
             name: object.name,
             x: object.x,
             y: mapHeight - object.y,
+            //position: new Point(object.position.x, mapHeight - object.position.y),
+            //position: object.position,
             type: object.type,
+            // size: object.size,
             width: object.width,
             height: object.height,
             properties: (object.properties ?? []).reduce((props, property) => {

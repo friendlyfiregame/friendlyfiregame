@@ -6,6 +6,7 @@ import { FireGfx } from './FireGfx';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
 import { ParticleEmitter, valueCurves } from './Particles';
+import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { rnd, rndInt, shiftValue } from './util';
 import { RenderingLayer, RenderingType } from './Renderer';
@@ -34,15 +35,15 @@ export class Fire extends NPC {
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER));
         this.smokeEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-            velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
+            position: this.position,
+            offset: () => new Point(rnd(-1, 1) * 3 * this.intensity, rnd(2) * this.intensity),
+            velocity: () => new Point(rnd(-1, 1) * 15, 4 + rnd(3)),
             color: () => Fire.smokeImage,
             size: () => rndInt(24, 32),
-            gravity: {x: 0, y: 8},
+            gravity: new Point(0, 8),
             lifetime: () => rnd(5, 8),
             alpha: () => rnd(0.2, 0.45),
             angleSpeed: () => rnd(-1, 1) * 1.5,
@@ -51,11 +52,11 @@ export class Fire extends NPC {
             breakFactor: 0.85
         })
         this.sparkEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
+            position: this.position,
+            velocity: () => new Point(rnd(-1, 1) * 30, rnd(50, 100)),
             color: () => FireGfx.gradient.getCss(rnd() ** 0.5),
             size: 2,
-            gravity: {x: 0, y: -100},
+            gravity: new Point(0, -100),
             lifetime: () => rnd(1, 1.5),
             blendMode: "screen",
             alpha: () => rnd(0.3, 1),
@@ -83,7 +84,7 @@ export class Fire extends NPC {
 
     public drawToCanvas (ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.position.x, -this.position.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
         this.fireGfx.draw(ctx, 0, 0);
         ctx.restore();
@@ -109,7 +110,7 @@ export class Fire extends NPC {
             this.intensity = shiftValue(this.intensity, this.growthTarget, this.growth * dt);
         }
 
-        if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
+        if (!this.scene.camera.isPointVisible(this.position.x, this.position.y, 200)) {
             this.isVisible = false;
             return;
         }
@@ -129,9 +130,9 @@ export class Fire extends NPC {
             this.fireGfx.update(dt);
         }
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x, this.y + 32);
+            this.dialoguePrompt.update(dt, this.position.x, this.position.y + 32);
         }
-        this.speechBubble.update(this.x, this.y);
+        this.speechBubble.update(this.position);
     }
 
     public feed(wood: Wood) {

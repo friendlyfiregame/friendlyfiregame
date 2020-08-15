@@ -167,7 +167,7 @@ export class Campaign {
                 case "crazyzoom":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
-                    this.gameScene.camera.focusOn(duration, this.gameScene.fire.x, this.gameScene.fire.y + 15, 8,
+                    this.gameScene.camera.focusOn(duration, this.gameScene.fire.position.x, this.gameScene.fire.position.y + 15, 8,
                         -2 * Math.PI, valueCurves.cubic).then(() => this.gameScene!.beginApocalypse());
                         this.gameScene.fire.conversation = null;
                         this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;

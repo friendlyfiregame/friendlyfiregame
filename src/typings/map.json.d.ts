@@ -13,8 +13,10 @@ declare module "*/level.json" {
     export interface MapObjectJSON {
         name: string;
         type: string;
+        //position: Point;
         x: number;
         y: number;
+        // size: Size;
         width: number;
         height: number;
         properties?: MapObjectPropertyJSON[];

@@ -8,6 +8,7 @@ import { Environment } from './World';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
 import { ParticleEmitter, valueCurves } from './Particles';
+import { Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';
 import { rnd, rndItem } from './util';
 
@@ -34,17 +35,17 @@ export class Bird extends NPC {
     private state = BirdState.WAITING_LEFT;
     private jumpTimer = 0;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 28, 24);
-        this.minAltitude = y;
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(28, 24));
+        this.minAltitude = position.y;
         this.conversation = new Conversation(conversation, this);
 
         this.doubleJumpEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
+            position: this.position,
+            velocity: () => new Point(rnd(-1, 1) * 90, rnd(-1, 0) * 100),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1, 2),
-            gravity: {x: 0, y: -120},
+            gravity: new Point(0, -120),
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
@@ -58,7 +59,7 @@ export class Bird extends NPC {
     protected jump (): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+        this.doubleJumpEmitter.setPosition(this.position.x, this.position.y + 20);
         this.doubleJumpEmitter.emit(20);
     }
 
@@ -67,8 +68,7 @@ export class Bird extends NPC {
     }
 
     protected updatePosition(newX: number, newY: number): void {
-        this.x = newX;
-        this.y = newY;
+        this.position.moveTo(newX, newY);
 
         // Check collision with the environment and correct player position and movement
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
@@ -84,11 +84,11 @@ export class Bird extends NPC {
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
-            col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
-            while (this.y < height && col) {
+            col = world.collidesWith(this.position.x, this.position.y, [ this ], [ Environment.WATER ]);
+            while (this.position.y < height && col) {
                 pulled++;
-                this.y++;
-                col = world.collidesWith(this.x, this.y);
+                this.position.moveYBy(1);
+                col = world.collidesWith(this.position.x, this.position.y);
             }
         }
         return pulled;
@@ -97,10 +97,15 @@ export class Bird extends NPC {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
-                [ Environment.PLATFORM, Environment.WATER ])) {
+        while (
+            this.position.y > 0
+            && world.collidesWith(
+                this.position.x, this.position.y + this.size.height, [ this ],
+                [ Environment.PLATFORM, Environment.WATER ]
+            )
+        ) {
             pulled++;
-            this.y--;
+            this.position.moveYBy(-1);
         }
         return pulled;
     }
@@ -109,15 +114,15 @@ export class Bird extends NPC {
         let pulled = 0;
         const world = this.scene.world;
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
-                this.x--;
+            while (world.collidesWithVerticalLine(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4,
+                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+                this.position.moveXBy(-1);
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
-                this.x++;
+            while (world.collidesWithVerticalLine(this.position.x - this.size.width / 2, this.position.y + this.size.height * 3 / 4,
+                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+                this.position.moveXBy(1);
                 pulled++;
             }
         }
@@ -138,7 +143,7 @@ export class Bird extends NPC {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
+        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.position, RenderingLayer.ENTITIES, this.direction)
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
@@ -167,7 +172,7 @@ export class Bird extends NPC {
 
         if (this.state === BirdState.FLYING_RIGHT || this.state === BirdState.FLYING_LEFT) {
             this.move = this.state === BirdState.FLYING_RIGHT ? 1 : -1;
-            if (this.y < this.minAltitude && this.canJump()) {
+            if (this.position.y < this.minAltitude && this.canJump()) {
                 this.jump();
             }
 
@@ -191,6 +196,6 @@ export class Bird extends NPC {
             }
         }
 
-        this.speechBubble.update(this.x, this.y);
+        this.speechBubble.update(this.position);
     }
 }

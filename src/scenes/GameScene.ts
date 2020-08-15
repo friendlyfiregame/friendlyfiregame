@@ -191,15 +191,15 @@ export class GameScene extends Scene<FriendlyFire> {
             this.particles,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
-                    case 'riddlestone': return new RiddleStone(this, entity.x, entity.y, entity.properties);
-                    case 'campfire': return new Campfire(this, entity.x, entity.y);
-                    case 'radio': return new Radio(this, entity.x, entity.y);
-                    case 'movingplatform': return new MovingPlatform(this, entity.x, entity.y, entity.properties);
-                    case 'skull': return new Skull(this, entity.x, entity.y);
-                    case 'chicken': return new Chicken(this, entity.x, entity.y);
-                    case 'superthrow': return new SuperThrow(this, entity.x, entity.y);
-                    case 'portal': return new Portal(this, entity.x, entity.y);
-                    default: return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
+                    case 'riddlestone': return new RiddleStone(this, new Point(entity.x, entity.y), entity.properties);
+                    case 'campfire': return new Campfire(this, new Point(entity.x, entity.y));
+                    case 'radio': return new Radio(this, new Point(entity.x, entity.y));
+                    case 'movingplatform': return new MovingPlatform(this, new Point(entity.x, entity.y), entity.properties);
+                    case 'skull': return new Skull(this, new Point(entity.x, entity.y));
+                    case 'chicken': return new Chicken(this, new Point(entity.x, entity.y));
+                    case 'superthrow': return new SuperThrow(this, new Point(entity.x, entity.y));
+                    case 'portal': return new Portal(this, new Point(entity.x, entity.y));
+                    default: return createEntity(entity.name, this, new Point(entity.x, entity.y), entity.properties);
                 }
             })
         ];
@@ -216,7 +216,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
 
-        this.camera = new Camera(this, this.player);
+        this.camera = new Camera(this, this.player.position);
         this.camera.setBounds(this.player.getCurrentMapBounds());
 
         this.fpsInterval = setInterval(() => {
@@ -434,9 +434,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.DEBUG,
-            position: new Point(bounds.x, -bounds.y),
+            position: new Point(bounds.position.x, -bounds.position.y),
             lineColor: color,
-            size: new Size(bounds.width, bounds.height)
+            size: bounds.size
         })
     }
 
@@ -489,7 +489,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private updateApocalypse() {
-        this.fireEmitter.setPosition(this.player.x, this.player.y);
+        this.fireEmitter.setPosition(this.player.position.x, this.player.position.y);
         this.fireEffects.forEach(e => e.update(this.dt));
         if (timedRnd(this.dt, 0.8)) {
             this.fireEmitter.emit();
@@ -544,12 +544,12 @@ export class GameScene extends Scene<FriendlyFire> {
     public loadApocalypse() {
         this.fireEffects = [1, 2].map(num => new FireGfx(32, 24, true, 2));
         this.fireEmitter = this.particles.createEmitter({
-            position: {x: this.player.x, y: this.player.y},
-            offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
-            velocity: () => ({ x: 0, y: -25}),
+            position: this.player.position,
+            offset: () => new Point(rnd(-1, 1) * 300, 200),
+            velocity: () => new Point(0, -25),
             color: () => rndItem(this.fireEffects).getImage(),
             size: () => rnd(16, 32),
-            gravity: {x: -10, y: -30},
+            gravity: new Point(-10, -30),
             lifetime: () => rnd(5, 15),
             alpha: 1,
             breakFactor: 0.9,
@@ -572,20 +572,32 @@ export class GameScene extends Scene<FriendlyFire> {
 
         if (bossPosition && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {
-                const cloud = new Cloud(this, pos.x, pos.y, {
-                    velocity: 0,
-                    distance: 1
-                }, true);
+                const cloud = new Cloud(
+                    this,
+                    new Point(pos.x, pos.y),
+                    {
+                        velocity: 0,
+                        distance: 1
+                    },
+                    true
+                );
+
                 this.gameObjects.push(cloud);
             })
 
             // Teleport player and fire to boss spawn position
-            this.player.x = bossPosition.x - 36;
-            this.player.y = bossPosition.y;
+            this.player.position.moveTo(
+                bossPosition.x - 36,
+                bossPosition.y
+            );
+
             this.player.removePowerUps();
             this.player.enableRainDance();
-            this.fire.x = bossPosition.x;
-            this.fire.y = bossPosition.y;
+
+            this.fire.position.moveTo(
+                bossPosition.x,
+                bossPosition.y
+            )
             this.camera.setBounds(this.player.getCurrentMapBounds())
 
             // this.player.enableMultiJump();

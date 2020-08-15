@@ -197,7 +197,7 @@ export class Renderer {
     }
 
     public addAseprite(
-        sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer,
+        sprite: Aseprite, animationTag: string, position: Point, layer: RenderingLayer,
         direction = 1, time?: number
     ): void {
         const scale = direction < 0 ? new Point(-1, 1) : undefined;
@@ -205,7 +205,7 @@ export class Renderer {
         this.add({
             type: RenderingType.ASEPRITE,
             layer,
-            translation: new Point(x, -y),
+            translation: new Point(position.x, -position.y),
             position: new Point(-sprite.width >> 1, -sprite.height),
             scale,
             asset: sprite,

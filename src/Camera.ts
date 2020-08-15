@@ -1,7 +1,8 @@
 import { Bounds } from './Entity';
-import { clamp, isDev, rnd, shiftValue, Vector2 } from './util';
+import { clamp, isDev, rnd, shiftValue } from './util';
 import { Fire } from './Fire';
-import { GameScene } from "./scenes/GameScene";
+import { GameScene } from './scenes/GameScene';
+import { Point } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { ValueCurve, valueCurves } from './Particles';
 
@@ -47,7 +48,7 @@ export class Camera {
     private currentBarHeight = 0;
     private bounds?: Bounds;
 
-    constructor(protected scene: GameScene, private target: Vector2, interpolationTime = 0.5, private barHeight = 0.1) {
+    constructor(protected scene: GameScene, private target: Point, interpolationTime = 0.5, private barHeight = 0.1) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
@@ -92,8 +93,7 @@ export class Camera {
             const worldRect = this.getVisibleRect();
             const tx = worldRect.x + px * worldRect.width, ty = worldRect.y + (1 - py) * worldRect.height;
             // Teleport player
-            this.scene.player.x = tx;
-            this.scene.player.y = ty;
+            this.scene.player.position.moveTo(tx, ty);
             this.scene.player.setVelocity(0, 0);
             this.zoomingOut = false;
         }
@@ -130,38 +130,38 @@ export class Camera {
             const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
 
             const overBounds: OverBoundData = {
-                left: (targetVisibleRect.x < this.bounds.x),
-                right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.x + this.bounds.width),
-                top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.y,
-                bottom: targetVisibleRect.y < (this.bounds.y - this.bounds.height)
+                left: (targetVisibleRect.x < this.bounds.position.x),
+                right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.position.x + this.bounds.size.width),
+                top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.position.y,
+                bottom: targetVisibleRect.y < (this.bounds.position.y - this.bounds.size.height)
             }
 
             // Bound clip left / right
-            if (targetVisibleRect.width >= this.bounds.width) {
+            if (targetVisibleRect.width >= this.bounds.size.width) {
                 const visibleCenterX = targetVisibleRect.x + targetVisibleRect.width / 2;
-                const boundCenterX = this.bounds.x + this.bounds.width / 2;
+                const boundCenterX = this.bounds.position.x + this.bounds.size.width / 2;
                 const diff = boundCenterX - visibleCenterX;
                 xTarget += diff;
             } else if (overBounds.left) {
-                const diff = this.bounds.x - targetVisibleRect.x;
+                const diff = this.bounds.position.x - targetVisibleRect.x;
                 xTarget += diff;
             } else if (overBounds.right) {
-                const diff = (this.bounds.x + this.bounds.width) - (targetVisibleRect.x + targetVisibleRect.width);
+                const diff = (this.bounds.position.x + this.bounds.size.width) - (targetVisibleRect.x + targetVisibleRect.width);
                 xTarget += diff;
             }
 
             // Bound clip top / bottom
-            if (targetVisibleRect.height >= this.bounds.height) {
+            if (targetVisibleRect.height >= this.bounds.size.height) {
                 const visibleCenterY = (targetVisibleRect.y + targetVisibleRect.height) - targetVisibleRect.height / 2;
-                const boundCenterY = this.bounds.y - this.bounds.height / 2;
+                const boundCenterY = this.bounds.position.y - this.bounds.size.height / 2;
                 const diff = boundCenterY - visibleCenterY;
                 // console.log(diff);
                 yTarget += diff;
             } else if (overBounds.top) {
-                const diff = this.bounds.y - (targetVisibleRect.y + targetVisibleRect.height);
+                const diff = this.bounds.position.y - (targetVisibleRect.y + targetVisibleRect.height);
                 yTarget += diff;
             } else if (overBounds.bottom) {
-                const diff = (this.bounds.y - this.bounds.height) - targetVisibleRect.y;
+                const diff = (this.bounds.position.y - this.bounds.size.height) - targetVisibleRect.y;
                 yTarget += diff;
             }
         }
@@ -199,7 +199,7 @@ export class Camera {
     }
 
     private applyApocalypticShake(shakeSource: Fire) {
-        const dx = this.x - shakeSource.x, dy = this.y - shakeSource.y;
+        const dx = this.x - shakeSource.position.x, dy = this.y - shakeSource.position.y;
         const dis = Math.sqrt(dx * dx + dy * dy);
         const maxDis = 200;
         if (dis < maxDis) {

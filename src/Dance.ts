@@ -4,6 +4,7 @@ import { ControllerEvent } from './input/ControllerEvent';
 import { ControllerSpriteMap } from './input/ControllerFamily';
 import { ControllerManager } from './input/ControllerManager';
 import { GameScene } from './scenes/GameScene';
+import { Point } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { Sound } from './Sound';
 import { ValueCurve, valueCurves } from './Particles';
@@ -51,8 +52,7 @@ export class Dance {
 
     constructor(
         private scene: GameScene,
-        private x: number,
-        private y: number,
+        private position: Point,
         private bpm = 128,
         keys = "", // can contain "1" or "2" for single keys, or "3" for both at once
         private warmupBeats = 8,
@@ -107,8 +107,7 @@ export class Dance {
     }
 
     public setPosition(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+        this.position.moveTo(x, y);
     }
 
     // Called by parent
@@ -255,7 +254,7 @@ export class Dance {
     public draw(ctx: CanvasRenderingContext2D) {
         const controller: ControllerSpriteMap = ControllerManager.getInstance().controllerSprite;
         ctx.save();
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.position.x, -this.position.y);
 
         // Key Bar
         const w = 100
