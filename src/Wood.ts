@@ -60,8 +60,12 @@ export class Wood extends PhysicsEntity {
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
-            if (!this.isCarried() && this.state !== WoodState.SWIMMING
-                    && this.scene.world.collidesWith(this.position.x, this.position.y - 5) === Environment.WATER) {
+
+            if (
+                !this.isCarried()
+                && this.state !== WoodState.SWIMMING
+                && this.scene.world.collidesWith(new Point(this.position.x, this.position.y - 5)) === Environment.WATER
+            ) {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);

@@ -660,12 +660,12 @@ export class Player extends PhysicsEntity {
 
     private canThrowStoneIntoWater(): boolean {
         return this.carrying instanceof Stone && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.position.x - 30, this.position.y - 20) === Environment.WATER);
+            this.scene.world.collidesWith(new Point(this.position.x - 30, this.position.y - 20)) === Environment.WATER);
     }
 
     private canThrowSeedIntoSoil(): boolean {
         return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.position.x - 30, this.position.y + 2) === Environment.SOIL);
+            this.scene.world.collidesWith(new Point(this.position.x - 30, this.position.y + 2)) === Environment.SOIL);
     }
 
     public debugCollisions(): void {
@@ -762,9 +762,7 @@ export class Player extends PhysicsEntity {
             }
         }
 
-        const isDrowning = this.scene.world.collidesWith(
-            this.position.x, this.position.y
-        ) === Environment.WATER;
+        const isDrowning = this.scene.world.collidesWith(this.position) === Environment.WATER;
 
         if (isDrowning) {
             if (!this.thinkBubble) {
@@ -855,7 +853,7 @@ export class Player extends PhysicsEntity {
             if (this.getVelocityY() > 0) {
                 this.animation = "jump";
                 this.flying = true;
-            } else if (isDrowning || (this.getVelocityY() < 0 && this.position.y - world.getGround(this.position.x, this.position.y) > 10)) {
+            } else if (isDrowning || (this.getVelocityY() < 0 && this.position.y - world.getGround(this.position) > 10)) {
                 if (this.jumpThresholdTimer < 0 || this.usedJump) {
                     this.animation = "fall";
                 }
@@ -909,7 +907,12 @@ export class Player extends PhysicsEntity {
         }
 
         // Bounce
-        if (this.scene.world.collidesWith(this.position.x, this.position.y - 2, [ this ]) === Environment.BOUNCE) {
+        if (
+            this.scene.world.collidesWith(
+                new Point(this.position.x, this.position.y - 2),
+                [ this ]
+            ) === Environment.BOUNCE
+        ) {
             this.bounce();
         }
 
@@ -942,7 +945,7 @@ export class Player extends PhysicsEntity {
                         // Camera focus to boss for each triggered rain cloud
                         const bossPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
                         if (bossPointer) {
-                            this.scene.camera.focusOn(3, bossPointer.x, bossPointer.y + 60, 1, 0, valueCurves.cos(0.35));
+                            this.scene.camera.focusOn(3, new Point(bossPointer.x, bossPointer.y + 60), 1, 0, valueCurves.cos(0.35));
                         }
 
                         // Remove a single boss fight barrier
@@ -1030,12 +1033,17 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
-            col = world.collidesWith(this.position.x, this.position.y, [ this ],
-                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
+
+            col = world.collidesWith(
+                this.position,
+                [ this ],
+                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]
+            );
+
             while (this.position.y < height && col) {
                 pulled++;
                 this.position.moveYBy(1);
-                col = world.collidesWith(this.position.x, this.position.y);
+                col = world.collidesWith(this.position);
             }
         }
         return pulled;
@@ -1070,7 +1078,8 @@ export class Player extends PhysicsEntity {
         while (
             this.position.y > 0
             && world.collidesWith(
-                this.position.x, this.position.y + this.size.height, [ this ],
+                new Point(this.position.x, this.position.y + this.size.height),
+                [ this ],
                 [ Environment.PLATFORM, Environment.WATER ]
             )
         ) {
@@ -1086,14 +1095,26 @@ export class Player extends PhysicsEntity {
         const world = this.scene.world;
 
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4,
-                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    new Point(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4),
+                    this.size.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.position.moveXBy(-1);
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.position.x - this.size.width / 2, this.position.y + this.size.height * 3 / 4,
-                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    new Point(this.position.x - this.size.width / 2, this.position.y + this.size.height * 3 / 4),
+                    this.size.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.position.moveXBy(1);
                 pulled++;
             }

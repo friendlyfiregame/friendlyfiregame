@@ -34,9 +34,14 @@ export class Wall extends Entity implements CollidableGameObject {
         this.state = WallState.CRUMBLED
     }
 
-    collidesWith(x: number, y: number): number {
-        if (this.state === WallState.SOLID && x >= this.position.x - this.size.width / 2 && x <= this.position.x + this.size.width / 2
-                && y >= this.position.y && y <= this.position.y + this.size.height) {
+    collidesWith(position: Point): number {
+        if (
+            this.state === WallState.SOLID
+            && position.x >= this.position.x - this.size.width / 2
+            && position.x <= this.position.x + this.size.width / 2
+            && position.y >= this.position.y
+            && position.y <= this.position.y + this.size.height
+        ) {
             return Environment.SOLID;
         }
 

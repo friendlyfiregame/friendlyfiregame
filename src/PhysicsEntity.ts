@@ -3,6 +3,7 @@ import { Entity } from './Entity';
 import { Environment } from './World';
 import { GameObject } from './scenes/GameScene';
 import { Player } from './Player';
+import { Point } from './Geometry'
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -84,22 +85,22 @@ export abstract class PhysicsEntity extends Entity {
         return this.velocityY;
     }
 
-    private checkCollision(x: number, y: number, ignore?: Environment[]): Environment {
-        return this.scene.world.collidesWith(x, y, [ this ], ignore);
+    private checkCollision(position: Point, ignore?: Environment[]): Environment {
+        return this.scene.world.collidesWith(position, [ this ], ignore);
     }
 
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
         for (let i = -this.size.width / 2; i < this.size.width / 2; i++) {
-            let env = this.checkCollision(x + i, y, ignore);
+            let env = this.checkCollision(new Point(x + i, y), ignore);
             if (env !== Environment.AIR) return env;
-            env = this.checkCollision(x + i, y + this.size.height, ignore);
+            env = this.checkCollision(new Point(x + i, y + this.size.height), ignore);
             if (env !== Environment.AIR) return env;
         }
 
         for (let i = 0; i < this.size.height; i++) {
-            let env = this.checkCollision(x - this.size.width / 2, y + i, ignore);
+            let env = this.checkCollision(new Point(x - this.size.width / 2, y + i), ignore);
             if (env !== Environment.AIR) return env;
-            env = this.checkCollision(x + this.size.width / 2, y + i, ignore);
+            env = this.checkCollision(new Point(x + this.size.width / 2, y + i), ignore);
             if (env !== Environment.AIR) return env;
         }
 
@@ -123,8 +124,8 @@ export abstract class PhysicsEntity extends Entity {
         super.update(dt);
 
         const world = this.scene.world;
+        const ground = world.getObjectAt(new Point(this.position.x, this.position.y - 5), [ this ]);
 
-        const ground = world.getObjectAt(this.position.x, this.position.y - 5, [ this ]);
         if (ground instanceof PhysicsEntity) {
             this.position.moveBy(
                 ground.getVelocityX() * PIXEL_PER_METER * dt,
@@ -141,7 +142,7 @@ export abstract class PhysicsEntity extends Entity {
 
         // Object dropping down when there is no ground below
         if (!this.floating) {
-            const environment = world.collidesWith(this.position.x, this.position.y - 1, [ this ],
+            const environment = world.collidesWith(new Point(this.position.x, this.position.y - 1), [ this ],
                     this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
 
             if (environment === Environment.AIR) {

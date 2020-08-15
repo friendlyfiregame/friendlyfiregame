@@ -11,6 +11,7 @@ import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import { Game } from './Game';
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
+import { Point } from './Geometry'
 import { Quest, QuestA, QuestATrigger, QuestB, QuestBTrigger, QuestKey } from './Quests';
 import seed1 from '../assets/dialog/seed1.dialog.json';
 import shadowpresence1 from '../assets/dialog/shadowpresence1.dialog.json';
@@ -150,7 +151,7 @@ export class Campaign {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'forest');
 
                     if (forestPointer) {
-                        this.gameScene.camera.focusOn(8, forestPointer.x, forestPointer.y, 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(8, new Point(forestPointer.x, forestPointer.y), 1, 0, valueCurves.cos(0.35));
                     }
 
                     break;
@@ -158,7 +159,7 @@ export class Campaign {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'mountain');
 
                     if (mountainPointer) {
-                        this.gameScene.camera.focusOn(8, mountainPointer.x, mountainPointer.y, 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(8, new Point(mountainPointer.x, mountainPointer.y), 1, 0, valueCurves.cos(0.35));
                     }
 
                     break;
@@ -166,14 +167,14 @@ export class Campaign {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'river');
 
                     if (riverPointer) {
-                        this.gameScene.camera.focusOn(8, riverPointer.x, riverPointer.y, 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(8, new Point(riverPointer.x, riverPointer.y), 1, 0, valueCurves.cos(0.35));
                     }
 
                     break;
                 case "crazyzoom":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
-                    this.gameScene.camera.focusOn(duration, this.gameScene.fire.position.x, this.gameScene.fire.position.y + 15, 8,
+                    this.gameScene.camera.focusOn(duration, new Point(this.gameScene.fire.position.x, this.gameScene.fire.position.y + 15), 8,
                         -2 * Math.PI, valueCurves.cubic).then(() => this.gameScene!.beginApocalypse());
                         this.gameScene.fire.conversation = null;
                         this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;

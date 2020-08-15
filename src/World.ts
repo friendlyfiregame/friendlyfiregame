@@ -104,8 +104,9 @@ export class World implements GameObject {
         }
     }
 
-    public getEnvironment(x: number, y: number): Environment {
-        const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+    public getEnvironment(position: Point): Environment {
+        const index = (this.getHeight() - 1 - position.yRounded) * this.getWidth() + position.xRounded;
+
         if (index < 0 || index >= World.collisionMap.length) {
             return Environment.AIR;
         }
@@ -121,22 +122,24 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
      *         specific meaning which isn't defined yet).
      */
-    public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
+    public collidesWith(position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
-                const environment = gameObject.collidesWith(x, y);
+                const environment = gameObject.collidesWith(position);
+
                 if (environment !== Environment.AIR && !ignore.includes(environment) ) {
                     return environment;
                 }
             }
         }
 
-        const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+        const index = (this.getHeight() - 1 - position.yRounded) * this.getWidth() + position.xRounded;
 
         if (index < 0 || index >= World.collisionMap.length) {
             return 0;
         }
-        const environment = this.getEnvironment(x, y);
+
+        const environment = this.getEnvironment(position);
 
         if ((!validEnvironments.includes(environment)) || (ignore && ignore.includes(environment))) {
             return Environment.AIR;
@@ -218,11 +221,11 @@ export class World implements GameObject {
         );
     }
 
-    public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
+    public getObjectAt(position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
             GameObject | null {
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
-                const environment = gameObject.collidesWith(x, y);
+                const environment = gameObject.collidesWith(position);
                 if (environment !== Environment.AIR && !ignore.includes(environment)) {
                     return gameObject;
                 }
@@ -239,10 +242,10 @@ export class World implements GameObject {
      * @param height - The height of the line to check
      * @return 0 if no collision. Type of first collision along the line otherwise.
      */
-    public collidesWithVerticalLine(x: number, y: number, height: number, ignoreObjects?: GameObject[],
+    public collidesWithVerticalLine(position: Point, height: number, ignoreObjects?: GameObject[],
             ignore?: Environment[]): number {
         for (let i = 0; i < height; i++) {
-            const collision = this.collidesWith(x, y - i, ignoreObjects, ignore);
+            const collision = this.collidesWith(new Point(position.x, position.y - i), ignoreObjects, ignore);
             if (collision) {
                 return collision;
             }
@@ -257,8 +260,10 @@ export class World implements GameObject {
      * @param y - Y coordinate of current position.
      * @return The Y coordinate of the ground below the given coordinate.
      */
-    public getGround(x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]): number {
-        while (y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)) {
+    public getGround(position: Point, ignoreObjects?: GameObject[], ignore?: Environment[]): number {
+        let y = position.y
+
+        while (y > 0 && !this.collidesWith(position, ignoreObjects, ignore)) {
             y--;
         }
         return y;

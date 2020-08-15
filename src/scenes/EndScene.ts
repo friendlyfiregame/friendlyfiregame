@@ -5,6 +5,7 @@ import { ControllerFamily } from '../input/ControllerFamily';
 import { CreditsScene } from './CreditsScene';
 import { DIALOG_FONT } from '../constants';
 import { FriendlyFire } from '../FriendlyFire';
+import { Point } from '../Geometry';
 import { Quest } from '../Quests';
 import { Scene } from '../Scene';
 import { Sound } from '../Sound';
@@ -55,14 +56,23 @@ export class EndScene extends Scene<FriendlyFire> {
         if (this.time > this.subtitleDelay) {
             const endingLabel = this.ending ? this.ending.title : 'Unknown [E]nding';
             const size = EndScene.font.measureText(endingLabel);
-            EndScene.font.drawText(ctx, endingLabel, width / 2 - size.width / 2, height / 2 - EndScene.logo.height / 2 + 20, "red");
+            EndScene.font.drawText(ctx, endingLabel, new Point(width / 2 - size.width / 2, height / 2 - EndScene.logo.height / 2 + 20), "red");
         }
         // Inform the user, that it's possible to return to the title…
 
         if (this.time > this.inputDelay) {
             const txt = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to continue.`;
             const txtSize = EndScene.font.measureText(txt);
-            EndScene.font.drawText(ctx, txt, width / 2 - txtSize.width / 2 , height - txtSize.height - 15, "darkgrey");
+
+            EndScene.font.drawText(
+                ctx,
+                txt,
+                new Point(
+                    width / 2 - txtSize.width / 2,
+                    height - txtSize.height - 15
+                ),
+                "darkgrey"
+            );
         }
     }
 

@@ -7,6 +7,7 @@ import { ControllerManager } from '../input/ControllerManager';
 import { DIALOG_FONT } from '../constants';
 import { easeOutCubic } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
+import { Point } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 
@@ -71,13 +72,15 @@ export class ControlsScene extends Scene<FriendlyFire> {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, x: number, y: number, text: string, animationTag: ControllerAnimationTags) {
+    private drawTooltip (ctx: CanvasRenderingContext2D, position: Point, text: string, animationTag: ControllerAnimationTags) {
         const gap = 6;
-        const textPositionX = Math.round(x + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap);
-        const textPositionY = y;
+        const textPositionX = position.xRounded + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap;
+        const textPositionY = position.y;
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, x, y)
-        ControlsScene.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY, "white", "black");
+
+        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, position)
+
+        ControlsScene.font.drawTextWithOutline(ctx, text, new Point(textPositionX, textPositionY), 'white', 'black');
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -99,10 +102,12 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ctx.drawImage(ControlsScene.panelImage, 0, 0);
 
         const controllerSprite = ControllerManager.getInstance().selectedGamepadStyle;
-        ControlsScene.gamepadSelection.drawTag(ctx, controllerSprite, 204, 2);
-        ControlsScene.gamepadControls.drawTag(ctx, controllerSprite, 206, 35);
-        this.drawTooltip(ctx, 0, ControlsScene.panelImage.height, "Toggle Gamepad Button Prompts", ControllerAnimationTags.ACTION);
-        this.drawTooltip(ctx, 0, ControlsScene.panelImage.height + 16, "Back", ControllerAnimationTags.BACK);
+
+        ControlsScene.gamepadSelection.drawTag(ctx, controllerSprite, new Point(204, 2));
+        ControlsScene.gamepadControls.drawTag(ctx, controllerSprite, new Point(206, 35));
+
+        this.drawTooltip(ctx, new Point(0, ControlsScene.panelImage.height), "Toggle Gamepad Button Prompts", ControllerAnimationTags.ACTION);
+        this.drawTooltip(ctx, new Point(0, ControlsScene.panelImage.height + 16), "Back", ControllerAnimationTags.BACK);
 
 
         ctx.font = "20px sans-serif";
@@ -113,7 +118,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
         let textOffsetY = startingY;
         this.controls.forEach(label => {
-            ControlsScene.font.drawText(ctx, label, textOffsetX, textOffsetY, fontColor);
+            ControlsScene.font.drawText(ctx, label, new Point(textOffsetX, textOffsetY), fontColor);
             textOffsetY += gap;
         })
 

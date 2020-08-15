@@ -294,7 +294,7 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y1, 9, 9);
                     } else {
-                        Dance.keys.drawTag(ctx, `${controller}-dance1`, x + Dance.keys.width / -2, y1);
+                        Dance.keys.drawTag(ctx, `${controller}-dance1`, new Point(x + Dance.keys.width / -2, y1));
                     }
                 }
                 if (keys.includes("2")) {
@@ -303,7 +303,7 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y2, 9, 9);
                     } else {
-                        Dance.keys.drawTag(ctx, `${controller}-dance2`, x + Dance.keys.width / -2, y2);
+                        Dance.keys.drawTag(ctx, `${controller}-dance2`, new Point(x + Dance.keys.width / -2, y2));
                     }
                 }
             }

@@ -7,8 +7,7 @@ import { RenderingLayer, RenderingType } from './Renderer';
 import { ValueCurve, valueCurves } from './Particles';
 
 export interface camFocus {
-    x: number;
-    y: number;
+    position: Point;
     duration: number;
     startTime: number;
     endTime: number;
@@ -234,11 +233,12 @@ export class Camera {
         ctx.translate(-this.x, this.y);
     }
 
-    public focusOn(duration: number, x: number, y: number, zoom = 1, rotation = 0,
-            curve = valueCurves.cos(this.interpolationTime)): Promise<void> {
+    public focusOn(
+        duration: number, position: Point, zoom = 1, rotation = 0,
+        curve = valueCurves.cos(this.interpolationTime)
+    ): Promise<void> {
         const focus: camFocus = {
-            x,
-            y,
+            position,
             duration,
             zoom,
             rotation,
@@ -264,8 +264,8 @@ export class Camera {
             const force = focus.force = focus.curve.get(focus.progress);
             // Apply to camera state
             const f1 = 1 - force;
-            this.x = f1 * this.x + force * focus.x;
-            this.y = f1 * this.y + force * focus.y;
+            this.x = f1 * this.x + force * focus.position.x;
+            this.y = f1 * this.y + force * focus.position.y;
             const originalSize = 1 / this.zoom, targetSize = 1 / focus.zoom;
             const currentSize = f1 * originalSize + force * targetSize;
             this.zoom = 1 / currentSize;

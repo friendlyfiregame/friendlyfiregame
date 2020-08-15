@@ -8,6 +8,7 @@ import { easeOutBounce } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
 import { MenuItem, MenuList } from '../Menu';
+import { Point } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
@@ -43,9 +44,9 @@ export class PauseScene extends Scene<FriendlyFire> {
         PauseScene.music.play();
 
         this.menu.setItems(
-            new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
-            new MenuItem(MenuItemKey.CONTROLS, "Controls and Options", PauseScene.font, "white", 75, 145),
-            new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 160),
+            new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", new Point(75, 130)),
+            new MenuItem(MenuItemKey.CONTROLS, "Controls and Options", PauseScene.font, "white", new Point(75, 145)),
+            new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", new Point(75, 160)),
         )
     }
 
@@ -94,10 +95,20 @@ export class PauseScene extends Scene<FriendlyFire> {
         ctx.globalAlpha = 0.8;
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
-        PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
-        const versionText = isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
+
+        PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', new Point(75, 100), 'white');
+
+        const versionText = isDev() ? 'DEVELOPMENT VERSION' : PauseScene.appInfo.version;
         const versionTextSize = PauseScene.font.measureText(versionText);
-        PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 4, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
+
+        PauseScene.font.drawText(
+            ctx,
+            versionText,
+            new Point(this.game.width - versionTextSize.width - 4, this.game.height - versionTextSize.height - 4),
+            'white',
+            0,
+            0.6
+        );
         ctx.restore();
         this.menu.draw(ctx);
     }

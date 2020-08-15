@@ -91,9 +91,15 @@ export class Seed extends NPC {
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
-            if (!this.isCarried() && this.scene.world.collidesWith(this.position.x, this.position.y - 8) === Environment.SOIL) {
+            if (
+                !this.isCarried()
+                && this.scene.world.collidesWith(
+                    new Point(this.position.x, this.position.y - 8)
+                ) === Environment.SOIL
+            ) {
                 const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'seedposition');
-                if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
+
+                if (!seedPosition) throw new Error('Seed position is missing in points of interest array');
 
                 this.state = SeedState.PLANTED;
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
@@ -107,7 +113,14 @@ export class Seed extends NPC {
                 Seed.successSound.play();
                 Conversation.setGlobal("seedplanted", "true");
             }
-            if (!this.isCarried() && this.state !== SeedState.SWIMMING && this.scene.world.collidesWith(this.position.x, this.position.y - 5) === Environment.WATER) {
+
+            if (
+                !this.isCarried()
+                && this.state !== SeedState.SWIMMING
+                && this.scene.world.collidesWith(
+                    new Point(this.position.x, this.position.y - 5)
+                ) === Environment.WATER
+            ) {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);

@@ -84,11 +84,11 @@ export class Bird extends NPC {
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
-            col = world.collidesWith(this.position.x, this.position.y, [ this ], [ Environment.WATER ]);
+            col = world.collidesWith(this.position, [ this ], [ Environment.WATER ]);
             while (this.position.y < height && col) {
                 pulled++;
                 this.position.moveYBy(1);
-                col = world.collidesWith(this.position.x, this.position.y);
+                col = world.collidesWith(this.position);
             }
         }
         return pulled;
@@ -100,7 +100,7 @@ export class Bird extends NPC {
         while (
             this.position.y > 0
             && world.collidesWith(
-                this.position.x, this.position.y + this.size.height, [ this ],
+                new Point(this.position.x, this.position.y + this.size.height), [ this ],
                 [ Environment.PLATFORM, Environment.WATER ]
             )
         ) {
@@ -113,15 +113,34 @@ export class Bird extends NPC {
     private pullOutOfWall(): number {
         let pulled = 0;
         const world = this.scene.world;
+
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4,
-                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    new Point(
+                        this.position.x + this.size.width / 2,
+                        this.position.y + this.size.height * 3 / 4
+                    ),
+                    this.size.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.position.moveXBy(-1);
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.position.x - this.size.width / 2, this.position.y + this.size.height * 3 / 4,
-                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    new Point(
+                        this.position.x - this.size.width / 2,
+                        this.position.y + this.size.height * 3 / 4
+                    ),
+                    this.size.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.position.moveXBy(1);
                 pulled++;
             }

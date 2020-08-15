@@ -64,7 +64,7 @@ export class Stone extends NPC implements CollidableGameObject {
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
-            if (this.scene.world.collidesWith(this.position.x, this.position.y - 5) === Environment.WATER) {
+            if (this.scene.world.collidesWith(new Point(this.position.x, this.position.y - 5)) === Environment.WATER) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_STONE_INTO_WATER);
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
@@ -92,10 +92,14 @@ export class Stone extends NPC implements CollidableGameObject {
         this.speechBubble.update(this.position);
     }
 
-    collidesWith(x: number, y: number): number {
+    collidesWith(position: Point): number {
         if (this.state === StoneState.FLOATING || this.state === StoneState.SWIMMING) {
-            if (x >= this.position.x - this.size.width / 2 && x <= this.position.x + this.size.width / 2
-                    && y >= this.position.y && y <= this.position.y + this.size.height) {
+            if (
+                position.x >= this.position.x - this.size.width / 2
+                && position.x <= this.position.x + this.size.width / 2
+                && position.y >= this.position.y
+                && position.y <= this.position.y + this.size.height
+            ) {
                 return Environment.SOLID;
             }
         }

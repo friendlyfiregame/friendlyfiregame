@@ -1,5 +1,6 @@
 import { FontJSON } from '*.font.json';
 import { loadImage } from './graphics.js';
+import { Point, Size } from './Geometry';
 
 export class BitmapFont {
     private sourceImage: HTMLImageElement;
@@ -93,17 +94,20 @@ export class BitmapFont {
     }
 
     private drawCharacter(
-        ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string
+        ctx: CanvasRenderingContext2D, char: number, position: Point, color: string
     ) {
         const colorIndex = this.colorMap[color];
         const charIndex = (typeof char == "number") ? char : this.getCharIndex(char);
         const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
-        ctx.drawImage(this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
-            Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight);
+
+        ctx.drawImage(
+            this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
+            position.xRounded, position.yRounded, this.charWidths[charIndex], this.charHeight
+        );
     };
 
     public drawText(
-        ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
+        ctx: CanvasRenderingContext2D, text: string, position: Point, color: string, align = 0,
         alpha = 1
     ) {
         text = "" + text;
@@ -125,22 +129,23 @@ export class BitmapFont {
 
         const offX = Math.round(-align * width);
         precursorChar = null
+        let currentPosition = position.clone();
 
         for (let i = 0; i < text.length; i++) {
             const currentChar = text[i];
             const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
 
-            let xPos = Math.round(x + offX) - spaceReduction;
+            let xPos = currentPosition.xRounded + offX - spaceReduction;
 
-            this.drawCharacter(ctx, index, xPos, Math.round(y), color);
-            x += this.charWidths[index] - spaceReduction + 1;
+            this.drawCharacter(ctx, index, new Point(xPos, currentPosition.yRounded), color);
+            currentPosition.moveXBy(this.charWidths[index] - spaceReduction + 1);
 
             precursorChar = currentChar;
         }
     }
 
-    public measureText(text: string): { width: number, height: number } {
+    public measureText(text: string): Size {
         const CHAR_SPACING = 1;
         let width = 0;
         let precursorChar = null;
@@ -162,21 +167,21 @@ export class BitmapFont {
             width -= CHAR_SPACING;
         }
 
-        return { width, height: this.charHeight };
+        return new Size(width, this.charHeight);
     }
 
     public drawTextWithOutline(
-        ctx: CanvasRenderingContext2D, text: string, xPos: number, yPos: number, textColor: string,
+        ctx: CanvasRenderingContext2D, text: string, position: Point, textColor: string,
         outlineColor: string, align = 0
     ) {
-        for (let yOffset = yPos - 1; yOffset <= yPos + 1; yOffset++) {
-            for (let xOffset = xPos - 1; xOffset <= xPos + 1; xOffset++) {
-                if (xOffset != xPos || yOffset != yPos) {
-                    this.drawText(ctx, text, xOffset, yOffset, outlineColor, align);
+        for (let yOffset = position.y - 1; yOffset <= position.y + 1; yOffset++) {
+            for (let xOffset = position.x - 1; xOffset <= position.x + 1; xOffset++) {
+                if (xOffset != position.x || yOffset != position.y) {
+                    this.drawText(ctx, text, new Point(xOffset, yOffset), outlineColor, align);
                 }
             }
         }
 
-        this.drawText(ctx, text, xPos, yPos, textColor, align);
+        this.drawText(ctx, text, position, textColor, align);
     };
 }

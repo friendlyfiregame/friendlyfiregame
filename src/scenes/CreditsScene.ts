@@ -8,6 +8,7 @@ import { easeOutCubic } from '../easings';
 import { FadeTransition } from '../transitions/FadeTransition';
 import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
+import { Point } from '../Geometry'
 import { Scene } from '../Scene';
 import { Sound } from '../Sound';
 import { TitleScene } from './TitleScene';
@@ -109,33 +110,37 @@ export class CreditsScene extends Scene<FriendlyFire> {
         this.time += dt;
     }
 
-    private drawTitle(ctx: CanvasRenderingContext2D, posY: number, posX: number): number {
+    private drawTitle(ctx: CanvasRenderingContext2D, position: Point): number {
         const gap = 5;
         const titleText = "Friendly Fire";
         const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
-        CreditsScene.headlineFont.drawText(ctx, titleText, posX, posY, "white");
-        CreditsScene.standardFont.drawText(ctx, versionText, posX, posY + this.headlineCharHeight + gap, "white");
-        return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20
+
+        CreditsScene.headlineFont.drawText(ctx, titleText, position, 'white');
+        CreditsScene.standardFont.drawText(ctx, versionText, new Point(position.x, position.y + this.headlineCharHeight + gap), 'white');
+
+        return position.y + this.headlineCharHeight + this.standardCharHeight + gap + 20
     }
 
-    private drawParagraph(ctx: CanvasRenderingContext2D, posY: number, posX: number, lines: string[], marginBotton = 10): number {
-        let y = posY;
+    private drawParagraph(ctx: CanvasRenderingContext2D, position: Point, lines: string[], marginBotton = 10): number {
+        let y = position.y;
+
         lines.forEach(line => {
-            CreditsScene.standardFont.drawText(ctx, line, posX, y, "white");
+            CreditsScene.standardFont.drawText(ctx, line, new Point(position.x, y), 'white');
             y += this.standardCharHeight;
         })
 
         return y + marginBotton;
     }
 
-    private drawCredit(ctx: CanvasRenderingContext2D, posY: number, posX: number, title: string, names: string[]): number {
-        let y = posY;
+    private drawCredit(ctx: CanvasRenderingContext2D, position: Point, title: string, names: string[]): number {
+        let y = position.y;
         const gap = 5;
-        CreditsScene.creditsFont.drawText(ctx, title, posX, y, "white");
+
+        CreditsScene.creditsFont.drawText(ctx, title, new Point(position.x, y), 'white');
         y += this.creditsFontHeight + this.lineSpacing + gap;
 
         names.forEach(name => {
-            CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
+            CreditsScene.standardFont.drawText(ctx, name, new Point(position.x, y), 'white');
             y += this.standardCharHeight;
         })
 
@@ -149,11 +154,11 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Stars
         this.starPositions.forEach((pos, index) => {
             const starIndex = index % CreditsScene.stars.length;
-            CreditsScene.stars[starIndex].drawTag(ctx, "idle", pos[0], pos[1], this.time * 1000);
+            CreditsScene.stars[starIndex].drawTag(ctx, 'idle', new Point(pos[0], pos[1]), this.time * 1000);
         });
 
         // Leaf
-        CreditsScene.leaf.drawTag(ctx, "idle", 414, 163, this.time * 1000);
+        CreditsScene.leaf.drawTag(ctx, "idle", new Point(414, 163), this.time * 1000);
 
         ctx.globalAlpha = .75;
         ctx.drawImage(CreditsScene.overlayImage, 0, 0);
@@ -173,41 +178,42 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
         const color = "white";
 
-        posY = this.drawTitle(ctx, posY, posX);
-        posY = this.drawParagraph(ctx, posY, posX, [
+        posY = this.drawTitle(ctx, new Point(posX, posY));
+        posY = this.drawParagraph(ctx, new Point(posX, posY), [
             'Originally made as a team',
             'effort for Ludum Dare 46',
             'in three days by'
         ]);
-        posY = this.drawParagraph(ctx, posY, posX, [
+        posY = this.drawParagraph(ctx, new Point(posX, posY), [
             'Eduard But, Nico Hülscher,',
             'Benjamin Jung, Nils Kreutzer,',
             'Bastian Lang, Ranjit Mevius,',
             'Markus Over, Klaus Reimer,',
             'and Jennifer van Veen'
         ], 50);
-        posY = this.drawCredit(ctx, posY, posX, 'GAME DESIGN', ['Everyone']);
-        posY = this.drawCredit(ctx, posY, posX, 'STORY', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'GAME DESIGN', ['Everyone']);
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'STORY', [
             'Markus Over',
             'Jennifer van Veen',
             'Ranjit Mevius',
             'Nils Kreutzer'
         ]);
-        posY = this.drawCredit(ctx, posY, posX, 'PROGRAMMING', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'PROGRAMMING', [
             'Nico Hülscher',
             'Benjaming Jung',
             'Nils Kreutzer',
             'Ranjit Mevius',
             'Markus Over',
             'Klaus Reimer',
-            'Eduard But'
+            'Eduard But',
+            'Matthias Wetter'
         ]);
-        posY = this.drawCredit(ctx, posY, posX, 'SCRIPTING', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'SCRIPTING', [
             'Markus Over',
             'Eduard But'
         ]);
-        posY = this.drawCredit(ctx, posY, posX, 'ART DIRECTION', ['Eduard But']);
-        posY = this.drawCredit(ctx, posY, posX, '2D ART', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'ART DIRECTION', ['Eduard But']);
+        posY = this.drawCredit(ctx, new Point(posX, posY), '2D ART', [
             'Eduard But',
             'Nils Kreutzer',
             'Christina Schneider',
@@ -215,40 +221,49 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Matthias Wetter'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'WRITING', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'WRITING', [
             'Markus Over',
             'Jennifer van Veen',
             'Eduard But'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'LEVEL DESIGN', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'LEVEL DESIGN', [
             'Eduard But',
             'Nils Kreutzer',
             'Jennifer van Veen'
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'DISTRIBUTION', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'DISTRIBUTION', [
             'Benjamin Jung',
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'MUSIC', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'MUSIC', [
             'Bastian Lang',
             'Benjamin Jung',
             'Eduard But',
             'Matthias Wetter'
         ]);
-        posY = this.drawCredit(ctx, posY, posX, 'QA', [
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'QA', [
             'Jennifer van Veen',
             'Matthias Wetter'
         ]);
-        posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
+        posY = this.drawCredit(ctx, new Point(posX, posY), 'SFX', ['freesound.org']);
 
         if (this.totalCrawlHeight === 0) this.totalCrawlHeight = posY;
 
         // Shortened Git commit hash to provide support.
         const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
         const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
+
+        CreditsScene.standardFont.drawText(
+            ctx,
+            shortenedGitCommitHash,
+            new Point(
+                CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 10,
+                CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4
+            ),
+            color
+        );
 
         ctx.restore();
     }

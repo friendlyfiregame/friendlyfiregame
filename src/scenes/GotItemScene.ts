@@ -6,6 +6,7 @@ import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
+import { Point } from '../Geometry';
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE }
 
@@ -110,10 +111,22 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
         const itemNameText = this.titles[this.targetItem];
         metrics = GotItemScene.headlineFont.measureText(itemNameText);
-        GotItemScene.headlineFont.drawText(ctx, itemNameText, (width - metrics.width) >> 1, centerY + 10, "white");
+
+        GotItemScene.headlineFont.drawText(
+            ctx,
+            itemNameText,
+            new Point((width - metrics.width) >> 1, centerY + 10),
+            'white'
+        );
 
         metrics = GotItemScene.font.measureText(this.selectedSubtitle);
-        GotItemScene.font.drawText(ctx, this.selectedSubtitle, (width - metrics.width) >> 1, centerY + 30, "white");
+
+        GotItemScene.font.drawText(
+            ctx,
+            this.selectedSubtitle,
+            new Point((width - metrics.width) >> 1, centerY + 30),
+            'white'
+        );
 
         ctx.scale(2, 2);
         const image = GotItemScene.itemImages[this.targetItem];

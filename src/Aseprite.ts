@@ -3,6 +3,7 @@ import type {
 } from '*.aseprite.json';
 import { loadImage } from './graphics';
 import { now } from './util';
+import { Point } from './Geometry';
 
 /**
  * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous [[load]] method to load the
@@ -95,7 +96,7 @@ export class Aseprite {
      * @param x     - The X position in pixels to draw to the sprite at.
      * @param y     - The Y position in pixels to draw to the sprite at.
      */
-    public drawFrame(ctx: CanvasRenderingContext2D, index: number, x: number, y: number): void {
+    public drawFrame(ctx: CanvasRenderingContext2D, index: number, position: Point): void {
         const frame = this.frames[index];
 
         if (frame == null) {
@@ -103,7 +104,7 @@ export class Aseprite {
         }
 
         ctx.drawImage(this.image, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h,
-            Math.round(x) + frame.spriteSourceSize.x, Math.round(y) + frame.spriteSourceSize.y,
+            position.xRounded + frame.spriteSourceSize.x, position.yRounded + frame.spriteSourceSize.y,
             frame.spriteSourceSize.w, frame.spriteSourceSize.h);
     }
 
@@ -146,8 +147,8 @@ export class Aseprite {
      * @param y    - The Y position in pixels to draw to the sprite at.
      * @param time - Optional time index of the animation. Current system time is used if not specified.
      */
-    public drawTag(ctx: CanvasRenderingContext2D, tag: string, x: number, y: number, time: number = now()): void {
-        this.drawFrame(ctx, this.getTaggedFrameIndex(tag, time), x, y);
+    public drawTag(ctx: CanvasRenderingContext2D, tag: string, position: Point, time: number = now()): void {
+        this.drawFrame(ctx, this.getTaggedFrameIndex(tag, time), position);
     }
 
     /**
@@ -158,9 +159,9 @@ export class Aseprite {
      * @param y    - The Y position in pixels to draw to the sprite at.
      * @param time - Optional time index of the animation. Current system time is used if not specified.
      */
-    public draw(ctx: CanvasRenderingContext2D, x: number, y: number, time: number = now()): void {
+    public draw(ctx: CanvasRenderingContext2D, position: Point, time: number = now()): void {
         const frameIndex = this.calculateFrameIndex(time);
-        this.drawFrame(ctx, frameIndex, x, y);
+        this.drawFrame(ctx, frameIndex, position);
     }
 
     /**

@@ -51,7 +51,7 @@ export interface GameObject {
 }
 
 export interface CollidableGameObject extends GameObject {
-    collidesWith(x: number, y: number): number;
+    collidesWith(position: Point): number;
 }
 
 export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
@@ -425,7 +425,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Display FPS counter
         if (isDev()) {
-            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale - 3, "white");
+            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, new Point(2 * this.scale, 2 * this.scale - 3), 'white');
         }
         this.frameCounter++;
     }
@@ -555,7 +555,7 @@ export class GameScene extends Scene<FriendlyFire> {
             breakFactor: 0.9,
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
-                if (this.world.collidesWith(particle.x, particle.y - particle.size / 4)) {
+                if (this.world.collidesWith(new Point(particle.x, particle.y - particle.size / 4))) {
                     particle.vx = 0;
                     particle.vy = 0;
                 }

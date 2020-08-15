@@ -1,5 +1,6 @@
 import { asset } from './Assets';
 import { BitmapFont } from './BitmapFont';
+import { Point } from './Geometry';
 import { Signal } from './Signal';
 import { Sound } from './Sound';
 
@@ -16,21 +17,19 @@ export class MenuItem {
     public label: string;
     private font: BitmapFont;
     private color: "black" | "white";
-    public x: number;
-    public y: number;
+    public position: Point;
     public enabled: boolean;
     public focused: boolean;
 
     @asset("sprites/menu_selector.png")
     private static selectorImage: HTMLImageElement;
 
-    public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, enabled = true) {
+    public constructor(id: string, label: string, font: BitmapFont, color: 'black' | 'white', position: Point, enabled = true) {
         this.id = id;
         this.label = label;
         this.font = font;
         this.color = color;
-        this.x = x;
-        this.y = y;
+        this.position = position;
         this.enabled = enabled;
         this.focused = false;
     }
@@ -43,22 +42,23 @@ export class MenuItem {
      */
     public draw(ctx: CanvasRenderingContext2D, align: MenuAlignment) {
         ctx.save();
+
         const alpha = this.enabled ? 1 : 0.35;
-
-        let x = this.x;
-        let y = this.y;
-
         const text = this.label;
         const width = this.font.measureText(text).width;
 
+        let actualPosition = this.position.clone();
+
         if (align === MenuAlignment.CENTER) {
-            x -= Math.round(width / 2);
+            actualPosition.moveXBy(-Math.round(width / 2));
         }
 
-        this.font.drawText(ctx, text, x, y, this.color, 0, alpha);
+        this.font.drawText(ctx, text, actualPosition, this.color, 0, alpha);
 
         if (this.focused) {
-            ctx.drawImage(MenuItem.selectorImage, x - 13, y + 2);
+            actualPosition.moveBy(-13, 2);
+
+            ctx.drawImage(MenuItem.selectorImage, actualPosition.x, actualPosition.y);
         }
 
         ctx.restore();

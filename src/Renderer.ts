@@ -159,7 +159,7 @@ export class Renderer {
                             ctx.drawImage(item.asset, item.position.x, item.position.y);
                             break;
                         case RenderingType.ASEPRITE:
-                            item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
+                            item.asset.drawTag(ctx, item.animationTag, item.position, item.time);
                             break;
                         case RenderingType.RECT:
                             if (item.lineColor) {
@@ -179,9 +179,9 @@ export class Renderer {
                             break;
                         case RenderingType.TEXT:
                             if (item.outlineColor) {
-                                item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
+                                item.asset.drawTextWithOutline(ctx, item.text, item.position, item.textColor, item.outlineColor);
                             } else {
-                                item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
+                                item.asset.drawText(ctx, item.text, item.position, item.textColor);
                             }
                             break;
                     }
