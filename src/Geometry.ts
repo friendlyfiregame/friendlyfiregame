@@ -77,6 +77,10 @@ export class Point {
         return this;
     }
 
+    public clone(): Point {
+        return new Point(this._x, this._y);
+    }
+
     private recalculateXRounded(): number {
         this._xRounded = Math.round(this._x);
 
@@ -145,6 +149,10 @@ export class Size {
         this.recalculateHeightRounded();
 
         return this;
+    }
+
+    public clone(): Point {
+        return new Point(this._x, this._y);
     }
 
     private recalculateWidthRounded(): number {
