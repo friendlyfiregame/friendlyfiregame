@@ -91,6 +91,7 @@ export class World implements GameObject {
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
+
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
@@ -100,7 +101,7 @@ export class World implements GameObject {
                     (-this.getHeight() + camY) / bgY
                 ),
                 asset: background
-            })
+            });
         }
     }
 

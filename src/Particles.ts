@@ -98,8 +98,8 @@ export class ParticleEmitter {
         this.particles = [];
         this.x = args.position.x;
         this.y = args.position.y;
-        this.offsetGenerator = toGenerator(args.offset ?? new Point(0, 0));
-        this.velocityGenerator = toGenerator(args.velocity ?? new Point(0, 0));
+        this.offsetGenerator = toGenerator(args.offset ?? Point.ORIGIN);
+        this.velocityGenerator = toGenerator(args.velocity ?? Point.ORIGIN);
         this.colorGenerator = toGenerator(args.color ?? "white");
         this.alphaGenerator = toGenerator(args.alpha ?? 1);
         this.sizeGenerator = toGenerator(args.size ?? 4);
