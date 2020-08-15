@@ -31,38 +31,50 @@ export class Point {
         return new Point(this._xRounded, this._yRounded);
     }
 
-    public moveTo(x: number, y: number): void {
+    public moveTo(x: number, y: number): Point {
         this.moveXTo(x);
         this.moveYTo(y);
+
+        return this;
     }
 
-    public moveXTo(x: number): void {
+    public moveXTo(x: number): Point {
         this._x = x;
 
         this.recalculateXRounded()
+
+        return this;
     }
 
-    public moveYTo(y: number): void {
+    public moveYTo(y: number): Point {
         this._y = y;
 
         this.recalculateYRounded()
+
+        return this;
     }
 
-    public moveBy(x: number, y: number): void {
+    public moveBy(x: number, y: number): Point {
         this.moveXBy(x);
         this.moveYBy(y);
+
+        return this;
     }
 
-    public moveXBy(x: number): void {
+    public moveXBy(x: number): Point {
         this._x += x;
 
         this.recalculateXRounded()
+
+        return this;
     }
 
-    public moveYBy(y: number): void {
+    public moveYBy(y: number): Point {
         this._y += y;
 
         this.recalculateYRounded()
+
+        return this;
     }
 
     private recalculateXRounded(): number {
@@ -112,21 +124,27 @@ export class Size {
         return new Size(this._widthRounded, this._heightRounded);
     }
 
-    public resize(width: number, height: number): void {
+    public resize(width: number, height: number): Size {
         this.resizeWidth(width);
         this.resizeHeight(height);
+
+        return this;
     }
 
-    public resizeWidth(width: number): void {
+    public resizeWidth(width: number): Size {
         this._width = width;
 
         this.recalculateWidthRounded();
+
+        return this;
     }
 
-    public resizeHeight(height: number): void {
+    public resizeHeight(height: number): Size {
         this._height = height;
 
         this.recalculateHeightRounded();
+
+        return this;
     }
 
     private recalculateWidthRounded(): number {
