@@ -152,7 +152,7 @@ export class Size {
     }
 
     public clone(): Point {
-        return new Point(this._x, this._y);
+        return new Point(this._width, this._height);
     }
 
     private recalculateWidthRounded(): number {
