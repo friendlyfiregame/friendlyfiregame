@@ -109,6 +109,7 @@ export class World implements GameObject {
         if (index < 0 || index >= World.collisionMap.length) {
             return Environment.AIR;
         }
+
         return World.collisionMap[index];
     }
 
@@ -131,13 +132,16 @@ export class World implements GameObject {
         }
 
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+
         if (index < 0 || index >= World.collisionMap.length) {
             return 0;
         }
         const environment = this.getEnvironment(x, y);
+
         if ((!validEnvironments.includes(environment)) || (ignore && ignore.includes(environment))) {
             return Environment.AIR;
         }
+
         return World.collisionMap[index];
     }
 

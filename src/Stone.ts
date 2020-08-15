@@ -99,6 +99,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 return Environment.SOLID;
             }
         }
+
         return Environment.AIR;
     }
 

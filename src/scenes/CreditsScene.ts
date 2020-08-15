@@ -124,6 +124,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             CreditsScene.standardFont.drawText(ctx, line, posX, y, "white");
             y += this.standardCharHeight;
         })
+
         return y + marginBotton;
     }
 
@@ -137,9 +138,9 @@ export class CreditsScene extends Scene<FriendlyFire> {
             CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
             y += this.standardCharHeight;
         })
+
         return y + 40;
     }
-
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
         ctx.save();

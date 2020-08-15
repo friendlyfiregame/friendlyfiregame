@@ -46,14 +46,17 @@ export class Wood extends PhysicsEntity {
 
     update(dt: number): void {
         super.update(dt);
+
         if (this.state === WoodState.SWIMMING) {
             const diffX = this.floatingPosition.x - this.position.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.position.moveXBy(moveX * dt);
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
+
         if (this.state === WoodState.FREE || this.state === WoodState.SWIMMING) {
             const player = this.scene.player;
+
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
@@ -65,6 +68,7 @@ export class Wood extends PhysicsEntity {
                 this.position.moveYTo(this.floatingPosition.y + 8);
             }
         }
+
         if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
             this.scene.fire.feed(this);
             this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_WOOD_INTO_FIRE);

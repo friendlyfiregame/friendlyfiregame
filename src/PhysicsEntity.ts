@@ -95,12 +95,14 @@ export abstract class PhysicsEntity extends Entity {
             env = this.checkCollision(x + i, y + this.size.height, ignore);
             if (env !== Environment.AIR) return env;
         }
+
         for (let i = 0; i < this.size.height; i++) {
             let env = this.checkCollision(x - this.size.width / 2, y + i, ignore);
             if (env !== Environment.AIR) return env;
             env = this.checkCollision(x + this.size.width / 2, y + i, ignore);
             if (env !== Environment.AIR) return env;
         }
+
         return Environment.AIR;
     }
 
@@ -119,6 +121,7 @@ export abstract class PhysicsEntity extends Entity {
 
     public update(dt: number): void {
         super.update(dt);
+
         const world = this.scene.world;
 
         const ground = world.getObjectAt(this.position.x, this.position.y - 5, [ this ]);
@@ -128,6 +131,7 @@ export abstract class PhysicsEntity extends Entity {
                 ground.getVelocityY() * PIXEL_PER_METER * dt
             );
         }
+
         this.ground = ground;
 
         this.updatePosition(
@@ -139,6 +143,7 @@ export abstract class PhysicsEntity extends Entity {
         if (!this.floating) {
             const environment = world.collidesWith(this.position.x, this.position.y - 1, [ this ],
                     this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
+
             if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
 

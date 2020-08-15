@@ -123,6 +123,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 && y >= this.position.y && y <= this.position.y + this.size.height) {
             return Environment.PLATFORM;
         }
+
         return Environment.AIR;
     }
 }

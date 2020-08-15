@@ -1026,6 +1026,7 @@ export class Player extends PhysicsEntity {
      */
     private pullOutOfGround(): number {
         let pulled = 0, col = 0;
+
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
@@ -1065,6 +1066,7 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
+
         while (
             this.position.y > 0
             && world.collidesWith(
@@ -1075,12 +1077,14 @@ export class Player extends PhysicsEntity {
             pulled++;
             this.position.moveYBy(-1);
         }
+
         return pulled;
     }
 
     private pullOutOfWall(): number {
         let pulled = 0;
         const world = this.scene.world;
+
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4,
                     this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
@@ -1094,6 +1098,7 @@ export class Player extends PhysicsEntity {
                 pulled++;
             }
         }
+
         return pulled;
     }
 
@@ -1104,6 +1109,7 @@ export class Player extends PhysicsEntity {
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
             this.setVelocityY(0);
         }
+
         if (this.pullOutOfWall() !== 0) {
             this.setVelocityX(0);
         }

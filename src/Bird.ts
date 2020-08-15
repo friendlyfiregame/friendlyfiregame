@@ -126,6 +126,7 @@ export class Bird extends NPC {
                 pulled++;
             }
         }
+
         return pulled;
     }
 

@@ -77,6 +77,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
                 && y >= this.position.y && y <= this.position.y + this.size.height) {
             return Environment.PLATFORM;
         }
+
         return Environment.AIR;
     }
 }

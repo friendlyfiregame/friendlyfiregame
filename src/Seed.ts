@@ -120,6 +120,7 @@ export class Seed extends NPC {
         } else if (this.state === SeedState.GROWN) {
             // TODO Special update behavior when grown
         }
+
         this.speechBubble.update(this.position);
     }
 
@@ -134,6 +135,7 @@ export class Seed extends NPC {
         );
 
         this.wood.setVelocity(-5, 0);
+
         return this.wood;
     }
 

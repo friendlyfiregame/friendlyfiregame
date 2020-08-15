@@ -39,6 +39,7 @@ export class Wall extends Entity implements CollidableGameObject {
                 && y >= this.position.y && y <= this.position.y + this.size.height) {
             return Environment.SOLID;
         }
+
         return Environment.AIR;
     }
 }
