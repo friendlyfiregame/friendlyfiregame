@@ -1,5 +1,5 @@
-import { loadImage } from "./graphics.js";
-import { FontJSON } from "*.font.json";
+import { FontJSON } from '*.font.json';
+import { loadImage } from './graphics.js';
 
 export class BitmapFont {
     private sourceImage: HTMLImageElement;

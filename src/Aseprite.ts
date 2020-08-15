@@ -1,6 +1,8 @@
-import type { AsepriteJSON, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteDirection, AsepriteLayerJSON } from "*.aseprite.json";
-import { loadImage } from "./graphics";
-import { now } from "./util";
+import type {
+    AsepriteDirection, AsepriteJSON, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteLayerJSON
+} from '*.aseprite.json';
+import { loadImage } from './graphics';
+import { now } from './util';
 
 /**
  * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous [[load]] method to load the

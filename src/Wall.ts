@@ -1,8 +1,8 @@
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { CollidableGameObject, GameScene } from "./scenes/GameScene";
+import { asset } from './Assets';
+import { CollidableGameObject, GameScene } from './scenes/GameScene';
 import { Environment } from './World';
-import { entity, Entity } from "./Entity";
+import { entity, Entity } from './Entity';
 import { GameObjectProperties } from './MapInfo';
 import { Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';

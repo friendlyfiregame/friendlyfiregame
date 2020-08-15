@@ -1,13 +1,13 @@
-import { Scene } from "../Scene";
-import { FriendlyFire } from "../FriendlyFire";
-import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { Quest } from '../Quests';
-import { CreditsScene } from './CreditsScene';
-import { Sound } from '../Sound';
+import { asset } from '../Assets';
+import { BitmapFont } from '../BitmapFont';
+import { ControllerEvent } from '../input/ControllerEvent';
 import { ControllerFamily } from '../input/ControllerFamily';
-import { DIALOG_FONT } from "../constants";
+import { CreditsScene } from './CreditsScene';
+import { DIALOG_FONT } from '../constants';
+import { FriendlyFire } from '../FriendlyFire';
+import { Quest } from '../Quests';
+import { Scene } from '../Scene';
+import { Sound } from '../Sound';
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
