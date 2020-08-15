@@ -248,7 +248,7 @@ export class Player extends PhysicsEntity {
             velocity: () => new Point(rnd(-1, 1) * 45, rnd(-1, 1) * 45),
             color: () => rndItem(genderSwapColors),
             size: rnd(2, 2),
-            gravity: new Point(0, 0),
+            gravity: Point.ORIGIN,
             lifetime: () => rnd(0.5, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });

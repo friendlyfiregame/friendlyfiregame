@@ -59,7 +59,7 @@ export class MapInfo {
         if (object) {
             return new Point(object.x, mapHeight - object.y);
         } else {
-            return new Point(0, 0);
+            return Point.ORIGIN;
         }
     }
 
