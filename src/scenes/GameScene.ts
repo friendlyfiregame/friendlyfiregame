@@ -44,6 +44,7 @@ import { Renderer, RenderingType, RenderingLayer } from '../Renderer';
 import { Bone } from '../Bone';
 import { Shiba, ShibaState } from '../Shiba';
 import { PowerShiba } from '../PowerShiba';
+import { SoundEmitter } from '../SoundEmitter';
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -66,6 +67,10 @@ export enum BgmId {
     CAVE = 'cave',
     RIDDLE = 'riddle',
     RADIO = 'radio'
+}
+
+export enum AmbientSoundId {
+    STREAM = 'stream',
 }
 
 export type BackgroundTrack = {
@@ -91,7 +96,14 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("music/radio.ogg")
     public static bgmRadio: Sound;
 
-    private backgroundTracks: BackgroundTrack[] = [
+    @asset("sounds/ambient/stream.ogg")
+    public static ambientStream: Sound;
+
+    public readonly ambientSounds: Record<AmbientSoundId, Sound> = {
+        [AmbientSoundId.STREAM]: GameScene.ambientStream
+    }
+
+    private readonly backgroundTracks: BackgroundTrack[] = [
         {
             active: false,
             id: BgmId.OVERWORLD,
@@ -137,6 +149,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
+    public soundEmitters: SoundEmitter[] = [];
     public pointsOfInterest: GameObjectInfo[] = [];
     public triggerObjects: GameObjectInfo[] = [];
     public boundObjects: GameObjectInfo[] = [];
@@ -183,6 +196,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public setup(): void {
 
         this.mapInfo = new MapInfo();
+        this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o))
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
@@ -195,6 +209,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gameObjects = [
             this.world = new World(this),
             this.particles,
+            ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
                     case 'riddlestone': return new RiddleStone(this, entity.x, entity.y, entity.properties);

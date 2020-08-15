@@ -198,7 +198,7 @@ export class Fire extends NPC {
                 particleChance -= rnd() * this.averageParticleDelay;
             }
 
-            const vol = calculateVolume(this.distanceToPlayer, .7, 0.5);
+            const vol = calculateVolume(this.distanceToPlayer, .7, 0.2);
             if (vol) {
                 Fire.fireAmbience.setVolume(vol);
                 if (!Fire.fireAmbience.isPlaying()) Fire.fireAmbience.play();

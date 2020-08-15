@@ -2358,6 +2358,34 @@
                  "width":12,
                  "x":1212,
                  "y":1921
+                }, 
+                {
+                 "height":0,
+                 "id":176,
+                 "name":"water_sound",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"stream"
+                        }, 
+                        {
+                         "name":"volume",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":732,
+                 "y":1992
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2366,7 +2394,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":176,
+ "nextobjectid":177,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",

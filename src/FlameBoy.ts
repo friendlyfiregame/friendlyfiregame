@@ -48,7 +48,7 @@ export class FlameBoy extends NPC {
         this.dialoguePrompt.update(dt, this.x, this.y + 32);
         this.speechBubble.update(this.x, this.y);
 
-        const vol = calculateVolume(this.distanceToPlayer, .7, 0.5);
+        const vol = calculateVolume(this.distanceToPlayer, .7, 0.2);
         if (vol) {
             FlameBoy.fireAmbience.setVolume(vol);
             if (!FlameBoy.fireAmbience.isPlaying()) {

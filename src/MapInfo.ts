@@ -6,7 +6,8 @@ export enum MapObjectType {
     TRIGGER = 'trigger',
     POINTER = 'pointer',
     GATE = 'gate',
-    BOUNDS = 'bounds'
+    BOUNDS = 'bounds',
+    SOUND = 'sound'
 }
 
 export interface GameObjectProperties {
@@ -24,6 +25,9 @@ export interface GameObjectProperties {
     content?: string;
     bgm?: string;
     identifier?: string;
+    intensity?: number;
+    volume?: number;
+    sound?: string;
     col?: number;
     row?: number;
 }
@@ -80,7 +84,9 @@ export class MapInfo {
     public getEntities(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.ENTITY);
     }
-
+    public getSounds(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.SOUND);
+    }
     public getPointers(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.POINTER);
     }
