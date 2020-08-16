@@ -66,7 +66,8 @@ export enum BgmId {
     INFERNO = 'inferno',
     CAVE = 'cave',
     RIDDLE = 'riddle',
-    RADIO = 'radio'
+    RADIO = 'radio',
+    WINGS = 'wings'
 }
 
 export enum AmbientSoundId {
@@ -96,6 +97,9 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("music/radio.ogg")
     public static bgmRadio: Sound;
 
+    @asset("music/wings.ogg")
+    public static bgmWings: Sound;
+
     @asset("sounds/ambient/stream.ogg")
     public static ambientStream: Sound;
 
@@ -120,7 +124,7 @@ export class GameScene extends Scene<FriendlyFire> {
             active: false,
             id: BgmId.INFERNO,
             sound: GameScene.bgm2,
-            baseVolume: 0.15
+            baseVolume: 0.10
         },
         {
             active: false,
@@ -133,6 +137,12 @@ export class GameScene extends Scene<FriendlyFire> {
             id: BgmId.RADIO,
             sound: GameScene.bgmRadio,
             baseVolume: 1
+        },
+        {
+            active: false,
+            id: BgmId.WINGS,
+            sound: GameScene.bgmWings,
+            baseVolume: 0.75
         },
     ]
 
@@ -497,7 +507,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public startFriendshipMusic(): void {
-        this.playBackgroundTrack(BgmId.RIDDLE);
+        this.playBackgroundTrack(BgmId.WINGS);
     }
 
     public muteMusic(): void {

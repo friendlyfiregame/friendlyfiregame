@@ -2141,7 +2141,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A pretty normal mailbox.:::Kinda stupid."
+                         "value":"A classic mailbox.:::It's welded shut."
                         }],
                  "rotation":0,
                  "type":"trigger",
@@ -2188,8 +2188,8 @@
                  "type":"entity",
                  "visible":true,
                  "width":0,
-                 "x":1253,
-                 "y":1963
+                 "x":3252,
+                 "y":426
                 }, 
                 {
                  "height":0,

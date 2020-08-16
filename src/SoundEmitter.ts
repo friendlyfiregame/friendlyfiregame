@@ -6,6 +6,7 @@ import { calculateVolume } from './util';
 
 /**
  * Sound emitters are invisible entities that emit a sound in relation to the player distance.
+ * Might be better to set the volume according the camera center in the future.
  */
 export class SoundEmitter extends Entity {
     private sound: Sound;
@@ -32,7 +33,6 @@ export class SoundEmitter extends Entity {
     }
 
     public static fromGameObjectInfo(scene: GameScene, gameObjectInfo: GameObjectInfo): SoundEmitter {
-        console.log(gameObjectInfo);
         const soundId = gameObjectInfo.properties.sound;
         const volume = gameObjectInfo.properties.volume || 1;
         const intensity = gameObjectInfo.properties.intensity || 1;

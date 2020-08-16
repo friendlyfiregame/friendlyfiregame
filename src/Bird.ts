@@ -5,7 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NPC } from './NPC';
 import { valueCurves, ParticleEmitter } from './Particles';
 import { rnd, rndItem, calculateVolume } from './util';
-import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR, METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from "./constants";
+import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
 import { Environment } from './World';
 import conversation from '../assets/dialog/bird.dialog.json';
 import { Conversation } from './Conversation';

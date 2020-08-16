@@ -44,7 +44,7 @@
     "search": [
         "Wow! Thanks!",
         "I want to smell brother!",
-        "►I'll see what I can find in the clouds. @met2"
+        "►I'll see what I can find in the clouds. @met2 !end"
     ],
     "found": [
         "Wow! Really? !set $gotBoneQuest",
