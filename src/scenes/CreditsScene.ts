@@ -247,7 +247,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Shortened Git commit hash to provide support.
         const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
         const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
+        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 7, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
 
         ctx.restore();
     }

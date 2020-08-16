@@ -97,7 +97,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
         const versionText = isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
         const versionTextSize = PauseScene.font.measureText(versionText);
-        PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 4, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
+        PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 7, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
         ctx.restore();
         this.menu.draw(ctx);
     }
