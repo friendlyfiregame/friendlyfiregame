@@ -56,11 +56,10 @@ export class SpeechBubble {
     private fontSize = SpeechBubble.font.charHeight;
     private lineHeight = this.fontSize;
     private height = 0;
-    private offset = { x: 0, y: 40 };
+    private offset = new Point(0, 40);
     private messageVelocity = 20;
 
-    private x: number;
-    private y: number;
+    private position: Point;
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
@@ -79,8 +78,7 @@ export class SpeechBubble {
         private color = "white",
         private relativeToScreen = false
     ) {
-        this.x = Math.round(anchor.x + this.offset.x);
-        this.y = Math.round(anchor.y + this.offset.y);
+        this.position = anchor.rounded.moveBy(this.offset.x, this.offset.y);
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
     }
 
@@ -147,8 +145,8 @@ export class SpeechBubble {
             return;
         }
 
-        let posX = this.x;
-        let posY = this.y;
+        let posX = this.position.x;
+        let posY = this.position.y;
         let offsetX = 0;
 
         if (this.relativeToScreen) {
@@ -233,8 +231,7 @@ export class SpeechBubble {
     }
 
     public update(anchor: Point): void {
-        this.x = Math.round(anchor.x + this.offset.x);
-        this.y = Math.round(anchor.y + this.offset.y);
+        this.position = anchor.rounded.moveBy(this.offset.x, this.offset.y);
     }
 
     private determineMaxLineLength(message: string[]): number {
