@@ -23,7 +23,7 @@ export class SoundEmitter extends Entity {
     public draw () {}
 
     public update(dt: number): void {
-        const vol = calculateVolume(this.distanceToPlayer, this.maxVolume, this.intensity);
+        const vol = this.scene.paused ? 0 : calculateVolume(this.distanceToPlayer, this.maxVolume, this.intensity);
         if (vol) {
             this.sound.setVolume(vol);
             if (!this.sound.isPlaying()) this.sound.play();
