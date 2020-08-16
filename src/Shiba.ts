@@ -305,7 +305,7 @@ export class Shiba extends ScriptableNPC {
 
         if (!this.saidFarewell && this.flyingTime > 2) {
             this.saidFarewell = true;
-            this.think("See you on the Mountain!", 3000);
+            this.think('See you on the mountain!', 3000);
         }
 
         if (this.flyingTime >= FLYING_DURATION) {
