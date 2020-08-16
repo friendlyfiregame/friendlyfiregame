@@ -2386,6 +2386,34 @@
                  "width":0,
                  "x":732,
                  "y":1992
+                }, 
+                {
+                 "height":0,
+                 "id":177,
+                 "name":"wind_sound",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"wind"
+                        }, 
+                        {
+                         "name":"volume",
+                         "type":"float",
+                         "value":0.6
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":2029,
+                 "y":933
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2394,7 +2422,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":177,
+ "nextobjectid":178,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",
