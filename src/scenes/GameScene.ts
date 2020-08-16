@@ -10,7 +10,6 @@ import { Stone } from "../Stone";
 import { Tree } from "../Tree";
 import { FlameBoy } from "../FlameBoy";
 import { Wing } from "../Wing";
-import { Spider } from "../Spider";
 import { Conversation } from "../Conversation";
 import { Particles, ParticleEmitter, valueCurves } from "../Particles";
 import { Seed } from "../Seed";
@@ -183,7 +182,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public bird!: Bird;
     public shiba!: Shiba;
     public powerShiba!: PowerShiba;
-    public spider!: Spider;
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
@@ -250,7 +248,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba = this.getGameObject(Shiba);
         this.powerShiba = this.getGameObject(PowerShiba);
         this.shadowPresence = this.getGameObject(ShadowPresence);
-        this.spider = this.getGameObject(Spider);
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
         this.bone = this.getGameObject(Bone);

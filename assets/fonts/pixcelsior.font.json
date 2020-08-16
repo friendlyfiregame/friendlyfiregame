@@ -640,6 +640,7 @@
         "white": "#ffffff",
         "black": "#000000",
         "red": "#b70000",
-        "darkgrey": "#3d3d3d"
+        "darkgrey": "#3d3d3d",
+        "grey": "#8f8f8f"
     }
 }
