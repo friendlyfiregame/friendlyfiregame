@@ -22,8 +22,8 @@ export class Tree extends NPC {
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(78, 140));
         this.face = new Face(scene, this, EyeType.TREE, 5, 94);
-        this.seed = new Seed(scene, position);
-        this.wood = new Wood(scene, position);
+        this.seed = new Seed(scene, position.clone());
+        this.wood = new Wood(scene, position.clone());
         this.startDialog();
     }
 
