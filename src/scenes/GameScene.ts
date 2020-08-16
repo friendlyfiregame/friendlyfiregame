@@ -542,7 +542,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public loadApocalypse() {
-        this.fireEffects = [1, 2].map(num => new FireGfx(32, 24, true, 2));
+        this.fireEffects = [1, 2].map(num => new FireGfx(new Size(32, 24), true, 2));
         this.fireEmitter = this.particles.createEmitter({
             position: this.player.position,
             offset: () => new Point(rnd(-1, 1) * 300, 200),

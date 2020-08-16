@@ -31,7 +31,6 @@ export class Fire extends NPC {
 
     private fireGfx = new FireGfx();
 
-    // private fireEmitter: ParticleEmitter;
     private sparkEmitter: ParticleEmitter;
     private smokeEmitter: ParticleEmitter;
 
