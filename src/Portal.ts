@@ -26,7 +26,7 @@ export class Portal extends Entity {
         this.animationState++;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         switch (this.animationState) {
             case PortalAnimationState.WAITING:
                 this.animator.play("empty", 1);

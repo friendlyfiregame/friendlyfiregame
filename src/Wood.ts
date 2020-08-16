@@ -35,7 +35,7 @@ export class Wood extends PhysicsEntity {
         this.floatingPosition = floatingPosition;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         this.scene.renderer.addAseprite(Wood.sprite, "idle", this.position, RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
     }
