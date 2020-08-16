@@ -44,7 +44,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private titles = [
         "Fear of the Dark",
         "Double Jump Boots",
-        "Flying Wings Knockoff",
+        "Flying Wings Knock-off",
         "Dancing Dave",
         "Eternal Friendship"
     ]
