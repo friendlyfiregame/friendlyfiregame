@@ -6,6 +6,8 @@ import { NPC } from './NPC';
 import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Sound } from './Sound';
+import { SoundEmitter } from './SoundEmitter';
 
 enum AnimationTag {
     INVISIBLE = "invisible",
@@ -16,12 +18,18 @@ enum AnimationTag {
 export class ShadowPresence extends NPC {
     @asset("sprites/shadowpresence.aseprite.json")
     private static sprite: Aseprite;
+
+    @asset("sounds/ambient/cave.ogg")
+    private static caveAmbience: Sound;
+    private soundEmitter: SoundEmitter;
+
     private isNearPlayer = false;
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(12, 46));
         this.direction = -1;
         this.lookAtPlayer = false;
+        this.soundEmitter = new SoundEmitter(this.scene, this.position, ShadowPresence.caveAmbience, 0.3, 1);
     }
 
     protected showDialoguePrompt (): boolean {
@@ -69,6 +77,7 @@ export class ShadowPresence extends NPC {
         super.update(dt);
         this.checkPlayerDistance();
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(48));
-        this.speechBubble.update(new Point(this.position.x, this.position.y + 12));
+        this.speechBubble.update(this.position.clone().moveYBy(12));
+        this.soundEmitter.update(dt);
     }
 }

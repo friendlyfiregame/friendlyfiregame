@@ -73,6 +73,7 @@ export enum BgmId {
 
 export enum AmbientSoundId {
     STREAM = 'stream',
+    WIND = 'wind',
 }
 
 export type BackgroundTrack = {
@@ -104,8 +105,12 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("sounds/ambient/stream.ogg")
     public static ambientStream: Sound;
 
+    @asset("sounds/ambient/wind.ogg")
+    public static ambientWind: Sound;
+
     public readonly ambientSounds: Record<AmbientSoundId, Sound> = {
-        [AmbientSoundId.STREAM]: GameScene.ambientStream
+        [AmbientSoundId.STREAM]: GameScene.ambientStream,
+        [AmbientSoundId.WIND]: GameScene.ambientWind
     }
 
     private readonly backgroundTracks: BackgroundTrack[] = [
