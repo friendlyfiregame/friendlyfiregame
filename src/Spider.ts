@@ -77,7 +77,7 @@ export class Spider extends NPC {
         const eyeOffsetFrames = this.getSpriteMetadata().eyeOffsetFrames ?? [];
         this.eyeOffsetY = eyeOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
 
-        this.dialoguePrompt.update(dt, this.position.x, this.position.y + 32);
+        this.dialoguePrompt.update(dt, this.position.clone().moveYBy(32));
         this.speechBubble.update(this.position);
     }
 }

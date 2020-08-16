@@ -9,26 +9,26 @@ export class DialoguePrompt {
     private static sprite: Aseprite;
 
     private scene: GameScene;
-    private x: number;
-    private y: number;
+    private position: Point;
     private timeAlive = 0;
     private floatAmount = 2;
     private floatSpeed = 5;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, position: Point) {
         this.scene = scene;
-        this.x = x;
-        this.y = y;
+        this.position = position.clone();
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        this.scene.renderer.addAseprite(DialoguePrompt.sprite, "idle", new Point(this.x, this.y - floatOffsetY), RenderingLayer.ENTITIES)
+        this.scene.renderer.addAseprite(
+            DialoguePrompt.sprite, "idle", this.position.moveYBy(-floatOffsetY),
+            RenderingLayer.ENTITIES
+        );
     }
 
-    update(dt: number, anchorX: number, anchorY: number): void {
+    update(dt: number, anchor: Point): void {
         this.timeAlive += dt;
-        this.x = anchorX;
-        this.y = anchorY;
+        this.position.moveTo(anchor.x, anchor.y);
     }
 }

@@ -39,7 +39,7 @@ export class Wing extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, this.position.x, this.position.y + 16);
+        this.dialoguePrompt.update(dt, this.position.clone().moveYBy(16));
         this.speechBubble.update(this.position);
     }
 }

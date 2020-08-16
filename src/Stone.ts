@@ -88,7 +88,7 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = -1;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
-        this.dialoguePrompt.update(dt, this.position.x, this.position.y + 48);
+        this.dialoguePrompt.update(dt, this.position.clone().moveYBy(48));
         this.speechBubble.update(this.position);
     }
 

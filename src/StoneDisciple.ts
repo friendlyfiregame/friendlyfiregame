@@ -43,7 +43,7 @@ export class StoneDisciple extends NPC {
 
     update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, this.position.x, this.position.y + this.size.height);
+        this.dialoguePrompt.update(dt, this.position.clone().moveYBy(this.size.height));
         this.speechBubble.update(this.position);
     }
 }

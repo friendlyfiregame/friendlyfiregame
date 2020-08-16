@@ -51,7 +51,7 @@ export class Tree extends NPC {
     update(dt: number): void {
         super.update(dt);
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.position.x + 4, this.position.y + 128);
+            this.dialoguePrompt.update(dt, this.position.clone().moveBy(4, 128));
         }
     }
 

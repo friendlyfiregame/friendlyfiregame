@@ -131,7 +131,7 @@ export class Fire extends NPC {
             this.fireGfx.update(dt);
         }
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.position.x, this.position.y + 32);
+            this.dialoguePrompt.update(dt, this.position.clone().moveYBy(32));
         }
         this.speechBubble.update(this.position);
     }

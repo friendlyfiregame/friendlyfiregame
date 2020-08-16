@@ -17,7 +17,7 @@ export abstract class NPC extends PhysicsEntity {
     public conversation: Conversation | null = null;
     public speechBubble = new SpeechBubble(this.scene, new Point(this.position.x, this.position.y));
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.scene, this.position.x, this.position.y);
+    public dialoguePrompt = new DialoguePrompt(this.scene, this.position);
     private lastEndedConversation = -Infinity;
     protected met = false;
 
@@ -53,7 +53,7 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     protected drawDialoguePrompt (ctx: CanvasRenderingContext2D): void {
-        this.dialoguePrompt.draw(ctx);
+        this.dialoguePrompt.draw();
     }
 
     protected drawGreeting(ctx: CanvasRenderingContext2D): void {
