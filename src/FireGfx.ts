@@ -1,7 +1,7 @@
-import { rnd, clamp, orientPow } from './util';
-import { ColorGradient } from './ColorGradient';
 import { asset } from "./Assets";
-
+import { clamp, orientPow, rnd } from './util';
+import { ColorGradient } from './ColorGradient';
+import { Point } from './Geometry';
 
 export class FireGfx {
     @asset("gradients/fire.png", { map: (image: HTMLImageElement) => ColorGradient.fromImage(image) })
@@ -38,41 +38,53 @@ export class FireGfx {
         this.age = 0;
         this.nextUpdate = -Infinity;
         this.startTime = Date.now();
+
         const decay = this.decayData;
         const data = this.data;
+
         for (let y = 0; y < this.h; y++) {
             const row: number[] = data[y] = [];
             const decayRow: number[] = decay[y] = [];
             const yrel = y / (this.h - 1);
+
             for (let x = 0; x < this.w; x++) {
                 row[x] = 0;
                 decayRow[x] = this.getDecay(x / (this.w - 1), yrel);
             }
         }
+
         const bottom = data[this.h - 1];
+
         for (let x = 0; x < this.w; x++) {
             const xrel = x / (this.w - 1);
             const stuffedXrel = this.coneShaped ? clamp(2 * xrel - 0.5, 0, 1) : xrel;
             const smooth = 0.5 - 0.5 * Math.cos(2 * Math.PI * stuffedXrel);
             bottom[x] = 1.25 * Math.pow(smooth, 0.5);
         }
+
         this.bottomLine = bottom.slice();
     }
 
     private getDecay(xrel: number, yrel: number): number {
-        if (xrel > 0.5) { xrel = 1 - xrel; }
+        if (xrel > 0.5) {
+            xrel = 1 - xrel;
+        }
+
         if (this.coneShaped) {
             yrel = 1.2 * yrel;
+
             if (yrel > 1) {
                 return 0.02;
             }
         }
+
         return 0.02 + (0.5 - xrel) * 0.1 + Math.pow(1 - yrel, 8);
     }
 
     public update(dt: number) {
         const t = Date.now();
         this.age = t - this.startTime;
+
         if (t >= this.nextUpdate) {
             this.nextUpdate = t + this.updateMs;
             this.updateStep();
@@ -85,15 +97,18 @@ export class FireGfx {
         let fromRow = data[0];
         let fromX = 0, toCenter = 0, midX = (this.w - 1) * 0.5, toCenter1 = 1;
         const yThreshold = this.coneShaped ? this.h * 0.8 : Infinity;
+
         // Let all fire rows move upward, so update rows from top to bottom
         for (let y = 0; y < this.h - 1; y++) {
             const row = fromRow, decayRow = this.decayData[y];
             fromRow = data[y + 1];
+
             if (y > yThreshold) {
                 const yp = (y - yThreshold) / (this.h - yThreshold);
                 toCenter = 0.15 * yp * yp;
                 toCenter1 = 1 - toCenter;
             }
+
             for (let x = 0; x < this.w; x++) {
                 fromX = clamp(x + rnd(-1, 1) * rnd(), 0.3, this.w - 1.3);
                 if (toCenter) {
@@ -104,12 +119,14 @@ export class FireGfx {
                 row[x] = clamp(v, 0, Infinity);
             }
         }
+
         // Bottom line always stays mostly the same, only minor variations
         const row = data[this.h - 1];
         const t = this.age * 6 / 1000;
         const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764) * Math.sin(t * 0.5433)
                 * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
         const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);
+
         for (let x = 0; x < this.w; x++) {
             // const f = 1 + 0.5 * Math.sin(0.1 * x + t) * Math.sin()
             let f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
@@ -122,8 +139,10 @@ export class FireGfx {
         const pixels = this.imageData.data;
         const data = this.data;
         let p = 0, col = [0];
+
         for (let y = 0; y < this.h; y++) {
             const row = data[y];
+
             for (let x = 0; x < this.w; x++) {
                 col = this.valueToColor(row[x]);
                 pixels[p++] = col[0];
@@ -132,6 +151,7 @@ export class FireGfx {
                 pixels[p++] = col[3];
             }
         }
+
         this.context.putImageData(this.imageData, 0, 0);
     }
 
@@ -146,6 +166,7 @@ export class FireGfx {
         this.returnColor[1] = v255;
         this.returnColor[2] = v255 * v;
         this.returnColor[3] = v255;
+
         return this.returnColor;
     }
 
@@ -153,8 +174,8 @@ export class FireGfx {
         return this.canvas;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, x = 0, y = 0) {
+    public draw(ctx: CanvasRenderingContext2D, position: Point = Point.ORIGIN) {
         const img = this.getImage();
-        ctx.drawImage(img, x - img.width / 2, -y - img.height);
+        ctx.drawImage(img, position.x - img.width / 2, -position.y - img.height);
     }
 }

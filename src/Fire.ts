@@ -86,7 +86,9 @@ export class Fire extends NPC {
         ctx.save();
         ctx.translate(this.position.x, -this.position.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
-        this.fireGfx.draw(ctx, 0, 0);
+
+        this.fireGfx.draw(ctx, Point.ORIGIN);
+
         ctx.restore();
     }
 
