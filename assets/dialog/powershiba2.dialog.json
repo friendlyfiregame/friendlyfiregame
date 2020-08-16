@@ -42,7 +42,7 @@
     ],
     "notyet": [
         "Make sure you have done everything you need to do here up in the clouds.",
-        "If you give away your multi jump prematurely, it could lead to a disaster.",
+        "If you give away your multi-jump prematurely it could lead to a disaster.",
         "I can tell that you still have business here.",
         "►Thanks for heads up! !end @sacriface"
     ],
@@ -50,7 +50,7 @@
         "Thank you human! !set $gotPowerShibaQuest true !end @end"
     ],
     "end": [
-        "Please grant your multi jump to my mortal brother.",
+        "Please grant your multi-jump to my mortal brother.",
         "Your sacrifice will not be forgotten.",
         "►Of course I will! @end !end"
     ]

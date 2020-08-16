@@ -1,20 +1,20 @@
 {
     "entry": [
         "Human! Thank your for coming.",
-        "Your selflesseness brought an estranged family back together.",
+        "Your selflessness brought an estranged family back together.",
         "This is something no amount of meditating could achieve.",
         "►Don't mention it!",
         "Please don't play this down.",
-        "My brother and I came to the agreement, that you should collect me.",
+        "My brother and I came to the agreement that you should collect me.",
         "My unknown power might help you on your quest.",
         "►I don't know if I can accept that… @accept",
         "►Great idea! @idea"
     ],
     "accept": [
-        "We don't accept a 'no' as an answer. @fate"
+        "We don't accept a “no” as an answer. @fate"
     ],
     "idea": [
-        "Good to see, that you agree. @fate"
+        "Good to see that you agree. @fate"
     ],
     "fate": [
         "This is the inevitable fate of my existance.",

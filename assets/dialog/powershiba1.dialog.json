@@ -1,11 +1,11 @@
 {
     "entry": [
         "…",
-        "Oh, hello Mortal. !set $metPowerShiba",
+        "Oh, hello mortal. !set $metPowerShiba",
         "►Hello. Who are you?",
         "I'm a power-up.",
         "But I wasn't always one.",
-        "►Were you a dog before, by any chance?",
+        "►Were you a dog before by any chance?",
         "I do not remember my past life and it doesn't really matter either.",
         "►How does one become a power-up?",
         "I was taught by my mentor and father figure, the almighty flying power-up.",
@@ -22,9 +22,9 @@
         "Please do. @met !end"
     ],
     "powerup": [
-        "That, I do not know.",
+        "That I do not know.",
         "Usually, the designated power is bestowed upon birth.",
-        "Since I transcended being a mortal as you, my power is unknown.",
+        "Since I transcended being a mortal like you, my power is unknown.",
         "But it doesn't matter either way.",
         "I have no intention to be consumed.",
         "►Not even… by me?",
