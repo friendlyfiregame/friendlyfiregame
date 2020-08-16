@@ -78,7 +78,7 @@ export class Fire extends NPC {
         );
     }
 
-    public isRendererd (): boolean {
+    public isRendered (): boolean {
         return this.isVisible;
     }
 
