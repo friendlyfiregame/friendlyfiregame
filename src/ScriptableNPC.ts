@@ -1,12 +1,12 @@
-import { NPC } from './NPC';
 import { Environment } from './World';
+import { NPC } from './NPC';
+import { Point } from './Geometry';
 
 export abstract class ScriptableNPC extends NPC {
     protected move: 0 | 1 | -1  = 0;
 
     protected updatePosition(newX: number, newY: number): void {
-        this.x = newX;
-        this.y = newY;
+        this.position = new Point(newX, newY);
 
         // Check collision with the environment and correct player position and movement
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
@@ -22,11 +22,12 @@ export abstract class ScriptableNPC extends NPC {
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
-            col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
-            while (this.y < height && col) {
+            col = world.collidesWith(this.position, [ this ], [ Environment.WATER ]);
+
+            while (this.position.y < height && col) {
                 pulled++;
-                this.y++;
-                col = world.collidesWith(this.x, this.y);
+                this.position.moveYBy(1);
+                col = world.collidesWith(this.position);
             }
         }
         return pulled;
@@ -35,11 +36,18 @@ export abstract class ScriptableNPC extends NPC {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
-                [ Environment.PLATFORM, Environment.WATER ])) {
+
+        while (
+            this.position.y > 0
+            && world.collidesWith(
+                this.position.clone().moveYBy(this.size.height), [ this ],
+                [ Environment.PLATFORM, Environment.WATER ]
+            )
+        ) {
             pulled++;
-            this.y--;
+            this.position.moveYBy(-1);
         }
+
         return pulled;
     }
 
@@ -47,15 +55,23 @@ export abstract class ScriptableNPC extends NPC {
         let pulled = 0;
         const world = this.scene.world;
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
-                this.x--;
+            while (
+                world.collidesWithVerticalLine(
+                    this.position.clone().moveBy(this.size.width / 2, this.size.height * 3 / 4),
+                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
+                this.position.moveXBy(-1);
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
-                this.x++;
+            while (
+                world.collidesWithVerticalLine(
+                    this.position.clone().moveBy(-this.size.width / 2, this.size.height * 3 / 4),
+                    this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
+                this.position.moveXBy(1);
                 pulled++;
             }
         }

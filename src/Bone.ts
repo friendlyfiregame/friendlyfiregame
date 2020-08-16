@@ -1,12 +1,13 @@
-import { entity } from "./Entity";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer } from './Renderer';
-import { Environment } from './World';
-import { Sound } from './Sound';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { GameScene } from './scenes/GameScene';
+import { PhysicsEntity } from './PhysicsEntity';
+import { Point, Size } from './Geometry';
+import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
 
 @entity("bone")
 export class Bone extends PhysicsEntity {
@@ -16,12 +17,12 @@ export class Bone extends PhysicsEntity {
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
 
-    public constructor(scene: GameScene, x: number, y:number) {
-        super(scene, x, y, 20, 10);
+    public constructor(scene: GameScene, position: Point) {
+        super(scene, position, new Size(20, 10));
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Bone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        this.scene.renderer.addAseprite(Bone.sprite, 'idle', this.position, RenderingLayer.ENTITIES);
         if (this.scene.showBounds) this.drawBounds();
     }
 
@@ -36,7 +37,7 @@ export class Bone extends PhysicsEntity {
             player.carry(this);
         }
 
-        if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+        if (!this.isCarried() && this.scene.world.collidesWith(this.position.clone().moveYBy(-5)) === Environment.WATER) {
             const vx = this.getVelocityX();
             this.setVelocity(vx, 10);
         }
