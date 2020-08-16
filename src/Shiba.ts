@@ -45,7 +45,7 @@ export class Shiba extends ScriptableNPC {
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
-    
+
     private doubleJumpEmitter: ParticleEmitter;
     private minAltitude: number;
     private jumpHeight = 1.5;
@@ -102,7 +102,7 @@ export class Shiba extends ScriptableNPC {
             this.setMaxVelocity(2);
 
             this.scene.startFriendshipMusic();
-            
+
             if (!shibaSpawnPos) throw new Error(`'friendship_shiba_spawn' point in map is missing`);
             this.x = shibaSpawnPos.x;
             this.y = shibaSpawnPos.y;

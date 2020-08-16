@@ -11,7 +11,7 @@ export abstract class PhysicsEntity extends Entity {
     private maxVelocityY = Infinity;
     private floating = false;
     private ground: GameObject | null = null;
-    
+
     // This property describes how much the player hitbox grows when
     // this entity is carried. Defaults to the entities own height.
     public carryHeight = this.height;

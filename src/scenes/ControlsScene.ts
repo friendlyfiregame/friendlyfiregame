@@ -95,7 +95,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
         const startingY = 35;
         const gap = 20;
         ctx.translate(x, y);
-        
+
         ctx.drawImage(ControlsScene.panelImage, 0, 0);
 
         const controllerSprite = ControllerManager.getInstance().selectedGamepadStyle;

@@ -36,7 +36,7 @@ export class Particles {
     private emitters: ParticleEmitter[] = [];
 
     public constructor(scene: GameScene) {
-        this.scene = scene;    
+        this.scene = scene;
     }
 
     public update(dt: number): void {
