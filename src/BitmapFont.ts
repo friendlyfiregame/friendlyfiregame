@@ -156,7 +156,7 @@ export class BitmapFont {
 
             width += this.charWidths[index];
 
-            if (precursorChar && !(precursorChar in compactablePrecursors)) {
+            if (precursorChar && !(compactablePrecursors.includes(precursorChar))) {
                 width += CHAR_SPACING;
             }
 

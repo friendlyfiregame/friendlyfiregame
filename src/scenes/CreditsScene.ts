@@ -287,7 +287,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             ctx,
             shortenedGitCommitHash,
             new Point(
-                CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 10,
+                CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 7,
                 CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4
             ),
             color

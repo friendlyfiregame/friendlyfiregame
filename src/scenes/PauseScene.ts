@@ -104,7 +104,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         PauseScene.font.drawText(
             ctx,
             versionText,
-            new Point(this.game.width - versionTextSize.width - 4, this.game.height - versionTextSize.height - 4),
+            new Point(this.game.width - versionTextSize.width - 7, this.game.height - versionTextSize.height - 4),
             'white',
             0,
             0.6
