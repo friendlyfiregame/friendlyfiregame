@@ -1,6 +1,6 @@
 {
     "entry": [
-        "You found Bone!",
+        "You found bone!",
         "Wow!!!",
         "Bring to brother please.",
         "►Sure, I'm on the way! !end @entry2"
@@ -8,7 +8,7 @@
     "entry2": [
         "Friend!",
         "Go to brother.",
-        "Bring bone. He will rememeber!",
+        "Bring bone. He will remember!",
         "►Sure, I'm on the way! !end @entry2"
     ]
 }
