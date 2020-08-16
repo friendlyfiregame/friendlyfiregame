@@ -12,7 +12,7 @@ export abstract class PhysicsEntity extends Entity {
     private maxVelocityY = Infinity;
     private floating = false;
     private ground: GameObject | null = null;
-    protected lastGroundPosition = { x: 0, y: 0 };
+    protected lastGroundPosition = Point.ORIGIN;
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
@@ -167,8 +167,7 @@ export abstract class PhysicsEntity extends Entity {
                 )
             } else {
                 // is on ground
-                this.lastGroundPosition.x = this.position.x;
-                this.lastGroundPosition.y = this.position.y;
+                this.lastGroundPosition = this.position.clone();
             }
         }
     }
