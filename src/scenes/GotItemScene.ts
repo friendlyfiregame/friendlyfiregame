@@ -27,10 +27,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         "sprites/powerup_raindance.png"
     ])
     private static itemImages: HTMLImageElement[];
-    private itemPosition = {
-        x: 0,
-        y: 0
-    }
+    private itemPosition = Point.ORIGIN;
 
     private time = 0;
     private stopped = false;
@@ -97,17 +94,18 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
         let metrics;
-        const centerY = height >> 1;
-        const centerX = (width / 2) - GotItemScene.itemImages[this.targetItem].width;
+        const center = new Point(
+            (width / 2) - GotItemScene.itemImages[this.targetItem].width,
+            height >> 1
+        );
         const floatOffsetY = Math.sin(this.time * this.floatSpeed) * this.floatAmount;
 
-        this.itemPosition.x = centerX;
-        this.itemPosition.y = centerY - 40 - floatOffsetY;
+        this.itemPosition = center.clone().moveYBy(-40 - floatOffsetY);
 
         ctx.save();
         ctx.globalAlpha = 0.5;
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, centerY - 1, width, 50);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, center.y - 1, width, 50);
 
         const itemNameText = this.titles[this.targetItem];
         metrics = GotItemScene.headlineFont.measureText(itemNameText);
@@ -115,7 +113,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         GotItemScene.headlineFont.drawText(
             ctx,
             itemNameText,
-            new Point((width - metrics.width) >> 1, centerY + 10),
+            new Point((width - metrics.width) >> 1, center.y + 10),
             'white'
         );
 
@@ -124,7 +122,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         GotItemScene.font.drawText(
             ctx,
             this.selectedSubtitle,
-            new Point((width - metrics.width) >> 1, centerY + 30),
+            new Point((width - metrics.width) >> 1, center.y + 30),
             'white'
         );
 
