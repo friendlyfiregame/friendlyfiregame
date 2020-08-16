@@ -1,5 +1,5 @@
 import { asset } from './Assets';
-import { calculateVolume, rnd, rndInt, shiftValue } from './util';
+import { rnd, rndInt, shiftValue } from './util';
 import { entity } from './Entity';
 import { Face, EyeType, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
@@ -12,6 +12,7 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { ShibaState } from './Shiba';
 import { Sound } from './Sound';
+import { SoundEmitter } from './SoundEmitter';
 import { Wood } from './Wood';
 
 export const SHRINK_SIZE = 2;
@@ -33,6 +34,7 @@ export class Fire extends NPC {
 
     @asset("sounds/fire/fire.ogg")
     private static fireAmbience: Sound;
+    private soundEmitter: SoundEmitter;
 
     public intensity = 5;
 
@@ -60,7 +62,7 @@ export class Fire extends NPC {
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER));
 
-        Fire.fireAmbience.setLoop(true);
+        this.soundEmitter = new SoundEmitter(this.scene, this.position, Fire.fireAmbience, 0.7, 0.2);
 
         const GRAVITY = new Point(0, 8);
 
@@ -209,13 +211,7 @@ export class Fire extends NPC {
                 particleChance -= rnd() * this.averageParticleDelay;
             }
 
-            const vol = calculateVolume(this.distanceToPlayer, .7, 0.2);
-            if (vol) {
-                Fire.fireAmbience.setVolume(vol);
-                if (!Fire.fireAmbience.isPlaying()) Fire.fireAmbience.play();
-            } else {
-                Fire.fireAmbience.stop();
-            }
+            this.soundEmitter.update(dt);
         }
 
         if (this.isBeingPutOut()) {

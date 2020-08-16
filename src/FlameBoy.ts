@@ -1,6 +1,5 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
-import { calculateVolume } from './util';
 import { entity } from './Entity';
 import { EyeType, Face, FaceModes } from './Face';
 import { GameScene } from './scenes/GameScene';
@@ -9,6 +8,7 @@ import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { Sound } from './Sound';
+import { SoundEmitter } from './SoundEmitter';
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -17,12 +17,14 @@ export class FlameBoy extends NPC {
 
     @asset("sounds/fire/fire2.ogg")
     private static fireAmbience: Sound;
+    private soundEmitter: SoundEmitter;
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(26, 54));
         this.face = new Face(scene, this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED
         this.face.setMode(this.defaultFaceMode);
+        this.soundEmitter = new SoundEmitter(this.scene, this.position, FlameBoy.fireAmbience, 0.7, 0.2);
     }
 
     protected showDialoguePrompt (): boolean {
@@ -53,17 +55,6 @@ export class FlameBoy extends NPC {
         super.update(dt);
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(32));
         this.speechBubble.update(this.position);
-
-        const vol = calculateVolume(this.distanceToPlayer, .7, 0.2);
-
-        if (vol) {
-            FlameBoy.fireAmbience.setVolume(vol);
-
-            if (!FlameBoy.fireAmbience.isPlaying()) {
-                FlameBoy.fireAmbience.play();
-            }
-        } else {
-            FlameBoy.fireAmbience.stop();
-        }
+        this.soundEmitter.update(dt);
     }
 }
