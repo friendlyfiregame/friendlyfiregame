@@ -1,5 +1,5 @@
-import { Aseprite } from './Aseprite'
-import { BitmapFont } from './BitmapFont'
+import { Aseprite } from './Aseprite';
+import { BitmapFont } from './BitmapFont';
 import { Dance } from './Dance';
 import { Fire } from './Fire';
 import { GameScene } from './scenes/GameScene';
