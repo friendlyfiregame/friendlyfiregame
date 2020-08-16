@@ -62,6 +62,7 @@ export type BaseRenderingItem = {
 export type ParticleEmitterRenderingItem = {
     type: RenderingType.PARTICLE_EMITTER;
     layer: RenderingLayer;
+    zIndex: number;
     emitter: ParticleEmitter;
 }
 
@@ -176,6 +177,7 @@ export class Renderer {
                             ctx = roundRect(ctx, item.position, item.size, item.radius, item.relativeToScreen, item.offsetX);
                             ctx.fillStyle = item.fillColor;
                             ctx.fill();
+                            ctx.closePath();
                             break;
                         case RenderingType.TEXT:
                             if (item.outlineColor) {

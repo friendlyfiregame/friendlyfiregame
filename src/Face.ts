@@ -11,7 +11,8 @@ export enum FaceModes {
     ANGRY = "angry",
     BORED = "bored",
     AMUSED = "amused",
-    SAD = "sad"
+    SAD = "sad",
+    DISGUSTED = "disgusted"
 };
 
 export enum EyeType {

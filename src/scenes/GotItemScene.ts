@@ -1,14 +1,15 @@
+import { Aseprite } from '../Aseprite';
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
 import { DIALOG_FONT } from "../constants";
 import { easeInExpo, easeOutExpo } from "../easings";
 import { FriendlyFire } from "../FriendlyFire";
+import { Point } from '../Geometry';
 import { Scene } from "../Scene";
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
-import { Point } from '../Geometry';
 
-export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE }
+export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 
 export class GotItemScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -24,9 +25,10 @@ export class GotItemScene extends Scene<FriendlyFire> {
         "sprites/powerup_running.png",
         "sprites/powerup_doublejump.png",
         "sprites/powerup_multijump.png",
-        "sprites/powerup_raindance.png"
+        "sprites/powerup_raindance.png",
+        "sprites/powerup_friendship.aseprite.json"
     ])
-    private static itemImages: HTMLImageElement[];
+    private static itemImages: (HTMLImageElement | Aseprite)[];
     private itemPosition = Point.ORIGIN;
 
     private time = 0;
@@ -39,7 +41,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
         "Fear of the Dark",
         "Double Jump Boots",
         "Flying Wings Knock-off",
-        "Dancing Dave"
+        "Dancing Dave",
+        "Eternal Friendship"
     ]
 
     private subtitles = [
@@ -64,6 +67,12 @@ export class GotItemScene extends Scene<FriendlyFire> {
         [
             "Like tears in the rain"
         ],
+        [
+            "Dogs are the best!",
+            "What might this be good for?",
+            "Powered by unconditional love",
+            "Nothing can stop us!"
+        ]
     ]
     private selectedSubtitle = '';
 
@@ -128,7 +137,12 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
         ctx.scale(2, 2);
         const image = GotItemScene.itemImages[this.targetItem];
-        ctx.drawImage(image, this.itemPosition.x / 2, this.itemPosition.y / 2);
+
+        if (image instanceof HTMLImageElement) {
+            ctx.drawImage(image, this.itemPosition.x / 2, this.itemPosition.y / 2);
+        } else {
+            image.drawTag(ctx, 'idle', new Point(this.itemPosition.x / 2, this.itemPosition.y / 2));
+        }
 
         ctx.restore();
     }

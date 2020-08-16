@@ -1,11 +1,11 @@
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
-import { BgmId, FadeDirection, GameScene } from "./scenes/GameScene";
-import { Bounds, entity } from "./Entity";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { BitmapFont } from './BitmapFont';
+import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
+import { Bounds, entity } from './Entity';
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
 import { Cloud } from './Cloud';
-import { ControllerAnimationTags, ControllerSpriteMap } from "./input/ControllerFamily";
+import { ControllerAnimationTags, ControllerSpriteMap } from './input/ControllerFamily';
 import { ControllerEvent } from './input/ControllerEvent';
 import { ControllerManager } from './input/ControllerManager';
 import { Conversation } from './Conversation';
@@ -13,28 +13,28 @@ import { ConversationProxy } from './ConversationProxy';
 import { Dance } from './Dance';
 import {
     DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
-    PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_PADDING,
+    PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
     PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
     SHORT_JUMP_GRAVITY
-} from "./constants";
-import { Environment } from "./World";
+} from './constants';
+import { Environment } from './World';
 import { GameObjectInfo } from './MapInfo';
 import { GotItemScene, Item } from './scenes/GotItemScene';
 import { NPC } from './NPC';
 import { ParticleEmitter, valueCurves } from './Particles';
-import { PhysicsEntity } from "./PhysicsEntity";
+import { PhysicsEntity } from './PhysicsEntity';
 import { PlayerConversation } from './PlayerConversation';
 import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
-import { Seed, SeedState } from "./Seed";
+import { Seed, SeedState } from './Seed';
 import { Sign } from './Sign';
-import { Snowball } from "./Snowball";
-import { Sound } from "./Sound";
-import { SpeechBubble } from "./SpeechBubble";
-import { Stone, StoneState } from "./Stone";
+import { Snowball } from './Snowball';
+import { Sound } from './Sound';
+import { SpeechBubble } from './SpeechBubble';
+import { Stone, StoneState } from './Stone';
 import { Wall } from './Wall';
-import { Wood, WoodState } from "./Wood";
+import { Wood, WoodState } from './Wood';
 
 const groundColors = [
     "#806057",
@@ -171,11 +171,12 @@ export class Player extends PhysicsEntity {
     private canRainDance = false;
     private doubleJump = false;
     private multiJump = false;
+    private hasFriendship = false;
     private usedJump = false;
     private usedDoubleJump = false;
     // private hasBeard = false;
     private autoMove: AutoMove | null = null;
-    private isControllable: boolean = true;
+    public isControllable: boolean = true;
     private showHints = false;
 
     public playerConversation: PlayerConversation | null = null;
@@ -262,9 +263,17 @@ export class Player extends PhysicsEntity {
         Conversation.setGlobal("ismale", this.gender === Gender.MALE ? "true" : "" );
     }
 
+    public getControllable (): boolean {
+        return this.isControllable;
+    }
+
+    public setControllable (isControllable: boolean): void {
+        this.isControllable = isControllable;
+    }
+
     public startAutoMove (x: number, turnAround: boolean) {
         if (!this.autoMove) {
-            this.isControllable = false;
+            // this.isControllable = false;
             this.autoMove = {
                 destinationX: x,
                 lastX: this.position.x,
@@ -284,7 +293,7 @@ export class Player extends PhysicsEntity {
         this.autoMove = null;
         this.moveRight = false;
         this.moveLeft = false;
-        this.isControllable = true;
+        // this.isControllable = true;
     }
 
     public enableRunning (): void {
@@ -316,6 +325,19 @@ export class Player extends PhysicsEntity {
         if (!this.multiJump) {
             this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
             this.multiJump = true;
+        }
+    }
+
+    public disableMultiJump (): void {
+        this.multiJump = false;
+    }
+
+    public enableFriendship (): void {
+        if (!this.hasFriendship) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.FRIENDSHIP });
+            this.hasFriendship = true;
+            Conversation.setGlobal("hasFriendship", "true");
+            this.scene.removeGameObject(this.scene.powerShiba);
         }
     }
 
@@ -425,6 +447,8 @@ export class Player extends PhysicsEntity {
                 this.carry(this.scene.stone);
             } else if (event.key === "o" && !this.carrying) {
                 this.carry(this.scene.tree.spawnSeed());
+            } else if (event.key === "u" && !this.carrying) {
+                this.carry(this.scene.bone);
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
@@ -754,9 +778,11 @@ export class Player extends PhysicsEntity {
                 this.scene.gameTime * 1000);
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
+
             this.carrying.position.moveYTo(
-                this.position.y + (this.size.height - PLAYER_CARRY_PADDING) - offset + 4
+                this.position.y + (this.size.height - this.carrying.carryHeight) - offset
             );
+
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }
@@ -1146,7 +1172,8 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            this.size.resizeHeight(PLAYER_HEIGHT + PLAYER_CARRY_PADDING);
+            this.size.resizeHeight(PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT);
+
             if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }

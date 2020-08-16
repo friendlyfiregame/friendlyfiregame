@@ -13,6 +13,9 @@ export const GAME_CANVAS_HEIGHT = 270;
  * physics calculations).
  */
 export const PIXEL_PER_METER = 18;
+export const METER_PER_PIXEL = 1 / PIXEL_PER_METER;
+
+export const SOUND_INTENSITY_MULTIPLIER = 50;
 
 /** Gravity in m/s² */
 export const GRAVITY = 35;
@@ -53,7 +56,7 @@ export const DOUBLE_JUMP_COLORS = [ "#ffffff", "#cccccc", "#aaaaaa" ];
 /** Player dimensions */
 export const PLAYER_HEIGHT = 1.60 * PIXEL_PER_METER;
 export const PLAYER_WIDTH = 0.5 * PIXEL_PER_METER;
-export const PLAYER_CARRY_PADDING = 1 * PIXEL_PER_METER;
+export const PLAYER_CARRY_HEIGHT = 4;
 
 /** Fonts */
 export const DIALOG_FONT = "fonts/pixcelsior.font.json";

@@ -26,6 +26,8 @@ export interface ParticleEmitterArguments {
     sizeCurve?: ValueCurve;
     angle?: number | NumberGenerator;
     angleSpeed?: number | NumberGenerator;
+    renderingLayer?: RenderingLayer;
+    zIndex?: number;
     update?: (p: Particle) => void
 };
 
@@ -45,7 +47,8 @@ export class Particles {
         this.emitters.forEach(emitter => {
             this.scene.renderer.add({
                 type: RenderingType.PARTICLE_EMITTER,
-                layer: RenderingLayer.PARTICLES,
+                layer: emitter.renderingLayer,
+                zIndex: emitter.zIndex,
                 emitter
             })
         });
@@ -92,6 +95,8 @@ export class ParticleEmitter {
     private blendMode: string;
     public alphaCurve: ValueCurve;
     public sizeCurve: ValueCurve;
+    public renderingLayer: RenderingLayer;
+    public zIndex: number;
     private updateMethod: ((p: Particle) => void) | undefined;
 
     constructor(args: ParticleEmitterArguments) {
@@ -112,6 +117,8 @@ export class ParticleEmitter {
         this.blendMode = args.blendMode || "source-over";
         this.alphaCurve = args.alphaCurve || valueCurves.constant;
         this.sizeCurve = args.sizeCurve || valueCurves.constant;
+        this.renderingLayer = args.renderingLayer || RenderingLayer.PARTICLES;
+        this.zIndex = args.zIndex !== undefined ? args.zIndex : 0;
         this.updateMethod = args.update;
 
         function toGenerator<tp>(obj: tp | (() => tp)): (() => tp) {

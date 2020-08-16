@@ -6,15 +6,22 @@ import fire0 from '../assets/dialog/fire0.dialog.json';
 import fire1 from '../assets/dialog/fire1.dialog.json';
 import fire2 from '../assets/dialog/fire2.dialog.json';
 import fire3 from '../assets/dialog/fire3.dialog.json';
+import fire4 from '../assets/dialog/fire4.dialog.json';
 import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
 import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import { Game } from './Game';
-import { GameScene } from "./scenes/GameScene";
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
 import { Point } from './Geometry'
-import { Quest, QuestA, QuestATrigger, QuestB, QuestBTrigger, QuestKey } from './Quests';
+import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
+import { Quest, QuestA, QuestATrigger, QuestB, QuestKey } from './Quests';
 import seed1 from '../assets/dialog/seed1.dialog.json';
 import shadowpresence1 from '../assets/dialog/shadowpresence1.dialog.json';
+import shiba1 from '../assets/dialog/shiba1.dialog.json';
+import shiba2 from '../assets/dialog/shiba2.dialog.json';
+import shiba3 from '../assets/dialog/shiba3.dialog.json';
+import shiba4 from '../assets/dialog/shiba4.dialog.json';
+import shiba5 from '../assets/dialog/shiba5.dialog.json';
 import { Signal } from './Signal';
 import spider1 from '../assets/dialog/spider1.dialog.json';
 import stone1 from '../assets/dialog/stone1.dialog.json';
@@ -35,6 +42,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "fire1": fire1,
     "fire2": fire2,
     "fire3": fire3,
+    "fire4": fire4,
     "stone1": stone1,
     "stone2": stone2,
     "stonedisciple1": stonedisciple1,
@@ -43,6 +51,12 @@ const allDialogs: Record<string, DialogJSON> = {
     "tree0": tree0,
     "tree1": tree1,
     "tree2": tree2,
+    "shiba1": shiba1,
+    "shiba2": shiba2,
+    "shiba3": shiba3,
+    "shiba4": shiba4,
+    "shiba5": shiba5,
+    "powershiba2": powershiba2,
     "spider1": spider1,
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
@@ -179,8 +193,19 @@ export class Campaign {
                         this.gameScene.fire.conversation = null;
                         this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
                     break;
+                case "friendshipEnding":
+                    this.gameScene.beginFriendshipEnding();
+                    break;
                 case  "talkedtofire":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
+                    break;
+                case "giveBone":
+                    Conversation.setGlobal('gaveBoneToPowerShiba', 'true');
+                    this.runAction("enable", null, ["shiba", "shiba3"]);
+                    this.runAction("enable", null, ["powershiba", "powershiba2"]);
+                    break;
+                case "shibaNextState":
+                    this.gameScene!.shiba.nextState();
                     break;
                 case  "talkedtotree":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
@@ -193,13 +218,17 @@ export class Campaign {
                 case "givebeard":
                     // this.gameScene.player.setBeard(true);
                     break;
-                case "endgame":
+                case "endgameA":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                     this.getQuest(QuestKey.A).finish();
                     this.gameScene.fire.conversation = null;
                     this.gameScene!.gameOver();
                     break;
-
+                case "endgameB":
+                    this.getQuest(QuestKey.B).finish();
+                    this.gameScene.fire.conversation = null;
+                    this.gameScene!.gameOver();
+                    break;
                 case "game":
                     this.addState(params[0] as any);
                     break;
@@ -212,6 +241,9 @@ export class Campaign {
                 case "multijump":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
                     this.gameScene.player.enableMultiJump();
+                    break;
+                case "friendship":
+                    this.gameScene.player.enableFriendship();
                     break;
                 case "spawnseed":
                     this.gameScene.tree.spawnSeed();
@@ -244,9 +276,6 @@ export class Campaign {
                 case "togglegender":
                     this.gameScene.player.toggleGender();
                     break;
-                case "corruptFlameboy":
-                    this.getQuest(QuestKey.B).trigger(QuestBTrigger.FLAMEBOY_CORRUPTED);
-                    break;
                 case "wakeupchest":
                     this.gameScene.mimic.nextState();
                     break;
@@ -262,7 +291,9 @@ export class Campaign {
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
-                        "shadowpresence": this.gameScene.shadowPresence
+                        "shadowpresence": this.gameScene.shadowPresence,
+                        "shiba": this.gameScene.shiba,
+                        "powershiba": this.gameScene.powerShiba
                     };
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
@@ -282,7 +313,9 @@ export class Campaign {
                         "wing": this.gameScene.wing,
                         "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
-                        "shadowpresence": this.gameScene.shadowPresence
+                        "shadowpresence": this.gameScene.shadowPresence,
+                        "shiba": this.gameScene.shiba,
+                        "powershiba": this.gameScene.powerShiba
                     };
                     const targetNpc1 = npcMap1[char1];
                     if (targetNpc1) {

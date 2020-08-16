@@ -2,6 +2,7 @@ import { Player } from '../Player';
 import { asset } from '../Assets';
 import { Bird } from '../Bird';
 import { BitmapFont } from '../BitmapFont';
+import { Bone } from '../Bone';
 import { Bounds, createEntity } from '../Entity';
 import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from '../util';
 import { Camera } from '../Camera';
@@ -13,7 +14,7 @@ import { ControllerEvent } from '../input/ControllerEvent';
 import { Conversation } from '../Conversation';
 import { DIALOG_FONT } from '../constants';
 import { EndScene } from './EndScene';
-import { Fire } from '../Fire';
+import { Fire, FireState } from '../Fire';
 import { FireGfx } from '../FireGfx';
 import { FlameBoy } from '../FlameBoy';
 import { FriendlyFire } from '../FriendlyFire';
@@ -26,6 +27,7 @@ import { Particles, ParticleEmitter, valueCurves } from '../Particles';
 import { PauseScene } from './PauseScene';
 import { Point, Size } from '../Geometry';
 import { Portal } from '../Portal';
+import { PowerShiba } from '../PowerShiba';
 import { QuestATrigger, QuestKey } from '../Quests';
 import { Radio } from '../Radio';
 import { Renderer, RenderingLayer, RenderingType } from '../Renderer';
@@ -33,8 +35,10 @@ import { RiddleStone } from '../RiddleStone';
 import { Scene } from '../Scene';
 import { Seed } from '../Seed';
 import { ShadowPresence } from '../ShadowPresence';
+import { Shiba, ShibaState } from '../Shiba';
 import { Skull } from '../Skull';
 import { Sound } from '../Sound';
+import { SoundEmitter } from '../SoundEmitter';
 import { Spider } from '../Spider';
 import { Stone } from '../Stone';
 import { StoneDisciple } from '../StoneDisciple';
@@ -63,7 +67,12 @@ export enum BgmId {
     INFERNO = 'inferno',
     CAVE = 'cave',
     RIDDLE = 'riddle',
-    RADIO = 'radio'
+    RADIO = 'radio',
+    WINGS = 'wings'
+}
+
+export enum AmbientSoundId {
+    STREAM = 'stream',
 }
 
 export type BackgroundTrack = {
@@ -89,7 +98,17 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("music/radio.ogg")
     public static bgmRadio: Sound;
 
-    private backgroundTracks: BackgroundTrack[] = [
+    @asset("music/wings.ogg")
+    public static bgmWings: Sound;
+
+    @asset("sounds/ambient/stream.ogg")
+    public static ambientStream: Sound;
+
+    public readonly ambientSounds: Record<AmbientSoundId, Sound> = {
+        [AmbientSoundId.STREAM]: GameScene.ambientStream
+    }
+
+    private readonly backgroundTracks: BackgroundTrack[] = [
         {
             active: false,
             id: BgmId.OVERWORLD,
@@ -106,7 +125,7 @@ export class GameScene extends Scene<FriendlyFire> {
             active: false,
             id: BgmId.INFERNO,
             sound: GameScene.bgm2,
-            baseVolume: 0.15
+            baseVolume: 0.10
         },
         {
             active: false,
@@ -119,6 +138,12 @@ export class GameScene extends Scene<FriendlyFire> {
             id: BgmId.RADIO,
             sound: GameScene.bgmRadio,
             baseVolume: 1
+        },
+        {
+            active: false,
+            id: BgmId.WINGS,
+            sound: GameScene.bgmWings,
+            baseVolume: 0.75
         },
     ]
 
@@ -135,6 +160,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
+    public soundEmitters: SoundEmitter[] = [];
     public pointsOfInterest: GameObjectInfo[] = [];
     public triggerObjects: GameObjectInfo[] = [];
     public boundObjects: GameObjectInfo[] = [];
@@ -147,9 +173,12 @@ export class GameScene extends Scene<FriendlyFire> {
     public stoneDisciple!: StoneDisciple;
     public tree!: Tree;
     public seed!: Seed;
+    public bone!: Bone;
     public flameboy!: FlameBoy;
     public wing!: Wing;
     public bird!: Bird;
+    public shiba!: Shiba;
+    public powerShiba!: PowerShiba;
     public spider!: Spider;
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
@@ -158,6 +187,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public fire!: Fire;
     public fireFuryEndTime = 0;
     public apocalypse = false;
+    public friendshipCutscene = false;
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
@@ -177,6 +207,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public setup(): void {
 
         this.mapInfo = new MapInfo();
+        this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o))
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
@@ -189,6 +220,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gameObjects = [
             this.world = new World(this),
             this.particles,
+            ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
                     case 'riddlestone': return new RiddleStone(this, new Point(entity.x, entity.y), entity.properties);
@@ -211,10 +243,13 @@ export class GameScene extends Scene<FriendlyFire> {
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
         this.bird = this.getGameObject(Bird);
+        this.shiba = this.getGameObject(Shiba);
+        this.powerShiba = this.getGameObject(PowerShiba);
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.spider = this.getGameObject(Spider);
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
+        this.bone = this.getGameObject(Bone);
 
         this.camera = new Camera(this, this.player.position);
         this.camera.setBounds(this.player.getCurrentMapBounds());
@@ -372,6 +407,10 @@ export class GameScene extends Scene<FriendlyFire> {
             }
             this.fadeToBlackFactor = fade;
         }
+
+        if (this.friendshipCutscene) {
+            this.updateFriendshipEndingCutscene(dt);
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -462,6 +501,10 @@ export class GameScene extends Scene<FriendlyFire> {
         this.playBackgroundTrack(BgmId.INFERNO);
     }
 
+    public startFriendshipMusic(): void {
+        this.playBackgroundTrack(BgmId.WINGS);
+    }
+
     public muteMusic(): void {
         this.backgroundTracks.forEach(t => t.sound.setVolume(0));
     }
@@ -504,13 +547,18 @@ export class GameScene extends Scene<FriendlyFire> {
                 // End apocalypse
                 this.apocalypseFactor = 0;
                 this.apocalypse = false;
-                this.fire.angry = false;
+                this.fire.state = FireState.PUT_OUT;
+
                 this.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_FIRE);
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
                 // Music
                 GameScene.bgm2.stop()
             }
         }
+    }
+
+    private updateFriendshipEndingCutscene(dt: number) {
+        this.camera.setCinematicBar(1);
     }
 
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
@@ -563,6 +611,18 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
+    public beginFriendshipEnding() {
+        this.friendshipCutscene = true;
+        this.shiba.setState(ShibaState.ON_MOUNTAIN);
+        this.shiba.nextState();
+
+        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position")
+
+        if (!playerTargetPos) throw new Error ('cannot initiate friendship ending because some points of interest are missing');
+        this.player.startAutoMove(playerTargetPos.x, true);
+        this.player.setControllable(false);
+    }
+
     public beginApocalypse() {
         this.apocalypse = true;
         this.world.stopRain();
@@ -599,8 +659,6 @@ export class GameScene extends Scene<FriendlyFire> {
                 bossPosition.y
             )
             this.camera.setBounds(this.player.getCurrentMapBounds())
-
-            // this.player.enableMultiJump();
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);

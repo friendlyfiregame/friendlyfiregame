@@ -16,8 +16,16 @@
     ],
     "what": [
         "I do bird stuff, mostly.",
-        "I fly from my nest to some bushes to find food. ♪ Chirp.",
-        "There isn't any, though. !set relevant true @entry"
+        "I fly from my nest to some bushes to find food.",
+        "♪ Chirp.",
+        "There isn't any, though. !set relevant true",
+        "My adopted child might go hungry again.",
+        "►You adopted a bird baby?",
+        "No. ♪ Chirp!",
+        "It's something else. But it's still my son.",
+        "You can visit our nest on the tree in the east...",
+        "if you can fly, that is.",
+        "♪ Chirp! @entry"
     ],
     "quest": [
         "What quest? I'm a bird!",

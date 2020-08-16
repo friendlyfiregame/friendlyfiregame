@@ -4,6 +4,7 @@ import { Face, FaceModes } from './Face';
 import { Greeting } from './Greeting';
 import { PhysicsEntity } from './PhysicsEntity';
 import { Point } from './Geometry';
+import { sleep } from './util';
 import { SpeechBubble } from './SpeechBubble';
 
 // Seconds NPC can't be talked to after a conversation has ended
@@ -15,6 +16,7 @@ export abstract class NPC extends PhysicsEntity {
     public defaultFaceMode = FaceModes.NEUTRAL;
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
+    public thinkBubble: SpeechBubble | null = null;
     public speechBubble = new SpeechBubble(this.scene, new Point(this.position.x, this.position.y));
     public lookAtPlayer = true;
     public dialoguePrompt = new DialoguePrompt(this.scene, this.position);
@@ -35,6 +37,21 @@ export abstract class NPC extends PhysicsEntity {
         }
     }
 
+    public async think(message: string, time: number): Promise<void> {
+        if (this.thinkBubble) {
+            this.thinkBubble.hide();
+            this.thinkBubble = null;
+        }
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.position.clone());
+        thinkBubble.setMessage(message);
+        thinkBubble.show();
+        await sleep(time);
+        if (this.thinkBubble === thinkBubble) {
+            thinkBubble.hide();
+            this.thinkBubble = null;
+        }
+    }
+
     public hasMet(): boolean {
         return false;
     }
@@ -48,7 +65,7 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     protected showDialoguePrompt (): boolean {
-        if (this.hasActiveConversation()) return false;
+        if (this.hasActiveConversation() || !this.scene.player.isControllable) return false;
         return true;
     }
 

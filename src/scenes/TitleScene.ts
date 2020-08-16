@@ -87,6 +87,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.logoAlphaProgress = 0;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
+        this.menu.reset();
 
         Object.values(MenuItemKey).forEach((key, index) => {
             if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {

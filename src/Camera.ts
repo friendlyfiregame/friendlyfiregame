@@ -185,7 +185,7 @@ export class Camera {
         this.y = baseCamTarget.y;
 
         // Cam Shake during apocalypse
-        if (this.scene.fire.angry || this.scene.apocalypse) {
+        if (this.scene.fire.isAngry() || this.scene.apocalypse) {
             this.applyApocalypticShake(this.scene.fire);
         }
         this.zoom = this.zoomingOut ? 0.2 : 1;

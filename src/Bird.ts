@@ -1,6 +1,7 @@
 import { entity } from './Entity';
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
+import { calculateVolume, rnd, rndItem } from './util';
 import conversation from '../assets/dialog/bird.dialog.json';
 import { Conversation } from './Conversation';
 import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from './constants';
@@ -10,7 +11,7 @@ import { NPC } from './NPC';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';
-import { rnd, rndItem } from './util';
+import { Sound } from './Sound';
 
 enum BirdState {
     WAITING_LEFT,
@@ -27,6 +28,8 @@ const MAX_SPEED = 4;
 export class Bird extends NPC {
     @asset("sprites/bird.aseprite.json")
     private static sprite: Aseprite;
+    @asset("sounds/jumping/jump_neutral.ogg")
+    private static jumpSound: Sound;
     private doubleJumpEmitter: ParticleEmitter;
     private move: 0 | 1 | -1  = 1;
     private minAltitude: number;
@@ -61,6 +64,14 @@ export class Bird extends NPC {
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
         this.doubleJumpEmitter.setPosition(this.position.x, this.position.y + 20);
         this.doubleJumpEmitter.emit(20);
+
+        // const targetVolume = (1 / Math.pow(this.distanceToPlayer * METER_PER_PIXEL, 2)) * SOUND_INTENSITY_MULTIPLIER;
+        const vol = calculateVolume(this.distanceToPlayer, 0.4);
+        if (vol > 0) {
+            Bird.jumpSound.setVolume(vol);
+            Bird.jumpSound.stop();
+            Bird.jumpSound.play();
+        }
     }
 
     protected canJump (): boolean {

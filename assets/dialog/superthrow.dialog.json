@@ -23,7 +23,31 @@
         "►What are you up to? @what",
         "►[not talkedAboutSeed]I have this seed problem… @seed",
         "►[talkedAboutSeed]I still have this seed problem… @seed2",
+        "►[$gotBoneQuest]I have this bone problem… @bone",
         "►I'm off… @bye"
+    ],
+    "bone": [
+        "A bone problem…?",
+        "►[not gotBoneInfo]Yeah, I need to get a bone through a door",
+        "►[gotBoneInfo]How did the trick work again? @throw",
+        "Oh… that might be tricky.",
+        "As you know, items won't go through doors.",
+        "►Is there really nothing I can do?",
+        "Well… I'll let you in on a little secret.",
+        "Listen closely!",
+        "It's not that items can't go through doors.",
+        "They just don't want to.",
+        "But you can trick them with a precise throw.",
+        "►How would that help? @throw"
+    ],
+    "throw": [
+        "It's really easy.",
+        "You pretend to go through the door without the item.",
+        "Just throw it and enter the door as usual.",
+        "The trick is, that you time the throw in a way, that you can still catch it.",
+        "Going through a door takes some time after all!",
+        "I hope that helps with your bone problem.",
+        "►Awesome, I'll try that. !set gotBoneInfo @greetings"
     ],
     "who": [
         "I'm the almighty super throw!",
