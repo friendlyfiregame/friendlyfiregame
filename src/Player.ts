@@ -372,7 +372,7 @@ export class Player extends PhysicsEntity {
                     const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
                     this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
                 } else if (this.readableTrigger) {
-                    const proxy = new ConversationProxy(this.scene, this.position.x, this.position.y, this.readableTrigger.properties);
+                    const proxy = new ConversationProxy(this.scene, this.position, this.readableTrigger.properties);
                     this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
