@@ -1,18 +1,18 @@
-import { NPC } from './NPC';
-import { PIXEL_PER_METER } from './constants';
-import { rnd, rndInt, shiftValue } from './util';
-import { ParticleEmitter, valueCurves } from './Particles';
-import { Face, EyeType, FaceModes } from './Face';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { EyeType, Face, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
-import { entity } from "./Entity";
-import { Wood } from "./Wood";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { ParticleEmitter, valueCurves } from './Particles';
+import { PIXEL_PER_METER } from './constants';
 import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { RenderingLayer, RenderingType } from './Renderer';
+import { rnd, rndInt, shiftValue } from './util';
 import { ShibaState } from './Shiba';
 import { Sound } from './Sound';
 import { SoundEmitter } from './SoundEmitter';
+import { Wood } from './Wood';
 
 export const SHRINK_SIZE = 2;
 

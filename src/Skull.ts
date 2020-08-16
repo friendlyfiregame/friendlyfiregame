@@ -1,8 +1,8 @@
-import { entity } from "./Entity";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
+import { PhysicsEntity } from './PhysicsEntity';
 import { RenderingLayer } from './Renderer';
 
 @entity("skull")

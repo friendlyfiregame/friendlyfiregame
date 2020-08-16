@@ -1,17 +1,17 @@
-import { Scene } from "../Scene";
-import { FriendlyFire } from "../FriendlyFire";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { easeOutBounce } from "../easings";
-import { BitmapFont } from "../BitmapFont";
-import { asset } from "../Assets";
-import { MenuList, MenuItem } from '../Menu';
-import { ControlsScene } from './ControlsScene';
-import { TitleScene } from "./TitleScene";
-import { ControllerEvent } from "../input/ControllerEvent";
 import { AppInfoJSON } from 'appinfo.json';
+import { asset } from '../Assets';
+import { BitmapFont } from '../BitmapFont';
+import { ControllerEvent } from '../input/ControllerEvent';
+import { ControlsScene } from './ControlsScene';
+import { DIALOG_FONT } from '../constants';
+import { easeOutBounce } from '../easings';
+import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
+import { MenuList, MenuItem } from '../Menu';
+import { Scene } from '../Scene';
+import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
-import { DIALOG_FONT } from "../constants";
+import { TitleScene } from './TitleScene';
 
 enum MenuItemKey {
     RESUME = 'resume',

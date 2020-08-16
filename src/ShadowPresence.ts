@@ -1,10 +1,10 @@
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
 import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { RenderingLayer, RenderingType } from './Renderer';
 import { Sound } from './Sound';
 import { SoundEmitter } from './SoundEmitter';
 

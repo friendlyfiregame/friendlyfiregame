@@ -1,11 +1,11 @@
-import { getImageData } from "./graphics";
-import { ParticleEmitter, valueCurves, Particles } from "./Particles";
-import { rnd, rndInt, boundsFromMapObject } from "./util";
-import { asset } from "./Assets";
-import { GameScene, GameObject, isCollidableGameObject } from "./scenes/GameScene";
-import { Entity, Bounds } from './Entity';
+import { asset } from './Assets';
+import { Bounds, Entity } from './Entity';
+import { boundsFromMapObject, rnd, rndInt } from './util';
+import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScene';
 import { GameObjectInfo } from './MapInfo';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { getImageData } from './graphics';
+import { ParticleEmitter, Particles, valueCurves } from './Particles';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export enum Environment {
     AIR = 0,

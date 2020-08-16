@@ -1,10 +1,10 @@
 import { Aseprite } from './Aseprite'
 import { BitmapFont } from './BitmapFont'
-import { roundRect } from './SpeechBubble';
+import { Dance } from './Dance';
+import { Fire } from './Fire';
 import { GameScene } from './scenes/GameScene';
 import { ParticleEmitter } from './Particles';
-import { Fire } from './Fire';
-import { Dance } from './Dance';
+import { roundRect } from './SpeechBubble';
 
 export enum RenderingType {
   PARTICLE_EMITTER,

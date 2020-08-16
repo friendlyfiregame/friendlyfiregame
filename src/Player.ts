@@ -1,38 +1,39 @@
-import { SpeechBubble } from "./SpeechBubble";
-import {
-    DIALOG_FONT, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY, MAX_PLAYER_RUNNING_SPEED,
-    PLAYER_JUMP_TIMING_THRESHOLD, DOUBLE_JUMP_COLORS, PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_CARRY_HEIGHT
-} from "./constants";
-import { NPC } from './NPC';
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Snowball } from "./Snowball";
-import { Environment } from "./World";
-import { valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, sleep, rndInt, isDev, boundsFromMapObject } from './util';
-import { entity, Bounds } from "./Entity";
-import { Sound } from "./Sound";
-import { Dance } from './Dance';
-import { Stone, StoneState } from "./Stone";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
+import { BitmapFont } from './BitmapFont';
+import { Bounds, entity } from './Entity';
+import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
 import { Cloud } from './Cloud';
-import { Seed, SeedState } from "./Seed";
-import { PlayerConversation } from './PlayerConversation';
-import { Wood, WoodState } from "./Wood";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
-import { GameScene, FadeDirection, BgmId } from "./scenes/GameScene";
-import { GotItemScene, Item } from './scenes/GotItemScene';
-import { Conversation } from './Conversation';
-import { ControllerSpriteMap, ControllerAnimationTags } from "./input/ControllerFamily";
+import { ControllerAnimationTags, ControllerSpriteMap } from './input/ControllerFamily';
 import { ControllerEvent } from './input/ControllerEvent';
-import { QuestATrigger, QuestKey } from './Quests';
-import { GameObjectInfo } from './MapInfo';
-import { Sign } from './Sign';
-import { Wall } from './Wall';
-import { RenderingType, RenderingLayer } from './Renderer';
-import { ConversationProxy } from './ConversationProxy';
 import { ControllerManager } from './input/ControllerManager';
+import { Conversation } from './Conversation';
+import { ConversationProxy } from './ConversationProxy';
+import { Dance } from './Dance';
+import {
+    DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
+    PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
+    PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
+    SHORT_JUMP_GRAVITY
+} from './constants';
+import { Environment } from './World';
+import { GameObjectInfo } from './MapInfo';
+import { GotItemScene, Item } from './scenes/GotItemScene';
+import { NPC } from './NPC';
+import { ParticleEmitter, valueCurves } from './Particles';
+import { PhysicsEntity } from './PhysicsEntity';
+import { PlayerConversation } from './PlayerConversation';
+import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingLayer, RenderingType } from './Renderer';
+import { Seed, SeedState } from './Seed';
+import { Sign } from './Sign';
+import { Snowball } from './Snowball';
+import { Sound } from './Sound';
+import { SpeechBubble } from './SpeechBubble';
+import { Stone, StoneState } from './Stone';
+import { Wall } from './Wall';
+import { Wood, WoodState } from './Wood';
 
 const groundColors = [
     "#806057",

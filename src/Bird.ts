@@ -1,14 +1,14 @@
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from './NPC';
-import { valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, calculateVolume } from './util';
-import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
-import { Environment } from './World';
-import conversation from '../assets/dialog/bird.dialog.json';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { calculateVolume, rnd, rndItem } from './util';
 import { Conversation } from './Conversation';
+import conversation from '../assets/dialog/bird.dialog.json';
+import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from './constants';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { ParticleEmitter, valueCurves } from './Particles';
 import { RenderingLayer } from './Renderer';
 import { Sound } from './Sound';
 
@@ -57,7 +57,7 @@ export class Bird extends NPC {
     private isWaiting (): boolean {
         return this.state === BirdState.WAITING_LEFT || this.state === BirdState.WAITING_RIGHT;
     }
-    
+
     protected jump (): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));

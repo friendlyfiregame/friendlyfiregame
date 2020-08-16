@@ -1,16 +1,16 @@
 
-import { Environment } from "./World";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { CollidableGameObject, GameScene } from './scenes/GameScene';
+import { entity } from './Entity';
+import { Environment } from './World';
 import { EyeType, Face, FaceModes } from './Face';
-import { NPC } from './NPC';
-import { Sound } from './Sound';
-import { entity } from "./Entity";
-import { now } from "./util";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene, CollidableGameObject } from "./scenes/GameScene";
-import { QuestATrigger, QuestKey } from './Quests';
 import { GameObjectInfo } from './MapInfo';
+import { now } from './util';
+import { NPC } from './NPC';
+import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
 
 export enum StoneState {
     DEFAULT = 0,

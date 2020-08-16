@@ -1,8 +1,8 @@
+import { DROWNING_VELOCITY, PIXEL_PER_METER, GRAVITY, TERMINAL_VELOCITY } from './constants';
 import { Entity } from './Entity';
-import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY, TERMINAL_VELOCITY } from "./constants";
-import { Environment } from "./World";
-import { Player } from "./Player";
-import { GameObject } from "./scenes/GameScene";
+import { Environment } from './World';
+import { GameObject } from './scenes/GameScene';
+import { Player } from './Player';
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
