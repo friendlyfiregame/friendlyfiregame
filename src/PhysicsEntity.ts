@@ -1,4 +1,4 @@
-import { DROWNING_VELOCITY, PIXEL_PER_METER, GRAVITY, TERMINAL_VELOCITY } from './constants';
+import { DROWNING_VELOCITY, GRAVITY, PIXEL_PER_METER, TERMINAL_VELOCITY } from './constants';
 import { Entity } from './Entity';
 import { Environment } from './World';
 import { GameObject } from './scenes/GameScene';

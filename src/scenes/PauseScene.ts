@@ -7,7 +7,7 @@ import { DIALOG_FONT } from '../constants';
 import { easeOutBounce } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
-import { MenuList, MenuItem } from '../Menu';
+import { MenuItem, MenuList } from '../Menu';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
