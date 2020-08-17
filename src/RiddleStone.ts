@@ -1,8 +1,8 @@
-import { Entity } from "./Entity";
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { asset } from './Assets';
+import { Entity } from './Entity';
 import { GameObjectProperties } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
 import { RenderingLayer } from './Renderer';
 
 export class RiddleStone extends Entity {

@@ -1,12 +1,12 @@
-import { entity } from "./Entity";
-import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer } from './Renderer';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
 import powershiba1 from '../assets/dialog/powershiba1.dialog.json';
 import powershiba3 from '../assets/dialog/powershiba3.dialog.json';
+import { RenderingLayer } from './Renderer';
 
 export enum PowerShibaState {
     IN_CLOUDS,

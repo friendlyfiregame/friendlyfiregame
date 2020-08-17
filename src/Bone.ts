@@ -1,12 +1,12 @@
-import { entity } from "./Entity";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer } from './Renderer';
-import { Environment } from './World';
-import { Sound } from './Sound';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { GameScene } from './scenes/GameScene';
+import { PhysicsEntity } from './PhysicsEntity';
+import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
 
 @entity("bone")
 export class Bone extends PhysicsEntity {

@@ -1,11 +1,11 @@
-import { PIXEL_PER_METER } from "./constants";
-import { Environment } from "./World";
-import { entity } from "./Entity";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { GameObjectProperties } from "./MapInfo";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene, CollidableGameObject } from "./scenes/GameScene";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { CollidableGameObject, GameScene } from './scenes/GameScene';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { GameObjectProperties } from './MapInfo';
+import { PhysicsEntity } from './PhysicsEntity';
+import { PIXEL_PER_METER } from './constants';
 import { RenderingLayer } from './Renderer';
 
 @entity("movingplatform")

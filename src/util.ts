@@ -1,6 +1,6 @@
-import { MapObjectJSON } from '*/level.json';
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
+import { MapObjectJSON } from '*/level.json';
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from './constants';
 
 export type Vector2 = {x: number, y: number};

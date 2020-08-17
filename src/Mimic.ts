@@ -1,10 +1,10 @@
-import { entity } from "./Entity";
-import { NPC } from './NPC';
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import conversation from '../assets/dialog/mimic.dialog.json';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
+import conversation from '../assets/dialog/mimic.dialog.json';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
 import { Sound } from './Sound';
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }

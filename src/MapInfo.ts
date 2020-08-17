@@ -1,5 +1,5 @@
-import { Vector2 } from "./util";
-import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
+import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
+import { Vector2 } from './util';
 
 export enum MapObjectType {
     ENTITY = 'entity',
@@ -105,7 +105,7 @@ export class MapInfo {
         objects.forEach(o => o.y = mapHeight - o.y);
         return objects;
     }
-    
+
     public static getMapSize(): { width: number, height: number } {
         return {
             width: json.width * json.tilewidth,
