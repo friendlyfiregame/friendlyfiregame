@@ -1,5 +1,6 @@
 import { Game } from './Game';
 import { Scene, SceneConstructor, SceneProperties } from './Scene';
+import { Size } from './Geometry';
 
 export class Scenes<T extends Game> {
     public activeScene: Scene<T> | null = null;
@@ -111,13 +112,13 @@ export class Scenes<T extends Game> {
         });
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         this.sortedScenes.forEach(scene => {
             ctx.save();
             if (scene.currentTransition != null) {
-                scene.currentTransition.draw(ctx, () => scene.draw(ctx, width, height), width, height);
+                scene.currentTransition.draw(ctx, () => scene.draw(ctx, size), size);
             } else {
-                scene.draw(ctx, width, height)
+                scene.draw(ctx, size)
             }
             ctx.restore();
         });

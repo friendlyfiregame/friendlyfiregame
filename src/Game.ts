@@ -7,6 +7,7 @@ import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from './constants';
 import { GamepadInput } from './input/GamepadInput';
 import { Keyboard } from './input/Keyboard';
 import { Scenes } from './Scenes';
+import { Size } from './Geometry';
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump
@@ -34,8 +35,8 @@ export abstract class Game {
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
-    public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
-        const canvas = this.canvas = createCanvas(width, height);
+    public constructor(public readonly size = new Size(GAME_CANVAS_WIDTH, GAME_CANVAS_HEIGHT)) {
+        const canvas = this.canvas = createCanvas(size);
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
         // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.
         this.ctx = getRenderingContext(canvas, "2d", { alpha: false, desynchronized: false });
@@ -66,11 +67,11 @@ export abstract class Game {
     }
 
     private updateCanvasSize(): void {
-        const { width, height } = this;
-        const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / width, window.innerHeight / height)));
+        const { size } = this;
+        const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / size.width, window.innerHeight / size.height)));
         const style = this.canvas.style;
-        style.width = width * scale + "px";
-        style.height = height * scale + "px";
+        style.width = size.width * scale + "px";
+        style.height = size.height * scale + "px";
     }
 
     private gameLoop(): void {
@@ -79,12 +80,12 @@ export abstract class Game {
         this.update(dt);
         this.lastUpdateTime = currentUpdateTime;
 
-        const { ctx, width, height } = this;
+        const { ctx, size } = this;
         ctx.save();
         ctx.imageSmoothingEnabled = false;
         ctx.fillStyle = this.backgroundColor;
-        ctx.fillRect(0, 0, width, height);
-        this.draw(ctx, width, height);
+        ctx.fillRect(0, 0, size.width, size.height);
+        this.draw(ctx, size);
         ctx.restore();
 
         this.nextFrame();
@@ -100,8 +101,8 @@ export abstract class Game {
         this.scenes.update(dt);
     }
 
-    protected draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        this.scenes.draw(ctx, width, height);
+    protected draw(ctx: CanvasRenderingContext2D, size: Size): void {
+        this.scenes.draw(ctx, size);
     }
 
     public start(): void {

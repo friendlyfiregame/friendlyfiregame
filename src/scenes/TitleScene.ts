@@ -72,12 +72,12 @@ export class TitleScene extends Scene<FriendlyFire> {
     private logoAlphaProgress = 0;
     private animationDuration = 3;
 
-    private titleBasePosition = new Point(this.game.width / 2 - TitleScene.logoImage.width / 2, 60);
+    private titleBasePosition = new Point(this.game.size.width / 2 - TitleScene.logoImage.width / 2, 60);
     private titleLayer1Position = new Point(0, 70)
     private titleLayer2Position = new Point(0, 163)
     private titleLayer3Position = new Point(0, -125)
 
-    private menuBasePosition = new Point(this.game.width / 2, 190);
+    private menuBasePosition = new Point(this.game.size.width / 2, 190);
     private menuGap = 15;
 
     public setup(): void {

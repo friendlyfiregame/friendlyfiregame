@@ -50,7 +50,7 @@ import { World } from '../World';
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
 export interface GameObject {
-    draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
+    draw(ctx: CanvasRenderingContext2D, size: Size): void;
     update(dt: number): void;
 }
 
@@ -418,7 +418,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size) {
         ctx.save();
 
         // Center coordinate system
@@ -431,7 +431,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera.applyTransform(ctx);
 
         for (const obj of this.gameObjects) {
-            obj.draw(ctx, width, height);
+            obj.draw(ctx, size);
         }
 
         // Add all particle emitters to rendering queue

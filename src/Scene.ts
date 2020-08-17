@@ -2,6 +2,7 @@ import { ControllerManager } from './input/ControllerManager';
 import { Game } from './Game';
 import { Keyboard } from './input/Keyboard';
 import { Scenes } from './Scenes';
+import { Size } from './Geometry';
 import { Transition } from './Transition';
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
@@ -59,5 +60,5 @@ export abstract class Scene<T extends Game> {
 
     public update(dt: number): void {}
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {}
+    public draw(ctx: CanvasRenderingContext2D, size: Size) {}
 }

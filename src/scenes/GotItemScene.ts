@@ -4,7 +4,7 @@ import { BitmapFont } from '../BitmapFont';
 import { DIALOG_FONT } from '../constants';
 import { easeInExpo, easeOutExpo } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
-import { Point } from '../Geometry';
+import { Point, Size } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
@@ -101,11 +101,11 @@ export class GotItemScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size) {
         let metrics;
         const center = new Point(
-            (width / 2) - GotItemScene.itemImages[this.targetItem].width,
-            height >> 1
+            (size.width / 2) - GotItemScene.itemImages[this.targetItem].width,
+            size.height >> 1
         );
         const floatOffsetY = Math.sin(this.time * this.floatSpeed) * this.floatAmount;
 
@@ -114,7 +114,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         ctx.save();
         ctx.globalAlpha = 0.5;
         ctx.fillStyle = 'black';
-        ctx.fillRect(0, center.y - 1, width, 50);
+        ctx.fillRect(0, center.y - 1, size.width, 50);
 
         const itemNameText = this.titles[this.targetItem];
         metrics = GotItemScene.headlineFont.measureText(itemNameText);
@@ -122,7 +122,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         GotItemScene.headlineFont.drawText(
             ctx,
             itemNameText,
-            new Point((width - metrics.width) >> 1, center.y + 10),
+            new Point((size.width - metrics.width) >> 1, center.y + 10),
             'white'
         );
 
@@ -131,7 +131,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         GotItemScene.font.drawText(
             ctx,
             this.selectedSubtitle,
-            new Point((width - metrics.width) >> 1, center.y + 30),
+            new Point((size.width - metrics.width) >> 1, center.y + 30),
             'white'
         );
 

@@ -8,7 +8,7 @@ import { easeOutBounce } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
 import { MenuItem, MenuList } from '../Menu';
-import { Point } from '../Geometry';
+import { Point, Size } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
@@ -90,11 +90,11 @@ export class PauseScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         ctx.save();
         ctx.globalAlpha = 0.8;
         ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillRect(0, 0, size.width, size.height);
 
         PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', new Point(75, 100), 'white');
 
@@ -104,7 +104,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         PauseScene.font.drawText(
             ctx,
             versionText,
-            new Point(this.game.width - versionTextSize.width - 7, this.game.height - versionTextSize.height - 4),
+            new Point(this.game.size.width - versionTextSize.width - 7, this.game.size.height - versionTextSize.height - 4),
             'white',
             0,
             0.6

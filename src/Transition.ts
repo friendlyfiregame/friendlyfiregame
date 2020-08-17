@@ -1,5 +1,6 @@
 import { clamp } from './util';
 import { Easing, linear } from './easings';
+import { Size } from './Geometry';
 
 export type TransitionType = "in" | "out";
 
@@ -36,7 +37,7 @@ export class Transition {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number): void {}
+    public draw(ctx: CanvasRenderingContext2D, draw: () => void, size: Size): void {}
 
     public start(type: TransitionType): Promise<void> {
         if (this.promise == null) {

@@ -5,7 +5,7 @@ import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScen
 import { GameObjectInfo } from './MapInfo';
 import { getImageData } from './graphics';
 import { ParticleEmitter, Particles, valueCurves } from './Particles';
-import { Point } from './Geometry';
+import { Point, Size } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
 
 export enum Environment {
@@ -75,7 +75,7 @@ export class World implements GameObject {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number): void {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         const camX = this.scene.camera.x;
         const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
@@ -97,7 +97,7 @@ export class World implements GameObject {
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
                 translation: new Point(camX, -camY),
                 position: new Point(
-                    (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                    (-camX / bgX) + (-posXMultiplier * (size.width / 2)),
                     (-this.getHeight() + camY) / bgY
                 ),
                 asset: background

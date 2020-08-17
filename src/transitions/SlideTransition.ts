@@ -1,4 +1,5 @@
-import { Transition, TransitionOptions } from "../Transition";
+import { Size } from '../Geometry';
+import { Transition, TransitionOptions } from '../Transition';
 
 export type SlideDirection = "top" | "left" | "bottom" | "right";
 
@@ -14,17 +15,17 @@ export class SlideTransition extends Transition {
         this.direction = direction;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, draw: () => void, size: Size) {
         const value = this.valueOf();
 
         if (this.direction === "top") {
-            ctx.translate(0, -height * value);
+            ctx.translate(0, -size.height * value);
         } else if (this.direction === "bottom") {
-            ctx.translate(0, height * value);
+            ctx.translate(0, size.height * value);
         } else if (this.direction === "left") {
-            ctx.translate(-width * value, 0);
+            ctx.translate(-size.width * value, 0);
         } else if (this.direction === "right") {
-            ctx.translate(width * value, 0);
+            ctx.translate(size.width * value, 0);
         }
 
         draw();

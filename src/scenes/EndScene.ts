@@ -5,7 +5,7 @@ import { ControllerFamily } from '../input/ControllerFamily';
 import { CreditsScene } from './CreditsScene';
 import { DIALOG_FONT } from '../constants';
 import { FriendlyFire } from '../FriendlyFire';
-import { Point } from '../Geometry';
+import { Point, Size } from '../Geometry';
 import { Quest } from '../Quests';
 import { Scene } from '../Scene';
 import { Sound } from '../Sound';
@@ -50,13 +50,13 @@ export class EndScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.drawImage(EndScene.logo, width / 2 - EndScene.logo.width / 2, height / 2 - EndScene.logo.height / 2 - 15);
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
+        ctx.drawImage(EndScene.logo, size.width / 2 - EndScene.logo.width / 2, size.height / 2 - EndScene.logo.height / 2 - 15);
 
         if (this.time > this.subtitleDelay) {
             const endingLabel = this.ending ? this.ending.title : 'Unknown [E]nding';
             const size = EndScene.font.measureText(endingLabel);
-            EndScene.font.drawText(ctx, endingLabel, new Point(width / 2 - size.width / 2, height / 2 - EndScene.logo.height / 2 + 20), "red");
+            EndScene.font.drawText(ctx, endingLabel, new Point(size.width / 2 - size.width / 2, size.height / 2 - EndScene.logo.height / 2 + 20), "red");
         }
         // Inform the user, that it's possible to return to the title…
 
@@ -68,8 +68,8 @@ export class EndScene extends Scene<FriendlyFire> {
                 ctx,
                 txt,
                 new Point(
-                    width / 2 - txtSize.width / 2,
-                    height - txtSize.height - 15
+                    size.width / 2 - txtSize.width / 2,
+                    size.height - txtSize.height - 15
                 ),
                 "darkgrey"
             );

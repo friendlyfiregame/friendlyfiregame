@@ -7,7 +7,7 @@ import { ControllerManager } from '../input/ControllerManager';
 import { DIALOG_FONT } from '../constants';
 import { easeOutCubic } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
-import { Point } from '../Geometry';
+import { Point, Size } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 
@@ -83,17 +83,17 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ControlsScene.font.drawTextWithOutline(ctx, text, new Point(textPositionX, textPositionY), 'white', 'black');
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size) {
         ctx.save();
 
         ctx.globalAlpha = 0.8;
         ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillRect(0, 0, size.width, size.height);
 
         ctx.globalAlpha = 1;
 
-        const x = (width / 2) - ControlsScene.panelImage.width / 2;
-        const y = (height / 2) - (ControlsScene.panelImage.height / 2) - 16;
+        const x = (size.width / 2) - ControlsScene.panelImage.width / 2;
+        const y = (size.height / 2) - (ControlsScene.panelImage.height / 2) - 16;
         const textOffsetX = 10;
         const startingY = 35;
         const gap = 20;
