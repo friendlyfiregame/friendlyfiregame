@@ -65,11 +65,12 @@
   "scale": "1",
   "frameTags": [
    { "name": "jump", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "confirm", "from": 0, "to": 0, "direction": "forward" },
    { "name": "back", "from": 1, "to": 1, "direction": "forward" },
    { "name": "interact", "from": 3, "to": 3, "direction": "forward" },
    { "name": "up", "from": 4, "to": 4, "direction": "forward" },
    { "name": "action", "from": 5, "to": 5, "direction": "forward" },
-   { "name": "confirm", "from": 6, "to": 6, "direction": "forward" }
+   { "name": "pause", "from": 6, "to": 6, "direction": "forward" }
   ]
  }
 }

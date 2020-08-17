@@ -83,11 +83,9 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         switch(buttonId) {
             case MenuItemKey.CHARACTER:
                 this.game.campaign.toggleCharacterAsset();
-                console.log(this.game.campaign.selectedCharacter);
                 break;
             case MenuItemKey.VOICE:
                 this.game.campaign.toggleVoiceAsset();
-                console.log(this.game.campaign.selectedVoice);
                 break;
             case MenuItemKey.START:
                 await this.game.scenes.popScene({ noTransition: false });
