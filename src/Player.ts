@@ -60,7 +60,7 @@ const genderSwapColors = [
 ];
 
 const drownThoughts = [
-    { message: "Ok, I'm not Jesus. Noted!", duration: 4000 },
+    { message: "OK, I'm not Jesus. Noted!", duration: 4000 },
     { message: "Looks like I can't swim… But I can respawn, nice!", duration: 5000 },
     { message: "Well, that was strange… And wet.", duration: 4000 }
 ];

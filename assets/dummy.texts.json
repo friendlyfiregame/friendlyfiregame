@@ -50,7 +50,7 @@
                             "text": "Im so sorry",
                             "actions": [
                                 "face amused",
-                                "dialog ok"
+                                "dialog OK"
                             ]
                         }
                     ],
