@@ -243,7 +243,7 @@ export class Fire extends NPC {
         this.conversation = null;
 
         // Remove any reachable NPCs
-        for (const npc of [this.scene.spider, this.scene.shadowPresence]) {
+        for (const npc of [this.scene.shadowPresence]) {
             if (npc) {
                 this.scene.removeGameObject(npc);
             }

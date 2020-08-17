@@ -38,7 +38,7 @@ const JUMP_INTERVAL = 0.3;
 export class Shiba extends ScriptableNPC {
     @asset("sprites/shiba.aseprite.json")
     private static sprite: Aseprite;
-    @asset("sounds/ending/putOut.mp3")
+    @asset("sounds/ending/putout.mp3")
     private static putOutSound: Sound;
     @asset("sounds/jumping/jump_neutral.ogg")
     private static jumpSound: Sound;

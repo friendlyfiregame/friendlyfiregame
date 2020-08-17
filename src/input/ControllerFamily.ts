@@ -27,6 +27,8 @@ export enum ControllerSpriteMap {
  * This enum consists of all available animation tags supported by the button aseprite sheets
  */
 export enum ControllerAnimationTags {
+    CONFIRM = 'confirm',
+    JUMP = 'jump',
     ACTION = 'action',
     INTERACT = 'interact',
     OPEN_DOOR = 'up',

@@ -39,7 +39,6 @@ import { Shiba, ShibaState } from '../Shiba';
 import { Skull } from '../Skull';
 import { Sound } from '../Sound';
 import { SoundEmitter } from '../SoundEmitter';
-import { Spider } from '../Spider';
 import { Stone } from '../Stone';
 import { StoneDisciple } from '../StoneDisciple';
 import { SuperThrow } from '../SuperThrow';
@@ -184,7 +183,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public bird!: Bird;
     public shiba!: Shiba;
     public powerShiba!: PowerShiba;
-    public spider!: Spider;
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
@@ -251,7 +249,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba = this.getGameObject(Shiba);
         this.powerShiba = this.getGameObject(PowerShiba);
         this.shadowPresence = this.getGameObject(ShadowPresence);
-        this.spider = this.getGameObject(Spider);
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
         this.bone = this.getGameObject(Bone);
