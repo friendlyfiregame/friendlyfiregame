@@ -3,7 +3,7 @@
         "start":  [
             "Hi?",
             "Hoi\nWaddup?",
-            "Hey!\nYou!\nOver here..."
+            "Hey!\nYou!\nOver here…"
         ],
         "finished": [
             "Bye",
@@ -59,7 +59,7 @@
                             "text": "i forgive you"
                         },
                         "dumber": {
-                            "text": "You seem to be confused..."
+                            "text": "You seem to be confused…"
                         }
                     }
                 },

@@ -1,34 +1,50 @@
 {
   "$schema": "http://json.schemastore.org/package",
-  "name": "ludum-dare-46",
+  "name": "friendlyfire",
   "version": "1.0.0",
-  "description": "",
+  "description": "TODO",
+  "author": "TODO",
   "keywords": [],
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/iplabs/ludum-dare-46"
   },
+  "main": ".webpack/main",
   "scripts": {
-    "clean": "rimraf lib",
+    "clean": "rimraf lib dist out",
     "compile": "tsc",
     "watch": "tsc -w",
     "prepare": "npm run -s clean && npm run -s compile",
     "dist": "webpack",
-    "start": "webpack-dev-server -d"
+    "start": "webpack-dev-server -d",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "config": {
+    "forge": "electron-forge.config.js"
   },
   "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.51",
+    "@electron-forge/maker-deb": "6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.51",
+    "@electron-forge/maker-zip": "6.0.0-beta.51",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.51",
     "copy-webpack-plugin": "5.1.1",
+    "electron": "8.2.5",
+    "generate-json-webpack-plugin": "^1.0.0",
+    "git-revision-webpack-plugin": "^3.0.6",
     "rimraf": "3.0.2",
     "source-map-loader": "0.2.4",
     "steal": "2.2.4",
-    "typescript": "3.8.3",
-    "webpack": "4.42.1",
-    "webpack-cli": "3.3.11",
-    "webpack-dev-server": "3.10.3"
+    "typescript": "3.9.7",
+    "webpack": "4.44.1",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
-    "rxjs": "^6.5.5",
-    "tslib": "^1.11.1"
+    "electron-squirrel-startup": "^1.0.0",
+    "tslib": "^2.0.0"
   }
 }

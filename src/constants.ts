@@ -1,8 +1,21 @@
 /**
+ * Width of the game canvas in pixels.
+ */
+export const GAME_CANVAS_WIDTH = 480;
+
+/**
+ * Height of the game canvas in pixels.
+ */
+export const GAME_CANVAS_HEIGHT = 270;
+
+/**
  * Number if pixels per meter on the world map. Used to convert from pixel coordinates to meters (for size and
  * physics calculations).
  */
 export const PIXEL_PER_METER = 18;
+export const METER_PER_PIXEL = 1 / PIXEL_PER_METER;
+
+export const SOUND_INTENSITY_MULTIPLIER = 50;
 
 /** Gravity in m/s² */
 export const GRAVITY = 35;
@@ -16,6 +29,9 @@ export const DROWNING_VELOCITY = -1;
 /** Maximum movement speed of the player in m/s */
 export const MAX_PLAYER_SPEED = 5;
 
+/** Maximum movement speed of the player in m/s */
+export const MAX_PLAYER_RUNNING_SPEED = 7;
+
 /** Player movement acceleration on ground in m/s² */
 export const PLAYER_ACCELERATION = 30;
 
@@ -28,26 +44,19 @@ export const PLAYER_JUMP_HEIGHT = 3.75;
 /** Player jump height in meters. */
 export const PLAYER_BOUNCE_HEIGHT = 10;
 
-/** Animation speed for player idling in milliseconds */
-export const PLAYER_IDLE_ANIMATION = [ 100, 500, 50, 1000 ];
+/** Terminal velocity in m/s */
+export const TERMINAL_VELOCITY = -30;
 
-/** Animation speed for player dancing in milliseconds */
-export const PLAYER_DANCING_ANIMATION = [ 167, 167, 167, 167, 167, 167 ];
+/** Threshold in seconds for allowing a jump after entering falling state */
+export const PLAYER_JUMP_TIMING_THRESHOLD = 0.1;
 
-/** Animation speed for player running in milliseconds */
-export const PLAYER_RUNNING_ANIMATION = [ 150, 150, 150, 150 ];
+/** Color array containing all double jump particle colors */
+export const DOUBLE_JUMP_COLORS = [ "#ffffff", "#cccccc", "#aaaaaa" ];
 
-/** Animation speed for failing the dance doesn't really matter as just one frame each */
-export const PLAYER_FAIL_ANIMATION = [ 150 ];
+/** Player dimensions */
+export const PLAYER_HEIGHT = 1.60 * PIXEL_PER_METER;
+export const PLAYER_WIDTH = 0.5 * PIXEL_PER_METER;
+export const PLAYER_CARRY_HEIGHT = 4;
 
-/** Animation speed for the stone in milliseconds */
-export const STONE_ANIMATION = [ 167, 167, 167 ];
-
-/** Animation speed for the flameboy in milliseconds */
-export const FLAMEBOY_ANIMATION = [ 100, 100, 100, 100, 100, 100 ];
-
-/** Animation speed for the flameboy in milliseconds */
-export const WING_ANIMATION = [ 200, 200, 200, 200 ];
-
-/** Animation speed for the tree in milliseconds */
-export const TREE_ANIMATION = [ 250, 250 ];
+/** Fonts */
+export const DIALOG_FONT = "fonts/pixcelsior.font.json";

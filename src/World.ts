@@ -1,7 +1,11 @@
-import { loadImage, getImageData } from "./graphics";
-import { GameObject, Game, isCollidableGameObject, gameWidth } from "./game";
-import { ParticleEmitter, particles, valueCurves } from "./Particles";
-import { rnd, rndInt } from "./util";
+import { asset } from './Assets';
+import { Bounds, Entity } from './Entity';
+import { boundsFromMapObject, rnd, rndInt } from './util';
+import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScene';
+import { GameObjectInfo } from './MapInfo';
+import { getImageData } from './graphics';
+import { ParticleEmitter, Particles, valueCurves } from './Particles';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export enum Environment {
     AIR = 0,
@@ -13,24 +17,40 @@ export enum Environment {
     RAINCLOUD = 0xff00ff00
 }
 
+export const validEnvironments = Object.values(Environment);
+
 export class World implements GameObject {
-    private foreground!: HTMLImageElement;
-    private background!: HTMLImageElement;
-    private background2!: HTMLImageElement;
-    private background3!: HTMLImageElement;
-    private collisionMap!: Uint32Array;
-    private game: Game;
-    private raindrop!: HTMLImageElement;
+    @asset("maps/level.png")
+    private static foreground: HTMLImageElement;
+
+    @asset("maps/level_collision.png", { map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer) })
+    private static collisionMap: Uint32Array;
+
+    @asset([
+        "maps/bg.png",
+        "maps/bg2.png",
+        "maps/bg3.png"
+    ])
+    private static backgrounds: HTMLImageElement[];
+
+    private scene: GameScene;
+
+    @asset("sprites/raindrop.png")
+    private static raindrop: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = false;
 
-    public constructor(game: Game) {
-        this.game = game;
-        this.rainEmitter = particles.createEmitter({
-            position: {x: 2051, y: 2120},
+    public constructor(scene: GameScene) {
+        this.scene = scene;
+
+        const rainSpawnPosition = this.scene.pointsOfInterest.find(o => o.name === 'rain_spawn_position');
+        if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
+
+        this.rainEmitter = this.scene.particles.createEmitter({
+            position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
-            color: () => this.raindrop,
+            color: () => World.raindrop,
             size: 4,
             gravity: {x: 0, y: -100},
             lifetime: () => 3,
@@ -39,26 +59,12 @@ export class World implements GameObject {
         });
     }
 
-    public async load(): Promise<void> {
-        const worldImage = await loadImage("maps/debug.png");
-        const worldCollisionImage = await loadImage("maps/debug_collision.png");
-        if (worldImage.width !== worldCollisionImage.width || worldImage.height !== worldCollisionImage.height) {
-            throw new Error("World image must have same size as world collision image");
-        }
-        this.foreground = worldImage;
-        this.background = await loadImage("maps/bg.png");
-        this.background2 = await loadImage("maps/bg2.png");
-        this.background3 = await loadImage("maps/bg3.png");
-        this.collisionMap = new Uint32Array(getImageData(worldCollisionImage).data.buffer);
-        this.raindrop = await loadImage("sprites/raindrop.png");
-    }
-
     public getWidth(): number {
-        return this.foreground.width;
+        return World.foreground.width;
     }
 
     public getHeight(): number {
-        return this.foreground.height;
+        return World.foreground.height;
     }
 
     public update(dt: number) {
@@ -67,34 +73,41 @@ export class World implements GameObject {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        const bgX = this.getWidth() / this.background.width;
-        const bgY = this.getHeight() / this.background.height;
-
-        const bg2X = this.getWidth() / this.background2.width;
-        const bg2Y = this.getHeight() / this.background2.height;
-
-        const bg3X = this.getWidth() / this.background3.width;
-        const bg3Y = this.getHeight() / this.background3.height;
-
-        const camX = this.game.camera.x;
-        const camY = this.game.camera.y;
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+        const camX = this.scene.camera.x;
+        const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
-        ctx.save();
-        ctx.translate(camX, -camY);
-        ctx.drawImage(this.background, (-camX / bgX) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bgY);
-        ctx.drawImage(this.background2, (-camX / bg2X) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bg2Y);
-        ctx.drawImage(this.background3, (-camX / bg3X) + (-posXMultiplier * (gameWidth / 2)), (-this.getHeight() + camY) / bg3Y);
-        ctx.drawImage(this.foreground, -camX, -this.getHeight() + camY);
-        ctx.restore();
+
+        this.scene.renderer.add({
+            type: RenderingType.DRAW_IMAGE,
+            layer: RenderingLayer.TILEMAP_MAP,
+            translation: { x: camX, y: -camY },
+            position: { x: -camX, y: -this.getHeight() + camY },
+            asset: World.foreground
+        })
+
+        for (const background of World.backgrounds) {
+            const bgX = this.getWidth() / background.width;
+            const bgY = this.getHeight() / background.height;
+            this.scene.renderer.add({
+                type: RenderingType.DRAW_IMAGE,
+                layer: RenderingLayer.TILEMAP_BACKGROUND,
+                translation: { x: camX, y: -camY },
+                position: {
+                    x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                    y: (-this.getHeight() + camY) / bgY
+                },
+                asset: background
+            })
+        }
     }
 
     public getEnvironment(x: number, y: number): Environment {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
-        if (index < 0 || index >= this.collisionMap.length) {
+        if (index < 0 || index >= World.collisionMap.length) {
             return Environment.AIR;
         }
-        return this.collisionMap[index];
+        return World.collisionMap[index];
     }
 
     /**
@@ -106,7 +119,7 @@ export class World implements GameObject {
      *         specific meaning which isn't defined yet).
      */
     public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
-        for (const gameObject of this.game.gameObjects) {
+        for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y);
                 if (environment !== Environment.AIR && !ignore.includes(environment) ) {
@@ -116,19 +129,92 @@ export class World implements GameObject {
         }
 
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
-        if (index < 0 || index >= this.collisionMap.length) {
+        if (index < 0 || index >= World.collisionMap.length) {
             return 0;
         }
         const environment = this.getEnvironment(x, y);
-        if (ignore && ignore.includes(environment)) {
+        if ((!validEnvironments.includes(environment)) || (ignore && ignore.includes(environment))) {
             return Environment.AIR;
         }
-        return this.collisionMap[index];
+        return World.collisionMap[index];
+    }
+
+    /**
+     * Checks if a specific entity (`sourceEntity`) collides with either of of the entities in the gameObjects array
+     * of the GameScene and returns all entities that currently collide. `Particles` are taken out of this check automatically.
+     * @param sourceEntity    - The entity to be checked against the other entities
+     * @param margin          - Optional margin added to the bounding boxes of the entities to extend collision radius
+     * @param ignoreEntities  - Array of entities to be ignored with this check
+     * @return                - An array containing all entities that collide with the source entity.
+     */
+    public getEntityCollisions (sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
+        const collidesWith: Entity[] = [];
+        for (const gameObject of this.scene.gameObjects) {
+            if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && gameObject.isTrigger && !ignoreEntities.includes(gameObject)) {
+                const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(margin), gameObject.getBounds(margin));
+                if (colliding) {
+                    collidesWith.push(gameObject);
+                }
+            }
+        }
+        return collidesWith;
+    }
+
+    /**
+     * Returns all triggers that do collide with the provided entity
+     * @param sourceEntity Entity to check collisions against trigger boxes
+     */
+    public getTriggerCollisions (sourceEntity: Entity): GameObjectInfo[] {
+        const collidesWith: GameObjectInfo[] = [];
+        for (const triggerObject of this.scene.triggerObjects) {
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+            if (colliding) {
+                collidesWith.push(triggerObject);
+            }
+        }
+        return collidesWith;
+    }
+
+    public getGateCollisions (sourceEntity: Entity): GameObjectInfo[] {
+        const collidesWith: GameObjectInfo[] = [];
+        for (const gateObject of this.scene.gateObjects) {
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0));
+            if (colliding) {
+                collidesWith.push(gateObject);
+            }
+        }
+        return collidesWith;
+    }
+
+    public getCameraBounds (sourceEntity: Entity): GameObjectInfo[] {
+        const collidesWith: GameObjectInfo[] = [];
+        for (const triggerObject of this.scene.boundObjects) {
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+            if (colliding) {
+                collidesWith.push(triggerObject);
+            }
+        }
+        return collidesWith;
+    }
+
+    /**
+     * Checks if the two provided bounding boxes are touching each other
+     * @param box1 first bounding box
+     * @param box2 second bounding box
+     * @return `true` when the bounding boxes are touching, `false` if not.
+     */
+    private boundingBoxesCollide (box1: Bounds, box2: Bounds): boolean {
+        return !(
+            ((box1.y - box1.height) > (box2.y)) ||
+            (box1.y < (box2.y - box2.height)) ||
+            ((box1.x + box1.width) < box2.x) ||
+            (box1.x > (box2.x + box2.width))
+        );
     }
 
     public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
             GameObject | null {
-        for (const gameObject of this.game.gameObjects) {
+        for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y);
                 if (environment !== Environment.AIR && !ignore.includes(environment)) {

@@ -1,4 +1,6 @@
+import { GameScene } from './scenes/GameScene';
 import { GRAVITY } from './constants';
+import { RenderingLayer, RenderingType } from './Renderer';
 import { Vector2 } from './util';
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
@@ -24,26 +26,36 @@ export interface ParticleEmitterArguments {
     sizeCurve?: ValueCurve;
     angle?: number | NumberGenerator;
     angleSpeed?: number | NumberGenerator;
+    renderingLayer?: RenderingLayer;
+    zIndex?: number;
     update?: (p: Particle) => void
 };
 
 export class Particles {
+    private scene: GameScene;
     private emitters: ParticleEmitter[] = [];
 
-    constructor() {
-
-    }
-
-    public async load(): Promise<void> {
+    public constructor(scene: GameScene) {
+        this.scene = scene;
     }
 
     public update(dt: number): void {
         this.emitters.forEach(emitter => emitter.update(dt));
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        this.emitters.forEach(emitter => emitter.draw(ctx));
+    public addEmittersToRenderingQueue (): void {
+        this.emitters.forEach(emitter => {
+            this.scene.renderer.add({
+                type: RenderingType.PARTICLE_EMITTER,
+                layer: emitter.renderingLayer,
+                zIndex: emitter.zIndex,
+                emitter
+            })
+        });
     }
+
+    // Direct drawing of particles is deactivated since it's handled via rendering engine
+    public draw(ctx: CanvasRenderingContext2D): void {}
 
     public addEmitter(emitter: ParticleEmitter): void {
         this.emitters.push(emitter);
@@ -65,7 +77,6 @@ export class Particles {
     }
 
 }
-export const particles = new Particles();
 
 export class ParticleEmitter {
     private particles: Particle[];
@@ -85,6 +96,8 @@ export class ParticleEmitter {
     private blendMode: string;
     public alphaCurve: ValueCurve;
     public sizeCurve: ValueCurve;
+    public renderingLayer: RenderingLayer;
+    public zIndex: number;
     private updateMethod: ((p: Particle) => void) | undefined;
 
     constructor(args: ParticleEmitterArguments) {
@@ -105,6 +118,8 @@ export class ParticleEmitter {
         this.blendMode = args.blendMode || "source-over";
         this.alphaCurve = args.alphaCurve || valueCurves.constant;
         this.sizeCurve = args.sizeCurve || valueCurves.constant;
+        this.renderingLayer = args.renderingLayer || RenderingLayer.PARTICLES;
+        this.zIndex = args.zIndex !== undefined ? args.zIndex : 0;
         this.updateMethod = args.update;
 
         function toGenerator<tp>(obj: tp | (() => tp)): (() => tp) {
@@ -174,7 +189,6 @@ export class ParticleEmitter {
 }
 
 export class Particle {
-
     private halfSize: number;
     private originalLifetime: number;
     private progress: number = 0;

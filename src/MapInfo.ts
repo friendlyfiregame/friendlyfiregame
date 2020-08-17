@@ -1,18 +1,44 @@
-import { Vector2 } from "./util";
-import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/map.json";
+import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
+import { Vector2 } from './util';
+
+export enum MapObjectType {
+    ENTITY = 'entity',
+    TRIGGER = 'trigger',
+    POINTER = 'pointer',
+    GATE = 'gate',
+    BOUNDS = 'bounds',
+    SOUND = 'sound'
+}
 
 export interface GameObjectProperties {
     direction?: "up" | "down" | "left" | "right",
     distance: number;
-
-    /** */
     velocity: number;
+    target?: string;
+    duration?: number;
+    teleportY?: number;
+    disableParticles?: boolean;
+    setGlobalKey?: string;
+    setGlobalVal?: string;
+    setDialogEntity?: string;
+    setDialogValue?: string;
+    content?: string;
+    bgm?: string;
+    identifier?: string;
+    intensity?: number;
+    volume?: number;
+    sound?: string;
+    col?: number;
+    row?: number;
 }
 
 export interface GameObjectInfo {
     x: number;
     y: number;
     name: string;
+    type: string;
+    width: number;
+    height: number;
     properties: GameObjectProperties;
 }
 
@@ -30,7 +56,7 @@ export class MapInfo {
     }
 
     public getPlayerStart(): Vector2 {
-        const mapHeight = this.getMapSize().height;
+        const mapHeight = MapInfo.getMapSize().height;
         const object = this.getObject("player");
         if (object) {
             return { x: object.x, y: mapHeight - object.y }
@@ -39,12 +65,15 @@ export class MapInfo {
         }
     }
 
-    public getGameObjectInfos(): GameObjectInfo[] {
-        const mapHeight = this.getMapSize().height;
-        return this.getObjects().map(object => ({
+    public getGameObjectInfos(type: MapObjectType): GameObjectInfo[] {
+        const mapHeight = MapInfo.getMapSize().height;
+        return this.getObjects(type).map(object => ({
             name: object.name,
             x: object.x,
             y: mapHeight - object.y,
+            type: object.type,
+            width: object.width,
+            height: object.height,
             properties: (object.properties ?? []).reduce((props, property) => {
                 props[property.name] = property.value;
                 return props;
@@ -52,7 +81,32 @@ export class MapInfo {
         }));
     }
 
-    public getMapSize(): { width: number, height: number } {
+    public getEntities(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.ENTITY);
+    }
+    public getSounds(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.SOUND);
+    }
+    public getPointers(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.POINTER);
+    }
+    public getTriggerObjects(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.TRIGGER);
+    }
+    public getBoundObjects(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.BOUNDS);
+    }
+    public getGateObjects(): GameObjectInfo[] {
+        return this.getGameObjectInfos(MapObjectType.GATE);
+    }
+
+    public static normalizeCoordinates(objects: MapObjectJSON[]): MapObjectJSON[] {
+        const mapHeight = MapInfo.getMapSize().height;
+        objects.forEach(o => o.y = mapHeight - o.y);
+        return objects;
+    }
+
+    public static getMapSize(): { width: number, height: number } {
         return {
             width: json.width * json.tilewidth,
             height: json.height * json.tileheight

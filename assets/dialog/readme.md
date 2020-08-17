@@ -18,7 +18,7 @@ One dialog is a JSON file, containing an object with any number of keys, which r
 states that can be jumped to. There should always be an "entry" key, which is the state the conversation
 will start with when the player starts it for the very first time.
 Each of these keys holds an array of strings, which are twofold: Either a player option (marked by an
-initial ">"), or an NPC line. Each line may end with a state change and or an action.
+initial "►"), or an NPC line. Each line may end with a state change and or an action.
 
 ### State Changes
 
@@ -30,7 +30,7 @@ spoken by NPC or player, the dialog will continue in that state (with its first 
 
 Any kind of side effect in the game. Always starts with an exclamation mark, followed by the action name
 and possibly additional parameters. Includes camera behavior (e.g. "!zoomin", "!zoomout", "!zoomto <NPC name>"),
-NPC moods ("!angry", "!scared", ... whatever we support), game progress ("!enabledialog <NPC name> <dialog name>")
+NPC moods ("!angry", "!scared", … whatever we support), game progress ("!enabledialog <NPC name> <dialog name>")
 and more.
 
 ### Interpretation
@@ -41,16 +41,16 @@ see both at the same time. Multiple options after one another will always be vis
 It's possible to have one player option lead to more player options using state changes though:
 
 ```
-    ...
+    …
     "myState": [
         "I'm NPC XY and say stuff",
-        ">Greet",
-        ">Leave !end",
-        ">Insult @insults"
+        "►Greet",
+        "►Leave !end",
+        "►Insult @insults"
     ],
     "insults": [
-        ">You're heavy!",
-        ">I don't like you"
+        "►You're heavy!",
+        "►I don't like you"
     ]
 ```
 
@@ -59,20 +59,20 @@ It's sometimes possible to not use all that many states for every single player 
 but stay mostly in a single one linearly:
 
 ```
-    ...
+    …
     "entry": [
         "Hello you!",
-        ">Hi", /* all these lead to the same line below, mere illusion of choice! */
-        ">Hello you too!",
-        ">Who are you?",
+        "►Hi", /* all these lead to the same line below, mere illusion of choice! */
+        "►Hello you too!",
+        "►Who are you?",
         "I'm Steve the sentient stone!",
-        ">Whoa! A talking stone!",
-        ">You rock!",
-        ">What do you want from me? @want",
+        "►Whoa! A talking stone!",
+        "►You rock!",
+        "►What do you want from me? @want",
         "Well yes, thank you! And you are?",
-        ...
+        …
     ]
-    ...
+    …
 ```
 
 This way even longer conversations don't need to turn complex.

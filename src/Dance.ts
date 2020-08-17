@@ -1,8 +1,35 @@
-import { Game } from './game';
-import { valueCurves, ValueCurve } from './Particles';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { ControllerEvent } from './input/ControllerEvent';
+import { ControllerManager } from './input/ControllerManager';
+import { ControllerSpriteMap } from './input/ControllerFamily';
+import { GameScene } from './scenes/GameScene';
+import { RenderingLayer, RenderingType } from './Renderer';
 import { Sound } from './Sound';
+import { ValueCurve, valueCurves } from './Particles';
 
 export class Dance {
+    @asset("sounds/dancing/success.mp3")
+    private static successSound: Sound;
+
+    @asset("sounds/dancing/fail.mp3")
+    private static failSound: Sound;
+
+    @asset("music/raindance.ogg")
+    private static raindance_music: Sound;
+
+    @asset("music/dancing_queen.ogg")
+    private static treedance_music: Sound;
+
+    @asset("sprites/dancing_ui_bar.png")
+    private static bar: HTMLImageElement;
+
+    @asset("sprites/dancing_ui_indicator.png")
+    private static indicator: HTMLImageElement;
+
+    @asset("sprites/dancing_ui_keys.aseprite.json")
+    private static keys: Aseprite;
+
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
     /** Time of the first note, depends on openTime and warmupBeats */
@@ -21,13 +48,9 @@ export class Dance {
     private performance: Record<string, boolean>[] = [];
     private currentIndex = 0;
     private success = false;
-    private static successSound: Sound;
-    private static failSound: Sound;
-    private static raindance_music: Sound;
-    private static treedance_music: Sound;
 
     constructor(
-        private game: Game,
+        private scene: GameScene,
         private x: number,
         private y: number,
         private bpm = 128,
@@ -50,18 +73,6 @@ export class Dance {
         this.alphaCurve = valueCurves.cos(0.15);
     }
 
-    public static async load(): Promise<void> {
-        console.log('loading');
-        this.successSound = new Sound("sounds/dancing/success.mp3");
-        this.failSound = new Sound("sounds/dancing/fail.mp3");
-        this.raindance_music = new Sound("music/raindance.mp3");
-        this.raindance_music.setVolume(0);
-        this.raindance_music.stop();
-        this.treedance_music = new Sound("music/dancing_queen.mp3");
-        this.treedance_music.setVolume(0);
-        this.treedance_music.stop();
-    }
-
     public wasSuccessful(): boolean {
         return this.success;
     }
@@ -79,7 +90,7 @@ export class Dance {
     }
 
     private begin() {
-        this.openTime = this.game.gameTime;
+        this.openTime = this.scene.gameTime;
         this.startTime = this.openTime + this.warmupBeats / this.bpm * 60;
         this.currentKey = "";
         this.currentDistanceToIdealTime = 0;
@@ -101,9 +112,9 @@ export class Dance {
     }
 
     // Called by parent
-    public handleKeyDown(e: KeyboardEvent) {
+    public handleButtonDown(e: ControllerEvent) {
         if (!e.repeat && this.hasStarted()) {
-            const key = e.key.substr(-1).toLowerCase();
+            const key = e.isPlayerDance1 ? "1" : "2";
             if (this.allKeys.indexOf(key) >= 0) {
                 if (this.currentKey.includes(key)) {
                     if (this.currentDistanceToIdealTime <= this.timeTolerance) {
@@ -167,10 +178,8 @@ export class Dance {
         this.begin();
     }
 
-
-
     public update(dt: number): boolean {
-        const time = this.game.gameTime - this.startTime;
+        const time = this.scene.gameTime - this.startTime;
         this.progress = time * this.bpm / 60;
         const prevIndex = this.currentIndex;
         this.currentIndex = Math.floor(this.progress);
@@ -211,42 +220,55 @@ export class Dance {
         }
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            this.game.music[0].setVolume(0.25 * fade);
+            this.scene.fadeActiveBackgroundTrack(fade);
         } else {
             // own music paused
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
                 Dance.treedance_music.setVolume(0.8);
                 Dance.treedance_music.play();
-                this.game.music[0].setVolume(0);
+                GameScene.bgm1.setVolume(0);
+                GameScene.bgm2.setVolume(0);
             }
             if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
                 Dance.raindance_music.setVolume(0.8);
                 Dance.raindance_music.play();
-                this.game.music[0].setVolume(0);
+                GameScene.bgm1.setVolume(0);
+                GameScene.bgm2.setVolume(0);
             }
         }
     }
 
-    private resetMusic() {
+    public resetMusic() {
         Dance.raindance_music.stop();
         Dance.treedance_music.stop();
-        this.game.music[0].setVolume(0.25);
+        this.scene.resetMusicVolumes();
+    }
+
+    public addDanceToRenderQueue(): void {
+        this.scene.renderer.add({
+            type: RenderingType.DANCE,
+            layer: RenderingLayer.UI,
+            dance: this
+        });
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
+        const controller: ControllerSpriteMap = ControllerManager.getInstance().controllerSprite;
         ctx.save();
         ctx.translate(this.x, -this.y);
+
         // Key Bar
-        const w = 100, h = 18, w2 = w / 2, h2 = h / 2;
-        ctx.fillStyle = "#999";
-        ctx.fillRect(-w2 + 2, -h2 + 1, w - 4, h);
-        ctx.fillStyle = "white";
-        ctx.fillRect(-w2, -h2, w, 1);
-        ctx.fillRect(-w2, h2 + 1, w, 1);
+        const w = 100
+        const h = 18
+        const w2 = w / 2
+        const h2 = h / 2;
+
+        ctx.drawImage(Dance.bar, Dance.bar.width / -2, 1 + Dance.bar.height / -2);
+
         // Feedback
         if (this.progress - this.lastMistake < 1) {
             ctx.fillStyle = "red";
-            ctx.globalAlpha = (1 - this.progress + this.lastMistake) * 0.5;
+            ctx.globalAlpha = (1 - this.progress + this.lastMistake) * 0.6;
             ctx.fillRect(-w2 + 2, -h2 + 1, w - 4, h);
         }
         if (this.progress - this.lastSuccess < 1) {
@@ -271,27 +293,26 @@ export class Dance {
                     ctx.strokeStyle = "#ff8010";
                     if (this.performance[i]["1"] != null) {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
-                        ctx.fillRect(x - 5, y1, 9, 9);
+                        ctx.fillRect(x - 4, y1, 9, 9);
+                    } else {
+                        Dance.keys.drawTag(ctx, `${controller}-dance1`, x + Dance.keys.width / -2, y1);
                     }
-                    ctx.strokeRect(x - 5, y1, 9, 9);
-                    this.game.mainFont.drawText(ctx, "1", x - 2, y1 + 1, "black");
                 }
                 if (keys.includes("2")) {
                     ctx.strokeStyle = "blue";
                     if (this.performance[i]["2"] != null) {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
-                        ctx.fillRect(x - 5, y2, 9, 9);
+                        ctx.fillRect(x - 4, y2, 9, 9);
+                    } else {
+                        Dance.keys.drawTag(ctx, `${controller}-dance2`, x + Dance.keys.width / -2, y2);
                     }
-                    ctx.strokeRect(x - 5, y2, 9, 9);
-                    this.game.mainFont.drawText(ctx, "2", x - 3, y2 + 1, "black");
                 }
             }
         }
         // Sweet-spot
         ctx.globalAlpha = 1;
-        ctx.fillStyle = "#2080bf";
-        ctx.fillRect(sweetX - 6, -h2 + 1, 1, h);
-        ctx.fillRect(sweetX + 6, -h2 + 1, 1, h);
+        ctx.drawImage(Dance.indicator, sweetX - 8, 1 + Dance.indicator.height / -2);
+        ctx.drawImage(Dance.indicator, sweetX + 4, 1 + Dance.indicator.height / -2);
         ctx.restore();
     }
 }

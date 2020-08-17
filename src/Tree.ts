@@ -1,46 +1,56 @@
-
-import { Face, EyeType } from './Face';
-import { Game } from "./game";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { EyeType, Face } from './Face';
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { TREE_ANIMATION } from "./constants";
-import { entity } from "./Entity";
-import { loadImage } from "./graphics";
-import { Seed } from "./Seed";
+import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingLayer } from './Renderer';
+import { Seed } from './Seed';
 import { Wood } from './Wood';
 
 @entity("tree")
 export class Tree extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    @asset("sprites/tree.aseprite.json")
+    private static sprite: Aseprite;
+
     public seed: Seed;
     private wood: Wood;
 
-    public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 78, 140);
-        this.face = new Face(this, EyeType.TREE, 1, 5, 94);
-        this.seed = new Seed(game, x, y);
-        this.wood = new Wood(game, x, y);
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 78, 140);
+        this.face = new Face(scene, this, EyeType.TREE, 5, 94);
+        this.seed = new Seed(scene, x, y);
+        this.wood = new Wood(scene, x, y);
         this.startDialog();
     }
 
-    public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/tree.png"), 2, 1);
-        await this.seed.load();
-        await this.wood.load();
+    public showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
+        return (
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE &&
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
+        ) || (
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.MADE_RAIN &&
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TREE_DROPPED_WOOD
+        );
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        this.sprites.draw(ctx, this.spriteIndex);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        if (this.scene.showBounds) this.drawBounds();
         this.drawFace(ctx);
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt(ctx);
+        }
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
-        this.spriteIndex = getSpriteIndex(0, TREE_ANIMATION);
+        super.update(dt);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.update(dt, this.x + 4, this.y + 128);
+        }
     }
 
     startDialog(): void {
@@ -48,8 +58,8 @@ export class Tree extends NPC {
     }
 
     public spawnSeed(): Seed {
-        if (!this.game.gameObjects.includes(this.seed)) {
-            this.game.addGameObject(this.seed);
+        if (!this.scene.gameObjects.includes(this.seed)) {
+            this.scene.addGameObject(this.seed);
         }
         this.seed.x = this.x;
         this.seed.y = this.y + this.height / 2;
@@ -58,8 +68,8 @@ export class Tree extends NPC {
     }
 
     public spawnWood(): Wood {
-        if (!this.game.gameObjects.includes(this.wood)) {
-            this.game.addGameObject(this.wood);
+        if (!this.scene.gameObjects.includes(this.wood)) {
+            this.scene.addGameObject(this.wood);
         }
         this.wood.x = this.x;
         this.wood.y = this.y + this.height / 2;

@@ -1,7 +1,8 @@
 {
+    "lang": "en-US",
     "name": "Friendly Fire",
     "short_name": "Friendly Fire",
-    "start_url": ".",
+    "start_url": "./?utm_source=web_app_manifest",
     "display": "standalone",
     "background_color": "#cecece",
     "theme_color": "#e56026",
@@ -9,72 +10,82 @@
         "games"
     ],
     "orientation": "landscape",
-    "description": "Ludum Dare 46 Submission",
+    "description": "Can you save the world from an unknown destiny?",
     "icons": [
         {
-            "src": "assets/appicon/16x16.png",
+            "src": "assets/appicon.iconset/icon_16x16.png",
             "sizes": "16x16",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/32x32.png",
+            "src": "assets/appicon.iconset/icon_32x32.png",
             "sizes": "32x32",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/48x48.png",
+            "src": "assets/appicon.iconset/icon_48x48.png",
             "sizes": "48x48",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/64x64.png",
+            "src": "assets/appicon.iconset/icon_64x64.png",
             "sizes": "64x64",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/72x72.png",
+            "src": "assets/appicon.iconset/icon_72x72.png",
             "sizes": "72x72",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/96x96.png",
+            "src": "assets/appicon.iconset/icon_96x96.png",
             "sizes": "96x96",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/128x128.png",
+            "src": "assets/appicon.iconset/icon_128x128.png",
             "sizes": "128x128",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/144x144.png",
+            "src": "assets/appicon.iconset/icon_144x144.png",
             "sizes": "144x144",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/168x168.png",
+            "src": "assets/appicon.iconset/icon_168x168.png",
             "sizes": "168x168",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/192x192.png",
+            "src": "assets/appicon.iconset/icon_192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/256x256.png",
+            "src": "assets/appicon.iconset/icon_256x256.png",
             "sizes": "256x256",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/512x512.png",
+            "src": "assets/appicon.iconset/icon_512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         },
         {
-            "src": "assets/appicon/1024x1024.png",
+            "src": "assets/appicon.iconset/icon_1024x1024.png",
             "sizes": "1024x1024",
             "type": "image/png"
         }
-    ]
+    ],
+    "related_applications": [
+        {
+            "platform": "Web"
+        },
+        {
+            "platform": "steam",
+            "url": "https://store.steampowered.com/app/1311660/Friendly_Fire/"
+        }
+    ],
+    "prefer_related_applications": false
 }

@@ -1,28 +1,35 @@
-import { Game, CollidableGameObject } from "./game";
-import { PIXEL_PER_METER } from "./constants";
-import { Environment } from "./World";
-import { entity } from "./Entity";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { GameObjectProperties } from "./MapInfo";
-import { loadImage } from "./graphics";
-import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, timedRnd, rndInt } from './util';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { CollidableGameObject, GameScene } from './scenes/GameScene';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { GameObjectProperties } from './MapInfo';
+import { ParticleEmitter, valueCurves } from './Particles';
+import { PhysicsEntity } from './PhysicsEntity';
+import { PIXEL_PER_METER } from './constants';
+import { RenderingLayer } from './Renderer';
+import { rnd, rndInt, timedRnd } from './util';
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
+    @asset("sprites/cloud3.aseprite.json")
+    private static sprite: Aseprite;
+
+    @asset("sprites/raindrop.png")
+    private static raindrop: HTMLImageElement;
+
     private startX: number;
     private startY: number;
     private targetX: number;
     private targetY: number;
     private velocity: number;
-    private image!: HTMLImageElement;
-    private raindrop!: HTMLImageElement;
+
     private rainEmitter: ParticleEmitter;
     private raining = 0;
     private isRainCloud = false;
 
-    public constructor(game: Game, x: number, y: number, properties: GameObjectProperties, canRain = false) {
-        super(game, x, y, 74, 5);
+    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties, canRain = false) {
+        super(scene, x, y, 74, 5);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
@@ -41,23 +48,18 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             this.targetY = y - properties.distance;
             this.setVelocityY(-this.velocity);
         }
-        this.rainEmitter = particles.createEmitter({
+        this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
                         y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80) }),
-            color: () => this.raindrop,
+            color: () => Cloud.raindrop,
             size: 4,
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.7, 1.2),
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
         });
-    }
-
-    public async load(): Promise<void> {
-        this.image = await loadImage("sprites/cloud3.png");
-        this.raindrop = await loadImage("sprites/raindrop.png");
     }
 
     public startRain(time: number = Infinity) {
@@ -73,7 +75,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.drawImage(this.image, this.x - this.width / 2 - 4, -this.y - this.height - 16);
+        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS)
     }
 
     update(dt: number): void {

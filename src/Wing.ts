@@ -1,34 +1,44 @@
-import { entity } from "./Entity";
-import { Game } from "./game";
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { loadImage } from "./graphics";
-import { WING_ANIMATION } from "./constants";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
+import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingLayer } from './Renderer';
 
 @entity("wing")
 export class Wing extends NPC {
-    private sprites!: Sprites;
-    private spriteIndex = 0;
+    @asset("sprites/wing.aseprite.json")
+    private static sprite: Aseprite;
 
-    public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 24, 24);
+    private floatAmount = 4;
+    private floatSpeed = 2;
+
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 24, 24);
     }
 
-    public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/powerup_wing.png"), 4, 1);
+    protected showDialoguePrompt (): boolean {
+        if (!super.showDialoguePrompt()) return false;
+        return (
+            this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.PLANTED_SEED) &&
+            !this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)
+        );
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y);
-        this.sprites.draw(ctx, this.spriteIndex);
-        ctx.restore();
+        const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
+        this.scene.renderer.addAseprite(Wing.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES);
+        if (this.scene.showBounds) this.drawBounds();
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt(ctx);
+        }
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
-        this.spriteIndex = getSpriteIndex(0, WING_ANIMATION);
+        this.dialoguePrompt.update(dt, this.x, this.y + 16);
         this.speechBubble.update(this.x, this.y);
     }
 }

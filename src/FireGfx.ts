@@ -1,24 +1,27 @@
-import { rnd, clamp, orientPow } from './util';
-import { loadImage } from './graphics';
+import { asset } from './Assets';
+import { clamp, orientPow, rnd } from './util';
 import { ColorGradient } from './ColorGradient';
 
-
 export class FireGfx {
+    @asset("gradients/fire.png", { map: (image: HTMLImageElement) => ColorGradient.fromImage(image) })
     public static gradient: ColorGradient;
+
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private data: number[][];
     private decayData: number[][];
     private imageData: ImageData;
     private returnColor: number[] = [0, 0, 0, 255];
-    private updateSteps = 0;
     private bottomLine: number[] = [];
+    private nextUpdate = -Infinity;
+    private age = 0;
+    private startTime = 0;
 
     constructor(
         private w = 48,
         private h = 64,
         private coneShaped = true,
-        private stepModulo = 2
+        private updateMs = 33
     ) {
         this.canvas = document.createElement("canvas");
         this.canvas.width = this.w;
@@ -30,12 +33,10 @@ export class FireGfx {
         this.init();
     }
 
-    public static async load(): Promise<void> {
-        const gradientImg = await loadImage("gradients/fire.png");
-        this.gradient = ColorGradient.fromImage(gradientImg);
-    }
-
     private init() {
+        this.age = 0;
+        this.nextUpdate = -Infinity;
+        this.startTime = Date.now();
         const decay = this.decayData;
         const data = this.data;
         for (let y = 0; y < this.h; y++) {
@@ -69,8 +70,10 @@ export class FireGfx {
     }
 
     public update(dt: number) {
-        this.updateSteps++;
-        if (this.updateSteps % this.stepModulo === 0) {
+        const t = Date.now();
+        this.age = t - this.startTime;
+        if (t >= this.nextUpdate) {
+            this.nextUpdate = t + this.updateMs;
             this.updateStep();
             this.render();
         }
@@ -102,7 +105,7 @@ export class FireGfx {
         }
         // Bottom line always stays mostly the same, only minor variations
         const row = data[this.h - 1];
-        const t = this.updateSteps * 0.1
+        const t = this.age * 6 / 1000;
         const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764) * Math.sin(t * 0.5433)
                 * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
         const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);

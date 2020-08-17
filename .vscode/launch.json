@@ -1,0 +1,99 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Start development server & Debug in Chrome",
+            "configurations": [
+                "Launch webpack-dev-server",
+                "Launch Chrome against localhost"
+            ],
+            "stopAll": false,
+            "presentation": {
+                "hidden": false,
+                "group": "dev-server-and-debug",
+                "order": 1
+            }
+        },
+        {
+            "name": "Start development server & Debug in Firefox",
+            "configurations": [
+                "Launch webpack-dev-server",
+                "Launch Firefox against localhost"
+            ],
+            "stopAll": false,
+            "presentation": {
+                "hidden": false,
+                "group": "dev-server-and-debug",
+                "order": 2
+            }
+        },
+        {
+            "name": "Start development server & Debug in Microsoft Edge",
+            "configurations": [
+                "Launch webpack-dev-server",
+                "Launch Microsoft Edge against localhost"
+            ],
+            "stopAll": false,
+            "presentation": {
+                "hidden": false,
+                "group": "dev-server-and-debug",
+                "order": 3
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "webServerPort",
+            "type": "promptString",
+            "description": "Development Web Server port to use.",
+            "default": "8000",
+            "password": false
+        },
+        {
+            "id": "devMode",
+            "type": "pickString",
+            "description": "Whether development mode options will be available in-game or not.",
+            "default": "true",
+            "options": [
+                "true",
+                "false"
+            ]
+        }
+    ],
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch webpack-dev-server",
+            "program": "${workspaceFolder}/node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+            "args": [
+                "-d",
+                "--port=${input:webServerPort}"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:${input:webServerPort}?${input:devMode}",
+            "webRoot": "${workspaceFolder}",
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "Launch Firefox against localhost",
+            "url": "http://localhost:${input:webServerPort}?${input:devMode}",
+            "webRoot": "${workspaceFolder}",
+        },
+        {
+            "type": "edge",
+            "request": "launch",
+            "name": "Launch Microsoft Edge against localhost",
+            "url": "http://localhost:${input:webServerPort}?${input:devMode}",
+            "webRoot": "${workspaceFolder}",
+        }
+    ]
+}

@@ -1,64 +1,23 @@
 
 {
     "entry": [
-        "Hey, person!",
-        "I am starving, I fear to die very soon and my light will go out forever. @help !sad"
+        "Oh, you did it! That's the real deal. !amused !talkedToFireWithWood",
+        "Good job on scalping that piece of junk.",
+        "Just take the wood and throw it into my fire, just as we agreed.",
+        "►Got it.",
+        "►I have second thoughts… @secondthoughts",
+        "Just do it! @holdup !end"
     ],
-    "help": [
-        "Would you help me out, kind stranger?",
-        ">Oh my God, a talking fire?! @impressed",
-        ">Why should I help you? @why",
-        ">How can I help you? @how",
-        ">I don't care !angry",
-        "Oh you son of a ...! No, sorry, I get it. Well, maybe another time. !neutral",
-        "Just be aware this whole game is pretty pointless if you don't help me out... @help !end"
+    "holdup": [
+        "What's the holdup? !angry",
+        "Just take the wood and throw it into me! Seriously…",
+        "►Got it. @holdup !end"
     ],
-    "impressed": [
-        "Well yes, I'm impressed too. Took me some time to get used to it. @help !amused"
-    ],
-    "how": [
-        "I really need some wood. Surely a strong and marvelous man like you can help an old fire out.",
-        ">Sounds boring. Maybe later @bye",
-        ">I'm in. @details",
-        ">What do we say to the god of Fire?",
-        "I don't know, what?",
-        ">Not today! @bye"
-    ],
-    "why": [
-        "Because I am the essence of life. If I die, everything dies. Do you want everything to die?",
-        ">Oh, I wouldn't want to be responsible for that! @details",
-        ">I don't know, do I?",
-        "No!",
-        ">OK",
-        "So you'll help me then?",
-        ">Definitely! @details",
-        ">Do I even have a choice?",
-        "Technically yes. Practically deciding against it would be a little stupid though.",
-        ">Well OK then, you convinced me. @details",
-        ">Why?",
-        "Because your sole existence in this world hinges on helping to keep me alive.",
-        "That's why you're here. There's nothing else to do for you anyway.",
-        ">Great! I'll help you. @details",
-        ">I'd rather think about this in private @bye"
-    ],
-    "bye": [
-        "Sure, take your time. You'll come back eventually! @help !end"
-    ],
-    "details": [
-        "Great! I knew I could rely on you. I know a good person when I see one!",
-        ">So what exactly should I do?",
-        "It's easy! I just need a little firewood so I can keep burning for some longer.",
-        ">I can get you some wood!",
-        "Yes yes! But it needs to be special kind of wood.",
-        "There's a good tree in the East. His wood is good. !treezoom",
-        "Go ask him! !enable tree tree1",
-        ">Sure thing! @reminder !end"
-    ],
-    "reminder": [
-        "Hello again!",
-        ">What do I need to do?",
-        ">Bye @reminder !end",
-        "Go to East. Ask tree for wood. Bring me wood. Soon!",
-        ">On my way! @reminder !end"
+    "secondthoughts": [
+        "You can't be serious. Are you numb? !angry",
+        "Take the WOOD and THROW it into ME, you understand? !angry",
+        "Don't make me wait!",
+        "►Wow, calm down.",
+        "You calm down! Just give me the wood already! !angry @holdup !end"
     ]
 }

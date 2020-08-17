@@ -1,13 +1,15 @@
 {
     "entry": [
-        "Hello humble adventurer, welcome to my... wait, how did you get past the river? That's not how this works!",
-        ">Whoops, I'll be on my way.",
+        "Hello humble adventurer, welcome to my…",
+        "Wait, how did you get past the river? That's not how this works! !angry",
+        "►Whoops, I'll be on my way.",
         "Yeah, do that please. @visited !end"
     ],
     "visited": [
-        "No no no no! Don't go breaking all the precious sequences!",
-        "Go get the damn stone geezer and drown him in the river",
-        "Don't worry, he loves the abuse",
-        "> You're right @visited !end"
+        "No no no no! Don't go breaking all the precious sequences! !angry",
+        "Go get the damn stone geezer and drown him in the river.",
+        "Don't worry, he loves the abuse. !amused",
+        "►You're right.",
+        "Hush hush! @visited !end"
     ]
 }

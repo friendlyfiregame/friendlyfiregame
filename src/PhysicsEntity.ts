@@ -1,8 +1,8 @@
+import { DROWNING_VELOCITY, GRAVITY, PIXEL_PER_METER, TERMINAL_VELOCITY } from './constants';
 import { Entity } from './Entity';
-import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY } from "./constants";
-import { Environment } from "./World";
-import { Player } from "./Player";
-import { GameObject } from './game';
+import { Environment } from './World';
+import { GameObject } from './scenes/GameScene';
+import { Player } from './Player';
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -11,6 +11,12 @@ export abstract class PhysicsEntity extends Entity {
     private maxVelocityY = Infinity;
     private floating = false;
     private ground: GameObject | null = null;
+
+    // This property describes how much the player hitbox grows when
+    // this entity is carried. Defaults to the entities own height.
+    public carryHeight = this.height;
+
+    protected lastGroundPosition = { x: 0, y: 0 };
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
@@ -84,7 +90,7 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     private checkCollision(x: number, y: number, ignore?: Environment[]): Environment {
-        return this.game.world.collidesWith(x, y, [ this ], ignore);
+        return this.scene.world.collidesWith(x, y, [ this ], ignore);
     }
 
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
@@ -119,7 +125,8 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     public update(dt: number): void {
-        const world = this.game.world;
+        super.update(dt);
+        const world = this.scene.world;
 
         const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
         if (ground instanceof PhysicsEntity) {
@@ -139,6 +146,11 @@ export abstract class PhysicsEntity extends Entity {
                     this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
             if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
+
+                // Apply terminal velocity to falling entities
+                if (this.velocityY < 0) {
+                    this.velocityY = Math.max(this.velocityY, TERMINAL_VELOCITY);
+                }
             } else if (environment === Environment.WATER) {
                 this.velocityY = DROWNING_VELOCITY;
                 this.velocityX = 0;
@@ -149,6 +161,10 @@ export abstract class PhysicsEntity extends Entity {
                 }
                 this.x = Math.round(this.x);
                 this.y = Math.round(this.y);
+            } else {
+                // is on ground
+                this.lastGroundPosition.x = this.x;
+                this.lastGroundPosition.y = this.y;
             }
         }
     }

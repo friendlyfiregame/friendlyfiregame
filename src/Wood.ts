@@ -1,12 +1,14 @@
-import { entity } from "./Entity";
-import { Game } from "./game";
-import { Sprites } from "./Sprites";
-import { loadImage } from "./graphics";
-import { Environment } from "./World";
-import { now } from "./util";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Sound } from "./Sound";
-import { Milestone } from "./Player";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { GameObjectInfo } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { now } from './util';
+import { PhysicsEntity } from './PhysicsEntity';
+import { QuestKey, QuestATrigger } from './Quests';
+import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
 
 export enum WoodState {
     FREE = 0,
@@ -15,55 +17,57 @@ export enum WoodState {
 
 @entity("wood")
 export class Wood extends PhysicsEntity {
-    private sprites!: Sprites;
+    @asset("sprites/wood.aseprite.json")
+    private static sprite: Aseprite;
+
+    @asset("sounds/throwing/success.mp3")
+    private static successSound: Sound;
+    private floatingPosition: GameObjectInfo;
+
     public state = WoodState.FREE;
-    private successSound!: Sound;
 
-    public constructor(game: Game, x: number, y:number) {
-        super(game, x, y, 24, 24);
-    }
+    public constructor(scene: GameScene, x: number, y:number) {
+        super(scene, x, y, 26, 16);
 
-    public async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage("sprites/wood.png"), 1, 1);
-        this.successSound = new Sound("sounds/throwing/success.mp3");
+        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
+        if (!floatingPosition) throw new Error ('Could not find "recover_floating_position" point of interest in game scene');
+        this.floatingPosition = floatingPosition;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.x, -this.y + 1);
-        this.sprites.draw(ctx, 0);
-        ctx.restore();
+        this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        if (this.scene.showBounds) this.drawBounds();
     }
 
     public isCarried(): boolean {
-        return this.game.player.isCarrying(this);
+        return this.scene.player.isCarrying(this);
     }
 
     update(dt: number): void {
         super.update(dt);
         if (this.state === WoodState.SWIMMING) {
-            const diffX = 1035 - this.x;
+            const diffX = this.floatingPosition.x - this.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.x += moveX * dt;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
         if (this.state === WoodState.FREE || this.state === WoodState.SWIMMING) {
-            const player = this.game.player;
+            const player = this.scene.player;
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
             if (!this.isCarried() && this.state !== WoodState.SWIMMING
-                    && this.game.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+                    && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.y = 390;
+                this.y = this.floatingPosition.y + 8;
             }
         }
-        if (!this.isCarried() && this.distanceTo(this.game.fire) < 20) {
-            this.game.fire.feed(this);
-            this.game.player.achieveMilestone(Milestone.THROWN_WOOD_INTO_FIRE);
-            this.successSound.play();
+        if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
+            this.scene.fire.feed(this);
+            this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_WOOD_INTO_FIRE);
+            Wood.successSound.play();
         }
     }
 }

@@ -1,50 +1,73 @@
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Sprites } from './Sprites';
-import { loadImage } from './graphics';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export enum FaceModes {
-    NEUTRAL = 1,
-    ANGRY = 2,
-    BORED = 3,
-    AMUSED = 4,
-    SAD = 5
+    BLINK = "blink",
+    NEUTRAL = "neutral",
+    ANGRY = "angry",
+    BORED = "bored",
+    AMUSED = "amused",
+    SAD = "sad",
+    DISGUSTED = "disgusted"
 };
 
 export enum EyeType {
     STANDARD = 0,
     TREE = 1,
-    STONE = 2
+    STONE = 2,
+    FLAMEBOY = 3,
+    STONEDISCIPLE = 4
 }
 
 export class Face {
-    private static sprites: Sprites;
+    @asset([
+        "sprites/eyes/standard.aseprite.json",
+        "sprites/eyes/tree.aseprite.json",
+        "sprites/eyes/stone.aseprite.json",
+        "sprites/eyes/flameboy.aseprite.json",
+        "sprites/eyes/stonedisciple.aseprite.json",
+    ])
+    private static sprites: Aseprite[];
+
     private mode = FaceModes.NEUTRAL;
     private direction = 1; // 1 = right, -1 = left
 
     constructor(
+        private scene: GameScene,
         private owner: NPC,
         private eyeType: EyeType,
-        private scale = 1,
         private offX = 0,
         private offY = 20
     ) {}
-
-    public static async load(): Promise<void> {
-        this.sprites = new Sprites(await loadImage(`sprites/eyes.png`), 6, 3);
-    }
 
     public setMode(mode: FaceModes) {
         this.mode = mode;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.translate(this.owner.x + this.offX, -this.owner.y - this.offY);
-        ctx.scale(this.direction, 1);
-        const isBlinking = ((<any>window).game?.gameTime % 5) < 0.6;
-        const frame = isBlinking ? 0 : this.mode;
-        Face.sprites.draw(ctx, frame + (Face.sprites.getColumns() * this.eyeType), this.scale);
-        ctx.restore();
+        const sprite = Face.sprites[this.eyeType];
+        this.scene.renderer.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.ENTITIES,
+            asset: sprite,
+            scale: {
+                x: this.direction,
+                y: 1
+            },
+            translation: {
+                x: this.owner.x + this.offX,
+                y: -this.owner.y - this.offY
+            },
+            position: {
+                x: -sprite.width >> 1,
+                y: -sprite.height
+            },
+            animationTag: this.mode,
+            time: this.scene.gameTime * 1000
+        });
     }
 
     public toggleDirection(direction = this.direction > 0 ? -1 : 1) {
@@ -52,5 +75,7 @@ export class Face {
             this.direction = direction;
         }
     }
-
+    public setDirection(direction: number) {
+        this.direction = direction;
+    }
 }

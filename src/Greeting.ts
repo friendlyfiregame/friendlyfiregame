@@ -1,38 +1,34 @@
-import { NPC } from './NPC';
-import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
-import { SpeechBubble } from './SpeechBubble';
-import { rndItem } from './util';
 import { Campaign, CampaignState } from './Campaign';
-import { GameObject, Game } from './game';
+import { GameObject, GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { rndItem } from './util';
+import { ScriptedDialogJSON } from '../assets/dummy.texts.json';
+import { SpeechBubble } from './SpeechBubble';
 
 export class Greeting implements GameObject {
     public greetingRange = 120;
     private currentMatchingGreetings: string[] = [];
     private greetingActive = false;
-    /* used to prevent multiple greetings, e.g after a dialog has ended */
+    /* used to prevent multiple greetings, e.g. after a dialog has ended. */
     private greetingAlreadyShown = false;
 
     private speechBubble = new SpeechBubble(
-        this.game,
+        this.scene,
         this.npc.x,
-        this.npc.y,
-        "white"
+        this.npc.y
     );
 
     public get dialogActive(): boolean {
-        return !!this.game.player.playerConversation;
+        return !!this.scene.player.playerConversation;
     }
 
     public get campaign(): Campaign {
-        return this.game.campaign;
+        return this.scene.game.campaign;
     }
 
-    constructor(private game: Game, public npc: NPC, private dialogData: ScriptedDialogJSON) {
+    constructor(private scene: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
-        this.campaign.statesChanged$.subscribe(this.updateMatchingData.bind(this))
-    }
-
-    async load() {
+        this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
@@ -43,7 +39,7 @@ export class Greeting implements GameObject {
 
     public update(dt: number) {
         this.speechBubble.update(this.npc.x, this.npc.y);
-        const isInRange = this.npc.game.player.distanceTo(this.npc) < this.greetingRange;
+        const isInRange = this.npc.scene.player.distanceTo(this.npc) < this.greetingRange;
         if (isInRange && !this.greetingActive && !this.greetingAlreadyShown && !this.dialogActive) {
             this.setRandomGreeting();
             this.greetingActive = this.greetingAlreadyShown = true;

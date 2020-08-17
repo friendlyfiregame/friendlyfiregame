@@ -1,7 +1,8 @@
+import { ControllerEvent } from './input/ControllerEvent';
 import { Conversation, Interaction } from './Conversation';
-import { Player } from './Player';
+import { MenuList } from './Menu';
 import { NPC } from './NPC';
-import { FaceModes } from './Face';
+import { Player } from './Player';
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;
@@ -9,22 +10,25 @@ export class PlayerConversation {
 
     constructor(
         private readonly player: Player,
-        private readonly npc: NPC,
-        private readonly conversation: Conversation
+        public readonly npc: NPC,
+        private readonly conversation: Conversation,
+        private readonly autoMove = true
     ) {
         this.interaction = this.conversation.getNextInteraction();
         this.setSelectedOption(0);
         this.setBubblesContent();
         this.interaction?.npcLine?.executeBeforeLine();
+        npc.meet();
+
         // Ensure safe distance to NPC
-        const minDis = 28;
-        if (Math.abs(player.x - npc.x) < minDis) {
-            if (player.x < npc.x) {
-                player.x = npc.x - minDis;
-                player.direction = 1;
-            } else {
-                player.x = npc.x + minDis;
-                player.direction = -1;
+        if (this.autoMove) {
+            const minDis = 20;
+            if (Math.abs(player.x - npc.x) < minDis) {
+                if (player.x < npc.x) {
+                    player.startAutoMove(npc.x - minDis, true)
+                } else {
+                    player.startAutoMove(npc.x + minDis, true)
+                }
             }
         }
     }
@@ -39,7 +43,7 @@ export class PlayerConversation {
             }
             return true;
         }
-        this.player.game.camera.setCinematicBar(1);
+        this.player.scene.camera.setCinematicBar(1);
 
         return false;
     }
@@ -71,14 +75,18 @@ export class PlayerConversation {
         return this.selectedOption;
     }
 
-    public handleKey(e: KeyboardEvent) {
-        if (!e.repeat) {
+    public handleButton(e: ControllerEvent) {
+        if (e.isAbort && !e.isPause) {
+            this.endConversation();
+        } else if (!e.repeat) {
             // Enter to proceed
-            if (e.key == "Enter" || e.key == "e") {
+            if (e.isConfirm) {
                 this.proceed();
             }
-            const upDown = (["s", "ArrowDown"].includes(e.key) ? 1 : 0) - (["w", "ArrowUp"].includes(e.key) ? 1 : 0);
+            const upDown = (e.isMenuDown ? 1 : 0) - (e.isMenuUp ? 1 : 0);
             if (upDown !== 0) {
+                MenuList.click.stop();
+                MenuList.click.play();
                 this.setSelectedOption(this.selectedOption + upDown);
             }
         }
@@ -86,7 +94,6 @@ export class PlayerConversation {
 
     private proceed() {
         if (this.interaction) {
-
             if (this.npc.speechBubble.isCurrentlyWriting || this.npc.speechBubble.preventUnwantedSelection) {
                 this.npc.speechBubble.isCurrentlyWriting = false;
                 return;
@@ -97,6 +104,7 @@ export class PlayerConversation {
                 const index = (options.length === 1) ? 0 : this.selectedOption;
                 const option = options[index];
                 if (option) {
+                    MenuList.select.play();
                     option.execute();
                 } else {
                     console.error("Tried to execute invalid option at index " + index + " in interaction around line: "
@@ -104,6 +112,8 @@ export class PlayerConversation {
                 }
             }
             if (this.interaction.npcLine) {
+                MenuList.click.stop();
+                MenuList.click.play();
                 // NPC said something, player proceeds without any options
                 this.interaction.npcLine.execute();
             }
@@ -116,7 +126,7 @@ export class PlayerConversation {
         } else {
             if (this.interaction.npcLine) {
                 // Mostly NPCs execute actions at the beginning of their line, not afterwards
-                this.npc.face?.setMode(FaceModes.NEUTRAL);
+                this.npc.face?.setMode(this.npc.defaultFaceMode);
                 this.interaction.npcLine.executeBeforeLine();
             }
         }

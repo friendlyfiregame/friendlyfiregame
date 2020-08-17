@@ -1,13 +1,13 @@
 {
     "entry": [
-        "You are the dancing Tree,\nOld and Rough !amused",
-        "One hundred and seventeen,\nDancing Tree !amused",
-        ">hello?",
-        "Feel the beat from the tree topsee, oh yeah !amused",
-        ">He seems preoccupied with singing @visited !end"
+        "You are the dancing tree,\nOld and rough. !amused",
+        "One hundred and seventeen,\ndancing tree. !amused",
+        "►Hello?",
+        "Feel the beat from the tree topsee, oh yeah! !amused",
+        "►He seems preoccupied with singing. @visited !end"
     ],
     "visited": [
-        "la la la...",
-        ">Maybe I should talk to the fire first... @visited !end"
+        "La la la…",
+        "►Maybe I should talk to the fire first… @visited !end"
     ]
 }

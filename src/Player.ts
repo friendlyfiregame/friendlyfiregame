@@ -1,52 +1,40 @@
-import { SpeechBubble } from "./SpeechBubble";
-import { Game, GameStage } from "./game";
-import {
-    PIXEL_PER_METER, GRAVITY, MAX_PLAYER_SPEED, PLAYER_ACCELERATION, PLAYER_JUMP_HEIGHT,
-    PLAYER_IDLE_ANIMATION, PLAYER_RUNNING_ANIMATION, PLAYER_BOUNCE_HEIGHT, PLAYER_ACCELERATION_AIR, SHORT_JUMP_GRAVITY,
-    PLAYER_DANCING_ANIMATION, PLAYER_FAIL_ANIMATION
-} from "./constants";
-import { NPC } from './NPC';
-import { loadImage } from "./graphics";
-import { Sprites, getSpriteIndex } from "./Sprites";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Snowball } from "./Snowball";
-import { Environment } from "./World";
-import { particles, valueCurves, ParticleEmitter } from './Particles';
-import { rnd, rndItem, timedRnd, sleep, rndInt } from './util';
-import { entity } from "./Entity";
-import { Sound } from "./Sound";
-import { Dance } from './Dance';
-import { Stone, StoneState } from "./Stone";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
+import { BitmapFont } from './BitmapFont';
+import { Bounds, entity } from './Entity';
+import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
+import { CharacterAsset, VoiceAsset } from './Campaign';
 import { Cloud } from './Cloud';
-import { Seed, SeedState } from "./Seed";
+import { ControllerAnimationTags, ControllerSpriteMap } from './input/ControllerFamily';
+import { ControllerEvent } from './input/ControllerEvent';
+import { ControllerManager } from './input/ControllerManager';
+import { Conversation } from './Conversation';
+import { ConversationProxy } from './ConversationProxy';
+import { Dance } from './Dance';
+import {
+    DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
+    PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
+    PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
+    SHORT_JUMP_GRAVITY
+} from './constants';
+import { Environment } from './World';
+import { GameObjectInfo } from './MapInfo';
+import { GotItemScene, Item } from './scenes/GotItemScene';
+import { NPC } from './NPC';
+import { ParticleEmitter, valueCurves } from './Particles';
+import { PhysicsEntity } from './PhysicsEntity';
 import { PlayerConversation } from './PlayerConversation';
-import { Wood, WoodState } from "./Wood";
-import { Fire } from "./Fire";
-import { Tree } from "./Tree";
-import { FlameBoy } from "./FlameBoy";
-
-enum SpriteIndex {
-    IDLE0 = 0,
-    IDLE1 = 1,
-    IDLE2 = 2,
-    IDLE3 = 3,
-    WALK0 = 4,
-    WALK1 = 5,
-    WALK2 = 6,
-    WALK3 = 7,
-    JUMP = 8,
-    FALL = 9,
-    CARRY0 = 10,
-    CARRY1 = 11,
-    DANCE0 = 12,
-    DANCE1 = 13,
-    DANCE2 = 14,
-    DANCE3 = 15,
-    DANCE4 = 16,
-    DANCE5 = 17,
-    FAIL0 = 18,
-    FAIL1 = 19
-}
+import { QuestATrigger, QuestKey } from './Quests';
+import { RenderingLayer, RenderingType } from './Renderer';
+import { Seed, SeedState } from './Seed';
+import { Sign } from './Sign';
+import { Snowball } from './Snowball';
+import { Sound } from './Sound';
+import { SpeechBubble } from './SpeechBubble';
+import { Stone, StoneState } from './Stone';
+import { Wall } from './Wall';
+import { Wood, WoodState } from './Wood';
 
 const groundColors = [
     "#806057",
@@ -61,16 +49,10 @@ const bounceColors = [
     "#ff7070"
 ];
 
-const doubleJumpColors = [
-    "#ffffff",
-    "#cccccc",
-    "#aaaaaa"
-];
-
 const drownThoughts = [
     { message: "Ok, I'm not Jesus. Noted!", duration: 4000 },
-    { message: "Looks like I can't swim... But I can respawn, nice!", duration: 5000 },
-    { message: "Well, that was strange... And wet.", duration: 4000 }
+    { message: "Looks like I can't swim… But I can respawn, nice!", duration: 5000 },
+    { message: "Well, that was strange… And wet.", duration: 4000 }
 ];
 
 const drowningThoughts = [
@@ -81,76 +63,151 @@ const drowningThoughts = [
     { message: "Argh!", duration: 1000 }
 ];
 
-export enum Milestone {
-    JUST_ARRIVED,
-    TALKED_TO_FIRE,
-    TALKED_TO_TREE,
-    GOT_SEED,
-    PLANTED_SEED,
-    TALKED_TO_STONE,
-    GOT_STONE,
-    THROWN_STONE_INTO_WATER,
-    TALKED_TO_FLAMEBOY,
-    MADE_RAIN,
-    GOT_WOOD,
-    THROWN_WOOD_INTO_FIRE
-}
+export enum Gender {
+    FEMALE = 0,
+    MALE = 1
+};
 
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
 
+interface PlayerSpriteMetadata {
+    carryOffsetFrames?: number[];
+}
+
+type AutoMove = {
+    destinationX: number;
+    lastX: number;
+    turnAround: boolean;
+}
+
 @entity("player")
 export class Player extends PhysicsEntity {
-    private milestone = Milestone.JUST_ARRIVED;
+    @asset([
+        "sprites/pc/female.aseprite.json",
+        "sprites/pc/male.aseprite.json"
+    ])
+    public static playerSprites: Aseprite[];
+
+    @asset([
+        "sprites/buttons_keyboard.aseprite.json",
+        "sprites/buttons_xbox.aseprite.json",
+        "sprites/buttons_playstation.aseprite.json"
+    ])
+    public static buttons: Aseprite[];
+    public controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
+        [ControllerSpriteMap.KEYBOARD]: Player.buttons[0],
+        [ControllerSpriteMap.XBOX]: Player.buttons[1],
+        [ControllerSpriteMap.PLAYSTATION]: Player.buttons[2]
+    };
+
+    @asset("sounds/drowning/drowning.mp3")
+    private static drowningSound: Sound;
+
+    @asset("sounds/feet-walking/steps_single.mp3")
+    private static walkingSound: Sound;
+
+    @asset("sounds/throwing/throwing.mp3")
+    private static throwingSound: Sound;
+
+    @asset("sounds/gate/door_open.mp3")
+    private static enterGateSound: Sound;
+
+    @asset("sounds/gate/door_close.mp3")
+    private static leaveGateSound: Sound;
+
+    @asset([
+        "sounds/jumping/jumping_female.mp3",
+        "sounds/jumping/jumping.mp3"
+    ])
+    private static jumpingSounds: Sound[];
+
+    @asset("sounds/jumping/landing.mp3")
+    private static landingSound: Sound;
+
+    @asset("sounds/jumping/squish.mp3")
+    private static bouncingSound: Sound;
+
+    @asset(DIALOG_FONT)
+    private static font: BitmapFont;
+
     private lastHint = Date.now();
     private flying = false;
     public direction = 1;
-    private spriteIndex = SpriteIndex.IDLE0;
-    private legsSprite!: Sprites;
-    private bodySprite!: Sprites;
+    private playerSpriteMetadata: PlayerSpriteMetadata[] | null = null;
+    public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
+    private visible = false;
+
+    private running: boolean = false;
+
+    private jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
+
     public jumpDown: boolean = false;
     private jumpKeyPressed: boolean | null = false;
     private drowning = 0;
-    private readonly startX: number;
-    private readonly startY: number;
     private dance: Dance | null = null;
-    private currentFailSpriteIndex = 0;
+    private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
-    public doubleJump = false;
-    public multiJump = false;
+    private canRun = false;
+    private canRainDance = false;
+    private doubleJump = false;
+    private multiJump = false;
+    private hasFriendship = false;
+    private usedJump = false;
     private usedDoubleJump = false;
+    private autoMove: AutoMove | null = null;
+    public isControllable: boolean = true;
+    private showHints = false;
+
+    private characterAsset: CharacterAsset;
+    private voiceAsset: VoiceAsset;
 
     public playerConversation: PlayerConversation | null = null;
-    public speechBubble = new SpeechBubble(this.game, this.x, this.y, "white", true);
+
+    public speechBubble = new SpeechBubble(
+        this.scene,
+        this.x, this.y,
+        undefined,
+        undefined, undefined, undefined, undefined,
+        undefined,
+        true
+    );
     public thinkBubble: SpeechBubble | null = null;
 
-    private dialogRange = 50;
-    private dialogTipText = "Press 'Enter' or 'E' to talk";
     private closestNPC: NPC | null = null;
+    private readableTrigger?: GameObjectInfo;
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
-    private drowningSound!: Sound;
-    private walkingSound!: Sound;
-    private throwingSound!: Sound;
-    private jumpingSound!: Sound;
-    private landingSound!: Sound;
-    private bouncingSound!: Sound;
+    // private genderSwapEmitter: ParticleEmitter;
+    private disableParticles = false;
 
-    public constructor(game: Game, x: number, y: number) {
-        super(game, x, y, 0.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
-        this.startX = x;
-        this.startY = y;
+    public constructor(scene: GameScene, x: number, y: number) {
+        super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        this.isControllable = false;
+        this.setFloating(true);
+
+        // Apply selected character traits
+        this.characterAsset = this.scene.game.campaign.selectedCharacter;
+        this.voiceAsset = this.scene.game.campaign.selectedVoice;
+        Conversation.setGlobal("ismale", this.characterAsset === CharacterAsset.MALE ? "true" : "false");
+
+        setTimeout(() => {
+            this.isControllable = true;
+            this.visible = true;
+            this.setFloating(false);
+        }, 2200);
+
         document.addEventListener("keydown", event => this.handleKeyDown(event));
-        document.addEventListener("keyup", event => this.handleKeyUp(event));
-        if (this.game.dev) {
+
+        if (isDev()) {
             console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
-                "wood, T to throw useless snowball, K to learn all abilities");
+                "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
         }
-        this.setMaxVelocity(MAX_PLAYER_SPEED);
-        this.dustEmitter = particles.createEmitter({
+        this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
+        this.dustEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
@@ -159,7 +216,7 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.bounceEmitter = particles.createEmitter({
+        this.bounceEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
             color: () => rndItem(bounceColors),
@@ -168,10 +225,10 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.doubleJumpEmitter = particles.createEmitter({
+        this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
-            color: () => rndItem(doubleJumpColors),
+            color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1.5, 3),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
@@ -179,106 +236,206 @@ export class Player extends PhysicsEntity {
         });
     }
 
-    public async load(): Promise<void> {
-        this.legsSprite = new Sprites(await loadImage("sprites/main_legs.png"), 4, 5);
-        this.bodySprite = new Sprites(await loadImage("sprites/main_body.png"), 4, 5);
-        this.drowningSound = new Sound("sounds/drowning/drowning.mp3");
-        this.walkingSound = new Sound("sounds/feet-walking/steps_single.mp3");
-        this.throwingSound = new Sound("sounds/throwing/throwing.mp3");
-        this.jumpingSound = new Sound("sounds/jumping/jumping.mp3");
-        this.landingSound = new Sound("sounds/jumping/landing.mp3");
-        this.bouncingSound = new Sound("sounds/jumping/squish.mp3");
+    public getControllable (): boolean {
+        return this.isControllable;
     }
 
-    private async handleKeyDown(event: KeyboardEvent) {
-        if (this.game.stage === GameStage.TITLE) {
+    public setControllable (isControllable: boolean): void {
+        this.isControllable = isControllable;
+    }
+
+    public startAutoMove (x: number, turnAround: boolean) {
+        if (!this.autoMove) {
+            // this.isControllable = false;
+            this.autoMove = {
+                destinationX: x,
+                lastX: this.x,
+                turnAround
+            };
+        }
+        // Failsafe to stop automove after 1 second.
+        setTimeout(() => {
+            if (this.autoMove) this.stopAutoMove();
+        }, 1000);
+    }
+
+    public stopAutoMove (): void {
+        if (this.autoMove?.turnAround) {
+            this.direction = this.direction * -1;
+        }
+        this.autoMove = null;
+        this.moveRight = false;
+        this.moveLeft = false;
+        // this.isControllable = true;
+    }
+
+    public enableRunning (): void {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
+        if (!this.canRun) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.RUNNING });
+            this.canRun = true;
+        }
+    }
+
+    public enableRainDance (): void {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
+        if (!this.canRainDance) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.RAINDANCE });
+            this.canRainDance = true;
+        }
+    }
+
+    public enableDoubleJump (): void {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
+        if (!this.doubleJump) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
+            this.doubleJump = true;
+        }
+    }
+
+    public enableMultiJump (): void {
+        this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
+        if (!this.multiJump) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
+            this.multiJump = true;
+        }
+    }
+    public disableMultiJump (): void {
+        this.multiJump = false;
+    }
+
+    public enableFriendship (): void {
+        if (!this.hasFriendship) {
+            this.scene.scenes.pushScene(GotItemScene, { item: Item.FRIENDSHIP });
+            this.hasFriendship = true;
+            Conversation.setGlobal("hasFriendship", "true");
+            this.scene.removeGameObject(this.scene.powerShiba);
+        }
+    }
+
+    public removePowerUps (): void {
+        this.multiJump = false;
+        this.doubleJump = false;
+        this.canRun = false;
+    }
+
+    public getDance (): Dance | null {
+        return this.dance;
+    }
+
+    public cancelDance (): void {
+        this.dance = null;
+    }
+
+    public async handleButtonDown(event: ControllerEvent) {
+        if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
         if (this.dance) {
-            this.dance.handleKeyDown(event);
+            this.dance.handleButtonDown(event);
             return;
         }
-        if (!this.game.camera.isOnTarget() || event.repeat) {
+        if (!this.scene.camera.isOnTarget() || event.repeat) {
             return;
         }
         if (this.playerConversation) {
-            this.playerConversation.handleKey(event);
+            this.playerConversation.handleButton(event);
             return;
         }
-        if ((event.key === "ArrowRight" || event.key === "d")) {
-            this.direction = 1;
-            this.moveRight = true;
-            this.moveLeft = false;
-        } else if ((event.key === "ArrowLeft" || event.key === "a")) {
-            this.direction = -1;
-            this.moveLeft = true;
-            this.moveRight = false;
-        } else if (event.key === "Enter" || event.key === "e") {
-            if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation() &&
-                    this.closestNPC.conversation) {
-                this.playerConversation = new PlayerConversation(this, this.closestNPC, this.closestNPC.conversation);
-                if (this.closestNPC instanceof Fire) {
-                    this.achieveMilestone(Milestone.TALKED_TO_FIRE);
-                }
-                if (this.closestNPC instanceof Tree) {
-                    this.achieveMilestone(Milestone.TALKED_TO_TREE);
-                }
-                if (this.closestNPC instanceof Stone) {
-                    this.achieveMilestone(Milestone.TALKED_TO_STONE);
-                }
-                if (this.closestNPC instanceof FlameBoy) {
-                    this.achieveMilestone(Milestone.TALKED_TO_FLAMEBOY);
-                }
-            } else if (this.canDanceToMakeRain()) {
-                this.startDance(this.game.apocalypse ? 3 : 2);
-                this.achieveMilestone(Milestone.MADE_RAIN);
-            } else {
-                if (this.carrying instanceof Stone) {
-                    if (this.canThrowStoneIntoWater()) {
-                        this.carrying.setVelocity(10 * this.direction, 10);
-                        this.carrying = null;
-                        this.throwingSound.stop();
-                        this.throwingSound.play();
-                    } else {
-                        // TODO Say something when wrong place to throw
-                    }
-                } else if (this.carrying instanceof Seed) {
-                    this.carrying.setVelocity(5 * this.direction, 5);
-                    this.carrying = null;
-                    this.throwingSound.stop();
-                    this.throwingSound.play();
-                } else if (this.carrying instanceof Wood) {
-                    this.carrying.setVelocity(5 * this.direction, 5);
-                    this.carrying = null;
-                    this.throwingSound.stop();
-                    this.throwingSound.play();
-                }
-            }
-        } else if ((event.key === " " || event.key === "w" || event.key === "ArrowUp") && this.canJump()) {
-            this.jumpKeyPressed = true;
-            this.jump();
-        } else if ((event.key === "s" || event.key === "ArrowDown")) {
-            this.jumpDown = true;
+
+        if (this.canRun && event.isPlayerRun) {
+            this.running = true;
         }
 
-        if (this.game.dev) {
+        if (event.isPlayerMoveRight) {
+            this.moveRight = true;
+            this.moveLeft = false;
+        } else if (event.isPlayerMoveLeft) {
+            this.moveLeft = true;
+            this.moveRight = false;
+        } else if (event.isPlayerEnterDoor) {
+            if (!this.canEnterDoor()) return;
+            const gate = this.scene.world.getGateCollisions(this)[0];
+            this.enterGate(gate);
+        } else if (event.isPlayerInteract) {
+            // Check for gates / doors
+            if (!this.flying) {
+                if (this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                    const conversation = this.closestNPC.conversation;
+                    // Disable auto movement to a safe talking distance for the stone in the river
+                    const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
+                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+                } else if (this.readableTrigger) {
+                    const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
+                    this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
+                } else if (this.canDanceToMakeRain()) {
+                    this.startDance(this.scene.apocalypse ? 3 : 2);
+                    this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
+                }
+            }
+        } else if (event.isPlayerAction) {
+            if (this.isCarrying()) this.throw();
+        } else if (event.isPlayerJump && this.canJump()) {
+            this.jumpKeyPressed = true;
+            this.jump();
+        } else if (event.isPlayerDrop) {
+            this.jumpDown = true;
+        }
+    }
+
+    public throw (): void {
+        if (!this.carrying || (this.carrying instanceof Stone && !this.canThrowStoneIntoWater())) {
+            return;
+        }
+
+        if (this.carrying instanceof Stone) {
+            this.carrying.setVelocity(10 * this.direction, 10);
+        } else {
+            this.carrying.setVelocity(5 * this.direction, 5);
+        }
+
+        this.height = PLAYER_HEIGHT;
+        this.carrying = null;
+        Player.throwingSound.stop();
+        Player.throwingSound.play();
+    }
+
+    // Used in dev mode to enable some special keys that can only be triggered
+    // by using a keyboard.
+    public handleKeyDown(event: KeyboardEvent): void {
+        if (this.scene.paused) {
+            return;
+        }
+        if (!this.scene.camera.isOnTarget() || event.repeat) {
+            return;
+        }
+
+        if (isDev()) {
             if (event.key === "c") {
                 // TODO Just for debugging. Real dancing is with action key on rain cloud
                 this.startDance(3);
             } else if (event.key === "p" && !this.carrying) {
                 // TODO Just for debugging, this must be removed later
-                this.carry(this.game.stone);
+                this.carry(this.scene.stone);
             } else if (event.key === "o" && !this.carrying) {
-                this.carry(this.game.tree.spawnSeed());
+                this.carry(this.scene.tree.spawnSeed());
+            } else if (event.key === "u" && !this.carrying) {
+                this.carry(this.scene.bone);
             } else if (event.key === "i" && !this.carrying) {
-                this.carry(this.game.tree.seed.spawnWood());
+                this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.game.gameObjects.push(new Snowball(this.game, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
-                this.throwingSound.stop();
-                this.throwingSound.play();
+                this.scene.gameObjects.push(new Snowball(this.scene, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+                Player.throwingSound.stop();
+                Player.throwingSound.play();
             } else if (event.key === "k") {
                 this.multiJump = true;
                 this.doubleJump = true;
+                this.canRun = true;
+                this.canRainDance = true;
+                this.think("I can everything now", 1500);
+            } else if (event.key === "m") {
+                this.scene.showBounds = !this.scene.showBounds;
+                this.think("Toggling Bounds", 1500);
             }
         }
     }
@@ -288,7 +445,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.game, this.x, this.y, "white", false)
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y)
         thinkBubble.setMessage(message);
         thinkBubble.show();
         await sleep(time);
@@ -302,23 +459,58 @@ export class Player extends PhysicsEntity {
         if (!this.dance) {
             switch (difficulty) {
                 case 1:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
                             1, undefined, true, 0);
                     break;
                 case 2:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
                     break;
                 case 3:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "112 221 312 123 2121121 111 222 3    ", undefined, 4);
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "112 221 312 123 2121121 111 222 3    ", undefined, 4);
                     break;
                 default:
-                    this.dance = new Dance(this.game, this.x, this.y - 25, 192, "3");
+                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "3");
+            }
+        }
+    }
+
+    /**
+     * Teleport the player fromt he source gate to it's corresponding target gate.
+     * The teleport is not instand but accompanied by a fade to black to obscure the teleportation.
+     * Also sets the camera bounds to the target position
+     * @param gate the source the player enters
+     */
+    private enterGate(gate: GameObjectInfo): void {
+        if (gate && gate.properties.target) {
+            this.isControllable = false;
+            this.moveRight = false;
+            this.moveLeft = false;
+            const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
+            const targetBgmId = gate.properties.bgm;
+
+            if (targetGate) {
+                Player.enterGateSound.stop();
+                Player.enterGateSound.play();
+                this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
+                .then(() => {
+                    if (targetBgmId) this.scene.setActiveBgmTrack(targetBgmId as BgmId);
+                    Player.leaveGateSound.stop();
+                    Player.leaveGateSound.play();
+                    this.x = targetGate.x + (targetGate.width / 2);
+                    this.y = targetGate.y - targetGate.height;
+                    this.scene.camera.setBounds(this.getCurrentMapBounds())
+                    this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
+                        this.isControllable = true;
+                    });
+                });
             }
         }
     }
 
     private canJump(): boolean {
         if (this.multiJump) {
+            return true;
+        } else if (!this.usedJump && this.jumpThresholdTimer > 0) {
             return true;
         } else if (this.doubleJump) {
             return !this.usedDoubleJump;
@@ -328,69 +520,101 @@ export class Player extends PhysicsEntity {
 
     private jump(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-        this.jumpingSound.stop();
-        this.jumpingSound.play();
-        if (this.flying) {
+        Player.jumpingSounds[this.voiceAsset].stop();
+        Player.jumpingSounds[this.voiceAsset].play();
+
+        if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
-            this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
-            this.doubleJumpEmitter.emit(20);
+            if (!this.disableParticles && this.visible) {
+                this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+                this.doubleJumpEmitter.emit(20);
+            }
+        }
+        this.usedJump = true;
+    }
+
+    public handleButtonUp(event: ControllerEvent) {
+        if (this.scene.paused || !this.isControllable || this.autoMove) {
+            return;
+        }
+        if (event.isPlayerMoveRight) {
+            this.moveRight = false;
+        } else if (event.isPlayerMoveLeft) {
+            this.moveLeft = false;
+        } else if (event.isPlayerJump) {
+            this.jumpKeyPressed = false;
+        } else if (event.isPlayerDrop) {
+            this.jumpDown = false;
+        } else if (event.isPlayerRun) {
+            this.running = false;
         }
     }
 
-    private handleKeyUp(event: KeyboardEvent) {
-        if (event.key === "ArrowRight" || event.key === "d") {
-            this.moveRight = false;
-        } else if (event.key === "ArrowLeft" || event.key === "a") {
-            this.moveLeft = false;
-        } else if (event.key === " " || event.key === "w" || event.key === "ArrowUp") {
-            this.jumpKeyPressed = false;
-        } else if (event.key === "s" || event.key === "ArrowDown") {
-            this.jumpDown = false;
-        }
+    private drawTooltip (
+        text: string,
+        buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
+    ) {
+        const controllerSprite = ControllerManager.getInstance().controllerSprite;
+        const measure = Player.font.measureText(text);
+        const gap = 6;
+        const offsetY = 12;
+        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
+        const textPositionY = -this.y + offsetY;
+
+
+        this.scene.renderer.add({
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.UI,
+            position: {
+                x: textPositionX - this.controllerSpriteMapRecords[controllerSprite].width - gap,
+                y: textPositionY
+            },
+            asset: this.controllerSpriteMapRecords[controllerSprite],
+            animationTag: buttonTag,
+        })
+
+        this.scene.renderer.add({
+            type: RenderingType.TEXT,
+            layer: RenderingLayer.UI,
+            text,
+            textColor: "white",
+            outlineColor: "black",
+            position: {
+                x: textPositionX,
+                y: textPositionY
+            },
+            asset: Player.font,
+        })
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.beginPath();
-        ctx.strokeStyle = "red";
-        ctx.translate(this.x, -this.y + 1);
-        if (this.direction < 0) {
-            ctx.scale(-1, 1);
-        }
-        this.legsSprite.draw(ctx, this.spriteIndex);
-        if (this.carrying) {
-            if (this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) {
-                this.bodySprite.draw(ctx, SpriteIndex.CARRY1);
-            } else {
-                this.bodySprite.draw(ctx, SpriteIndex.CARRY0);
-            }
-        } else {
-            this.bodySprite.draw(ctx, this.spriteIndex);
-        }
-        ctx.restore();
-
-        if (!this.isCarrying() && this.closestNPC && this.closestNPC.isReadyForConversation()
-                && !this.playerConversation && !this.dance) {
-            this.drawDialogTip(ctx);
+        if (!this.visible) return;
+        const sprite = Player.playerSprites[this.characterAsset];
+        let animation = this.animation;
+        if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
+            animation = animation + "-carry";
         }
 
-        if (this.canThrowStoneIntoWater()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the stone into the water",
-                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
-        }
+        this.scene.renderer.addAseprite(sprite, animation, this.x, this.y - 1, RenderingLayer.PLAYER, this.direction)
 
-        if (this.canThrowSeedIntoSoil()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to throw the seed into the soil",
-                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
-        }
+        if (this.scene.showBounds) this.drawBounds();
 
-        if (this.canDanceToMakeRain()) {
-            this.game.mainFont.drawTextWithOutline(ctx, "Press 'Enter' or 'E' to dance",
-                this.x - Math.round(this.width / 2), -this.y + 12, "white", "black", 0.5);
+        if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
+            this.drawTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
+        } else if (this.readableTrigger) {
+            this.drawTooltip("Examine", ControllerAnimationTags.INTERACT);
+        } else if (this.canEnterDoor()) {
+            this.drawTooltip("Enter", ControllerAnimationTags.OPEN_DOOR);
+        } else if (this.canThrowStoneIntoWater()) {
+            this.drawTooltip("Throw stone", ControllerAnimationTags.ACTION);
+        } else if (this.canThrowSeedIntoSoil()) {
+            this.drawTooltip("Plant seed", ControllerAnimationTags.ACTION);
+        } else if (this.canDanceToMakeRain()) {
+            this.drawTooltip("Dance", ControllerAnimationTags.INTERACT);
         }
 
         if (this.dance) {
-            this.dance.draw(ctx);
+            this.dance.addDanceToRenderQueue();
         }
 
         this.speechBubble.draw(ctx);
@@ -401,44 +625,75 @@ export class Player extends PhysicsEntity {
 
     private canThrowStoneIntoWater(): boolean {
         return this.carrying instanceof Stone && (this.direction === -1 &&
-            this.game.world.collidesWith(this.x - 100, this.y - 20) === Environment.WATER);
+            this.scene.world.collidesWith(this.x - 30, this.y - 20) === Environment.WATER);
     }
 
     private canThrowSeedIntoSoil(): boolean {
         return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.game.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
+            this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
+    }
+
+    public debugCollisions(): void {
+        console.log('Entities: ',this.scene.world.getEntityCollisions(this));
+        console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
+        console.log('Gates: ',this.scene.world.getGateCollisions(this));
+    }
+
+    private getReadableTrigger (): GameObjectInfo | undefined {
+        const triggers = this.scene.world.getTriggerCollisions(this);
+        if (triggers.length === 0) return undefined;
+        return triggers.find(t => t.name === 'readable');
     }
 
     private canDanceToMakeRain(): boolean {
+        // if (!this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)) return false;
+        if (!this.canRainDance) return false;
         const ground = this.getGround();
-        return !this.dance && !this.game.world.isRaining() && this.carrying === null &&
-            (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD && !this.game.apocalypse ||
-            ground instanceof Cloud && this.game.apocalypse && !ground.isRaining() && ground.canRain());
+        return (
+            (this.isCollidingWithTrigger('raincloud_sky') &&
+            !this.scene.world.isRaining() &&
+            this.carrying === null &&
+            !this.scene.apocalypse) ||
+            (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
+        );
     }
 
-    drawDialogTip(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.beginPath();
-        const text = this.dialogTipText;
-        this.game.mainFont.drawTextWithOutline(ctx, text, this.x - Math.round(this.width / 2), -this.y + 12,
-            "white", "black", 0.5);
-        ctx.restore();
+    private canEnterDoor(): boolean {
+        return !this.flying && !this.carrying && this.scene.world.getGateCollisions(this).length > 0;
+    }
+
+    public getCurrentMapBounds (): Bounds | undefined {
+        const collisions = this.scene.world.getCameraBounds(this);
+        if (collisions.length === 0) return undefined;
+        return boundsFromMapObject(collisions[0]);
     }
 
     private respawn() {
-        if (this.x > this.startX - 242) {
-            this.x = this.startX;
-            this.direction = -1;
-        } else {
-            this.x = this.startX - 485;
-            this.direction = 1;
-        }
-        this.y = this.startY;
+        this.x = this.lastGroundPosition.x;
+        this.y = this.lastGroundPosition.y + 10;
         this.setVelocity(0, 0);
+    }
+
+    private getPlayerSpriteMetadata(): PlayerSpriteMetadata[] {
+        if (this.playerSpriteMetadata == null) {
+            this.playerSpriteMetadata = Player.playerSprites.map(sprite => {
+                const metaDataJSON = sprite.getLayer("Meta")?.data;
+                return metaDataJSON ? JSON.parse(metaDataJSON): {};
+            });
+        };
+        return this.playerSpriteMetadata;
+    }
+
+    private resetJumps (): void {
+        this.usedJump = false;
+        this.usedDoubleJump = false;
+        this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
     }
 
     update(dt: number): void {
         super.update(dt);
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+
         this.speechBubble.update(this.x, this.y);
         if (this.thinkBubble) {
             this.thinkBubble.update(this.x, this.y);
@@ -446,22 +701,28 @@ export class Player extends PhysicsEntity {
         if (this.playerConversation) {
             this.playerConversation.update(dt);
         }
-        if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
-            this.showHint();
+        if (this.showHints) {
+            if ((Date.now() - this.lastHint) / 1000 > HINT_TIMEOUT) {
+                this.showHint();
+            }
         }
         if (this.carrying) {
-            this.carrying.x = this.x;
-            this.carrying.y = this.y + this.height -
-                ((this.spriteIndex === SpriteIndex.WALK2 || this.spriteIndex === SpriteIndex.WALK0) ? 1 : 0);
-            if (this.carrying instanceof Seed) {
-                this.carrying.x += 4;
+            if (this.running) {
+                this.running = false;
+                this.animation = 'walk';
             }
+            this.carrying.x = this.x;
+            const currentFrameIndex = Player.playerSprites[this.characterAsset].getTaggedFrameIndex(this.animation + "-carry",
+                this.scene.gameTime * 1000);
+            const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.characterAsset].carryOffsetFrames ?? [];
+            const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
+            this.carrying.y = this.y + (this.height - this.carrying.carryHeight) - offset;
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
             }
         }
 
-        const isDrowning = this.game.world.collidesWith(this.x, this.y) === Environment.WATER;
+        const isDrowning = this.scene.world.collidesWith(this.x, this.y) === Environment.WATER;
         if (isDrowning) {
             if (!this.thinkBubble) {
                 const thought = drowningThoughts[rndInt(0, drowningThoughts.length)];
@@ -472,12 +733,12 @@ export class Player extends PhysicsEntity {
                 this.carrying = null;
             }
             if (this.drowning === 0) {
-                this.drowningSound.trigger();
+                Player.drowningSound.play();
             }
             this.setVelocityX(0);
             this.drowning += dt;
             if (this.drowning > 3) {
-                this.drowningSound.stop();
+                Player.drowningSound.stop();
                 this.respawn();
                 const thought = drownThoughts[rndInt(0, drownThoughts.length)];
                 this.think(thought.message, thought.duration);
@@ -486,29 +747,54 @@ export class Player extends PhysicsEntity {
             this.drowning = 0;
         }
 
-        const world = this.game.world;
+        const world = this.scene.world;
         const wasFlying = this.flying;
         const prevVelocity = this.getVelocityY();
 
+        // Apply auto movement
+        if (this.autoMove) {
+            if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.x - this.autoMove.destinationX) <= 0 ) {
+                // Reached or overreached destination
+                this.stopAutoMove();
+            } else {
+                // Not yet reached, keep going
+                this.autoMove.lastX = this.x;
+                if (this.x < this.autoMove.destinationX) {
+                    this.moveRight = true;
+                    this.moveLeft = false;
+                } else {
+                    this.moveRight = false;
+                    this.moveLeft = true;
+                }
+            }
+        }
+
         // Player movement
-        if (!this.game.camera.isOnTarget()) {
+        if (!this.scene.camera.isOnTarget()) {
             this.moveRight = false;
             this.moveLeft = false;
         }
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
         if (!isDrowning) {
+            if(this.running) {
+                this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED)
+            } else {
+                this.setMaxVelocity(MAX_PLAYER_SPEED)
+            }
             if (this.moveRight) {
+                this.direction = 1;
                 if (!this.flying) {
-                    this.walkingSound.play();
+                    Player.walkingSound.play();
                 }
                 this.accelerateX(acceleration * dt);
             } else if (this.moveLeft) {
+                this.direction = -1;
                 if (!this.flying) {
-                    this.walkingSound.play();
+                    Player.walkingSound.play();
                 }
                 this.accelerateX(-acceleration * dt);
             } else {
-                this.walkingSound.stop();
+                Player.walkingSound.stop();
                 if (this.getVelocityX() > 0) {
                     this.decelerateX(acceleration * dt);
                 } else {
@@ -519,42 +805,58 @@ export class Player extends PhysicsEntity {
 
         // Set sprite index depending on movement
         if (this.getVelocityX() === 0 && this.getVelocityY() === 0) {
-            this.spriteIndex = getSpriteIndex(SpriteIndex.IDLE0, PLAYER_IDLE_ANIMATION);
+            this.animation = "idle";
             this.flying = false;
-            this.usedDoubleJump = false;
+            this.resetJumps();
         } else {
             if (this.getVelocityY() > 0) {
-                this.spriteIndex = SpriteIndex.JUMP;
+                this.animation = "jump";
                 this.flying = true;
             } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
-                this.spriteIndex = SpriteIndex.FALL;
+                if (this.jumpThresholdTimer < 0 || this.usedJump) {
+                    this.animation = "fall";
+                }
                 this.flying = true;
             } else {
-                this.spriteIndex = getSpriteIndex(SpriteIndex.WALK0, PLAYER_RUNNING_ANIMATION);
+                this.animation = (this.running && !this.carrying) ? "run" : "walk";
                 this.flying = false;
-                this.usedDoubleJump = false;
+                this.resetJumps();
             }
         }
 
-        if(wasFlying && !this.flying) {
-            this.landingSound.stop();
-            this.landingSound.play();
+        if (wasFlying && !this.flying) {
+            Player.landingSound.stop();
+            Player.landingSound.play();
         }
 
-        // check for npc in interactionRange
-        const closestEntity = this.getClosestEntityInRange(this.game.fire.angry ? 1.8 * this.dialogRange : this.dialogRange);
-        if (closestEntity instanceof NPC) {
-            this.closestNPC = closestEntity;
-        } else {
-            this.closestNPC = null;
+        // Reduce jump threshold timer when player did not jump yet when falling off an edge
+        if (this.flying && !this.usedJump && this.jumpThresholdTimer > 0) {
+            this.jumpThresholdTimer -= dt;
         }
+
+        // Check for NPC's that can be interacted with
+        // Reset closestNPC and get all entities that collide with the player with an added 5px of margin
+        // If there are multiple npcs colliding, the closest one will be chosen
+        this.closestNPC = null;
+        const entities = this.scene.world.getEntityCollisions(this, 5);
+        if (entities.length > 0) {
+            const closestEntity = entities.length > 1 ? this.getClosestEntity(entities) : entities[0];
+            if (closestEntity instanceof NPC) {
+                this.closestNPC = closestEntity;
+            }
+        }
+
+        // Check for readables in player trigger collisions
+        this.readableTrigger = this.getReadableTrigger();
 
         // Spawn random dust particles while walking
-        if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
-            if (timedRnd(dt, 0.2) || wasFlying) {
-                this.dustEmitter.setPosition(this.x, this.y);
-                const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
-                this.dustEmitter.emit(count);
+        if (!this.disableParticles && this.visible) {
+            if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
+                if (timedRnd(dt, 0.2) || wasFlying) {
+                    this.dustEmitter.setPosition(this.x, this.y);
+                    const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
+                    this.dustEmitter.emit(count);
+                }
             }
         }
 
@@ -564,7 +866,7 @@ export class Player extends PhysicsEntity {
         }
 
         // Bounce
-        if (this.game.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
+        if (this.scene.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
             this.bounce();
         }
 
@@ -576,13 +878,11 @@ export class Player extends PhysicsEntity {
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
                         if (err == 0) {
-                            this.currentFailSpriteIndex = rnd() < 0.5 ? SpriteIndex.FAIL0 : SpriteIndex.FAIL1;
+                            this.currentFailAnimation = rndInt(1, 3);
                         }
-                        // Show error frame?
-                        this.spriteIndex = getSpriteIndex(this.currentFailSpriteIndex, PLAYER_FAIL_ANIMATION);
+                        this.animation = "dance-fluke-" + this.currentFailAnimation;
                     } else {
-                        // Show dance frame?
-                        this.spriteIndex = getSpriteIndex(SpriteIndex.DANCE0, PLAYER_DANCING_ANIMATION);
+                        this.animation = "dance";
                     }
                 }
             }
@@ -591,18 +891,84 @@ export class Player extends PhysicsEntity {
             if (done) {
                 // On cloud -> make it rain
                 if (this.dance.wasSuccessful()) {
-                    // (Useless because wrong cloud but hey...)
+                    // (Useless because wrong cloud but hey…)
                     const ground = this.getGround();
                     if (ground && ground instanceof Cloud) {
-                        ground.startRain(this.game.apocalypse ? Infinity : 15);
+                        ground.startRain(this.scene.apocalypse ? Infinity : 15);
+
+                        // Camera focus to boss for each triggered rain cloud
+                        const bossPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
+                        if (bossPointer) {
+                            this.scene.camera.focusOn(3, bossPointer.x, bossPointer.y + 60, 1, 0, valueCurves.cos(0.35));
+                        }
+
+                        // Remove a single boss fight barrier
+                        const rainingCloudCount = this.scene.gameObjects.filter(o => o instanceof Cloud && o.isRaining()).length;
+                        const wallIdentifier = `wall${rainingCloudCount - 1}`;
+                        const targetWall = this.scene.gameObjects.find(o => o instanceof Wall && o.identifier === wallIdentifier) as Wall | undefined;
+                        if (targetWall) {
+                            targetWall.crumble()
+                        }
                     }
-                    if (this.game.world.collidesWith(this.x, this.y - 5) === Environment.RAINCLOUD &&
-                            !this.game.apocalypse) {
-                        this.game.world.startRain();
+                    if (this.isCollidingWithTrigger('raincloud_sky')) {
+                        this.scene.world.startRain();
                     }
                 }
                 this.dance = null;
             }
+        }
+
+        this.disableParticles = false;
+
+        // Logic from Triggers
+        if (triggerCollisions.length > 0) {
+            triggerCollisions.forEach(trigger => {
+
+                // Handle Mountain Riddle Logic
+                if (trigger.name === 'reset_mountain') {
+                    this.scene.mountainRiddle.resetRiddle();
+                }
+                if (trigger.name === 'mountaingate') {
+                    const row = trigger.properties.row;
+                    const col = trigger.properties.col;
+                    if (col != null && row != null) {
+                        this.scene.mountainRiddle.checkGate(col, row);
+                    }
+                }
+                if (trigger.name === 'teleporter' && this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
+                    const teleportY = trigger.properties.teleportY;
+                    if (teleportY) {
+                        this.y -= teleportY;
+                    }
+                }
+                if (trigger.name === 'finish_mountain_riddle') {
+                    this.scene.mountainRiddle.clearRiddle();
+                }
+
+                // Disable particle effects while in trigger
+                const disableParticles = trigger.properties.disableParticles;
+                if (disableParticles) {
+                    this.disableParticles = true;
+                }
+
+                // Set Global Conversation Variables from map triggers
+                const globalConversationProps = {
+                    key: trigger.properties.setGlobalKey,
+                    value: trigger.properties.setGlobalVal
+                }
+                if (globalConversationProps.key && globalConversationProps.value) {
+                    Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
+                }
+
+                // Enable Conversion Trees from map triggers
+                const enableConversationProps = {
+                    key: trigger.properties.setDialogEntity,
+                    value: trigger.properties.setDialogValue
+                }
+                if (enableConversationProps.key && enableConversationProps.value) {
+                    this.scene.game.campaign.runAction("enable", null, [enableConversationProps.key, enableConversationProps.value]);
+                }
+            })
         }
     }
 
@@ -618,7 +984,7 @@ export class Player extends PhysicsEntity {
     private pullOutOfGround(): number {
         let pulled = 0, col = 0;
         if (this.getVelocityY() <= 0) {
-            const world = this.game.world;
+            const world = this.scene.world;
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ],
                 this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
@@ -637,8 +1003,12 @@ export class Player extends PhysicsEntity {
         this.bounceEmitter.setPosition(this.x, this.y - 12);
         this.bounceEmitter.emit(20);
         this.dustEmitter.clear();
-        this.bouncingSound.stop();
-        this.bouncingSound.play();
+        Player.bouncingSound.stop();
+        Player.bouncingSound.play();
+    }
+
+    public setBeard(beard: boolean) {
+        // this.hasBeard = beard;
     }
 
     /**
@@ -651,7 +1021,7 @@ export class Player extends PhysicsEntity {
      */
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.game.world;
+        const world = this.scene.world;
         while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
                 [ Environment.PLATFORM, Environment.WATER ])) {
             pulled++;
@@ -662,7 +1032,7 @@ export class Player extends PhysicsEntity {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.game.world;
+        const world = this.scene.world;
         if (this.getVelocityX() > 0) {
             while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
                     this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
@@ -702,14 +1072,16 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity) {
         if (!this.carrying) {
-            if (object instanceof Seed) {
-                this.achieveMilestone(Milestone.GOT_SEED);
+            this.height = PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT;
+            if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }
-            if (object instanceof Wood) {
-                this.achieveMilestone(Milestone.GOT_WOOD);
+            if (object instanceof Wood && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_WOOD);
+                this.scene.game.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
-            if (object instanceof Stone) {
-                this.achieveMilestone(Milestone.GOT_STONE);
+            if (object instanceof Stone && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_STONE);
             }
             this.carrying = object;
             object.setFloating(false);
@@ -736,45 +1108,48 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public achieveMilestone(milestone: Milestone): void {
-        this.milestone = Math.max(this.milestone, milestone);
-        this.lastHint = Date.now();
-    }
+    // this.lastHint = Date.now();
 
     public showHint(): void {
         if (this.playerConversation === null) {
-            switch (this.milestone) {
-                case Milestone.JUST_ARRIVED:
+            switch (this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex()) {
+                case QuestATrigger.JUST_ARRIVED:
                     this.think("I should talk to someone.", 3000);
                     break;
-                case Milestone.TALKED_TO_FIRE:
-                    this.think("The fire told me to visit the tree in the east", 3000);
+                case QuestATrigger.TALKED_TO_FIRE:
+                    this.think("I think the fire needs my help.", 3000);
                     break;
-                case Milestone.TALKED_TO_TREE:
-                    this.think("Maybe I should talk to the tree again", 3000);
+                case QuestATrigger.GOT_QUEST_FROM_FIRE:
+                    this.think("The fire told me to visit the tree in the east.", 3000);
                     break;
-                case Milestone.GOT_SEED:
-                    this.think("I should check the mountains for a good place for the seed", 3000);
+                case QuestATrigger.TALKED_TO_TREE:
+                    this.think("Maybe I should talk to the tree again.", 3000);
                     break;
-                case Milestone.PLANTED_SEED:
-                    this.think("The seed needs something to grow, I think", 3000);
+                case QuestATrigger.GOT_QUEST_FROM_TREE:
+                    this.think("I need to pick up the seed by the tree.", 3000);
                     break;
-                case Milestone.TALKED_TO_STONE:
-                    this.think("I should talk to that crazy stone again", 3000);
+                case QuestATrigger.GOT_SEED:
+                    this.think("I should check the mountains for a good place for the seed.", 3000);
                     break;
-                case Milestone.GOT_STONE:
-                    this.think("My arms get heavy. I really should throw that thing in the river", 3000);
+                case QuestATrigger.PLANTED_SEED:
+                    this.think("The seed needs something to grow, I think.", 3000);
                     break;
-                case Milestone.THROWN_STONE_INTO_WATER:
-                    this.think("There must be something interesting west of the river", 3000);
+                case QuestATrigger.TALKED_TO_STONE:
+                    this.think("I should talk to that crazy stone again.", 3000);
                     break;
-                case Milestone.TALKED_TO_FLAMEBOY:
-                    this.think("I should check the clouds. The seed still needs something to grow", 3000);
+                case QuestATrigger.GOT_STONE:
+                    this.think("My arms get heavy. I really should throw that thing in the river.", 3000);
                     break;
-                case Milestone.MADE_RAIN:
-                    this.think("I should talk to that singing tree again", 3000);
+                case QuestATrigger.THROWN_STONE_INTO_WATER:
+                    this.think("There must be something interesting west of the river.", 3000);
                     break;
-                case Milestone.GOT_WOOD:
+                case QuestATrigger.GOT_MULTIJUMP:
+                    this.think("I should check the clouds. The seed still needs something to grow.", 3000);
+                    break;
+                case QuestATrigger.MADE_RAIN:
+                    this.think("I should talk to that singing tree again.", 3000);
+                    break;
+                case QuestATrigger.GOT_WOOD:
                     this.think("Quick! The fire needs wood!", 3000);
                     break;
             }

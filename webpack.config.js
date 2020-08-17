@@ -1,12 +1,15 @@
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const GenerateJsonPlugin = require("generate-json-webpack-plugin");
+const GitRevisionPlugin = require("git-revision-webpack-plugin")
+const gitRevisionPlugin = new GitRevisionPlugin()
 
 module.exports = {
-    entry: `./lib/game.js`,
+    entry: `./lib/FriendlyFire.js`,
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "game.js",
+        filename: "FriendlyFire.js",
         chunkFilename: "[name].js?m=[chunkhash]"
     },
     mode: "development",
@@ -48,12 +51,17 @@ module.exports = {
         ]
     },
     plugins: [
+        gitRevisionPlugin,
+        new GenerateJsonPlugin("appinfo.json", {
+            version: process.env.npm_package_version,
+            gitCommitHash: gitRevisionPlugin.commithash()
+        }),
         new CopyWebpackPlugin([
             { from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
             { from: "index.html", transform(content) {
-                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/game\"",
-                    "src=\"game.js\"");
+                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
+                    "src=\"FriendlyFire.js\"");
             }},
             { from: "style.css" },
             { from: "manifest.webmanifest" }

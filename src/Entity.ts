@@ -1,5 +1,7 @@
-import { GameObject, Game } from "./game";
-import { GameObjectProperties } from "./MapInfo";
+import { Animator } from './Animator';
+import { GameObject, GameScene } from './scenes/GameScene';
+import { GameObjectProperties } from './MapInfo';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 export interface EntityDistance {
     source: Entity;
@@ -7,7 +9,14 @@ export interface EntityDistance {
     distance: number;
 }
 
-type EntityConstructor = new (game: Game, x: number, y: number, properties: GameObjectProperties) => Entity;
+export type Bounds = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
 
@@ -17,35 +26,40 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, game: Game, x: number, y: number, properties: GameObjectProperties): Entity {
+export function createEntity(name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties): Entity {
     const constructor = entities.get(name);
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
-    return new constructor(game, x, y, properties);
+    return new constructor(scene, x, y, properties);
 }
 
 export abstract class Entity implements GameObject {
+    protected timeAlive = 0;
+    protected animator = new Animator(this);
     constructor(
-        public game: Game,
+        public scene: GameScene,
         public x: number,
         public y: number,
         public width = 0,
-        public height = 0
+        public height = 0,
+        public isTrigger = true
     ) {}
-
-    async load(): Promise<void> {
-        // set width/height based on loaded sprite?
-    }
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
 
-    abstract update(dt: number): void;
+    public update(dt: number): void {
+        this.timeAlive += dt;
+    };
 
     public distanceTo(entity: Entity) {
         const a = this.x - entity.x;
         const b = this.y - entity.y;
         return Math.sqrt(a*a + b*b);
+    }
+
+    public get distanceToPlayer (): number {
+        return this.distanceTo(this.scene.player);
     }
 
     protected getClosestEntityInRange(range: number): Entity | null {
@@ -59,7 +73,7 @@ export abstract class Entity implements GameObject {
 
     protected getEntitiesInRange(range: number): EntityDistance[] {
         const entitiesInRange: EntityDistance[] = []
-        this.game.gameObjects.forEach(gameObject => {
+        this.scene.gameObjects.forEach(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
                 if (distance < range) {
@@ -70,7 +84,53 @@ export abstract class Entity implements GameObject {
         return entitiesInRange;
     }
 
+    protected getClosestEntity(entities: Entity[]): Entity {
+        const entitiesInRange: EntityDistance[] = []
+        this.scene.gameObjects.forEach(gameObject => {
+            if (gameObject instanceof Entity && gameObject !== this) {
+                const distance = this.distanceTo(gameObject);
+                entitiesInRange.push({source: this, target: gameObject, distance});
+            }
+        });
+        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; })
+        return entitiesInRange[0].target;
+    }
+
+    public getBounds(margin = 0): Bounds {
+        const width = this.width + (margin * 2);
+        const height = this.height + (margin * 2);
+        const x = this.x - (this.width / 2) - margin;
+        const y = this.y - -this.height + margin;
+        return { x, y, width, height };
+    }
+
+    protected drawBounds(): void {
+        this.scene.renderer.add({
+            type: RenderingType.RECT,
+            layer: RenderingLayer.DEBUG,
+            position: {
+                x: this.getBounds().x,
+                y: -this.getBounds().y
+            },
+            lineColor: "red",
+            dimension: {
+               width: this.getBounds().width,
+               height: this.getBounds().height
+            }
+        })
+    }
+
+    /**
+     * Checks wether this entity is currently colliding with the provided named trigger.
+     * @param triggerName the trigger name to check against.
+     */
+    protected isCollidingWithTrigger (triggerName: string): boolean {
+        const collisions = this.scene.world.getTriggerCollisions(this);
+        if (collisions.length === 0) return false;
+        return collisions.findIndex(o => o.name === triggerName) > -1;
+    }
+
     public remove(): void {
-        this.game.removeGameObject(this);
+        this.scene.removeGameObject(this);
     }
 }
