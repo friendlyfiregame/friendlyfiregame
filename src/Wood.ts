@@ -1,14 +1,14 @@
-import { entity } from "./Entity";
-import { Environment } from "./World";
-import { now } from "./util";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { Sound } from "./Sound";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { QuestKey, QuestATrigger } from './Quests';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { Environment } from './World';
 import { GameObjectInfo } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { now } from './util';
+import { PhysicsEntity } from './PhysicsEntity';
+import { QuestKey, QuestATrigger } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Sound } from './Sound';
 
 export enum WoodState {
     FREE = 0,

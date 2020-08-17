@@ -1,7 +1,7 @@
-import { GRAVITY } from './constants';
-import { Vector2 } from './util';
 import { GameScene } from './scenes/GameScene';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { GRAVITY } from './constants';
+import { RenderingLayer, RenderingType } from './Renderer';
+import { Vector2 } from './util';
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
@@ -36,7 +36,7 @@ export class Particles {
     private emitters: ParticleEmitter[] = [];
 
     public constructor(scene: GameScene) {
-        this.scene = scene;    
+        this.scene = scene;
     }
 
     public update(dt: number): void {

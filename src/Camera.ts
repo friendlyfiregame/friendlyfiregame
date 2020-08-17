@@ -1,9 +1,9 @@
-import { Vector2, clamp, shiftValue, rnd, isDev } from './util';
-import { ValueCurve, valueCurves } from './Particles';
-import { Fire } from './Fire';
-import { GameScene } from "./scenes/GameScene";
 import { Bounds } from './Entity';
+import { clamp, isDev, rnd, shiftValue, Vector2 } from './util';
+import { Fire } from './Fire';
+import { GameScene } from './scenes/GameScene';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { ValueCurve, valueCurves } from './Particles';
 
 export interface camFocus {
     x: number;

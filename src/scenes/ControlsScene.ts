@@ -1,14 +1,14 @@
-import { Scene } from "../Scene";
-import { FriendlyFire } from "../FriendlyFire";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { easeOutCubic } from "../easings";
-import { BitmapFont } from "../BitmapFont";
-import { asset } from "../Assets";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { DIALOG_FONT } from "../constants";
 import { Aseprite } from '../Aseprite';
-import { ControllerManager } from '../input/ControllerManager';
+import { asset } from '../Assets';
+import { BitmapFont } from '../BitmapFont';
 import { ControllerAnimationTags, ControllerSpriteMap } from '../input/ControllerFamily';
+import { ControllerEvent } from '../input/ControllerEvent';
+import { ControllerManager } from '../input/ControllerManager';
+import { DIALOG_FONT } from '../constants';
+import { easeOutCubic } from '../easings';
+import { FriendlyFire } from '../FriendlyFire';
+import { Scene } from '../Scene';
+import { SlideTransition } from '../transitions/SlideTransition';
 
 export class ControlsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -95,7 +95,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
         const startingY = 35;
         const gap = 20;
         ctx.translate(x, y);
-        
+
         ctx.drawImage(ControlsScene.panelImage, 0, 0);
 
         const controllerSprite = ControllerManager.getInstance().selectedGamepadStyle;

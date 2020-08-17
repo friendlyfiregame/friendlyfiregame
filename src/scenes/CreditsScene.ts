@@ -1,16 +1,16 @@
-import { Scene } from '../Scene';
-import { FriendlyFire } from '../FriendlyFire';
+import { AppInfoJSON } from 'appinfo.json';
+import { Aseprite } from '../Aseprite';
 import { asset } from '../Assets';
 import { BitmapFont } from '../BitmapFont';
-import { easeOutCubic } from '../easings';
 import { ControllerEvent } from '../input/ControllerEvent';
-import { AppInfoJSON } from "appinfo.json";
+import { DIALOG_FONT } from '../constants';
+import { easeOutCubic } from '../easings';
 import { FadeTransition } from '../transitions/FadeTransition';
-import { TitleScene } from './TitleScene';
+import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
-import { Aseprite } from '../Aseprite';
+import { Scene } from '../Scene';
 import { Sound } from '../Sound';
-import { DIALOG_FONT } from "../constants";
+import { TitleScene } from './TitleScene';
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([
@@ -247,7 +247,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Shortened Git commit hash to provide support.
         const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
         const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 5, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
+        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 7, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
 
         ctx.restore();
     }

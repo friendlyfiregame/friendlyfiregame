@@ -1,8 +1,8 @@
+import { DROWNING_VELOCITY, GRAVITY, PIXEL_PER_METER, TERMINAL_VELOCITY } from './constants';
 import { Entity } from './Entity';
-import { PIXEL_PER_METER, GRAVITY, DROWNING_VELOCITY, TERMINAL_VELOCITY } from "./constants";
-import { Environment } from "./World";
-import { Player } from "./Player";
-import { GameObject } from "./scenes/GameScene";
+import { Environment } from './World';
+import { GameObject } from './scenes/GameScene';
+import { Player } from './Player';
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -11,7 +11,7 @@ export abstract class PhysicsEntity extends Entity {
     private maxVelocityY = Infinity;
     private floating = false;
     private ground: GameObject | null = null;
-    
+
     // This property describes how much the player hitbox grows when
     // this entity is carried. Defaults to the entities own height.
     public carryHeight = this.height;

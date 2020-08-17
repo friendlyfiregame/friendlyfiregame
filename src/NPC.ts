@@ -1,10 +1,10 @@
-import { Face, FaceModes } from './Face';
-import { Greeting } from './Greeting';
-import { PhysicsEntity } from "./PhysicsEntity";
-import { SpeechBubble } from './SpeechBubble';
 import { Conversation } from './Conversation';
 import { DialoguePrompt } from './DialoguePrompt';
+import { Face, FaceModes } from './Face';
+import { Greeting } from './Greeting';
+import { PhysicsEntity } from './PhysicsEntity';
 import { sleep } from './util';
+import { SpeechBubble } from './SpeechBubble';
 
 // Seconds where NPC can't be talked to after an ended conversation
 const PAUSE_AFTER_CONVERSATION = 1.5;

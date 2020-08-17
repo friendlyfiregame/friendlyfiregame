@@ -1,20 +1,20 @@
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import conversation from '../assets/dialog/bird.dialog.json';
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
+import { calculateVolume, rnd, rndItem } from './util';
 import { Conversation } from './Conversation';
+import conversation from '../assets/dialog/bird.dialog.json';
+import { DOUBLE_JUMP_COLORS, GRAVITY } from './constants';
+import { entity } from './Entity';
+import { Environment } from './World';
+import { FaceModes } from './Face';
+import { FireState, SHRINK_SIZE } from './Fire';
+import { GameObjectInfo } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { ParticleEmitter, valueCurves } from './Particles';
+import { QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { ScriptableNPC } from './ScriptableNPC';
 import shiba1 from '../assets/dialog/shiba1.dialog.json';
-import { rndItem, rnd, calculateVolume } from './util';
-import { ParticleEmitter, valueCurves } from './Particles';
-import { DOUBLE_JUMP_COLORS, GRAVITY } from './constants';
-import { GameObjectInfo } from './MapInfo';
-import { Environment } from './World';
-import { SHRINK_SIZE, FireState } from './Fire';
-import { FaceModes } from './Face';
-import { QuestKey } from './Quests';
 import { Sound } from './Sound';
 
 const IDLE_DURATION = [2, 3, 4];
@@ -45,7 +45,7 @@ export class Shiba extends ScriptableNPC {
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
-    
+
     private doubleJumpEmitter: ParticleEmitter;
     private minAltitude: number;
     private jumpHeight = 1.5;
@@ -102,7 +102,7 @@ export class Shiba extends ScriptableNPC {
             this.setMaxVelocity(2);
 
             this.scene.startFriendshipMusic();
-            
+
             if (!shibaSpawnPos) throw new Error(`'friendship_shiba_spawn' point in map is missing`);
             this.x = shibaSpawnPos.x;
             this.y = shibaSpawnPos.y;

@@ -1,5 +1,5 @@
-import { GameScene } from './scenes/GameScene';
 import { Conversation } from './Conversation';
+import { GameScene } from './scenes/GameScene';
 import { GotItemScene } from './scenes/GotItemScene';
 
 const AMOUNT_GATE_COLS = 3;

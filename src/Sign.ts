@@ -1,11 +1,11 @@
-import { entity } from "./Entity";
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from './NPC';
-import { GameObjectProperties } from './MapInfo';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
-import { RenderingType, RenderingLayer } from './Renderer';
+import { entity } from './Entity';
+import { GameObjectProperties } from './MapInfo';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
+import { RenderingLayer, RenderingType } from './Renderer';
 
 @entity("sign")
 export class Sign extends NPC {
@@ -51,7 +51,7 @@ export class Sign extends NPC {
             animationTag: "idle",
             time: this.scene.gameTime * 1000
         })
-        
+
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }

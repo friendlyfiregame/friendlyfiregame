@@ -1,10 +1,10 @@
-import { NPC } from './NPC';
-import { entity } from "./Entity";
-import { Aseprite } from "./Aseprite";
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { Aseprite } from './Aseprite';
+import { asset } from './Assets';
 import { Conversation } from './Conversation';
-import { Face, EyeType } from './Face';
+import { entity } from './Entity';
+import { EyeType, Face } from './Face';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
 import { RenderingLayer } from './Renderer';
 
 @entity("stonedisciple")

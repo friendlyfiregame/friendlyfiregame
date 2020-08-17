@@ -1,5 +1,5 @@
-import { loadImage } from "./graphics.js";
-import { FontJSON } from "*.font.json";
+import { FontJSON } from '*.font.json';
+import { loadImage } from './graphics.js';
 
 export class BitmapFont {
     private sourceImage: HTMLImageElement;
@@ -151,7 +151,7 @@ export class BitmapFont {
 
             width += this.charWidths[index];
 
-            if (precursorChar && !(precursorChar in compactablePrecursors)) {
+            if (precursorChar && !(compactablePrecursors.includes(precursorChar))) {
                 width += CHAR_SPACING;
             }
 

@@ -1,12 +1,12 @@
-import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
-import { easeInExpo, easeOutExpo } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
-import { Scene } from "../Scene";
+import { Aseprite } from '../Aseprite';
+import { asset } from '../Assets';
+import { BitmapFont } from '../BitmapFont';
+import { DIALOG_FONT } from '../constants';
+import { easeInExpo, easeOutExpo } from '../easings';
+import { FriendlyFire } from '../FriendlyFire';
+import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
-import { DIALOG_FONT } from "../constants";
-import { Aseprite } from '../Aseprite';
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 

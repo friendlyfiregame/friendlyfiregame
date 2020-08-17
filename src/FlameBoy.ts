@@ -1,9 +1,9 @@
-import { entity } from "./Entity";
-import { NPC } from './NPC';
-import { Face, EyeType, FaceModes } from './Face';
 import { Aseprite } from './Aseprite';
-import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
+import { asset } from './Assets';
+import { entity } from './Entity';
+import { EyeType, Face, FaceModes } from './Face';
+import { GameScene } from './scenes/GameScene';
+import { NPC } from './NPC';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { Sound } from './Sound';
