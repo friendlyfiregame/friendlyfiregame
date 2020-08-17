@@ -3,13 +3,16 @@ on:
   push:
     branches:
     - master
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches:
     - master
 jobs:
-  build:
-    name: Build and Package
-    runs-on: ubuntu-18.04
+
+  build_webapp:
+    name: Build Webapp
+    runs-on: ubuntu-20.04
     steps:
     - name: git checkout
       uses: actions/checkout@v2
@@ -17,6 +20,48 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: "13.x"
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     - run: yarn install
     - run: yarn compile
     - run: yarn dist
+
+  build_electron_app:
+    name: Build Electron Apps
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - ubuntu-20.04
+        - macos-10.15
+        - windows-2019
+    steps:
+    - name: git checkout
+      uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: "13.x"
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - run: yarn install
+    - run: yarn compile
+    - run: yarn package
