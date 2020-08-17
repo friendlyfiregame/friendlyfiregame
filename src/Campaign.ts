@@ -63,6 +63,14 @@ const allDialogs: Record<string, DialogJSON> = {
     "shadowpresence1": shadowpresence1,
 };
 
+export enum CharacterAsset {
+    FEMALE, MALE
+}
+
+export enum VoiceAsset {
+    FEMALE, MALE
+}
+
 export class Campaign {
     public onStatesChanged = new Signal<CampaignState[]>();
     public states: CampaignState[] = ["start"];
@@ -72,12 +80,23 @@ export class Campaign {
     ];
     public gameScene?: GameScene | undefined;
 
+    public selectedCharacter = CharacterAsset.FEMALE;
+    public selectedVoice = VoiceAsset.FEMALE;
+
     constructor(public game: Game) {}
 
     public getQuest(key: QuestKey): Quest {
         const ending = this.quests.find(ending => ending.key === key);
         if (!ending) throw new Error(`Cannot find quest with key ${key}`);
         return ending;
+    }
+
+    public toggleCharacterAsset (): void {
+        this.selectedCharacter = this.selectedCharacter === CharacterAsset.MALE ? CharacterAsset.FEMALE : CharacterAsset.MALE;
+    }
+
+    public toggleVoiceAsset (): void {
+        this.selectedVoice = this.selectedVoice === VoiceAsset.MALE ? VoiceAsset.FEMALE : VoiceAsset.MALE;
     }
 
     /**
@@ -266,9 +285,6 @@ export class Campaign {
                         this.gameScene!.player.startDance(+params[0] || 1);
                     }, 500);
                     break;
-                case "togglegender":
-                    this.gameScene.player.toggleGender();
-                    break;
                 case "wakeupchest":
                     this.gameScene.mimic.nextState();
                     break;
@@ -282,7 +298,6 @@ export class Campaign {
                         "seed": this.gameScene.seed,
                         "flameboy": this.gameScene.flameboy,
                         "wing": this.gameScene.wing,
-                        "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
                         "shadowpresence": this.gameScene.shadowPresence,
                         "shiba": this.gameScene.shiba,
@@ -304,7 +319,6 @@ export class Campaign {
                         "seed": this.gameScene.seed,
                         "flameboy": this.gameScene.flameboy,
                         "wing": this.gameScene.wing,
-                        "spider": this.gameScene.spider,
                         "caveman": this.gameScene.caveman,
                         "shadowpresence": this.gameScene.shadowPresence,
                         "shiba": this.gameScene.shiba,

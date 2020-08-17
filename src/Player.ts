@@ -4,6 +4,7 @@ import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
 import { BitmapFont } from './BitmapFont';
 import { Bounds, entity } from './Entity';
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
+import { CharacterAsset, VoiceAsset } from './Campaign';
 import { Cloud } from './Cloud';
 import { ControllerAnimationTags, ControllerSpriteMap } from './input/ControllerFamily';
 import { ControllerEvent } from './input/ControllerEvent';
@@ -48,16 +49,6 @@ const bounceColors = [
     "#ff7070"
 ];
 
-const genderSwapColors = [
-    "#ef002d",
-    "#a900ef",
-    "#0049ef",
-    "#00e7ef",
-    "#00ef33",
-    "#bfef00",
-    "#ef8d00",
-];
-
 const drownThoughts = [
     { message: "Ok, I'm not Jesus. Noted!", duration: 4000 },
     { message: "Looks like I can't swim… But I can respawn, nice!", duration: 5000 },
@@ -79,9 +70,6 @@ export enum Gender {
 
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
-
-const startingGender = Math.random() >= 0.5 ? Gender.MALE : Gender.FEMALE;
-Conversation.setGlobal("ismale", startingGender === Gender.MALE ? "true" : "false");
 
 interface PlayerSpriteMetadata {
     carryOffsetFrames?: number[];
@@ -122,9 +110,6 @@ export class Player extends PhysicsEntity {
     @asset("sounds/throwing/throwing.mp3")
     private static throwingSound: Sound;
 
-    @asset("sounds/genderswapping/fairydust.mp3")
-    private static genderSwapSound: Sound;
-
     @asset("sounds/gate/door_open.mp3")
     private static enterGateSound: Sound;
 
@@ -148,7 +133,6 @@ export class Player extends PhysicsEntity {
 
     private lastHint = Date.now();
     private flying = false;
-    private gender = startingGender;
     public direction = 1;
     private playerSpriteMetadata: PlayerSpriteMetadata[] | null = null;
     public animation = "idle";
@@ -173,10 +157,12 @@ export class Player extends PhysicsEntity {
     private hasFriendship = false;
     private usedJump = false;
     private usedDoubleJump = false;
-    // private hasBeard = false;
     private autoMove: AutoMove | null = null;
     public isControllable: boolean = true;
     private showHints = false;
+
+    private characterAsset: CharacterAsset;
+    private voiceAsset: VoiceAsset;
 
     public playerConversation: PlayerConversation | null = null;
 
@@ -195,13 +181,18 @@ export class Player extends PhysicsEntity {
     private dustEmitter: ParticleEmitter;
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
-    private genderSwapEmitter: ParticleEmitter;
+    // private genderSwapEmitter: ParticleEmitter;
     private disableParticles = false;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         this.isControllable = false;
         this.setFloating(true);
+
+        // Apply selected character traits
+        this.characterAsset = this.scene.game.campaign.selectedCharacter;
+        this.voiceAsset = this.scene.game.campaign.selectedVoice;
+        Conversation.setGlobal("ismale", this.characterAsset === CharacterAsset.MALE ? "true" : "false");
 
         setTimeout(() => {
             this.isControllable = true;
@@ -243,23 +234,6 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.genderSwapEmitter = this.scene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 45, y: rnd(-1, 1) * 45 }),
-            color: () => rndItem(genderSwapColors),
-            size: rnd(2, 2),
-            gravity: {x: 0, y: 0},
-            lifetime: () => rnd(0.5, 1),
-            alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
-    }
-
-    public toggleGender () {
-        this.genderSwapEmitter.setPosition(this.x, this.y + Player.playerSprites[this.gender].height / 2);
-        this.genderSwapEmitter.emit(20);
-        Player.genderSwapSound.play();
-        this.gender = this.gender === Gender.MALE ? Gender.FEMALE : Gender.MALE;
-        Conversation.setGlobal("ismale", this.gender === Gender.MALE ? "true" : "" );
     }
 
     public getControllable (): boolean {
@@ -546,8 +520,8 @@ export class Player extends PhysicsEntity {
 
     private jump(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-        Player.jumpingSounds[this.gender].stop();
-        Player.jumpingSounds[this.gender].play();
+        Player.jumpingSounds[this.voiceAsset].stop();
+        Player.jumpingSounds[this.voiceAsset].play();
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
@@ -615,8 +589,7 @@ export class Player extends PhysicsEntity {
 
     draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) return;
-
-        const sprite = Player.playerSprites[this.gender];
+        const sprite = Player.playerSprites[this.characterAsset];
         let animation = this.animation;
         if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
             animation = animation + "-carry";
@@ -739,9 +712,9 @@ export class Player extends PhysicsEntity {
                 this.animation = 'walk';
             }
             this.carrying.x = this.x;
-            const currentFrameIndex = Player.playerSprites[this.gender].getTaggedFrameIndex(this.animation + "-carry",
+            const currentFrameIndex = Player.playerSprites[this.characterAsset].getTaggedFrameIndex(this.animation + "-carry",
                 this.scene.gameTime * 1000);
-            const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.gender].carryOffsetFrames ?? [];
+            const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.characterAsset].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
             this.carrying.y = this.y + (this.height - this.carrying.carryHeight) - offset;
             if (this.carrying instanceof Stone) {

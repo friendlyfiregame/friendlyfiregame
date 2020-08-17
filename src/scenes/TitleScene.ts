@@ -9,11 +9,11 @@ import { DIALOG_FONT } from '../constants';
 import { easeInSine } from '../easings';
 import { FadeTransition } from '../transitions/FadeTransition';
 import { FriendlyFire } from '../FriendlyFire';
-import { GameScene } from './GameScene';
 import { isElectron } from '../util';
 import { MenuAlignment, MenuItem, MenuList } from '../Menu';
 import { Scene } from '../Scene';
 import { Sound } from '../Sound';
+import { CharacterSelectionScene } from './CharacterSelectionScene';
 
 type MainMenuParams = {
     label: string;
@@ -36,7 +36,7 @@ const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
 
 export class TitleScene extends Scene<FriendlyFire> {
     @asset("music/cerulean-expanse.ogg")
-    private static music: Sound;
+    public static music: Sound;
 
     @asset("images/title/layer1.aseprite.json")
     private static titleLayer1: Aseprite;
@@ -115,8 +115,9 @@ export class TitleScene extends Scene<FriendlyFire> {
     public handleMenuAction (buttonId: string) {
         switch(buttonId) {
             case MenuItemKey.START:
-                this.stopMusicTrack();
-                this.game.scenes.setScene(GameScene);
+                // this.stopMusicTrack();
+                this.game.scenes.pushScene(CharacterSelectionScene);
+                // this.game.scenes.setScene(GameScene);
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);

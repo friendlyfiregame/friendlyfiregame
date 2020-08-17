@@ -729,18 +729,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":16,
-                 "name":"spider",
-                 "point":true,
-                 "rotation":0,
-                 "type":"entity",
-                 "visible":true,
-                 "width":0,
-                 "x":1288,
-                 "y":1680
-                }, 
-                {
-                 "height":0,
                  "id":43,
                  "name":"campfire",
                  "point":true,
