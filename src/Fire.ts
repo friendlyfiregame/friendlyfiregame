@@ -1,7 +1,6 @@
 import { asset } from './Assets';
-import { rnd, rndInt, shiftValue } from './util';
 import { entity } from './Entity';
-import { Face, EyeType, FaceModes } from './Face';
+import { EyeType, Face, FaceModes } from './Face';
 import { FireGfx } from './FireGfx';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
@@ -10,6 +9,7 @@ import { PIXEL_PER_METER } from './constants';
 import { Point, Size } from './Geometry';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { rnd, rndInt, shiftValue } from './util';
 import { ShibaState } from './Shiba';
 import { Sound } from './Sound';
 import { SoundEmitter } from './SoundEmitter';

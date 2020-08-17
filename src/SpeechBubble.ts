@@ -1,11 +1,11 @@
-import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
+import { asset } from './Assets';
+import { BitmapFont } from './BitmapFont';
 import { ConversationLine } from './Conversation';
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
-import { GameScene } from "./scenes/GameScene";
-import { Padding, Point, Size } from "./Geometry";
-import { RenderingType, RenderingLayer } from './Renderer';
-import { sleep } from "./util";
+import { GameScene } from './scenes/GameScene';
+import { Padding, Point, Size } from './Geometry';
+import { RenderingLayer, RenderingType } from './Renderer';
+import { sleep } from './util';
 
 export function roundRect(
     ctx: CanvasRenderingContext2D, position: Point, size: Size, r: number,

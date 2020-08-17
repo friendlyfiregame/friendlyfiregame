@@ -1,8 +1,8 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { ControllerEvent } from './input/ControllerEvent';
-import { ControllerSpriteMap } from './input/ControllerFamily';
 import { ControllerManager } from './input/ControllerManager';
+import { ControllerSpriteMap } from './input/ControllerFamily';
 import { GameScene } from './scenes/GameScene';
 import { Point } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';

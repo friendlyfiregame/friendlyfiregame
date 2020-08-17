@@ -1,5 +1,5 @@
 import { Campaign, CampaignState } from './Campaign';
-import { GameScene, GameObject } from './scenes/GameScene';
+import { GameObject, GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
 import { Point } from './Geometry';
 import { rndItem } from './util';

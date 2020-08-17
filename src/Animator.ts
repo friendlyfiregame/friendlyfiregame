@@ -1,5 +1,5 @@
-import { Entity } from './Entity';
 import { Aseprite } from './Aseprite';
+import { Entity } from './Entity';
 import { RenderingLayer } from './Renderer';
 
 export type AnimationConfig = {

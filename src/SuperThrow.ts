@@ -1,7 +1,7 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
-import conversation from '../assets/dialog/superthrow.dialog.json';
 import { Conversation } from './Conversation';
+import conversation from '../assets/dialog/superthrow.dialog.json';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';

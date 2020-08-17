@@ -23,7 +23,7 @@ import { MenuList } from '../Menu';
 import { Mimic } from '../Mimic';
 import { MountainRiddle } from '../MountainRiddle';
 import { MovingPlatform } from '../MovingPlatform';
-import { Particles, ParticleEmitter, valueCurves } from '../Particles';
+import { ParticleEmitter, Particles, valueCurves } from '../Particles';
 import { PauseScene } from './PauseScene';
 import { Point, Size } from '../Geometry';
 import { Portal } from '../Portal';

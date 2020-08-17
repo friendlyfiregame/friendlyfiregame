@@ -1,11 +1,11 @@
 import { Aseprite } from '../Aseprite';
-import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
-import { DIALOG_FONT } from "../constants";
-import { easeInExpo, easeOutExpo } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
+import { asset } from '../Assets';
+import { BitmapFont } from '../BitmapFont';
+import { DIALOG_FONT } from '../constants';
+import { easeInExpo, easeOutExpo } from '../easings';
+import { FriendlyFire } from '../FriendlyFire';
 import { Point } from '../Geometry';
-import { Scene } from "../Scene";
+import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
 

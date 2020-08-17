@@ -1,6 +1,6 @@
 import { GameScene } from './scenes/GameScene';
-import { PIXEL_PER_METER } from './constants';
 import { PhysicsEntity } from './PhysicsEntity';
+import { PIXEL_PER_METER } from './constants';
 import { Point, Size } from './Geometry';
 
 export class Snowball extends PhysicsEntity {

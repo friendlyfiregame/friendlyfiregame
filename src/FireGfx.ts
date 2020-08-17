@@ -1,4 +1,4 @@
-import { asset } from "./Assets";
+import { asset } from './Assets';
 import { clamp, orientPow, rnd } from './util';
 import { ColorGradient } from './ColorGradient';
 import { Point, Size } from './Geometry';

@@ -1,6 +1,6 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
-import { calculateVolume, rndItem, rnd } from './util';
+import { calculateVolume, rnd, rndItem } from './util';
 import { Conversation } from './Conversation';
 import conversation from '../assets/dialog/bird.dialog.json';
 import { DOUBLE_JUMP_COLORS, GRAVITY } from './constants';

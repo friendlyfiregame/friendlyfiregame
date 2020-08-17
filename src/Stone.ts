@@ -1,4 +1,3 @@
-
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { CollidableGameObject, GameScene } from './scenes/GameScene';

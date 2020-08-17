@@ -109,7 +109,9 @@ export class PauseScene extends Scene<FriendlyFire> {
             0,
             0.6
         );
+
         ctx.restore();
+
         this.menu.draw(ctx);
     }
 }

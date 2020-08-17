@@ -1,7 +1,7 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
-import { BitmapFont } from './BitmapFont';
 import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
+import { BitmapFont } from './BitmapFont';
 import { Bounds, entity } from './Entity';
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
 import { Cloud } from './Cloud';

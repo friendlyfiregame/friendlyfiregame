@@ -1,7 +1,7 @@
 import { asset } from './Assets';
 import { BitmapFont } from './BitmapFont';
-import dialogData from '../assets/dummy.texts.json';
 import { DIALOG_FONT } from './constants';
+import dialogData from '../assets/dummy.texts.json';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { Greeting } from './Greeting';
