@@ -1,5 +1,5 @@
 import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
-import { Point } from './Geometry';
+import { Point, Size } from './Geometry';
 
 export enum MapObjectType {
     ENTITY = 'entity',
@@ -60,6 +60,7 @@ export class MapInfo {
     public getPlayerStart(): Point {
         const mapHeight = MapInfo.getMapSize().height;
         const object = this.getObject("player");
+
         if (object) {
             return new Point(object.x, mapHeight - object.y);
         } else {
@@ -111,10 +112,7 @@ export class MapInfo {
         return objects;
     }
 
-    public static getMapSize(): { width: number, height: number } {
-        return {
-            width: json.width * json.tilewidth,
-            height: json.height * json.tileheight
-        }
+    public static getMapSize(): Size {
+        return new Size(json.width * json.tilewidth, json.height * json.tileheight);
     }
 }
