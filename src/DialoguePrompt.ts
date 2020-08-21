@@ -29,6 +29,6 @@ export class DialoguePrompt {
 
     update(dt: number, anchor: Point): void {
         this.timeAlive += dt;
-        this.position.moveTo(anchor.x, anchor.y);
+        this.position.moveTo(anchor);
     }
 }

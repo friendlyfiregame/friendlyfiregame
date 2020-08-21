@@ -62,10 +62,8 @@ export class Tree extends NPC {
         if (!this.scene.gameObjects.includes(this.seed)) {
             this.scene.addGameObject(this.seed);
         }
-        this.seed.position.moveTo(
-            this.position.x,
-            this.position.y + this.size.height / 2
-        );
+
+        this.seed.position.moveTo(this.position.clone().moveYBy(this.size.height / 2));
 
         this.seed.setVelocity(5, 0);
         return this.seed;
@@ -76,12 +74,9 @@ export class Tree extends NPC {
             this.scene.addGameObject(this.wood);
         }
 
-        this.wood.position.moveTo(
-            this.position.x,
-            this.position.y + this.size.height / 2
-        );
-
+        this.wood.position.moveTo(this.position.clone().moveYBy(this.size.height / 2));
         this.wood.setVelocity(5, 0);
+
         return this.wood;
     }
 }

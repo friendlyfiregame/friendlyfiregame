@@ -33,13 +33,22 @@ export class Point {
         return new Point(this._xRounded, this._yRounded);
     }
 
-    public moveTo(x: number, y: number): Point {
-        this.moveXTo(x);
-        this.moveYTo(y);
+    public moveTo(x: number, y: number): Point;
+    public moveTo(position: Point): Point;
+
+    public moveTo(pointOrX: Point | number, y?: number): Point {
+        if (pointOrX && pointOrX instanceof Point && !y) {
+            this.moveXTo(pointOrX.x);
+            this.moveYTo(pointOrX.y);
+        } else if (pointOrX && typeof pointOrX == 'number' && y) {
+            this.moveXTo(pointOrX);
+            this.moveYTo(y);
+        } else {
+            throw new Error('Invalid call signature.');
+        }
 
         return this;
     }
-
     public moveXTo(x: number): Point {
         this._x = x;
 

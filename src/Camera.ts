@@ -184,7 +184,7 @@ export class Camera {
 
         // Base position always on target (player)
         const baseCamTarget = this.getBaseCameraTarget();
-        this.position.moveTo(baseCamTarget.x, baseCamTarget.y)
+        this.position.moveTo(baseCamTarget)
 
         // Cam Shake during apocalypse
         if (this.scene.fire.isAngry() || this.scene.apocalypse) {

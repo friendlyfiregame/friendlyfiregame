@@ -523,15 +523,19 @@ export class Player extends PhysicsEntity {
                 Player.enterGateSound.play();
                 this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
                 .then(() => {
-                    if (targetBgmId) this.scene.setActiveBgmTrack(targetBgmId as BgmId);
+                    if (targetBgmId) {
+                        this.scene.setActiveBgmTrack(targetBgmId as BgmId);
+                    }
+
                     Player.leaveGateSound.stop();
                     Player.leaveGateSound.play();
 
                     this.position.moveTo(
                         targetGate.x + (targetGate.width / 2),
                         targetGate.y - targetGate.height
-                    )
-                    this.scene.camera.setBounds(this.getCurrentMapBounds())
+                    );
+
+                    this.scene.camera.setBounds(this.getCurrentMapBounds());
                     this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
                         this.isControllable = true;
                     });
@@ -701,10 +705,7 @@ export class Player extends PhysicsEntity {
     }
 
     private respawn() {
-        this.position.moveTo(
-            this.lastGroundPosition.x,
-            this.lastGroundPosition.y + 10
-        )
+        this.position.moveTo(this.lastGroundPosition.moveYBy(10));
         this.setVelocity(0, 0);
     }
 
@@ -1154,25 +1155,32 @@ export class Player extends PhysicsEntity {
             if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }
+
             if (object instanceof Wood && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_WOOD);
                 this.scene.game.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
+
             if (object instanceof Stone && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_STONE);
             }
+
             this.carrying = object;
             object.setFloating(false);
+
             if (object instanceof Stone) {
                 object.state = StoneState.DEFAULT;
             }
+
             if (object instanceof Seed) {
                 object.state = SeedState.FREE;
             }
+
             if (object instanceof Wood) {
                 object.state = WoodState.FREE;
             }
-            object.position.moveTo(this.position.x, this.position.y + this.size.height);
+
+            object.position.moveTo(this.position.clone().moveYBy(this.size.height));
             object.setVelocity(0, 0);
         }
     }

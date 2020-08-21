@@ -42,10 +42,13 @@ export abstract class NPC extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
+
         const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.position.clone());
         thinkBubble.setMessage(message);
         thinkBubble.show();
+
         await sleep(time);
+
         if (this.thinkBubble === thinkBubble) {
             thinkBubble.hide();
             this.thinkBubble = null;
@@ -65,7 +68,10 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     protected showDialoguePrompt (): boolean {
-        if (this.hasActiveConversation() || !this.scene.player.isControllable) return false;
+        if (this.hasActiveConversation() || !this.scene.player.isControllable) {
+            return false;
+        }
+
         return true;
     }
 
@@ -104,6 +110,7 @@ export abstract class NPC extends PhysicsEntity {
             const dx = this.scene.player.position.x - this.position.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
         }
+
         super.update(dt);
     }
 }
