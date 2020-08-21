@@ -118,14 +118,14 @@ export class Camera {
         };
     }
 
-    public isPointVisible(x: number, y: number, radius = 0): boolean {
+    public isPointVisible(position: Point, radius = 0): boolean {
         const visibleRect = this.getVisibleRect();
 
         return (
-            x >= visibleRect.position.x - radius
-            && y >= visibleRect.position.y - radius
-            && x <= visibleRect.position.x + visibleRect.size.width + radius
-            && y <= visibleRect.position.y + visibleRect.size.height + radius
+            position.x >= visibleRect.position.x - radius
+            && position.y >= visibleRect.position.y - radius
+            && position.x <= visibleRect.position.x + visibleRect.size.width + radius
+            && position.y <= visibleRect.position.y + visibleRect.size.height + radius
         )
     }
 
@@ -190,12 +190,15 @@ export class Camera {
         if (this.scene.fire.isAngry() || this.scene.apocalypse) {
             this.applyApocalypticShake(this.scene.fire);
         }
+
         this.zoom = this.zoomingOut ? 0.2 : 1;
         this.rotation = 0;
+
         // On top of that, apply cam focus(es)
         for (const focus of this.focuses) {
             this.updateAndApplyFocus(focus);
         }
+
         // Drop any focus that is done
         this.focuses = this.focuses.filter(f => !f.dead);
         // Update bar target towards goal
@@ -212,6 +215,7 @@ export class Camera {
 
         if (dis < maxDis) {
             const intensity = (shakeSource.intensity - 5) / 15;
+
             if (intensity > 0) {
                 const shake = 5 * intensity * (1 - dis / maxDis) * (this.scene.player.playerConversation ? 0.5 : 1);
                 this.position.moveBy(rnd(-1, 1) * shake, rnd(-1, 1) * shake)

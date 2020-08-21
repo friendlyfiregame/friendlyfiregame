@@ -98,6 +98,7 @@ export class Fire extends NPC {
             zIndex: 1,
             breakFactor: 0.5
         })
+
         this.sparkEmitter = this.scene.particles.createEmitter({
             position: this.position,
             velocity: () => new Point(rnd(-1, 1) * 30, rnd(50, 100)),
@@ -109,11 +110,15 @@ export class Fire extends NPC {
             alpha: () => rnd(0.3, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
+
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
     }
 
     public showDialoguePrompt (): boolean {
-        if (!super.showDialoguePrompt()) return false;
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
             (
@@ -132,9 +137,11 @@ export class Fire extends NPC {
     public isAngry(): boolean {
         return this.state === FireState.ANGRY;
     }
+
     public isBeingPutOut(): boolean {
         return this.state === FireState.BEING_PUT_OUT;
     }
+
     public isPutOut(): boolean {
         return this.state === FireState.PUT_OUT;
     }
@@ -157,10 +164,13 @@ export class Fire extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isVisible) return;
-        this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this })
+        if (!this.isVisible) {
+            return;
+        }
 
+        this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this })
         this.drawFace(ctx);
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
@@ -170,7 +180,10 @@ export class Fire extends NPC {
         }
 
         this.speechBubble.draw(ctx);
-        if (this.scene.showBounds) this.drawBounds();
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
     update(dt: number): void {
@@ -192,7 +205,7 @@ export class Fire extends NPC {
             this.scene.shiba.nextState();
         }
 
-        if (!this.scene.camera.isPointVisible(this.position.x, this.position.y, 200)) {
+        if (!this.scene.camera.isPointVisible(this.position, 200)) {
             this.isVisible = false;
             return;
         }
@@ -201,13 +214,16 @@ export class Fire extends NPC {
 
         if (!this.isBeingPutOut() && !this.isPutOut()) {
             let particleChance = dt - rnd() * this.averageParticleDelay;
+
             while (particleChance > 0) {
                 if (rnd() < 0.5) {
                     this.sparkEmitter.emit();
                 }
+
                 if (rnd() < 0.32) {
                     this.smokeEmitter.emit();
                 }
+
                 particleChance -= rnd() * this.averageParticleDelay;
             }
 
@@ -216,6 +232,7 @@ export class Fire extends NPC {
 
         if (this.isBeingPutOut()) {
             let steamParticleChance = dt - rnd() * this.averageSteamDelay;
+
             while (steamParticleChance > 0) {
                 this.steamEmitter.emit();
                 steamParticleChance -= rnd() * this.averageSteamDelay;
@@ -225,14 +242,17 @@ export class Fire extends NPC {
         if (this.isVisible) {
             this.fireGfx.update(dt);
         }
+
         if (this.showDialoguePrompt()) {
             this.dialoguePrompt.update(dt, this.position.clone().moveYBy(32));
         }
+
         this.speechBubble.update(this.position);
     }
 
     public feed(wood: Wood) {
         wood.remove();
+
         // Handle end of the world
         this.state = FireState.ANGRY;
         this.growthTarget = 14;
@@ -257,6 +277,7 @@ export class Fire extends NPC {
         ].forEach(line => setTimeout(() => {
             this.scene.player.think(line[0] as string, line[2] as number * 1000);
         }, (line[1] as number) * 1000));
+
         // Give fire new dialog
         setTimeout(() => {
             this.scene.game.campaign.runAction("enable", null, ["fire", "fire2"]);
