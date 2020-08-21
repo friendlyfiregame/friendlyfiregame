@@ -76,8 +76,8 @@ export class World implements GameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
-        const camX = this.scene.camera.x;
-        const camY = this.scene.camera.y;
+        const camX = this.scene.camera.position.x;
+        const camY = this.scene.camera.position.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
 
         this.scene.renderer.add({

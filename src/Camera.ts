@@ -33,8 +33,7 @@ type OverBoundData = {
 }
 
 export class Camera {
-    public x = 0;
-    public y = 0;
+    public position = Point.ORIGIN.clone();
     public zoom = 1;
     public rotation = 0;
     private focuses: camFocus[] = [];
@@ -97,24 +96,25 @@ export class Camera {
             const px = cx / rect.width;
             const py = cy / rect.height;
             const worldRect = this.getVisibleRect();
-            const tx = worldRect.position.x + px * worldRect.size.width;
-            const ty = worldRect.position.y + (1 - py) * worldRect.size.height;
 
             // Teleport player
-            this.scene.player.position.moveTo(tx, ty);
+            this.scene.player.position.moveTo(
+                worldRect.position.x + px * worldRect.size.width,
+                worldRect.position.y + (1 - py) * worldRect.size.height
+            );
+
             this.scene.player.setVelocity(0, 0);
             this.zoomingOut = false;
         }
     }
 
-    public getVisibleRect(x = this.x, y = this.y): Rectangle {
+    public getVisibleRect(position = this.position): Rectangle {
         const canvas = this.scene.game.canvas;
-        const offX = canvas.width / 2 / this.zoom
-        const offY = canvas.height / 2 / this.zoom;
+        const offset = new Point(canvas.width / 2 / this.zoom, canvas.height / 2 / this.zoom);
 
         return {
-            position: new Point(x - offX, y - offY),
-            size: new Size(offX * 2, offY * 2)
+            position: position.clone().moveBy(-offset.x, -offset.y),
+            size: new Size(offset.x * 2, offset.y * 2)
         };
     }
 
@@ -133,13 +133,12 @@ export class Camera {
         this.currentBarTarget = target;
     }
 
-    private getBaseCameraTarget () {
+    private getBaseCameraTarget(): Point {
         // Base position always on target (player)
-        let xTarget = this.target.x;
-        let yTarget = this.target.y + 30;
+        let target = this.target.clone().moveYBy(30);
 
         if (this.bounds) {
-            const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
+            const targetVisibleRect = this.getVisibleRect(target);
 
             const overBounds: OverBoundData = {
                 left: (targetVisibleRect.position.x < this.bounds.position.x),
@@ -153,13 +152,13 @@ export class Camera {
                 const visibleCenterX = targetVisibleRect.position.x + targetVisibleRect.size.width / 2;
                 const boundCenterX = this.bounds.position.x + this.bounds.size.width / 2;
                 const diff = boundCenterX - visibleCenterX;
-                xTarget += diff;
+                target.moveXBy(diff);
             } else if (overBounds.left) {
                 const diff = this.bounds.position.x - targetVisibleRect.position.x;
-                xTarget += diff;
+                target.moveXBy(diff);
             } else if (overBounds.right) {
                 const diff = (this.bounds.position.x + this.bounds.size.width) - (targetVisibleRect.position.x + targetVisibleRect.size.width);
-                xTarget += diff;
+                target.moveXBy(diff);
             }
 
             // Bound clip top / bottom
@@ -167,29 +166,25 @@ export class Camera {
                 const visibleCenterY = (targetVisibleRect.position.y + targetVisibleRect.size.height) - targetVisibleRect.size.height / 2;
                 const boundCenterY = this.bounds.position.y - this.bounds.size.height / 2;
                 const diff = boundCenterY - visibleCenterY;
-                yTarget += diff;
+                target.moveYBy(diff);
             } else if (overBounds.top) {
                 const diff = this.bounds.position.y - (targetVisibleRect.position.y + targetVisibleRect.size.height);
-                yTarget += diff;
+                target.moveYBy(diff);
             } else if (overBounds.bottom) {
                 const diff = (this.bounds.position.y - this.bounds.size.height) - targetVisibleRect.position.y;
-                yTarget += diff;
+                target.moveYBy(diff);
             }
         }
 
-        return {
-            x: xTarget,
-            y: yTarget
-        }
+        return target;
     }
 
-    public update(dt: number, time: number) {
+    public update(dt: number, time: number): void {
         this.time = time;
 
         // Base position always on target (player)
         const baseCamTarget = this.getBaseCameraTarget();
-        this.x = baseCamTarget.x;
-        this.y = baseCamTarget.y;
+        this.position.moveTo(baseCamTarget.x, baseCamTarget.y)
 
         // Cam Shake during apocalypse
         if (this.scene.fire.isAngry() || this.scene.apocalypse) {
@@ -210,7 +205,8 @@ export class Camera {
     }
 
     private applyApocalypticShake(shakeSource: Fire) {
-        const dx = this.x - shakeSource.position.x, dy = this.y - shakeSource.position.y;
+        const dx = this.position.x - shakeSource.position.x;
+        const dy = this.position.y - shakeSource.position.y;
         const dis = Math.sqrt(dx * dx + dy * dy);
         const maxDis = 200;
 
@@ -218,8 +214,7 @@ export class Camera {
             const intensity = (shakeSource.intensity - 5) / 15;
             if (intensity > 0) {
                 const shake = 5 * intensity * (1 - dis / maxDis) * (this.scene.player.playerConversation ? 0.5 : 1);
-                this.x += rnd(-1, 1) * shake;
-                this.y += rnd(-1, 1) * shake;
+                this.position.moveBy(rnd(-1, 1) * shake, rnd(-1, 1) * shake)
             }
         }
     }
@@ -243,7 +238,7 @@ export class Camera {
     public applyTransform(ctx: CanvasRenderingContext2D): void {
         ctx.scale(this.zoom, this.zoom);
         ctx.rotate(this.rotation);
-        ctx.translate(-this.x, this.y);
+        ctx.translate(-this.position.x, this.position.y);
     }
 
     public focusOn(
@@ -262,24 +257,31 @@ export class Camera {
             force: 0,
             curve
         };
+
         this.focuses.push(focus);
+
         return new Promise((resolve, reject) => {
             focus.resolve = resolve;
             this.updateAndApplyFocus(focus);
         });
     }
 
-    public updateAndApplyFocus(focus: camFocus) {
+    public updateAndApplyFocus(focus: camFocus): void {
         focus.progress = clamp((this.time - focus.startTime) / focus.duration, 0, 1);
         focus.dead = (focus.progress >= 1);
+
         if (!focus.dead) {
             // Fade in and out of focus using force lerping from 0 to 1 and back to 0 over time
             const force = focus.force = focus.curve.get(focus.progress);
 
             // Apply to camera state
             const f1 = 1 - force;
-            this.x = f1 * this.x + force * focus.position.x;
-            this.y = f1 * this.y + force * focus.position.y;
+
+            this.position.moveTo(
+                f1 * this.position.x + force * focus.position.x,
+                f1 * this.position.y + force * focus.position.y
+            );
+
             const originalSize = 1 / this.zoom, targetSize = 1 / focus.zoom;
             const currentSize = f1 * originalSize + force * targetSize;
 
@@ -295,6 +297,7 @@ export class Camera {
 
     public addCinematicBarsToRenderer(force = this.getFocusForce()): void {
         force = Math.max(force, this.getFocusForce(), this.currentBarHeight);
+
         this.scene.renderer.add({
             type: RenderingType.BLACK_BARS,
             layer: RenderingLayer.BLACK_BARS,
