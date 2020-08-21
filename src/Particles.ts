@@ -63,24 +63,26 @@ export class Particles {
 
     public dropEmitter(emitter: ParticleEmitter): boolean {
         const index = this.emitters.indexOf(emitter);
+
         if (index >= 0) {
             this.emitters.splice(index, 1);
             return true;
         }
+
         return false;
     }
 
     public createEmitter(args: ParticleEmitterArguments) {
         const emitter = new ParticleEmitter(args);
         this.addEmitter(emitter);
+
         return emitter;
     }
 }
 
 export class ParticleEmitter {
     private particles: Particle[];
-    private x: number;
-    private y: number;
+    private position: Point;
     private offsetGenerator: PointGenerator;
     private velocityGenerator: PointGenerator;
     private colorGenerator: ParticleAppearanceGenerator;
@@ -101,8 +103,7 @@ export class ParticleEmitter {
 
     constructor(args: ParticleEmitterArguments) {
         this.particles = [];
-        this.x = args.position.x;
-        this.y = args.position.y;
+        this.position = args.position;  // Clone?
         this.offsetGenerator = toGenerator(args.offset ?? Point.ORIGIN);
         this.velocityGenerator = toGenerator(args.velocity ?? Point.ORIGIN);
         this.colorGenerator = toGenerator(args.color ?? "white");
@@ -131,8 +132,7 @@ export class ParticleEmitter {
     }
 
     public setPosition(position: Point): void {
-        this.x = position.x;
-        this.y = position.y;
+        this.position = position.clone();
     }
 
     public clear() {
@@ -147,11 +147,11 @@ export class ParticleEmitter {
 
     public emitSingle(): Particle {
         const v = this.velocityGenerator();
-        const off = this.offsetGenerator();
+        const offset = this.offsetGenerator();
+
         const particle = new Particle(
             this,
-            this.x + off.x,
-            this.y + off.y,
+            this.position.clone().moveBy(offset),
             v.x,
             v.y,
             this.angleGenerator(),
@@ -161,17 +161,21 @@ export class ParticleEmitter {
             this.lifetimeGenerator(),
             this.alphaGenerator()
         );
+
         this.particles.push(particle);
+
         return particle;
     }
 
     public update(dt: number): void {
         this.gravity = this.gravityGenerator();
+
         for (let i = this.particles.length - 1; i >= 0; i--) {
             if (this.particles[i].update(dt)) {
                 this.particles.splice(i, 1);
             }
         }
+
         if (this.updateMethod) {
             for (const p of this.particles) {
                 this.updateMethod(p);
@@ -194,8 +198,7 @@ export class Particle {
 
     constructor(
         private emitter: ParticleEmitter,
-        public x: number,
-        public y: number,
+        public position: Point,
         public vx = 0,
         public vy = 0,
         private angle = 0,
@@ -213,6 +216,7 @@ export class Particle {
     public update(dt: number): boolean {
         // Life
         this.lifetime -= dt;
+
         if (this.lifetime <= 0) {
             // Tell parent that it may eliminate this particle
             return true;
@@ -223,6 +227,7 @@ export class Particle {
         // Gravity
         this.vx += this.emitter.gravity.x * dt;
         this.vy += this.emitter.gravity.y * dt;
+
         if (this.emitter.breakFactor !== 1) {
             const factor = this.emitter.breakFactor ** dt;
             this.vx *= factor;
@@ -230,8 +235,7 @@ export class Particle {
         }
 
         // Movement
-        this.x += this.vx * dt;
-        this.y += this.vy * dt;
+        this.position.moveBy(this.vx * dt, this.vy * dt);
         this.angle += this.angleSpeed * dt;
 
         return false;
@@ -240,10 +244,12 @@ export class Particle {
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.globalAlpha = this.alpha * this.emitter.alphaCurve.get(this.progress);
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.position.x, -this.position.y);
+
         if (this.angle) {
             ctx.rotate(this.angle);
         }
+
         if (this.imageOrColor instanceof Object) {
             // Image
             const img = this.imageOrColor;
@@ -255,12 +261,14 @@ export class Particle {
             ctx.fillStyle = (this.imageOrColor as string);
             ctx.fillRect(-this.halfSize, -this.halfSize, this.size, this.size);
         }
+
         ctx.restore();
     }
 }
 
 export class ValueCurve {
     private mapping: number[] = [];
+
     constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
         for (let i = 0; i <= steps; i++) {
             this.mapping[i] = func(i / steps);
