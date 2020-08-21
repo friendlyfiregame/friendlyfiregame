@@ -19,10 +19,8 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
 
-    private startX: number;
-    private startY: number;
-    private targetX: number;
-    private targetY: number;
+    private start: Point;
+    private target: Point;
     private velocity: number;
 
     private rainEmitter: ParticleEmitter;
@@ -32,23 +30,24 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     public constructor(scene: GameScene, position: Point, properties: GameObjectProperties, canRain = false) {
         super(scene, position, new Size(74, 5));
         this.setFloating(true);
-        this.startX = this.targetX = position.x;
-        this.startY = this.targetY = position.y;
+        this.start = this.target = position;
         this.isRainCloud = canRain;
         this.velocity = properties.velocity / PIXEL_PER_METER;
+
         if (properties.direction === "right") {
-            this.targetX = position.x + properties.distance;
+            this.target.moveXBy(properties.distance);
             this.setVelocityX(this.velocity);
         } else if (properties.direction === "left") {
-            this.targetX = position.x - properties.distance;
+            this.target.moveXBy(-properties.distance);
             this.setVelocityX(-this.velocity);
         } else if (properties.direction === "up") {
-            this.targetY = position.y + properties.distance;
+            this.target.moveYBy(properties.distance);
             this.setVelocityY(this.velocity);
         } else if (properties.direction === "down") {
-            this.targetY = position.y - properties.distance;
+            this.target.moveYBy(-properties.distance);
             this.setVelocityY(-this.velocity);
         }
+
         this.rainEmitter = this.scene.particles.createEmitter({
             position: this.position,
             offset: () => new Point(rnd(-1, 1) * 26, rnd(-1, 1) * 5),
@@ -84,24 +83,24 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     update(dt: number): void {
         super.update(dt);
         if (this.getVelocityY() > 0) {
-            if (this.position.y >= Math.max(this.startY, this.targetY)) {
-                this.position.moveYTo(Math.max(this.startY, this.targetY));
+            if (this.position.y >= Math.max(this.start.y, this.target.y)) {
+                this.position.moveYTo(Math.max(this.start.y, this.target.y));
                 this.setVelocityY(-this.velocity);
             }
         } else if (this.getVelocityY() < 0) {
-            if (this.position.y <= Math.min(this.startY, this.targetY)) {
-                this.position.moveYTo(Math.min(this.startY, this.targetY));
+            if (this.position.y <= Math.min(this.start.y, this.target.y)) {
+                this.position.moveYTo(Math.min(this.start.y, this.target.y));
                 this.setVelocityY(this.velocity);
             }
         }
         if (this.getVelocityX() > 0) {
-            if (this.position.x >= Math.max(this.targetX, this.startX)) {
-                this.position.moveXTo(Math.max(this.targetX, this.startX));
+            if (this.position.x >= Math.max(this.target.x, this.start.x)) {
+                this.position.moveXTo(Math.max(this.target.x, this.start.x));
                 this.setVelocityX(-this.velocity);
             }
         } else if (this.getVelocityX() < 0) {
-            if (this.position.x <= Math.min(this.startX, this.targetX)) {
-                this.position.moveXTo(Math.min(this.startX, this.targetX));
+            if (this.position.x <= Math.min(this.start.x, this.target.x)) {
+                this.position.moveXTo(Math.min(this.start.x, this.target.x));
                 this.setVelocityX(this.velocity);
             }
         }
