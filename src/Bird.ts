@@ -78,8 +78,8 @@ export class Bird extends NPC {
         return this.jumpTimer === 0;
     }
 
-    protected updatePosition(newX: number, newY: number): void {
-        this.position.moveTo(newX, newY);
+    protected updatePosition(newPosition: Point): void {
+        this.position.moveTo(newPosition);
 
         // Check collision with the environment and correct player position and movement
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {

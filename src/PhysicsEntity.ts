@@ -112,13 +112,19 @@ export abstract class PhysicsEntity extends Entity {
         return Environment.AIR;
     }
 
-    protected updatePosition(newX: number, newY: number): void {
+    protected updatePosition(newPosition: Point): void {
+        const position = newPosition.clone();
+
         if (this.floating) {
-            this.position.moveTo(newX, newY);
+            this.position.moveTo(position);
         } else {
-            const env = this.checkCollisionBox(newX, newY, newY > this.position.y ? [ Environment.PLATFORM ] : []);
+            const env = this.checkCollisionBox(
+                position.x, position.y,
+                position.y > this.position.y ? [ Environment.PLATFORM ] : []
+            );
+
             if (env === Environment.AIR || env === Environment.WATER) {
-                this.position.moveTo(newX, newY);
+                this.position.moveTo(position);
             } else {
                 this.setVelocity(0, 0);
             }
@@ -141,8 +147,10 @@ export abstract class PhysicsEntity extends Entity {
         this.ground = ground;
 
         this.updatePosition(
-            this.position.x + this.velocityX * PIXEL_PER_METER * dt,
-            this.position.y + this.velocityY * PIXEL_PER_METER * dt
+            this.position.clone().moveBy(
+                this.velocityX * PIXEL_PER_METER * dt,
+                this.velocityY * PIXEL_PER_METER * dt
+            )
         );
 
         // Object dropping down when there is no ground below

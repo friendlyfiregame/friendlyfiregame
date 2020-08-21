@@ -5,8 +5,8 @@ import { Point } from './Geometry';
 export abstract class ScriptableNPC extends NPC {
     protected move: 0 | 1 | -1  = 0;
 
-    protected updatePosition(newX: number, newY: number): void {
-        this.position = new Point(newX, newY);
+    protected updatePosition(newPosition: Point): void {
+        this.position.moveTo(newPosition);
 
         // Check collision with the environment and correct player position and movement
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
