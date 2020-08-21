@@ -293,7 +293,7 @@ export class GameScene extends Scene<FriendlyFire> {
         const found = this.backgroundTracks.find(track => track.id === id);
 
         if (!found) {
-            console.error(`Missing background track with id '${id}'`);
+            console.error(`Missing background track with ID '${id}'.`);
             return this.backgroundTracks[0];
         }
 
@@ -355,7 +355,7 @@ export class GameScene extends Scene<FriendlyFire> {
             }
         }
 
-        throw new Error(`Game object of type ${type.name} not found`);
+        throw new Error(`Game object of type ${type.name} not found.`);
     }
 
     public activate(): void {
@@ -647,10 +647,10 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position")
+        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === 'friendship_player_position')
 
         if (!playerTargetPos) {
-            throw new Error ('cannot initiate friendship ending because some points of interest are missing');
+            throw new Error ('Cannot initiate friendship ending because some points of interest are missing.');
         }
 
         this.player.startAutoMove(playerTargetPos.x, true);
@@ -697,9 +697,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);
-            setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
+            setTimeout(() => this.player.think("There's still something I can do.", 4000), 12000);
         } else {
-            throw new Error('cannot begin apocalypse because. boss_spawn or bosscloud trigger in map missing');
+            throw new Error('Cannot begin apocalypse because boss_spawn or bosscloud trigger is missing in map.');
         }
     }
 
