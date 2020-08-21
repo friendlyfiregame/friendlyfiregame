@@ -66,9 +66,19 @@ export class Point {
         return this;
     }
 
-    public moveBy(x: number, y: number): Point {
-        this.moveXBy(x);
-        this.moveYBy(y);
+    public moveBy(x: number, y: number): Point;
+    public moveBy(position: Point): Point;
+
+    public moveBy(pointOrX: Point | number, y?: number): Point {
+        if (typeof pointOrX === 'number' && typeof y === 'number') {
+            this.moveXBy(pointOrX);
+            this.moveYBy(y);
+        } else if (pointOrX instanceof Point && typeof y === 'undefined') {
+            this.moveXBy(pointOrX.x);
+            this.moveYBy(pointOrX.y);
+        } else {
+            throw new Error('Invalid call signature.');
+        }
 
         return this;
     }

@@ -78,7 +78,7 @@ export class SpeechBubble {
         private color = "white",
         private relativeToScreen = false
     ) {
-        this.position = anchor.rounded.moveBy(this.offset.x, this.offset.y);
+        this.position = anchor.rounded.moveBy(this.offset);
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
     }
 
@@ -231,7 +231,7 @@ export class SpeechBubble {
     }
 
     public update(anchor: Point): void {
-        this.position = anchor.rounded.moveBy(this.offset.x, this.offset.y);
+        this.position = anchor.rounded.moveBy(this.offset);
     }
 
     private determineMaxLineLength(message: string[]): number {

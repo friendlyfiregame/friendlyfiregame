@@ -25,8 +25,7 @@ const menuItemX = 12;
 const characterMenuItemPosition = new Point(menuItemX, 20);
 const voiceMenuItemPosition = new Point(menuItemX, 50);
 const startMenuItemPosition = new Point(menuItemX, 124);
-const selectionItemsYDistance = 12;
-const selectionItemsXDistance = 12
+const selectionItemsOffset = new Point(menuItemX, menuItemX);
 
 export class CharacterSelectionScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -137,7 +136,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         this.drawTooltip(ctx, new Point(0, CharacterSelectionScene.panelImage.height + 16), "Back", ControllerAnimationTags.BACK);
 
         const character = this.game.campaign.selectedCharacter;
-        const charSelectionTextPosition = characterMenuItemPosition.clone().moveBy(selectionItemsXDistance, selectionItemsYDistance);
+        const charSelectionTextPosition = characterMenuItemPosition.clone().moveBy(selectionItemsOffset);
         const charSelectenTextGap = 55;
 
         if (character === CharacterAsset.MALE) {
@@ -151,7 +150,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         CharacterSelectionScene.playerSprites[character].drawTag(ctx, "idle", new Point(213, 46));
 
         const voice = this.game.campaign.selectedVoice;
-        const voiceSelectionTextPosition = voiceMenuItemPosition.clone().moveBy(selectionItemsXDistance, selectionItemsYDistance);
+        const voiceSelectionTextPosition = voiceMenuItemPosition.clone().moveBy(selectionItemsOffset);
         const voiceSelectenTextGap = 55;
 
         if (voice === VoiceAsset.MALE) {
