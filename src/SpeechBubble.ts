@@ -155,7 +155,7 @@ export class SpeechBubble {
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
-            const relativeX = posX - visibleRect.x;
+            const relativeX = posX - visibleRect.position.x;
             const clipAmount = Math.max((this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (this.longestLine / 2), 0);
 
             if (clipAmount !== 0) {

@@ -2,7 +2,7 @@ import { Bounds } from './Entity';
 import { clamp, isDev, rnd, shiftValue } from './util';
 import { Fire } from './Fire';
 import { GameScene } from './scenes/GameScene';
-import { Point } from './Geometry';
+import { Point, Size } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { ValueCurve, valueCurves } from './Particles';
 
@@ -21,10 +21,8 @@ export interface camFocus {
 };
 
 interface Rectangle {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    position: Point;
+    size: Size;
 };
 
 type OverBoundData = {
@@ -47,7 +45,10 @@ export class Camera {
     private currentBarHeight = 0;
     private bounds?: Bounds;
 
-    constructor(protected scene: GameScene, private target: Point, interpolationTime = 0.5, private barHeight = 0.1) {
+    constructor(
+        protected scene: GameScene, private target: Point, interpolationTime = 0.5,
+        private barHeight = 0.1
+    ) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");
         }
@@ -91,10 +92,14 @@ export class Camera {
     private handleClick(e: MouseEvent) {
         if (this.zoomingOut) {
             const rect = this.scene.game.canvas.getBoundingClientRect();
-            const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
-            const px = cx / rect.width, py = cy / rect.height;
+            const cx = e.clientX - rect.x;
+            const cy = e.clientY - rect.y;
+            const px = cx / rect.width;
+            const py = cy / rect.height;
             const worldRect = this.getVisibleRect();
-            const tx = worldRect.x + px * worldRect.width, ty = worldRect.y + (1 - py) * worldRect.height;
+            const tx = worldRect.position.x + px * worldRect.size.width;
+            const ty = worldRect.position.y + (1 - py) * worldRect.size.height;
+
             // Teleport player
             this.scene.player.position.moveTo(tx, ty);
             this.scene.player.setVelocity(0, 0);
@@ -103,22 +108,25 @@ export class Camera {
     }
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
-        const cnv = this.scene.game.canvas;
-        const cw = cnv.width, ch = cnv.height;
-        const offx = cw / 2 / this.zoom, offy = ch / 2 / this.zoom;
+        const canvas = this.scene.game.canvas;
+        const offX = canvas.width / 2 / this.zoom
+        const offY = canvas.height / 2 / this.zoom;
 
         return {
-            x: x - offx,
-            y: y - offy,
-            width: offx * 2,
-            height: offy * 2
+            position: new Point(x - offX, y - offY),
+            size: new Size(offX * 2, offY * 2)
         };
     }
 
     public isPointVisible(x: number, y: number, radius = 0): boolean {
         const visibleRect = this.getVisibleRect();
-        return x >= visibleRect.x - radius && y >= visibleRect.y - radius && x <= visibleRect.x +
-                visibleRect.width + radius && y <= visibleRect.y + visibleRect.height + radius;
+
+        return (
+            x >= visibleRect.position.x - radius
+            && y >= visibleRect.position.y - radius
+            && x <= visibleRect.position.x + visibleRect.size.width + radius
+            && y <= visibleRect.position.y + visibleRect.size.height + radius
+        )
     }
 
     public setCinematicBar(target: number) {
@@ -134,38 +142,37 @@ export class Camera {
             const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
 
             const overBounds: OverBoundData = {
-                left: (targetVisibleRect.x < this.bounds.position.x),
-                right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.position.x + this.bounds.size.width),
-                top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.position.y,
-                bottom: targetVisibleRect.y < (this.bounds.position.y - this.bounds.size.height)
+                left: (targetVisibleRect.position.x < this.bounds.position.x),
+                right: (targetVisibleRect.position.x + targetVisibleRect.size.width) > (this.bounds.position.x + this.bounds.size.width),
+                top: (targetVisibleRect.position.y + targetVisibleRect.size.height) > this.bounds.position.y,
+                bottom: targetVisibleRect.position.y < (this.bounds.position.y - this.bounds.size.height)
             }
 
             // Bound clip left / right
-            if (targetVisibleRect.width >= this.bounds.size.width) {
-                const visibleCenterX = targetVisibleRect.x + targetVisibleRect.width / 2;
+            if (targetVisibleRect.size.width >= this.bounds.size.width) {
+                const visibleCenterX = targetVisibleRect.position.x + targetVisibleRect.size.width / 2;
                 const boundCenterX = this.bounds.position.x + this.bounds.size.width / 2;
                 const diff = boundCenterX - visibleCenterX;
                 xTarget += diff;
             } else if (overBounds.left) {
-                const diff = this.bounds.position.x - targetVisibleRect.x;
+                const diff = this.bounds.position.x - targetVisibleRect.position.x;
                 xTarget += diff;
             } else if (overBounds.right) {
-                const diff = (this.bounds.position.x + this.bounds.size.width) - (targetVisibleRect.x + targetVisibleRect.width);
+                const diff = (this.bounds.position.x + this.bounds.size.width) - (targetVisibleRect.position.x + targetVisibleRect.size.width);
                 xTarget += diff;
             }
 
             // Bound clip top / bottom
-            if (targetVisibleRect.height >= this.bounds.size.height) {
-                const visibleCenterY = (targetVisibleRect.y + targetVisibleRect.height) - targetVisibleRect.height / 2;
+            if (targetVisibleRect.size.height >= this.bounds.size.height) {
+                const visibleCenterY = (targetVisibleRect.position.y + targetVisibleRect.size.height) - targetVisibleRect.size.height / 2;
                 const boundCenterY = this.bounds.position.y - this.bounds.size.height / 2;
                 const diff = boundCenterY - visibleCenterY;
-                // console.log(diff);
                 yTarget += diff;
             } else if (overBounds.top) {
-                const diff = this.bounds.position.y - (targetVisibleRect.y + targetVisibleRect.height);
+                const diff = this.bounds.position.y - (targetVisibleRect.position.y + targetVisibleRect.size.height);
                 yTarget += diff;
             } else if (overBounds.bottom) {
-                const diff = (this.bounds.position.y - this.bounds.size.height) - targetVisibleRect.y;
+                const diff = (this.bounds.position.y - this.bounds.size.height) - targetVisibleRect.position.y;
                 yTarget += diff;
             }
         }
