@@ -55,18 +55,18 @@ export class Bird extends NPC {
         this.setMaxVelocity(MAX_SPEED)
     }
 
-    private isWaiting (): boolean {
+    private isWaiting(): boolean {
         return this.state === BirdState.WAITING_LEFT || this.state === BirdState.WAITING_RIGHT;
     }
 
-    protected jump (): void {
+    protected jump(): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.position.x, this.position.y + 20);
+        this.doubleJumpEmitter.setPosition(this.position.clone().moveYBy(20));
         this.doubleJumpEmitter.emit(20);
 
-        // const targetVolume = (1 / Math.pow(this.distanceToPlayer * METER_PER_PIXEL, 2)) * SOUND_INTENSITY_MULTIPLIER;
         const vol = calculateVolume(this.distanceToPlayer, 0.4);
+
         if (vol > 0) {
             Bird.jumpSound.setVolume(vol);
             Bird.jumpSound.stop();
@@ -74,7 +74,7 @@ export class Bird extends NPC {
         }
     }
 
-    protected canJump (): boolean {
+    protected canJump(): boolean {
         return this.jumpTimer === 0;
     }
 
@@ -85,6 +85,7 @@ export class Bird extends NPC {
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
             this.setVelocityY(0);
         }
+
         if (this.pullOutOfWall() !== 0) {
             this.setVelocityX(0);
         }
@@ -92,22 +93,26 @@ export class Bird extends NPC {
 
     private pullOutOfGround(): number {
         let pulled = 0, col = 0;
+
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
             col = world.collidesWith(this.position, [ this ], [ Environment.WATER ]);
+
             while (this.position.y < height && col) {
                 pulled++;
                 this.position.moveYBy(1);
                 col = world.collidesWith(this.position);
             }
         }
+
         return pulled;
     }
 
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
+
         while (
             this.position.y > 0
             && world.collidesWith(
@@ -118,6 +123,7 @@ export class Bird extends NPC {
             pulled++;
             this.position.moveYBy(-1);
         }
+
         return pulled;
     }
 
@@ -160,7 +166,7 @@ export class Bird extends NPC {
         return pulled;
     }
 
-    private nextState (): void {
+    private nextState(): void {
         if (this.state === BirdState.FLYING_LEFT) {
             this.state = BirdState.WAITING_LEFT;
         } else {
@@ -173,13 +179,13 @@ export class Bird extends NPC {
         return (superResult && this.isWaiting());
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(Bird.sprite, "idle", this.position, RenderingLayer.ENTITIES, this.direction)
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
         this.move = 0;
 

@@ -146,7 +146,7 @@ export class Shiba extends ScriptableNPC {
     protected jump (): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.position.x, this.position.y + 20);
+        this.doubleJumpEmitter.setPosition(this.position.clone().moveYBy(20));
         this.doubleJumpEmitter.emit(20);
 
         const vol = calculateVolume(this.distanceToPlayer, 0.4)

@@ -584,7 +584,7 @@ export class Player extends PhysicsEntity {
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
             if (!this.disableParticles && this.visible) {
-                this.doubleJumpEmitter.setPosition(this.position.x, this.position.y + 20);
+                this.doubleJumpEmitter.setPosition(this.position.clone().moveYBy(20));
                 this.doubleJumpEmitter.emit(20);
             }
         }
@@ -952,7 +952,7 @@ export class Player extends PhysicsEntity {
         if (!this.disableParticles && this.visible) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
-                    this.dustEmitter.setPosition(this.position.x, this.position.y);
+                    this.dustEmitter.setPosition(this.position.clone());
                     const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
                     this.dustEmitter.emit(count);
                 }
@@ -993,7 +993,7 @@ export class Player extends PhysicsEntity {
                 }
             }
 
-            this.dance.setPosition(this.position.x, this.position.y - 16);
+            this.dance.setPosition(this.position.clone().moveYBy(-16));
             const done = this.dance.update(dt);
 
             if (done) {
@@ -1126,7 +1126,7 @@ export class Player extends PhysicsEntity {
     private bounce(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
         // Nice bouncy particles
-        this.bounceEmitter.setPosition(this.position.x, this.position.y - 12);
+        this.bounceEmitter.setPosition(this.position.clone().moveYBy(-12));
         this.bounceEmitter.emit(20);
         this.dustEmitter.clear();
 

@@ -94,7 +94,6 @@ export class GotItemScene extends Scene<FriendlyFire> {
             this.time += dt;
 
             if (this.time > 4) {
-                // this.glitter.setPosition(this.itemPosition.x, this.itemPosition.y);
                 this.stopped = true;
                 this.scenes.popScene();
             }

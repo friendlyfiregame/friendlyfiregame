@@ -130,9 +130,9 @@ export class ParticleEmitter {
         }
     }
 
-    public setPosition(x: number, y: number): void {
-        this.x = x;
-        this.y = y;
+    public setPosition(position: Point): void {
+        this.x = position.x;
+        this.y = position.y;
     }
 
     public clear() {

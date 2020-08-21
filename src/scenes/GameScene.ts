@@ -558,7 +558,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private updateApocalypse(): void {
-        this.fireEmitter.setPosition(this.player.position.x, this.player.position.y);
+        this.fireEmitter.setPosition(this.player.position.clone());
         this.fireEffects.forEach(e => e.update(this.dt));
 
         if (timedRnd(this.dt, 0.8)) {
