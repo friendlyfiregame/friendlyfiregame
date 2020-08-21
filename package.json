@@ -38,13 +38,13 @@
     "rimraf": "3.0.2",
     "source-map-loader": "0.2.4",
     "steal": "2.2.4",
-    "typescript": "3.9.7",
+    "typescript": "^4.0.2",
     "webpack": "4.44.1",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.1"
   }
 }
