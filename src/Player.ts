@@ -205,8 +205,11 @@ export class Player extends PhysicsEntity {
         document.addEventListener("keydown", event => this.handleKeyDown(event));
 
         if (isDev()) {
-            console.log("Dev mode, press C to dance anywhere, P to spawn the stone, O to spawn the seed, I to spawn " +
-                "wood, T to throw useless snowball, K to learn all abilities, M to show bounds of Entities and Triggers");
+            console.log(
+                'Dev mode, press “C” to dance anywhere, “P” to spawn the stone, “O” to spawn the '
+                + 'seed, “I” to spawn wood, “T” to throw useless snowball, “K” to learn all '
+                + 'abilities, “M” to show bounds of entities and triggers.'
+            );
         }
 
         this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
@@ -374,14 +377,33 @@ export class Player extends PhysicsEntity {
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
             if (!this.flying) {
-                if (this.closestNPC && this.closestNPC.isReadyForConversation() && this.closestNPC.conversation) {
+                if (
+                    this.closestNPC
+                    && this.closestNPC.isReadyForConversation()
+                    && this.closestNPC.conversation
+                ) {
                     const conversation = this.closestNPC.conversation;
+
                     // Disable auto movement to a safe talking distance for the stone in the river
-                    const autoMove = this.closestNPC instanceof Sign || (this.closestNPC instanceof Stone && this.closestNPC.state !== StoneState.DEFAULT) ? false : true;
-                    this.playerConversation = new PlayerConversation(this, this.closestNPC, conversation, autoMove);
+                    const autoMove = (
+                        this.closestNPC instanceof Sign
+                        || (
+                            this.closestNPC instanceof Stone
+                            && this.closestNPC.state !== StoneState.DEFAULT
+                        ) ? false : true
+                    );
+
+                    this.playerConversation = new PlayerConversation(
+                        this, this.closestNPC, conversation, autoMove
+                    );
                 } else if (this.readableTrigger) {
-                    const proxy = new ConversationProxy(this.scene, this.position, this.readableTrigger.properties);
-                    this.playerConversation = new PlayerConversation(this, proxy, proxy.conversation, false);
+                    const proxy = new ConversationProxy(
+                        this.scene, this.position, this.readableTrigger.properties
+                    );
+
+                    this.playerConversation = new PlayerConversation(
+                        this, proxy, proxy.conversation, false
+                    );
                 } else if (this.canDanceToMakeRain()) {
                     this.startDance(this.scene.apocalypse ? 3 : 2);
                     this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.MADE_RAIN);
@@ -415,8 +437,7 @@ export class Player extends PhysicsEntity {
         Player.throwingSound.play();
     }
 
-    // Used in dev mode to enable some special keys that can only be triggered
-    // by using a keyboard.
+    // Used in dev mode to enable some special keys that can only be triggered by using a keyboard.
     public handleKeyDown(event: KeyboardEvent): void {
         if (this.scene.paused) {
             return;
@@ -440,7 +461,15 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.scene.gameObjects.push(new Snowball(this.scene, new Point(this.position.x, this.position.y + this.size.height * 0.75), 20 * this.direction, 10));
+                this.scene.gameObjects.push(
+                    new Snowball(
+                        this.scene,
+                        new Point(this.position.x, this.position.y + this.size.height * 0.75),
+                        20 * this.direction,
+                        10
+                    )
+                );
+
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
             } else if (event.key === "k") {
@@ -448,10 +477,10 @@ export class Player extends PhysicsEntity {
                 this.doubleJump = true;
                 this.canRun = true;
                 this.canRainDance = true;
-                this.think("I can everything now", 1500);
+                this.think("I can do everything now.", 1500);
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
-                this.think("Toggling Bounds", 1500);
+                this.think("Toggling bounds.", 1500);
             }
         }
     }
@@ -462,7 +491,10 @@ export class Player extends PhysicsEntity {
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, new Point(this.position.x, this.position.y));
+        const thinkBubble = this.thinkBubble = new SpeechBubble(
+            this.scene, new Point(this.position.x, this.position.y)
+        );
+
         thinkBubble.setMessage(message);
         thinkBubble.show();
 
@@ -533,7 +565,10 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
             this.moveLeft = false;
 
-            const targetGate = this.scene.gateObjects.find(target => target.name === gate.properties.target);
+            const targetGate = this.scene.gateObjects.find(
+                target => target.name === gate.properties.target
+            );
+
             const targetBgmId = gate.properties.bgm;
 
             if (targetGate) {
@@ -619,7 +654,10 @@ export class Player extends PhysicsEntity {
         const gap = 6;
         const offsetY = 12;
         const textPosition = new Point(
-            Math.round(this.position.xRounded - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2)),
+            Math.round(
+                this.position.xRounded
+                - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2)
+            ),
             -this.position.y + offsetY
         );
 
@@ -652,15 +690,30 @@ export class Player extends PhysicsEntity {
         const sprite = Player.playerSprites[this.characterAsset];
         let animation = this.animation;
 
-        if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
+        // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
+        if (
+            this.carrying
+            && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")
+        ) {
             animation = animation + "-carry";
         }
 
-        this.scene.renderer.addAseprite(sprite, animation, new Point(this.position.x, this.position.y - 1), RenderingLayer.PLAYER, this.direction)
+        this.scene.renderer.addAseprite(
+            sprite,
+            animation,
+            new Point(this.position.x, this.position.y - 1),
+            RenderingLayer.PLAYER,
+            this.direction
+        )
 
         if (this.scene.showBounds) this.drawBounds();
 
-        if (this.closestNPC && !this.dance && !this.playerConversation && this.closestNPC.isReadyForConversation()) {
+        if (
+            this.closestNPC
+            && !this.dance
+            && !this.playerConversation
+            && this.closestNPC.isReadyForConversation()
+        ) {
             this.drawTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
         } else if (this.readableTrigger) {
             this.drawTooltip("Examine", ControllerAnimationTags.INTERACT);
@@ -690,14 +743,18 @@ export class Player extends PhysicsEntity {
             this.carrying instanceof Stone
             && (
                 this.direction === -1
-                && this.scene.world.collidesWith(new Point(this.position.x - 30, this.position.y - 20)) === Environment.WATER
+                && this.scene.world.collidesWith(
+                    new Point(this.position.x - 30, this.position.y - 20)
+                ) === Environment.WATER
             )
         );
     }
 
     private canThrowSeedIntoSoil(): boolean {
         return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.scene.world.collidesWith(new Point(this.position.x - 30, this.position.y + 2)) === Environment.SOIL);
+            this.scene.world.collidesWith(
+                new Point(this.position.x - 30, this.position.y + 2)
+            ) === Environment.SOIL);
     }
 
     public debugCollisions(): void {
@@ -714,8 +771,8 @@ export class Player extends PhysicsEntity {
     }
 
     private canDanceToMakeRain(): boolean {
-        // if (!this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.LEARNED_RAIN_DANCE)) return false;
         if (!this.canRainDance) return false;
+
         const ground = this.getGround();
 
         return (
@@ -840,7 +897,9 @@ export class Player extends PhysicsEntity {
 
         // Apply auto movement
         if (this.autoMove) {
-            if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.position.x - this.autoMove.destinationX) <= 0 ) {
+            if (
+                (this.autoMove.lastX - this.autoMove.destinationX) * (this.position.x - this.autoMove.destinationX) <= 0
+            ) {
                 // Reached or overreached destination
                 this.stopAutoMove();
             } else {
@@ -908,7 +967,13 @@ export class Player extends PhysicsEntity {
             if (this.getVelocityY() > 0) {
                 this.animation = "jump";
                 this.flying = true;
-            } else if (isDrowning || (this.getVelocityY() < 0 && this.position.y - world.getGround(this.position) > 10)) {
+            } else if (
+                isDrowning
+                || (
+                    this.getVelocityY() < 0
+                    && this.position.y - world.getGround(this.position) > 10
+                )
+            ) {
                 if (this.jumpThresholdTimer < 0 || this.usedJump) {
                     this.animation = "fall";
                 }
@@ -931,9 +996,9 @@ export class Player extends PhysicsEntity {
             this.jumpThresholdTimer -= dt;
         }
 
-        // Check for NPC's that can be interacted with
-        // Reset closestNPC and get all entities that collide with the player with an added 5px of margin
-        // If there are multiple npcs colliding, the closest one will be chosen
+        // Check for NPC's that can be interacted with. Reset closestNPC and get all entities that
+        // collide with the player with an added 5 px of margin. If there are multiple NPCs
+        // colliding, the closest one will be chosen.
         this.closestNPC = null;
         const entities = this.scene.world.getEntityCollisions(this, 5);
 
@@ -978,7 +1043,8 @@ export class Player extends PhysicsEntity {
         if (this.dance) {
             if (this.dance.hasStarted()) {
                 // Basic dancing or error?
-                const err = this.dance.getTimeSinceLastMistake(), suc = this.dance.getTimeSinceLastSuccess();
+                const err = this.dance.getTimeSinceLastMistake();
+                const suc = this.dance.getTimeSinceLastSuccess();
 
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
@@ -1006,16 +1072,30 @@ export class Player extends PhysicsEntity {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
 
                         // Camera focus to boss for each triggered rain cloud
-                        const bossPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
+                        const bossPointer = this.scene.pointsOfInterest.find(
+                            poi => poi.name === 'boss_spawn'
+                        );
 
                         if (bossPointer) {
-                            this.scene.camera.focusOn(3, new Point(bossPointer.position.x, bossPointer.position.y + 60), 1, 0, valueCurves.cos(0.35));
+                            this.scene.camera.focusOn(
+                                3,
+                                new Point(bossPointer.position.x, bossPointer.position.y + 60),
+                                1,
+                                0,
+                                valueCurves.cos(0.35)
+                            );
                         }
 
                         // Remove a single boss fight barrier
-                        const rainingCloudCount = this.scene.gameObjects.filter(o => o instanceof Cloud && o.isRaining()).length;
+                        const rainingCloudCount = this.scene.gameObjects.filter(
+                            o => o instanceof Cloud && o.isRaining()
+                        ).length;
+
                         const wallIdentifier = `wall${rainingCloudCount - 1}`;
-                        const targetWall = this.scene.gameObjects.find(o => o instanceof Wall && o.identifier === wallIdentifier) as Wall | undefined;
+
+                        const targetWall = this.scene.gameObjects.find(
+                            o => o instanceof Wall && o.identifier === wallIdentifier
+                        ) as Wall | undefined;
 
                         if (targetWall) {
                             targetWall.crumble()
@@ -1049,7 +1129,11 @@ export class Player extends PhysicsEntity {
                     }
                 }
 
-                if (trigger.name === 'teleporter' && this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
+                if (
+                    trigger.name === 'teleporter'
+                    && this.scene.mountainRiddle.isFailed()
+                    && !this.scene.mountainRiddle.isCleared()
+                ) {
                     const teleportY = trigger.properties.teleportY;
 
                     if (teleportY) {
@@ -1085,7 +1169,9 @@ export class Player extends PhysicsEntity {
                 }
 
                 if (enableConversationProps.key && enableConversationProps.value) {
-                    this.scene.game.campaign.runAction("enable", null, [enableConversationProps.key, enableConversationProps.value]);
+                    this.scene.game.campaign.runAction(
+                        "enable", null, [enableConversationProps.key, enableConversationProps.value]
+                    );
                 }
             })
         }
@@ -1093,8 +1179,8 @@ export class Player extends PhysicsEntity {
 
 
     /**
-     * If given coordinate collides with the world then the first free Y coordinate above is returned. This can
-     * be used to unstuck an object after a new position was set.
+     * If given coordinate collides with the world then the first free y coordinate above is
+     * returned. This can be used to unstuck an object after a new position was set.
      *
      * @param x - X coordinate of current position.
      * @param y - Y coordinate of current position.
@@ -1139,8 +1225,8 @@ export class Player extends PhysicsEntity {
     }
 
     /**
-     * If given coordinate collides with the world then the first free Y coordinate above is returned. This can
-     * be used to unstuck an object after a new position was set.
+     * If given coordinate collides with the world then the first free y coordinate above is
+     * returned. This can be used to unstuck an object after a new position was set.
      *
      * @param x - X coordinate of current position.
      * @param y - Y coordinate of current position.
@@ -1172,7 +1258,10 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityX() > 0) {
             while (
                 world.collidesWithVerticalLine(
-                    new Point(this.position.x + this.size.width / 2, this.position.y + this.size.height * 3 / 4),
+                    new Point(
+                        this.position.x + this.size.width / 2,
+                        this.position.y + this.size.height * 3 / 4
+                    ),
                     this.size.height / 2,
                     [ this ],
                     [ Environment.PLATFORM, Environment.WATER ]
@@ -1184,7 +1273,10 @@ export class Player extends PhysicsEntity {
         } else {
             while (
                 world.collidesWithVerticalLine(
-                    new Point(this.position.x - this.size.width / 2, this.position.y + this.size.height * 3 / 4),
+                    new Point(
+                        this.position.x - this.size.width / 2,
+                        this.position.y + this.size.height * 3 / 4
+                    ),
                     this.size.height / 2,
                     [ this ],
                     [ Environment.PLATFORM, Environment.WATER ]
@@ -1223,16 +1315,25 @@ export class Player extends PhysicsEntity {
         if (!this.carrying) {
             this.size.resizeHeight(PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT);
 
-            if (object instanceof Seed && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED) {
+            if (
+                object instanceof Seed
+                && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_SEED
+            ) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_SEED);
             }
 
-            if (object instanceof Wood && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD) {
+            if (
+                object instanceof Wood
+                && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_WOOD
+            ) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_WOOD);
                 this.scene.game.campaign.runAction("enable", null, ["fire", "fire1"]);
             }
 
-            if (object instanceof Stone && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE) {
+            if (
+                object instanceof Stone
+                && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
+            ) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_STONE);
             }
 
@@ -1263,8 +1364,6 @@ export class Player extends PhysicsEntity {
             return this.carrying != null;
         }
     }
-
-    // this.lastHint = Date.now();
 
     public showHint(): void {
         if (this.playerConversation === null) {
