@@ -1,5 +1,5 @@
+import { Direction, Point, Size } from './Geometry';
 import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
-import { Point, Size } from './Geometry';
 
 export enum MapObjectType {
     ENTITY = 'entity',
@@ -11,8 +11,7 @@ export enum MapObjectType {
 }
 
 export interface GameObjectProperties {
-    // TODO: use Direction
-    direction?: "up" | "down" | "left" | "right",
+    direction?: Direction,
     distance: number;
     velocity: number;
     target?: string;
