@@ -7,7 +7,7 @@ import { ControllerManager } from '../input/ControllerManager';
 import { DIALOG_FONT } from '../constants';
 import { easeOutCubic } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
-import { Point, Size } from '../Geometry';
+import { Direction, Point, Size } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 
@@ -51,7 +51,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         this.zIndex = 2;
-        this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
+        this.inTransition = new SlideTransition({ duration: 0.5, direction: Direction.UP, easing: easeOutCubic });
         this.outTransition = new SlideTransition({ duration: 0.25 });
     }
 

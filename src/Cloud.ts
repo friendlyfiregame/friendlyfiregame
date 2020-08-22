@@ -7,7 +7,7 @@ import { GameObjectProperties } from './MapInfo';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { PhysicsEntity } from './PhysicsEntity';
 import { PIXEL_PER_METER } from './constants';
-import { Point, Size } from './Geometry';
+import { Direction, Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';
 import { rnd, rndInt, timedRnd } from './util';
 
@@ -34,16 +34,16 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         this.isRainCloud = canRain;
         this.velocity = properties.velocity / PIXEL_PER_METER;
 
-        if (properties.direction === "right") {
+        if (properties.direction === Direction.RIGHT) {
             this.target.moveXBy(properties.distance);
             this.setVelocityX(this.velocity);
-        } else if (properties.direction === "left") {
+        } else if (properties.direction === Direction.LEFT) {
             this.target.moveXBy(-properties.distance);
             this.setVelocityX(-this.velocity);
-        } else if (properties.direction === "up") {
+        } else if (properties.direction === Direction.UP) {
             this.target.moveYBy(properties.distance);
             this.setVelocityY(this.velocity);
-        } else if (properties.direction === "down") {
+        } else if (properties.direction === Direction.DOWN) {
             this.target.moveYBy(-properties.distance);
             this.setVelocityY(-this.velocity);
         }

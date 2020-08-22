@@ -34,6 +34,7 @@ export class Point {
     }
 
     public moveTo(x: number, y: number): Point;
+
     public moveTo(position: Point): Point;
 
     public moveTo(pointOrX: Point | number, y?: number): Point {
@@ -67,6 +68,7 @@ export class Point {
     }
 
     public moveBy(x: number, y: number): Point;
+
     public moveBy(position: Point): Point;
 
     public moveBy(pointOrX: Point | number, y?: number): Point {
@@ -188,6 +190,13 @@ export class Size {
 
         return this._heightRounded;
     }
+}
+
+export enum Direction {
+    UP = 'up',
+    RIGHT = 'right',
+    DOWN = 'down',
+    LEFT = 'left'
 }
 
 export class Padding {

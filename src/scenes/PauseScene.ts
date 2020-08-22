@@ -4,11 +4,11 @@ import { BitmapFont } from '../BitmapFont';
 import { ControllerEvent } from '../input/ControllerEvent';
 import { ControlsScene } from './ControlsScene';
 import { DIALOG_FONT } from '../constants';
+import { Direction, Point, Size } from '../Geometry';
 import { easeOutBounce } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
 import { MenuItem, MenuList } from '../Menu';
-import { Point, Size } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
@@ -36,7 +36,7 @@ export class PauseScene extends Scene<FriendlyFire> {
     private menu = new MenuList();
 
     public setup(): void {
-        this.inTransition = new SlideTransition({ duration: 1, direction: "top", easing: easeOutBounce });
+        this.inTransition = new SlideTransition({ duration: 1, direction: Direction.UP, easing: easeOutBounce });
         this.outTransition = new SlideTransition({ duration: 0.25 });
 
         PauseScene.music.setLoop(true);

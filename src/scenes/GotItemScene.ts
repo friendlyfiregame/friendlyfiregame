@@ -2,9 +2,9 @@ import { Aseprite } from '../Aseprite';
 import { asset } from '../Assets';
 import { BitmapFont } from '../BitmapFont';
 import { DIALOG_FONT } from '../constants';
+import { Direction, Point, Size } from '../Geometry';
 import { easeInExpo, easeOutExpo } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
-import { Point, Size } from '../Geometry';
 import { Scene } from '../Scene';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
@@ -85,8 +85,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
         this.selectedSubtitle = "“" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "”";
         this.stopped = false;
         this.time = 0;
-        this.inTransition = new SlideTransition({ duration: .5, direction: "bottom", easing: easeOutExpo });
-        this.outTransition = new SlideTransition({ duration: .5, direction: "bottom", easing: easeInExpo });
+        this.inTransition = new SlideTransition({ duration: .5, direction: Direction.DOWN, easing: easeOutExpo });
+        this.outTransition = new SlideTransition({ duration: .5, direction: Direction.DOWN, easing: easeInExpo });
     }
 
     public update(dt: number) {

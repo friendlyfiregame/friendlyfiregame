@@ -1,12 +1,12 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { CollidableGameObject, GameScene } from './scenes/GameScene';
+import { Direction, Point, Size } from './Geometry';
 import { entity } from './Entity';
 import { Environment } from './World';
 import { GameObjectProperties } from './MapInfo';
 import { PhysicsEntity } from './PhysicsEntity';
 import { PIXEL_PER_METER } from './constants';
-import { Point, Size } from './Geometry';
 import { RenderingLayer } from './Renderer';
 
 @entity("movingplatform")
@@ -25,16 +25,16 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         this.targetPosition = position.clone();
         this.velocity = properties.velocity / PIXEL_PER_METER;
 
-        if (properties.direction === "right") {
+        if (properties.direction === Direction.RIGHT) {
             this.targetPosition.moveXBy(properties.distance);
             this.setVelocityX(this.velocity);
-        } else if (properties.direction === "left") {
+        } else if (properties.direction === Direction.LEFT) {
             this.targetPosition.moveXBy(-properties.distance);
             this.setVelocityX(-this.velocity);
-        } else if (properties.direction === "up") {
+        } else if (properties.direction === Direction.UP) {
             this.targetPosition.moveYBy(properties.distance);
             this.setVelocityY(this.velocity);
-        } else if (properties.direction === "down") {
+        } else if (properties.direction === Direction.DOWN) {
             this.targetPosition.moveYBy(-properties.distance);
             this.setVelocityY(-this.velocity);
         }
