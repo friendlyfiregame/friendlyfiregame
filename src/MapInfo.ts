@@ -60,7 +60,7 @@ export class MapInfo {
         if (object) {
             return new Point(object.x, mapHeight - object.y);
         } else {
-            return Point.ORIGIN;
+            return Point.getOrigin();
         }
     }
 

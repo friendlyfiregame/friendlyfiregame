@@ -33,7 +33,7 @@ type OverBoundData = {
 }
 
 export class Camera {
-    public position = Point.ORIGIN.clone();
+    public position = Point.getOrigin();
     public zoom = 1;
     public rotation = 0;
     private focuses: camFocus[] = [];

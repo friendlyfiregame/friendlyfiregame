@@ -17,7 +17,7 @@ export abstract class PhysicsEntity extends Entity {
     // this entity is carried. Defaults to the entities own height.
     public carryHeight = this.size.height;
 
-    protected lastGroundPosition = Point.ORIGIN;
+    protected lastGroundPosition = Point.getOrigin();
 
     public setFloating(floating: boolean): void {
         this.floating = floating;

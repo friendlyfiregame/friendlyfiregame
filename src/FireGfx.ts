@@ -172,7 +172,7 @@ export class FireGfx {
         return this.canvas;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, position: Point = Point.ORIGIN) {
+    public draw(ctx: CanvasRenderingContext2D, position: Point = Point.getOrigin()) {
         const img = this.getImage();
         ctx.drawImage(img, position.x - img.width / 2, -position.y - img.height);
     }

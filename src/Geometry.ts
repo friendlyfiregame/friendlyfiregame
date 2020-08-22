@@ -1,5 +1,7 @@
 export class Point {
-    public static ORIGIN = new Point(0, 0);
+    public static getOrigin(): Point {
+        return new Point(0, 0);
+    }
 
     private _x: number;
     private _y: number;

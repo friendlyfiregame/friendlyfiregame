@@ -607,7 +607,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
-            position: Point.ORIGIN,
+            position: Point.getOrigin(),
             fillColor: "darkred",
             globalCompositeOperation: "color",
             alpha: 0.7 * this.apocalypseFactor,
@@ -620,7 +620,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
-            position: Point.ORIGIN,
+            position: Point.getOrigin(),
             fillColor: color,
             alpha,
             relativeToScreen: true,
