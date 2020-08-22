@@ -4,7 +4,7 @@
  * on a gamepad or a touch screen event.
  *
  * Right now, these events are stored in a bit mask to be extra efficient, …
- * … maybe that's not really necessary and should be changed to improve
+ * …maybe that's not really necessary and should be changed to improve
  * readability at some point…
  */
 export enum ControllerIntent {
