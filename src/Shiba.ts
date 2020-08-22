@@ -37,10 +37,13 @@ const JUMP_INTERVAL = 0.3;
 export class Shiba extends ScriptableNPC {
     @asset("sprites/shiba.aseprite.json")
     private static sprite: Aseprite;
+
     @asset("sounds/ending/putout.mp3")
     private static putOutSound: Sound;
+
     @asset("sounds/jumping/jump_neutral.ogg")
     private static jumpSound: Sound;
+
     private state = ShibaState.ON_TREE;
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
@@ -72,15 +75,15 @@ export class Shiba extends ScriptableNPC {
         });
     }
 
-    public setState (state: ShibaState): void {
+    public setState(state: ShibaState): void {
         this.state = state;
     }
 
-    public getState (): ShibaState {
+    public getState(): ShibaState {
         return this.state;
     }
 
-    public nextState (): void {
+    public nextState(): void {
         this.state++;
 
         if (this.state === ShibaState.FLYING_AWAY) {
@@ -89,7 +92,11 @@ export class Shiba extends ScriptableNPC {
             this.setMaxVelocity(3);
         } else if (this.state === ShibaState.ON_MOUNTAIN) {
             this.move = 0;
-            const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "shiba_mountain_spawn");
+
+            const spawn = this.scene.pointsOfInterest.find(
+                poi => poi.name === "shiba_mountain_spawn"
+            );
+
             if (!spawn) throw new Error('Shiba mountain spawn missing');
             this.x = spawn.x;
             this.y = spawn.y;
@@ -97,7 +104,11 @@ export class Shiba extends ScriptableNPC {
             this.scene.powerShiba.nextState();
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
             this.scene.camera.setCinematicBar(1);
-            const shibaSpawnPos = this.scene.pointsOfInterest.find(poi => poi.name === "friendship_shiba_spawn");
+
+            const shibaSpawnPos = this.scene.pointsOfInterest.find(
+                poi => poi.name === "friendship_shiba_spawn"
+            );
+
             this.lookAtPlayer = false;
             this.setMaxVelocity(2);
 
@@ -111,24 +122,28 @@ export class Shiba extends ScriptableNPC {
 
             setTimeout(() => this.think('Wow!', 1500), 500);
             setTimeout(() => (this.direction = 1), 1000);
+
             setTimeout(() => {
-                this.think('Bad Fire!', 2000);
+                this.think('Bad fire!', 2000);
                 this.scene.fire.setState(FireState.BEING_PUT_OUT);
                 this.scene.fire.growthTarget = SHRINK_SIZE;
                 this.peeing = true;
                 Shiba.putOutSound.setVolume(.3);
                 Shiba.putOutSound.play();
             }, 2000);
+
             setTimeout(() => this.scene.fire.think('Oh God…', 2000), 4500);
             setTimeout(() => this.scene.fire.think('Disgusting…', 3000), 8000);
         } else if (this.state === ShibaState.FIRE_KILLED) {
             this.peeing = false;
             this.scene.fire.state = FireState.PUT_OUT;
             Shiba.putOutSound.stop();
+
             setTimeout(() => (this.direction = -1), 1000);
             setTimeout(() => this.think('I help friend!', 1500), 1500);
+
             setTimeout(() => {
-                this.scene.fire.think('Yeah, great', 2000);
+                this.scene.fire.think('Yeah, great.', 2000);
                 this.scene.fire.face?.setMode(FaceModes.BORED);
                 this.scene.player.isControllable = true;
                 this.scene.friendshipCutscene = false;
@@ -140,25 +155,26 @@ export class Shiba extends ScriptableNPC {
         }
     }
 
-    protected jump (): void {
+    protected jump(): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
         this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
         this.doubleJumpEmitter.emit(20);
 
-        const vol = calculateVolume(this.distanceToPlayer, 0.4)
+        const vol = calculateVolume(this.distanceToPlayer, 0.4);
+
         if (vol > 0) {
-            Shiba.jumpSound.setVolume(vol)
+            Shiba.jumpSound.setVolume(vol);
             Shiba.jumpSound.stop();
             Shiba.jumpSound.play();
         }
     }
 
-    protected canJump (): boolean {
+    protected canJump(): boolean {
         return this.jumpTimer === 0;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         if (this.move === 0) {
             const tag = this.peeing ? "peeing" : "idle";
             this.scene.renderer.addAseprite(Shiba.sprite, tag, this.x, this.y, RenderingLayer.ENTITIES, this.direction)
@@ -167,21 +183,25 @@ export class Shiba extends ScriptableNPC {
         }
 
         if (this.scene.showBounds) this.drawBounds();
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         if (this.thinkBubble) {
             this.thinkBubble.draw(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
-    public showDialoguePrompt (): boolean {
+    public showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
+
         return false;
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         // Triggers
@@ -193,7 +213,7 @@ export class Shiba extends ScriptableNPC {
             if (this.state === ShibaState.ON_TREE) {
                 this.onTreeUpdateLogic(triggerCollisions, dt)
             } else if (this.state === ShibaState.FLYING_AWAY) {
-                this.flyingAwayUpdateLogic(triggerCollisions, dt);
+                this.flyingAwayUpdateLogic(dt);
             } else if (this.state === ShibaState.GOING_TO_FIRE) {
                 this.walkToFireLogic(triggerCollisions);
             }
@@ -212,6 +232,7 @@ export class Shiba extends ScriptableNPC {
 
         this.dialoguePrompt.update(dt, this.x, this.y + 20);
         this.speechBubble.update(this.x, this.y);
+
         if (this.thinkBubble) {
             this.thinkBubble.update(this.x, this.y);
         }
@@ -219,24 +240,29 @@ export class Shiba extends ScriptableNPC {
 
     public isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
+
         return (superResult && this.state !== ShibaState.FLYING_AWAY);
     }
 
-    private walkToFireLogic (triggerCollisions: GameObjectInfo[]): void {
+    private walkToFireLogic(triggerCollisions: GameObjectInfo[]): void {
         this.move = -1;
         if (this.scene.world.collidesWithVerticalLine(this.x - (this.width / 2), this.y + this.height, this.height, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
             this.jump();
         }
+
         if (triggerCollisions.length > 0) {
             const event = triggerCollisions.find(t => t.name === 'shiba_stop');
+
             if (event) {
                 this.nextState();
             }
         }
     }
-    private onTreeUpdateLogic (triggerCollisions: GameObjectInfo[], dt: number): void {
+
+    private onTreeUpdateLogic(triggerCollisions: GameObjectInfo[], dt: number): void {
         if (triggerCollisions.length > 0) {
             const event = triggerCollisions.find(t => t.name === 'shiba_action');
+
             if (event && event.properties.velocity) {
                 this.autoMoveDirection = event.properties.velocity > 0 ? 1 : -1;
                 this.move = this.autoMoveDirection;
@@ -263,15 +289,19 @@ export class Shiba extends ScriptableNPC {
             this.move = 0;
         }
 
-        // Check if Bone is near
-        if (Conversation.getGlobals()["$gotBoneQuest"] && !Conversation.getGlobals()['$broughtBone'] && this.distanceTo(this.scene.bone) < 100) {
+        // Check if bone is near
+        if (
+            Conversation.getGlobals()["$gotBoneQuest"]
+            && !Conversation.getGlobals()['$broughtBone']
+            && this.distanceTo(this.scene.bone) < 100
+        ) {
             Conversation.setGlobal('broughtBone', 'true');
             this.think('Wow! Bone!!!', 2000);
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba2"]);
         }
     }
 
-    private flyingAwayUpdateLogic (triggerCollisions: GameObjectInfo[], dt: number): void {
+    private flyingAwayUpdateLogic(dt: number): void {
         this.move = 1;
         this.minAltitude += 20 * dt;
 

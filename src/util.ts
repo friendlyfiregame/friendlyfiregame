@@ -23,16 +23,19 @@ export function rndInt(minOrMax: number, max?: number): number {
 
 export function rndItem(array: any[] | string) {
     const index = Math.floor(Math.random() * array.length);
+
     return array[index];
 }
 
 export function timedRnd(dt: number, averageDelay: number): number {
     let count = 0;
     let chance = dt - Math.random() * averageDelay;
+
     while (chance > 0) {
         count++;
         chance -= Math.random() * averageDelay;
     }
+
     return count;
 }
 
@@ -49,6 +52,7 @@ export function orientPow(v: number, exp: number): number {
 }
 
 const timeDelta = Date.now() - performance.now();
+
 export function now(): number {
     return performance.now() + timeDelta;
 }
@@ -57,6 +61,7 @@ export function shiftValue(v: number, trg: number, inc: number): number {
     if (v === trg) {
         return trg;
     }
+
     if (v < trg) {
         v += inc;
         if (v >= trg) {
@@ -68,6 +73,7 @@ export function shiftValue(v: number, trg: number, inc: number): number {
             return trg;
         }
     }
+
     return v;
 }
 
@@ -85,12 +91,14 @@ export async function sleep(ms = 0): Promise<void> {
 export function shuffle<T>(array: T[]): T[] {
     for (let i = 1; i < array.length; i++) {
         const j = Math.floor(Math.random() * (i + 1));
+
         if (i !== j) {
             const tmp = array[i];
             array[i] = array[j];
             array[j] = tmp;
         }
     }
+
     return array;
 }
 
@@ -114,9 +122,11 @@ export function isDev(): boolean {
     if (window.location.port === "8000") {
         return true;
     }
+
     if (!!window.location.search) {
         return !!window.location.search.substr(1).split("&").find(key => key.toLowerCase().startsWith("dev"));
     }
+
     return false;
 }
 
@@ -127,6 +137,11 @@ export function isDev(): boolean {
  * @param maxVolume - Defines the maximum volume of the sound (when distance is 0).
  *                    The sound will never be louder than this. Defaults to 1.
  */
-export function calculateVolume(distance: number, maxVolume: number = 1, intensity: number = 1): number {
-    return Math.max(0, maxVolume - ((distance * METER_PER_PIXEL) / (SOUND_INTENSITY_MULTIPLIER * intensity)))
+export function calculateVolume(
+    distance: number, maxVolume: number = 1, intensity: number = 1
+): number {
+    return Math.max(
+        0,
+        maxVolume - ((distance * METER_PER_PIXEL) / (SOUND_INTENSITY_MULTIPLIER * intensity))
+    )
 }

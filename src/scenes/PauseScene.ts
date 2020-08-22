@@ -99,6 +99,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         const versionTextSize = PauseScene.font.measureText(versionText);
         PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 7, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
         ctx.restore();
+
         this.menu.draw(ctx);
     }
 }

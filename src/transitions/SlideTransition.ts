@@ -25,6 +25,7 @@ export class SlideTransition extends Transition {
         } else if (this.direction === "right") {
             ctx.translate(width * value, 0);
         }
+
         draw();
     }
 }

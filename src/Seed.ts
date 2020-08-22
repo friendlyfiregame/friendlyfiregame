@@ -38,7 +38,7 @@ export class Seed extends NPC {
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
-        if (!floatingPosition) throw new Error ('Could not find "recover_floating_position" point of interest in game scene');
+        if (!floatingPosition) throw new Error ('Could not find “recover_floating_position” point of interest in game scene.');
         this.floatingPosition = floatingPosition;
     }
 
@@ -92,13 +92,15 @@ export class Seed extends NPC {
             }
             if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL) {
                 const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'seedposition');
-                if (!seedPosition) throw new Error('Seed Position is missing in Points of Interest Array');
+
+                if (!seedPosition) throw new Error('Seed position is missing in points of interest array');
 
                 this.state = SeedState.PLANTED;
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
                 this.setFloating(true);
                 this.x = seedPosition.x;
                 this.y = seedPosition.y;
+
                 Seed.successSound.play();
                 Conversation.setGlobal("seedplanted", "true");
             }
@@ -125,9 +127,9 @@ export class Seed extends NPC {
         this.wood.x = this.x;
         this.wood.y = this.y + this.height / 2;
         this.wood.setVelocity(-5, 0);
+
         return this.wood;
     }
 
-    startDialog(): void {
-    }
+    startDialog(): void {}
 }

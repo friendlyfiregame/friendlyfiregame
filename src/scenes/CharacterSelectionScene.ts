@@ -1,18 +1,18 @@
-import { Scene } from "../Scene";
-import { FriendlyFire } from "../FriendlyFire";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { easeOutCubic } from "../easings";
-import { BitmapFont } from "../BitmapFont";
-import { asset } from "../Assets";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { DIALOG_FONT } from "../constants";
-import { ControllerManager } from '../input/ControllerManager';
-import { ControllerAnimationTags, ControllerSpriteMap } from '../input/ControllerFamily';
 import { Aseprite } from '../Aseprite';
-import { TitleScene } from './TitleScene';
-import { GameScene } from './GameScene';
-import { MenuList, MenuItem } from '../Menu';
+import { asset } from '../Assets';
+import { BitmapFont } from '../BitmapFont';
 import { CharacterAsset, VoiceAsset } from '../Campaign';
+import { ControllerAnimationTags, ControllerSpriteMap } from '../input/ControllerFamily';
+import { ControllerEvent } from '../input/ControllerEvent';
+import { ControllerManager } from '../input/ControllerManager';
+import { DIALOG_FONT } from '../constants';
+import { easeOutCubic } from '../easings';
+import { FriendlyFire } from '../FriendlyFire';
+import { GameScene } from './GameScene';
+import { MenuItem, MenuList } from '../Menu';
+import { Scene } from '../Scene';
+import { SlideTransition } from '../transitions/SlideTransition';
+import { TitleScene } from './TitleScene';
 
 enum MenuItemKey {
     CHARACTER = 'character',
@@ -128,7 +128,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const x = (width / 2) - CharacterSelectionScene.panelImage.width / 2;
         const y = (height / 2) - (CharacterSelectionScene.panelImage.height / 2) - 16;
         ctx.translate(x, y);
-        
+
         ctx.drawImage(CharacterSelectionScene.panelImage, 0, 0);
 
         CharacterSelectionScene.headlineFont.drawText(ctx, "CHARACTER CUSTOMIZATION", 0, -14, "white");
@@ -139,6 +139,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const charSelectionTextY = characterMenuItemY + selectionItemsYDistance;
         const charSelectionTextX = menuItemX + selectionItemsXDistance;
         const charSelectenTextGap = 55;
+
         if (character === CharacterAsset.MALE) {
             CharacterSelectionScene.font.drawText(ctx, "Variant 1", charSelectionTextX, charSelectionTextY, "grey");
             CharacterSelectionScene.font.drawTextWithOutline(ctx, "Variant 2", charSelectionTextX + charSelectenTextGap, charSelectionTextY, "white", "black");
@@ -153,6 +154,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const voiceSelectionTextY = voiceMenuItemY + selectionItemsYDistance;
         const voiceSelectionTextX = menuItemX + selectionItemsXDistance;
         const voiceSelectenTextGap = 55;
+
         if (voice === VoiceAsset.MALE) {
             CharacterSelectionScene.font.drawText(ctx, "High Pitch", voiceSelectionTextX, voiceSelectionTextY, "grey");
             CharacterSelectionScene.font.drawTextWithOutline(ctx, "Low Pitch", voiceSelectionTextX + voiceSelectenTextGap, voiceSelectionTextY, "white", "black");

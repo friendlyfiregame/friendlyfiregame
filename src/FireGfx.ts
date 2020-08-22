@@ -37,6 +37,7 @@ export class FireGfx {
         this.age = 0;
         this.nextUpdate = -Infinity;
         this.startTime = Date.now();
+
         const decay = this.decayData;
         const data = this.data;
         for (let y = 0; y < this.h; y++) {
@@ -55,23 +56,30 @@ export class FireGfx {
             const smooth = 0.5 - 0.5 * Math.cos(2 * Math.PI * stuffedXrel);
             bottom[x] = 1.25 * Math.pow(smooth, 0.5);
         }
+
         this.bottomLine = bottom.slice();
     }
 
     private getDecay(xrel: number, yrel: number): number {
-        if (xrel > 0.5) { xrel = 1 - xrel; }
+        if (xrel > 0.5) {
+            xrel = 1 - xrel;
+        }
+
         if (this.coneShaped) {
             yrel = 1.2 * yrel;
+
             if (yrel > 1) {
                 return 0.02;
             }
         }
+
         return 0.02 + (0.5 - xrel) * 0.1 + Math.pow(1 - yrel, 8);
     }
 
     public update(dt: number) {
         const t = Date.now();
         this.age = t - this.startTime;
+
         if (t >= this.nextUpdate) {
             this.nextUpdate = t + this.updateMs;
             this.updateStep();
@@ -84,10 +92,12 @@ export class FireGfx {
         let fromRow = data[0];
         let fromX = 0, toCenter = 0, midX = (this.w - 1) * 0.5, toCenter1 = 1;
         const yThreshold = this.coneShaped ? this.h * 0.8 : Infinity;
+
         // Let all fire rows move upward, so update rows from top to bottom
         for (let y = 0; y < this.h - 1; y++) {
             const row = fromRow, decayRow = this.decayData[y];
             fromRow = data[y + 1];
+
             if (y > yThreshold) {
                 const yp = (y - yThreshold) / (this.h - yThreshold);
                 toCenter = 0.15 * yp * yp;
@@ -103,6 +113,7 @@ export class FireGfx {
                 row[x] = clamp(v, 0, Infinity);
             }
         }
+
         // Bottom line always stays mostly the same, only minor variations
         const row = data[this.h - 1];
         const t = this.age * 6 / 1000;
@@ -110,7 +121,6 @@ export class FireGfx {
                 * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
         const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);
         for (let x = 0; x < this.w; x++) {
-            // const f = 1 + 0.5 * Math.sin(0.1 * x + t) * Math.sin()
             let f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
             const baseX = Math.floor((this.w - 1) * (x / (this.w - 1)) ** exponent);
             row[x] = this.bottomLine[baseX] * f;
@@ -131,6 +141,7 @@ export class FireGfx {
                 pixels[p++] = col[3];
             }
         }
+
         this.context.putImageData(this.imageData, 0, 0);
     }
 
@@ -145,6 +156,7 @@ export class FireGfx {
         this.returnColor[1] = v255;
         this.returnColor[2] = v255 * v;
         this.returnColor[3] = v255;
+
         return this.returnColor;
     }
 

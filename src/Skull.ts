@@ -14,8 +14,9 @@ export class Skull extends PhysicsEntity {
         super(scene, x, y, 16, 16);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         this.scene.renderer.addAseprite(Skull.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+
         if (this.scene.showBounds) this.drawBounds();
     }
 

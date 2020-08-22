@@ -33,7 +33,9 @@ export class PowerShiba extends NPC {
 
         if (this.state === PowerShibaState.ON_MOUNTAIN) {
             const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "powershiba_mountain_spawn");
+
             if (!spawn) throw new Error('PowerShiba mountain spawn missing');
+
             this.floatSpeed = 2;
             this.floatAmount = 4;
             this.x = spawn.x;
@@ -61,13 +63,17 @@ export class PowerShiba extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         this.scene.renderer.addAseprite(PowerShiba.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES);
+
         if (this.scene.showBounds) this.drawBounds();
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         if (this.thinkBubble) {
             this.thinkBubble.draw(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
@@ -75,6 +81,7 @@ export class PowerShiba extends NPC {
         super.update(dt);
         this.dialoguePrompt.update(dt, this.x, this.y + 16);
         this.speechBubble.update(this.x, this.y);
+
         if (this.thinkBubble) {
             this.thinkBubble.update(this.x, this.y);
         }

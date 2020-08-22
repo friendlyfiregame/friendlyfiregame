@@ -63,6 +63,7 @@ export class Tree extends NPC {
         }
         this.seed.x = this.x;
         this.seed.y = this.y + this.height / 2;
+
         this.seed.setVelocity(5, 0);
         return this.seed;
     }
@@ -74,6 +75,7 @@ export class Tree extends NPC {
         this.wood.x = this.x;
         this.wood.y = this.y + this.height / 2;
         this.wood.setVelocity(5, 0);
+
         return this.wood;
     }
 }

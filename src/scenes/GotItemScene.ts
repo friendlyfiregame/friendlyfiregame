@@ -29,7 +29,6 @@ export class GotItemScene extends Scene<FriendlyFire> {
     ])
     private static itemImages: (HTMLImageElement | Aseprite)[];
 
-
     private itemPosition = {
         x: 0,
         y: 0
@@ -72,9 +71,9 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Like tears in the rain"
         ],
         [
-            "Dog's are the best!",
+            "Dogs are the best!",
             "What might this be good for?",
-            "powered by unconditional love",
+            "Powered by unconditional love",
             "Nothing can stop us!"
         ]
     ]
@@ -98,7 +97,6 @@ export class GotItemScene extends Scene<FriendlyFire> {
             this.time += dt;
 
             if (this.time > 4) {
-                // this.glitter.setPosition(this.itemPosition.x, this.itemPosition.y);
                 this.stopped = true;
                 this.scenes.popScene();
             }

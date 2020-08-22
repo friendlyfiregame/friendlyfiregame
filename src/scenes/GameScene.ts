@@ -147,7 +147,7 @@ export class GameScene extends Scene<FriendlyFire> {
             id: BgmId.WINGS,
             sound: GameScene.bgmWings,
             baseVolume: 0.75
-        },
+        }
     ]
 
     @asset(DIALOG_FONT)
@@ -206,8 +206,8 @@ export class GameScene extends Scene<FriendlyFire> {
     private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
     public readonly renderer = new Renderer(this);
     public readonly mountainRiddle = new MountainRiddle();
-    public setup(): void {
 
+    public setup(): void {
         this.mapInfo = new MapInfo();
         this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o))
         this.pointsOfInterest = this.mapInfo.getPointers();
@@ -237,6 +237,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 }
             })
         ];
+
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
         this.stone = this.getGameObject(Stone);
@@ -281,6 +282,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public removeGameObject(object: GameObject): void {
         const index = this.gameObjects.indexOf(object);
+
         if (index >= 0) {
             this.gameObjects.splice(index, 1);
         }
@@ -288,10 +290,12 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public getBackgroundTrack (id: BgmId): BackgroundTrack {
         const found = this.backgroundTracks.find(track => track.id === id);
+
         if (!found) {
-            console.error(`Missing background track with id '${id}'`);
+            console.error(`Missing background track with ID '${id}'.`);
             return this.backgroundTracks[0];
         }
+
         return found;
     }
 
@@ -310,8 +314,10 @@ export class GameScene extends Scene<FriendlyFire> {
     public setActiveBgmTrack (id: BgmId): void {
         this.backgroundTracks.forEach(t => t.active = false);
         const track = this.backgroundTracks.find(t => t.id === id);
+
         if (track) {
             track.active = true;
+
             if (!track.sound.isPlaying()) {
                 track.sound.setLoop(true);
                 track.sound.play();
@@ -325,6 +331,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.backgroundTracks.forEach(t => t.active = false);
         track.active = true;
         track.sound.setVolume(track.baseVolume);
+
         if (!track.sound.isPlaying()) {
             track.sound.setLoop(true);
             track.sound.play();
@@ -346,7 +353,8 @@ export class GameScene extends Scene<FriendlyFire> {
                 return gameObject;
             }
         }
-        throw new Error(`Game object of type ${type.name} not found`);
+
+        throw new Error(`Game object of type ${type.name} not found.`);
     }
 
     public activate(): void {
@@ -370,6 +378,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.player.cancelDance();
             }
         }
+
         if (event.isPause) {
             this.scenes.pushScene(PauseScene);
         }
@@ -394,18 +403,23 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.paused) {
             dt = 0;
         }
+
         this.dt = dt;
         this.gameTime += dt;
+
         for (const obj of this.gameObjects) {
             obj.update(dt);
         }
+
         this.camera.update(dt, this.gameTime);
 
         if (this.fadeToBlackEndTime > this.gameTime) {
             let fade = (this.gameTime - this.fadeToBlackStartTime) / (this.fadeToBlackEndTime - this.fadeToBlackStartTime);
+
             if (this.faceToBlackDirection === FadeDirection.FADE_IN) {
                 fade = 1 - fade;
             }
+
             this.fadeToBlackFactor = fade;
         }
 
@@ -445,6 +459,7 @@ export class GameScene extends Scene<FriendlyFire> {
             const fade = valueCurves.trapeze(0.4).get(p);
             this.drawFade(ctx, fade, "black");
         }
+
         if (this.apocalypse) {
             this.drawApocalypseOverlay(ctx);
         }
@@ -467,6 +482,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (isDev()) {
             GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale - 3, "white");
         }
+
         this.frameCounter++;
     }
 
@@ -493,10 +509,12 @@ export class GameScene extends Scene<FriendlyFire> {
                 const bounds = boundsFromMapObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "blue");
             }
+
             for (const obj of this.boundObjects) {
                 const bounds = boundsFromMapObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "yellow");
             }
+
             for (const obj of this.gateObjects) {
                 const bounds = boundsFromMapObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "green");
@@ -527,6 +545,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fadeToBlackStartTime = this.gameTime;
             this.fadeToBlackEndTime = this.gameTime + duration;
             this.faceToBlackDirection = direction;
+
             setTimeout(() => {
                 if (direction === FadeDirection.FADE_OUT) {
                     this.fadeToBlackFactor = 1;
@@ -541,15 +560,19 @@ export class GameScene extends Scene<FriendlyFire> {
     private updateApocalypse() {
         this.fireEmitter.setPosition(this.player.x, this.player.y);
         this.fireEffects.forEach(e => e.update(this.dt));
+
         if (timedRnd(this.dt, 0.8)) {
             this.fireEmitter.emit();
         }
+
         this.fire.growthTarget = Math.max(2, 20 - 6 * this.gameObjects.filter(
-                o => o instanceof Cloud && o.isRaining()).length);
+            o => o instanceof Cloud && o.isRaining()
+        ).length);
+
         if (this.fire.intensity < 6) {
             this.fire.intensity = Math.max(this.fire.intensity, 4);
             this.apocalypseFactor = clamp((this.fire.intensity - 4) / 2, 0, 1);
-            // GameScene.bgm2.setVolume(this.bgm2BaseVolume * this.apocalypseFactor);
+
             if (this.apocalypseFactor <= 0.001) {
                 // End apocalypse
                 this.apocalypseFactor = 0;
@@ -564,11 +587,11 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    private updateFriendshipEndingCutscene(dt: number) {
+    private updateFriendshipEndingCutscene(dt: number): void {
         this.camera.setCinematicBar(1);
     }
 
-    private drawApocalypseOverlay(ctx: CanvasRenderingContext2D) {
+    private drawApocalypseOverlay(ctx: CanvasRenderingContext2D): void {
         this.updateApocalypse();
         this.camera.setCinematicBar(this.apocalypseFactor);
 
@@ -584,7 +607,7 @@ export class GameScene extends Scene<FriendlyFire> {
         })
     }
 
-    private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black") {
+    private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black"): void {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
@@ -596,7 +619,7 @@ export class GameScene extends Scene<FriendlyFire> {
         })
     }
 
-    public loadApocalypse() {
+    public loadApocalypse(): void {
         this.fireEffects = [1, 2].map(num =>  new FireGfx(32, 24, true, 2));
         this.fireEmitter = this.particles.createEmitter({
             position: {x: this.player.x, y: this.player.y},
@@ -618,7 +641,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    public beginFriendshipEnding() {
+    public beginFriendshipEnding(): void {
         this.friendshipCutscene = true;
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
@@ -630,7 +653,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.player.setControllable(false);
     }
 
-    public beginApocalypse() {
+    public beginApocalypse(): void {
         this.apocalypse = true;
         this.world.stopRain();
 
@@ -649,32 +672,34 @@ export class GameScene extends Scene<FriendlyFire> {
             // Teleport player and fire to boss spawn position
             this.player.x = bossPosition.x - 36;
             this.player.y = bossPosition.y;
+
             this.player.removePowerUps();
             this.player.enableRainDance();
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
+
             this.camera.setBounds(this.player.getCurrentMapBounds())
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);
-            setTimeout(() => this.player.think("There's still something I can do", 4000), 12000);
+            setTimeout(() => this.player.think("There's still something I can do.", 4000), 12000);
         } else {
-            throw new Error('cannot begin apocalypse because. boss_spawn or bosscloud trigger in map missing');
+            throw new Error('Cannot begin apocalypse because boss_spawn or bosscloud trigger is missing in map.');
         }
     }
 
-    private togglePause(paused = !this.paused) {
+    private togglePause(paused = !this.paused): void {
         this.paused = paused;
     }
 
-    public pause() {
+    public pause(): void {
         this.muteMusic();
         MenuList.pause.stop();
         MenuList.pause.play();
         this.togglePause(true);
     }
 
-    public resume() {
+    public resume():void {
         this.resetMusicVolumes()
         this.togglePause(false);
     }

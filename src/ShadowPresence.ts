@@ -77,6 +77,6 @@ export class ShadowPresence extends NPC {
         this.checkPlayerDistance();
         this.dialoguePrompt.update(dt, this.x, this.y + 48);
         this.speechBubble.update(this.x, this.y + 12);
-        this.soundEmitter.update(dt);
+        this.soundEmitter.update();
     }
 }

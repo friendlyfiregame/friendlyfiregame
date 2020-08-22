@@ -97,9 +97,11 @@ export class Aseprite {
      */
     public drawFrame(ctx: CanvasRenderingContext2D, index: number, x: number, y: number): void {
         const frame = this.frames[index];
+
         if (frame == null) {
             throw new Error("Frame index not found: " + index);
         }
+
         ctx.drawImage(this.image, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h,
             Math.round(x) + frame.spriteSourceSize.x, Math.round(y) + frame.spriteSourceSize.y,
             frame.spriteSourceSize.w, frame.spriteSourceSize.h);

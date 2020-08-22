@@ -13,7 +13,7 @@ export class Radio extends Entity {
         super(scene, x, y, 24, 24, false);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         this.scene.renderer.addAseprite(Radio.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES)
         if (this.scene.showBounds) this.drawBounds();
     }

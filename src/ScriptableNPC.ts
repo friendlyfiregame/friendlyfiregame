@@ -40,6 +40,7 @@ export abstract class ScriptableNPC extends NPC {
             pulled++;
             this.y--;
         }
+
         return pulled;
     }
 

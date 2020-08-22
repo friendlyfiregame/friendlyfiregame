@@ -20,7 +20,7 @@ export class DialoguePrompt {
         this.y = y;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
         this.scene.renderer.addAseprite(DialoguePrompt.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES)
     }

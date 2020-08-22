@@ -28,20 +28,25 @@ export class FlameBoy extends NPC {
 
     protected showDialoguePrompt (): boolean {
         if (!super.showDialoguePrompt()) return false;
+
         return (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.THROWN_STONE_INTO_WATER &&
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_MULTIJUMP
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.THROWN_STONE_INTO_WATER
+            && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_MULTIJUMP
         );
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        const animationTag = "idle";
+        const animationTag = 'idle';
         this.scene.renderer.addAseprite(FlameBoy.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES, this.direction);
+
         if (this.scene.showBounds) this.drawBounds();
+
         this.drawFace(ctx, false);
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
@@ -49,6 +54,6 @@ export class FlameBoy extends NPC {
         super.update(dt);
         this.dialoguePrompt.update(dt, this.x, this.y + 32);
         this.speechBubble.update(this.x, this.y);
-        this.soundEmitter.update(dt);
+        this.soundEmitter.update();
     }
 }

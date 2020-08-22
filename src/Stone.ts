@@ -36,12 +36,18 @@ export class Stone extends NPC implements CollidableGameObject {
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 
-        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'stone_floating_position');
-        if (!floatingPosition) throw new Error ('Could not find "stone_floating_position" point of interest in game scene');
+        const floatingPosition = this.scene.pointsOfInterest.find(
+            poi => poi.name === 'stone_floating_position'
+        );
+
+        if (!floatingPosition) {
+            throw new Error ('Could not find "stone_floating_position" point of interest in game scene');
+        }
+
         this.floatingPosition = floatingPosition;
     }
 
-    protected showDialoguePrompt (): boolean {
+    protected showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
@@ -52,14 +58,17 @@ export class Stone extends NPC implements CollidableGameObject {
     draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(Stone.sprite, "idle", this.x, this.y - 1, RenderingLayer.ENTITIES, this.direction);
         if (this.scene.showBounds) this.drawBounds();
+
         this.drawFace(ctx, false);
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
@@ -78,9 +87,11 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = Math.sign(diffX);
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.x += moveX * dt;
+
             if (Math.abs(moveX) < 2) {
                 this.state = StoneState.FLOATING;
             }
+
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         } else if (this.state === StoneState.FLOATING) {
             this.x = this.floatingPosition.x;
@@ -98,6 +109,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 return Environment.SOLID;
             }
         }
+
         return Environment.AIR;
     }
 

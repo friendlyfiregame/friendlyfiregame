@@ -6,7 +6,7 @@ import { PhysicsEntity } from './PhysicsEntity';
 import { sleep } from './util';
 import { SpeechBubble } from './SpeechBubble';
 
-// Seconds where NPC can't be talked to after an ended conversation
+// Seconds NPC can't be talked to after a conversation has ended
 const PAUSE_AFTER_CONVERSATION = 1.5;
 
 export abstract class NPC extends PhysicsEntity {
@@ -44,7 +44,9 @@ export abstract class NPC extends PhysicsEntity {
         const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y);
         thinkBubble.setMessage(message);
         thinkBubble.show();
+
         await sleep(time);
+
         if (this.thinkBubble === thinkBubble) {
             thinkBubble.hide();
             this.thinkBubble = null;
@@ -65,11 +67,12 @@ export abstract class NPC extends PhysicsEntity {
 
     protected showDialoguePrompt (): boolean {
         if (this.hasActiveConversation() || !this.scene.player.isControllable) return false;
+
         return true;
     }
 
     protected drawDialoguePrompt (ctx: CanvasRenderingContext2D): void {
-        this.dialoguePrompt.draw(ctx);
+        this.dialoguePrompt.draw();
     }
 
     protected drawGreeting(ctx: CanvasRenderingContext2D): void {
@@ -103,6 +106,7 @@ export abstract class NPC extends PhysicsEntity {
             const dx = this.scene.player.x - this.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
         }
+
         super.update(dt);
     }
 }

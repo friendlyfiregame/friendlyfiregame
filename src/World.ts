@@ -67,7 +67,7 @@ export class World implements GameObject {
         return World.foreground.height;
     }
 
-    public update(dt: number) {
+    public update() {
         if (this.raining) {
             this.rainEmitter.emit(rndInt(1, 4));
         }
@@ -89,6 +89,7 @@ export class World implements GameObject {
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
+
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
@@ -98,15 +99,17 @@ export class World implements GameObject {
                     y: (-this.getHeight() + camY) / bgY
                 },
                 asset: background
-            })
+            });
         }
     }
 
     public getEnvironment(x: number, y: number): Environment {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+
         if (index < 0 || index >= World.collisionMap.length) {
             return Environment.AIR;
         }
+
         return World.collisionMap[index];
     }
 
@@ -122,6 +125,7 @@ export class World implements GameObject {
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y);
+
                 if (environment !== Environment.AIR && !ignore.includes(environment) ) {
                     return environment;
                 }
@@ -129,13 +133,16 @@ export class World implements GameObject {
         }
 
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+
         if (index < 0 || index >= World.collisionMap.length) {
             return 0;
         }
         const environment = this.getEnvironment(x, y);
+
         if ((!validEnvironments.includes(environment)) || (ignore && ignore.includes(environment))) {
             return Environment.AIR;
         }
+
         return World.collisionMap[index];
     }
 
@@ -147,16 +154,19 @@ export class World implements GameObject {
      * @param ignoreEntities  - Array of entities to be ignored with this check
      * @return                - An array containing all entities that collide with the source entity.
      */
-    public getEntityCollisions (sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
+    public getEntityCollisions(sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
         const collidesWith: Entity[] = [];
+
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && gameObject.isTrigger && !ignoreEntities.includes(gameObject)) {
                 const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(margin), gameObject.getBounds(margin));
+
                 if (colliding) {
                     collidesWith.push(gameObject);
                 }
             }
         }
+
         return collidesWith;
     }
 
@@ -164,36 +174,45 @@ export class World implements GameObject {
      * Returns all triggers that do collide with the provided entity
      * @param sourceEntity Entity to check collisions against trigger boxes
      */
-    public getTriggerCollisions (sourceEntity: Entity): GameObjectInfo[] {
+    public getTriggerCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
         for (const triggerObject of this.scene.triggerObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+
             if (colliding) {
                 collidesWith.push(triggerObject);
             }
         }
+
         return collidesWith;
     }
 
-    public getGateCollisions (sourceEntity: Entity): GameObjectInfo[] {
+    public getGateCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
         for (const gateObject of this.scene.gateObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0));
+
             if (colliding) {
                 collidesWith.push(gateObject);
             }
         }
+
         return collidesWith;
     }
 
-    public getCameraBounds (sourceEntity: Entity): GameObjectInfo[] {
+    public getCameraBounds(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
         for (const triggerObject of this.scene.boundObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+
             if (colliding) {
                 collidesWith.push(triggerObject);
             }
         }
+
         return collidesWith;
     }
 
@@ -203,7 +222,7 @@ export class World implements GameObject {
      * @param box2 second bounding box
      * @return `true` when the bounding boxes are touching, `false` if not.
      */
-    private boundingBoxesCollide (box1: Bounds, box2: Bounds): boolean {
+    private boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
         return !(
             ((box1.y - box1.height) > (box2.y)) ||
             (box1.y < (box2.y - box2.height)) ||
@@ -217,11 +236,13 @@ export class World implements GameObject {
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(x, y);
+
                 if (environment !== Environment.AIR && !ignore.includes(environment)) {
                     return gameObject;
                 }
             }
         }
+
         return null;
     }
 
@@ -237,10 +258,12 @@ export class World implements GameObject {
             ignore?: Environment[]): number {
         for (let i = 0; i < height; i++) {
             const collision = this.collidesWith(x, y - i, ignoreObjects, ignore);
+
             if (collision) {
                 return collision;
             }
         }
+
         return 0;
     }
 
@@ -255,6 +278,7 @@ export class World implements GameObject {
         while (y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)) {
             y--;
         }
+
         return y;
     }
 

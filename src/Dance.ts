@@ -64,11 +64,13 @@ export class Dance {
         this.duration = keys.length;
         this.keys = [];
         this.performance = [];
+
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             this.keys[i] = key === " " ? "" : key === "3" ? "12" : key;
             this.performance[i] = {};
         }
+
         this.begin();
         this.alphaCurve = valueCurves.cos(0.15);
     }
@@ -122,13 +124,16 @@ export class Dance {
                         return;
                     }
                 }
+
                 const nxt = this.currentIndex + 1;
+
                 if (this.keys[nxt] && this.keys[nxt].includes(key)) {
                     if (this.progress - (nxt + 0.5) < this.timeTolerance) {
                         this.keySuccess(key, nxt);
                         return
                     }
                 }
+
                 this.keyFailure(key);
             }
         }
@@ -139,12 +144,12 @@ export class Dance {
             if (index == this.currentIndex) {
                 this.currentKey = this.currentKey.replace(char, "");
             }
+
             this.performance[index][char] = true;
         }
         if (index === this.currentIndex && this.currentKey.length === 0 || this.keys[index].length === 0) {
             this.lastSuccess = this.progress;
             Dance.successSound.stop();
-            // Dance.successSound.play();
         }
     }
 
@@ -161,6 +166,7 @@ export class Dance {
                 this.performance[this.currentIndex][char] = false;
             }
         }
+
         this.registerMistake()
     }
 
@@ -168,6 +174,7 @@ export class Dance {
         this.mistakes++;
         this.lastMistake = this.progress;
         Dance.failSound.play();
+
         if (this.mistakes > this.allowedMistakes) {
             this.loseGame();
         }
@@ -184,6 +191,7 @@ export class Dance {
         const prevIndex = this.currentIndex;
         this.currentIndex = Math.floor(this.progress);
         this.updateMusic();
+
         // Next key?
         if (this.currentIndex > prevIndex) {
             // Missed last one?
@@ -192,25 +200,30 @@ export class Dance {
                 this.currentKey = "";
                 return false;
             }
+
             // Proceed
             this.currentKey = this.keys[this.currentIndex] || "";
+
             for (let char of this.currentKey) {
                 if (this.performance[this.currentIndex] && this.performance[this.currentIndex][char]) {
                     this.currentKey = this.currentKey.replace(char, "");
                 }
             }
         }
+
         if (this.progress >= this.duration) {
             // Done! Success! Yeah!
             this.success = true;
             this.resetMusic();
             return true;
         }
+
         if (this.currentKey) {
             this.currentDistanceToIdealTime = Math.abs(this.progress - (this.currentIndex + 0.5));
         } else {
             this.currentDistanceToIdealTime = 0;
         }
+
         return false;
     }
 
@@ -218,6 +231,7 @@ export class Dance {
         if (!this.withMusic) {
             return;
         }
+
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
             this.scene.fadeActiveBackgroundTrack(fade);
@@ -229,6 +243,7 @@ export class Dance {
                 GameScene.bgm1.setVolume(0);
                 GameScene.bgm2.setVolume(0);
             }
+
             if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
                 Dance.raindance_music.setVolume(0.8);
                 Dance.raindance_music.play();
@@ -271,26 +286,32 @@ export class Dance {
             ctx.globalAlpha = (1 - this.progress + this.lastMistake) * 0.6;
             ctx.fillRect(-w2 + 2, -h2 + 1, w - 4, h);
         }
+
         if (this.progress - this.lastSuccess < 1) {
             ctx.fillStyle = "green";
             ctx.globalAlpha = (1 - this.progress + this.lastSuccess) * 0.1;
             ctx.fillRect(-w2 + 2, -h2 + 1, w - 4, h);
         }
+
         // Upcoming keys
         ctx.globalAlpha = 1;
         ctx.textAlign = "center";
         const sweetX = w2 - 16, y1 = -8, y2 = 1;
         ctx.fillStyle = "black";
+
         for (let i = Math.floor(this.progress) - 2; i < this.progress + 8; i++) {
             const keys = this.keys[i];
+
             if (keys) {
                 const diff = i - this.progress;
                 const x = sweetX - diff * 20 - 6;
                 const xp = (x - (-w2)) / w;
                 const alpha = this.alphaCurve.get(xp);
                 ctx.globalAlpha = alpha;
+
                 if (keys.includes("1")) {
                     ctx.strokeStyle = "#ff8010";
+
                     if (this.performance[i]["1"] != null) {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y1, 9, 9);
@@ -298,8 +319,10 @@ export class Dance {
                         Dance.keys.drawTag(ctx, `${controller}-dance1`, x + Dance.keys.width / -2, y1);
                     }
                 }
+
                 if (keys.includes("2")) {
                     ctx.strokeStyle = "blue";
+
                     if (this.performance[i]["2"] != null) {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y2, 9, 9);
@@ -309,6 +332,7 @@ export class Dance {
                 }
             }
         }
+
         // Sweet-spot
         ctx.globalAlpha = 1;
         ctx.drawImage(Dance.indicator, sweetX - 8, 1 + Dance.indicator.height / -2);

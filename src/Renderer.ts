@@ -203,7 +203,7 @@ export class Renderer {
         this.queue = [];
     }
 
-    public add (item: RenderingItem) {
+    public add(item: RenderingItem) {
         this.queue.push(item);
     }
 

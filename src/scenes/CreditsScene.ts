@@ -199,7 +199,8 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Ranjit Mevius',
             'Markus Over',
             'Klaus Reimer',
-            'Eduard But'
+            'Eduard But',
+            'Matthias Wetter'
         ]);
         posY = this.drawCredit(ctx, posY, posX, 'SCRIPTING', [
             'Markus Over',
