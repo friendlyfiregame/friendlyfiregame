@@ -35,13 +35,9 @@ export interface GameObjectProperties {
 
 export interface GameObjectInfo {
     position: Point,
-    // x: number,
-    // y: number,
     name: string;
     type: string;
-    width: number,
-    height: number,
-    // size: Size;
+    size: Size;
     properties: GameObjectProperties;
 }
 
@@ -71,13 +67,12 @@ export class MapInfo {
 
     public getGameObjectInfos(type: MapObjectType): GameObjectInfo[] {
         const mapHeight = MapInfo.getMapSize().height;
+
         return this.getObjects(type).map(object => ({
             name: object.name,
             position: new Point(object.x, mapHeight - object.y),
             type: object.type,
-            // size: object.size,
-            width: object.width,
-            height: object.height,
+            size: new Size(object.width, object.height),
             properties: (object.properties ?? []).reduce((props, property) => {
                 props[property.name] = property.value;
                 return props;

@@ -99,8 +99,8 @@ export function boundsFromGameObject(o: GameObjectInfo, margin = 0): Bounds {
     );
 
     const size = new Size(
-        o.width + (margin * 2),
-        o.height + (margin * 2)
+        o.size.width + (margin * 2),
+        o.size.height + (margin * 2)
     );
 
     return { position, size };

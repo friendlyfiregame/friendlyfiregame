@@ -550,8 +550,8 @@ export class Player extends PhysicsEntity {
                         Player.leaveGateSound.play();
 
                         this.position.moveTo(
-                            targetGate.position.x + (targetGate.width / 2),
-                            targetGate.position.y - targetGate.height
+                            targetGate.position.x + (targetGate.size.width / 2),
+                            targetGate.position.y - targetGate.size.height
                         );
 
                         this.scene.camera.setBounds(this.getCurrentMapBounds());
