@@ -152,25 +152,70 @@ export class Size {
         return new Size(this._widthRounded, this._heightRounded);
     }
 
-    public resize(width: number, height: number): Size {
-        this.resizeWidth(width);
-        this.resizeHeight(height);
+    public resizeTo(width: number, height: number): Size;
+
+    public resizeTo(size: Size): Size;
+
+    public resizeTo(sizeOrWidth: Size | number, height?: number): Size {
+        if (typeof sizeOrWidth === 'number' && typeof height === 'number') {
+            this.resizeWidthTo(sizeOrWidth);
+            this.resizeHeightTo(height);
+        } else if (sizeOrWidth instanceof Size && typeof height === 'undefined') {
+            this.resizeWidthTo(sizeOrWidth.width);
+            this.resizeHeightTo(sizeOrWidth.height);
+        } else {
+            throw new Error('Invalid call signature.');
+        }
 
         return this;
     }
 
-    public resizeWidth(width: number): Size {
+    public resizeWidthTo(width: number): Size {
         this._width = width;
 
-        this.recalculateWidthRounded();
+        this.recalculateWidthRounded()
 
         return this;
     }
 
-    public resizeHeight(height: number): Size {
+    public resizeHeightTo(height: number): Size {
         this._height = height;
 
-        this.recalculateHeightRounded();
+        this.recalculateHeightRounded()
+
+        return this;
+    }
+
+    public resizeBy(width: number, height: number): Size;
+
+    public resizeBy(size: Size): Size;
+
+    public resizeBy(sizeOrWidth: Size | number, height?: number): Size {
+        if (typeof sizeOrWidth === 'number' && typeof height === 'number') {
+            this.resizeWidthBy(sizeOrWidth);
+            this.resizeHeightBy(height);
+        } else if (sizeOrWidth instanceof Size && typeof height === 'undefined') {
+            this.resizeWidthBy(sizeOrWidth.width);
+            this.resizeHeightBy(sizeOrWidth.height);
+        } else {
+            throw new Error('Invalid call signature.');
+        }
+
+        return this;
+    }
+
+    public resizeWidthBy(width: number): Size {
+        this._width += width;
+
+        this.recalculateWidthRounded()
+
+        return this;
+    }
+
+    public resizeHeightBy(height: number): Size {
+        this._height += height;
+
+        this.recalculateHeightRounded()
 
         return this;
     }
