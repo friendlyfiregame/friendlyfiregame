@@ -558,7 +558,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private updateApocalypse(): void {
-        this.fireEmitter.setPosition(this.player.position.clone());
+        this.fireEmitter.setPosition(this.player.position);
         this.fireEffects.forEach(e => e.update(this.dt));
 
         if (timedRnd(this.dt, 0.8)) {
@@ -634,7 +634,7 @@ export class GameScene extends Scene<FriendlyFire> {
             breakFactor: 0.9,
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
-                if (this.world.collidesWith(new Point(particle.x, particle.y - particle.size / 4))) {
+                if (this.world.collidesWith(particle.position.clone().moveYBy(-particle.size / 4))) {
                     particle.vx = 0;
                     particle.vy = 0;
                 }

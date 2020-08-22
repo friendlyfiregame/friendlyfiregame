@@ -952,7 +952,7 @@ export class Player extends PhysicsEntity {
         if (!this.disableParticles && this.visible) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
-                    this.dustEmitter.setPosition(this.position.clone());
+                    this.dustEmitter.setPosition(this.position);
                     const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
                     this.dustEmitter.emit(count);
                 }

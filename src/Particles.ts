@@ -132,7 +132,7 @@ export class ParticleEmitter {
     }
 
     public setPosition(position: Point): void {
-        this.position = position.clone();
+        this.position.moveTo(position);
     }
 
     public clear() {

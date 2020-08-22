@@ -110,7 +110,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.raining = 0;
             } else {
                 if (timedRnd(dt, 0.1)) {
-                    this.rainEmitter.setPosition(this.position.clone());
+                    this.rainEmitter.setPosition(this.position);
                     this.rainEmitter.emit(rndInt(1, 4));
                 }
             }

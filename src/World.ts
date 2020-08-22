@@ -118,8 +118,7 @@ export class World implements GameObject {
     /**
      * Checks if the given position collides with the world.
      *
-     * @param x - X position within the world.
-     * @param y - Y position within the world.
+     * @param position - position within the world.
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
      *         specific meaning which isn't defined yet).
      */
