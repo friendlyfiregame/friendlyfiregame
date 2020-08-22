@@ -84,7 +84,6 @@ export class Fire extends NPC {
         this.steamEmitter = this.scene.particles.createEmitter({
             position: this.position.clone().moveXBy(10),
             offset: () => new Point(rnd(-1, 1) * 3, 0),
-            //velocity: () => ({ x: rnd(-1, 2) * 5, y: 50 + rnd(3) }),
             velocity: () => new Point(rnd(-1, 2) * 5, 50 + rnd(3)),
             color: () => Fire.steamImage,
             size: () => rndInt(12, 18),

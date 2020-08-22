@@ -14,29 +14,28 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     @asset("sprites/stoneplatform.aseprite.json")
     private static sprite: Aseprite;
 
-    private startX: number;
-    private startY: number;
-    private targetX: number;
-    private targetY: number;
+    private startPosition: Point;
+    private targetPosition: Point;
     private velocity: number;
 
     public constructor(scene: GameScene, position: Point, properties: GameObjectProperties) {
         super(scene, position, new Size(68, 12));
         this.setFloating(true);
-        this.startX = this.targetX = position.x;
-        this.startY = this.targetY = position.y;
+        this.startPosition = position.clone();
+        this.targetPosition = position.clone();
         this.velocity = properties.velocity / PIXEL_PER_METER;
+
         if (properties.direction === "right") {
-            this.targetX = position.x + properties.distance;
+            this.targetPosition.moveXBy(properties.distance);
             this.setVelocityX(this.velocity);
         } else if (properties.direction === "left") {
-            this.targetX = position.x - properties.distance;
+            this.targetPosition.moveXBy(-properties.distance);
             this.setVelocityX(-this.velocity);
         } else if (properties.direction === "up") {
-            this.targetY = position.y + properties.distance;
+            this.targetPosition.moveYBy(properties.distance);
             this.setVelocityY(this.velocity);
         } else if (properties.direction === "down") {
-            this.targetY = position.y - properties.distance;
+            this.targetPosition.moveYBy(-properties.distance);
             this.setVelocityY(-this.velocity);
         }
     }
@@ -48,25 +47,35 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
 
     update(dt: number): void {
         super.update(dt);
+
         if (this.getVelocityY() > 0) {
-            if (this.position.y >= Math.max(this.startY, this.targetY)) {
-                this.position.moveYTo(Math.max(this.startY, this.targetY));
+            const yMax = Math.max(this.startPosition.y, this.targetPosition.y);
+
+            if (this.position.y >= yMax) {
+                this.position.moveYTo(yMax);
                 this.setVelocityY(-this.velocity);
             }
         } else if (this.getVelocityY() < 0) {
-            if (this.position.y <= Math.min(this.startY, this.targetY)) {
-                this.position.moveYTo(Math.min(this.startY, this.targetY));
+            const yMin = Math.min(this.startPosition.y, this.targetPosition.y);
+
+            if (this.position.y <= yMin) {
+                this.position.moveYTo(yMin);
                 this.setVelocityY(this.velocity);
             }
         }
+
         if (this.getVelocityX() > 0) {
-            if (this.position.x >= Math.max(this.targetX, this.startX)) {
-                this.position.moveXTo(Math.max(this.targetX, this.startX));
+            const xMax = Math.max(this.startPosition.x, this.targetPosition.x);
+
+            if (this.position.x >= xMax) {
+                this.position.moveXTo(xMax);
                 this.setVelocityX(-this.velocity);
             }
         } else if (this.getVelocityX() < 0) {
-            if (this.position.x <= Math.min(this.startX, this.targetX)) {
-                this.position.moveXTo(Math.min(this.startX, this.targetX));
+            const xMin = Math.min(this.startPosition.x, this.targetPosition.x);
+
+            if (this.position.x <= xMin) {
+                this.position.moveXTo(xMin);
                 this.setVelocityX(this.velocity);
             }
         }
