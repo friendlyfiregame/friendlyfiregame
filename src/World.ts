@@ -1,6 +1,6 @@
 import { asset } from './Assets';
 import { Bounds, Entity } from './Entity';
-import { boundsFromMapObject, rnd, rndInt } from './util';
+import { boundsFromGameObject, rnd, rndInt } from './util';
 import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScene';
 import { GameObjectInfo } from './MapInfo';
 import { getImageData } from './graphics';
@@ -49,7 +49,7 @@ export class World implements GameObject {
 
         this.rainEmitter = this.scene.particles.createEmitter({
             //position: rainSpawnPosition.position,
-            position: new Point(rainSpawnPosition.x, rainSpawnPosition.y),
+            position: new Point(rainSpawnPosition.position.x, rainSpawnPosition.position.y),
             offset: () => new Point(rnd(-1, 1) * 26, rnd(-1, 1) * 5),
             velocity: () => new Point(rnd(-1, 1) * 5, -rnd(50, 80)),
             color: () => World.raindrop,
@@ -176,7 +176,7 @@ export class World implements GameObject {
     public getTriggerCollisions (sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
         for (const triggerObject of this.scene.triggerObjects) {
-            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(triggerObject));
             if (colliding) {
                 collidesWith.push(triggerObject);
             }
@@ -187,7 +187,7 @@ export class World implements GameObject {
     public getGateCollisions (sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
         for (const gateObject of this.scene.gateObjects) {
-            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0));
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(gateObject, 0));
             if (colliding) {
                 collidesWith.push(gateObject);
             }
@@ -198,7 +198,7 @@ export class World implements GameObject {
     public getCameraBounds (sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
         for (const triggerObject of this.scene.boundObjects) {
-            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromMapObject(triggerObject));
+            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(triggerObject));
             if (colliding) {
                 collidesWith.push(triggerObject);
             }

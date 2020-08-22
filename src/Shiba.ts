@@ -95,7 +95,7 @@ export class Shiba extends ScriptableNPC {
 
             if (!spawn) throw new Error('Shiba mountain spawn missing');
 
-            this.position.moveTo(spawn.x, spawn.y);
+            this.position.moveTo(spawn.position.x, spawn.position.y);
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
             this.scene.powerShiba.nextState();
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
@@ -108,7 +108,7 @@ export class Shiba extends ScriptableNPC {
 
             if (!shibaSpawnPos) throw new Error(`'friendship_shiba_spawn' point in map is missing`);
 
-            this.position.moveTo(shibaSpawnPos.x, shibaSpawnPos.y);
+            this.position.moveTo(shibaSpawnPos.position.x, shibaSpawnPos.position.y);
         } else if (this.state === ShibaState.KILLING_FIRE) {
             this.move = 0;
 

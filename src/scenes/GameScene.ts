@@ -4,7 +4,7 @@ import { Bird } from '../Bird';
 import { BitmapFont } from '../BitmapFont';
 import { Bone } from '../Bone';
 import { Bounds, createEntity } from '../Entity';
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from '../util';
+import { boundsFromGameObject, clamp, isDev, rnd, rndItem, timedRnd } from '../util';
 import { Camera } from '../Camera';
 import { Campfire } from '../Campfire';
 import { Caveman } from '../Caveman';
@@ -226,15 +226,24 @@ export class GameScene extends Scene<FriendlyFire> {
             ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
-                    case 'riddlestone': return new RiddleStone(this, new Point(entity.x, entity.y), entity.properties);
-                    case 'campfire': return new Campfire(this, new Point(entity.x, entity.y));
-                    case 'radio': return new Radio(this, new Point(entity.x, entity.y));
-                    case 'movingplatform': return new MovingPlatform(this, new Point(entity.x, entity.y), entity.properties);
-                    case 'skull': return new Skull(this, new Point(entity.x, entity.y));
-                    case 'chicken': return new Chicken(this, new Point(entity.x, entity.y));
-                    case 'superthrow': return new SuperThrow(this, new Point(entity.x, entity.y));
-                    case 'portal': return new Portal(this, new Point(entity.x, entity.y));
-                    default: return createEntity(entity.name, this, new Point(entity.x, entity.y), entity.properties);
+                    case 'riddlestone':
+                        return new RiddleStone(this, entity.position, entity.properties);
+                    case 'campfire':
+                        return new Campfire(this, entity.position);
+                    case 'radio':
+                        return new Radio(this, entity.position);
+                    case 'movingplatform':
+                        return new MovingPlatform(this, entity.position, entity.properties);
+                    case 'skull':
+                        return new Skull(this, entity.position);
+                    case 'chicken':
+                        return new Chicken(this, entity.position);
+                    case 'superthrow':
+                        return new SuperThrow(this, entity.position);
+                    case 'portal':
+                        return new Portal(this, entity.position);
+                    default:
+                        return createEntity(entity.name, this, entity.position, entity.properties);
                 }
             })
         ];
@@ -506,17 +515,17 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.showBounds) {
             // Draw trigger bounds for collisions
             for (const obj of this.triggerObjects) {
-                const bounds = boundsFromMapObject(obj);
+                const bounds = boundsFromGameObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "blue");
             }
 
             for (const obj of this.boundObjects) {
-                const bounds = boundsFromMapObject(obj);
+                const bounds = boundsFromGameObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "yellow");
             }
 
             for (const obj of this.gateObjects) {
-                const bounds = boundsFromMapObject(obj);
+                const bounds = boundsFromGameObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "green");
             }
         }
@@ -653,7 +662,7 @@ export class GameScene extends Scene<FriendlyFire> {
             throw new Error ('Cannot initiate friendship ending because some points of interest are missing.');
         }
 
-        this.player.startAutoMove(playerTargetPos.x, true);
+        this.player.startAutoMove(playerTargetPos.position.x, true);
         this.player.setControllable(false);
     }
 
@@ -668,7 +677,7 @@ export class GameScene extends Scene<FriendlyFire> {
             cloudPositions.forEach(pos => {
                 const cloud = new Cloud(
                     this,
-                    new Point(pos.x, pos.y),
+                    new Point(pos.position.x, pos.position.y),
                     {
                         velocity: 0,
                         distance: 1
@@ -681,16 +690,16 @@ export class GameScene extends Scene<FriendlyFire> {
 
             // Teleport player and fire to boss spawn position
             this.player.position.moveTo(
-                bossPosition.x - 36,
-                bossPosition.y
+                bossPosition.position.x - 36,
+                bossPosition.position.y
             );
 
             this.player.removePowerUps();
             this.player.enableRainDance();
 
             this.fire.position.moveTo(
-                bossPosition.x,
-                bossPosition.y
+                bossPosition.position.x,
+                bossPosition.position.y
             )
 
             this.camera.setBounds(this.player.getCurrentMapBounds())

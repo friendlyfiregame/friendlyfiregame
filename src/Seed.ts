@@ -81,7 +81,7 @@ export class Seed extends NPC {
     update(dt: number): void {
         super.update(dt);
         if (this.state === SeedState.SWIMMING) {
-            const diffX = this.floatingPosition.x - this.position.x;
+            const diffX = this.floatingPosition.position.x - this.position.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.position.moveXBy(moveX * dt);
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
@@ -106,8 +106,8 @@ export class Seed extends NPC {
                 this.setFloating(true);
 
                 this.position.moveTo(
-                    seedPosition.x,
-                    seedPosition.y
+                    seedPosition.position.x,
+                    seedPosition.position.y
                 );
 
                 Seed.successSound.play();
@@ -124,7 +124,7 @@ export class Seed extends NPC {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.position.moveXTo(this.floatingPosition.y);
+                this.position.moveXTo(this.floatingPosition.position.y);
             }
         } else if (this.state === SeedState.PLANTED) {
             if (this.scene.world.isRaining()) {

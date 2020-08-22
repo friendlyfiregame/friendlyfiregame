@@ -3,7 +3,7 @@ import { asset } from './Assets';
 import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
 import { BitmapFont } from './BitmapFont';
 import { Bounds, entity } from './Entity';
-import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
+import { boundsFromGameObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
 import { CharacterAsset, VoiceAsset } from './Campaign';
 import { Cloud } from './Cloud';
 import { ControllerAnimationTags, ControllerSpriteMap } from './input/ControllerFamily';
@@ -550,8 +550,8 @@ export class Player extends PhysicsEntity {
                         Player.leaveGateSound.play();
 
                         this.position.moveTo(
-                            targetGate.x + (targetGate.width / 2),
-                            targetGate.y - targetGate.height
+                            targetGate.position.x + (targetGate.width / 2),
+                            targetGate.position.y - targetGate.height
                         );
 
                         this.scene.camera.setBounds(this.getCurrentMapBounds());
@@ -734,7 +734,7 @@ export class Player extends PhysicsEntity {
     public getCurrentMapBounds(): Bounds | undefined {
         const collisions = this.scene.world.getCameraBounds(this);
         if (collisions.length === 0) return undefined;
-        return boundsFromMapObject(collisions[0]);
+        return boundsFromGameObject(collisions[0]);
     }
 
     private respawn() {
@@ -1009,7 +1009,7 @@ export class Player extends PhysicsEntity {
                         const bossPointer = this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
 
                         if (bossPointer) {
-                            this.scene.camera.focusOn(3, new Point(bossPointer.x, bossPointer.y + 60), 1, 0, valueCurves.cos(0.35));
+                            this.scene.camera.focusOn(3, new Point(bossPointer.position.x, bossPointer.position.y + 60), 1, 0, valueCurves.cos(0.35));
                         }
 
                         // Remove a single boss fight barrier

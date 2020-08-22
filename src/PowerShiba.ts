@@ -39,7 +39,7 @@ export class PowerShiba extends NPC {
 
             this.floatSpeed = 2;
             this.floatAmount = 4;
-            this.position = new Point(spawn.x, spawn.y);
+            this.position = new Point(spawn.position.x, spawn.position.y);
             this.conversation = new Conversation(powershiba3, this);
         }
     }

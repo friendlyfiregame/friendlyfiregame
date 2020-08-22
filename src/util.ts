@@ -1,6 +1,5 @@
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
-import { MapObjectJSON } from '*/level.json';
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from './constants';
 import { Point, Size } from './Geometry';
 
@@ -93,10 +92,10 @@ export function shuffle<T>(array: T[]): T[] {
     return array;
 }
 
-export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 0): Bounds {
+export function boundsFromGameObject(o: GameObjectInfo, margin = 0): Bounds {
     const position = new Point(
-        o.x - margin,
-        o.y + margin
+        o.position.x - margin,
+        o.position.y + margin
     );
 
     const size = new Size(

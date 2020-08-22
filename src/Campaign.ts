@@ -184,7 +184,7 @@ export class Campaign {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'forest');
 
                     if (forestPointer) {
-                        this.gameScene.camera.focusOn(8, new Point(forestPointer.x, forestPointer.y), 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(8, new Point(forestPointer.position.x, forestPointer.position.y), 1, 0, valueCurves.cos(0.35));
                     }
 
                     break;
@@ -192,7 +192,7 @@ export class Campaign {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'mountain');
 
                     if (mountainPointer) {
-                        this.gameScene.camera.focusOn(8, new Point(mountainPointer.x, mountainPointer.y), 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(8, new Point(mountainPointer.position.x, mountainPointer.position.y), 1, 0, valueCurves.cos(0.35));
                     }
 
                     break;
@@ -200,7 +200,7 @@ export class Campaign {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'river');
 
                     if (riverPointer) {
-                        this.gameScene.camera.focusOn(8, new Point(riverPointer.x, riverPointer.y), 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(8, new Point(riverPointer.position.x, riverPointer.position.y), 1, 0, valueCurves.cos(0.35));
                     }
 
                     break;

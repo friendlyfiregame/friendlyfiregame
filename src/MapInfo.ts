@@ -33,9 +33,9 @@ export interface GameObjectProperties {
 }
 
 export interface GameObjectInfo {
-    //position: Point,
-    x: number,
-    y: number,
+    position: Point,
+    // x: number,
+    // y: number,
     name: string;
     type: string;
     width: number,
@@ -72,10 +72,7 @@ export class MapInfo {
         const mapHeight = MapInfo.getMapSize().height;
         return this.getObjects(type).map(object => ({
             name: object.name,
-            x: object.x,
-            y: mapHeight - object.y,
-            //position: new Point(object.position.x, mapHeight - object.position.y),
-            //position: object.position,
+            position: new Point(object.x, mapHeight - object.y),
             type: object.type,
             // size: object.size,
             width: object.width,

@@ -69,13 +69,13 @@ export class Stone extends NPC implements CollidableGameObject {
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.position.moveYTo(this.floatingPosition.y);
+                this.position.moveYTo(this.floatingPosition.position.y);
                 Stone.successSound.play();
                 this.scene.game.campaign.runAction("enable", null, ["stone", "stone2"]);
                 this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {
-            const diffX = this.floatingPosition.x - this.position.x;
+            const diffX = this.floatingPosition.position.x - this.position.x;
             this.direction = Math.sign(diffX);
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.position.moveXBy(moveX * dt);
@@ -84,7 +84,7 @@ export class Stone extends NPC implements CollidableGameObject {
             }
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         } else if (this.state === StoneState.FLOATING) {
-            this.position.moveXTo(this.floatingPosition.x);
+            this.position.moveXTo(this.floatingPosition.position.x);
             this.direction = -1;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }

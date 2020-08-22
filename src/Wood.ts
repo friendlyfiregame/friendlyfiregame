@@ -48,7 +48,7 @@ export class Wood extends PhysicsEntity {
         super.update(dt);
 
         if (this.state === WoodState.SWIMMING) {
-            const diffX = this.floatingPosition.x - this.position.x;
+            const diffX = this.floatingPosition.position.x - this.position.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.position.moveXBy(moveX * dt);
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
@@ -69,7 +69,7 @@ export class Wood extends PhysicsEntity {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.position.moveYTo(this.floatingPosition.y + 8);
+                this.position.moveYTo(this.floatingPosition.position.y + 8);
             }
         }
 
