@@ -8,9 +8,9 @@ export enum MenuAlignment { LEFT, CENTER, RIGHT };
 
 /**
  * Simple MenuItem Class for usage in a MenuList.
- * Currently, each item is only rendered as simple text. The focused state is visualized via
- * an additional `►` character as prefix. The item instances don't need to be manually drawn,
- * since the MenuList class' draw method will take care of it
+ * Currently, each item is only rendered as simple text. The focused state is visualized via an
+ * additional `►` character as prefix. The item instances don't need to be manually drawn, since the
+ * MenuList class' draw method will take care of it.
  */
 export class MenuItem {
     public id: string;
@@ -24,7 +24,10 @@ export class MenuItem {
     @asset("sprites/menu_selector.png")
     private static selectorImage: HTMLImageElement;
 
-    public constructor(id: string, label: string, font: BitmapFont, color: 'black' | 'white', position: Point, enabled = true) {
+    public constructor(
+        id: string, label: string, font: BitmapFont, color: 'black' | 'white', position: Point,
+        enabled = true
+    ) {
         this.id = id;
         this.label = label;
         this.font = font;
@@ -66,10 +69,11 @@ export class MenuItem {
 }
 
 /**
- * A simple Menu List that can hold MenuItems and navigate them in two directions via methods.
- * On each navigational change, the new Menu Item is focused. When calling the `executeAction` method a
- * signal is emitted containing the focused menu items id. Disabled Menu Items will be skipped automatically when navigating.
- * The draw method of the list instance has to be called to have all contianing buttons be drawn automatically.
+ * A simple MenuList that can hold MenuItems and navigate them in two directions via methods. On
+ * each navigational change, the new MenuItem is focused. When calling the `executeAction` method a
+ * signal is emitted containing the focused MenuItem's ID. Disabled MenuItems will be skipped
+ * automatically when navigating. The draw method of the list instance has to be called to have all
+ * containing buttons be drawn automatically.
  */
 export class MenuList {
     @asset("sounds/interface/click.mp3")
@@ -107,8 +111,8 @@ export class MenuList {
     }
 
     /**
-     * Sets an arbitray number of menu items to the menu list and overrides
-     * any previously added items. The first available menu item will be focused automatically
+     * Sets an arbitrary number of menu items to the menu list and overrides any previously added
+     * items. The first available menu item will be focused automatically.
      * @param items
      */
     public setItems(...items: MenuItem[]) {
@@ -160,6 +164,7 @@ export class MenuList {
         } else {
             this.findAndFocusNextItem(nextIndex, direction);
         }
+
         MenuList.click.stop();
         MenuList.click.play();
     }
