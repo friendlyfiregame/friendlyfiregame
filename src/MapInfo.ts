@@ -82,18 +82,23 @@ export class MapInfo {
     public getEntities(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.ENTITY);
     }
+
     public getSounds(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.SOUND);
     }
+
     public getPointers(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.POINTER);
     }
+
     public getTriggerObjects(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.TRIGGER);
     }
+
     public getBoundObjects(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.BOUNDS);
     }
+
     public getGateObjects(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.GATE);
     }
@@ -101,6 +106,7 @@ export class MapInfo {
     public static normalizeCoordinates(objects: MapObjectJSON[]): MapObjectJSON[] {
         const mapHeight = MapInfo.getMapSize().height;
         objects.forEach(o => o.y = mapHeight - o.y);
+
         return objects;
     }
 

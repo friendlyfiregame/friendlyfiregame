@@ -226,7 +226,7 @@ export class Fire extends NPC {
                 particleChance -= rnd() * this.averageParticleDelay;
             }
 
-            this.soundEmitter.update(dt);
+            this.soundEmitter.update();
         }
 
         if (this.isBeingPutOut()) {

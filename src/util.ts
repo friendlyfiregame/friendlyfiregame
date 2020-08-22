@@ -92,15 +92,15 @@ export function shuffle<T>(array: T[]): T[] {
     return array;
 }
 
-export function boundsFromGameObject(o: GameObjectInfo, margin = 0): Bounds {
+export function boundsFromGameObject(object: GameObjectInfo, margin = 0): Bounds {
     const position = new Point(
-        o.position.x - margin,
-        o.position.y + margin
+        object.position.x - margin,
+        object.position.y + margin
     );
 
     const size = new Size(
-        o.size.width + (margin * 2),
-        o.size.height + (margin * 2)
+        object.size.width + (margin * 2),
+        object.size.height + (margin * 2)
     );
 
     return { position, size };

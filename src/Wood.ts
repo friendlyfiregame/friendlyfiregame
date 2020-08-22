@@ -30,13 +30,20 @@ export class Wood extends PhysicsEntity {
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(26, 16));
 
-        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
-        if (!floatingPosition) throw new Error ('Could not find "recover_floating_position" point of interest in game scene');
+        const floatingPosition = this.scene.pointsOfInterest.find(
+            poi => poi.name === 'recover_floating_position'
+        );
+
+        if (!floatingPosition) {
+            throw new Error ('Could not find "recover_floating_position" point of interest in game scene.');
+        }
+
         this.floatingPosition = floatingPosition;
     }
 
-    draw(): void {
+    public draw(): void {
         this.scene.renderer.addAseprite(Wood.sprite, "idle", this.position, RenderingLayer.ENTITIES);
+
         if (this.scene.showBounds) this.drawBounds();
     }
 
@@ -44,7 +51,7 @@ export class Wood extends PhysicsEntity {
         return this.scene.player.isCarrying(this);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         if (this.state === WoodState.SWIMMING) {

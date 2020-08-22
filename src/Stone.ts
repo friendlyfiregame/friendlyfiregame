@@ -37,12 +37,18 @@ export class Stone extends NPC implements CollidableGameObject {
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 
-        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'stone_floating_position');
-        if (!floatingPosition) throw new Error ('Could not find "stone_floating_position" point of interest in game scene');
+        const floatingPosition = this.scene.pointsOfInterest.find(
+            poi => poi.name === 'stone_floating_position'
+        );
+
+        if (!floatingPosition) {
+            throw new Error ('Could not find "stone_floating_position" point of interest in game scene');
+        }
+
         this.floatingPosition = floatingPosition;
     }
 
-    protected showDialoguePrompt (): boolean {
+    protected showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
@@ -50,17 +56,27 @@ export class Stone extends NPC implements CollidableGameObject {
         );
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Stone.sprite, "idle", new Point(this.position.x, this.position.y - 1), RenderingLayer.ENTITIES, this.direction);
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Stone.sprite,
+            "idle",
+            new Point(this.position.x, this.position.y - 1),
+            RenderingLayer.ENTITIES,
+            this.direction
+        );
+
         if (this.scene.showBounds) this.drawBounds();
+
         this.drawFace(ctx, false);
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
@@ -79,20 +95,23 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = Math.sign(diffX);
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.position.moveXBy(moveX * dt);
+
             if (Math.abs(moveX) < 2) {
                 this.state = StoneState.FLOATING;
             }
+
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         } else if (this.state === StoneState.FLOATING) {
             this.position.moveXTo(this.floatingPosition.position.x);
             this.direction = -1;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
+
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(48));
         this.speechBubble.update(this.position);
     }
 
-    collidesWith(position: Point): number {
+    public collidesWith(position: Point): number {
         if (this.state === StoneState.FLOATING || this.state === StoneState.SWIMMING) {
             if (
                 position.x >= this.position.x - this.size.width / 2

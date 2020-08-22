@@ -55,6 +55,6 @@ export class FlameBoy extends NPC {
         super.update(dt);
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(32));
         this.speechBubble.update(this.position);
-        this.soundEmitter.update(dt);
+        this.soundEmitter.update();
     }
 }

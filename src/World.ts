@@ -69,7 +69,7 @@ export class World implements GameObject {
         return World.foreground.height;
     }
 
-    public update(dt: number) {
+    public update() {
         if (this.raining) {
             this.rainEmitter.emit(rndInt(1, 4));
         }
@@ -122,7 +122,9 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
      *         specific meaning which isn't defined yet).
      */
-    public collidesWith(position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
+    public collidesWith(
+        position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
+    ): number {
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(position);
@@ -156,16 +158,19 @@ export class World implements GameObject {
      * @param ignoreEntities  - Array of entities to be ignored with this check
      * @return                - An array containing all entities that collide with the source entity.
      */
-    public getEntityCollisions (sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
+    public getEntityCollisions(sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
         const collidesWith: Entity[] = [];
+
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && gameObject.isTrigger && !ignoreEntities.includes(gameObject)) {
                 const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(margin), gameObject.getBounds(margin));
+
                 if (colliding) {
                     collidesWith.push(gameObject);
                 }
             }
         }
+
         return collidesWith;
     }
 
@@ -173,36 +178,45 @@ export class World implements GameObject {
      * Returns all triggers that do collide with the provided entity
      * @param sourceEntity Entity to check collisions against trigger boxes
      */
-    public getTriggerCollisions (sourceEntity: Entity): GameObjectInfo[] {
+    public getTriggerCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
         for (const triggerObject of this.scene.triggerObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(triggerObject));
+
             if (colliding) {
                 collidesWith.push(triggerObject);
             }
         }
+
         return collidesWith;
     }
 
-    public getGateCollisions (sourceEntity: Entity): GameObjectInfo[] {
+    public getGateCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
         for (const gateObject of this.scene.gateObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(gateObject, 0));
+
             if (colliding) {
                 collidesWith.push(gateObject);
             }
         }
+
         return collidesWith;
     }
 
-    public getCameraBounds (sourceEntity: Entity): GameObjectInfo[] {
+    public getCameraBounds(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
         for (const triggerObject of this.scene.boundObjects) {
             const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(triggerObject));
+
             if (colliding) {
                 collidesWith.push(triggerObject);
             }
         }
+
         return collidesWith;
     }
 
@@ -212,7 +226,7 @@ export class World implements GameObject {
      * @param box2 second bounding box
      * @return `true` when the bounding boxes are touching, `false` if not.
      */
-    private boundingBoxesCollide (box1: Bounds, box2: Bounds): boolean {
+    private boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
         return !(
             ((box1.position.y - box1.size.height) > (box2.position.y)) ||
             (box1.position.y < (box2.position.y - box2.size.height)) ||
@@ -221,16 +235,19 @@ export class World implements GameObject {
         );
     }
 
-    public getObjectAt(position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
-            GameObject | null {
+    public getObjectAt(
+        position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
+    ): GameObject | null {
         for (const gameObject of this.scene.gameObjects) {
             if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
                 const environment = gameObject.collidesWith(position);
+
                 if (environment !== Environment.AIR && !ignore.includes(environment)) {
                     return gameObject;
                 }
             }
         }
+
         return null;
     }
 
@@ -242,14 +259,17 @@ export class World implements GameObject {
      * @param height - The height of the line to check
      * @return 0 if no collision. Type of first collision along the line otherwise.
      */
-    public collidesWithVerticalLine(position: Point, height: number, ignoreObjects?: GameObject[],
-            ignore?: Environment[]): number {
+    public collidesWithVerticalLine(
+        position: Point, height: number, ignoreObjects?: GameObject[], ignore?: Environment[]
+    ): number {
         for (let i = 0; i < height; i++) {
             const collision = this.collidesWith(new Point(position.x, position.y - i), ignoreObjects, ignore);
+
             if (collision) {
                 return collision;
             }
         }
+
         return 0;
     }
 
@@ -260,12 +280,15 @@ export class World implements GameObject {
      * @param y - Y coordinate of current position.
      * @return The Y coordinate of the ground below the given coordinate.
      */
-    public getGround(position: Point, ignoreObjects?: GameObject[], ignore?: Environment[]): number {
+    public getGround(
+        position: Point, ignoreObjects?: GameObject[], ignore?: Environment[]
+    ): number {
         let y = position.y
 
         while (y > 0 && !this.collidesWith(position, ignoreObjects, ignore)) {
             y--;
         }
+
         return y;
     }
 
