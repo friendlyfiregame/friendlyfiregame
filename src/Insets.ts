@@ -1,3 +1,4 @@
+// TODO: integrate with Geometry
 export class Insets {
     public static readonly EMPTY = new Insets(0);
 

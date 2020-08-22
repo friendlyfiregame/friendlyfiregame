@@ -11,6 +11,7 @@ export enum MapObjectType {
 }
 
 export interface GameObjectProperties {
+    // TODO: use Direction
     direction?: "up" | "down" | "left" | "right",
     distance: number;
     velocity: number;
