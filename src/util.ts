@@ -1,7 +1,6 @@
 import { Bounds } from './Entity';
 import { GameObjectInfo } from './MapInfo';
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from './constants';
-import { Point, Size } from './Geometry';
 
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {
@@ -93,15 +92,8 @@ export function shuffle<T>(array: T[]): T[] {
 }
 
 export function boundsFromGameObject(object: GameObjectInfo, margin = 0): Bounds {
-    const position = new Point(
-        object.position.x - margin,
-        object.position.y + margin
-    );
-
-    const size = new Size(
-        object.size.width + (margin * 2),
-        object.size.height + (margin * 2)
-    );
+    const position = object.position.clone().moveBy(-margin, margin);
+    const size = object.size.clone().resizeBy(margin * 2, margin * 2);
 
     return { position, size };
 }

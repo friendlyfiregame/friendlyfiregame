@@ -656,13 +656,13 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === 'friendship_player_position')
+        const playerTargetPOI = this.pointsOfInterest.find(poi => poi.name === 'friendship_player_position')
 
-        if (!playerTargetPos) {
+        if (!playerTargetPOI) {
             throw new Error ('Cannot initiate friendship ending because some points of interest are missing.');
         }
 
-        this.player.startAutoMove(playerTargetPos.position.x, true);
+        this.player.startAutoMove(playerTargetPOI.position.x, true);
         this.player.setControllable(false);
     }
 
@@ -670,14 +670,14 @@ export class GameScene extends Scene<FriendlyFire> {
         this.apocalypse = true;
         this.world.stopRain();
 
-        const bossPosition = this.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
-        const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === 'bosscloud');
+        const bossPOI = this.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
+        const cloudPOIs = this.pointsOfInterest.filter(poi => poi.name === 'bosscloud');
 
-        if (bossPosition && cloudPositions.length > 0) {
-            cloudPositions.forEach(pos => {
+        if (bossPOI && cloudPOIs.length > 0) {
+            cloudPOIs.forEach(poi => {
                 const cloud = new Cloud(
                     this,
-                    new Point(pos.position.x, pos.position.y),
+                    poi.position,
                     {
                         velocity: 0,
                         distance: 1
@@ -689,18 +689,12 @@ export class GameScene extends Scene<FriendlyFire> {
             })
 
             // Teleport player and fire to boss spawn position
-            this.player.position.moveTo(
-                bossPosition.position.x - 36,
-                bossPosition.position.y
-            );
+            this.player.position.moveTo(bossPOI.position.clone().moveXBy(-36));
 
             this.player.removePowerUps();
             this.player.enableRainDance();
 
-            this.fire.position.moveTo(
-                bossPosition.position.x,
-                bossPosition.position.y
-            )
+            this.fire.position.moveTo(bossPOI.position);
 
             this.camera.setBounds(this.player.getCurrentMapBounds())
 

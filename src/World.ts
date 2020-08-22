@@ -263,7 +263,7 @@ export class World implements GameObject {
         position: Point, height: number, ignoreObjects?: GameObject[], ignore?: Environment[]
     ): number {
         for (let i = 0; i < height; i++) {
-            const collision = this.collidesWith(new Point(position.x, position.y - i), ignoreObjects, ignore);
+            const collision = this.collidesWith(position.clone().moveYBy(-i), ignoreObjects, ignore);
 
             if (collision) {
                 return collision;
