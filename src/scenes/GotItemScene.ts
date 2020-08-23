@@ -89,7 +89,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         this.outTransition = new SlideTransition({ duration: .5, direction: Direction.DOWN, easing: easeInExpo });
     }
 
-    public update(dt: number) {
+    public update(dt: number): void {
         if (!this.stopped) {
             this.time += dt;
 
@@ -100,7 +100,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, size: Size) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         let metrics;
         const center = new Point(
             (size.width / 2) - GotItemScene.itemImages[this.targetItem].width,

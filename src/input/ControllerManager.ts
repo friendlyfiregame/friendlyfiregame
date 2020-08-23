@@ -39,11 +39,11 @@ export class ControllerManager {
         return this[currentControllerFamilySymbol];
     }
 
-    public toggleSelectedGamepadStyle (): void {
+    public toggleSelectedGamepadStyle(): void {
         this.selectedGamepadStyle = this.selectedGamepadStyle === GamepadStyle.XBOX ? GamepadStyle.PLAYSTATION : GamepadStyle.XBOX;
     }
 
-    public get controllerSprite (): ControllerSpriteMap {
+    public get controllerSprite(): ControllerSpriteMap {
         if (this.currentControllerFamily === ControllerFamily.GAMEPAD) {
             switch(ControllerManager.getInstance().selectedGamepadStyle) {
                 case GamepadStyle.PLAYSTATION: return ControllerSpriteMap.PLAYSTATION;

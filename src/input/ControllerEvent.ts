@@ -13,7 +13,10 @@ export class ControllerEvent extends Object {
     private [eventTypeSymbol]: ControllerEventType;
     private [repeatSymbol]: boolean;
 
-    constructor(controllerFamily: ControllerFamily, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
+    constructor(
+        controllerFamily: ControllerFamily, eventType: ControllerEventType,
+        intents: ControllerIntent[], repeat: boolean = false
+    ) {
         super();
         this[controllerFamilySymbol] = controllerFamily;
         this[intentsSymbol] = intents.reduce((prev, curr) => prev | curr);

@@ -158,7 +158,9 @@ export class World implements GameObject {
      * @param ignoreEntities  - Array of entities to be ignored with this check
      * @return                - An array containing all entities that collide with the source entity.
      */
-    public getEntityCollisions(sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
+    public getEntityCollisions(
+        sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []
+    ): Entity[] {
         const collidesWith: Entity[] = [];
 
         for (const gameObject of this.scene.gameObjects) {
