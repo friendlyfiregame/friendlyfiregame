@@ -312,13 +312,13 @@ export class World implements GameObject {
     public getGround(
         position: Point, ignoreObjects?: GameObject[], ignore?: Environment[]
     ): number {
-        let y = position.y
+        let groundPosition = position.clone()
 
-        while (y > 0 && !this.collidesWith(position, ignoreObjects, ignore)) {
-            y--;
+        while (groundPosition.y > 0 && !this.collidesWith(position, ignoreObjects, ignore)) {
+            groundPosition.moveUp();
         }
 
-        return y;
+        return groundPosition.y;
     }
 
     public startRain() {

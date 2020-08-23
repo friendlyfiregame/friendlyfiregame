@@ -64,7 +64,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.scene.renderer.addAseprite(
             Stone.sprite,
             "idle",
-            new Point(this.position.x, this.position.y - 1),
+            this.position.clone().moveUp(),
             RenderingLayer.ENTITIES,
             this.direction
         );

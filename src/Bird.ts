@@ -101,7 +101,7 @@ export class Bird extends NPC {
 
             while (this.position.y < height && col) {
                 pulled++;
-                this.position.moveYBy(1);
+                this.position.moveDown();
                 col = world.collidesWith(this.position);
             }
         }
@@ -121,7 +121,7 @@ export class Bird extends NPC {
             )
         ) {
             pulled++;
-            this.position.moveYBy(-1);
+            this.position.moveUp();
         }
 
         return pulled;
@@ -143,7 +143,7 @@ export class Bird extends NPC {
                     [ Environment.PLATFORM, Environment.WATER ]
                 )
             ) {
-                this.position.moveXBy(-1);
+                this.position.moveLeft();
                 pulled++;
             }
         } else {
@@ -158,7 +158,7 @@ export class Bird extends NPC {
                     [ Environment.PLATFORM, Environment.WATER ]
                 )
             ) {
-                this.position.moveXBy(1);
+                this.position.moveRight();
                 pulled++;
             }
         }

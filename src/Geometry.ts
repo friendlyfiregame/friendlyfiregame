@@ -103,6 +103,22 @@ export class Point {
         return this;
     }
 
+    public moveUp(): Point {
+        return this.moveYBy(-1);
+    }
+
+    public moveRight(): Point {
+        return this.moveXBy(1);
+    }
+
+    public moveDown(): Point {
+        return this.moveYBy(1);
+    }
+
+    public moveLeft(): Point {
+        return this.moveXBy(-1);
+    }
+
     public clone(): Point {
         return new Point(this._x, this._y);
     }

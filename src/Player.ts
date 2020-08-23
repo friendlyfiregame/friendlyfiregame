@@ -1203,7 +1203,7 @@ export class Player extends PhysicsEntity {
 
             while (this.position.y < height && col) {
                 pulled++;
-                this.position.moveYBy(1);
+                this.position.moveDown();
                 col = world.collidesWith(this.position);
             }
         }
@@ -1247,7 +1247,7 @@ export class Player extends PhysicsEntity {
             )
         ) {
             pulled++;
-            this.position.moveYBy(-1);
+            this.position.moveUp();
         }
 
         return pulled;
@@ -1269,7 +1269,7 @@ export class Player extends PhysicsEntity {
                     [ Environment.PLATFORM, Environment.WATER ]
                 )
             ) {
-                this.position.moveXBy(-1);
+                this.position.moveLeft();
                 pulled++;
             }
         } else {
@@ -1284,7 +1284,7 @@ export class Player extends PhysicsEntity {
                     [ Environment.PLATFORM, Environment.WATER ]
                 )
             ) {
-                this.position.moveXBy(1);
+                this.position.moveRight();
                 pulled++;
             }
         }

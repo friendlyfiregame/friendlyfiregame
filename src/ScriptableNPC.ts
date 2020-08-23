@@ -26,7 +26,7 @@ export abstract class ScriptableNPC extends NPC {
 
             while (this.position.y < height && col) {
                 pulled++;
-                this.position.moveYBy(1);
+                this.position.moveDown();
                 col = world.collidesWith(this.position);
             }
         }
@@ -45,7 +45,7 @@ export abstract class ScriptableNPC extends NPC {
             )
         ) {
             pulled++;
-            this.position.moveYBy(-1);
+            this.position.moveUp();
         }
 
         return pulled;
@@ -61,7 +61,7 @@ export abstract class ScriptableNPC extends NPC {
                     this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ]
                 )
             ) {
-                this.position.moveXBy(-1);
+                this.position.moveLeft();
                 pulled++;
             }
         } else {
@@ -71,7 +71,7 @@ export abstract class ScriptableNPC extends NPC {
                     this.size.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ]
                 )
             ) {
-                this.position.moveXBy(1);
+                this.position.moveRight();
                 pulled++;
             }
         }
