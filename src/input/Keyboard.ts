@@ -1,9 +1,9 @@
-import { Signal } from "../Signal";
-import { ControllerManager } from "./ControllerManager";
-import { ControllerIntent } from "./ControllerIntent";
-import { ControllerEvent } from "./ControllerEvent";
-import { ControllerEventType } from "./ControllerEventType";
-import { ControllerFamily } from "./ControllerFamily";
+import { ControllerEvent } from './ControllerEvent';
+import { ControllerEventType } from './ControllerEventType';
+import { ControllerFamily } from './ControllerFamily';
+import { ControllerIntent } from './ControllerIntent';
+import { ControllerManager } from './ControllerManager';
+import { Signal } from '../Signal';
 
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
 keyToIntentMappings.set("Space", [ControllerIntent.PLAYER_JUMP]);

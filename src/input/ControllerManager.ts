@@ -1,6 +1,6 @@
-import { ControllerEvent } from "./ControllerEvent";
-import { ControllerFamily, GamepadStyle, ControllerSpriteMap } from "./ControllerFamily";
-import { Signal } from "../Signal";
+import { ControllerEvent } from './ControllerEvent';
+import { ControllerFamily, ControllerSpriteMap, GamepadStyle } from './ControllerFamily';
+import { Signal } from '../Signal';
 
 /** Symbol to identify the current/active controller family */
 const currentControllerFamilySymbol = Symbol("currentControllerFamily");
