@@ -119,6 +119,18 @@ export class Point {
         return this.moveXBy(-1);
     }
 
+    public mirrorHorizontally(): Point {
+        this._x = this._x * -1;
+
+        return this;
+    }
+
+    public mirrorVertically(): Point {
+        this._y = this._y * -1;
+
+        return this;
+    }
+
     public clone(): Point {
         return new Point(this._x, this._y);
     }

@@ -85,8 +85,8 @@ export class World implements GameObject {
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
             layer: RenderingLayer.TILEMAP_MAP,
-            translation: new Point(camX, -camY),
-            position: new Point(-camX, -this.getHeight() + camY),
+            translation: cameraPosition.clone().mirrorVertically(),
+            position: cameraPosition.clone().mirrorHorizontally().moveYBy(-this.getHeight()),
             asset: World.foreground
         })
 
@@ -97,7 +97,7 @@ export class World implements GameObject {
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
-                translation: new Point(camX, -camY),
+                translation: cameraPosition.clone().mirrorVertically(),
                 position: new Point(
                     (-camX / bgX) + (-posXMultiplier * (size.width / 2)),
                     (-this.getHeight() + camY) / bgY

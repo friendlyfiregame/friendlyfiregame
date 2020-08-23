@@ -45,7 +45,7 @@ export class Sign extends NPC {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: new Point(this.position.x, -this.position.y),
+            translation: this.position.clone().mirrorVertically(),
             position: new Point(
                 -Sign.sprite.width >> 1,
                 -Sign.sprite.height
