@@ -121,6 +121,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         animationTag: ControllerAnimationTags
     ): void {
         const gap = 6;
+
         const textPosition = position.clone().moveXBy(
             this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap
         );

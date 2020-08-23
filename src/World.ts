@@ -133,7 +133,11 @@ export class World implements GameObject {
         position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
     ): number {
         for (const gameObject of this.scene.gameObjects) {
-            if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
+            if (
+                gameObject !== this
+                && !ignoreObjects.includes(gameObject)
+                && isCollidableGameObject(gameObject)
+            ) {
                 const environment = gameObject.collidesWith(position);
 
                 if (environment !== Environment.AIR && !ignore.includes(environment) ) {
