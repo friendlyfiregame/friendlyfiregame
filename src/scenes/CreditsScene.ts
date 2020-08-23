@@ -82,9 +82,9 @@ export class CreditsScene extends Scene<FriendlyFire> {
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
         this.outTransition = new FadeTransition({ duration: 0.25 });
-        this.headlineCharHeight = CreditsScene.headlineFont.measureText(" ").height;
-        this.standardCharHeight = CreditsScene.standardFont.measureText(" ").height;
-        this.creditsFontHeight = CreditsScene.creditsFont.measureText(" ").height;
+        this.headlineCharHeight = CreditsScene.headlineFont.charHeight;
+        this.standardCharHeight = CreditsScene.standardFont.charHeight;
+        this.creditsFontHeight = CreditsScene.creditsFont.charHeight;
     }
 
     public activate(): void {
