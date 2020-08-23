@@ -460,7 +460,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"A magical journey awaits you beneath the clouds."
+                         "value":"↓ A magical journey awaits you beneath the clouds."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -532,7 +532,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Entrance to mountain hiking path.:::Good jumping skills required."
+                         "value":"↑ Entrance to mountain hiking path.:::Good jumping skills required."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -586,7 +586,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"Mountain Trial"
+                         "value":"↑ Mountain trial"
                         }],
                  "rotation":0,
                  "type":"entity",

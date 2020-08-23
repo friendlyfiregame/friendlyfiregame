@@ -137,8 +137,8 @@ class GamepadAxisWrapper {
 }
 
 /**
- * Some obscure magic to make sure that gamepad buttons and axes are mapped
- * onto unified controller events.
+ * Some obscure magic to make sure that gamepad buttons and axes are mapped onto unified controller
+ * events.
  */
 class GamepadWrapper {
     private index: number;

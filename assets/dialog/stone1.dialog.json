@@ -100,7 +100,7 @@
     ],
     "touche": [
         "…",
-        "►… touché, master. @yesmaster"
+        "►…touché, master. @yesmaster"
     ],
     "human": [
         "This… exceeds my expertise. Umm. Where were we. Ah, yes. @yesmaster"
@@ -110,7 +110,7 @@
     ],
     "yesmaster": [
         "So, let an old and wise stone tell you: Basic gardening requires water. So…",
-        "►Soooo…? @soo",
+        "►Sooo…? @soo",
         "►I think I need a drink… a hard one. @drink",
         "►Wait… I want to talk about something else first. @introduction"
     ],
@@ -130,7 +130,7 @@
         "Beyond the river, you will find the answer to your quest in a sacred cave.",
         "►I am not sure if I really want to touch you… @nottouchyou",
         "►By the power of Grayskull! @lift",
-        "►Yes master. @lift",
+        "►Yes, master. @lift",
         "►On second thought, I don't like this… at all.",
         "What a hard disappointment… @visitedentry !end"
     ],
