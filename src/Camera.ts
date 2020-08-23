@@ -55,7 +55,7 @@ export class Camera {
         this.interpolationTime = interpolationTime / 2;
 
         if (isDev()) {
-            console.log("Dev mode, press TAB to zoom out & click somewhere to teleport there");
+            console.log("Dev mode, press “Tab” to zoom out & click somewhere to teleport there.");
             document.addEventListener("keydown", this.handleKeyDown.bind(this));
             document.addEventListener("keyup", this.handleKeyUp.bind(this));
             this.scene.game.canvas.addEventListener("click", this.handleClick.bind(this));

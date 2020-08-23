@@ -33,8 +33,7 @@ export class ControllerManager {
 
     /**
      * Returns the current (a.k.a. most recently used!) controller family.
-     * Can be used to determine which tooltips (gamepad buttons or keyboard indicators)
-     * to show.qaa
+     * Can be used to determine which tooltips (gamepad buttons or keyboard indicators) to show.
      */
     public get currentControllerFamily(): ControllerFamily {
         return this[currentControllerFamilySymbol];

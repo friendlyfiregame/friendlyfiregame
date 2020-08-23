@@ -42,7 +42,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     private titles = [
         "Fear of the Dark",
-        "Double Jump Boots",
+        "Double-Jump Boots",
         "Flying Wings Knock-off",
         "Dancing Dave",
         "Eternal Friendship"
@@ -58,7 +58,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Not suitable for step dancing",
             "An all-time classic",
             "Still in mint condition",
-            "Even works without wearing them",
+            "Even work without wearing them",
             "Why would a tree have those?"
         ],
         [
