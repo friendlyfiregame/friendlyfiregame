@@ -1,6 +1,6 @@
-import { ControllerFamily } from "./ControllerFamily";
-import { ControllerEventType } from "./ControllerEventType";
-import { ControllerIntent } from "./ControllerIntent";
+import { ControllerEventType } from './ControllerEventType';
+import { ControllerFamily } from './ControllerFamily';
+import { ControllerIntent } from './ControllerIntent';
 
 const controllerFamilySymbol = Symbol("controllerFamily");
 const intentsSymbol = Symbol("intent");
