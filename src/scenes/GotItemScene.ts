@@ -77,14 +77,17 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Nothing can stop us!"
         ]
     ]
+
     private selectedSubtitle = '';
 
     public setup(): void {
         GotItemScene.sound.setVolume(0.7);
         GotItemScene.sound.play();
+
         if (this.properties?.item !== undefined) {
             this.targetItem = this.properties.item as Item;
         }
+
         this.selectedSubtitle = "“" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "”";
         this.stopped = false;
         this.time = 0;

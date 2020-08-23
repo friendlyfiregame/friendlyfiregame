@@ -31,6 +31,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public constructor(scene: GameScene, x: number, y:number) {
         super(scene, x, y, 26, 50);
+
         this.direction = -1;
         this.face = new Face(scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
@@ -48,16 +49,24 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     protected showDialoguePrompt(): boolean {
-        if (!super.showDialoguePrompt()) return false;
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
         );
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Stone.sprite, "idle", this.x, this.y - 1, RenderingLayer.ENTITIES, this.direction);
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Stone.sprite, "idle", this.x, this.y - 1, RenderingLayer.ENTITIES, this.direction
+        );
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
 
         this.drawFace(ctx, false);
 

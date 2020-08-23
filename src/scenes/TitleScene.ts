@@ -197,6 +197,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10 + menuOffY, this.time * 1000);
 
         ctx.restore();
+
         if (this.animationIsDone()) {
             this.menu.draw(ctx);
         }

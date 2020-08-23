@@ -8,7 +8,6 @@
  * readability at some point…
  */
 export enum ControllerIntent {
-
     /** Used for unknown / unmapped buttons. */
     NONE = 0,
 
@@ -57,5 +56,4 @@ export enum ControllerIntent {
     UNUSED_1 = 0b0010_0000_0000_0000_0000,
     UNUSED_2 = 0b0100_0000_0000_0000_0000,
     UNUSED_3 = 0b1000_0000_0000_0000_0000,
-
 }
