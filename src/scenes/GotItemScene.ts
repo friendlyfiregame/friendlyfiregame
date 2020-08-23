@@ -29,8 +29,8 @@ export class GotItemScene extends Scene<FriendlyFire> {
         "sprites/powerup_friendship.aseprite.json"
     ])
     private static itemImages: (HTMLImageElement | Aseprite)[];
-    private itemPosition = Point.getOrigin();
 
+    private itemPosition = Point.getOrigin();
     private time = 0;
     private stopped = false;
     private targetItem: Item = Item.DOUBLEJUMP;

@@ -116,17 +116,21 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         }
     }
 
-
-    private drawTooltip (ctx: CanvasRenderingContext2D, position: Point, text: string, animationTag: ControllerAnimationTags) {
+    private drawTooltip(
+        ctx: CanvasRenderingContext2D, position: Point, text: string,
+        animationTag: ControllerAnimationTags
+    ): void {
         const gap = 6;
-        const textPosition = position.clone().moveXBy(this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap);
+        const textPosition = position.clone().moveXBy(
+            this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap
+        );
 
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, position)
         CharacterSelectionScene.font.drawTextWithOutline(ctx, text, textPosition, "white", "black");
     }
 
-    public draw(ctx: CanvasRenderingContext2D, size: Size) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         ctx.save();
 
         ctx.globalAlpha = 0.8;
@@ -141,20 +145,42 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
 
         ctx.drawImage(CharacterSelectionScene.panelImage, 0, 0);
 
-        CharacterSelectionScene.headlineFont.drawText(ctx, "CHARACTER CUSTOMIZATION", new Point(0, -14), "white");
-        this.drawTooltip(ctx, new Point(0, CharacterSelectionScene.panelImage.height), "Select or Change", ControllerAnimationTags.CONFIRM);
-        this.drawTooltip(ctx, new Point(0, CharacterSelectionScene.panelImage.height + 16), "Back", ControllerAnimationTags.BACK);
+        CharacterSelectionScene.headlineFont.drawText(
+            ctx, "CHARACTER CUSTOMIZATION", new Point(0, -14), "white"
+        );
+
+        this.drawTooltip(
+            ctx, new Point(0, CharacterSelectionScene.panelImage.height), "Select or Change",
+            ControllerAnimationTags.CONFIRM
+        );
+
+        this.drawTooltip(
+            ctx, new Point(0, CharacterSelectionScene.panelImage.height + 16), "Back",
+            ControllerAnimationTags.BACK
+        );
 
         const character = this.game.campaign.selectedCharacter;
         const charSelectionTextPosition = characterMenuItemPosition.clone().moveBy(selectionItemsOffset);
         const charSelectenTextGap = 55;
 
         if (character === CharacterAsset.MALE) {
-            CharacterSelectionScene.font.drawText(ctx, "Variant 1", charSelectionTextPosition, "grey");
-            CharacterSelectionScene.font.drawTextWithOutline(ctx, "Variant 2", charSelectionTextPosition.clone().moveXBy(charSelectenTextGap), "white", "black");
+            CharacterSelectionScene.font.drawText(
+                ctx, "Variant 1", charSelectionTextPosition, "grey"
+            );
+
+            CharacterSelectionScene.font.drawTextWithOutline(
+                ctx, "Variant 2", charSelectionTextPosition.clone().moveXBy(charSelectenTextGap),
+                "white", "black"
+            );
         } else {
-            CharacterSelectionScene.font.drawTextWithOutline(ctx, "Variant 1", charSelectionTextPosition, "white", "black");
-            CharacterSelectionScene.font.drawText(ctx, "Variant 2", charSelectionTextPosition.clone().moveXBy(charSelectenTextGap), "grey");
+            CharacterSelectionScene.font.drawTextWithOutline(
+                ctx, "Variant 1", charSelectionTextPosition, "white", "black"
+            );
+
+            CharacterSelectionScene.font.drawText(
+                ctx, "Variant 2", charSelectionTextPosition.clone().moveXBy(charSelectenTextGap),
+                "grey"
+            );
         }
 
         CharacterSelectionScene.playerSprites[character].drawTag(ctx, "idle", new Point(213, 46));
@@ -164,11 +190,23 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const voiceSelectenTextGap = 55;
 
         if (voice === VoiceAsset.MALE) {
-            CharacterSelectionScene.font.drawText(ctx, "High Pitch", voiceSelectionTextPosition, "grey");
-            CharacterSelectionScene.font.drawTextWithOutline(ctx, "Low Pitch", voiceSelectionTextPosition.clone().moveXBy(voiceSelectenTextGap), "white", "black");
+            CharacterSelectionScene.font.drawText(
+                ctx, "High Pitch", voiceSelectionTextPosition, "grey"
+            );
+
+            CharacterSelectionScene.font.drawTextWithOutline(
+                ctx, "Low Pitch", voiceSelectionTextPosition.clone().moveXBy(voiceSelectenTextGap),
+                "white", "black"
+            );
         } else {
-            CharacterSelectionScene.font.drawTextWithOutline(ctx, "High Pitch", voiceSelectionTextPosition, "white", "black");
-            CharacterSelectionScene.font.drawText(ctx, "Low Pitch", voiceSelectionTextPosition.clone().moveXBy(voiceSelectenTextGap), "grey");
+            CharacterSelectionScene.font.drawTextWithOutline(
+                ctx, "High Pitch", voiceSelectionTextPosition, "white", "black"
+            );
+
+            CharacterSelectionScene.font.drawText(
+                ctx, "Low Pitch", voiceSelectionTextPosition.clone().moveXBy(voiceSelectenTextGap),
+                "grey"
+            );
         }
 
         ctx.font = "20px sans-serif";

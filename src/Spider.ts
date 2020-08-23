@@ -44,8 +44,10 @@ export class Spider extends NPC {
         return this.spriteMetadata || {};
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Spider.sprite, "idle", this.position, RenderingLayer.ENTITIES, this.direction);
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Spider.sprite, "idle", this.position, RenderingLayer.ENTITIES, this.direction
+        );
 
         const scale = (this.direction < 0) ? new Point(-1, 1) : undefined;
         const totalOffsetY = -10 - this.eyeOffsetY;

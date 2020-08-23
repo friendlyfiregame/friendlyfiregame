@@ -561,6 +561,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 } else {
                     this.fadeToBlackFactor = 0;
                 }
+
                 resolve();
             }, duration * 1000);
         });
@@ -590,6 +591,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
                 this.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_FIRE);
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
+
                 // Music
                 GameScene.bgm2.stop()
             }
@@ -643,7 +645,9 @@ export class GameScene extends Scene<FriendlyFire> {
             breakFactor: 0.9,
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
-                if (this.world.collidesWith(particle.position.clone().moveYBy(-particle.size / 4))) {
+                if (this.world.collidesWith(
+                    particle.position.clone().moveYBy(-particle.size / 4))
+                ) {
                     particle.vx = 0;
                     particle.vy = 0;
                 }

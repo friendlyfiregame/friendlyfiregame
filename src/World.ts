@@ -46,8 +46,13 @@ export class World implements GameObject {
     public constructor(scene: GameScene) {
         this.scene = scene;
 
-        const rainSpawnPosition = this.scene.pointsOfInterest.find(o => o.name === 'rain_spawn_position');
-        if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
+        const rainSpawnPosition = this.scene.pointsOfInterest.find(
+            o => o.name === 'rain_spawn_position'
+        );
+
+        if (!rainSpawnPosition) {
+            throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
+        }
 
         this.rainEmitter = this.scene.particles.createEmitter({
             //position: rainSpawnPosition.position,
@@ -292,7 +297,9 @@ export class World implements GameObject {
         position: Point, height: number, ignoreObjects?: GameObject[], ignore?: Environment[]
     ): number {
         for (let i = 0; i < height; i++) {
-            const collision = this.collidesWith(position.clone().moveYBy(-i), ignoreObjects, ignore);
+            const collision = this.collidesWith(
+                position.clone().moveYBy(-i), ignoreObjects, ignore
+            );
 
             if (collision) {
                 return collision;

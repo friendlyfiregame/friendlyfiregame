@@ -20,7 +20,10 @@ export class Sign extends NPC {
     }
 
     private prepareContent (content?: string ): string[] {
-        if (!content) return ['The sign is empty.'];
+        if (!content) {
+            return ['The sign is empty.'];
+        }
+
         return content.split(":::");
     }
 
@@ -62,5 +65,5 @@ export class Sign extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    update(): void {}
+    public update(): void {}
 }
