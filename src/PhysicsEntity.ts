@@ -94,6 +94,7 @@ export abstract class PhysicsEntity extends Entity {
         return this.scene.world.collidesWith(position, [ this ], ignore);
     }
 
+    // TODO: Use Point here
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
         for (let i = -this.size.width / 2; i < this.size.width / 2; i++) {
             let env = this.checkCollision(new Point(x + i, y), ignore);
