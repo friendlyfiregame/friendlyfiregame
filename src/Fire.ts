@@ -233,7 +233,7 @@ export class Fire extends NPC {
         }
 
         if (this.isVisible) {
-            this.fireGfx.update(dt);
+            this.fireGfx.update();
         }
 
         if (this.showDialoguePrompt()) {

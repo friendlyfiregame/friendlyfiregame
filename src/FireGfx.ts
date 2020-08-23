@@ -30,26 +30,31 @@ export class FireGfx {
         this.imageData = this.context.getImageData(0, 0, this.w, this.h);
         this.data = [];
         this.decayData = [];
+
         this.init();
     }
 
-    private init() {
+    private init(): void {
         this.age = 0;
         this.nextUpdate = -Infinity;
         this.startTime = Date.now();
 
         const decay = this.decayData;
         const data = this.data;
+
         for (let y = 0; y < this.h; y++) {
             const row: number[] = data[y] = [];
             const decayRow: number[] = decay[y] = [];
             const yrel = y / (this.h - 1);
+
             for (let x = 0; x < this.w; x++) {
                 row[x] = 0;
                 decayRow[x] = this.getDecay(x / (this.w - 1), yrel);
             }
         }
+
         const bottom = data[this.h - 1];
+
         for (let x = 0; x < this.w; x++) {
             const xrel = x / (this.w - 1);
             const stuffedXrel = this.coneShaped ? clamp(2 * xrel - 0.5, 0, 1) : xrel;
@@ -76,7 +81,7 @@ export class FireGfx {
         return 0.02 + (0.5 - xrel) * 0.1 + Math.pow(1 - yrel, 8);
     }
 
-    public update(dt: number) {
+    public update(): void {
         const t = Date.now();
         this.age = t - this.startTime;
 
@@ -87,7 +92,7 @@ export class FireGfx {
         }
     }
 
-    private updateStep() {
+    private updateStep(): void {
         const data = this.data;
         let fromRow = data[0];
         let fromX = 0, toCenter = 0, midX = (this.w - 1) * 0.5, toCenter1 = 1;
@@ -103,11 +108,14 @@ export class FireGfx {
                 toCenter = 0.15 * yp * yp;
                 toCenter1 = 1 - toCenter;
             }
+
             for (let x = 0; x < this.w; x++) {
                 fromX = clamp(x + rnd(-1, 1) * rnd(), 0.3, this.w - 1.3);
+
                 if (toCenter) {
                     fromX = toCenter * midX + toCenter1 * fromX;
                 }
+
                 const fromX1 = Math.floor(fromX), fx = fromX - fromX1;
                 const v = fx * fromRow[fromX1 + 1] + (1 - fx) * fromRow[fromX1] - decayRow[x] + rnd(-0.03, 0.02);
                 row[x] = clamp(v, 0, Infinity);
@@ -117,9 +125,10 @@ export class FireGfx {
         // Bottom line always stays mostly the same, only minor variations
         const row = data[this.h - 1];
         const t = this.age * 6 / 1000;
-        const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764) * Math.sin(t * 0.5433)
-                * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
+        const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764)
+            * Math.sin(t * 0.5433) * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
         const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);
+
         for (let x = 0; x < this.w; x++) {
             let f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
             const baseX = Math.floor((this.w - 1) * (x / (this.w - 1)) ** exponent);
@@ -127,12 +136,14 @@ export class FireGfx {
         }
     }
 
-    private render() {
+    private render(): void {
         const pixels = this.imageData.data;
         const data = this.data;
         let p = 0, col = [0];
+
         for (let y = 0; y < this.h; y++) {
             const row = data[y];
+
             for (let x = 0; x < this.w; x++) {
                 col = this.valueToColor(row[x]);
                 pixels[p++] = col[0];
@@ -160,11 +171,11 @@ export class FireGfx {
         return this.returnColor;
     }
 
-    public getImage() {
+    public getImage(): HTMLCanvasElement {
         return this.canvas;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, x = 0, y = 0) {
+    public draw(ctx: CanvasRenderingContext2D, x = 0, y = 0): void {
         const img = this.getImage();
         ctx.drawImage(img, x - img.width / 2, -y - img.height);
     }
