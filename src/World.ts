@@ -45,8 +45,13 @@ export class World implements GameObject {
     public constructor(scene: GameScene) {
         this.scene = scene;
 
-        const rainSpawnPosition = this.scene.pointsOfInterest.find(o => o.name === 'rain_spawn_position');
-        if (!rainSpawnPosition) throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
+        const rainSpawnPosition = this.scene.pointsOfInterest.find(
+            o => o.name === 'rain_spawn_position'
+        );
+
+        if (!rainSpawnPosition) {
+            throw new Error (`Missing 'rain_spawn_position' point in map data to place rain emitter`);
+        }
 
         this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
@@ -123,9 +128,15 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (actually an RGBA color
      *         which has specific meaning which isn't defined yet).
      */
-    public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
+    public collidesWith(
+        x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
+    ): number {
         for (const gameObject of this.scene.gameObjects) {
-            if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
+            if (
+                gameObject !== this
+                && !ignoreObjects.includes(gameObject)
+                && isCollidableGameObject(gameObject)
+            ) {
                 const environment = gameObject.collidesWith(x, y);
 
                 if (environment !== Environment.AIR && !ignore.includes(environment) ) {
@@ -256,8 +267,9 @@ export class World implements GameObject {
         );
     }
 
-    public getObjectAt(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []):
-            GameObject | null {
+    public getObjectAt(
+        x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
+    ): GameObject | null {
         for (const gameObject of this.scene.gameObjects) {
             if (
                 gameObject !== this
@@ -283,8 +295,9 @@ export class World implements GameObject {
      * @param height - The height of the line to check
      * @return 0 if no collision. Type of first collision along the line otherwise.
      */
-    public collidesWithVerticalLine(x: number, y: number, height: number, ignoreObjects?: GameObject[],
-            ignore?: Environment[]): number {
+    public collidesWithVerticalLine(
+        x: number, y: number, height: number, ignoreObjects?: GameObject[], ignore?: Environment[]
+    ): number {
         for (let i = 0; i < height; i++) {
             const collision = this.collidesWith(x, y - i, ignoreObjects, ignore);
 
@@ -303,7 +316,9 @@ export class World implements GameObject {
      * @param y - Y coordinate of current position.
      * @return The Y coordinate of the ground below the given coordinate.
      */
-    public getGround(x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]): number {
+    public getGround(
+        x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]
+    ): number {
         while (y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)) {
             y--;
         }

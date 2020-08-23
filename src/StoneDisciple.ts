@@ -30,8 +30,11 @@ export class StoneDisciple extends NPC {
         );
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(StoneDisciple.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            StoneDisciple.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction
+        );
+
         this.drawFace(ctx, false);
 
         if (this.scene.showBounds) {

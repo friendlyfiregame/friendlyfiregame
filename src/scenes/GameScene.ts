@@ -552,6 +552,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 } else {
                     this.fadeToBlackFactor = 0;
                 }
+
                 resolve();
             }, duration * 1000);
         });
@@ -581,6 +582,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
                 this.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_FIRE);
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
+
                 // Music
                 GameScene.bgm2.stop()
             }
