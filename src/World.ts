@@ -55,8 +55,7 @@ export class World implements GameObject {
         }
 
         this.rainEmitter = this.scene.particles.createEmitter({
-            //position: rainSpawnPosition.position,
-            position: new Point(rainSpawnPosition.position.x, rainSpawnPosition.position.y),
+            position: rainSpawnPosition.position,
             offset: () => new Point(rnd(-1, 1) * 26, rnd(-1, 1) * 5),
             velocity: () => new Point(rnd(-1, 1) * 5, -rnd(50, 80)),
             color: () => World.raindrop,
@@ -83,9 +82,9 @@ export class World implements GameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
-        const camX = this.scene.camera.position.x;
-        const camY = this.scene.camera.position.y;
-        const posXMultiplier = 1 - (camX / this.getWidth() * 2);
+        // TODO: Use Point
+        const cameraPosition = this.scene.camera.position.clone();
+        const posXMultiplier = 1 - (cameraPosition.x / this.getWidth() * 2);
 
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
@@ -96,16 +95,18 @@ export class World implements GameObject {
         })
 
         for (const background of World.backgrounds) {
-            const bgX = this.getWidth() / background.width;
-            const bgY = this.getHeight() / background.height;
+            const backgroundPosition = new Point(
+                this.getWidth() / background.width,
+                this.getHeight() / background.height
+            );
 
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
                 translation: cameraPosition.clone().mirrorVertically(),
                 position: new Point(
-                    (-camX / bgX) + (-posXMultiplier * (size.width / 2)),
-                    (-this.getHeight() + camY) / bgY
+                    (-cameraPosition.x / backgroundPosition.x) + (-posXMultiplier * (size.width / 2)),
+                    (-this.getHeight() + cameraPosition.y) / backgroundPosition.y
                 ),
                 asset: background
             });

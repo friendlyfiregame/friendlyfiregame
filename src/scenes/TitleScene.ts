@@ -177,26 +177,47 @@ export class TitleScene extends Scene<FriendlyFire> {
         ctx.beginPath();
 
         const layer3OffY = (1 - this.animationProgress) * 100;
-        TitleScene.titleLayer3.drawTag(ctx, "idle", new Point(this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY), this.time * 1000);
+
+        TitleScene.titleLayer3.drawTag(
+            ctx, "idle", this.titleLayer3Position.clone().moveYBy(layer3OffY), this.time * 1000
+        );
 
         const layer2OffY = (1 - this.animationProgress) * 200;
-        TitleScene.titleLayer2.drawTag(ctx, "idle", new Point(this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY), this.time * 1000);
+
+        TitleScene.titleLayer2.drawTag(
+            ctx, "idle", this.titleLayer2Position.clone().moveYBy(layer2OffY), this.time * 1000
+        );
 
         const islandOffY = (1 - this.animationProgress) * 250;
-        TitleScene.titleIsland1.drawTag(ctx, "idle", new Point(90, 168 + islandOffY), this.time * 1000);
-        TitleScene.titleIsland2.drawTag(ctx, "idle", new Point(323, 178 + islandOffY), this.time * 1000);
+
+        TitleScene.titleIsland1.drawTag(
+            ctx, "idle", new Point(90, 168 + islandOffY), this.time * 1000
+        );
+
+        TitleScene.titleIsland2.drawTag(
+            ctx, "idle", new Point(323, 178 + islandOffY), this.time * 1000
+        );
 
         const personOff = (1 - this.animationProgress) * 330;
 
         TitleScene.person.drawTag(ctx, "idle", new Point(22, 155 + personOff), this.time * 1000);
 
         const layer1OffY = (1 - this.animationProgress) * 300;
-        TitleScene.titleLayer1.drawTag(ctx, "idle", new Point(this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY), this.time * 1000);
+
+        TitleScene.titleLayer1.drawTag(
+            ctx, "idle", this.titleLayer1Position.clone().moveYBy(layer1OffY), this.time * 1000
+        );
 
         ctx.globalAlpha = Math.max(this.logoAlphaProgress, 0);
         const menuOffY = (1 - this.animationProgress) * 150;
-        ctx.drawImage(TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y + menuOffY);
-        TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.clone().moveBy(147, - 10 + menuOffY), this.time * 1000);
+
+        ctx.drawImage(
+            TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y + menuOffY
+        );
+
+        TitleScene.flameicon.drawTag(
+            ctx, "idle", this.titleBasePosition.clone().moveBy(147, - 10 + menuOffY), this.time * 1000
+        );
 
         ctx.restore();
 

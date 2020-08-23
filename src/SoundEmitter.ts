@@ -52,7 +52,7 @@ export class SoundEmitter extends Entity {
 
             if (sound) {
                 return new SoundEmitter(
-                    scene, gameObjectInfo.position.clone(), sound, volume, intensity
+                    scene, gameObjectInfo.position, sound, volume, intensity
                 );
             } else {
                 throw new Error(

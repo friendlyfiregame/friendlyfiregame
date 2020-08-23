@@ -113,51 +113,47 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     private drawTitle(ctx: CanvasRenderingContext2D, position: Point): Point {
-        let currentPosition = position.clone();
         const gap = 5;
         const titleText = "Friendly Fire";
         const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
 
-        CreditsScene.headlineFont.drawText(ctx, titleText, currentPosition, 'white');
+        CreditsScene.headlineFont.drawText(ctx, titleText, position, 'white');
 
         CreditsScene.standardFont.drawText(
             ctx,
             versionText,
-            currentPosition.moveYBy(this.headlineCharHeight + gap),
+            position.moveYBy(this.headlineCharHeight + gap),
             'white'
         );
 
-        return currentPosition.moveYBy(this.headlineCharHeight + this.standardCharHeight + gap + 20);
+        return position.moveYBy(this.headlineCharHeight + this.standardCharHeight + gap + 20);
     }
 
     private drawParagraph(
         ctx: CanvasRenderingContext2D, position: Point, lines: string[], marginBotton = 10
     ): Point {
-        let currentPosition = position.clone();
-
         lines.forEach(line => {
-            CreditsScene.standardFont.drawText(ctx, line, currentPosition, 'white');
-            currentPosition.moveYBy(this.standardCharHeight);
+            CreditsScene.standardFont.drawText(ctx, line, position, 'white');
+            position.moveYBy(this.standardCharHeight);
         })
 
-        return currentPosition.moveYBy(marginBotton);
+        return position.moveYBy(marginBotton);
     }
 
     private drawCredit(
         ctx: CanvasRenderingContext2D, position: Point, title: string, names: string[]
     ): Point {
-        let currentPosition = position.clone();
         const gap = 5;
 
-        CreditsScene.creditsFont.drawText(ctx, title, currentPosition, 'white');
-        currentPosition.moveYBy(this.creditsFontHeight + this.lineSpacing + gap);
+        CreditsScene.creditsFont.drawText(ctx, title, position, 'white');
+        position.moveYBy(this.creditsFontHeight + this.lineSpacing + gap);
 
         names.forEach(name => {
-            CreditsScene.standardFont.drawText(ctx, name, currentPosition, 'white');
-            currentPosition.moveYBy(this.standardCharHeight);
+            CreditsScene.standardFont.drawText(ctx, name, position, 'white');
+            position.moveYBy(this.standardCharHeight);
         })
 
-        return currentPosition.moveYBy(40);
+        return position.moveYBy(40);
     }
 
     public draw(ctx: CanvasRenderingContext2D) {

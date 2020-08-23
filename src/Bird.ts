@@ -116,7 +116,8 @@ export class Bird extends NPC {
         while (
             this.position.y > 0
             && world.collidesWith(
-                new Point(this.position.x, this.position.y + this.size.height), [ this ],
+                this.position.clone().moveYBy(this.size.height),
+                [ this ],
                 [ Environment.PLATFORM, Environment.WATER ]
             )
         ) {
@@ -134,10 +135,7 @@ export class Bird extends NPC {
         if (this.getVelocityX() > 0) {
             while (
                 world.collidesWithVerticalLine(
-                    new Point(
-                        this.position.x + this.size.width / 2,
-                        this.position.y + this.size.height * 3 / 4
-                    ),
+                    this.position.clone().moveBy(this.size.width / 2, this.size.height * 3 / 4),
                     this.size.height / 2,
                     [ this ],
                     [ Environment.PLATFORM, Environment.WATER ]
@@ -149,10 +147,7 @@ export class Bird extends NPC {
         } else {
             while (
                 world.collidesWithVerticalLine(
-                    new Point(
-                        this.position.x - this.size.width / 2,
-                        this.position.y + this.size.height * 3 / 4
-                    ),
+                    this.position.clone().moveBy(-this.size.width / 2, this.size.height * 3 / 4),
                     this.size.height / 2,
                     [ this ],
                     [ Environment.PLATFORM, Environment.WATER ]
