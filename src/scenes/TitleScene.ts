@@ -112,7 +112,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.logoAlphaProgress = 1;
     }
 
-    public handleMenuAction (buttonId: string) {
+    public handleMenuAction(buttonId: string): void {
         switch(buttonId) {
             case MenuItemKey.START:
                 // this.stopMusicTrack();
@@ -160,7 +160,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     }
 
-    public update(dt: number) {
+    public update(dt: number): void {
         this.time += dt;
 
         if (this.time < this.animationDuration && !this.animationIsDone()) {
@@ -171,7 +171,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
         ctx.beginPath();
 

@@ -66,7 +66,8 @@ class GamepadButtonWrapper {
         this.index = index;
         this.pressed = wrapped.pressed;
     }
-    public setPressed(pressed: boolean) {
+
+    public setPressed(pressed: boolean): void {
         const controllerManager = ControllerManager.getInstance();
         const oldPressed = this.pressed;
         this.pressed = pressed;
@@ -99,7 +100,8 @@ class GamepadAxisWrapper {
     constructor(index: number) {
         this.index = index;
     }
-    public setValue(newValue: number) {
+
+    public setValue(newValue: number): void {
         const controllerManager = ControllerManager.getInstance();
         const oldValue = this.value;
         this.value = newValue;
@@ -157,14 +159,16 @@ class GamepadWrapper {
             this.axes[i] = new GamepadAxisWrapper(i);
         }
     }
-    update(): void {
+
+    public update(): void {
         const gamepad = navigator.getGamepads()[this.index];
         if (gamepad != null) {
             this.buttons.forEach(button => button.setPressed(gamepad.buttons[button.index].pressed));
             this.axes.forEach(axis => axis.setValue(gamepad.axes[axis.index]));
         }
     }
-    toString(): String {
+
+    public toString(): String {
         return `Gamepad (index: ${this.index}, id: ${this.id})`;
     }
 }
@@ -188,7 +192,8 @@ export class GamepadInput {
             }
         });
     }
-    update(): void {
+
+    public update(): void {
         this.gamepads.forEach(gamepad => gamepad.update());
     }
 }
