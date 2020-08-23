@@ -18,6 +18,7 @@ export class ControllerEvent extends Object {
         intents: ControllerIntent[], repeat: boolean = false
     ) {
         super();
+
         this[controllerFamilySymbol] = controllerFamily;
         this[intentsSymbol] = intents.reduce((prev, curr) => prev | curr);
         this[eventTypeSymbol] = eventType;
@@ -103,5 +104,4 @@ export class ControllerEvent extends Object {
     get isAbort(): boolean {
         return (this[intentsSymbol] & ControllerIntent.ABORT) === ControllerIntent.ABORT;
     }
-
 }

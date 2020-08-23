@@ -34,15 +34,21 @@ export class StoneDisciple extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(StoneDisciple.sprite, "idle", this.position, RenderingLayer.ENTITIES, this.direction);
         this.drawFace(ctx, false);
-        if (this.scene.showBounds) this.drawBounds();
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
     update(dt: number): void {
         super.update(dt);
+
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(this.size.height));
         this.speechBubble.update(this.position);
     }

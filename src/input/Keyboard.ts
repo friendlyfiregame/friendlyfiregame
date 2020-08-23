@@ -6,6 +6,7 @@ import { ControllerManager } from './ControllerManager';
 import { Signal } from '../Signal';
 
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
+
 keyToIntentMappings.set("Space", [ControllerIntent.PLAYER_JUMP]);
 keyToIntentMappings.set("KeyW", [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
 keyToIntentMappings.set("KeyA", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
@@ -30,6 +31,7 @@ export class Keyboard {
     public readonly onKeyPress = new Signal<KeyboardEvent>();
     private readonly pressed = new Set<string>();
     private readonly controllerManager = ControllerManager.getInstance();
+
     public constructor() {
         document.addEventListener("keypress", event => this.handleKeyPress(event));
         document.addEventListener("keydown", event => this.handleKeyDown(event));
@@ -37,24 +39,44 @@ export class Keyboard {
     }
 
     private handleKeyPress(event: KeyboardEvent): void {
-        this.onKeyPress.emit(event)
-        this.controllerManager.onButtonPress.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.PRESS, keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat))
+        this.onKeyPress.emit(event);
+
+        this.controllerManager.onButtonPress.emit(
+            new ControllerEvent(
+                ControllerFamily.KEYBOARD, ControllerEventType.PRESS,
+                keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
+            )
+        )
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
         if (!event.repeat) {
             this.pressed.add(event.key);
         }
+
         this.onKeyDown.emit(event);
-        this.controllerManager.onButtonDown.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.DOWN, keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat))
+
+        this.controllerManager.onButtonDown.emit(
+            new ControllerEvent(
+                ControllerFamily.KEYBOARD, ControllerEventType.DOWN,
+                keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
+            )
+        )
     }
 
     private handleKeyUp(event: KeyboardEvent): void {
         if (!event.repeat) {
             this.pressed.delete(event.key);
         }
+
         this.onKeyUp.emit(event);
-        this.controllerManager.onButtonUp.emit(new ControllerEvent(ControllerFamily.KEYBOARD, ControllerEventType.UP, keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat))
+
+        this.controllerManager.onButtonUp.emit(
+            new ControllerEvent(
+                ControllerFamily.KEYBOARD, ControllerEventType.UP,
+                keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
+            )
+        )
     }
 
     public isPressed(key: string): boolean {

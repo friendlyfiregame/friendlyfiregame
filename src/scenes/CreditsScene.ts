@@ -19,7 +19,9 @@ export class CreditsScene extends Scene<FriendlyFire> {
         "music/a-vision-of-fire-acoustic.ogg"
     ])
     public static music: Sound[];
+
     private songIndex = 1;
+
     @asset([
         "sprites/stars/star1.aseprite.json",
         "sprites/stars/star2.aseprite.json",
@@ -117,6 +119,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
 
         CreditsScene.headlineFont.drawText(ctx, titleText, currentPosition, 'white');
+
         CreditsScene.standardFont.drawText(
             ctx,
             versionText,

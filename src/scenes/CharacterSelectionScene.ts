@@ -49,6 +49,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         "sprites/buttons_playstation.aseprite.json"
     ])
     public static buttons: Aseprite[];
+
     public controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
         [ControllerSpriteMap.KEYBOARD]: CharacterSelectionScene.buttons[0],
         [ControllerSpriteMap.XBOX]: CharacterSelectionScene.buttons[1],
@@ -63,9 +64,18 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         this.outTransition = new SlideTransition({ duration: 0.25 });
 
         this.menu.setItems(
-            new MenuItem(MenuItemKey.CHARACTER, "Character:", CharacterSelectionScene.font, "black", characterMenuItemPosition),
-            new MenuItem(MenuItemKey.VOICE, "Voice:", CharacterSelectionScene.font, "black", voiceMenuItemPosition),
-            new MenuItem(MenuItemKey.START, "Start Game", CharacterSelectionScene.font, "black", startMenuItemPosition)
+            new MenuItem(
+                MenuItemKey.CHARACTER, "Character:", CharacterSelectionScene.font, "black",
+                characterMenuItemPosition
+            ),
+            new MenuItem(
+                MenuItemKey.VOICE, "Voice:", CharacterSelectionScene.font, "black",
+                voiceMenuItemPosition
+            ),
+            new MenuItem(
+                MenuItemKey.START, "Start Game", CharacterSelectionScene.font, "black",
+                startMenuItemPosition
+            )
         )
     }
 
@@ -79,7 +89,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
-    public async handleMenuAction (buttonId: string): Promise<void> {
+    public async handleMenuAction(buttonId: string): Promise<void> {
         switch(buttonId) {
             case MenuItemKey.CHARACTER:
                 this.game.campaign.toggleCharacterAsset();

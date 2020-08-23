@@ -74,14 +74,17 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Nothing can stop us!"
         ]
     ]
+
     private selectedSubtitle = '';
 
     public setup(): void {
         GotItemScene.sound.setVolume(0.7);
         GotItemScene.sound.play();
+
         if (this.properties?.item !== undefined) {
             this.targetItem = this.properties.item as Item;
         }
+
         this.selectedSubtitle = "“" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "”";
         this.stopped = false;
         this.time = 0;
@@ -102,10 +105,12 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         let metrics;
+
         const center = new Point(
             (size.width / 2) - GotItemScene.itemImages[this.targetItem].width,
             size.height >> 1
         );
+
         const floatOffsetY = Math.sin(this.time * this.floatSpeed) * this.floatAmount;
 
         this.itemPosition = center.clone().moveYBy(-40 - floatOffsetY);

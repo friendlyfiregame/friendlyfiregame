@@ -13,7 +13,6 @@ interface SpiderSpriteMetadata {
 
 @entity("spider")
 export class Spider extends NPC {
-
     @asset("sprites/magicspider.aseprite.json")
     private static sprite: Aseprite;
 
@@ -29,7 +28,10 @@ export class Spider extends NPC {
     }
 
     public showDialoguePrompt (): boolean {
-        if (!super.showDialoguePrompt()) return false;
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         return Conversation.getGlobals()["$talkedToSpider"] === "false";
     }
 
@@ -38,6 +40,7 @@ export class Spider extends NPC {
             const metadata = Spider.sprite.getLayer("Meta")?.data;
             this.spriteMetadata = metadata ? JSON.parse(metadata) : {};
         }
+
         return this.spriteMetadata || {};
     }
 
@@ -47,6 +50,7 @@ export class Spider extends NPC {
         const scale = (this.direction < 0) ? new Point(-1, 1) : undefined;
         const totalOffsetY = -10 - this.eyeOffsetY;
         const totalOffsetX = 5;
+
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
@@ -66,10 +70,11 @@ export class Spider extends NPC {
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         // Get y offset to match breathing motion

@@ -187,6 +187,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         TitleScene.titleIsland2.drawTag(ctx, "idle", new Point(323, 178 + islandOffY), this.time * 1000);
 
         const personOff = (1 - this.animationProgress) * 330;
+
         TitleScene.person.drawTag(ctx, "idle", new Point(22, 155 + personOff), this.time * 1000);
 
         const layer1OffY = (1 - this.animationProgress) * 300;
@@ -198,6 +199,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.clone().moveBy(147, - 10 + menuOffY), this.time * 1000);
 
         ctx.restore();
+
         if (this.animationIsDone()) {
             this.menu.draw(ctx);
         }

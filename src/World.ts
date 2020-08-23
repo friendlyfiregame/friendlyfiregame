@@ -24,7 +24,9 @@ export class World implements GameObject {
     @asset("maps/level.png")
     private static foreground: HTMLImageElement;
 
-    @asset("maps/level_collision.png", { map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer) })
+    @asset("maps/level_collision.png", {
+        map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer)
+    })
     private static collisionMap: Uint32Array;
 
     @asset([
@@ -119,8 +121,8 @@ export class World implements GameObject {
      * Checks if the given position collides with the world.
      *
      * @param position - position within the world.
-     * @return 0 if no collision. Anything else is a specific collision type (Actually an RGBA color which has
-     *         specific meaning which isn't defined yet).
+     * @return 0 if no collision. Anything else is a specific collision type (actually an RGBA color
+     *         which has specific meaning which isn't defined yet).
      */
     public collidesWith(
         position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
@@ -143,7 +145,10 @@ export class World implements GameObject {
 
         const environment = this.getEnvironment(position);
 
-        if ((!validEnvironments.includes(environment)) || (ignore && ignore.includes(environment))) {
+        if (
+            !validEnvironments.includes(environment)
+            || (ignore && ignore.includes(environment))
+        ) {
             return Environment.AIR;
         }
 
@@ -151,12 +156,16 @@ export class World implements GameObject {
     }
 
     /**
-     * Checks if a specific entity (`sourceEntity`) collides with either of of the entities in the gameObjects array
-     * of the GameScene and returns all entities that currently collide. `Particles` are taken out of this check automatically.
+     * Checks if a specific entity (`sourceEntity`) collides with either of of the entities in the
+     * gameObjects array of the GameScene and returns all entities that currently collide.
+     * `Particles` are taken out of this check automatically.
+     *
      * @param sourceEntity    - The entity to be checked against the other entities
-     * @param margin          - Optional margin added to the bounding boxes of the entities to extend collision radius
+     * @param margin          - Optional margin added to the bounding boxes of the entities to
+     *                          extend collision radius
      * @param ignoreEntities  - Array of entities to be ignored with this check
-     * @return                - An array containing all entities that collide with the source entity.
+     * @return                - An array containing all entities that collide with the source
+     *                          entity.
      */
     public getEntityCollisions(
         sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []
@@ -164,8 +173,16 @@ export class World implements GameObject {
         const collidesWith: Entity[] = [];
 
         for (const gameObject of this.scene.gameObjects) {
-            if (gameObject !== sourceEntity && !(gameObject instanceof Particles) && gameObject instanceof Entity && gameObject.isTrigger && !ignoreEntities.includes(gameObject)) {
-                const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(margin), gameObject.getBounds(margin));
+            if (
+                gameObject !== sourceEntity
+                && !(gameObject instanceof Particles)
+                && gameObject instanceof Entity
+                && gameObject.isTrigger
+                && !ignoreEntities.includes(gameObject)
+            ) {
+                const colliding = this.boundingBoxesCollide(
+                    sourceEntity.getBounds(margin), gameObject.getBounds(margin)
+                );
 
                 if (colliding) {
                     collidesWith.push(gameObject);
@@ -184,7 +201,9 @@ export class World implements GameObject {
         const collidesWith: GameObjectInfo[] = [];
 
         for (const triggerObject of this.scene.triggerObjects) {
-            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(triggerObject));
+            const colliding = this.boundingBoxesCollide(
+                sourceEntity.getBounds(), boundsFromGameObject(triggerObject)
+            );
 
             if (colliding) {
                 collidesWith.push(triggerObject);
@@ -198,7 +217,9 @@ export class World implements GameObject {
         const collidesWith: GameObjectInfo[] = [];
 
         for (const gateObject of this.scene.gateObjects) {
-            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(gateObject, 0));
+            const colliding = this.boundingBoxesCollide(
+                sourceEntity.getBounds(), boundsFromGameObject(gateObject, 0)
+            );
 
             if (colliding) {
                 collidesWith.push(gateObject);
@@ -212,7 +233,9 @@ export class World implements GameObject {
         const collidesWith: GameObjectInfo[] = [];
 
         for (const triggerObject of this.scene.boundObjects) {
-            const colliding = this.boundingBoxesCollide(sourceEntity.getBounds(), boundsFromGameObject(triggerObject));
+            const colliding = this.boundingBoxesCollide(
+                sourceEntity.getBounds(), boundsFromGameObject(triggerObject)
+            );
 
             if (colliding) {
                 collidesWith.push(triggerObject);
@@ -241,7 +264,11 @@ export class World implements GameObject {
         position: Point, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
     ): GameObject | null {
         for (const gameObject of this.scene.gameObjects) {
-            if (gameObject !== this && !ignoreObjects.includes(gameObject) && isCollidableGameObject(gameObject)) {
+            if (
+                gameObject !== this
+                && !ignoreObjects.includes(gameObject)
+                && isCollidableGameObject(gameObject)
+            ) {
                 const environment = gameObject.collidesWith(position);
 
                 if (environment !== Environment.AIR && !ignore.includes(environment)) {

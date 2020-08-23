@@ -32,6 +32,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(26, 50));
+
         this.direction = -1;
         this.face = new Face(scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
@@ -49,7 +50,10 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     protected showDialoguePrompt(): boolean {
-        if (!super.showDialoguePrompt()) return false;
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         return (
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
             this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
@@ -65,7 +69,9 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction
         );
 
-        if (this.scene.showBounds) this.drawBounds();
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
 
         this.drawFace(ctx, false);
 

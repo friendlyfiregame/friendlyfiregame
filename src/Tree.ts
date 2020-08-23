@@ -20,41 +20,53 @@ export class Tree extends NPC {
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(78, 140));
+
         this.face = new Face(scene, this, EyeType.TREE, 5, 94);
         this.seed = new Seed(scene, position.clone());
         this.wood = new Wood(scene, position.clone());
+
         this.startDialog();
     }
 
-    public showDialoguePrompt (): boolean {
-        if (!super.showDialoguePrompt()) return false;
+    public showDialoguePrompt(): boolean {
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         return (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE &&
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE
+            && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
         ) || (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.MADE_RAIN &&
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TREE_DROPPED_WOOD
+            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.MADE_RAIN
+            && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TREE_DROPPED_WOOD
         );
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(Tree.sprite, "idle", this.position, RenderingLayer.ENTITIES);
-        if (this.scene.showBounds) this.drawBounds();
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         this.drawFace(ctx);
+
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         if (this.showDialoguePrompt()) {
             this.dialoguePrompt.update(dt, this.position.clone().moveBy(4, 128));
         }
     }
 
-    startDialog(): void {
+    public startDialog(): void {
         this.speechBubble.update(this.position);
     }
 
@@ -64,8 +76,8 @@ export class Tree extends NPC {
         }
 
         this.seed.position.moveTo(this.position.clone().moveYBy(this.size.height / 2));
-
         this.seed.setVelocity(5, 0);
+
         return this.seed;
     }
 

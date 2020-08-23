@@ -6,10 +6,11 @@ import { Point, Size } from './Geometry';
 export class Snowball extends PhysicsEntity {
     public constructor(scene: GameScene, position: Point, velocityX: number, velocityY: number) {
         super(scene, position, new Size(0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER));
+
         this.setVelocity(velocityX, velocityY);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
         ctx.translate(this.position.x, -this.position.y);

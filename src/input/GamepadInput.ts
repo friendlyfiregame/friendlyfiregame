@@ -62,6 +62,7 @@ const controllerFamily = ControllerFamily.GAMEPAD;
 class GamepadButtonWrapper {
     public readonly index: number;
     private pressed: boolean;
+
     constructor(index: number, wrapped: GamepadButton) {
         this.index = index;
         this.pressed = wrapped.pressed;
@@ -71,11 +72,22 @@ class GamepadButtonWrapper {
         const controllerManager = ControllerManager.getInstance();
         const oldPressed = this.pressed;
         this.pressed = pressed;
+
         if (oldPressed != pressed) {
             if (pressed) {
-                controllerManager.onButtonDown.emit(new ControllerEvent(controllerFamily, ControllerEventType.DOWN, intentMappings.get(this.index) || [ControllerIntent.NONE]));
+                controllerManager.onButtonDown.emit(
+                    new ControllerEvent(
+                        controllerFamily, ControllerEventType.DOWN,
+                        intentMappings.get(this.index) || [ControllerIntent.NONE]
+                    )
+                );
             } else {
-                controllerManager.onButtonUp.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(this.index) || [ControllerIntent.NONE]));
+                controllerManager.onButtonUp.emit(
+                    new ControllerEvent(
+                        controllerFamily, ControllerEventType.UP,
+                        intentMappings.get(this.index) || [ControllerIntent.NONE]
+                    )
+                );
             }
         }
     }
@@ -83,7 +95,6 @@ class GamepadButtonWrapper {
 }
 
 class GamepadAxisWrapper {
-
     /**
      * Threshold to use to emulate virtual buttons.
      * Values between 0.1 (slight touches of the axis trigger button presses)
@@ -110,31 +121,54 @@ class GamepadAxisWrapper {
         if (oldValue <= -this.threshold && newValue > -this.threshold) {
             // Virtual button 1 released
             emulatedButtonId = axisMapping.get(this.index)?.button1;
+
             if (emulatedButtonId != null) {
-                controllerManager.onButtonUp.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
+                controllerManager.onButtonUp.emit(
+                    new ControllerEvent(
+                        controllerFamily, ControllerEventType.UP,
+                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                    )
+                );
             }
         } else if (oldValue > -this.threshold && newValue <= -this.threshold) {
             // Virtual button 1 pressed
             emulatedButtonId = axisMapping.get(this.index)?.button1;
+
             if (emulatedButtonId != null) {
-                controllerManager.onButtonDown.emit(new ControllerEvent(controllerFamily, ControllerEventType.DOWN, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
+                controllerManager.onButtonDown.emit(
+                    new ControllerEvent(
+                        controllerFamily, ControllerEventType.DOWN,
+                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                    )
+                );
             }
         }
 
         if (oldValue > this.threshold && newValue <= this.threshold) {
             // Virtual button 2 released
             emulatedButtonId = axisMapping.get(this.index)?.button2;
+
             if (emulatedButtonId != null) {
-                controllerManager.onButtonUp.emit(new ControllerEvent(controllerFamily, ControllerEventType.UP, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
+                controllerManager.onButtonUp.emit(
+                    new ControllerEvent(
+                        controllerFamily, ControllerEventType.UP,
+                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                    )
+                );
             }
         } else if (oldValue < this.threshold && newValue >= this.threshold) {
             // Virtual button 2 pressed
             emulatedButtonId = axisMapping.get(this.index)?.button2;
+
             if (emulatedButtonId != null) {
-                controllerManager.onButtonDown.emit(new ControllerEvent(controllerFamily, ControllerEventType.DOWN, intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]));
+                controllerManager.onButtonDown.emit(
+                    new ControllerEvent(
+                        controllerFamily, ControllerEventType.DOWN,
+                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                    )
+                );
             }
         }
-
     }
 }
 
@@ -147,14 +181,18 @@ class GamepadWrapper {
     private id: string;
     private buttons: GamepadButtonWrapper[];
     private axes: GamepadAxisWrapper[];
+
     constructor(gamepad: Gamepad) {
         this.index = gamepad.index;
         this.id = gamepad.id
         this.buttons = new Array(gamepad.buttons.length);
+
         for (let i = 0; i < this.buttons.length; i++) {
             this.buttons[i] = new GamepadButtonWrapper(i, gamepad.buttons[i]);
         }
+
         this.axes = new Array(gamepad.axes.length);
+
         for (let i = 0; i < this.axes.length; i++) {
             this.axes[i] = new GamepadAxisWrapper(i);
         }
@@ -162,6 +200,7 @@ class GamepadWrapper {
 
     public update(): void {
         const gamepad = navigator.getGamepads()[this.index];
+
         if (gamepad != null) {
             this.buttons.forEach(button => button.setPressed(gamepad.buttons[button.index].pressed));
             this.axes.forEach(axis => axis.setValue(gamepad.axes[axis.index]));
@@ -175,18 +214,23 @@ class GamepadWrapper {
 
 export class GamepadInput {
     private gamepads: Map<string, GamepadWrapper>;
+
     constructor() {
         this.gamepads = new Map();
+
         window.addEventListener("gamepadconnected", (e: any) => {
-            console.debug("Gamepad connected:", e);
+            console.debug("Gamepad connected: ", e);
             const gamepad = (e as GamepadEventInit).gamepad;
+
             if (gamepad != null) {
                 this.gamepads.set(gamepad.id, new GamepadWrapper(gamepad));
             }
         });
+
         window.addEventListener("gamepaddisconnected", (e) => {
-            console.debug("Gamepad disconnected:", e);
+            console.debug("Gamepad disconnected: ", e);
             const gamepad = (e as any as GamepadEventInit).gamepad;
+
             if (gamepad != null) {
                 this.gamepads.delete(gamepad.id);
             }
