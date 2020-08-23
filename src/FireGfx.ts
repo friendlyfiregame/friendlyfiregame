@@ -30,10 +30,11 @@ export class FireGfx {
         this.imageData = this.context.getImageData(0, 0, this.size.width, this.size.height);
         this.data = [];
         this.decayData = [];
+
         this.init();
     }
 
-    private init() {
+    private init(): void {
         this.age = 0;
         this.nextUpdate = -Infinity;
         this.startTime = Date.now();
@@ -80,7 +81,7 @@ export class FireGfx {
         return 0.02 + (0.5 - xrel) * 0.1 + Math.pow(1 - yrel, 8);
     }
 
-    public update(dt: number) {
+    public update(): void {
         const t = Date.now();
         this.age = t - this.startTime;
 
@@ -91,7 +92,7 @@ export class FireGfx {
         }
     }
 
-    private updateStep() {
+    private updateStep(): void {
         const data = this.data;
         let fromRow = data[0];
         let fromX = 0, toCenter = 0, midX = (this.size.width - 1) * 0.5, toCenter1 = 1;
@@ -110,9 +111,11 @@ export class FireGfx {
 
             for (let x = 0; x < this.size.width; x++) {
                 fromX = clamp(x + rnd(-1, 1) * rnd(), 0.3, this.size.width - 1.3);
+
                 if (toCenter) {
                     fromX = toCenter * midX + toCenter1 * fromX;
                 }
+
                 const fromX1 = Math.floor(fromX), fx = fromX - fromX1;
                 const v = fx * fromRow[fromX1 + 1] + (1 - fx) * fromRow[fromX1] - decayRow[x] + rnd(-0.03, 0.02);
                 row[x] = clamp(v, 0, Infinity);
@@ -122,8 +125,8 @@ export class FireGfx {
         // Bottom line always stays mostly the same, only minor variations
         const row = data[this.size.height - 1];
         const t = this.age * 6 / 1000;
-        const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764) * Math.sin(t * 0.5433)
-                * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
+        const skew = 0.5 * orientPow(Math.sin(t) * Math.sin(t * 0.353) * Math.sin(t * 0.764)
+            * Math.sin(t * 0.5433) * Math.sin(t * 1.634) * Math.sin(t * 1.342), 1.5);
         const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);
 
         for (let x = 0; x < this.size.width; x++) {
@@ -133,7 +136,7 @@ export class FireGfx {
         }
     }
 
-    private render() {
+    private render(): void {
         const pixels = this.imageData.data;
         const data = this.data;
         let p = 0, col = [0];
@@ -168,11 +171,11 @@ export class FireGfx {
         return this.returnColor;
     }
 
-    public getImage() {
+    public getImage(): HTMLCanvasElement {
         return this.canvas;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, position: Point = Point.getOrigin()) {
+    public draw(ctx: CanvasRenderingContext2D, position: Point = Point.getOrigin()): void {
         const img = this.getImage();
         ctx.drawImage(img, position.x - img.width / 2, -position.y - img.height);
     }

@@ -29,17 +29,19 @@ export class Sign extends NPC {
     }
 
     private generateConversation (lines: string[]): Conversation {
-        const json: Record<string, string[]> = { "entry": [] }
+        const json: Record<string, string[]> = { "entry": [] };
+
         lines.forEach((line, index) => {
             if (index === lines.length - 1) {
                 line += " @entry !end";
             }
             json.entry.push(line);
-        })
+        });
+
         return new Conversation(json, this);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
@@ -53,9 +55,12 @@ export class Sign extends NPC {
             time: this.scene.gameTime * 1000
         })
 
-        if (this.scene.showBounds) this.drawBounds();
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {}
+    update(): void {}
 }
