@@ -3,7 +3,6 @@ import { DialoguePrompt } from './DialoguePrompt';
 import { Face, FaceModes } from './Face';
 import { Greeting } from './Greeting';
 import { PhysicsEntity } from './PhysicsEntity';
-import { Point } from './Geometry';
 import { sleep } from './util';
 import { SpeechBubble } from './SpeechBubble';
 
@@ -17,9 +16,9 @@ export abstract class NPC extends PhysicsEntity {
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public thinkBubble: SpeechBubble | null = null;
-    public speechBubble = new SpeechBubble(this.scene, new Point(this.position.x, this.position.y));
+    public speechBubble = new SpeechBubble(this.scene, this.position.clone());
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.scene, this.position);
+    public dialoguePrompt = new DialoguePrompt(this.scene, this.position.clone());
     private lastEndedConversation = -Infinity;
     protected met = false;
 
@@ -84,7 +83,7 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     protected updateGreeting(dt: number) {
-        this.greeting?.update(dt);
+        this.greeting?.update();
     }
 
     public registerEndedConversation() {
