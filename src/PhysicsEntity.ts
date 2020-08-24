@@ -95,19 +95,33 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     // TODO: Use Point here
-    private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
+    private checkCollisionBox(position: Point, ignore?: Environment[]): Environment {
         for (let i = -this.size.width / 2; i < this.size.width / 2; i++) {
-            let env = this.checkCollision(new Point(x + i, y), ignore);
-            if (env !== Environment.AIR) return env;
-            env = this.checkCollision(new Point(x + i, y + this.size.height), ignore);
-            if (env !== Environment.AIR) return env;
+            let env = this.checkCollision(new Point(position.x + i, position.y), ignore);
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
+
+            env = this.checkCollision(new Point(position.x + i, position.y + this.size.height), ignore);
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
         }
 
         for (let i = 0; i < this.size.height; i++) {
-            let env = this.checkCollision(new Point(x - this.size.width / 2, y + i), ignore);
-            if (env !== Environment.AIR) return env;
-            env = this.checkCollision(new Point(x + this.size.width / 2, y + i), ignore);
-            if (env !== Environment.AIR) return env;
+            let env = this.checkCollision(new Point(position.x - this.size.width / 2, position.y + i), ignore);
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
+
+            env = this.checkCollision(new Point(position.x + this.size.width / 2, position.y + i), ignore);
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
         }
 
         return Environment.AIR;
@@ -120,8 +134,7 @@ export abstract class PhysicsEntity extends Entity {
             this.position.moveTo(position);
         } else {
             const env = this.checkCollisionBox(
-                position.x, position.y,
-                position.y > this.position.y ? [ Environment.PLATFORM ] : []
+                position, position.y > this.position.y ? [ Environment.PLATFORM ] : []
             );
 
             if (env === Environment.AIR || env === Environment.WATER) {
