@@ -3,6 +3,38 @@ export class Point {
         return new Point(0, 0);
     }
 
+    public static upLeft(): Point {
+        return new Point(-1, -1);
+    }
+
+    public static up(): Point {
+        return new Point(0, -1);
+    }
+
+    public static upRight(): Point {
+        return new Point(1, -1);
+    }
+
+    public static right(): Point {
+        return new Point(1, 0);
+    }
+
+    public static downRight(): Point {
+        return new Point(1, 1);
+    }
+
+    public static down(): Point {
+        return new Point(0, 1);
+    }
+
+    public static downLeft(): Point {
+        return new Point(-1, 1);
+    }
+
+    public static left(): Point {
+        return new Point(-1, 0);
+    }
+
     private _x: number;
     private _y: number;
     private _xRounded: number;

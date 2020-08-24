@@ -3,6 +3,17 @@ import { loadImage } from './graphics.js';
 import { Point, Size } from './Geometry';
 
 export class BitmapFont {
+    private static SHADOW_OFFSETS = [
+        Point.upLeft(),
+        Point.up(),
+        Point.upRight(),
+        Point.right(),
+        Point.downRight(),
+        Point.down(),
+        Point.downLeft(),
+        Point.left()
+    ];
+
     private sourceImage: HTMLImageElement;
     private canvas: HTMLCanvasElement;
     private colorMap: Record<string, number>;
@@ -174,12 +185,10 @@ export class BitmapFont {
         ctx: CanvasRenderingContext2D, text: string, position: Point, textColor: string,
         outlineColor: string, align = 0
     ) {
-        for (let yOffset = position.y - 1; yOffset <= position.y + 1; yOffset++) {
-            for (let xOffset = position.x - 1; xOffset <= position.x + 1; xOffset++) {
-                if (xOffset != position.x || yOffset != position.y) {
-                    this.drawText(ctx, text, new Point(xOffset, yOffset), outlineColor, align);
-                }
-            }
+        for (let offset of BitmapFont.SHADOW_OFFSETS) {
+            const drawingPosition = position.clone().moveBy(offset);
+
+            this.drawText(ctx, text, drawingPosition, outlineColor, align);
         }
 
         this.drawText(ctx, text, position, textColor, align);
