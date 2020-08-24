@@ -17,6 +17,7 @@ keyToIntentMappings.set("ArrowDown", [ControllerIntent.PLAYER_DROP, ControllerIn
 keyToIntentMappings.set("ArrowLeft", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
 keyToIntentMappings.set("ArrowRight", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
 keyToIntentMappings.set("Enter", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
+keyToIntentMappings.set("NumpadEnter", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
 keyToIntentMappings.set("Escape", [ControllerIntent.ABORT, ControllerIntent.PAUSE]);
 keyToIntentMappings.set("ShiftLeft", [ControllerIntent.PLAYER_RUN]);
 keyToIntentMappings.set("ShiftRight", [ControllerIntent.PLAYER_RUN]);
@@ -24,6 +25,8 @@ keyToIntentMappings.set("KeyE", [ControllerIntent.PLAYER_INTERACT, ControllerInt
 keyToIntentMappings.set("KeyF", [ControllerIntent.PLAYER_ACTION]);
 keyToIntentMappings.set("Digit1", [ControllerIntent.PLAYER_DANCE_1]);
 keyToIntentMappings.set("Digit2", [ControllerIntent.PLAYER_DANCE_2]);
+keyToIntentMappings.set("Numpad1", [ControllerIntent.PLAYER_DANCE_1]);
+keyToIntentMappings.set("Numpad2", [ControllerIntent.PLAYER_DANCE_2]);
 
 export class Keyboard {
     public readonly onKeyDown = new Signal<KeyboardEvent>();
