@@ -94,34 +94,39 @@ export abstract class PhysicsEntity extends Entity {
         return this.scene.world.collidesWith(position, [ this ], ignore);
     }
 
-    // TODO: Use Point here
     private checkCollisionBox(position: Point, ignore?: Environment[]): Environment {
+        let checkpoint = position.clone();
+
         for (let i = -this.size.width / 2; i < this.size.width / 2; i++) {
-            let env = this.checkCollision(new Point(position.x + i, position.y), ignore);
+            let env = this.checkCollision(checkpoint.moveXBy(i), ignore);
 
             if (env !== Environment.AIR) {
                 return env;
             }
 
-            env = this.checkCollision(new Point(position.x + i, position.y + this.size.height), ignore);
+            env = this.checkCollision(checkpoint.moveYBy(this.size.height), ignore);
 
             if (env !== Environment.AIR) {
                 return env;
             }
+
+            checkpoint.moveTo(position.clone());
         }
 
         for (let i = 0; i < this.size.height; i++) {
-            let env = this.checkCollision(new Point(position.x - this.size.width / 2, position.y + i), ignore);
+            let env = this.checkCollision(checkpoint.moveBy(-this.size.width / 2, i), ignore);
 
             if (env !== Environment.AIR) {
                 return env;
             }
 
-            env = this.checkCollision(new Point(position.x + this.size.width / 2, position.y + i), ignore);
+            env = this.checkCollision(checkpoint.moveBy(this.size.width / 2, i), ignore);
 
             if (env !== Environment.AIR) {
                 return env;
             }
+
+            checkpoint.moveTo(position.clone());
         }
 
         return Environment.AIR;
