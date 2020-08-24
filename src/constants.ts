@@ -1,12 +1,9 @@
-/**
- * Width of the game canvas in pixels.
- */
-export const GAME_CANVAS_WIDTH = 480;
+import { Size } from './Geometry';
 
 /**
- * Height of the game canvas in pixels.
+ * Size of the game canvas in pixels.
  */
-export const GAME_CANVAS_HEIGHT = 270;
+export const GAME_CANVAS_SIZE = new Size(480, 270);
 
 /**
  * Number if pixels per meter on the world map. Used to convert from pixel coordinates to meters (for size and

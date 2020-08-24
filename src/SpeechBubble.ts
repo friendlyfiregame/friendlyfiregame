@@ -1,7 +1,7 @@
 import { asset } from './Assets';
 import { BitmapFont } from './BitmapFont';
 import { ConversationLine } from './Conversation';
-import { DIALOG_FONT, GAME_CANVAS_WIDTH } from './constants';
+import { DIALOG_FONT, GAME_CANVAS_SIZE } from './constants';
 import { GameScene } from './scenes/GameScene';
 import { Padding, Point, Size } from './Geometry';
 import { RenderingLayer, RenderingType } from './Renderer';
@@ -157,7 +157,11 @@ export class SpeechBubble {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
             const relativeX = posX - visibleRect.position.x;
-            const clipAmount = Math.max((this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (this.longestLine / 2), 0);
+
+            const clipAmount = Math.max(
+                (this.longestLine / 2) + relativeX - GAME_CANVAS_SIZE.width, 0) || Math.min(relativeX - (this.longestLine / 2),
+                0
+            );
 
             if (clipAmount !== 0) {
                 offsetX = clipAmount + (10 * Math.sign(clipAmount));

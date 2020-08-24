@@ -3,15 +3,15 @@ import { Campaign } from './Campaign';
 import { clamp } from './util';
 import { ControllerManager } from './input/ControllerManager';
 import { createCanvas, getRenderingContext } from './graphics';
-import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from './constants';
+import { GAME_CANVAS_SIZE } from './constants';
 import { GamepadInput } from './input/GamepadInput';
 import { Keyboard } from './input/Keyboard';
 import { Scenes } from './Scenes';
 import { Size } from './Geometry';
 
 /**
- * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump
- * too much.
+ * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
+ * updates to jump too much.
  */
 const MAX_DT = 0.1;
 
@@ -35,10 +35,11 @@ export abstract class Game {
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
-    public constructor(public readonly size = new Size(GAME_CANVAS_WIDTH, GAME_CANVAS_HEIGHT)) {
+    public constructor(public readonly size = GAME_CANVAS_SIZE) {
         const canvas = this.canvas = createCanvas(size);
-        // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
-        // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.
+        // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics
+        // on some systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So
+        // it is deactivated here.
         this.ctx = getRenderingContext(canvas, "2d", { alpha: false, desynchronized: false });
         const style = canvas.style;
         style.position = "absolute";
@@ -60,6 +61,7 @@ export abstract class Game {
     private updateMouse(dt: number) {
         if (this.mouseTimeout > 0) {
             this.mouseTimeout = Math.max(0, this.mouseTimeout - dt);
+
             if (this.mouseTimeout === 0) {
                 this.canvas.style.cursor = "none";
             }
@@ -68,7 +70,12 @@ export abstract class Game {
 
     private updateCanvasSize(): void {
         const { size } = this;
-        const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / size.width, window.innerHeight / size.height)));
+
+        const scale = Math.max(
+            1,
+            Math.floor(Math.min(window.innerWidth / size.width, window.innerHeight / size.height))
+        );
+
         const style = this.canvas.style;
         style.width = size.width * scale + "px";
         style.height = size.height * scale + "px";

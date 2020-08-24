@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from './constants';
+import { GAME_CANVAS_SIZE } from './constants';
 import path from 'path';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -13,8 +13,8 @@ app.allowRendererProcessReuse = true;
 const createWindow = () => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: GAME_CANVAS_WIDTH,
-        height: GAME_CANVAS_HEIGHT,
+        width: GAME_CANVAS_SIZE.width,
+        height: GAME_CANVAS_SIZE.height,
         fullscreen: true,
         title: "Friendly Fire",
         icon: path.join(__dirname, "../renderer/assets/appicon/256x256.png")
