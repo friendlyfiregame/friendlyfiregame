@@ -4,9 +4,10 @@ import { entity } from './Entity';
 import { EyeType, Face, FaceModes } from './Face';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 import { Sound } from './Sound';
 import { SoundEmitter } from './SoundEmitter';
 

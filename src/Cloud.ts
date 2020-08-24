@@ -1,15 +1,17 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { CollidableGameObject, GameScene } from './scenes/GameScene';
+import { Direction } from './geometry/Direction';
 import { entity } from './Entity';
 import { Environment } from './World';
 import { GameObjectProperties } from './MapInfo';
 import { ParticleEmitter, valueCurves } from './Particles';
 import { PhysicsEntity } from './PhysicsEntity';
 import { PIXEL_PER_METER } from './constants';
-import { Direction, Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
 import { rnd, rndInt, timedRnd } from './util';
+import { Size } from './geometry/Size';
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {

@@ -1,6 +1,6 @@
 import { Game } from './Game';
 import { Scene, SceneConstructor, SceneProperties } from './Scene';
-import { Size } from './Geometry';
+import { Size } from './geometry/Size';
 
 export class Scenes<T extends Game> {
     public activeScene: Scene<T> | null = null;

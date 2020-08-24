@@ -2,7 +2,7 @@ import { ControllerManager } from './input/ControllerManager';
 import { Game } from './Game';
 import { Keyboard } from './input/Keyboard';
 import { Scenes } from './Scenes';
-import { Size } from './Geometry';
+import { Size } from './geometry/Size';
 import { Transition } from './Transition';
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;

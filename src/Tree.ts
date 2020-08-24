@@ -4,10 +4,11 @@ import { entity } from './Entity';
 import { EyeType, Face } from './Face';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { Seed } from './Seed';
+import { Size } from './geometry/Size';
 import { Wood } from './Wood';
 
 @entity("tree")

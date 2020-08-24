@@ -1,7 +1,8 @@
 import { GameScene } from './scenes/GameScene';
 import { PhysicsEntity } from './PhysicsEntity';
 import { PIXEL_PER_METER } from './constants';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 
 export class Snowball extends PhysicsEntity {
     public constructor(scene: GameScene, position: Point, velocityX: number, velocityY: number) {

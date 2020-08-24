@@ -3,8 +3,10 @@ import { BitmapFont } from './BitmapFont';
 import { ConversationLine } from './Conversation';
 import { DIALOG_FONT, GAME_CANVAS_SIZE } from './constants';
 import { GameScene } from './scenes/GameScene';
-import { Padding, Point, Size } from './Geometry';
+import { Padding } from './geometry/Padding';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Size } from './geometry/Size';
 import { sleep } from './util';
 
 export function roundRect(

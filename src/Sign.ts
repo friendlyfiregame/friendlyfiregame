@@ -5,8 +5,9 @@ import { entity } from './Entity';
 import { GameObjectProperties } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Size } from './geometry/Size';
 
 @entity("sign")
 export class Sign extends NPC {

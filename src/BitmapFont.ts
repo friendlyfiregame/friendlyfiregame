@@ -1,6 +1,7 @@
 import { FontJSON } from '*.font.json';
 import { loadImage } from './graphics.js';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 
 export class BitmapFont {
     private static SHADOW_OFFSETS = [

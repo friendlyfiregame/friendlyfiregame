@@ -3,8 +3,9 @@ import { asset } from './Assets';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { PhysicsEntity } from './PhysicsEntity';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 @entity("skull")
 export class Skull extends PhysicsEntity {

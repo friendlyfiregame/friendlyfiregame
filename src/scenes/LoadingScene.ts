@@ -1,6 +1,6 @@
 import { FriendlyFire } from '../FriendlyFire';
 import { Scene } from '../Scene';
-import { Size } from '../Geometry';
+import { Size } from '../geometry/Size';
 import { TitleScene } from './TitleScene';
 
 export class LoadingScene extends Scene<FriendlyFire> {

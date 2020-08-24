@@ -6,7 +6,8 @@ import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { Greeting } from './Greeting';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 
 @entity("tree")
 export class DummyNPC extends NPC {

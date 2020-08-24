@@ -1,6 +1,6 @@
 import { asset } from './Assets';
 import { BitmapFont } from './BitmapFont';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 import { Signal } from './Signal';
 import { Sound } from './Sound';
 

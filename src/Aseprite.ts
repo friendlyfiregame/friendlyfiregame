@@ -3,7 +3,7 @@ import type {
 } from '*.aseprite.json';
 import { loadImage } from './graphics';
 import { now } from './util';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 
 /**
  * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous [[load]] method to load the

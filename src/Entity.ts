@@ -1,8 +1,9 @@
 import { Animator } from './Animator';
 import { GameObject, GameScene } from './scenes/GameScene';
 import { GameObjectProperties } from './MapInfo';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Size } from './geometry/Size';
 
 export interface EntityDistance {
     source: Entity;

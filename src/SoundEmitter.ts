@@ -2,7 +2,8 @@ import { AmbientSoundId, GameScene } from './scenes/GameScene';
 import { calculateVolume } from './util';
 import { Entity } from './Entity';
 import { GameObjectInfo } from './MapInfo';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 import { Sound } from './Sound';
 
 /**

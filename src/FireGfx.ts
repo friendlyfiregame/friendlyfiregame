@@ -1,7 +1,8 @@
 import { asset } from './Assets';
 import { clamp, orientPow, rnd } from './util';
 import { ColorGradient } from './ColorGradient';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 
 export class FireGfx {
     @asset("gradients/fire.png", { map: (image: HTMLImageElement) => ColorGradient.fromImage(image) })

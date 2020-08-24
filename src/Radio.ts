@@ -2,8 +2,9 @@ import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { entity, Entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 @entity("radio")
 export class Radio extends Entity {

@@ -3,7 +3,7 @@ import { asset } from './Assets';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
 import { RenderingLayer, RenderingType } from './Renderer';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 
 export enum FaceModes {
     BLINK = "blink",

@@ -4,10 +4,11 @@ import { Conversation } from './Conversation';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import powershiba1 from '../assets/dialog/powershiba1.dialog.json';
 import powershiba3 from '../assets/dialog/powershiba3.dialog.json';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 export enum PowerShibaState {
     IN_CLOUDS,

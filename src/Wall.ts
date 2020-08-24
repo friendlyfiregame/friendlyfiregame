@@ -4,8 +4,9 @@ import { CollidableGameObject, GameScene } from './scenes/GameScene';
 import { entity, Entity } from './Entity';
 import { Environment } from './World';
 import { GameObjectProperties } from './MapInfo';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 enum WallState { SOLID, CRUMBLED }
 

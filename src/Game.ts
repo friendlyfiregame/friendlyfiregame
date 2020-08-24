@@ -7,7 +7,7 @@ import { GAME_CANVAS_SIZE } from './constants';
 import { GamepadInput } from './input/GamepadInput';
 import { Keyboard } from './input/Keyboard';
 import { Scenes } from './Scenes';
-import { Size } from './Geometry';
+import { Size } from './geometry/Size';
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want

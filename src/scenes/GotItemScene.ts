@@ -2,10 +2,12 @@ import { Aseprite } from '../Aseprite';
 import { asset } from '../Assets';
 import { BitmapFont } from '../BitmapFont';
 import { DIALOG_FONT } from '../constants';
-import { Direction, Point, Size } from '../Geometry';
+import { Direction } from '../geometry/Direction';
 import { easeInExpo, easeOutExpo } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
+import { Point } from '../geometry/Point';
 import { Scene } from '../Scene';
+import { Size } from '../geometry/Size';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { Sound } from '../Sound';
 

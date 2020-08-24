@@ -4,7 +4,7 @@ import { ControllerEvent } from './input/ControllerEvent';
 import { ControllerManager } from './input/ControllerManager';
 import { ControllerSpriteMap } from './input/ControllerFamily';
 import { GameScene } from './scenes/GameScene';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { Sound } from './Sound';
 import { ValueCurve, valueCurves } from './Particles';

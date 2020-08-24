@@ -3,9 +3,10 @@ import { asset } from './Assets';
 import { entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 @entity("wing")
 export class Wing extends NPC {

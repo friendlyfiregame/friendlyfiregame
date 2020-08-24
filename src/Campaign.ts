@@ -12,7 +12,7 @@ import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import { Game } from './Game';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point } from './Geometry'
+import { Point } from './geometry/Point'
 import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
 import { Quest, QuestA, QuestATrigger, QuestB, QuestKey } from './Quests';
 import seed1 from '../assets/dialog/seed1.dialog.json';

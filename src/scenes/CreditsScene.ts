@@ -8,7 +8,7 @@ import { easeOutCubic } from '../easings';
 import { FadeTransition } from '../transitions/FadeTransition';
 import { FriendlyFire } from '../FriendlyFire';
 import { isDev } from '../util';
-import { Point } from '../Geometry'
+import { Point } from '../geometry/Point'
 import { Scene } from '../Scene';
 import { Sound } from '../Sound';
 import { TitleScene } from './TitleScene';

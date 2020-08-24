@@ -2,7 +2,8 @@ import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { entity, Entity } from './Entity';
 import { GameScene } from './scenes/GameScene';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 import { Sound } from './Sound';
 
 enum PortalAnimationState { WAITING, FADEIN, IDLE, FADEOUT, GONE }

@@ -1,4 +1,4 @@
-import { Size } from '../Geometry';
+import { Size } from '../geometry/Size';
 import { Transition, TransitionOptions } from "../Transition";
 
 export type CurtainDirection = "horizontal" | "vertical";

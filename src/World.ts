@@ -5,8 +5,9 @@ import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScen
 import { GameObjectInfo } from './MapInfo';
 import { getImageData } from './graphics';
 import { ParticleEmitter, Particles, valueCurves } from './Particles';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Size } from './geometry/Size';
 
 export enum Environment {
     AIR = 0,

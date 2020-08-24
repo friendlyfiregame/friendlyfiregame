@@ -8,9 +8,10 @@ import { GameObjectInfo } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
 import { now } from './util';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 import { Sound } from './Sound';
 import { Wood } from './Wood';
 

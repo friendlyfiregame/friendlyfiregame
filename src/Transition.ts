@@ -1,6 +1,6 @@
 import { clamp } from './util';
 import { Easing, linear } from './easings';
-import { Size } from './Geometry';
+import { Size } from './geometry/Size';
 
 export type TransitionType = "in" | "out";
 

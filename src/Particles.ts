@@ -1,6 +1,6 @@
 import { GameScene } from './scenes/GameScene';
 import { GRAVITY } from './constants';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;

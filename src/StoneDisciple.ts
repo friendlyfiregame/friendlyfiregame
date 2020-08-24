@@ -5,8 +5,9 @@ import { entity } from './Entity';
 import { EyeType, Face } from './Face';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 @entity("stonedisciple")
 export class StoneDisciple extends NPC {

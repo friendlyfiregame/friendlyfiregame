@@ -5,9 +5,10 @@ import { ControllerFamily } from '../input/ControllerFamily';
 import { CreditsScene } from './CreditsScene';
 import { DIALOG_FONT } from '../constants';
 import { FriendlyFire } from '../FriendlyFire';
-import { Point, Size } from '../Geometry';
+import { Point } from '../geometry/Point';
 import { Quest } from '../Quests';
 import { Scene } from '../Scene';
+import { Size } from '../geometry/Size';
 import { Sound } from '../Sound';
 
 export class EndScene extends Scene<FriendlyFire> {

@@ -1,4 +1,4 @@
-import { Size } from './Geometry';
+import { Size } from './geometry/Size';
 
 /**
  * Size of the game canvas in pixels.

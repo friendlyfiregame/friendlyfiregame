@@ -2,8 +2,9 @@ import { Bounds } from './Entity';
 import { clamp, isDev, rnd, shiftValue } from './util';
 import { Fire } from './Fire';
 import { GameScene } from './scenes/GameScene';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer, RenderingType } from './Renderer';
+import { Size } from './geometry/Size';
 import { ValueCurve, valueCurves } from './Particles';
 
 export interface camFocus {

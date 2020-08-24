@@ -1,7 +1,7 @@
 import { Aseprite } from './Aseprite';
 import { asset } from './Assets';
 import { GameScene } from './scenes/GameScene';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
 
 export class DialoguePrompt {

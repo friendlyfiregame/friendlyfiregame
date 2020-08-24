@@ -2,7 +2,8 @@ import { Conversation } from './Conversation';
 import { GameObjectProperties } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 
 export class ConversationProxy extends NPC {
     public conversation: Conversation;

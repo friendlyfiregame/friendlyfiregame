@@ -3,8 +3,9 @@ import { asset } from './Assets';
 import { Entity } from './Entity';
 import { GameObjectProperties } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { RenderingLayer } from './Renderer';
+import { Size } from './geometry/Size';
 
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")

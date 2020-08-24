@@ -11,7 +11,7 @@ import { FadeTransition } from '../transitions/FadeTransition';
 import { FriendlyFire } from '../FriendlyFire';
 import { isElectron } from '../util';
 import { MenuAlignment, MenuItem, MenuList } from '../Menu';
-import { Point } from '../Geometry';
+import { Point } from '../geometry/Point';
 import { Scene } from '../Scene';
 import { Sound } from '../Sound';
 import { CharacterSelectionScene } from './CharacterSelectionScene';

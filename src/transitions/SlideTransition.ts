@@ -1,4 +1,5 @@
-import { Direction, Size } from '../Geometry';
+import { Direction } from '../geometry/Direction';
+import { Size } from '../geometry/Size';
 import { Transition, TransitionOptions } from '../Transition';
 
 export interface SlideTransitionOptions extends TransitionOptions {

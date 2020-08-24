@@ -1,4 +1,4 @@
-import { Size } from './Geometry';
+import { Size } from './geometry/Size';
 
 export async function loadImage(source: string | URL): Promise<HTMLImageElement> {
     const img = new Image();

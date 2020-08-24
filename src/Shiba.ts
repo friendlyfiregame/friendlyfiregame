@@ -11,11 +11,12 @@ import { FireState, SHRINK_SIZE } from './Fire';
 import { GameObjectInfo } from './MapInfo';
 import { GameScene } from './scenes/GameScene';
 import { ParticleEmitter, valueCurves } from './Particles';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { QuestKey } from './Quests';
 import { RenderingLayer } from './Renderer';
 import { ScriptableNPC } from './ScriptableNPC';
 import shiba1 from '../assets/dialog/shiba1.dialog.json';
+import { Size } from './geometry/Size';
 import { Sound } from './Sound';
 
 const IDLE_DURATION = [2, 3, 4];

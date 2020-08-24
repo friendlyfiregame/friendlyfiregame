@@ -4,8 +4,9 @@ import { Dance } from './Dance';
 import { Fire } from './Fire';
 import { GameScene } from './scenes/GameScene';
 import { ParticleEmitter } from './Particles';
-import { Point, Size } from './Geometry';
+import { Point } from './geometry/Point';
 import { roundRect } from './SpeechBubble';
+import { Size } from './geometry/Size';
 
 export enum RenderingType {
     PARTICLE_EMITTER,

@@ -3,7 +3,7 @@ import { Entity } from './Entity';
 import { Environment } from './World';
 import { GameObject } from './scenes/GameScene';
 import { Player } from './Player';
-import { Point } from './Geometry'
+import { Point } from './geometry/Point'
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;

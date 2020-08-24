@@ -1,5 +1,7 @@
-import { Direction, Point, Size } from './Geometry';
+import { Direction } from './geometry/Direction';
 import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
+import { Point } from './geometry/Point';
+import { Size } from './geometry/Size';
 
 export enum MapObjectType {
     ENTITY = 'entity',

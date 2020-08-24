@@ -6,12 +6,14 @@ import { ControllerAnimationTags, ControllerSpriteMap } from '../input/Controlle
 import { ControllerEvent } from '../input/ControllerEvent';
 import { ControllerManager } from '../input/ControllerManager';
 import { DIALOG_FONT } from '../constants';
-import { Direction, Point, Size } from '../Geometry';
+import { Direction } from '../geometry/Direction';
 import { easeOutCubic } from '../easings';
 import { FriendlyFire } from '../FriendlyFire';
 import { GameScene } from './GameScene';
 import { MenuItem, MenuList } from '../Menu';
+import { Point } from '../geometry/Point';
 import { Scene } from '../Scene';
+import { Size } from '../geometry/Size';
 import { SlideTransition } from '../transitions/SlideTransition';
 import { TitleScene } from './TitleScene';
 

@@ -1,6 +1,6 @@
 import { Environment } from './World';
 import { NPC } from './NPC';
-import { Point } from './Geometry';
+import { Point } from './geometry/Point';
 
 export abstract class ScriptableNPC extends NPC {
     protected move: 0 | 1 | -1  = 0;
