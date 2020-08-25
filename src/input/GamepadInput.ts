@@ -1,18 +1,21 @@
-import { ControllerEvent } from './ControllerEvent';
-import { ControllerEventType } from './ControllerEventType';
-import { ControllerFamily } from './ControllerFamily';
-import { ControllerIntent } from './ControllerIntent';
-import { ControllerManager } from './ControllerManager';
+import { ControllerManager } from "./ControllerManager";
+import { ControllerIntent } from "./ControllerIntent";
+import { ControllerEventType } from "./ControllerEventType";
+import { ControllerFamily } from "./ControllerFamily";
+import { ControllerEvent } from "./ControllerEvent";
+import { GamepadModel } from './GamepadModel';
 
-// TODO Possibly these constants are for XBox gamepads only…
+/**
+ * Game Pad Buttons
+ */
 enum GamePadButtonId {
-    /** Button A */
+    /** Button A / Cross*/
     BUTTON_1 = 0,
-    /** Button B */
+    /** Button B / Circle*/
     BUTTON_2 = 1,
-    /** Button X */
+    /** Button X / Square*/
     BUTTON_3 = 2,
-    /** Button Y */
+    /** Button Y / Triangle */
     BUTTON_4 = 3,
     SHOULDER_TOP_LEFT = 4,
     SHOULDER_TOP_RIGHT = 5,
@@ -181,10 +184,11 @@ class GamepadWrapper {
     private id: string;
     private buttons: GamepadButtonWrapper[];
     private axes: GamepadAxisWrapper[];
-
+    private gamepadModel: GamepadModel;
     constructor(gamepad: Gamepad) {
         this.index = gamepad.index;
         this.id = gamepad.id
+        this.gamepadModel = GamepadModel.fromString(this.id);
         this.buttons = new Array(gamepad.buttons.length);
 
         for (let i = 0; i < this.buttons.length; i++) {
