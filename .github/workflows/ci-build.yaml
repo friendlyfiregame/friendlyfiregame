@@ -34,8 +34,35 @@ jobs:
     - run: yarn install
     - run: yarn compile
     - run: yarn dist
+    - name: Archive dist folder
+      uses: actions/upload-artifact@v1
+      with:
+        name: webapp-dist
+        path: dist
+
+  deploy_webapp:
+    needs: build_webapp
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Download archived dist folder
+      uses: actions/download-artifact@master
+      with:
+        name: webapp-dist
+        path: dist
+
+    - name: Publish browser game
+      if: github.ref == 'refs/heads/master'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        external_repository: friendlyfiregame/friendlyfiregame.github.io
+        publish_branch: master
+        publish_dir: ./dist
+        force_orphan: true
+        cname: friendlyfiregame.com
 
   build_electron_app:
+    needs: build_webapp
     name: Build Electron Apps
     runs-on: ${{ matrix.os }}
     strategy:
