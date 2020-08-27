@@ -550,7 +550,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    public fadeToBlack(duration: number, direction: FadeDirection): Promise<void> {
+    public async fadeToBlack(duration: number, direction: FadeDirection): Promise<void> {
         return new Promise((resolve) => {
             this.fadeToBlackStartTime = this.gameTime;
             this.fadeToBlackEndTime = this.gameTime + duration;
