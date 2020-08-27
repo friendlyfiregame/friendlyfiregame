@@ -41,6 +41,7 @@ jobs:
         path: dist
 
   deploy_webapp:
+    name: Deploy Webapp
     needs: build_webapp
     runs-on: ubuntu-20.04
     steps:
@@ -54,7 +55,7 @@ jobs:
       if: github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         external_repository: friendlyfiregame/friendlyfiregame.github.io
         publish_branch: master
         publish_dir: ./dist
