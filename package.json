@@ -1,14 +1,24 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "friendlyfire",
-  "version": "1.0.0",
-  "description": "TODO",
-  "author": "TODO",
-  "keywords": [],
+  "version": "2.0.0",
+  "description": "Explore the world of “Friendly Fire” and meet all its inhabitants in a quest to save the world from an unknown destiny.",
+  "author": "The Cat Hive Developers",
+  "maintainers": [
+  ],
+  "keywords": [
+      "game",
+      "2d",
+      "browser",
+      "electron",
+      "platformer",
+      "metroidvania",
+      "pixelart"
+  ],
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iplabs/ludum-dare-46"
+    "url": "https://github.com/friendlyfiregame/friendlyfiregame"
   },
   "main": ".webpack/main",
   "scripts": {
