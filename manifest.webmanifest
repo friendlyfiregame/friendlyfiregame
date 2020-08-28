@@ -80,7 +80,8 @@
     ],
     "related_applications": [
         {
-            "platform": "Web"
+            "platform": "Web",
+            "url": "https://friendlyfiregame.com/"
         },
         {
             "platform": "steam",
