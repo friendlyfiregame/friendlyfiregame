@@ -1,0 +1,23 @@
+# Continuous integration workflows
+/.github/workflows/ @headcr4sh
+
+# Editor configuration and IDE integration
+/.editorconfig @headcr4sh
+/.mailmap @headcr4sh
+/.vscode/ @headcr4sh
+
+# Change log
+/CHANGELOG.md @headcr4sh
+
+# Artwork
+*.aseprite @eduke2k
+*.aseprite.json @eduke2k
+*.png @eduke2k
+
+
+# Dialogues
+/assets/dialog/*.dialog.json @eduke2k
+
+# Music and SFX
+/assets/music/* @headcr4sh @eduke2k @m2u-84 @BastianLangBonn
+
