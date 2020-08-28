@@ -17,7 +17,7 @@ const createWindow = () => {
         height: GAME_CANVAS_HEIGHT,
         fullscreen: true,
         title: "Friendly Fire",
-        icon: path.join(__dirname, "../renderer/assets/appicon/256x256.png")
+        icon: path.join(__dirname, "../renderer/assets/appicon.iconset/icon_256x256.png")
     });
 
     // and load the index.html of the app.
