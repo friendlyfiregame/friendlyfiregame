@@ -20,14 +20,14 @@ module.exports = {
             version: process.env.npm_package_version,
             gitCommitHash: gitRevisionPlugin.commithash()
         }),
-        new CopyWebpackPlugin([
-            { from: "src/demo/**/*.{html,css}" },
+        new CopyWebpackPlugin({ patterns: [
+            //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
             { from: "index.html", transform(content) {
                 return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
                     "src=\"index.js\"");
             }},
             { from: "style.css" }
-        ])
+        ]})
     ]
 }
