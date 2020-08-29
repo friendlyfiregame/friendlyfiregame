@@ -19,22 +19,24 @@ export class LoadingScene extends Scene<FriendlyFire> {
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         if (this.loaded !== this.total) {
-            // TODO: Use Size
-            const progressWidth = 200;
-            const progressHeight = 8;
+            const progressBarSize = new Size(200, 8);
 
             ctx.save();
             ctx.strokeStyle = "#888";
             ctx.fillStyle = "#222";
 
             ctx.fillRect(
-                ((size.width - progressWidth) >> 1), ((size.height - progressHeight) >> 1),
-                Math.round(progressWidth * this.loaded / this.total), progressHeight
+                (size.width - progressBarSize.width) >> 1,
+                (size.height - progressBarSize.height) >> 1,
+                Math.round(progressBarSize.width * this.loaded / this.total),
+                progressBarSize.height
             );
 
             ctx.strokeRect(
-                ((size.width - progressWidth) >> 1) + 0.5, ((size.height - progressHeight) >> 1) + 0.5,
-                progressWidth, progressHeight
+                ((size.width - progressBarSize.width) >> 1) + 0.5,
+                ((size.height - progressBarSize.height) >> 1) + 0.5,
+                progressBarSize.width,
+                progressBarSize.height
             );
 
             ctx.restore();
