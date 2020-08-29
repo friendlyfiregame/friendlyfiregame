@@ -120,7 +120,7 @@ export abstract class PhysicsEntity extends Entity {
                 return env;
             }
 
-            env = this.checkCollision(checkpoint.moveBy(this.size.width / 2, i), ignore);
+            env = this.checkCollision(checkpoint.moveXBy(this.size.width), ignore);
 
             if (env !== Environment.AIR) {
                 return env;
