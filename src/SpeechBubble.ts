@@ -144,22 +144,27 @@ export class SpeechBubble {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
+        if (
+            !this.isVisible
+            || !this.hasContent()
+            || !this.scene.camera.isOnTarget()
+            || !this.scene.isActive()
+        ) {
             return;
         }
 
-        let drawingPosition = this.position.clone();
+        let bubblePosition = this.position.clone();
         let offsetX = 0;
 
         if (this.relativeToScreen) {
-            drawingPosition.moveTo(
+            bubblePosition.moveTo(
                 Math.round(ctx.canvas.width / 2),
                 Math.round(-ctx.canvas.height * 0.63 - this.height)
             );
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
-            const relativeX = drawingPosition.x - visibleRect.position.x;
+            const relativeX = bubblePosition.x - visibleRect.position.x;
 
             const clipAmount = Math.max(
                 (this.longestLine / 2) + relativeX - GAME_CANVAS_SIZE.width, 0)
@@ -172,12 +177,8 @@ export class SpeechBubble {
             }
         }
 
-        drawingPosition.moveXBy(-offsetX);
-
-        const bubbleXPos = drawingPosition.x - Math.round(this.longestLine / 2) - this.padding.left;
-        const bubbleYPos = -drawingPosition.y - this.height;
-        drawingPosition.mirrorVertically().moveBy(
-            -Math.round(this.longestLine / 2) - this.padding.left,
+        bubblePosition.mirrorVertically().moveBy(
+            -Math.round(this.longestLine / 2) - this.padding.left - offsetX,
             -this.height
         );
 
@@ -185,7 +186,7 @@ export class SpeechBubble {
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
-            position: drawingPosition,
+            position: bubblePosition,
             size: new Size(
                 this.longestLine + this.padding.horizontal,
                 this.height
@@ -195,11 +196,11 @@ export class SpeechBubble {
             offsetX
         });
 
-        const textXPos = bubbleXPos + this.padding.left;
+        let messagePosition = bubblePosition.clone().moveBy(this.padding.left, this.padding.top);
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            const textYPos = Math.round(bubbleYPos + this.padding.top + i * this.lineHeight);
+            messagePosition.moveYBy(i * this.lineHeight);
 
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
@@ -207,25 +208,33 @@ export class SpeechBubble {
                 text: this.messageLines[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: new Point(textXPos, textYPos),
+                position: messagePosition.clone(),
                 asset: SpeechBubble.font
             });
         }
 
+        let optionPosition = bubblePosition.clone().moveBy(
+            this.padding.left + SpeechBubble.OPTION_BUBBLE_INDENTATION, this.padding.top
+        );
+
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            const textYPos = Math.round(bubbleYPos + this.padding.top + i * this.lineHeight);
+            optionPosition.moveYBy(i * this.lineHeight);
 
             if (isSelected) {
+                optionPosition.moveXBy(-SpeechBubble.OPTION_BUBBLE_INDENTATION);
+
                 this.scene.renderer.add({
                     type: RenderingType.TEXT,
                     layer: RenderingLayer.UI,
                     text: ConversationLine.OPTION_MARKER,
                     textColor: textColor,
                     relativeToScreen: this.relativeToScreen,
-                    position: new Point(textXPos, textYPos),
+                    position: optionPosition.clone(),
                     asset: SpeechBubble.font
                 });
+
+                optionPosition.moveXBy(SpeechBubble.OPTION_BUBBLE_INDENTATION);
             }
 
             this.scene.renderer.add({
@@ -234,7 +243,7 @@ export class SpeechBubble {
                 text: this.options[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: new Point(textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION, textYPos),
+                position: optionPosition.clone(),
                 asset: SpeechBubble.font
             });
         }
