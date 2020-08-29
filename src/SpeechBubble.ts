@@ -148,6 +148,7 @@ export class SpeechBubble {
             return;
         }
 
+        // TODO: Use Point
         let posX = this.position.x;
         let posY = this.position.y;
         let offsetX = 0;

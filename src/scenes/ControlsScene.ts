@@ -74,8 +74,12 @@ export class ControlsScene extends Scene<FriendlyFire> {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, position: Point, text: string, animationTag: ControllerAnimationTags) {
+    private drawTooltip(
+        ctx: CanvasRenderingContext2D, position: Point, text: string,
+        animationTag: ControllerAnimationTags
+    ): void {
         const gap = 6;
+        // TODO: Use Point
         const textPositionX = position.xRounded + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap;
         const textPositionY = position.y;
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
@@ -85,7 +89,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ControlsScene.font.drawTextWithOutline(ctx, text, new Point(textPositionX, textPositionY), 'white', 'black');
     }
 
-    public draw(ctx: CanvasRenderingContext2D, size: Size) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         ctx.save();
 
         ctx.globalAlpha = 0.8;
@@ -94,6 +98,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
 
         ctx.globalAlpha = 1;
 
+        // TODO: Use Point
         const x = (size.width / 2) - ControlsScene.panelImage.width / 2;
         const y = (size.height / 2) - (ControlsScene.panelImage.height / 2) - 16;
         const textOffsetX = 10;
@@ -115,14 +120,13 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ctx.font = "20px sans-serif";
         ctx.fillStyle = "white";
 
-        // ctx.translate((width / 2) - ControlsScene.panelImage.width, (height / 2) - ControlsScene.panelImage.height);
         const fontColor = "black";
-
         let textOffsetY = startingY;
+
         this.controls.forEach(label => {
             ControlsScene.font.drawText(ctx, label, new Point(textOffsetX, textOffsetY), fontColor);
             textOffsetY += gap;
-        })
+        });
 
         ctx.drawImage(ControlsScene.keyboardKeys, 123, startingY - 2);
         ctx.restore();

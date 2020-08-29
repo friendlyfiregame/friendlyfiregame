@@ -280,7 +280,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.loadApocalypse();
     }
 
-    public cleanup() {
+    public cleanup(): void {
         if (this.fpsInterval != null) {
             clearInterval(this.fpsInterval);
         }
@@ -299,18 +299,19 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public getBackgroundTrack (id: BgmId): BackgroundTrack {
+    public getBackgroundTrack(id: BgmId): BackgroundTrack {
         const found = this.backgroundTracks.find(track => track.id === id);
 
         if (!found) {
             console.error(`Missing background track with ID '${id}'.`);
+
             return this.backgroundTracks[0];
         }
 
         return found;
     }
 
-    public fadeActiveBackgroundTrack (fade: number, inverse = false): void {
+    public fadeActiveBackgroundTrack(fade: number, inverse = false): void {
         this.backgroundTracks.forEach(t => {
             if (t.active) {
                 if (inverse) {
@@ -322,7 +323,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    public setActiveBgmTrack (id: BgmId): void {
+    public setActiveBgmTrack(id: BgmId): void {
         this.backgroundTracks.forEach(t => t.active = false);
         const track = this.backgroundTracks.find(t => t.id === id);
 
@@ -336,7 +337,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public fadeToBackgroundTrack (id: BgmId): void {
+    public fadeToBackgroundTrack(id: BgmId): void {
         const track = this.getBackgroundTrack(id);
         this.muteMusic();
         this.backgroundTracks.forEach(t => t.active = false);
@@ -349,7 +350,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public playBackgroundTrack (id: BgmId): void {
+    public playBackgroundTrack(id: BgmId): void {
         const track = this.getBackgroundTrack(id);
         this.backgroundTracks.forEach(t => t.sound.stop());
         track.active = true;
@@ -395,7 +396,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public gameOver(questKey?: QuestKey) {
+    public gameOver(): void {
         GameScene.bgm1.stop();
         GameScene.bgm2.stop();
         GameScene.swell.setVolume(0.5);
@@ -410,7 +411,7 @@ export class GameScene extends Scene<FriendlyFire> {
         return !this.paused;
     }
 
-    public update(dt: number) {
+    public update(dt: number): void {
         if (this.paused) {
             dt = 0;
         }
@@ -439,7 +440,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, size: Size) {
+    public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         ctx.save();
 
         // Center coordinate system
@@ -509,7 +510,7 @@ export class GameScene extends Scene<FriendlyFire> {
             position: new Point(bounds.position.x, -bounds.position.y),
             lineColor: color,
             size: bounds.size
-        })
+        });
     }
 
     private addAllDebugBoundsToRenderingQueue(): void {
@@ -594,7 +595,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
 
                 // Music
-                GameScene.bgm2.stop()
+                GameScene.bgm2.stop();
             }
         }
     }
@@ -616,7 +617,7 @@ export class GameScene extends Scene<FriendlyFire> {
             alpha: 0.7 * this.apocalypseFactor,
             relativeToScreen: true,
             size: new Size(ctx.canvas.width, ctx.canvas.height)
-        })
+        });
     }
 
     private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black"): void {
@@ -628,7 +629,7 @@ export class GameScene extends Scene<FriendlyFire> {
             alpha,
             relativeToScreen: true,
             size: new Size(ctx.canvas.width, ctx.canvas.height)
-        })
+        });
     }
 
     public loadApocalypse(): void {
@@ -722,7 +723,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.togglePause(true);
     }
 
-    public resume():void {
+    public resume(): void {
         this.resetMusicVolumes()
         this.togglePause(false);
     }

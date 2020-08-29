@@ -82,7 +82,7 @@ export class Camera {
     }
 
     private handleKeyUp(e: KeyboardEvent) {
-        if (e.key === "Tab") {
+        if (e.key === 'Tab') {
             this.zoomingOut = false;
             e.stopPropagation();
             e.preventDefault();
@@ -225,16 +225,18 @@ export class Camera {
     }
 
     /**
-     * Returns true if cam target (player) currently has full attention, or is showing something else for the moment.
+     * Returns true if cam target (player) currently has full attention, or is showing something
+     * else for the moment.
      */
     public isOnTarget(): boolean {
         return this.focuses.length === 0;
     }
 
     /**
-     * Returns strength of camera focus on something other than the player. E.g. when camera focuses on some place to
-     * show the player, the focus force will be between 0 and 1 during interpolation and exactly 1 while fully focusing
-     * on that spot. This e.g. can be used for cinematic bars at top and bottom, scaling their height.
+     * Returns strength of camera focus on something other than the player. E.g. when camera focuses
+     * on some place to show the player, the focus force will be between 0 and 1 during
+     * interpolation and exactly 1 while fully focusing on that spot. This e.g. can be used for
+     * cinematic bars at top and bottom, scaling their height.
      */
     public getFocusForce(): number {
         return this.focuses.reduce((a, b) => Math.max(a, b.force), 0);

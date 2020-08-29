@@ -26,17 +26,22 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, scene: GameScene, position: Point, properties: GameObjectProperties): Entity {
+export function createEntity(
+    name: string, scene: GameScene, position: Point, properties: GameObjectProperties
+): Entity {
     const constructor = entities.get(name);
+
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
+
     return new constructor(scene, position, properties);
 }
 
 export abstract class Entity implements GameObject {
     protected timeAlive = 0;
     protected animator = new Animator(this);
+
     constructor(
         public scene: GameScene,
         public position: Point,
@@ -48,20 +53,24 @@ export abstract class Entity implements GameObject {
 
     public update(dt: number): void {
         this.timeAlive += dt;
-    };
+    }
 
-    public distanceTo(entity: Entity) {
+    public distanceTo(entity: Entity): number {
         const a = this.position.x - entity.position.x;
         const b = this.position.y - entity.position.y;
+
         return Math.sqrt(a * a + b * b);
     }
 
-    public get distanceToPlayer (): number {
+    public get distanceToPlayer(): number {
         return this.distanceTo(this.scene.player);
     }
 
     protected getClosestEntityInRange(range: number): Entity | null {
-        const sortedEntityDistances = this.getEntitiesInRange(range).sort((a, b ) => { return a.distance - b.distance; });
+        const sortedEntityDistances = this.getEntitiesInRange(range).sort(
+            (a, b ) => { return a.distance - b.distance; }
+        );
+
         if (sortedEntityDistances[0]) {
             return sortedEntityDistances[0].target;
         } else {
@@ -70,15 +79,18 @@ export abstract class Entity implements GameObject {
     }
 
     protected getEntitiesInRange(range: number): EntityDistance[] {
-        const entitiesInRange: EntityDistance[] = []
+        const entitiesInRange: EntityDistance[] = [];
+
         this.scene.gameObjects.forEach(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
+
                 if (distance < range) {
                     entitiesInRange.push({source: this, target: gameObject, distance});
                 }
             }
         });
+
         return entitiesInRange;
     }
 
@@ -90,7 +102,9 @@ export abstract class Entity implements GameObject {
                 entitiesInRange.push({source: this, target: gameObject, distance});
             }
         });
-        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; })
+
+        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; });
+
         return entitiesInRange[0].target;
     }
 
@@ -123,7 +137,11 @@ export abstract class Entity implements GameObject {
      */
     protected isCollidingWithTrigger (triggerName: string): boolean {
         const collisions = this.scene.world.getTriggerCollisions(this);
-        if (collisions.length === 0) return false;
+
+        if (collisions.length === 0) {
+            return false;
+        }
+
         return collisions.findIndex(o => o.name === triggerName) > -1;
     }
 

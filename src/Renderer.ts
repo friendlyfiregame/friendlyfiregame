@@ -25,13 +25,13 @@ export enum RenderingLayer {
     FULLSCREEN_FX = 'fullscreenFX',
     UI = 'ui',
     BLACK_BARS = 'blackBars',
-    TILEMAP_FOREGROUND = "tilemapForeground",
-    PLAYER = "player",
-    ENTITIES = "entities",
-    PLATFORMS = "platforms",
-    TILEMAP_MAP = "tilemapMap",
-    TILEMAP_BACKGROUND = "tilemapBackground",
-    PARTICLES = "particles"
+    TILEMAP_FOREGROUND = 'tilemapForeground',
+    PLAYER = 'player',
+    ENTITIES = 'entities',
+    PLATFORMS = 'platforms',
+    TILEMAP_MAP = 'tilemapMap',
+    TILEMAP_BACKGROUND = 'tilemapBackground',
+    PARTICLES = 'particles'
 }
 
 export const LAYER_ORDER: RenderingLayer[] = [
@@ -188,6 +188,7 @@ export class Renderer {
                             }
                             break;
                     }
+
                     ctx.restore();
                 }
             });
@@ -195,7 +196,7 @@ export class Renderer {
         this.queue = [];
     }
 
-    public add(item: RenderingItem) {
+    public add(item: RenderingItem): void {
         this.queue.push(item);
     }
 

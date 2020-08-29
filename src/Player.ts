@@ -342,7 +342,7 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
-    public async handleButtonDown(event: ControllerEvent) {
+    public async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
@@ -630,7 +630,7 @@ export class Player extends PhysicsEntity {
         this.usedJump = true;
     }
 
-    public handleButtonUp(event: ControllerEvent) {
+    public handleButtonUp(event: ControllerEvent): void {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
@@ -649,9 +649,8 @@ export class Player extends PhysicsEntity {
     }
 
     private drawTooltip(
-        text: string,
-        buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
-    ) {
+        text: string, buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
+    ): void {
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         const measure = Player.font.measureText(text);
         const gap = 6;
@@ -664,7 +663,6 @@ export class Player extends PhysicsEntity {
             -this.position.y + offsetY
         );
 
-
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
@@ -674,7 +672,7 @@ export class Player extends PhysicsEntity {
             ),
             asset: this.controllerSpriteMapRecords[controllerSprite],
             animationTag: buttonTag,
-        })
+        });
 
         this.scene.renderer.add({
             type: RenderingType.TEXT,
@@ -684,11 +682,13 @@ export class Player extends PhysicsEntity {
             outlineColor: "black",
             position: textPosition,
             asset: Player.font,
-        })
+        });
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.visible) return;
+    public draw(ctx: CanvasRenderingContext2D): void {
+        if (!this.visible) {
+            return;
+        }
 
         const sprite = Player.playerSprites[this.characterAsset];
         let animation = this.animation;
@@ -709,7 +709,9 @@ export class Player extends PhysicsEntity {
             this.direction
         )
 
-        if (this.scene.showBounds) this.drawBounds();
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
 
         if (
             this.closestNPC
@@ -754,10 +756,15 @@ export class Player extends PhysicsEntity {
     }
 
     private canThrowSeedIntoSoil(): boolean {
-        return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.scene.world.collidesWith(
-                new Point(this.position.x - 30, this.position.y + 2)
-            ) === Environment.SOIL);
+        return (
+            this.carrying instanceof Seed
+            && (
+                this.direction === -1
+                && this.scene.world.collidesWith(
+                    this.position.clone().moveBy(-30, 2)
+                ) === Environment.SOIL
+            )
+        );
     }
 
     public debugCollisions(): void {
@@ -779,11 +786,17 @@ export class Player extends PhysicsEntity {
         const ground = this.getGround();
 
         return (
-            (this.isCollidingWithTrigger('raincloud_sky') &&
-            !this.scene.world.isRaining() &&
-            this.carrying === null &&
-            !this.scene.apocalypse) ||
-            (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
+            (
+                this.isCollidingWithTrigger('raincloud_sky')
+                && !this.scene.world.isRaining()
+                && this.carrying === null
+                && !this.scene.apocalypse
+            ) || (
+                ground instanceof Cloud
+                && this.scene.apocalypse
+                && !ground.isRaining()
+                && ground.canRain()
+            )
         );
     }
 
@@ -797,7 +810,7 @@ export class Player extends PhysicsEntity {
         return boundsFromGameObject(collisions[0]);
     }
 
-    private respawn() {
+    private respawn(): void {
         this.position.moveTo(this.lastGroundPosition.moveYBy(10));
         this.setVelocity(0, 0);
     }
@@ -819,8 +832,9 @@ export class Player extends PhysicsEntity {
         this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         this.speechBubble.update(this.position);
@@ -1115,10 +1129,10 @@ export class Player extends PhysicsEntity {
 
         this.disableParticles = false;
 
-        // Logic from Triggers
+        // Logic from triggers
         if (triggerCollisions.length > 0) {
             triggerCollisions.forEach(trigger => {
-                // Handle Mountain Riddle Logic
+                // Handle MountainRiddle logic
                 if (trigger.name === 'reset_mountain') {
                     this.scene.mountainRiddle.resetRiddle();
                 }
@@ -1176,7 +1190,7 @@ export class Player extends PhysicsEntity {
                         "enable", null, [enableConversationProps.key, enableConversationProps.value]
                     );
                 }
-            })
+            });
         }
     }
 
@@ -1221,10 +1235,6 @@ export class Player extends PhysicsEntity {
 
         Player.bouncingSound.stop();
         Player.bouncingSound.play();
-    }
-
-    public setBeard(beard: boolean) {
-        // this.hasBeard = beard;
     }
 
     /**
@@ -1306,7 +1316,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    protected getGravity() {
+    protected getGravity(): number {
         if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
             return SHORT_JUMP_GRAVITY;
         } else {
@@ -1314,7 +1324,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public carry(object: PhysicsEntity) {
+    public carry(object: PhysicsEntity): void {
         if (!this.carrying) {
             this.size.resizeHeightTo(PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT);
 

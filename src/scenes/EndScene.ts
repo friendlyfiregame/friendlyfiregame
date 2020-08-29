@@ -52,15 +52,29 @@ export class EndScene extends Scene<FriendlyFire> {
     }
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
-        ctx.drawImage(EndScene.logo, size.width / 2 - EndScene.logo.width / 2, size.height / 2 - EndScene.logo.height / 2 - 15);
+        ctx.drawImage(
+            EndScene.logo,
+            size.width / 2 - EndScene.logo.width / 2,
+            size.height / 2 - EndScene.logo.height / 2 - 15
+        );
 
         if (this.time > this.subtitleDelay) {
             const endingLabel = this.ending ? this.ending.title : 'Unknown [E]nding';
             const size = EndScene.font.measureText(endingLabel);
-            EndScene.font.drawText(ctx, endingLabel, new Point(size.width / 2 - size.width / 2, size.height / 2 - EndScene.logo.height / 2 + 20), "red");
+
+            EndScene.font.drawText(
+                ctx,
+                endingLabel,
+                // TODO: Simplify calculation
+                new Point(
+                    size.width / 2 - size.width / 2,
+                    size.height / 2 - EndScene.logo.height / 2 + 20
+                ),
+                "red"
+            );
         }
 
-        // Inform the user, that it's possible to return to the title…
+        // Inform the user, that it's possible to return to the title
         if (this.time > this.inputDelay) {
             const txt = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to continue.`;
             const txtSize = EndScene.font.measureText(txt);

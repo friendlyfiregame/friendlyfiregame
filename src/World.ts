@@ -76,14 +76,13 @@ export class World implements GameObject {
         return World.foreground.height;
     }
 
-    public update() {
+    public update(): void {
         if (this.raining) {
             this.rainEmitter.emit(rndInt(1, 4));
         }
     }
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
-        // TODO: Use Point
         const cameraPosition = this.scene.camera.position.clone();
         const posXMultiplier = 1 - (cameraPosition.x / this.getWidth() * 2);
 
@@ -93,7 +92,7 @@ export class World implements GameObject {
             translation: cameraPosition.clone().mirrorVertically(),
             position: cameraPosition.clone().mirrorHorizontally().moveYBy(-this.getHeight()),
             asset: World.foreground
-        })
+        });
 
         for (const background of World.backgrounds) {
             const backgroundPosition = new Point(
@@ -334,15 +333,15 @@ export class World implements GameObject {
         return groundPosition.y;
     }
 
-    public startRain() {
+    public startRain(): void {
         this.raining = true;
     }
 
-    public stopRain() {
+    public stopRain(): void {
         this.raining = false;
     }
 
-    public isRaining() {
+    public isRaining(): boolean {
         return this.raining;
     }
 }
