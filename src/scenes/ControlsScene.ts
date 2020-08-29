@@ -78,15 +78,17 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ctx: CanvasRenderingContext2D, position: Point, text: string,
         animationTag: ControllerAnimationTags
     ): void {
-        const gap = 6;
-        // TODO: Use Point
-        const textPositionX = position.xRounded + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap;
-        const textPositionY = position.y;
+        const GAP = 6;
+
+        const drawingPosition = position.clone().moveXBy(
+            this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + GAP
+        );
+
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
 
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, position)
+        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, drawingPosition)
 
-        ControlsScene.font.drawTextWithOutline(ctx, text, new Point(textPositionX, textPositionY), 'white', 'black');
+        ControlsScene.font.drawTextWithOutline(ctx, text, drawingPosition.rounded, 'white', 'black');
     }
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {

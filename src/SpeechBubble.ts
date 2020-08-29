@@ -220,19 +220,15 @@ export class SpeechBubble {
             drawingPosition.moveYBy(i * this.lineHeight);
 
             if (isSelected) {
-                drawingPosition.moveXBy(-SpeechBubble.OPTION_BUBBLE_INDENTATION);
-
                 this.scene.renderer.add({
                     type: RenderingType.TEXT,
                     layer: RenderingLayer.UI,
                     text: ConversationLine.OPTION_MARKER,
                     textColor: textColor,
                     relativeToScreen: this.relativeToScreen,
-                    position: drawingPosition.clone(),
+                    position: drawingPosition.clone().moveXBy(-SpeechBubble.OPTION_BUBBLE_INDENTATION),
                     asset: SpeechBubble.font
                 });
-
-                drawingPosition.moveXBy(SpeechBubble.OPTION_BUBBLE_INDENTATION);
             }
 
             this.scene.renderer.add({
