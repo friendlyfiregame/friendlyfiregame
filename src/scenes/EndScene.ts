@@ -59,17 +59,17 @@ export class EndScene extends Scene<FriendlyFire> {
 
         if (this.time > this.subtitleDelay) {
             const endingLabel = this.ending ? this.ending.title : 'Unknown [E]nding';
-            const size = EndScene.font.measureText(endingLabel);
+            const endingLabelSize = EndScene.font.measureText(endingLabel);
 
             EndScene.font.drawText(
                 ctx,
                 endingLabel,
                 // TODO: Simplify calculation
                 new Point(
-                    size.width / 2 - size.width / 2,
+                    size.width / 2 - endingLabelSize.width / 2,
                     size.height / 2 - EndScene.logo.height / 2 + 20
                 ),
-                "red"
+                'red'
             );
         }
 
@@ -85,7 +85,7 @@ export class EndScene extends Scene<FriendlyFire> {
                     size.width / 2 - txtSize.width / 2,
                     size.height - txtSize.height - 15
                 ),
-                "darkgrey"
+                'darkgrey'
             );
         }
     }
