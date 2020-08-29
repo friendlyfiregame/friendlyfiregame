@@ -680,7 +680,7 @@ export class Player extends PhysicsEntity {
             text,
             textColor: "white",
             outlineColor: "black",
-            position: textPosition,
+            position: textPosition.clone(),
             asset: Player.font,
         });
     }

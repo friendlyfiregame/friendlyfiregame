@@ -74,40 +74,50 @@ export class ControlsScene extends Scene<FriendlyFire> {
         }
     }
 
+    // TODO: Should be unified with `drawTooltip(…)` in CharacterSelectionScene
     private drawTooltip(
         ctx: CanvasRenderingContext2D, position: Point, text: string,
         animationTag: ControllerAnimationTags
     ): void {
         const GAP = 6;
-
-        const drawingPosition = position.clone().moveXBy(
-            this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + GAP
-        );
-
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
 
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, drawingPosition)
+        this.controllerSpriteMapRecords[controllerSprite].drawTag(
+            ctx,
+            animationTag,
+            position.clone()
+        );
 
-        ControlsScene.font.drawTextWithOutline(ctx, text, drawingPosition.rounded, 'white', 'black');
+        ControlsScene.font.drawTextWithOutline(
+            ctx,
+            text,
+            position.clone().moveXBy(
+                this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + GAP
+            ),
+            'white',
+            'black'
+        );
     }
 
     public draw(ctx: CanvasRenderingContext2D, size: Size): void {
         ctx.save();
 
         ctx.globalAlpha = 0.8;
-        ctx.fillStyle = "black";
+        ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, size.width, size.height);
 
         ctx.globalAlpha = 1;
 
-        // TODO: Use Point
-        const x = (size.width / 2) - ControlsScene.panelImage.width / 2;
-        const y = (size.height / 2) - (ControlsScene.panelImage.height / 2) - 16;
-        const textOffsetX = 10;
-        const startingY = 35;
-        const gap = 20;
+        const position = new Point(
+            size.width / 2 - ControlsScene.panelImage.width / 2,
+            size.height / 2 - ControlsScene.panelImage.height / 2 - 16
+        );
 
-        ctx.translate(x, y);
+        const TEXT_OFFSET_X = 10;
+        const STARTING_Y = 35;
+        const GAP = 20;
+
+        ctx.translate(position.x, position.y);
         ctx.drawImage(ControlsScene.panelImage, 0, 0);
 
         const controllerSprite = ControllerManager.getInstance().selectedGamepadStyle;
@@ -115,22 +125,33 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ControlsScene.gamepadSelection.drawTag(ctx, controllerSprite, new Point(204, 2));
         ControlsScene.gamepadControls.drawTag(ctx, controllerSprite, new Point(206, 35));
 
-        this.drawTooltip(ctx, new Point(0, ControlsScene.panelImage.height), "Toggle Gamepad Button Prompts", ControllerAnimationTags.ACTION);
-        this.drawTooltip(ctx, new Point(0, ControlsScene.panelImage.height + 16), "Back", ControllerAnimationTags.BACK);
+        this.drawTooltip(
+            ctx,
+            new Point(0, ControlsScene.panelImage.height),
+            'Toggle Gamepad Button Prompts',
+            ControllerAnimationTags.ACTION
+        );
 
+        this.drawTooltip(
+            ctx,
+            new Point(0, ControlsScene.panelImage.height + 16),
+            'Back',
+            ControllerAnimationTags.BACK
+        );
 
-        ctx.font = "20px sans-serif";
-        ctx.fillStyle = "white";
+        ctx.font = '20px sans-serif';
+        ctx.fillStyle = 'white';
 
-        const fontColor = "black";
-        let textOffsetY = startingY;
+        const fontColor = 'black';
+        let drawingPosition = new Point(TEXT_OFFSET_X, STARTING_Y);
 
         this.controls.forEach(label => {
-            ControlsScene.font.drawText(ctx, label, new Point(textOffsetX, textOffsetY), fontColor);
-            textOffsetY += gap;
+            ControlsScene.font.drawText(ctx, label, drawingPosition.clone(), fontColor);
+
+            drawingPosition.moveYBy(GAP);
         });
 
-        ctx.drawImage(ControlsScene.keyboardKeys, 123, startingY - 2);
+        ctx.drawImage(ControlsScene.keyboardKeys, 123, STARTING_Y - 2);
         ctx.restore();
     }
 }

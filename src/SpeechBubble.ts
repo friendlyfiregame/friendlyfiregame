@@ -74,7 +74,7 @@ export class SpeechBubble {
 
     constructor(
         private scene: GameScene,
-        // TODO: Maye clone here instead of when calling
+        // TODO: Maybe clone here instead of when calling
         public anchor: Point,
         private lineHeightFactor = 1,
         private padding = new Padding(3, 7, 4, 7),
