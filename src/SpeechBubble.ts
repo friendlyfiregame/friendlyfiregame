@@ -176,15 +176,16 @@ export class SpeechBubble {
 
         const bubbleXPos = drawingPosition.x - Math.round(this.longestLine / 2) - this.padding.left;
         const bubbleYPos = -drawingPosition.y - this.height;
+        drawingPosition.mirrorVertically().moveBy(
+            -Math.round(this.longestLine / 2) - this.padding.left,
+            -this.height
+        );
 
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
-            position: new Point(
-                bubbleXPos,
-                bubbleYPos
-            ),
+            position: drawingPosition,
             size: new Size(
                 this.longestLine + this.padding.horizontal,
                 this.height
