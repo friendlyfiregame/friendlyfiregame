@@ -94,8 +94,9 @@ export abstract class Entity implements GameObject {
         return entitiesInRange;
     }
 
-    protected getClosestEntity(entities: Entity[]): Entity {
-        const entitiesInRange: EntityDistance[] = []
+    protected getClosestEntity(): Entity {
+        const entitiesInRange: EntityDistance[] = [];
+
         this.scene.gameObjects.forEach(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
@@ -109,16 +110,13 @@ export abstract class Entity implements GameObject {
     }
 
     public getBounds(margin = 0): Bounds {
-        const position = new Point(
-            this.position.x - (this.size.width / 2) - margin,
-            this.position.y - -this.size.height + margin
-        );
-        const size = new Size(
-            this.size.width + (margin * 2),
-            this.size.height + (margin * 2)
-        );
-
-        return { position, size };
+        return {
+            position: this.position.clone().moveBy(
+                -(this.size.width / 2) - margin,
+                this.size.height + margin
+            ),
+            size: this.size.clone().resizeBy(margin * 2, margin * 2)
+        };
     }
 
     protected drawBounds(): void {

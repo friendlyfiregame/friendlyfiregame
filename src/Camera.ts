@@ -92,16 +92,16 @@ export class Camera {
     private handleClick(e: MouseEvent) {
         if (this.zoomingOut) {
             const rect = this.scene.game.canvas.getBoundingClientRect();
-            const cx = e.clientX - rect.x;
-            const cy = e.clientY - rect.y;
-            const px = cx / rect.width;
-            const py = cy / rect.height;
             const worldRect = this.getVisibleRect();
+
+            const offset = new Point(
+                (e.clientX - rect.x) / rect.width * worldRect.size.width,
+                (1 - (e.clientY - rect.y) / rect.height) * worldRect.size.height
+            );
 
             // Teleport player
             this.scene.player.position.moveTo(
-                worldRect.position.x + px * worldRect.size.width,
-                worldRect.position.y + (1 - py) * worldRect.size.height
+                worldRect.position.moveBy(offset)
             );
 
             this.scene.player.setVelocity(0, 0);

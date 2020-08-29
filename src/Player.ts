@@ -15,8 +15,7 @@ import { Dance } from './Dance';
 import {
     DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
     PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
-    PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
-    SHORT_JUMP_GRAVITY
+    PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_SIZE, SHORT_JUMP_GRAVITY
 } from './constants';
 import { Environment } from './World';
 import { GameObjectInfo } from './MapInfo';
@@ -30,7 +29,6 @@ import { QuestATrigger, QuestKey } from './Quests';
 import { RenderingLayer, RenderingType } from './Renderer';
 import { Seed, SeedState } from './Seed';
 import { Sign } from './Sign';
-import { Size } from './geometry/Size';
 import { Snowball } from './Snowball';
 import { Sound } from './Sound';
 import { SpeechBubble } from './SpeechBubble';
@@ -171,7 +169,7 @@ export class Player extends PhysicsEntity {
 
     public speechBubble = new SpeechBubble(
         this.scene,
-        new Point(this.position.x, this.position.y),
+        this.position.clone(),
         undefined,
         undefined,
         undefined,
@@ -188,7 +186,8 @@ export class Player extends PhysicsEntity {
     private disableParticles = false;
 
     public constructor(scene: GameScene, position: Point) {
-        super(scene, position, new Size(PLAYER_WIDTH, PLAYER_HEIGHT));
+        super(scene, position, PLAYER_SIZE.clone());
+
         this.isControllable = false;
         this.setFloating(true);
 
@@ -431,7 +430,7 @@ export class Player extends PhysicsEntity {
             this.carrying.setVelocity(5 * this.direction, 5);
         }
 
-        this.size.resizeHeightTo(PLAYER_HEIGHT);
+        this.size.resizeHeightTo(PLAYER_SIZE.height);
         this.carrying = null;
 
         Player.throwingSound.stop();
@@ -465,7 +464,7 @@ export class Player extends PhysicsEntity {
                 this.scene.gameObjects.push(
                     new Snowball(
                         this.scene,
-                        new Point(this.position.x, this.position.y + this.size.height * 0.75),
+                        this.position.clone().moveYBy(this.size.height * 0.75),
                         20 * this.direction,
                         10
                     )
@@ -493,7 +492,7 @@ export class Player extends PhysicsEntity {
         }
 
         const thinkBubble = this.thinkBubble = new SpeechBubble(
-            this.scene, new Point(this.position.x, this.position.y)
+            this.scene, this.position.clone()
         );
 
         thinkBubble.setMessage(message);
@@ -509,11 +508,13 @@ export class Player extends PhysicsEntity {
 
     public startDance(difficulty: number = 1): void {
         if (!this.dance) {
+            const dancePosition = this.position.clone().moveYBy(-25);
+
             switch (difficulty) {
                 case 1:
                     this.dance = new Dance(
                         this.scene,
-                        new Point(this.position.x, this.position.y - 25),
+                        dancePosition,
                         100,
                         "  1 1 2 2 1 2 1 3",
                         undefined,
@@ -526,7 +527,7 @@ export class Player extends PhysicsEntity {
                 case 2:
                     this.dance = new Dance(
                         this.scene,
-                        new Point(this.position.x, this.position.y - 25),
+                        dancePosition,
                         192,
                         "1   2   1 1 2 2 121 212 121 212 3    ",
                         undefined,
@@ -536,7 +537,7 @@ export class Player extends PhysicsEntity {
                 case 3:
                     this.dance = new Dance(
                         this.scene,
-                        new Point(this.position.x, this.position.y - 25),
+                        dancePosition,
                         192,
                         "112 221 312 123 2121121 111 222 3    ",
                         undefined,
@@ -546,7 +547,7 @@ export class Player extends PhysicsEntity {
                 default:
                     this.dance = new Dance(
                         this.scene,
-                        new Point(this.position.x, this.position.y - 25),
+                        dancePosition,
                         192,
                         "3"
                     );
@@ -655,20 +656,19 @@ export class Player extends PhysicsEntity {
         const measure = Player.font.measureText(text);
         const gap = 6;
         const offsetY = 12;
-        const textPosition = new Point(
+
+        const textPosition = this.position.clone().mirrorVertically().moveBy(
             Math.round(
-                this.position.xRounded
-                - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2)
+                -((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2)
             ),
-            -this.position.y + offsetY
+            offsetY
         );
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
-            position: new Point(
-                textPosition.x - this.controllerSpriteMapRecords[controllerSprite].width - gap,
-                textPosition.y
+            position: textPosition.clone().moveXBy(
+                -this.controllerSpriteMapRecords[controllerSprite].width - gap
             ),
             asset: this.controllerSpriteMapRecords[controllerSprite],
             animationTag: buttonTag,
@@ -704,7 +704,7 @@ export class Player extends PhysicsEntity {
         this.scene.renderer.addAseprite(
             sprite,
             animation,
-            new Point(this.position.x, this.position.y - 1),
+            this.position.clone().moveLeft(),
             RenderingLayer.PLAYER,
             this.direction
         )
@@ -749,7 +749,7 @@ export class Player extends PhysicsEntity {
             && (
                 this.direction === -1
                 && this.scene.world.collidesWith(
-                    new Point(this.position.x - 30, this.position.y - 20)
+                    this.position.clone().moveBy(-30, -20)
                 ) === Environment.WATER
             )
         );
@@ -1020,7 +1020,7 @@ export class Player extends PhysicsEntity {
         const entities = this.scene.world.getEntityCollisions(this, 5);
 
         if (entities.length > 0) {
-            const closestEntity = entities.length > 1 ? this.getClosestEntity(entities) : entities[0];
+            const closestEntity = entities.length > 1 ? this.getClosestEntity() : entities[0];
 
             if (closestEntity instanceof NPC) {
                 this.closestNPC = closestEntity;
@@ -1049,7 +1049,7 @@ export class Player extends PhysicsEntity {
         // Bounce
         if (
             this.scene.world.collidesWith(
-                new Point(this.position.x, this.position.y - 2),
+                this.position.clone().moveYBy(-2),
                 [ this ]
             ) === Environment.BOUNCE
         ) {
@@ -1096,7 +1096,7 @@ export class Player extends PhysicsEntity {
                         if (bossPointer) {
                             this.scene.camera.focusOn(
                                 3,
-                                new Point(bossPointer.position.x, bossPointer.position.y + 60),
+                                bossPointer.position.clone().moveYBy(60),
                                 1,
                                 0,
                                 valueCurves.cos(0.35)
@@ -1252,7 +1252,7 @@ export class Player extends PhysicsEntity {
         while (
             this.position.y > 0
             && world.collidesWith(
-                new Point(this.position.x, this.position.y + this.size.height),
+                this.position.clone().moveYBy(this.size.height),
                 [ this ],
                 [ Environment.PLATFORM, Environment.WATER ]
             )
@@ -1271,10 +1271,7 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityX() > 0) {
             while (
                 world.collidesWithVerticalLine(
-                    new Point(
-                        this.position.x + this.size.width / 2,
-                        this.position.y + this.size.height * 3 / 4
-                    ),
+                    this.position.clone().moveBy(this.size.width / 2, this.size.height * 3 / 4),
                     this.size.height / 2,
                     [ this ],
                     [ Environment.PLATFORM, Environment.WATER ]
@@ -1286,10 +1283,7 @@ export class Player extends PhysicsEntity {
         } else {
             while (
                 world.collidesWithVerticalLine(
-                    new Point(
-                        this.position.x - this.size.width / 2,
-                        this.position.y + this.size.height * 3 / 4
-                    ),
+                    this.position.clone().moveBy(-this.size.width / 2, this.size.height * 3 / 4),
                     this.size.height / 2,
                     [ this ],
                     [ Environment.PLATFORM, Environment.WATER ]
@@ -1326,7 +1320,7 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity): void {
         if (!this.carrying) {
-            this.size.resizeHeightTo(PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT);
+            this.size.resizeHeightTo(PLAYER_SIZE.height + object.carryHeight + PLAYER_CARRY_HEIGHT);
 
             if (
                 object instanceof Seed

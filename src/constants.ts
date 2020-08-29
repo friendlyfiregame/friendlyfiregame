@@ -51,8 +51,7 @@ export const PLAYER_JUMP_TIMING_THRESHOLD = 0.1;
 export const DOUBLE_JUMP_COLORS = [ '#ffffff', '#cccccc', '#aaaaaa' ];
 
 /** Player dimensions */
-export const PLAYER_HEIGHT = 1.60 * PIXEL_PER_METER;
-export const PLAYER_WIDTH = 0.5 * PIXEL_PER_METER;
+export const PLAYER_SIZE = new Size(0.5 * PIXEL_PER_METER, 1.6 * PIXEL_PER_METER);
 export const PLAYER_CARRY_HEIGHT = 4;
 
 /** Fonts */

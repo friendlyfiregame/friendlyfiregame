@@ -68,16 +68,16 @@ export class BitmapFont {
         const result: { [x: string]: number} = {};
         const colors = Object.keys(colorMap);
         const count = colors.length;
-        const w = this.canvas.width = this.sourceImage.width;
-        const h = this.sourceImage.height;
-        this.canvas.height = h * count;
-        this.charHeight = h;
-        const ctx = this.canvas.getContext("2d")!;
+        const size = new Size(this.sourceImage.width, this.sourceImage.height);
+        this.canvas.width = size.width;
+        this.canvas.height = size.height * count;
+        this.charHeight = size.height;
+        const ctx = this.canvas.getContext('2d')!;
 
         // Fill with font
         for (let i = 0; i < count; i++) {
             result[colors[i]] = i;
-            ctx.drawImage(this.sourceImage, 0, h * i);
+            ctx.drawImage(this.sourceImage, 0, size.height * i);
         }
 
         // Colorize
@@ -87,9 +87,9 @@ export class BitmapFont {
             ctx.fillStyle = colorMap[colors[i]];
             ctx.save();
             ctx.beginPath();
-            ctx.rect(0, h * i, w, h);
+            ctx.rect(0, size.height * i, size.width, size.height);
             ctx.clip();
-            ctx.fillRect(0, 0, w, h * count);
+            ctx.fillRect(0, 0, size.width, size.height * count);
             ctx.restore();
         }
 
