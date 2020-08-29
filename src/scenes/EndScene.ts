@@ -1,6 +1,5 @@
 import { asset } from '../Assets';
 import { BitmapFont } from '../BitmapFont';
-import { ControllerEvent } from '../input/ControllerEvent';
 import { ControllerFamily } from '../input/ControllerFamily';
 import { CreditsScene } from './CreditsScene';
 import { DIALOG_FONT } from '../constants';
@@ -35,7 +34,7 @@ export class EndScene extends Scene<FriendlyFire> {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
-    private handleButtonDown(event: ControllerEvent): void {
+    private handleButtonDown(): void {
         if (this.time > this.inputDelay) {
             this.game.scenes.setScene(CreditsScene);
         }
