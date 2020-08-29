@@ -17,7 +17,7 @@ const createWindow = () => {
         height: GAME_CANVAS_SIZE.height,
         fullscreen: true,
         title: "Friendly Fire",
-        icon: path.join(__dirname, "../renderer/assets/appicon/256x256.png")
+        icon: path.join(__dirname, "../renderer/assets/appicon.iconset/icon_256x256.png")
     });
 
     // and load the index.html of the app.
@@ -39,9 +39,9 @@ app.on("ready", createWindow);
 app.on("window-all-closed", () => {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== "darwin") {
-        app.quit();
-    }
+    // For this game though, the situation is a bit different and
+    // we *do want* to quit the app once the last window is gone.
+    app.quit();
 });
 
 app.on("activate", () => {

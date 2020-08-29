@@ -26,8 +26,11 @@ continously compile the project in watch mode.
 
 ### Running the game in a browser
 
-There are three alternatives to run the game in the browser:
+There are four alternatives to run the game in the browser:
 
+* In Visual Studio Code press *Ctrl-Shift-D* and launch the `webpack-dev-server` and
+  one of the available browsed that can be selected by clicking on the drop down menu next to
+  the "launch" button.
 * Run `yarn start` and point your browser to <http://localhost:8000/>. The browser automatically
   reloads the game when changes are detected (You still need to run the compiler in watch mode in VS
   Code or on the CLI to receive code changes).
@@ -39,10 +42,5 @@ There are three alternatives to run the game in the browser:
 
 ### Publishing the game
 
-* Copy your local clone of the project to a new folder like `ludum-dare-46-site`.
-* In the new folder checkout the branch `gh-pages`.
-* In the `master` branch folder run `yarn dist`.
-* Copy the content of the `dist` of the master branch folder to the the `ludum-dare-46-site` branch
-  folder.
-* Commit and push the changes of the `ludum-dare-46-site` branch.
-* The changes should be visible a few moments / minutes later.
+The game will be automatically be published on every push to the `master` branch by
+a Github workflow.

@@ -12,7 +12,7 @@ module.exports = {
             FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
             ProductName: "Friendly Fire"
         },
-        icon: path.resolve(__dirname, "assets", "appicon"),
+        icon: path.resolve(__dirname, "assets", "appicon.iconset"),
         appCopyright: "Copyright (C) 2020 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
         "Klaus Reimer and Jennifer van Veen",
         appVersion: require(path.resolve(__dirname, "package.json")).version
@@ -33,7 +33,7 @@ module.exports = {
       {
         name: "@electron-forge/maker-deb",
         config: {
-          icon: "./assets/appicon/256x256.png",
+          icon: "./assets/appicon.iconset/icon_256x256.png",
           productName: "Friendly Fire",
           genericName: "Friendly Fire",
           categories: [

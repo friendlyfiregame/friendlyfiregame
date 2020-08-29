@@ -1,46 +1,5 @@
 {
     "version": "0.2.0",
-    "compounds": [
-        {
-            "name": "Start development server & Debug in Chrome",
-            "configurations": [
-                "Launch webpack-dev-server",
-                "Launch Chrome against localhost"
-            ],
-            "stopAll": false,
-            "presentation": {
-                "hidden": false,
-                "group": "dev-server-and-debug",
-                "order": 1
-            }
-        },
-        {
-            "name": "Start development server & Debug in Firefox",
-            "configurations": [
-                "Launch webpack-dev-server",
-                "Launch Firefox against localhost"
-            ],
-            "stopAll": false,
-            "presentation": {
-                "hidden": false,
-                "group": "dev-server-and-debug",
-                "order": 2
-            }
-        },
-        {
-            "name": "Start development server & Debug in Microsoft Edge",
-            "configurations": [
-                "Launch webpack-dev-server",
-                "Launch Microsoft Edge against localhost"
-            ],
-            "stopAll": false,
-            "presentation": {
-                "hidden": false,
-                "group": "dev-server-and-debug",
-                "order": 3
-            }
-        }
-    ],
     "inputs": [
         {
             "id": "webServerPort",
@@ -78,21 +37,21 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:${input:webServerPort}?${input:devMode}",
+            "url": "http://localhost:${input:webServerPort}?dev=${input:devMode}",
             "webRoot": "${workspaceFolder}",
         },
         {
             "type": "firefox",
             "request": "launch",
             "name": "Launch Firefox against localhost",
-            "url": "http://localhost:${input:webServerPort}?${input:devMode}",
+            "url": "http://localhost:${input:webServerPort}?dev=${input:devMode}",
             "webRoot": "${workspaceFolder}",
         },
         {
             "type": "edge",
             "request": "launch",
             "name": "Launch Microsoft Edge against localhost",
-            "url": "http://localhost:${input:webServerPort}?${input:devMode}",
+            "url": "http://localhost:${input:webServerPort}?dev=${input:devMode}",
             "webRoot": "${workspaceFolder}",
         }
     ]
