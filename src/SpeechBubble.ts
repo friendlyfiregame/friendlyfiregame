@@ -148,21 +148,22 @@ export class SpeechBubble {
             return;
         }
 
-        // TODO: Use Point
-        let posX = this.position.x;
-        let posY = this.position.y;
+        let drawingPosition = this.position.clone();
         let offsetX = 0;
 
         if (this.relativeToScreen) {
-            posX = Math.round(ctx.canvas.width / 2);
-            posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
+            drawingPosition.moveTo(
+                Math.round(ctx.canvas.width / 2),
+                Math.round(-ctx.canvas.height * 0.63 - this.height)
+            );
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
-            const relativeX = posX - visibleRect.position.x;
+            const relativeX = drawingPosition.x - visibleRect.position.x;
 
             const clipAmount = Math.max(
-                (this.longestLine / 2) + relativeX - GAME_CANVAS_SIZE.width, 0) || Math.min(relativeX - (this.longestLine / 2),
+                (this.longestLine / 2) + relativeX - GAME_CANVAS_SIZE.width, 0)
+                || Math.min(relativeX - (this.longestLine / 2),
                 0
             );
 
@@ -171,10 +172,10 @@ export class SpeechBubble {
             }
         }
 
-        posX -= offsetX;
+        drawingPosition.moveXBy(-offsetX);
 
-        const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.padding.left;
-        const bubbleYPos = -posY - this.height;
+        const bubbleXPos = drawingPosition.x - Math.round(this.longestLine / 2) - this.padding.left;
+        const bubbleYPos = -drawingPosition.y - this.height;
 
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,
@@ -207,7 +208,7 @@ export class SpeechBubble {
                 relativeToScreen: this.relativeToScreen,
                 position: new Point(textXPos, textYPos),
                 asset: SpeechBubble.font
-            })
+            });
         }
 
         for (let i = 0; i < this.options.length; i++) {
@@ -223,7 +224,7 @@ export class SpeechBubble {
                     relativeToScreen: this.relativeToScreen,
                     position: new Point(textXPos, textYPos),
                     asset: SpeechBubble.font
-                })
+                });
             }
 
             this.scene.renderer.add({
@@ -234,7 +235,7 @@ export class SpeechBubble {
                 relativeToScreen: this.relativeToScreen,
                 position: new Point(textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION, textYPos),
                 asset: SpeechBubble.font
-            })
+            });
         }
     }
 
