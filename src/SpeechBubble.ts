@@ -153,18 +153,18 @@ export class SpeechBubble {
             return;
         }
 
-        let bubblePosition = this.position.clone();
+        let drawingPosition = this.position.clone();
         let offsetX = 0;
 
         if (this.relativeToScreen) {
-            bubblePosition.moveTo(
+            drawingPosition.moveTo(
                 Math.round(ctx.canvas.width / 2),
                 Math.round(-ctx.canvas.height * 0.63 - this.height)
             );
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
-            const relativeX = bubblePosition.x - visibleRect.position.x;
+            const relativeX = drawingPosition.x - visibleRect.position.x;
 
             const clipAmount = Math.max(
                 (this.longestLine / 2) + relativeX - GAME_CANVAS_SIZE.width, 0)
@@ -177,7 +177,7 @@ export class SpeechBubble {
             }
         }
 
-        bubblePosition.mirrorVertically().moveBy(
+        drawingPosition.mirrorVertically().moveBy(
             -Math.round(this.longestLine / 2) - this.padding.left - offsetX,
             -this.height
         );
@@ -186,7 +186,7 @@ export class SpeechBubble {
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
-            position: bubblePosition,
+            position: drawingPosition.clone(),
             size: new Size(
                 this.longestLine + this.padding.horizontal,
                 this.height
@@ -196,11 +196,11 @@ export class SpeechBubble {
             offsetX
         });
 
-        let messagePosition = bubblePosition.clone().moveBy(this.padding.left, this.padding.top);
+        drawingPosition.moveBy(this.padding.left, this.padding.top);
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            messagePosition.moveYBy(i * this.lineHeight);
+            drawingPosition.moveYBy(i * this.lineHeight);
 
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
@@ -208,21 +208,19 @@ export class SpeechBubble {
                 text: this.messageLines[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: messagePosition.clone(),
+                position: drawingPosition.clone(),
                 asset: SpeechBubble.font
             });
         }
 
-        let optionPosition = bubblePosition.clone().moveBy(
-            this.padding.left + SpeechBubble.OPTION_BUBBLE_INDENTATION, this.padding.top
-        );
+        drawingPosition.moveXBy(SpeechBubble.OPTION_BUBBLE_INDENTATION);
 
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            optionPosition.moveYBy(i * this.lineHeight);
+            drawingPosition.moveYBy(i * this.lineHeight);
 
             if (isSelected) {
-                optionPosition.moveXBy(-SpeechBubble.OPTION_BUBBLE_INDENTATION);
+                drawingPosition.moveXBy(-SpeechBubble.OPTION_BUBBLE_INDENTATION);
 
                 this.scene.renderer.add({
                     type: RenderingType.TEXT,
@@ -230,11 +228,11 @@ export class SpeechBubble {
                     text: ConversationLine.OPTION_MARKER,
                     textColor: textColor,
                     relativeToScreen: this.relativeToScreen,
-                    position: optionPosition.clone(),
+                    position: drawingPosition.clone(),
                     asset: SpeechBubble.font
                 });
 
-                optionPosition.moveXBy(SpeechBubble.OPTION_BUBBLE_INDENTATION);
+                drawingPosition.moveXBy(SpeechBubble.OPTION_BUBBLE_INDENTATION);
             }
 
             this.scene.renderer.add({
@@ -243,7 +241,7 @@ export class SpeechBubble {
                 text: this.options[i],
                 textColor: textColor,
                 relativeToScreen: this.relativeToScreen,
-                position: optionPosition.clone(),
+                position: drawingPosition.clone(),
                 asset: SpeechBubble.font
             });
         }
