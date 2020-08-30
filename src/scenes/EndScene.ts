@@ -64,10 +64,9 @@ export class EndScene extends Scene<FriendlyFire> {
             EndScene.font.drawText(
                 ctx,
                 endingLabel,
-                // TODO: Simplify calculation
                 new Point(
-                    size.width / 2 - endingLabelSize.width / 2,
-                    size.height / 2 - EndScene.logo.height / 2 + 20
+                    (size.width - endingLabelSize.width) / 2,
+                    (size.height - EndScene.logo.height) / 2 + 20
                 ),
                 'red'
             );
@@ -82,7 +81,7 @@ export class EndScene extends Scene<FriendlyFire> {
                 ctx,
                 txt,
                 new Point(
-                    size.width / 2 - txtSize.width / 2,
+                    (size.width - txtSize.width) / 2,
                     size.height - txtSize.height - 15
                 ),
                 'darkgrey'
