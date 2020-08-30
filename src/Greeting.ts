@@ -15,7 +15,7 @@ export class Greeting implements GameObject {
 
     private speechBubble = new SpeechBubble(
         this.scene,
-        this.npc.position.clone()
+        this.npc.position
     );
 
     constructor(private scene: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {

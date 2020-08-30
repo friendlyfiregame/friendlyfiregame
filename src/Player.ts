@@ -169,7 +169,7 @@ export class Player extends PhysicsEntity {
 
     public speechBubble = new SpeechBubble(
         this.scene,
-        this.position.clone(),
+        this.position,
         undefined,
         undefined,
         undefined,
@@ -492,7 +492,7 @@ export class Player extends PhysicsEntity {
         }
 
         const thinkBubble = this.thinkBubble = new SpeechBubble(
-            this.scene, this.position.clone()
+            this.scene, this.position
         );
 
         thinkBubble.setMessage(message);

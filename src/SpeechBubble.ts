@@ -74,14 +74,13 @@ export class SpeechBubble {
 
     constructor(
         private scene: GameScene,
-        // TODO: Maybe clone here instead of when calling
         public anchor: Point,
         private lineHeightFactor = 1,
         private padding = new Padding(3, 7, 4, 7),
-        private color = "white",
+        private color = 'white',
         private relativeToScreen = false
     ) {
-        this.position = anchor.rounded.moveBy(this.offset);
+        this.position = anchor.clone().rounded.moveBy(this.offset);
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
     }
 
@@ -245,7 +244,7 @@ export class SpeechBubble {
     }
 
     public update(anchor: Point): void {
-        this.position = anchor.rounded.moveBy(this.offset);
+        this.position = anchor.clone().moveBy(this.offset).rounded;
     }
 
     private determineMaxLineLength(message: string[]): number {

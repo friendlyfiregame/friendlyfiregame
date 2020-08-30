@@ -16,7 +16,7 @@ export abstract class NPC extends PhysicsEntity {
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public thinkBubble: SpeechBubble | null = null;
-    public speechBubble = new SpeechBubble(this.scene, this.position.clone());
+    public speechBubble = new SpeechBubble(this.scene, this.position);
     public lookAtPlayer = true;
     public dialoguePrompt = new DialoguePrompt(this.scene, this.position.clone());
     private lastEndedConversation = -Infinity;
@@ -42,7 +42,7 @@ export abstract class NPC extends PhysicsEntity {
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.position.clone());
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.position);
         thinkBubble.setMessage(message);
         thinkBubble.show();
 
