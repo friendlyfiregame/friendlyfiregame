@@ -60,8 +60,14 @@ export class Seed extends NPC {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Seed.sprite, this.getSpriteTag(), new Point(this.position.x, this.position.y - 1), RenderingLayer.ENTITIES, undefined)
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Seed.sprite,
+            this.getSpriteTag(),
+            this.position.clone().moveUp(),
+            RenderingLayer.ENTITIES,
+            undefined
+        );
 
         if (this.scene.showBounds) {
             this.drawBounds();

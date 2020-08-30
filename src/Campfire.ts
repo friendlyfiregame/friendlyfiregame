@@ -19,7 +19,7 @@ export class Campfire extends Entity {
         this.scene.renderer.addAseprite(
             Campfire.sprite,
             "idle",
-            new Point(this.position.x, this.position.y - 2),
+            this.position.clone().moveYBy(-2),
             RenderingLayer.ENTITIES
         );
 

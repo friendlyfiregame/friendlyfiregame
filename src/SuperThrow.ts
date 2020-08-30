@@ -32,7 +32,14 @@ export class SuperThrow extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        this.scene.renderer.addAseprite(SuperThrow.sprite, "idle", new Point(this.position.x, this.position.y - floatOffsetY), RenderingLayer.ENTITIES, this.direction);
+
+        this.scene.renderer.addAseprite(
+            SuperThrow.sprite,
+            "idle",
+            this.position.clone().moveYBy(-floatOffsetY),
+            RenderingLayer.ENTITIES,
+            this.direction
+        );
 
         if (this.scene.showBounds) {
             this.drawBounds();

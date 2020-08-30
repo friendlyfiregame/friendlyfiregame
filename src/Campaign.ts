@@ -12,7 +12,6 @@ import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
 import { Game } from './Game';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
-import { Point } from './geometry/Point'
 import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
 import { Quest, QuestA, QuestATrigger, QuestB, QuestKey } from './Quests';
 import seed1 from '../assets/dialog/seed1.dialog.json';
@@ -183,7 +182,13 @@ export class Campaign {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'forest');
 
                     if (forestPointer) {
-                        this.gameScene.camera.focusOn(8, new Point(forestPointer.position.x, forestPointer.position.y), 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(
+                            8,
+                            forestPointer.position.clone(),
+                            1,
+                            0,
+                            valueCurves.cos(0.35)
+                        );
                     }
 
                     break;
@@ -191,7 +196,13 @@ export class Campaign {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'mountain');
 
                     if (mountainPointer) {
-                        this.gameScene.camera.focusOn(8, new Point(mountainPointer.position.x, mountainPointer.position.y), 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(
+                            8,
+                            mountainPointer.position.clone(),
+                            1,
+                            0,
+                            valueCurves.cos(0.35)
+                        );
                     }
 
                     break;
@@ -199,15 +210,26 @@ export class Campaign {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'river');
 
                     if (riverPointer) {
-                        this.gameScene.camera.focusOn(8, new Point(riverPointer.position.x, riverPointer.position.y), 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(
+                            8,
+                            riverPointer.position.clone(),
+                            1,
+                            0,
+                            valueCurves.cos(0.35)
+                        );
                     }
 
                     break;
                 case "crazyzoom":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
-                    this.gameScene.camera.focusOn(duration, new Point(this.gameScene.fire.position.x, this.gameScene.fire.position.y + 15), 8,
-                        -2 * Math.PI, valueCurves.cubic).then(() => this.gameScene!.beginApocalypse());
+
+                    this.gameScene.camera.focusOn(
+                        duration,
+                        this.gameScene.fire.position.clone().moveYBy(15),
+                        8,
+                        -2 * Math.PI, valueCurves.cubic
+                    ).then(() => this.gameScene!.beginApocalypse());
 
                     this.gameScene.fire.conversation = null;
                     this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
