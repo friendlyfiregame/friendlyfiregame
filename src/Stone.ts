@@ -77,7 +77,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.drawFace(ctx, false);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         this.speechBubble.draw(ctx);

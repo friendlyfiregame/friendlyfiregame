@@ -43,14 +43,14 @@ export class Particles {
         this.emitters.forEach(emitter => emitter.update(dt));
     }
 
-    public addEmittersToRenderingQueue (): void {
+    public addEmittersToRenderingQueue(): void {
         this.emitters.forEach(emitter => {
             this.scene.renderer.add({
                 type: RenderingType.PARTICLE_EMITTER,
                 layer: emitter.renderingLayer,
                 zIndex: emitter.zIndex,
                 emitter
-            })
+            });
         });
     }
 
@@ -135,7 +135,7 @@ export class ParticleEmitter {
         this.position.moveTo(position);
     }
 
-    public clear() {
+    public clear(): void {
         this.particles = [];
     }
 

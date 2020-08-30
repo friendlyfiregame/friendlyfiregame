@@ -78,12 +78,18 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         return this.isRainCloud;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.position, RenderingLayer.PLATFORMS)
+    public draw(): void {
+        this.scene.renderer.addAseprite(
+            Cloud.sprite,
+            "idle",
+            this.position,
+            RenderingLayer.PLATFORMS
+        );
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         if (this.getVelocityY() > 0) {
             if (this.position.y >= Math.max(this.start.y, this.target.y)) {
                 this.position.moveYTo(Math.max(this.start.y, this.target.y));
@@ -95,6 +101,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.setVelocityY(this.velocity);
             }
         }
+
         if (this.getVelocityX() > 0) {
             if (this.position.x >= Math.max(this.target.x, this.start.x)) {
                 this.position.moveXTo(Math.max(this.target.x, this.start.x));
@@ -106,8 +113,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.setVelocityX(this.velocity);
             }
         }
+
         if (this.raining) {
             this.raining -= dt;
+
             if (this.raining <= 0) {
                 this.raining = 0;
             } else {
@@ -119,7 +128,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         }
     }
 
-    collidesWith(position: Point): number {
+    public collidesWith(position: Point): number {
         if (
             position.x >= this.position.x - this.size.width / 2
             && position.x <= this.position.x + this.size.width / 2

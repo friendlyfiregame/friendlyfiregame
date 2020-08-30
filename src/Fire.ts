@@ -114,7 +114,7 @@ export class Fire extends NPC {
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
     }
 
-    public showDialoguePrompt (): boolean {
+    public showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -130,7 +130,7 @@ export class Fire extends NPC {
         );
     }
 
-    public isRendered (): boolean {
+    public isRendered(): boolean {
         return this.isVisible;
     }
 
@@ -146,14 +146,14 @@ export class Fire extends NPC {
         return this.state === FireState.PUT_OUT;
     }
 
-    public setState (state: FireState): void {
+    public setState(state: FireState): void {
         this.state = state;
         if (state === FireState.BEING_PUT_OUT || state === FireState.PUT_OUT) {
             Fire.fireAmbience.stop();
         }
     }
 
-    public drawToCanvas (ctx: CanvasRenderingContext2D): void {
+    public drawToCanvas(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.position.x, -this.position.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
@@ -172,7 +172,7 @@ export class Fire extends NPC {
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         if (this.thinkBubble) {
@@ -186,7 +186,7 @@ export class Fire extends NPC {
         }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         if (this.state === FireState.ANGRY && !this.beingPutOut) {
             this.face?.setMode(FaceModes.ANGRY);
         } else if (this.state === FireState.BEING_PUT_OUT) {
@@ -250,7 +250,7 @@ export class Fire extends NPC {
         this.speechBubble.update(this.position);
     }
 
-    public feed(wood: Wood) {
+    public feed(wood: Wood): void {
         wood.remove();
 
         // Handle end of the world

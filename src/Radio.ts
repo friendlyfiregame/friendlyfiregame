@@ -15,10 +15,13 @@ export class Radio extends Entity {
         super(scene, position, new Size(24, 24), false);
     }
 
-    draw(): void {
-        this.scene.renderer.addAseprite(Radio.sprite, "idle", this.position, RenderingLayer.ENTITIES)
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(): void {
+        this.scene.renderer.addAseprite(Radio.sprite, "idle", this.position, RenderingLayer.ENTITIES);
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
-    update(dt: number): void {}
+    public update(): void {}
 }

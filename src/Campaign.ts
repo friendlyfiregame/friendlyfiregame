@@ -92,11 +92,11 @@ export class Campaign {
         return ending;
     }
 
-    public toggleCharacterAsset (): void {
+    public toggleCharacterAsset(): void {
         this.selectedCharacter = this.selectedCharacter === CharacterAsset.MALE ? CharacterAsset.FEMALE : CharacterAsset.MALE;
     }
 
-    public toggleVoiceAsset (): void {
+    public toggleVoiceAsset(): void {
         this.selectedVoice = this.selectedVoice === VoiceAsset.MALE ? VoiceAsset.FEMALE : VoiceAsset.MALE;
     }
 
@@ -173,7 +173,6 @@ export class Campaign {
                 case "sad":
                     npc?.face?.setMode(FaceModes.SAD);
                     break;
-
                 case "zoomin":
                     this.gameScene.camera.zoom += 1
                     break;
@@ -234,9 +233,6 @@ export class Campaign {
                     Conversation.setGlobal("gotFireQuest", "true");
                     this.runAction("enable", null, ["tree", "tree1"]);
                     break;
-                case "givebeard":
-                    // this.gameScene.player.setBeard(true);
-                    break;
                 case "endgameA":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                     this.getQuest(QuestKey.A).finish();
@@ -275,6 +271,7 @@ export class Campaign {
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {
                         this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_STONE);
                     }
+
                     break;
                 case "pickupstone":
                     this.gameScene.stone.pickUp();
@@ -286,17 +283,20 @@ export class Campaign {
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
                         this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE_WITH_WOOD);
                     }
+
                     break;
                 case "dance":
                     setTimeout(() => {
                         this.gameScene!.player.startDance(+params[0] || 1);
                     }, 500);
+
                     break;
                 case "wakeupchest":
                     this.gameScene.mimic.nextState();
                     break;
                 case "enable":
                     const char = params[0], dialogName = params[1];
+
                     const npcMap: Record<string, NPC> = {
                         "fire": this.gameScene.fire,
                         "stone": this.gameScene.stone,
@@ -310,14 +310,18 @@ export class Campaign {
                         "shiba": this.gameScene.shiba,
                         "powershiba": this.gameScene.powerShiba
                     };
+
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
+
                     if (targetNpc && dialog) {
                         targetNpc.conversation = new Conversation(dialog, targetNpc);
                     }
+
                     break;
                 case "disable":
                     const char1 = params[0];
+
                     const npcMap1: Record<string, NPC> = {
                         "fire": this.gameScene.fire,
                         "stone": this.gameScene.stone,
@@ -331,10 +335,13 @@ export class Campaign {
                         "shiba": this.gameScene.shiba,
                         "powershiba": this.gameScene.powerShiba
                     };
+
                     const targetNpc1 = npcMap1[char1];
+
                     if (targetNpc1) {
                         targetNpc1.conversation = null;
                     }
+
                     break;
             }
         }

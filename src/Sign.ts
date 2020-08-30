@@ -20,7 +20,7 @@ export class Sign extends NPC {
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
     }
 
-    private prepareContent (content?: string ): string[] {
+    private prepareContent(content?: string ): string[] {
         if (!content) {
             return ['The sign is empty.'];
         }
@@ -28,11 +28,11 @@ export class Sign extends NPC {
         return content.split(":::");
     }
 
-    public getInteractionText (): string {
+    public getInteractionText(): string {
         return "Read sign";
     }
 
-    private generateConversation (lines: string[]): Conversation {
+    private generateConversation(lines: string[]): Conversation {
         const json: Record<string, string[]> = { "entry": [] };
 
         lines.forEach((line, index) => {

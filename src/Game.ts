@@ -53,12 +53,12 @@ export abstract class Game {
         window.addEventListener("pointermove", () => this.mouseMoved());
     }
 
-    private mouseMoved() {
+    private mouseMoved(): void {
         this.canvas.style.cursor = "default";
         this.mouseTimeout = MOUSE_TIMEOUT;
     }
 
-    private updateMouse(dt: number) {
+    private updateMouse(dt: number): void {
         if (this.mouseTimeout > 0) {
             this.mouseTimeout = Math.max(0, this.mouseTimeout - dt);
 
@@ -98,7 +98,7 @@ export abstract class Game {
         this.nextFrame();
     }
 
-    private nextFrame() {
+    private nextFrame(): void {
         this.gameLoopId = requestAnimationFrame(this.gameLoopCallback);
     }
 

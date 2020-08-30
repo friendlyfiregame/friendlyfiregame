@@ -66,11 +66,11 @@ export class Camera {
         this.currentBarHeight = 0;
     }
 
-    public setBounds (bounds: Bounds | undefined) {
+    public setBounds(bounds: Bounds | undefined): void {
         this.bounds = bounds;
     }
 
-    private handleKeyDown(e: KeyboardEvent) {
+    private handleKeyDown(e: KeyboardEvent): void {
         if (e.key === "Tab") {
             if (!e.repeat) {
                 this.zoomingOut = true;
@@ -81,7 +81,7 @@ export class Camera {
         }
     }
 
-    private handleKeyUp(e: KeyboardEvent) {
+    private handleKeyUp(e: KeyboardEvent): void {
         if (e.key === 'Tab') {
             this.zoomingOut = false;
             e.stopPropagation();
@@ -89,7 +89,7 @@ export class Camera {
         }
     }
 
-    private handleClick(e: MouseEvent) {
+    private handleClick(e: MouseEvent): void {
         if (this.zoomingOut) {
             const rect = this.scene.game.canvas.getBoundingClientRect();
             const worldRect = this.getVisibleRect();
@@ -130,7 +130,7 @@ export class Camera {
         )
     }
 
-    public setCinematicBar(target: number) {
+    public setCinematicBar(target: number): void {
         this.currentBarTarget = target;
     }
 
@@ -208,7 +208,7 @@ export class Camera {
         this.currentBarTarget = 0;
     }
 
-    private applyApocalypticShake(shakeSource: Fire) {
+    private applyApocalypticShake(shakeSource: Fire): void {
         const dx = this.position.x - shakeSource.position.x;
         const dy = this.position.y - shakeSource.position.y;
         const dis = Math.sqrt(dx * dx + dy * dy);
@@ -311,7 +311,7 @@ export class Camera {
             color: "black",
             height: this.barHeight,
             force
-        })
+        });
     }
 
     public drawBars(ctx: CanvasRenderingContext2D, force = this.getFocusForce()): void {

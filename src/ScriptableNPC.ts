@@ -12,6 +12,7 @@ export abstract class ScriptableNPC extends NPC {
         if (this.pullOutOfGround() !== 0 || this.pullOutOfCeiling() !== 0) {
             this.setVelocityY(0);
         }
+
         if (this.pullOutOfWall() !== 0) {
             this.setVelocityX(0);
         }
@@ -19,6 +20,7 @@ export abstract class ScriptableNPC extends NPC {
 
     private pullOutOfGround(): number {
         let pulled = 0, col = 0;
+
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
@@ -30,6 +32,7 @@ export abstract class ScriptableNPC extends NPC {
                 col = world.collidesWith(this.position);
             }
         }
+
         return pulled;
     }
 
@@ -54,6 +57,7 @@ export abstract class ScriptableNPC extends NPC {
     private pullOutOfWall(): number {
         let pulled = 0;
         const world = this.scene.world;
+
         if (this.getVelocityX() > 0) {
             while (
                 world.collidesWithVerticalLine(
@@ -75,6 +79,7 @@ export abstract class ScriptableNPC extends NPC {
                 pulled++;
             }
         }
+
         return pulled;
     }
 

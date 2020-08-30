@@ -844,7 +844,7 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.playerConversation) {
-            this.playerConversation.update(dt);
+            this.playerConversation.update();
         }
 
         if (this.showHints) {
@@ -1077,7 +1077,7 @@ export class Player extends PhysicsEntity {
             }
 
             this.dance.setPosition(this.position.clone().moveYBy(-16));
-            const done = this.dance.update(dt);
+            const done = this.dance.update();
 
             if (done) {
                 // On cloud -> make it rain

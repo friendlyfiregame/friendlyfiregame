@@ -42,12 +42,15 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         }
     }
 
-    draw(): void {
+    public draw(): void {
         this.scene.renderer.addAseprite(MovingPlatform.sprite, "idle", this.position, RenderingLayer.PLATFORMS);
-        if (this.scene.showBounds) this.drawBounds();
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         if (this.getVelocityY() > 0) {
@@ -83,7 +86,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         }
     }
 
-    collidesWith(position: Point): number {
+    public collidesWith(position: Point): number {
         if (
             position.x >= this.position.x - this.size.width / 2
             && position.x <= this.position.x + this.size.width / 2

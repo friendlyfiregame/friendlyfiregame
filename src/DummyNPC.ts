@@ -40,11 +40,11 @@ export class DummyNPC extends NPC {
         );
 
         ctx.restore();
-        this.drawDialoguePrompt(ctx);
+        this.drawDialoguePrompt();
         this.drawGreeting(ctx);
     }
 
     public update(dt: number): void {
-        this.updateGreeting(dt);
+        this.updateGreeting();
     }
 }

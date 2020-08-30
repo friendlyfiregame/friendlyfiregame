@@ -15,16 +15,20 @@ export class RiddleStone extends Entity {
 
     public constructor(scene: GameScene, position: Point, properties: GameObjectProperties) {
         super(scene, position, new Size(16, 16), false);
+
         this.col = properties.col || 0;
         this.row = properties.row || 0;
     }
 
-    draw(): void {
+    public draw(): void {
         if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
             this.scene.renderer.addAseprite(RiddleStone.sprite, "idle", this.position, RenderingLayer.ENTITIES)
-            if (this.scene.showBounds) this.drawBounds();
+
+            if (this.scene.showBounds) {
+                this.drawBounds();
+            }
         }
     }
 
-    update(dt: number): void {}
+    public update(): void {}
 }

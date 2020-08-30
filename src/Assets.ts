@@ -36,6 +36,7 @@ export function asset(src: string | string[], options: AssetOptions = {}): Prope
 export class Assets {
     private async loadAsset(src: string): Promise<unknown> {
         let asset = assets.get(src);
+
         if (asset == null) {
             if (src.endsWith(".aseprite.json")) {
                 asset = await Aseprite.load("assets/" + src);
@@ -52,25 +53,32 @@ export class Assets {
             } else {
                 throw new Error("Unknown asset format: " + src);
             }
+
             assets.set(src, asset);
         }
+
         return asset;
     }
 
     public async load(onProgress?: (total: number, loaded: number) => void): Promise<void> {
         const total = assetRequests.length;
         let loaded = 0;
+
         if (onProgress) {
             onProgress(total, loaded);
         }
+
         let request;
+
         while ((request = assetRequests.pop()) != null) {
             if (typeof request.src === "string") {
                 request.resolve(await this.loadAsset(request.src));
             } else {
                 request.resolve(await Promise.all(request.src.map(src => this.loadAsset(src))));
             }
+
             loaded++;
+
             if (onProgress) {
                 onProgress(total, loaded);
             }

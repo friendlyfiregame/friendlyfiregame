@@ -30,7 +30,7 @@ export class PowerShiba extends NPC {
         this.conversation = new Conversation(powershiba1, this);
     }
 
-    public nextState (): void {
+    public nextState(): void {
         this.state++;
 
         if (this.state === PowerShibaState.ON_MOUNTAIN) {
@@ -45,7 +45,7 @@ export class PowerShiba extends NPC {
         }
     }
 
-    protected showDialoguePrompt (): boolean {
+    protected showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && !Conversation.getGlobals()["$seedgrown"]) return true;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && Conversation.getGlobals()["$seedgrown"] && !Conversation.getGlobals()["$gotPowerShibaQuest"]) return true;
@@ -61,7 +61,7 @@ export class PowerShiba extends NPC {
         this.think('Oh… I remember…', 3000);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(
@@ -72,7 +72,7 @@ export class PowerShiba extends NPC {
         if (this.scene.showBounds) this.drawBounds();
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         if (this.thinkBubble) {
@@ -82,7 +82,7 @@ export class PowerShiba extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(16));

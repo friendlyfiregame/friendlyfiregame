@@ -33,16 +33,19 @@ export class ShadowPresence extends NPC {
         this.soundEmitter = new SoundEmitter(this.scene, this.position, ShadowPresence.caveAmbience, 0.3, 1);
     }
 
-    protected showDialoguePrompt (): boolean {
-        if (!super.showDialoguePrompt()) return false;
+    protected showDialoguePrompt(): boolean {
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         return (
-            this.isNearPlayer &&
-            this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.TALKED_TO_FIRE) &&
-            !this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.GOT_RUNNING_ABILITY)
+            this.isNearPlayer
+            && this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.TALKED_TO_FIRE)
+            && !this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.GOT_RUNNING_ABILITY)
         );
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         let scale = this.direction < 0 ? new Point(-1, 1) : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
 
@@ -60,22 +63,27 @@ export class ShadowPresence extends NPC {
             time: this.scene.gameTime * 1000
         });
 
-        if (this.scene.showBounds) this.drawBounds();
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+        if (this.scene.showBounds) {
+            this.drawBounds();
         }
+
+        if (this.showDialoguePrompt()) {
+            this.drawDialoguePrompt();
+        }
+
         this.speechBubble.draw(ctx);
     }
 
-    checkPlayerDistance (): void {
+    public checkPlayerDistance(): void {
         this.isNearPlayer = false;
         if (this.distanceTo(this.scene.player) < 60) {
             this.isNearPlayer = true;
         }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         this.checkPlayerDistance();
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(48));
         // TODO: The Y shift (making cloning necessary here should be handled in SpeecBubble class)

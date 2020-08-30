@@ -20,5 +20,5 @@ export class Campfire extends Entity {
         if (this.scene.showBounds) this.drawBounds();
     }
 
-    update(dt: number): void {}
+    public update(): void {}
 }

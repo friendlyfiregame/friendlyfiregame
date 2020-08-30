@@ -36,11 +36,16 @@ export class Seed extends NPC {
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(24, 24));
+
         this.wood = new Wood(scene, position);
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
-        if (!floatingPosition) throw new Error ('Could not find “recover_floating_position” point of interest in game scene.');
+
+        if (!floatingPosition) {
+            throw new Error ('Could not find “recover_floating_position” point of interest in game scene.');
+        }
+
         this.floatingPosition = floatingPosition;
     }
 
@@ -58,10 +63,14 @@ export class Seed extends NPC {
     draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(Seed.sprite, this.getSpriteTag(), new Point(this.position.x, this.position.y - 1), RenderingLayer.ENTITIES, undefined)
 
-        if (this.scene.showBounds) this.drawBounds();
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }
+
         this.speechBubble.draw(ctx);
     }
 
@@ -79,19 +88,23 @@ export class Seed extends NPC {
         }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         if (this.state === SeedState.SWIMMING) {
             const diffX = this.floatingPosition.position.x - this.position.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.position.moveXBy(moveX * dt);
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
+
         if (this.state === SeedState.FREE || this.state === SeedState.SWIMMING) {
             const player = this.scene.player;
+
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
+
             if (
                 !this.isCarried()
                 && this.scene.world.collidesWith(
@@ -150,5 +163,5 @@ export class Seed extends NPC {
         return this.wood;
     }
 
-    startDialog(): void {}
+    public startDialog(): void {}
 }

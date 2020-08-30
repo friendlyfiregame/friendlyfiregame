@@ -192,7 +192,8 @@ export class Renderer {
                     ctx.restore();
                 }
             });
-        })
+        });
+
         this.queue = [];
     }
 

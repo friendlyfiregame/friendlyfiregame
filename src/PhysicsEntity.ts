@@ -21,6 +21,7 @@ export abstract class PhysicsEntity extends Entity {
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
+
         if (floating) {
             this.setVelocity(0, 0);
         }
@@ -42,14 +43,14 @@ export abstract class PhysicsEntity extends Entity {
 
     public accelerateX(x: number): void {
         if (x > 0) {
-            this.velocityX = Math.min(this.maxVelocityX, this.velocityX + x)
+            this.velocityX = Math.min(this.maxVelocityX, this.velocityX + x);
         } else {
-            this.velocityX = Math.max(-this.maxVelocityX, this.velocityX + x)
+            this.velocityX = Math.max(-this.maxVelocityX, this.velocityX + x);
         }
     }
 
     public accelerateY(y: number): void {
-        this.velocityY = Math.min(this.maxVelocityY, this.velocityY + y)
+        this.velocityY = Math.min(this.maxVelocityY, this.velocityY + y);
     }
 
     public decelerate(x: number, y: number): void {
@@ -189,6 +190,7 @@ export abstract class PhysicsEntity extends Entity {
                 this.velocityX = 0;
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
+
                 if (!(this instanceof Player)) {
                     this.velocityX = 0;
                 }
@@ -201,7 +203,7 @@ export abstract class PhysicsEntity extends Entity {
         }
     }
 
-    protected getGravity() {
+    protected getGravity(): number {
         return GRAVITY;
     }
 

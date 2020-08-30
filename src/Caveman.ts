@@ -22,8 +22,9 @@ export class Caveman extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         this.speechBubble.update(this.position);
     }
 }

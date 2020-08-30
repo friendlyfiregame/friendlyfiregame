@@ -133,7 +133,7 @@ export abstract class Entity implements GameObject {
      * Checks wether this entity is currently colliding with the provided named trigger.
      * @param triggerName the trigger name to check against.
      */
-    protected isCollidingWithTrigger (triggerName: string): boolean {
+    protected isCollidingWithTrigger(triggerName: string): boolean {
         const collisions = this.scene.world.getTriggerCollisions(this);
 
         if (collisions.length === 0) {

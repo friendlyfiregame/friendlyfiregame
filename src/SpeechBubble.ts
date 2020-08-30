@@ -84,15 +84,15 @@ export class SpeechBubble {
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
     }
 
-    public show() {
+    public show(): void {
         this.isVisible = true;
     }
 
-    public hide() {
+    public hide(): void {
         this.isVisible = false;
     }
 
-    public hasContent() {
+    public hasContent(): boolean {
         return this.content.length > 0 &&
             (!this.partnersBubble || !this.partnersBubble.isCurrentlyWriting && this.selectedOptionIndex > -1);
     }
@@ -137,7 +137,7 @@ export class SpeechBubble {
         this.longestLine = this.determineMaxLineLength(this.messageLines);
     }
 
-    private updateContent() {
+    private updateContent(): void {
         this.content = this.messageLines.concat(this.options);
         this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.padding.vertical;
     }
