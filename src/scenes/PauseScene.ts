@@ -62,7 +62,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
-    public async handleMenuAction (buttonId: string): Promise<void> {
+    public async handleMenuAction(buttonId: string): Promise<void> {
         switch(buttonId) {
             case MenuItemKey.RESUME:
                 PauseScene.music.stop();

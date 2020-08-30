@@ -28,9 +28,19 @@ export class Chicken extends NPC {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Chicken.sprite, "idle", this.position, RenderingLayer.ENTITIES, this.direction);
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Chicken.sprite,
+            "idle",
+            this.position,
+            RenderingLayer.ENTITIES,
+            this.direction
+        );
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         this.speechBubble.draw(ctx);
     }
 

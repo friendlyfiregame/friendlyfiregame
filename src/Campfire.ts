@@ -15,9 +15,17 @@ export class Campfire extends Entity {
         super(scene, position, new Size(14, 28), false);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Campfire.sprite, "idle", new Point(this.position.x, this.position.y - 2), RenderingLayer.ENTITIES)
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(): void {
+        this.scene.renderer.addAseprite(
+            Campfire.sprite,
+            "idle",
+            new Point(this.position.x, this.position.y - 2),
+            RenderingLayer.ENTITIES
+        );
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
     public update(): void {}

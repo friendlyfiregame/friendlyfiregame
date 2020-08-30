@@ -208,8 +208,9 @@ export class Campaign {
                     const duration = 12;
                     this.gameScene.camera.focusOn(duration, new Point(this.gameScene.fire.position.x, this.gameScene.fire.position.y + 15), 8,
                         -2 * Math.PI, valueCurves.cubic).then(() => this.gameScene!.beginApocalypse());
-                        this.gameScene.fire.conversation = null;
-                        this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
+
+                    this.gameScene.fire.conversation = null;
+                    this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
                     break;
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();

@@ -63,8 +63,10 @@ export class Aseprite {
         return this.frames[0].sourceSize.h;
     }
 
-    private calculateFrameIndex(time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
-            direction: AsepriteDirection = "forward"): number {
+    private calculateFrameIndex(
+        time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
+        direction: AsepriteDirection = "forward"
+    ): number {
         let delta = direction === "reverse" ? -1 : 1;
 
         if (direction === "pingpong") {
@@ -116,9 +118,12 @@ export class Aseprite {
             throw new Error("Frame index not found: " + index);
         }
 
-        ctx.drawImage(this.image, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h,
-            position.xRounded + frame.spriteSourceSize.x, position.yRounded + frame.spriteSourceSize.y,
-            frame.spriteSourceSize.w, frame.spriteSourceSize.h);
+        ctx.drawImage(
+            this.image, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h,
+            position.xRounded + frame.spriteSourceSize.x,
+            position.yRounded + frame.spriteSourceSize.y, frame.spriteSourceSize.w,
+            frame.spriteSourceSize.h
+        );
     }
 
     /**

@@ -75,7 +75,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Powered by unconditional love",
             "Nothing can stop us!"
         ]
-    ]
+    ];
 
     private selectedSubtitle = '';
 
