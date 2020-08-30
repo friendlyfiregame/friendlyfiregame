@@ -176,7 +176,7 @@ export abstract class PhysicsEntity extends Entity {
         // Object dropping down when there is no ground below
         if (!this.floating) {
             const environment = world.collidesWith(
-                this.position.clone().moveLeft(),
+                this.position.clone().moveUp(),
                 [ this ],
                 this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []
             );
