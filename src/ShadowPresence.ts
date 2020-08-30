@@ -86,7 +86,7 @@ export class ShadowPresence extends NPC {
 
         this.checkPlayerDistance();
         this.dialoguePrompt.update(dt, this.position.clone().moveYBy(48));
-        // TODO: The Y shift (making cloning necessary here should be handled in SpeecBubble class)
+        // TODO: The Y shift (making cloning necessary here should be handled in SpeechBubble class)
         this.speechBubble.update(this.position.clone().moveYBy(12));
         this.soundEmitter.update();
     }
