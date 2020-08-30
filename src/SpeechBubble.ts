@@ -200,8 +200,6 @@ export class SpeechBubble {
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
-            drawingPosition.moveYBy(i * this.lineHeight);
-
             this.scene.renderer.add({
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
@@ -211,13 +209,14 @@ export class SpeechBubble {
                 position: drawingPosition.clone(),
                 asset: SpeechBubble.font
             });
+
+            drawingPosition.moveYBy(this.lineHeight);
         }
 
         drawingPosition.moveXBy(SpeechBubble.OPTION_BUBBLE_INDENTATION);
 
         for (let i = 0; i < this.options.length; i++) {
             const isSelected = this.selectedOptionIndex === i;
-            drawingPosition.moveYBy(i * this.lineHeight);
 
             if (isSelected) {
                 this.scene.renderer.add({
@@ -240,6 +239,8 @@ export class SpeechBubble {
                 position: drawingPosition.clone(),
                 asset: SpeechBubble.font
             });
+
+            drawingPosition.moveYBy(this.lineHeight);
         }
     }
 
