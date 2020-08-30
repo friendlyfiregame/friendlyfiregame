@@ -155,7 +155,7 @@ export abstract class PhysicsEntity extends Entity {
         super.update(dt);
 
         const world = this.scene.world;
-        const ground = world.getObjectAt(new Point(this.position.x, this.position.y - 5), [ this ]);
+        const ground = world.getObjectAt(this.position.clone().moveYBy(-5), [ this ]);
 
         if (ground instanceof PhysicsEntity) {
             this.position.moveBy(

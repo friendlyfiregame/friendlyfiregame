@@ -56,10 +56,7 @@ export class Face {
             layer: RenderingLayer.ENTITIES,
             asset: sprite,
             scale: new Point(this.direction, 1),
-            translation: new Point(
-                this.owner.position.x + this.offX,
-                -this.owner.position.y - this.offY
-            ),
+            translation: this.owner.position.clone().mirrorVertically().moveBy(this.offX, -this.offY),
             position: new Point(
                 -sprite.width >> 1,
                 -sprite.height

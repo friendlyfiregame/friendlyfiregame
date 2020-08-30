@@ -205,12 +205,12 @@ export class Renderer {
         sprite: Aseprite, animationTag: string, position: Point, layer: RenderingLayer,
         direction = 1, time?: number
     ): void {
-        const scale = direction < 0 ? new Point(-1, 1) : undefined;
+        const scale = direction < 0 ? Point.downLeft() : undefined;
 
         this.add({
             type: RenderingType.ASEPRITE,
             layer,
-            translation: new Point(position.x, -position.y),
+            translation: position.clone().mirrorVertically(),
             position: new Point(-sprite.width >> 1, -sprite.height),
             scale,
             asset: sprite,

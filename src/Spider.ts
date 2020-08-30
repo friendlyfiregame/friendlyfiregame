@@ -59,7 +59,7 @@ export class Spider extends NPC {
             layer: RenderingLayer.ENTITIES,
             asset: Spider.eyes,
             scale,
-            translation: new Point(this.position.x, -this.position.y),
+            translation: this.position.clone().mirrorVertically(),
             position: new Point(
                 (-Spider.eyes.width >> 1) + totalOffsetX,
                 -Spider.eyes.height + totalOffsetY

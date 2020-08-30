@@ -114,7 +114,7 @@ export class Seed extends NPC {
             if (
                 !this.isCarried()
                 && this.scene.world.collidesWith(
-                    new Point(this.position.x, this.position.y - 8)
+                    this.position.clone().moveYBy(-8)
                 ) === Environment.SOIL
             ) {
                 const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'seedposition');
@@ -138,7 +138,7 @@ export class Seed extends NPC {
                 !this.isCarried()
                 && this.state !== SeedState.SWIMMING
                 && this.scene.world.collidesWith(
-                    new Point(this.position.x, this.position.y - 5)
+                    this.position.clone().moveYBy(-5)
                 ) === Environment.WATER
             ) {
                 this.state = SeedState.SWIMMING;

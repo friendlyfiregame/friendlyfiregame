@@ -46,13 +46,13 @@ export class ShadowPresence extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        let scale = this.direction < 0 ? new Point(-1, 1) : undefined;
+        let scale = this.direction < 0 ? Point.downLeft() : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: new Point(this.position.x, -this.position.y),
+            translation: this.position.clone().mirrorVertically(),
             position: new Point(
                 -ShadowPresence.sprite.width >> 1,
                 -ShadowPresence.sprite.height

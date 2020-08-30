@@ -87,8 +87,13 @@ export class Stone extends NPC implements CollidableGameObject {
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
-            if (this.scene.world.collidesWith(new Point(this.position.x, this.position.y - 5)) === Environment.WATER) {
-                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_STONE_INTO_WATER);
+            if (
+                this.scene.world.collidesWith(this.position.clone().moveYBy(-5)) === Environment.WATER
+            ) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(
+                    QuestATrigger.THROWN_STONE_INTO_WATER
+                );
+
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);

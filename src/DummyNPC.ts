@@ -25,7 +25,7 @@ export class DummyNPC extends NPC {
         DummyNPC.font.drawText(
             ctx,
             'NPC',
-            new Point(this.position.x, -this.position.y - this.size.height - 10),
+            this.position.clone().mirrorVertically().moveYBy(-this.size.height - 10),
             'black',
             0.5
         );

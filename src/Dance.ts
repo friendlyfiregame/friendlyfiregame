@@ -180,7 +180,7 @@ export class Dance {
     }
 
     private loseGame(): void {
-        // Simply reset, for now
+        // Simply reset for now
         this.begin();
     }
 
@@ -295,7 +295,9 @@ export class Dance {
         // Upcoming keys
         ctx.globalAlpha = 1;
         ctx.textAlign = "center";
-        const sweetX = w2 - 16, y1 = -8, y2 = 1;
+        const sweetX = w2 - 16;
+        const y1 = -8;
+        const y2 = 1;
         ctx.fillStyle = "black";
 
         for (let i = Math.floor(this.progress) - 2; i < this.progress + 8; i++) {
@@ -315,7 +317,11 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y1, 9, 9);
                     } else {
-                        Dance.keys.drawTag(ctx, `${controller}-dance1`, new Point(x + Dance.keys.width / -2, y1));
+                        Dance.keys.drawTag(
+                            ctx,
+                            `${controller}-dance1`,
+                            new Point(x + Dance.keys.width / -2, y1)
+                        );
                     }
                 }
 
@@ -326,7 +332,11 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y2, 9, 9);
                     } else {
-                        Dance.keys.drawTag(ctx, `${controller}-dance2`, new Point(x + Dance.keys.width / -2, y2));
+                        Dance.keys.drawTag(
+                            ctx,
+                            `${controller}-dance2`,
+                            new Point(x + Dance.keys.width / -2, y2)
+                        );
                     }
                 }
             }

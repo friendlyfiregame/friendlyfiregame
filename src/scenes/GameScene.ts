@@ -507,7 +507,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.DEBUG,
-            position: new Point(bounds.position.x, -bounds.position.y),
+            position: bounds.position.clone().mirrorVertically(),
             lineColor: color,
             size: bounds.size
         });

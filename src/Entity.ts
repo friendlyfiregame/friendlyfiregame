@@ -123,10 +123,10 @@ export abstract class Entity implements GameObject {
         this.scene.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.DEBUG,
-            position: new Point(this.getBounds().position.x, -this.getBounds().position.y),
-            lineColor: "red",
+            position: this.getBounds().position.clone().mirrorVertically(),
+            lineColor: 'red',
             size: this.getBounds().size
-        })
+        });
     }
 
     /**
