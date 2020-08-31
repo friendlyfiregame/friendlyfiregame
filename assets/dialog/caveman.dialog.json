@@ -3,9 +3,19 @@
         "Holy macaroni, another human! !set $metcaveman",
         "[$ismale] I thought I'd never see another dude anytime soon.",
         "[not $ismale] I thought I'd never see a woman ever again.",
-        "Did you spawn on this side of the river after falling into the water as well?",
-        "►No, I come here regulary. @regulary",
-        "►You spawned here? @spawned"
+        "Did you stone-skip-jump your way across the river as well?",
+        "►[$hasDoubleJump]No, I come here regulary. @regulary",
+        "►[$hasDoubleJump]What's a stone-skip-jump? @skipjump",
+        "►[not $hasDoubleJump]Yes! @stuck"
+    ],
+    "stuck": [
+        "Well, then make yourself comfortable.",
+        "At least I'm not stuck here alone anymore.",
+        "►What? Can't we just exit the cave?",
+        "The platforms on the way up are too high...",
+        "►F...",
+        "Game over, man!",
+        "GAME OVER! !endgameC !end"
     ],
     "visitedEntry": [
         "[$ismale]Hey pal!",
@@ -18,16 +28,19 @@
         "►Yeah, it's a long story.",
         "I couldn't cross the broken bridge after falling down from the sky.",
         "I tried many times but I couldn't jump far enough.",
-        "Since there wasn't anything better to do, I tried to find out more about this world. @bug"
+        "Since there wasn't anything better to do, I found about the skip-jump by accident and ended up on this side of the river. @skipjump"
     ],
-    "spawned": [
-        "Yeah, funny story. !set visited",
-        "I guess you already found out how the water works here.",
-        "After I got stuck at the broken bridge, I tried to find out more about this world. @bug"
+    "skipjump": [
+        "It's a secret jumping technique I mastered. !set visited",
+        "Just at the momemnt of impact, I was able to jump on the water and cross the river this way!",
+        "Just like a stone skips on water when you throw it at the right angle. Hence the name.",
+        "Patent pendeng.",
+        "And now I'm stuck here… @bug"
     ],
     "bug": [
-        "As I was experimenting with the water, one time I wasn't teleported back to the east side of the river.",
-        "I found myself on this side and couldn't get back. The fire up top wasn't very helpful either.",
+        "The fire up top wasn't very helpful.",
+        "And after I entered the cave, I couldn't get back out.",
+        "The platforms are to high for me to jump up.",
         "►The power-up fire? He gave me the ability to fly. @powerup",
         "►Keep going. @strange"
     ],
@@ -42,7 +55,8 @@
         "But that's not all.",
         "There is something very strange going on here.",
         "►What do you mean?",
-        "Don't you see it? The strange shrine in the clouds, spider fairies, the very supspicious fire people?",
+        "Don't you see it? The strange shrine in the clouds and the very supspicious fire people?",
+        "How did we get here in the first place?",
         "It's like a feverish nightmare from which you can't wake up.",
         "I conducted some experiments down here and the results are alarming. @questions"
     ],

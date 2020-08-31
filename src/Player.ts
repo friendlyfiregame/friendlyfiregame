@@ -610,6 +610,8 @@ export class Player extends PhysicsEntity {
     }
 
     private jump(): void {
+        if (this.drowning > 0) return;
+
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
         Player.jumpingSounds[this.voiceAsset].stop();
         Player.jumpingSounds[this.voiceAsset].play();

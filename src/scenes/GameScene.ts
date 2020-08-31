@@ -216,6 +216,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gateObjects = this.mapInfo.getGateObjects();
 
         this.gameTime = 0;
+        this.fadeToBlackEndTime = 0;
+        this.fadeToBlackStartTime = 0;
+        this.fadeToBlackFactor = 0;
         this.apocalypse = false;
         this.fireFuryEndTime = 0;
 

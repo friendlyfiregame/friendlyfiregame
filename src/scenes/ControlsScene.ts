@@ -41,8 +41,8 @@ export class ControlsScene extends Scene<FriendlyFire> {
     private controls: string[] = [
         "Walk",
         "Jump",
-        "Run",
         "Interact",
+        "Run",
         "Throw",
         "Enter doors",
         "Pause"

@@ -460,7 +460,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"↓ A magical journey awaits you beneath the clouds."
+                         "value":"\u2193 A magical journey awaits you beneath the clouds."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -532,7 +532,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"↑ Entrance to mountain hiking path.:::Good jumping skills required."
+                         "value":"\u2191 Entrance to mountain hiking path.:::Good jumping skills required."
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -586,7 +586,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"↑ Mountain trial"
+                         "value":"\u2191 Mountain trial"
                         }],
                  "rotation":0,
                  "type":"entity",
@@ -2402,6 +2402,24 @@
                  "width":0,
                  "x":2029,
                  "y":933
+                }, 
+                {
+                 "height":0,
+                 "id":178,
+                 "name":"sign",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"There is currently no way to save your progress.:::A single run is pretty short so we hope that it isn't too much of a problem.::: Sorry for any resulting inconveniences!"
+                        }],
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":3336,
+                 "y":563
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2410,7 +2428,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":178,
+ "nextobjectid":179,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",

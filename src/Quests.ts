@@ -2,7 +2,8 @@ import { Campaign } from './Campaign';
 
 export enum QuestKey {
     A = 'questA',
-    B = 'questB'
+    B = 'questB',
+    C = 'questC'
 }
 
 export enum QuestATrigger {
@@ -30,6 +31,10 @@ export enum QuestATrigger {
 }
 
 export enum QuestBTrigger {
+    ENDING_TRIGGERED
+}
+
+export enum QuestCTrigger {
     ENDING_TRIGGERED
 }
 
@@ -122,6 +127,20 @@ export class QuestB extends Quest {
             campaign,
             'GOOD [B]OY',
             Object.values(QuestBTrigger).filter((i):i is number => typeof i === 'number')
+        );
+    }
+}
+
+/**
+ * Ending C. Sequence broken and soft locked in cave
+ */
+export class QuestC extends Quest {
+    public constructor (campaign: Campaign) {
+        super(
+            QuestKey.C,
+            campaign,
+            'SOFT LO[C]KED',
+            Object.values(QuestCTrigger).filter((i):i is number => typeof i === 'number')
         );
     }
 }
