@@ -16,6 +16,7 @@ export class Chicken extends NPC {
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(24, 18));
+
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }

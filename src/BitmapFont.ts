@@ -120,7 +120,7 @@ export class BitmapFont {
             this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
             position.xRounded, position.yRounded, this.charWidths[charIndex], this.charHeight
         );
-    };
+    }
 
     public drawText(
         ctx: CanvasRenderingContext2D, text: string, position: Point, color: string, align = 0,

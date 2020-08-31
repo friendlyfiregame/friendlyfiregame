@@ -709,7 +709,7 @@ export class Player extends PhysicsEntity {
             this.position.clone().moveLeft(),
             RenderingLayer.PLAYER,
             this.direction
-        )
+        );
 
         if (this.scene.showBounds) {
             this.drawBounds();

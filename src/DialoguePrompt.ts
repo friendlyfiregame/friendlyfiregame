@@ -23,7 +23,9 @@ export class DialoguePrompt {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(
-            DialoguePrompt.sprite, "idle", this.position.moveYBy(-floatOffsetY),
+            DialoguePrompt.sprite,
+            "idle",
+            this.position.moveYBy(-floatOffsetY),
             RenderingLayer.ENTITIES
         );
     }

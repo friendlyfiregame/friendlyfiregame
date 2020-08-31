@@ -695,7 +695,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 );
 
                 this.gameObjects.push(cloud);
-            })
+            });
 
             // Teleport player and fire to boss spawn position
             this.player.position.moveTo(bossPOI.position.clone().moveXBy(-36));

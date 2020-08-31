@@ -198,7 +198,7 @@ export abstract class PhysicsEntity extends Entity {
                     this.velocityX = 0;
                 }
 
-                this.position.moveTo(this.position.rounded)
+                this.position.moveTo(this.position.rounded);
             } else {
                 // is on ground
                 this.lastGroundPosition = this.position.clone();

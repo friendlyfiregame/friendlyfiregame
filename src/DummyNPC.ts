@@ -16,6 +16,7 @@ export class DummyNPC extends NPC {
 
     public constructor(scene: GameScene, position: Point) {
         super(scene, position, new Size(20, 30));
+
         this.greeting = new Greeting(this.scene, this, dialogData);
     }
 

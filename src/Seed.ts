@@ -163,7 +163,6 @@ export class Seed extends NPC {
         }
 
         this.wood.position.moveTo(this.position.clone().moveYBy(this.size.height / 2));
-
         this.wood.setVelocity(-5, 0);
 
         return this.wood;
