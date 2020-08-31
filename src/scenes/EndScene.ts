@@ -19,11 +19,15 @@ export class EndScene extends Scene<FriendlyFire> {
     @asset("sounds/ending/boom.mp3")
     private static boom: Sound;
 
-    private ending: Quest | undefined = this.game.campaign.quests.find(q => q.isFinished());
+    private ending: Quest | undefined;
     private time = 0;
     private boomPlayed = false;
     private subtitleDelay = 2;
     private inputDelay = 4;
+
+    public setup (): void {
+        this.ending = this.game.campaign.quests.find(q => q.isFinished());
+    }
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);

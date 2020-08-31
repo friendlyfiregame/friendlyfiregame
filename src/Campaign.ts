@@ -13,7 +13,7 @@ import { Game } from './Game';
 import { GameScene } from './scenes/GameScene';
 import { NPC } from './NPC';
 import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
-import { Quest, QuestA, QuestATrigger, QuestB, QuestKey } from './Quests';
+import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC } from './Quests';
 import seed1 from '../assets/dialog/seed1.dialog.json';
 import shadowpresence1 from '../assets/dialog/shadowpresence1.dialog.json';
 import shiba1 from '../assets/dialog/shiba1.dialog.json';
@@ -76,7 +76,8 @@ export class Campaign {
     public states: CampaignState[] = ["start"];
     public readonly quests = [
         new QuestA(this),
-        new QuestB(this)
+        new QuestB(this),
+        new QuestC(this)
     ];
     public gameScene?: GameScene | undefined;
 
@@ -247,6 +248,11 @@ export class Campaign {
                     this.gameScene.fire.conversation = null;
                     this.gameScene!.gameOver();
                     break;
+                case "endgameC":
+                    this.getQuest(QuestKey.C).finish();
+                    this.gameScene.caveman.conversation = null;
+                    this.gameScene!.gameOver();
+                    break;
                 case "game":
                     this.addState(params[0] as any);
                     break;
@@ -254,6 +260,7 @@ export class Campaign {
                     this.gameScene.player.enableRunning();
                     break;
                 case "doublejump":
+                    Conversation.setGlobal("hasDoubleJump", "true");
                     this.gameScene.player.enableDoubleJump();
                     break;
                 case "multijump":
