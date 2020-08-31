@@ -29,7 +29,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public state: StoneState = StoneState.DEFAULT;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 26, 50);
 
         this.direction = -1;
@@ -61,7 +61,11 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(
-            Stone.sprite, "idle", this.x, this.y - 1, RenderingLayer.ENTITIES, this.direction
+            Stone.sprite,
+            "idle",
+            this.x, this.y - 1,
+            RenderingLayer.ENTITIES,
+            this.direction
         );
 
         if (this.scene.showBounds) {
@@ -71,7 +75,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.drawFace(ctx, false);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         this.speechBubble.draw(ctx);
@@ -81,8 +85,13 @@ export class Stone extends NPC implements CollidableGameObject {
         super.update(dt);
 
         if (this.state === StoneState.DEFAULT) {
-            if (this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
-                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_STONE_INTO_WATER);
+            if (
+                this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+            ) {
+                this.scene.game.campaign.getQuest(QuestKey.A).trigger(
+                    QuestATrigger.THROWN_STONE_INTO_WATER
+                );
+
                 this.state = StoneState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
@@ -107,14 +116,19 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = -1;
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
+
         this.dialoguePrompt.update(dt, this.x, this.y + 48);
         this.speechBubble.update(this.x, this.y);
     }
 
-    collidesWith(x: number, y: number): number {
+    public collidesWith(x: number, y: number): number {
         if (this.state === StoneState.FLOATING || this.state === StoneState.SWIMMING) {
-            if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
-                    && y >= this.y && y <= this.y + this.height) {
+            if (
+                x >= this.x - this.width / 2
+                && x <= this.x + this.width / 2
+                && y >= this.y
+                && y <= this.y + this.height
+            ) {
                 return Environment.SOLID;
             }
         }

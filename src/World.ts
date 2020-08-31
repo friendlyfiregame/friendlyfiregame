@@ -74,7 +74,7 @@ export class World implements GameObject {
         return World.foreground.height;
     }
 
-    public update() {
+    public update(): void {
         if (this.raining) {
             this.rainEmitter.emit(rndInt(1, 4));
         }
@@ -91,7 +91,7 @@ export class World implements GameObject {
             translation: { x: camX, y: -camY },
             position: { x: -camX, y: -this.getHeight() + camY },
             asset: World.foreground
-        })
+        });
 
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
@@ -150,6 +150,7 @@ export class World implements GameObject {
         if (index < 0 || index >= World.collisionMap.length) {
             return 0;
         }
+
         const environment = this.getEnvironment(x, y);
 
         if (
@@ -299,7 +300,9 @@ export class World implements GameObject {
         x: number, y: number, height: number, ignoreObjects?: GameObject[], ignore?: Environment[]
     ): number {
         for (let i = 0; i < height; i++) {
-            const collision = this.collidesWith(x, y - i, ignoreObjects, ignore);
+            const collision = this.collidesWith(
+                x, y - i, ignoreObjects, ignore
+            );
 
             if (collision) {
                 return collision;
@@ -319,22 +322,24 @@ export class World implements GameObject {
     public getGround(
         x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]
     ): number {
-        while (y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)) {
+        while (
+            y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)
+        ) {
             y--;
         }
 
         return y;
     }
 
-    public startRain() {
+    public startRain(): void {
         this.raining = true;
     }
 
-    public stopRain() {
+    public stopRain(): void {
         this.raining = false;
     }
 
-    public isRaining() {
+    public isRaining(): boolean {
         return this.raining;
     }
 }

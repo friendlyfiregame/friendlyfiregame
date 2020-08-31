@@ -91,7 +91,7 @@ export class Dance {
         return this.progress - this.lastSuccess;
     }
 
-    private begin() {
+    private begin(): void {
         this.openTime = this.scene.gameTime;
         this.startTime = this.openTime + this.warmupBeats / this.bpm * 60;
         this.currentKey = "";
@@ -108,13 +108,13 @@ export class Dance {
         Dance.treedance_music.setVolume(0);
     }
 
-    public setPosition(x: number, y: number) {
+    public setPosition(x: number, y: number): void {
         this.x = x;
         this.y = y;
     }
 
     // Called by parent
-    public handleButtonDown(e: ControllerEvent) {
+    public handleButtonDown(e: ControllerEvent): void {
         if (!e.repeat && this.hasStarted()) {
             const key = e.isPlayerDance1 ? "1" : "2";
             if (this.allKeys.indexOf(key) >= 0) {
@@ -139,7 +139,7 @@ export class Dance {
         }
     }
 
-    private keySuccess(key: string, index = this.currentIndex) {
+    private keySuccess(key: string, index = this.currentIndex): void {
         for (let char of key) {
             if (index == this.currentIndex) {
                 this.currentKey = this.currentKey.replace(char, "");
@@ -153,14 +153,14 @@ export class Dance {
         }
     }
 
-    private keyFailure(key: string) {
+    private keyFailure(key: string): void {
         if (!this.currentKey.includes(key)) {
             this.registerMistake();
             Dance.failSound.play();
         }
     }
 
-    private keyMissed(key: string) {
+    private keyMissed(key: string): void {
         if (this.performance[this.currentIndex]) {
             for (let char of key) {
                 this.performance[this.currentIndex][char] = false;
@@ -170,7 +170,7 @@ export class Dance {
         this.registerMistake()
     }
 
-    private registerMistake() {
+    private registerMistake(): void {
         this.mistakes++;
         this.lastMistake = this.progress;
         Dance.failSound.play();
@@ -180,12 +180,12 @@ export class Dance {
         }
     }
 
-    private loseGame() {
-        // Simply reset, for now
+    private loseGame(): void {
+        // Simply reset for now
         this.begin();
     }
 
-    public update(dt: number): boolean {
+    public update(): boolean {
         const time = this.scene.gameTime - this.startTime;
         this.progress = time * this.bpm / 60;
         const prevIndex = this.currentIndex;
@@ -227,7 +227,7 @@ export class Dance {
         return false;
     }
 
-    private updateMusic() {
+    private updateMusic(): void {
         if (!this.withMusic) {
             return;
         }
@@ -253,7 +253,7 @@ export class Dance {
         }
     }
 
-    public resetMusic() {
+    public resetMusic(): void {
         Dance.raindance_music.stop();
         Dance.treedance_music.stop();
         this.scene.resetMusicVolumes();
@@ -267,7 +267,7 @@ export class Dance {
         });
     }
 
-    public draw(ctx: CanvasRenderingContext2D) {
+    public draw(ctx: CanvasRenderingContext2D): void {
         const controller: ControllerSpriteMap = ControllerManager.getInstance().controllerSprite;
         ctx.save();
         ctx.translate(this.x, -this.y);
@@ -296,7 +296,9 @@ export class Dance {
         // Upcoming keys
         ctx.globalAlpha = 1;
         ctx.textAlign = "center";
-        const sweetX = w2 - 16, y1 = -8, y2 = 1;
+        const sweetX = w2 - 16;
+        const y1 = -8;
+        const y2 = 1;
         ctx.fillStyle = "black";
 
         for (let i = Math.floor(this.progress) - 2; i < this.progress + 8; i++) {
@@ -316,7 +318,11 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["1"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y1, 9, 9);
                     } else {
-                        Dance.keys.drawTag(ctx, `${controller}-dance1`, x + Dance.keys.width / -2, y1);
+                        Dance.keys.drawTag(
+                            ctx,
+                            `${controller}-dance1`,
+                            x + Dance.keys.width / -2, y1
+                        );
                     }
                 }
 
@@ -327,13 +333,17 @@ export class Dance {
                         ctx.fillStyle = this.performance[i]["2"] ? "#70F070" : "#F06060";
                         ctx.fillRect(x - 4, y2, 9, 9);
                     } else {
-                        Dance.keys.drawTag(ctx, `${controller}-dance2`, x + Dance.keys.width / -2, y2);
+                        Dance.keys.drawTag(
+                            ctx,
+                            `${controller}-dance2`,
+                            x + Dance.keys.width / -2, y2
+                        );
                     }
                 }
             }
         }
 
-        // Sweet-spot
+        // Sweet spot
         ctx.globalAlpha = 1;
         ctx.drawImage(Dance.indicator, sweetX - 8, 1 + Dance.indicator.height / -2);
         ctx.drawImage(Dance.indicator, sweetX + 4, 1 + Dance.indicator.height / -2);

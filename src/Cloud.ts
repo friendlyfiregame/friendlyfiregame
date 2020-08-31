@@ -35,6 +35,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         this.startY = this.targetY = y;
         this.isRainCloud = canRain;
         this.velocity = properties.velocity / PIXEL_PER_METER;
+
         if (properties.direction === "right") {
             this.targetX = x + properties.distance;
             this.setVelocityX(this.velocity);
@@ -52,8 +53,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
-            velocity: () => ({ x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
-                        y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80) }),
+            velocity: () => ({
+                x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
+                y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80)
+            }),
             color: () => Cloud.raindrop,
             size: 4,
             gravity: {x: 0, y: -100},
@@ -75,12 +78,18 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         return this.isRainCloud;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Cloud.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS)
+    public draw(): void {
+        this.scene.renderer.addAseprite(
+            Cloud.sprite,
+            "idle",
+            this.x, this.y,
+            RenderingLayer.PLATFORMS
+        );
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         if (this.getVelocityY() > 0) {
             if (this.y >= Math.max(this.startY, this.targetY)) {
                 this.y = Math.max(this.startY, this.targetY);
@@ -92,6 +101,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.setVelocityY(this.velocity);
             }
         }
+
         if (this.getVelocityX() > 0) {
             if (this.x >= Math.max(this.targetX, this.startX)) {
                 this.x = Math.max(this.targetX, this.startX);
@@ -103,8 +113,10 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.setVelocityX(this.velocity);
             }
         }
+
         if (this.raining) {
             this.raining -= dt;
+
             if (this.raining <= 0) {
                 this.raining = 0;
             } else {
@@ -116,9 +128,13 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         }
     }
 
-    collidesWith(x: number, y: number): number {
-        if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
-                && y >= this.y && y <= this.y + this.height) {
+    public collidesWith(x: number, y: number): number {
+        if (
+            x >= this.x - this.width / 2
+            && x <= this.x + this.width / 2
+            && y >= this.y
+            && y <= this.y + this.height
+        ) {
             return Environment.PLATFORM;
         }
 

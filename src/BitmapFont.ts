@@ -19,7 +19,6 @@ export class BitmapFont {
     ) {
         this.sourceImage = sourceImage;
         this.canvas = document.createElement("canvas");
-
         this.colorMap = this.prepareColors(colors);
         this.charMap = charMap;
         this.charWidths = charWidths;
@@ -48,6 +47,7 @@ export class BitmapFont {
         const characters = json.characterMapping.map(charDef => charDef.char).join('');
         const widths = json.characterMapping.map(charDef => charDef.width)
         const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || [])
+
         return new BitmapFont(image, json.colors, characters, widths, compactablePrecursors, json.margin);
     }
 
@@ -60,13 +60,16 @@ export class BitmapFont {
         this.canvas.height = h * count;
         this.charHeight = h;
         const ctx = this.canvas.getContext("2d")!;
+
         // Fill with font
         for (let i = 0; i < count; i++) {
             result[colors[i]] = i;
             ctx.drawImage(this.sourceImage, 0, h * i);
         }
+
         // Colorize
-        ctx.globalCompositeOperation = "source-in";
+        ctx.globalCompositeOperation = 'source-in';
+
         for (let i = 0; i < count; i++) {
             ctx.fillStyle = colorMap[colors[i]];
             ctx.save();
@@ -76,7 +79,8 @@ export class BitmapFont {
             ctx.fillRect(0, 0, w, h * count);
             ctx.restore();
         }
-        ctx.globalCompositeOperation = "source-over";
+
+        ctx.globalCompositeOperation = 'source-over';
 
         return result;
     };
@@ -94,19 +98,22 @@ export class BitmapFont {
 
     private drawCharacter(
         ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string
-    ) {
+    ): void {
         const colorIndex = this.colorMap[color];
         const charIndex = (typeof char == "number") ? char : this.getCharIndex(char);
         const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
-        ctx.drawImage(this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
-            Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight);
-    };
+
+        ctx.drawImage(
+            this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
+            Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight
+        );
+    }
 
     public drawText(
         ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
         alpha = 1
-    ) {
-        text = "" + text;
+    ): void {
+        text = '' + text;
         ctx.globalAlpha = alpha;
         let width = 0;
         let precursorChar = null
@@ -168,7 +175,7 @@ export class BitmapFont {
     public drawTextWithOutline(
         ctx: CanvasRenderingContext2D, text: string, xPos: number, yPos: number, textColor: string,
         outlineColor: string, align = 0
-    ) {
+    ): void {
         for (let yOffset = yPos - 1; yOffset <= yPos + 1; yOffset++) {
             for (let xOffset = xPos - 1; xOffset <= xPos + 1; xOffset++) {
                 if (xOffset != xPos || yOffset != yPos) {

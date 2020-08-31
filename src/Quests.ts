@@ -49,6 +49,7 @@ export abstract class Quest {
         this.key = key;
         this.campaign = campaign;
         this.title = title;
+
         this.triggers = triggerIndices.map(index => ({
             index,
             isTriggered: false

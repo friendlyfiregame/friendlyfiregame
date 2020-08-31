@@ -13,7 +13,9 @@ export class SoundEmitter extends Entity {
     private maxVolume: number;
     private intensity: number;
 
-    public constructor(scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number) {
+    public constructor(
+        scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number
+    ) {
         super(scene, x, y, 1, 1);
 
         this.sound = sound;
@@ -48,7 +50,9 @@ export class SoundEmitter extends Entity {
             const sound = scene.ambientSounds[soundId as AmbientSoundId];
 
             if (sound) {
-                return new SoundEmitter(scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity);
+                return new SoundEmitter(
+                    scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity
+                );
             } else {
                 throw new Error(
                     `Cannot create sound emitter because '${soundId}' is not a valid ambient sound ID.`

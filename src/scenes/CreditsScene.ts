@@ -128,16 +128,22 @@ export class CreditsScene extends Scene<FriendlyFire> {
         return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20
     }
 
-    private drawParagraph(ctx: CanvasRenderingContext2D, posY: number, posX: number, lines: string[], marginBotton = 10): number {
+    private drawParagraph(
+        ctx: CanvasRenderingContext2D, posY: number, posX: number, lines: string[], marginBotton = 10
+    ): number {
         let y = posY;
+
         lines.forEach(line => {
             CreditsScene.standardFont.drawText(ctx, line, posX, y, "white");
             y += this.standardCharHeight;
-        })
+        });
+
         return y + marginBotton;
     }
 
-    private drawCredit(ctx: CanvasRenderingContext2D, posY: number, posX: number, title: string, names: string[]): number {
+    private drawCredit(
+        ctx: CanvasRenderingContext2D, posY: number, posX: number, title: string, names: string[]
+    ): number {
         let y = posY;
         const gap = 5;
         CreditsScene.creditsFont.drawText(ctx, title, posX, y, "white");
@@ -172,7 +178,10 @@ export class CreditsScene extends Scene<FriendlyFire> {
         let posY = CreditsScene.backgroundImage.height + 50 - (this.time * 1000 / 36);
 
         // Reset Credits Crawl when it's over
-        if (this.totalCrawlHeight > 0 && posY <= -this.totalCrawlHeight + CreditsScene.backgroundImage.height) {
+        if (
+            this.totalCrawlHeight > 0
+            && posY <= -this.totalCrawlHeight + CreditsScene.backgroundImage.height
+        ) {
             this.time = 0;
             posY = CreditsScene.backgroundImage.height;
         }
@@ -183,11 +192,13 @@ export class CreditsScene extends Scene<FriendlyFire> {
         const color = "white";
 
         posY = this.drawTitle(ctx, posY, posX);
+
         posY = this.drawParagraph(ctx, posY, posX, [
             'Originally made as a team',
             'effort for Ludum Dare 46',
             'in three days by'
         ]);
+
         posY = this.drawParagraph(ctx, posY, posX, [
             'Eduard But, Nico Hülscher,',
             'Benjamin Jung, Nils Kreutzer,',
@@ -195,13 +206,16 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Markus Over, Klaus Reimer,',
             'and Jennifer van Veen'
         ], 50);
+
         posY = this.drawCredit(ctx, posY, posX, 'GAME DESIGN', ['Everyone']);
+
         posY = this.drawCredit(ctx, posY, posX, 'STORY', [
             'Markus Over',
             'Jennifer van Veen',
             'Ranjit Mevius',
             'Nils Kreutzer'
         ]);
+
         posY = this.drawCredit(ctx, posY, posX, 'PROGRAMMING', [
             'Nico Hülscher',
             'Benjaming Jung',
@@ -212,11 +226,14 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Eduard But',
             'Matthias Wetter'
         ]);
+
         posY = this.drawCredit(ctx, posY, posX, 'SCRIPTING', [
             'Markus Over',
             'Eduard But'
         ]);
+
         posY = this.drawCredit(ctx, posY, posX, 'ART DIRECTION', ['Eduard But']);
+
         posY = this.drawCredit(ctx, posY, posX, '2D ART', [
             'Eduard But',
             'Nils Kreutzer',
@@ -247,18 +264,29 @@ export class CreditsScene extends Scene<FriendlyFire> {
             'Eduard But',
             'Matthias Wetter'
         ]);
+
         posY = this.drawCredit(ctx, posY, posX, 'QA', [
             'Jennifer van Veen',
             'Matthias Wetter'
         ]);
+
         posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
 
-        if (this.totalCrawlHeight === 0) this.totalCrawlHeight = posY;
+        if (this.totalCrawlHeight === 0) {
+            this.totalCrawlHeight = posY;
+        }
 
         // Shortened Git commit hash to provide support.
         const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
         const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-        CreditsScene.standardFont.drawText(ctx, shortenedGitCommitHash, CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 7, CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4, color);
+
+        CreditsScene.standardFont.drawText(
+            ctx,
+            shortenedGitCommitHash,
+            CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 7,
+            CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4,
+            color
+        );
 
         ctx.restore();
     }

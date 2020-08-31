@@ -40,13 +40,17 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(): void {
         this.scene.renderer.addAseprite(MovingPlatform.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS);
-        if (this.scene.showBounds) this.drawBounds();
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         if (this.getVelocityY() > 0) {
             if (this.y >= Math.max(this.startY, this.targetY)) {
                 this.y = Math.max(this.startY, this.targetY);
@@ -58,6 +62,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
                 this.setVelocityY(this.velocity);
             }
         }
+
         if (this.getVelocityX() > 0) {
             if (this.x >= Math.max(this.targetX, this.startX)) {
                 this.x = Math.max(this.targetX, this.startX);
@@ -71,11 +76,16 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         }
     }
 
-    collidesWith(x: number, y: number): number {
-        if (x >= this.x - this.width / 2 && x <= this.x + this.width / 2
-                && y >= this.y && y <= this.y + this.height) {
+    public collidesWith(x: number, y: number): number {
+        if (
+            x >= this.x - this.width / 2
+            && x <= this.x + this.width / 2
+            && y >= this.y
+            && y <= this.y + this.height
+        ) {
             return Environment.PLATFORM;
         }
+
         return Environment.AIR;
     }
 }

@@ -23,9 +23,21 @@ export class LoadingScene extends Scene<FriendlyFire> {
             ctx.save();
             ctx.strokeStyle = "#888";
             ctx.fillStyle = "#222";
-            ctx.fillRect(((width - progressWidth) >> 1), ((height - progressHeight) >> 1),
-                Math.round(progressWidth * this.loaded / this.total), progressHeight);
-            ctx.strokeRect(((width - progressWidth) >> 1) + 0.5, ((height - progressHeight) >> 1) + 0.5, progressWidth, progressHeight);
+
+            ctx.fillRect(
+                ((width - progressWidth) >> 1),
+                ((height - progressHeight) >> 1),
+                Math.round(progressWidth * this.loaded / this.total),
+                progressHeight
+            );
+
+            ctx.strokeRect(
+                ((width - progressWidth) >> 1) + 0.5,
+                ((height - progressHeight) >> 1) + 0.5,
+                progressWidth,
+                progressHeight
+            );
+
             ctx.restore();
         }
     }

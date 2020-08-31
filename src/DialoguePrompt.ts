@@ -20,12 +20,18 @@ export class DialoguePrompt {
         this.y = y;
     }
 
-    draw(): void {
+    public draw(): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        this.scene.renderer.addAseprite(DialoguePrompt.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES)
+
+        this.scene.renderer.addAseprite(
+            DialoguePrompt.sprite,
+            "idle",
+            this.x, this.y - floatOffsetY,
+            RenderingLayer.ENTITIES
+        );
     }
 
-    update(dt: number, anchorX: number, anchorY: number): void {
+    public update(dt: number, anchorX: number, anchorY: number): void {
         this.timeAlive += dt;
         this.x = anchorX;
         this.y = anchorY;

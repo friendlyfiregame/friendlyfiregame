@@ -41,6 +41,7 @@ export abstract class NPC extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
+
         const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y);
         thinkBubble.setMessage(message);
         thinkBubble.show();
@@ -61,17 +62,19 @@ export abstract class NPC extends PhysicsEntity {
         this.met = true;
     }
 
-    public getInteractionText (): string {
+    public getInteractionText(): string {
         return "Talk";
     }
 
-    protected showDialoguePrompt (): boolean {
-        if (this.hasActiveConversation() || !this.scene.player.isControllable) return false;
+    protected showDialoguePrompt(): boolean {
+        if (this.hasActiveConversation() || !this.scene.player.isControllable) {
+            return false;
+        }
 
         return true;
     }
 
-    protected drawDialoguePrompt (ctx: CanvasRenderingContext2D): void {
+    protected drawDialoguePrompt(): void {
         this.dialoguePrompt.draw();
     }
 
@@ -79,23 +82,27 @@ export abstract class NPC extends PhysicsEntity {
         this.greeting?.draw(ctx);
     }
 
-    protected updateGreeting(dt: number) {
-        this.greeting?.update(dt);
+    protected updateGreeting(): void {
+        this.greeting?.update();
     }
 
-    public registerEndedConversation() {
+    public registerEndedConversation(): void {
         this.lastEndedConversation = this.scene.gameTime;
     }
 
-    public isReadyForConversation() {
-        return (this.conversation && !this.scene.player.isCarrying(this) && this.scene.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION);
+    public isReadyForConversation(): boolean | null {
+        return (
+            this.conversation
+            && !this.scene.player.isCarrying(this)
+            && this.scene.gameTime - this.lastEndedConversation > PAUSE_AFTER_CONVERSATION
+        );
     }
 
     public hasActiveConversation(): boolean {
         return (this.scene.player.playerConversation !== null && this.scene.player.playerConversation.npc === this);
     }
 
-    public toggleDirection(direction = this.direction > 0 ? -1 : 1) {
+    public toggleDirection(direction = this.direction > 0 ? -1 : 1): void {
         if (direction !== this.direction) {
             this.direction = direction;
         }

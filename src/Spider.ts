@@ -26,7 +26,7 @@ export class Spider extends NPC {
         Conversation.setGlobal("talkedToSpider", "false");
     }
 
-    public showDialoguePrompt (): boolean {
+    public showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -72,7 +72,7 @@ export class Spider extends NPC {
         if (this.scene.showBounds) this.drawBounds();
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         this.speechBubble.draw(ctx);

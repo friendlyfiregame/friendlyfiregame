@@ -116,7 +116,8 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         }
     }
 
-    private drawTooltip (
+    // TODO: Should be unified with `drawTooltip(…)` in ControlScene
+    private drawTooltip(
         ctx: CanvasRenderingContext2D, x: number, y: number, text: string,
         animationTag: ControllerAnimationTags
     ): void {
@@ -129,7 +130,14 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const textPositionY = y;
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, x, y)
-        CharacterSelectionScene.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY, "white", "black");
+
+        CharacterSelectionScene.font.drawTextWithOutline(
+            ctx,
+            text,
+            textPositionX, textPositionY,
+            "white",
+            "black"
+        );
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {

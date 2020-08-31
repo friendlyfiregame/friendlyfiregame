@@ -24,7 +24,10 @@ export class MenuItem {
     @asset("sprites/menu_selector.png")
     private static selectorImage: HTMLImageElement;
 
-    public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, enabled = true) {
+    public constructor(
+        id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number,
+        enabled = true
+    ) {
         this.id = id;
         this.label = label;
         this.font = font;
@@ -96,7 +99,7 @@ export class MenuList {
      * The first available menu item will be focused automatically
      * @param items
      */
-    public addItems(...items: MenuItem[]) {
+    public addItems(...items: MenuItem[]): void {
         this.items.push(...items);
         this.focusFirstItem();
     }
@@ -113,7 +116,7 @@ export class MenuList {
      * items. The first available menu item will be focused automatically.
      * @param items
      */
-    public setItems(...items: MenuItem[]) {
+    public setItems(...items: MenuItem[]): void {
         this.items = [...items];
         this.focusFirstItem();
     }
@@ -121,25 +124,29 @@ export class MenuList {
     /**
      * Finds and focuses the first available item if no item was focused before.
      */
-    private focusFirstItem (): void {
+    private focusFirstItem(): void {
         if (!this.getFocusedItem()) {
-            const index = this.items.findIndex(item => item.enabled)
+            const index = this.items.findIndex(item => item.enabled);
+
             if (index > -1) {
                 this.items[index].focused = true;
             }
         }
     }
 
-    private getFocusedItem (): MenuItem | undefined {
-        return this.items.find(item => item.focused)
+    private getFocusedItem(): MenuItem | undefined {
+        return this.items.find(item => item.focused);
     }
-    private getFocusedItemIndex (): number {
-        return this.items.findIndex(item => item.focused)
+
+    private getFocusedItemIndex(): number {
+        return this.items.findIndex(item => item.focused);
     }
-    private unfocusAllItems (): void {
+
+    private unfocusAllItems(): void {
         this.items.forEach(item => item.focused = false);
     }
-    private focusItem (item: MenuItem): void {
+
+    private focusItem(item: MenuItem): void {
         this.unfocusAllItems();
         item.focused = true;
     }
@@ -150,7 +157,7 @@ export class MenuList {
      * @param direction    - Direction in which the next item should be searched for.
      *                       Either 1 (forwards) or -1 (backwards)
      */
-    private findAndFocusNextItem(currentIndex: number, direction: -1 | 1) {
+    private findAndFocusNextItem(currentIndex: number, direction: -1 | 1): void {
         const min = direction > 0 ? 0 : (this.items.length - 1);
         const max = direction > 0 ? (this.items.length - 1) : 0;
         const nextIndex = (currentIndex === max) ? min : currentIndex + direction;
@@ -158,7 +165,7 @@ export class MenuList {
         const nextItem = this.items[nextIndex];
 
         if (nextItem.enabled) {
-            this.focusItem(this.items[nextIndex])
+            this.focusItem(this.items[nextIndex]);
         } else {
             this.findAndFocusNextItem(nextIndex, direction);
         }
@@ -171,18 +178,19 @@ export class MenuList {
      * Method to navigate the focus of the menu list to the next item
      */
     public next(): void {
-        this.findAndFocusNextItem(this.getFocusedItemIndex(), 1)
+        this.findAndFocusNextItem(this.getFocusedItemIndex(), 1);
     }
 
     /**
      * Method to navigate the focus of the menu list to the previous item
      */
     public prev(): void {
-        this.findAndFocusNextItem(this.getFocusedItemIndex(), -1)
+        this.findAndFocusNextItem(this.getFocusedItemIndex(), -1);
     }
 
     public executeAction(sound: Sound = MenuList.confirm): void {
         const focusedButton = this.getFocusedItem();
+
         if (focusedButton && focusedButton.enabled) {
             sound.stop();
             sound.play();
@@ -190,9 +198,9 @@ export class MenuList {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D) {
+    public draw(ctx: CanvasRenderingContext2D): void {
         this.items.forEach(item => {
             item.draw(ctx, this.align);
-        })
+        });
     }
 }

@@ -26,17 +26,22 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties): Entity {
+export function createEntity(
+    name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties
+): Entity {
     const constructor = entities.get(name);
+
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
+
     return new constructor(scene, x, y, properties);
 }
 
 export abstract class Entity implements GameObject {
     protected timeAlive = 0;
     protected animator = new Animator(this);
+
     constructor(
         public scene: GameScene,
         public x: number,
@@ -50,20 +55,24 @@ export abstract class Entity implements GameObject {
 
     public update(dt: number): void {
         this.timeAlive += dt;
-    };
-
-    public distanceTo(entity: Entity) {
-        const a = this.x - entity.x;
-        const b = this.y - entity.y;
-        return Math.sqrt(a*a + b*b);
     }
 
-    public get distanceToPlayer (): number {
+    public distanceTo(entity: Entity): number {
+        const a = this.x - entity.x;
+        const b = this.y - entity.y;
+
+        return Math.sqrt(a * a + b * b);
+    }
+
+    public get distanceToPlayer(): number {
         return this.distanceTo(this.scene.player);
     }
 
     protected getClosestEntityInRange(range: number): Entity | null {
-        const sortedEntityDistances = this.getEntitiesInRange(range).sort((a, b ) => { return a.distance - b.distance; });
+        const sortedEntityDistances = this.getEntitiesInRange(range).sort(
+            (a, b ) => { return a.distance - b.distance; }
+        );
+
         if (sortedEntityDistances[0]) {
             return sortedEntityDistances[0].target;
         } else {
@@ -72,27 +81,33 @@ export abstract class Entity implements GameObject {
     }
 
     protected getEntitiesInRange(range: number): EntityDistance[] {
-        const entitiesInRange: EntityDistance[] = []
+        const entitiesInRange: EntityDistance[] = [];
+
         this.scene.gameObjects.forEach(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
+
                 if (distance < range) {
                     entitiesInRange.push({source: this, target: gameObject, distance});
                 }
             }
         });
+
         return entitiesInRange;
     }
 
-    protected getClosestEntity(entities: Entity[]): Entity {
-        const entitiesInRange: EntityDistance[] = []
+    protected getClosestEntity(): Entity {
+        const entitiesInRange: EntityDistance[] = [];
+
         this.scene.gameObjects.forEach(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
                 entitiesInRange.push({source: this, target: gameObject, distance});
             }
         });
-        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; })
+
+        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; });
+
         return entitiesInRange[0].target;
     }
 
@@ -117,16 +132,20 @@ export abstract class Entity implements GameObject {
                width: this.getBounds().width,
                height: this.getBounds().height
             }
-        })
+        });
     }
 
     /**
      * Checks wether this entity is currently colliding with the provided named trigger.
      * @param triggerName the trigger name to check against.
      */
-    protected isCollidingWithTrigger (triggerName: string): boolean {
+    protected isCollidingWithTrigger(triggerName: string): boolean {
         const collisions = this.scene.world.getTriggerCollisions(this);
-        if (collisions.length === 0) return false;
+
+        if (collisions.length === 0) {
+            return false;
+        }
+
         return collisions.findIndex(o => o.name === triggerName) > -1;
     }
 

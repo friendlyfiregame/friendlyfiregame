@@ -75,6 +75,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         x: this.game.width / 2 - TitleScene.logoImage.width / 2,
         y: 60
     }
+
     private titleLayer1Position = { x: 0, y: 70 }
     private titleLayer2Position = { x: 0, y: 163 }
     private titleLayer3Position = { x: 0, y: -125 }
@@ -97,7 +98,13 @@ export class TitleScene extends Scene<FriendlyFire> {
         Object.values(MenuItemKey).forEach((key, index) => {
             if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {
                 this.menu.addItems(
-                    new MenuItem(key, MenuLabels[key].label, TitleScene.font, "white", this.menuBasePosition.x, this.menuBasePosition.y + this.menuBasePosition.gap * index)
+                    new MenuItem(
+                        key,
+                        MenuLabels[key].label,
+                        TitleScene.font,
+                        "white",
+                        this.menuBasePosition.x, this.menuBasePosition.y + this.menuBasePosition.gap * index
+                    )
                 );
             }
         });
@@ -176,25 +183,39 @@ export class TitleScene extends Scene<FriendlyFire> {
         ctx.beginPath();
 
         const layer3OffY = (1 - this.animationProgress) * 100;
-        TitleScene.titleLayer3.drawTag(ctx, "idle", this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY, this.time * 1000);
+
+        TitleScene.titleLayer3.drawTag(
+            ctx, "idle", this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY, this.time * 1000
+        );
 
         const layer2OffY = (1 - this.animationProgress) * 200;
-        TitleScene.titleLayer2.drawTag(ctx, "idle", this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY, this.time * 1000);
+
+        TitleScene.titleLayer2.drawTag(
+            ctx, "idle", this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY, this.time * 1000
+        );
 
         const islandOffY = (1 - this.animationProgress) * 250;
+
         TitleScene.titleIsland1.drawTag(ctx, "idle", 90, 168 + islandOffY, this.time * 1000);
         TitleScene.titleIsland2.drawTag(ctx, "idle", 323, 178 + islandOffY, this.time * 1000);
 
         const personOff = (1 - this.animationProgress) * 330;
+
         TitleScene.person.drawTag(ctx, "idle", 22, 155 + personOff, this.time * 1000);
 
         const layer1OffY = (1 - this.animationProgress) * 300;
-        TitleScene.titleLayer1.drawTag(ctx, "idle", this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY, this.time * 1000);
+
+        TitleScene.titleLayer1.drawTag(
+            ctx, "idle", this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY, this.time * 1000
+        );
 
         ctx.globalAlpha = Math.max(this.logoAlphaProgress, 0);
         const menuOffY = (1 - this.animationProgress) * 150;
         ctx.drawImage(TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y + menuOffY);
-        TitleScene.flameicon.drawTag(ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10 + menuOffY, this.time * 1000);
+
+        TitleScene.flameicon.drawTag(
+            ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10 + menuOffY, this.time * 1000
+        );
 
         ctx.restore();
 

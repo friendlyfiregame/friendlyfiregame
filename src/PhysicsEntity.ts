@@ -20,6 +20,7 @@ export abstract class PhysicsEntity extends Entity {
 
     public setFloating(floating: boolean): void {
         this.floating = floating;
+
         if (floating) {
             this.setVelocity(0, 0);
         }
@@ -41,14 +42,14 @@ export abstract class PhysicsEntity extends Entity {
 
     public accelerateX(x: number): void {
         if (x > 0) {
-            this.velocityX = Math.min(this.maxVelocityX, this.velocityX + x)
+            this.velocityX = Math.min(this.maxVelocityX, this.velocityX + x);
         } else {
-            this.velocityX = Math.max(-this.maxVelocityX, this.velocityX + x)
+            this.velocityX = Math.max(-this.maxVelocityX, this.velocityX + x);
         }
     }
 
     public accelerateY(y: number): void {
-        this.velocityY = Math.min(this.maxVelocityY, this.velocityY + y)
+        this.velocityY = Math.min(this.maxVelocityY, this.velocityY + y);
     }
 
     public decelerate(x: number, y: number): void {
@@ -96,15 +97,30 @@ export abstract class PhysicsEntity extends Entity {
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
         for (let i = -this.width / 2; i < this.width / 2; i++) {
             let env = this.checkCollision(x + i, y, ignore);
-            if (env !== Environment.AIR) return env;
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
+
             env = this.checkCollision(x + i, y + this.height, ignore);
-            if (env !== Environment.AIR) return env;
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
         }
+
         for (let i = 0; i < this.height; i++) {
             let env = this.checkCollision(x - this.width / 2, y + i, ignore);
-            if (env !== Environment.AIR) return env;
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
+
             env = this.checkCollision(x + this.width / 2, y + i, ignore);
-            if (env !== Environment.AIR) return env;
+
+            if (env !== Environment.AIR) {
+                return env;
+            }
         }
 
         return Environment.AIR;
@@ -116,7 +132,9 @@ export abstract class PhysicsEntity extends Entity {
             this.x = newX;
             this.y = newY;
         } else {
-            const env = this.checkCollisionBox(newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []);
+            const env = this.checkCollisionBox(
+                newX, newY, newY > this.y ? [ Environment.PLATFORM ] : []
+            );
 
             if (env === Environment.AIR || env === Environment.WATER) {
                 this.x = newX;
@@ -131,8 +149,8 @@ export abstract class PhysicsEntity extends Entity {
         super.update(dt);
 
         const world = this.scene.world;
-
         const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
+
         if (ground instanceof PhysicsEntity) {
             this.x += ground.getVelocityX() * PIXEL_PER_METER * dt;
             this.y += ground.getVelocityY() * PIXEL_PER_METER * dt;
@@ -147,8 +165,11 @@ export abstract class PhysicsEntity extends Entity {
 
         // Object dropping down when there is no ground below
         if (!this.floating) {
-            const environment = world.collidesWith(this.x, this.y - 1, [ this ],
-                    this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []);
+            const environment = world.collidesWith(
+                this.x, this.y - 1,
+                [ this ],
+                this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []
+            );
 
             if (environment === Environment.AIR) {
                 this.velocityY -= this.getGravity() * dt;
@@ -162,6 +183,7 @@ export abstract class PhysicsEntity extends Entity {
                 this.velocityX = 0;
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
+
                 if (!(this instanceof Player)) {
                     this.velocityX = 0;
                 }
@@ -175,7 +197,7 @@ export abstract class PhysicsEntity extends Entity {
         }
     }
 
-    protected getGravity() {
+    protected getGravity(): number {
         return GRAVITY;
     }
 

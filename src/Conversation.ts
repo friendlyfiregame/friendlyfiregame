@@ -30,17 +30,20 @@ export class Conversation {
     constructor(json: DialogJSON, private readonly npc: NPC) {
         this.states = Object.keys(json);
         this.data = {};
+
         for (const state of this.states) {
             this.data[state] = json[state].map(line => new ConversationLine(line, this));
         }
+
         this.setState("entry");
         this.endConversation = false;
     }
 
-    public setState(name = "entry") {
+    public setState(name = "entry"): void {
         if (!this.states.includes(name)) {
             throw new Error("State name " + name + " does not exist in conversation");
         }
+
         this.state = name;
         this.stateIndex = 0;
     }
@@ -50,14 +53,18 @@ export class Conversation {
             this.endConversation = false;
             return null;
         }
+
         this.skippedLines = 0;
+
         const result: Interaction = {
             npcLine: null,
             options: [],
             spoiledOptions: []
         };
+
         // Does NPC speak?
-        const line = this.getNextLine()
+        const line = this.getNextLine();
+
         if (line == null) {
             // Conversation is over without changing state or anything
             return null;
@@ -68,26 +75,31 @@ export class Conversation {
                 this.goBack(1 + this.skippedLines);
             }
         }
+
         // Does Player react?
         this.skippedLines = 0;
         let option = this.getNextLine();
+
         while (option && !option.isNpc) {
-            // TODO identify spoiled options (that don't lead to anything new for the player) and sort accordingly
+            // TODO: Identify spoiled options (that don't lead to anything new for the player) and
+            //       sort accordingly.
             result.options.push(option);
             this.skippedLines = 0;
             option = this.getNextLine();
         }
+
         if (option && !option.isNpc) {
             this.goBack();
         } else {
             this.goBack(1 + this.skippedLines);
         }
-        // shuffle(result.options);
+
         this.skippedLines = 0;
+
         return result;
     }
 
-    public runAction(action: string[]) {
+    public runAction(action: string[]): void {
         switch (action[0]) {
             case "end":
                 this.endConversation = true;
@@ -114,10 +126,11 @@ export class Conversation {
         if (!varname.startsWith("$")) {
             varname = "$" + varname;
         }
+
         globalVariables[varname] = value;
     }
 
-    public static getGlobals() {
+    public static getGlobals(): Record<string, string> {
         return globalVariables;
     }
 
@@ -129,11 +142,11 @@ export class Conversation {
         }
     }
 
-    private goBack(steps = 1) {
+    private goBack(steps = 1): void {
         if (steps <= 0) {
             return;
         }
-        // const prev = this.stateIndex;
+
         this.stateIndex -= steps;
         this.skippedLines = 0;
     }
@@ -142,21 +155,23 @@ export class Conversation {
         if (this.stateIndex >= this.data[this.state].length) {
             return null;
         }
+
         let line = this.data[this.state][this.stateIndex++];
+
         // console.log(line.condition);
         if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {
             this.skippedLines++;
             return this.getNextLine(ignoreDisabled);
         }
+
         return line;
     }
 
     private testCondition(condition: string): boolean {
         const self = this;
         const subconditions = condition.split(',');
-        // console.log(subconditions);
         const result = subconditions.some(evaluateFragment);
-        // console.log("Condition ", condition, " yields ", result);
+
         return result;
 
         function evaluateFragment(s: string): boolean {
@@ -177,17 +192,17 @@ export class Conversation {
                     return parseFloat(self.getVariable(values[0])) < parseFloat(values[1]);
                 }
             }
+
             // Variable name only
             const v = self.getVariable(s.trim());
             return v != null && v != "" && v != "0" && v != "false";
         }
     }
 
-    public hasEnded() {
+    public hasEnded(): boolean {
         return this.endConversation;
     }
 }
-
 
 const MAX_CHARS_PER_LINE = 50;
 
@@ -212,7 +227,7 @@ export class ConversationLine {
         this.visited = false;
     }
 
-    public executeBeforeLine() {
+    public executeBeforeLine(): void {
         if (this.actions.length > 0) {
             for (const action of this.actions) {
                 if (this.isEarlyAction(action[0])) {
@@ -222,11 +237,13 @@ export class ConversationLine {
         }
     }
 
-    public execute() {
+    public execute(): void {
         this.visited = true;
+
         if (this.targetState != null) {
             this.conversation.setState(this.targetState);
         }
+
         if (this.actions.length > 0) {
             for (const action of this.actions) {
                 if (!this.isEarlyAction(action[0])) {
@@ -272,39 +289,47 @@ export class ConversationLine {
 
     private static extractCondition(line: string): string | null {
         const conditionString = line.match(/\[[a-zA-Z0-9\_\<\>\!\=\$ ]+\]/g);
-        // console.log(conditionString);
+
         if (conditionString && conditionString[0]) {
             return conditionString[0].substr(1, conditionString[0].length - 2);
         }
+
         return null;
     }
 
     private static extractState(line: string): string | null {
         const stateChanges = line.match(/(@[a-zA-Z0-9\_]+)/g);
+
         if (stateChanges && stateChanges.length > 0) {
             const stateName = stateChanges[0].substr(1);
             return stateName;
         }
+
         return null;
     }
 
     private static extractActions(line: string): string[][] {
         let actions = line.match(/(\![a-zA-Z][a-zA-Z0-9\_\$ ]*)+/g);
         const result = [];
+
         if (actions) {
             actions = actions.join(" ").split("!").map(action => action.trim()).filter(s => s.length > 0);
+
             for (const action of actions) {
                 const segments = action.split(" ");
                 result.push(segments);
             }
         }
+
         return result;
     }
 
     public static wrapString(s: string, charsPerLine: number): string {
         let currentLength = 0, lastSpace = -1;
+
         for (let i = 0; i < s.length; i++) {
             const char = s[i];
+
             if (char === "\n") {
                 // New line
                 currentLength = 0;
@@ -312,7 +337,9 @@ export class ConversationLine {
                 if (char === " ") {
                     lastSpace = i;
                 }
+
                 currentLength++;
+
                 if (currentLength >= charsPerLine) {
                     if (lastSpace >= 0) {
                         // Add cut at last space
@@ -327,6 +354,7 @@ export class ConversationLine {
                 }
             }
         }
+
         return s;
     }
 }

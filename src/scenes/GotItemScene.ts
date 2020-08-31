@@ -76,7 +76,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
             "Powered by unconditional love",
             "Nothing can stop us!"
         ]
-    ]
+    ];
 
     private selectedSubtitle = '';
 
@@ -117,15 +117,27 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
         ctx.save();
         ctx.globalAlpha = 0.5;
-        ctx.fillStyle = "black";
+        ctx.fillStyle = 'black';
         ctx.fillRect(0, centerY - 1, width, 50);
 
         const itemNameText = this.titles[this.targetItem];
         metrics = GotItemScene.headlineFont.measureText(itemNameText);
-        GotItemScene.headlineFont.drawText(ctx, itemNameText, (width - metrics.width) >> 1, centerY + 10, "white");
+
+        GotItemScene.headlineFont.drawText(
+            ctx,
+            itemNameText,
+            (width - metrics.width) >> 1, centerY + 10,
+            "white"
+        );
 
         metrics = GotItemScene.font.measureText(this.selectedSubtitle);
-        GotItemScene.font.drawText(ctx, this.selectedSubtitle, (width - metrics.width) >> 1, centerY + 30, "white");
+
+        GotItemScene.font.drawText(
+            ctx,
+            this.selectedSubtitle,
+            (width - metrics.width) >> 1, centerY + 30,
+            "white"
+        );
 
         ctx.scale(2, 2);
         const image = GotItemScene.itemImages[this.targetItem];

@@ -91,15 +91,15 @@ export class SpeechBubble {
         this.paddingVertical = this.paddingTop + this.paddingBottom;
     }
 
-    public show() {
+    public show(): void {
         this.isVisible = true;
     }
 
-    public hide() {
+    public hide(): void {
         this.isVisible = false;
     }
 
-    public hasContent() {
+    public hasContent(): boolean {
         return this.content.length > 0 &&
             (!this.partnersBubble || !this.partnersBubble.isCurrentlyWriting && this.selectedOptionIndex > -1);
     }
@@ -144,13 +144,18 @@ export class SpeechBubble {
         this.longestLine = this.determineMaxLineLength(this.messageLines);
     }
 
-    private updateContent() {
+    private updateContent(): void {
         this.content = this.messageLines.concat(this.options);
         this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isVisible || !this.hasContent() || !this.scene.camera.isOnTarget() || !this.scene.isActive()) {
+        if (
+            !this.isVisible
+            || !this.hasContent()
+            || !this.scene.camera.isOnTarget()
+            || !this.scene.isActive()
+        ) {
             return;
         }
 
@@ -165,7 +170,12 @@ export class SpeechBubble {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect()
             const relativeX = posX - visibleRect.x;
-            const clipAmount = Math.max((this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0) || Math.min(relativeX - (this.longestLine / 2), 0);
+
+            const clipAmount = Math.max(
+                (this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0)
+                || Math.min(relativeX - (this.longestLine / 2),
+                0
+            );
 
             if (clipAmount !== 0) {
                 offsetX = clipAmount + (10 * Math.sign(clipAmount));
@@ -211,7 +221,7 @@ export class SpeechBubble {
                     y: textYPos
                 },
                 asset: SpeechBubble.font,
-            })
+            });
         }
 
         for (let i = 0; i < this.options.length; i++) {
@@ -230,7 +240,7 @@ export class SpeechBubble {
                         y: textYPos
                     },
                     asset: SpeechBubble.font
-                })
+                });
             }
 
             this.scene.renderer.add({
@@ -244,7 +254,7 @@ export class SpeechBubble {
                     y: textYPos
                 },
                 asset: SpeechBubble.font
-            })
+            });
         }
     }
 

@@ -9,8 +9,8 @@ import { Keyboard } from './input/Keyboard';
 import { Scenes } from './Scenes';
 
 /**
- * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want updates to jump
- * too much.
+ * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
+ * updates to jump too much.
  */
 const MAX_DT = 0.1;
 
@@ -36,8 +36,9 @@ export abstract class Game {
 
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = createCanvas(width, height);
-        // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics on some
-        // systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So it is deactivated here.
+        // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics
+        // on some systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So
+        // it is deactivated here.
         this.ctx = getRenderingContext(canvas, "2d", { alpha: false, desynchronized: false });
         const style = canvas.style;
         style.position = "absolute";
@@ -51,14 +52,15 @@ export abstract class Game {
         window.addEventListener("pointermove", () => this.mouseMoved());
     }
 
-    private mouseMoved() {
+    private mouseMoved(): void {
         this.canvas.style.cursor = "default";
         this.mouseTimeout = MOUSE_TIMEOUT;
     }
 
-    private updateMouse(dt: number) {
+    private updateMouse(dt: number): void {
         if (this.mouseTimeout > 0) {
             this.mouseTimeout = Math.max(0, this.mouseTimeout - dt);
+
             if (this.mouseTimeout === 0) {
                 this.canvas.style.cursor = "none";
             }
@@ -67,7 +69,12 @@ export abstract class Game {
 
     private updateCanvasSize(): void {
         const { width, height } = this;
-        const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / width, window.innerHeight / height)));
+
+        const scale = Math.max(
+            1,
+            Math.floor(Math.min(window.innerWidth / width, window.innerHeight / height))
+        );
+
         const style = this.canvas.style;
         style.width = width * scale + "px";
         style.height = height * scale + "px";
@@ -90,7 +97,7 @@ export abstract class Game {
         this.nextFrame();
     }
 
-    private nextFrame() {
+    private nextFrame(): void {
         this.gameLoopId = requestAnimationFrame(this.gameLoopCallback);
     }
 

@@ -9,6 +9,7 @@ let globalGainNode: GainNode | null = null;
 
 export function getAudioContext(): AudioContext {
     const controllerManager = ControllerManager.getInstance();
+
     if (audioContext == null) {
         audioContext = new AudioContext();
 
@@ -17,8 +18,10 @@ export function getAudioContext(): AudioContext {
             const resume = () => {
                 audioContext?.resume();
             };
+
             controllerManager.onButtonDown.connect(resume);
             document.addEventListener("pointerdown", resume);
+
             audioContext.addEventListener("statechange", () => {
                 if (audioContext?.state === "running") {
                     controllerManager.onButtonDown.disconnect(resume);
@@ -27,6 +30,7 @@ export function getAudioContext(): AudioContext {
             });
         }
     }
+
     return audioContext;
 }
 
@@ -36,6 +40,7 @@ export function getGlobalGainNode(): GainNode {
         globalGainNode = audioContext.createGain();
         globalGainNode.connect(audioContext.destination);
     }
+
     return globalGainNode;
 }
 
@@ -50,7 +55,8 @@ export class Sound {
     }
 
     public static async load(url: string): Promise<Sound> {
-        const arrayBuffer = await (await fetch(url)).arrayBuffer()
+        const arrayBuffer = await (await fetch(url)).arrayBuffer();
+
         return new Promise((resolve, reject) => {
             getAudioContext().decodeAudioData(arrayBuffer,
                 buffer => resolve(new Sound(buffer)),
@@ -69,11 +75,13 @@ export class Sound {
             source.buffer = this.buffer;
             source.loop = this.loop;
             source.connect(this.gainNode);
+
             source.addEventListener("ended", () => {
                 if (this.source === source) {
                     this.source = null;
                 }
             });
+
             this.source = source;
             source.start();
         }
@@ -86,12 +94,14 @@ export class Sound {
             } catch (e) {
                 // Ignored. Happens on Safari sometimes. Can't stop a sound which may not be really playing?
             }
+
             this.source = null;
         }
     }
 
     public setLoop(loop: boolean): void {
         this.loop = loop;
+
         if (this.source) {
             this.source.loop = loop;
         }

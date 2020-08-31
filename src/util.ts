@@ -107,6 +107,7 @@ export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 
     const height = o.height + (margin * 2);
     const x = o.x - margin;
     const y = o.y + margin;
+
     return { x, y, width, height };
 }
 

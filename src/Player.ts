@@ -187,6 +187,7 @@ export class Player extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+
         this.isControllable = false;
         this.setFloating(true);
 
@@ -340,7 +341,7 @@ export class Player extends PhysicsEntity {
         this.dance = null;
     }
 
-    public async handleButtonDown(event: ControllerEvent) {
+    public async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
@@ -396,7 +397,9 @@ export class Player extends PhysicsEntity {
                         this, this.closestNPC, conversation, autoMove
                     );
                 } else if (this.readableTrigger) {
-                    const proxy = new ConversationProxy(this.scene, this.x, this.y, this.readableTrigger.properties);
+                    const proxy = new ConversationProxy(
+                        this.scene, this.x, this.y, this.readableTrigger.properties
+                    );
 
                     this.playerConversation = new PlayerConversation(
                         this, proxy, proxy.conversation, false
@@ -458,7 +461,15 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.scene.gameObjects.push(new Snowball(this.scene, this.x, this.y + this.height * 0.75, 20 * this.direction, 10));
+                this.scene.gameObjects.push(
+                    new Snowball(
+                        this.scene,
+                        this.x, this.y + this.height * 0.75,
+                        20 * this.direction,
+                        10
+                    )
+                );
+
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
             } else if (event.key === "k") {
@@ -479,7 +490,10 @@ export class Player extends PhysicsEntity {
             this.thinkBubble.hide();
             this.thinkBubble = null;
         }
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y)
+
+        const thinkBubble = this.thinkBubble = new SpeechBubble(
+            this.scene, this.x, this.y
+        );
 
         thinkBubble.setMessage(message);
         thinkBubble.show();
@@ -496,17 +510,45 @@ export class Player extends PhysicsEntity {
         if (!this.dance) {
             switch (difficulty) {
                 case 1:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 100, "  1 1 2 2 1 2 1 3", undefined,
-                            1, undefined, true, 0);
+                    this.dance = new Dance(
+                        this.scene,
+                        this.x, this.y - 25,
+                        100,
+                        "  1 1 2 2 1 2 1 3",
+                        undefined,
+                        1,
+                        undefined,
+                        true,
+                        0
+                    );
                     break;
                 case 2:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "1   2   1 1 2 2 121 212 121 212 3    ", undefined, 3);
+                    this.dance = new Dance(
+                        this.scene,
+                        this.x, this.y - 25,
+                        192,
+                        "1   2   1 1 2 2 121 212 121 212 3    ",
+                        undefined,
+                        3
+                    );
                     break;
                 case 3:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "112 221 312 123 2121121 111 222 3    ", undefined, 4);
+                    this.dance = new Dance(
+                        this.scene,
+                        this.x, this.y - 25,
+                        192,
+                        "112 221 312 123 2121121 111 222 3    ",
+                        undefined,
+                        4
+                    );
                     break;
                 default:
-                    this.dance = new Dance(this.scene, this.x, this.y - 25, 192, "3");
+                    this.dance = new Dance(
+                        this.scene,
+                        this.x, this.y - 25,
+                        192,
+                        "3"
+                    );
             }
         }
     }
@@ -583,7 +625,7 @@ export class Player extends PhysicsEntity {
         this.usedJump = true;
     }
 
-    public handleButtonUp(event: ControllerEvent) {
+    public handleButtonUp(event: ControllerEvent): void {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
             return;
         }
@@ -602,9 +644,8 @@ export class Player extends PhysicsEntity {
     }
 
     private drawTooltip(
-        text: string,
-        buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
-    ) {
+        text: string, buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
+    ): void {
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         const measure = Player.font.measureText(text);
         const gap = 6;
@@ -622,7 +663,7 @@ export class Player extends PhysicsEntity {
             },
             asset: this.controllerSpriteMapRecords[controllerSprite],
             animationTag: buttonTag,
-        })
+        });
 
         this.scene.renderer.add({
             type: RenderingType.TEXT,
@@ -635,21 +676,36 @@ export class Player extends PhysicsEntity {
                 y: textPositionY
             },
             asset: Player.font,
-        })
+        });
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.visible) return;
+    public draw(ctx: CanvasRenderingContext2D): void {
+        if (!this.visible) {
+            return;
+        }
 
         const sprite = Player.playerSprites[this.characterAsset];
         let animation = this.animation;
-        if (this.carrying && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")) {
+
+        // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
+        if (
+            this.carrying
+            && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")
+        ) {
             animation = animation + "-carry";
         }
 
-        this.scene.renderer.addAseprite(sprite, animation, this.x, this.y - 1, RenderingLayer.PLAYER, this.direction)
+        this.scene.renderer.addAseprite(
+            sprite,
+            animation,
+            this.x, this.y - 1,
+            RenderingLayer.PLAYER,
+            this.direction
+        );
 
-        if (this.scene.showBounds) this.drawBounds();
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
 
         if (
             this.closestNPC
@@ -682,13 +738,25 @@ export class Player extends PhysicsEntity {
     }
 
     private canThrowStoneIntoWater(): boolean {
-        return this.carrying instanceof Stone && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.x - 30, this.y - 20) === Environment.WATER);
+        return (
+            this.carrying instanceof Stone
+            && (
+                this.direction === -1
+                && this.scene.world.collidesWith(
+                    this.x - 30, this.y - 20
+                ) === Environment.WATER
+            )
+        );
     }
 
     private canThrowSeedIntoSoil(): boolean {
-        return this.carrying instanceof Seed && (this.direction === -1 &&
-            this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL);
+        return (
+            this.carrying instanceof Seed
+            && (
+                this.direction === -1
+                && this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL
+            )
+        );
     }
 
     public debugCollisions(): void {
@@ -710,11 +778,17 @@ export class Player extends PhysicsEntity {
         const ground = this.getGround();
 
         return (
-            (this.isCollidingWithTrigger('raincloud_sky') &&
-            !this.scene.world.isRaining() &&
-            this.carrying === null &&
-            !this.scene.apocalypse) ||
-            (ground instanceof Cloud && this.scene.apocalypse && !ground.isRaining() && ground.canRain())
+            (
+                this.isCollidingWithTrigger('raincloud_sky')
+                && !this.scene.world.isRaining()
+                && this.carrying === null
+                && !this.scene.apocalypse
+            ) || (
+                ground instanceof Cloud
+                && this.scene.apocalypse
+                && !ground.isRaining()
+                && ground.canRain()
+            )
         );
     }
 
@@ -728,7 +802,7 @@ export class Player extends PhysicsEntity {
         return boundsFromMapObject(collisions[0]);
     }
 
-    private respawn() {
+    private respawn(): void {
         this.x = this.lastGroundPosition.x;
         this.y = this.lastGroundPosition.y + 10;
         this.setVelocity(0, 0);
@@ -751,8 +825,9 @@ export class Player extends PhysicsEntity {
         this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         this.speechBubble.update(this.x, this.y);
@@ -762,7 +837,7 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.playerConversation) {
-            this.playerConversation.update(dt);
+            this.playerConversation.update();
         }
 
         if (this.showHints) {
@@ -776,9 +851,13 @@ export class Player extends PhysicsEntity {
                 this.running = false;
                 this.animation = 'walk';
             }
+
             this.carrying.x = this.x;
-            const currentFrameIndex = Player.playerSprites[this.characterAsset].getTaggedFrameIndex(this.animation + "-carry",
-                this.scene.gameTime * 1000);
+
+            const currentFrameIndex = Player.playerSprites[this.characterAsset].getTaggedFrameIndex(
+                this.animation + "-carry",
+                this.scene.gameTime * 1000
+            );
 
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.characterAsset].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
@@ -825,12 +904,15 @@ export class Player extends PhysicsEntity {
 
         // Apply auto movement
         if (this.autoMove) {
-            if ((this.autoMove.lastX - this.autoMove.destinationX) * (this.x - this.autoMove.destinationX) <= 0 ) {
+            if (
+                (this.autoMove.lastX - this.autoMove.destinationX) * (this.x - this.autoMove.destinationX) <= 0
+            ) {
                 // Reached or overreached destination
                 this.stopAutoMove();
             } else {
                 // Not yet reached, keep going
                 this.autoMove.lastX = this.x;
+
                 if (this.x < this.autoMove.destinationX) {
                     this.moveRight = true;
                     this.moveLeft = false;
@@ -892,7 +974,13 @@ export class Player extends PhysicsEntity {
             if (this.getVelocityY() > 0) {
                 this.animation = "jump";
                 this.flying = true;
-            } else if (isDrowning || (this.getVelocityY() < 0 && this.y - world.getGround(this.x, this.y) > 10)) {
+            } else if (
+                isDrowning
+                || (
+                    this.getVelocityY() < 0
+                    && this.y - world.getGround(this.x, this.y) > 10
+                )
+            ) {
                 if (this.jumpThresholdTimer < 0 || this.usedJump) {
                     this.animation = "fall";
                 }
@@ -922,7 +1010,7 @@ export class Player extends PhysicsEntity {
         const entities = this.scene.world.getEntityCollisions(this, 5);
 
         if (entities.length > 0) {
-            const closestEntity = entities.length > 1 ? this.getClosestEntity(entities) : entities[0];
+            const closestEntity = entities.length > 1 ? this.getClosestEntity() : entities[0];
 
             if (closestEntity instanceof NPC) {
                 this.closestNPC = closestEntity;
@@ -949,7 +1037,12 @@ export class Player extends PhysicsEntity {
         }
 
         // Bounce
-        if (this.scene.world.collidesWith(this.x, this.y - 2, [ this ]) === Environment.BOUNCE) {
+        if (
+            this.scene.world.collidesWith(
+                this.x, this.y - 2,
+                [ this ]
+            ) === Environment.BOUNCE
+        ) {
             this.bounce();
         }
 
@@ -972,8 +1065,9 @@ export class Player extends PhysicsEntity {
                     }
                 }
             }
+
             this.dance.setPosition(this.x, this.y - 16);
-            const done = this.dance.update(dt);
+            const done = this.dance.update();
 
             if (done) {
                 // On cloud -> make it rain
@@ -990,7 +1084,13 @@ export class Player extends PhysicsEntity {
                         );
 
                         if (bossPointer) {
-                            this.scene.camera.focusOn(3, bossPointer.x, bossPointer.y + 60, 1, 0, valueCurves.cos(0.35));
+                            this.scene.camera.focusOn(
+                                3,
+                                bossPointer.x, bossPointer.y + 60,
+                                1,
+                                0,
+                                valueCurves.cos(0.35)
+                            );
                         }
 
                         // Remove a single boss fight barrier
@@ -1019,10 +1119,10 @@ export class Player extends PhysicsEntity {
 
         this.disableParticles = false;
 
-        // Logic from Triggers
+        // Logic from triggers
         if (triggerCollisions.length > 0) {
             triggerCollisions.forEach(trigger => {
-                // Handle Mountain Riddle Logic
+                // Handle MountainRiddle logic
                 if (trigger.name === 'reset_mountain') {
                     this.scene.mountainRiddle.resetRiddle();
                 }
@@ -1080,7 +1180,7 @@ export class Player extends PhysicsEntity {
                         "enable", null, [enableConversationProps.key, enableConversationProps.value]
                     );
                 }
-            })
+            });
         }
     }
 
@@ -1099,8 +1199,13 @@ export class Player extends PhysicsEntity {
         if (this.getVelocityY() <= 0) {
             const world = this.scene.world;
             const height = world.getHeight();
-            col = world.collidesWith(this.x, this.y, [ this ],
-                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]);
+
+            col = world.collidesWith(
+                this.x, this.y,
+                [ this ],
+                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]
+            );
+
             while (this.y < height && col) {
                 pulled++;
                 this.y++;
@@ -1122,10 +1227,6 @@ export class Player extends PhysicsEntity {
         Player.bouncingSound.play();
     }
 
-    public setBeard(beard: boolean) {
-        // this.hasBeard = beard;
-    }
-
     /**
      * If given coordinate collides with the world then the first free y coordinate above is
      * returned. This can be used to unstuck an object after a new position was set.
@@ -1137,8 +1238,15 @@ export class Player extends PhysicsEntity {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
-                [ Environment.PLATFORM, Environment.WATER ])) {
+
+        while (
+            this.y > 0
+            && world.collidesWith(
+                this.x, this.y + this.height,
+                [ this ],
+                [ Environment.PLATFORM, Environment.WATER ]
+            )
+        ) {
             pulled++;
             this.y--;
         }
@@ -1151,14 +1259,26 @@ export class Player extends PhysicsEntity {
         const world = this.scene.world;
 
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    this.x + this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.x--;
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    this.x - this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.x++;
                 pulled++;
             }
@@ -1181,7 +1301,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    protected getGravity() {
+    protected getGravity(): number {
         if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
             return SHORT_JUMP_GRAVITY;
         } else {
@@ -1189,7 +1309,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    public carry(object: PhysicsEntity) {
+    public carry(object: PhysicsEntity): void {
         if (!this.carrying) {
             this.height = PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT;
 

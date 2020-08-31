@@ -14,7 +14,7 @@ export class Wing extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);
     }
 
@@ -31,14 +31,20 @@ export class Wing extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-        this.scene.renderer.addAseprite(Wing.sprite, "idle", this.x, this.y - floatOffsetY, RenderingLayer.ENTITIES);
+
+        this.scene.renderer.addAseprite(
+            Wing.sprite,
+            "idle",
+            this.x, this.y - floatOffsetY,
+            RenderingLayer.ENTITIES
+        );
 
         if (this.scene.showBounds) {
             this.drawBounds();
         }
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         this.speechBubble.draw(ctx);

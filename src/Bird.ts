@@ -37,7 +37,7 @@ export class Bird extends NPC {
     private state = BirdState.WAITING_LEFT;
     private jumpTimer = 0;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 28, 24);
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
@@ -98,6 +98,7 @@ export class Bird extends NPC {
             const world = this.scene.world;
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
+
             while (this.y < height && col) {
                 pulled++;
                 this.y++;
@@ -111,8 +112,15 @@ export class Bird extends NPC {
     private pullOutOfCeiling(): number {
         let pulled = 0;
         const world = this.scene.world;
-        while (this.y > 0 && world.collidesWith(this.x, this.y + this.height, [ this ],
-                [ Environment.PLATFORM, Environment.WATER ])) {
+
+        while (
+            this.y > 0
+            && world.collidesWith(
+                this.x, this.y + this.height,
+                [ this ],
+                [ Environment.PLATFORM, Environment.WATER ]
+            )
+        ) {
             pulled++;
             this.y--;
         }
@@ -125,14 +133,26 @@ export class Bird extends NPC {
         const world = this.scene.world;
 
         if (this.getVelocityX() > 0) {
-            while (world.collidesWithVerticalLine(this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    this.x + this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.x--;
                 pulled++;
             }
         } else {
-            while (world.collidesWithVerticalLine(this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            while (
+                world.collidesWithVerticalLine(
+                    this.x - this.width / 2, this.y + this.height * 3 / 4,
+                    this.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
                 this.x++;
                 pulled++;
             }

@@ -17,7 +17,7 @@ export class Tree extends NPC {
     public seed: Seed;
     private wood: Wood;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 78, 140);
 
         this.face = new Face(scene, this, EyeType.TREE, 5, 94);
@@ -51,7 +51,7 @@ export class Tree extends NPC {
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         this.speechBubble.draw(ctx);
@@ -76,7 +76,6 @@ export class Tree extends NPC {
 
         this.seed.x = this.x;
         this.seed.y = this.y + this.height / 2;
-
         this.seed.setVelocity(5, 0);
 
         return this.seed;

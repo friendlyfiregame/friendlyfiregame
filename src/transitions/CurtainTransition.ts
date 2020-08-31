@@ -11,6 +11,7 @@ export class CurtainTransition extends Transition {
 
     public constructor({ direction = "horizontal", ...options }: CurtainTransitionOptions) {
         super(options);
+
         this.direction = direction;
     }
 

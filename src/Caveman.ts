@@ -10,17 +10,27 @@ export class Caveman extends NPC {
     @asset("sprites/caveman.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 18, 24);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Caveman.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Caveman.sprite,
+            "idle",
+            this.x, this.y,
+            RenderingLayer.ENTITIES,
+            this.direction
+        );
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
     }

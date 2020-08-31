@@ -19,14 +19,18 @@ export class StoneDisciple extends NPC {
         this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);
     }
 
-    protected showDialoguePrompt (): boolean {
-        if (!super.showDialoguePrompt()) return false;
+    protected showDialoguePrompt(): boolean {
+        if (!super.showDialoguePrompt()) {
+            return false;
+        }
+
         const talkedToStoneDisciple = Conversation.getGlobals()['$talkedToStoneDisciple'];
         const talkedToStoneDiscipleAgain = Conversation.getGlobals()['$talkedToStoneDiscipleAgain'];
         const gotTeleported = Conversation.getGlobals()['$gotTeleported'];
+
         return (
-            talkedToStoneDisciple === undefined ||
-            (gotTeleported !== undefined && talkedToStoneDiscipleAgain === undefined)
+            talkedToStoneDisciple === undefined
+            || (gotTeleported !== undefined && talkedToStoneDiscipleAgain === undefined)
         );
     }
 
@@ -42,13 +46,13 @@ export class StoneDisciple extends NPC {
         }
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
 
         this.dialoguePrompt.update(dt, this.x, this.y + this.height);

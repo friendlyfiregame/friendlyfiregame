@@ -17,11 +17,14 @@ export class Aseprite {
     private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
         this.duration = this.frames.reduce((duration, frame) => duration + frame.duration, 0);
+
         for (const frameTag of json.meta.frameTags ?? []) {
             let duration = 0;
+
             for (let i = frameTag.from; i <= frameTag.to; i++) {
                 duration += this.frames[i].duration;
             }
+
             this.frameTags[frameTag.name] = frameTag;
             this.frameTagDurations[frameTag.name] = duration;
         }
@@ -37,6 +40,7 @@ export class Aseprite {
         const json = await (await fetch(source)).json() as AsepriteJSON;
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.meta.image, baseURL));
+
         return new Aseprite(json, image);
     }
 
@@ -58,22 +62,33 @@ export class Aseprite {
         return this.frames[0].sourceSize.h;
     }
 
-    private calculateFrameIndex(time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
-            direction: AsepriteDirection = "forward"): number {
+    private calculateFrameIndex(
+        time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
+        direction: AsepriteDirection = "forward"
+    ): number {
         let delta = direction === "reverse" ? -1 : 1;
+
         if (direction === "pingpong") {
             duration = duration * 2 - this.frames[from].duration - this.frames[to].duration;
         }
+
         let frameTime = time % duration;
         let frameIndex = direction === "reverse" ? to : from;
-        while (((delta > 0 && frameIndex < to) || (delta < 0 && frameIndex > from))
-                && frameTime >= this.frames[frameIndex].duration) {
+
+        while (
+            (
+                (delta > 0 && frameIndex < to)
+                || (delta < 0 && frameIndex > from)
+            ) && frameTime >= this.frames[frameIndex].duration
+        ) {
             frameTime -= this.frames[frameIndex].duration;
             frameIndex += delta;
+
             if (frameIndex === to) {
                 delta = -delta;
             }
         }
+
         return frameIndex;
     }
 
@@ -102,9 +117,13 @@ export class Aseprite {
             throw new Error("Frame index not found: " + index);
         }
 
-        ctx.drawImage(this.image, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h,
+        ctx.drawImage(
+            this.image,
+            frame.frame.x, frame.frame.y,
+            frame.frame.w, frame.frame.h,
             Math.round(x) + frame.spriteSourceSize.x, Math.round(y) + frame.spriteSourceSize.y,
-            frame.spriteSourceSize.w, frame.spriteSourceSize.h);
+            frame.spriteSourceSize.w, frame.spriteSourceSize.h
+        );
     }
 
     /**
@@ -116,11 +135,14 @@ export class Aseprite {
      */
     public getTaggedFrameIndex(tag: string, time: number = now()): number {
         const frameTag = this.frameTags[tag];
+
         if (frameTag == null) {
             throw new Error("Frame tag not found: " + tag);
         }
-        return this.calculateFrameIndex(time, this.frameTagDurations[tag], frameTag.from, frameTag.to,
-            frameTag.direction);
+
+        return this.calculateFrameIndex(
+            time, this.frameTagDurations[tag], frameTag.from, frameTag.to, frameTag.direction
+        );
     }
 
     /**
@@ -131,9 +153,11 @@ export class Aseprite {
      */
     public getAnimationDurationByTag(tag: string): number {
         const duration = this.frameTagDurations[tag];
+
         if (duration == null) {
             throw new Error("Frame tag not found: " + tag);
         }
+
         return duration;
     }
 

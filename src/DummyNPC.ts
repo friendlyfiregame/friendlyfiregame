@@ -17,18 +17,30 @@ export class DummyNPC extends NPC {
         this.greeting = new Greeting(this.scene, this, dialogData);
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        DummyNPC.font.drawText(ctx, "NPC", this.x, -this.y - this.height - 10, "black", 0.5);
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(this.x - Math.round(this.width / 2) - 0.5, -this.y - this.height - 0.5, this.width, this.height);
+
+        DummyNPC.font.drawText(
+            ctx,
+            'NPC',
+            this.x, -this.y - this.height - 10,
+            'black',
+            0.5
+        );
+
+        ctx.strokeStyle = 'black';
+
+        ctx.strokeRect(
+            this.x - Math.round(this.width / 2) - 0.5, -this.y - this.height - 0.5,
+            this.width, this.height
+        );
+
         ctx.restore();
-        this.drawDialoguePrompt(ctx);
+        this.drawDialoguePrompt();
         this.drawGreeting(ctx);
     }
 
-    update(dt: number): void {
-        this.updateGreeting(dt);
+    public update(dt: number): void {
+        this.updateGreeting();
     }
-
 }

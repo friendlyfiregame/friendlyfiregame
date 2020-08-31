@@ -225,15 +225,24 @@ export class GameScene extends Scene<FriendlyFire> {
             ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
-                    case 'riddlestone': return new RiddleStone(this, entity.x, entity.y, entity.properties);
-                    case 'campfire': return new Campfire(this, entity.x, entity.y);
-                    case 'radio': return new Radio(this, entity.x, entity.y);
-                    case 'movingplatform': return new MovingPlatform(this, entity.x, entity.y, entity.properties);
-                    case 'skull': return new Skull(this, entity.x, entity.y);
-                    case 'chicken': return new Chicken(this, entity.x, entity.y);
-                    case 'superthrow': return new SuperThrow(this, entity.x, entity.y);
-                    case 'portal': return new Portal(this, entity.x, entity.y);
-                    default: return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
+                    case 'riddlestone':
+                        return new RiddleStone(this, entity.x, entity.y, entity.properties);
+                    case 'campfire':
+                        return new Campfire(this, entity.x, entity.y);
+                    case 'radio':
+                        return new Radio(this, entity.x, entity.y);
+                    case 'movingplatform':
+                        return new MovingPlatform(this, entity.x, entity.y, entity.properties);
+                    case 'skull':
+                        return new Skull(this, entity.x, entity.y);
+                    case 'chicken':
+                        return new Chicken(this, entity.x, entity.y);
+                    case 'superthrow':
+                        return new SuperThrow(this, entity.x, entity.y);
+                    case 'portal':
+                        return new Portal(this, entity.x, entity.y);
+                    default:
+                        return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
                 }
             })
         ];
@@ -269,7 +278,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.loadApocalypse();
     }
 
-    public cleanup() {
+    public cleanup(): void {
         if (this.fpsInterval != null) {
             clearInterval(this.fpsInterval);
         }
@@ -288,18 +297,19 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public getBackgroundTrack (id: BgmId): BackgroundTrack {
+    public getBackgroundTrack(id: BgmId): BackgroundTrack {
         const found = this.backgroundTracks.find(track => track.id === id);
 
         if (!found) {
             console.error(`Missing background track with ID '${id}'.`);
+
             return this.backgroundTracks[0];
         }
 
         return found;
     }
 
-    public fadeActiveBackgroundTrack (fade: number, inverse = false): void {
+    public fadeActiveBackgroundTrack(fade: number, inverse = false): void {
         this.backgroundTracks.forEach(t => {
             if (t.active) {
                 if (inverse) {
@@ -311,7 +321,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    public setActiveBgmTrack (id: BgmId): void {
+    public setActiveBgmTrack(id: BgmId): void {
         this.backgroundTracks.forEach(t => t.active = false);
         const track = this.backgroundTracks.find(t => t.id === id);
 
@@ -325,7 +335,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public fadeToBackgroundTrack (id: BgmId): void {
+    public fadeToBackgroundTrack(id: BgmId): void {
         const track = this.getBackgroundTrack(id);
         this.muteMusic();
         this.backgroundTracks.forEach(t => t.active = false);
@@ -338,7 +348,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public playBackgroundTrack (id: BgmId): void {
+    public playBackgroundTrack(id: BgmId): void {
         const track = this.getBackgroundTrack(id);
         this.backgroundTracks.forEach(t => t.sound.stop());
         track.active = true;
@@ -384,7 +394,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public gameOver(questKey?: QuestKey) {
+    public gameOver(): void {
         GameScene.bgm1.stop();
         GameScene.bgm2.stop();
         GameScene.swell.setVolume(0.5);
@@ -399,7 +409,7 @@ export class GameScene extends Scene<FriendlyFire> {
         return !this.paused;
     }
 
-    public update(dt: number) {
+    public update(dt: number): void {
         if (this.paused) {
             dt = 0;
         }
@@ -428,7 +438,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
 
         // Center coordinate system
@@ -480,7 +490,12 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Display FPS counter
         if (isDev()) {
-            GameScene.font.drawText(ctx, `${this.framesPerSecond} FPS`, 2 * this.scale, 2 * this.scale - 3, "white");
+            GameScene.font.drawText(
+                ctx,
+                `${this.framesPerSecond} FPS`,
+                2 * this.scale, 2 * this.scale - 3,
+                "white"
+            );
         }
 
         this.frameCounter++;
@@ -499,7 +514,7 @@ export class GameScene extends Scene<FriendlyFire> {
                width: bounds.width,
                height: bounds.height
             }
-        })
+        });
     }
 
     private addAllDebugBoundsToRenderingQueue(): void {
@@ -584,7 +599,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.game.campaign.runAction("enable", null, [ "fire", "fire3" ]);
 
                 // Music
-                GameScene.bgm2.stop()
+                GameScene.bgm2.stop();
             }
         }
     }
@@ -606,7 +621,7 @@ export class GameScene extends Scene<FriendlyFire> {
             alpha: 0.7 * this.apocalypseFactor,
             relativeToScreen: true,
             dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
-        })
+        });
     }
 
     private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black"): void {
@@ -618,11 +633,12 @@ export class GameScene extends Scene<FriendlyFire> {
             alpha,
             relativeToScreen: true,
             dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
-        })
+        });
     }
 
     public loadApocalypse(): void {
         this.fireEffects = [1, 2].map(num =>  new FireGfx(32, 24, true, 2));
+
         this.fireEmitter = this.particles.createEmitter({
             position: {x: this.player.x, y: this.player.y},
             offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
@@ -635,7 +651,9 @@ export class GameScene extends Scene<FriendlyFire> {
             breakFactor: 0.9,
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
-                if (this.world.collidesWith(particle.x, particle.y - particle.size / 4)) {
+                if (
+                    this.world.collidesWith(particle.x, particle.y - particle.size / 4)
+                ) {
                     particle.vx = 0;
                     particle.vy = 0;
                 }
@@ -648,9 +666,12 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position")
+        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === 'friendship_player_position');
 
-        if (!playerTargetPos) throw new Error ('cannot initiate friendship ending because some points of interest are missing');
+        if (!playerTargetPos) {
+            throw new Error ('cannot initiate friendship ending because some points of interest are missing');
+        }
+
         this.player.startAutoMove(playerTargetPos.x, true);
         this.player.setControllable(false);
     }
@@ -664,12 +685,18 @@ export class GameScene extends Scene<FriendlyFire> {
 
         if (bossPosition && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {
-                const cloud = new Cloud(this, pos.x, pos.y, {
-                    velocity: 0,
-                    distance: 1
-                }, true);
+                const cloud = new Cloud(
+                    this,
+                    pos.x, pos.y,
+                    {
+                        velocity: 0,
+                        distance: 1
+                    },
+                    true
+                );
+
                 this.gameObjects.push(cloud);
-            })
+            });
 
             // Teleport player and fire to boss spawn position
             this.player.x = bossPosition.x - 36;
@@ -701,7 +728,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.togglePause(true);
     }
 
-    public resume():void {
+    public resume(): void {
         this.resetMusicVolumes()
         this.togglePause(false);
     }

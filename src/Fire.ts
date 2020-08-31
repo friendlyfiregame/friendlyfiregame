@@ -60,7 +60,9 @@ export class Fire extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+
         this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
+
         this.smokeEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
@@ -108,7 +110,7 @@ export class Fire extends NPC {
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
     }
 
-    public showDialoguePrompt (): boolean {
+    public showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -124,7 +126,7 @@ export class Fire extends NPC {
         );
     }
 
-    public isRendered (): boolean {
+    public isRendered(): boolean {
         return this.isVisible;
     }
 
@@ -140,14 +142,14 @@ export class Fire extends NPC {
         return this.state === FireState.PUT_OUT;
     }
 
-    public setState (state: FireState): void {
+    public setState(state: FireState): void {
         this.state = state;
         if (state === FireState.BEING_PUT_OUT || state === FireState.PUT_OUT) {
             Fire.fireAmbience.stop();
         }
     }
 
-    public drawToCanvas (ctx: CanvasRenderingContext2D): void {
+    public drawToCanvas(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.translate(this.x, -this.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
@@ -165,7 +167,7 @@ export class Fire extends NPC {
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         if (this.thinkBubble) {
@@ -179,7 +181,7 @@ export class Fire extends NPC {
         }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         if (this.state === FireState.ANGRY && !this.beingPutOut) {
             this.face?.setMode(FaceModes.ANGRY);
         } else if (this.state === FireState.BEING_PUT_OUT) {
@@ -239,10 +241,11 @@ export class Fire extends NPC {
         if (this.showDialoguePrompt()) {
             this.dialoguePrompt.update(dt, this.x, this.y + 32);
         }
+
         this.speechBubble.update(this.x, this.y);
     }
 
-    public feed(wood: Wood) {
+    public feed(wood: Wood): void {
         wood.remove();
 
         // Handle end of the world

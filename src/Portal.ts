@@ -21,11 +21,11 @@ export class Portal extends Entity {
         this.animator.assignSprite(Portal.sprite);
     }
 
-    private nextAnimationState (): void {
+    private nextAnimationState(): void {
         this.animationState++;
     }
 
-    draw(): void {
+    public draw(): void {
         switch (this.animationState) {
             case PortalAnimationState.WAITING:
                 this.animator.play("empty", 1);
@@ -43,11 +43,15 @@ export class Portal extends Entity {
                 this.animator.play("empty", 1);
                 break;
         }
-        if (this.scene.showBounds) this.drawBounds();
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         if (this.animationState === PortalAnimationState.WAITING) {
             if (this.timeAlive >= 1) {
                 this.nextAnimationState();

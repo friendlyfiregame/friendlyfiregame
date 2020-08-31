@@ -71,20 +71,35 @@ export class ControlsScene extends Scene<FriendlyFire> {
         }
     }
 
-    private drawTooltip (ctx: CanvasRenderingContext2D, x: number, y: number, text: string, animationTag: ControllerAnimationTags) {
+    // TODO: Should be unified with `drawTooltip(…)` in CharacterSelectionScene
+    private drawTooltip (
+        ctx: CanvasRenderingContext2D, x: number, y: number, text: string, animationTag: ControllerAnimationTags
+    ): void {
         const gap = 6;
         const textPositionX = Math.round(x + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap);
         const textPositionY = y;
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, x, y)
-        ControlsScene.font.drawTextWithOutline(ctx, text, textPositionX, textPositionY, "white", "black");
+
+        this.controllerSpriteMapRecords[controllerSprite].drawTag(
+            ctx,
+            animationTag,
+            x, y
+        );
+
+        ControlsScene.font.drawTextWithOutline(
+            ctx,
+            text,
+            textPositionX, textPositionY,
+            "white",
+            "black"
+        );
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
 
         ctx.globalAlpha = 0.8;
-        ctx.fillStyle = "black";
+        ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, width, height);
 
         ctx.globalAlpha = 1;
@@ -101,21 +116,32 @@ export class ControlsScene extends Scene<FriendlyFire> {
         const controllerSprite = ControllerManager.getInstance().selectedGamepadStyle;
         ControlsScene.gamepadSelection.drawTag(ctx, controllerSprite, 204, 2);
         ControlsScene.gamepadControls.drawTag(ctx, controllerSprite, 206, 35);
-        this.drawTooltip(ctx, 0, ControlsScene.panelImage.height, "Toggle Gamepad Button Prompts", ControllerAnimationTags.ACTION);
-        this.drawTooltip(ctx, 0, ControlsScene.panelImage.height + 16, "Back", ControllerAnimationTags.BACK);
 
+        this.drawTooltip(
+            ctx,
+            0, ControlsScene.panelImage.height,
+            'Toggle Gamepad Button Prompts',
+            ControllerAnimationTags.ACTION
+        );
 
-        ctx.font = "20px sans-serif";
-        ctx.fillStyle = "white";
+        this.drawTooltip(
+            ctx,
+            0, ControlsScene.panelImage.height + 16,
+            'Back',
+            ControllerAnimationTags.BACK
+        );
 
-        // ctx.translate((width / 2) - ControlsScene.panelImage.width, (height / 2) - ControlsScene.panelImage.height);
-        const fontColor = "black";
+        ctx.font = '20px sans-serif';
+        ctx.fillStyle = 'white';
+
+        const fontColor = 'black';
 
         let textOffsetY = startingY;
+
         this.controls.forEach(label => {
             ControlsScene.font.drawText(ctx, label, textOffsetX, textOffsetY, fontColor);
             textOffsetY += gap;
-        })
+        });
 
         ctx.drawImage(ControlsScene.keyboardKeys, 123, startingY - 2);
         ctx.restore();

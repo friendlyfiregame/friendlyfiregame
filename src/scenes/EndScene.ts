@@ -1,6 +1,5 @@
 import { asset } from '../Assets';
 import { BitmapFont } from '../BitmapFont';
-import { ControllerEvent } from '../input/ControllerEvent';
 import { ControllerFamily } from '../input/ControllerFamily';
 import { CreditsScene } from './CreditsScene';
 import { DIALOG_FONT } from '../constants';
@@ -33,7 +32,7 @@ export class EndScene extends Scene<FriendlyFire> {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
-    private handleButtonDown(event: ControllerEvent): void {
+    private handleButtonDown(): void {
         if (this.time > this.inputDelay) {
             this.game.scenes.setScene(CreditsScene);
         }
@@ -50,19 +49,34 @@ export class EndScene extends Scene<FriendlyFire> {
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.drawImage(EndScene.logo, width / 2 - EndScene.logo.width / 2, height / 2 - EndScene.logo.height / 2 - 15);
+        ctx.drawImage(
+            EndScene.logo,
+            width / 2 - EndScene.logo.width / 2, height / 2 - EndScene.logo.height / 2 - 15
+        );
 
         if (this.time > this.subtitleDelay) {
             const endingLabel = this.ending ? this.ending.title : 'Unknown [E]nding';
             const size = EndScene.font.measureText(endingLabel);
-            EndScene.font.drawText(ctx, endingLabel, width / 2 - size.width / 2, height / 2 - EndScene.logo.height / 2 + 20, "red");
+
+            EndScene.font.drawText(
+                ctx,
+                endingLabel,
+                width / 2 - size.width / 2, height / 2 - EndScene.logo.height / 2 + 20,
+                "red"
+            );
         }
 
-        // Inform the user, that it's possible to return to the title…
+        // Inform the user, that it's possible to return to the title
         if (this.time > this.inputDelay) {
             const txt = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to continue.`;
             const txtSize = EndScene.font.measureText(txt);
-            EndScene.font.drawText(ctx, txt, width / 2 - txtSize.width / 2 , height - txtSize.height - 15, "darkgrey");
+
+            EndScene.font.drawText(
+                ctx,
+                txt,
+                width / 2 - txtSize.width / 2 , height - txtSize.height - 15,
+                "darkgrey"
+            );
         }
     }
 }

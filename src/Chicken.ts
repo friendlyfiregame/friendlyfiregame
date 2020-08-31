@@ -12,8 +12,9 @@ export class Chicken extends NPC {
     @asset("sprites/chicken.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 18);
+
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }
@@ -26,13 +27,23 @@ export class Chicken extends NPC {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Chicken.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.addAseprite(
+            Chicken.sprite,
+            "idle",
+            this.x, this.y,
+            RenderingLayer.ENTITIES,
+            this.direction
+        );
+
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
+
         this.speechBubble.draw(ctx);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
     }

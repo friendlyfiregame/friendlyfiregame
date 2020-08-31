@@ -59,7 +59,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
 
-    public async handleMenuAction (buttonId: string): Promise<void> {
+    public async handleMenuAction(buttonId: string): Promise<void> {
         switch(buttonId) {
             case MenuItemKey.RESUME:
                 PauseScene.music.stop();
@@ -94,10 +94,22 @@ export class PauseScene extends Scene<FriendlyFire> {
         ctx.globalAlpha = 0.8;
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
+
         PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
+
         const versionText = isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
         const versionTextSize = PauseScene.font.measureText(versionText);
-        PauseScene.font.drawText(ctx, versionText, this.game.width - versionTextSize.width - 7, this.game.height - versionTextSize.height - 4, "white", 0, 0.6);
+
+        PauseScene.font.drawText(
+            ctx,
+            versionText,
+            this.game.width - versionTextSize.width - 7,
+            this.game.height - versionTextSize.height - 4,
+            "white",
+            0,
+            0.6
+        );
+
         ctx.restore();
 
         this.menu.draw(ctx);

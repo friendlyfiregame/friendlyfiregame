@@ -14,19 +14,23 @@ export class Skull extends PhysicsEntity {
         super(scene, x, y, 16, 16);
     }
 
-    draw(): void {
+    public draw(): void {
         this.scene.renderer.addAseprite(Skull.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
 
-        if (this.scene.showBounds) this.drawBounds();
+        if (this.scene.showBounds) {
+            this.drawBounds();
+        }
     }
 
     public isCarried(): boolean {
         return this.scene.player.isCarrying(this);
     }
 
-    update(dt: number): void {
+    public update(dt: number): void {
         super.update(dt);
+
         const player = this.scene.player;
+
         if (!this.isCarried() && this.distanceTo(player) < 20) {
             player.carry(this);
         }

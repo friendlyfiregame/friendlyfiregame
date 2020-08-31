@@ -91,11 +91,11 @@ export class Campaign {
         return ending;
     }
 
-    public toggleCharacterAsset (): void {
+    public toggleCharacterAsset(): void {
         this.selectedCharacter = this.selectedCharacter === CharacterAsset.MALE ? CharacterAsset.FEMALE : CharacterAsset.MALE;
     }
 
-    public toggleVoiceAsset (): void {
+    public toggleVoiceAsset(): void {
         this.selectedVoice = this.selectedVoice === VoiceAsset.MALE ? VoiceAsset.FEMALE : VoiceAsset.MALE;
     }
 
@@ -172,7 +172,6 @@ export class Campaign {
                 case "sad":
                     npc?.face?.setMode(FaceModes.SAD);
                     break;
-
                 case "zoomin":
                     this.gameScene.camera.zoom += 1
                     break;
@@ -183,7 +182,13 @@ export class Campaign {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'forest');
 
                     if (forestPointer) {
-                        this.gameScene.camera.focusOn(8, forestPointer.x, forestPointer.y, 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(
+                            8,
+                            forestPointer.x, forestPointer.y,
+                            1,
+                            0,
+                            valueCurves.cos(0.35)
+                        );
                     }
 
                     break;
@@ -191,7 +196,13 @@ export class Campaign {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'mountain');
 
                     if (mountainPointer) {
-                        this.gameScene.camera.focusOn(8, mountainPointer.x, mountainPointer.y, 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(
+                            8,
+                            mountainPointer.x, mountainPointer.y,
+                            1,
+                            0,
+                            valueCurves.cos(0.35)
+                        );
                     }
 
                     break;
@@ -199,17 +210,29 @@ export class Campaign {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'river');
 
                     if (riverPointer) {
-                        this.gameScene.camera.focusOn(8, riverPointer.x, riverPointer.y, 1, 0, valueCurves.cos(0.35));
+                        this.gameScene.camera.focusOn(
+                            8,
+                            riverPointer.x, riverPointer.y,
+                            1,
+                            0,
+                            valueCurves.cos(0.35)
+                        );
                     }
 
                     break;
                 case "crazyzoom":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
-                    this.gameScene.camera.focusOn(duration, this.gameScene.fire.x, this.gameScene.fire.y + 15, 8,
-                        -2 * Math.PI, valueCurves.cubic).then(() => this.gameScene!.beginApocalypse());
-                        this.gameScene.fire.conversation = null;
-                        this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
+
+                    this.gameScene.camera.focusOn(
+                        duration,
+                        this.gameScene.fire.x, this.gameScene.fire.y + 15,
+                        8,
+                        -2 * Math.PI, valueCurves.cubic
+                    ).then(() => this.gameScene!.beginApocalypse());
+
+                    this.gameScene.fire.conversation = null;
+                    this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
                     break;
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();
@@ -232,9 +255,6 @@ export class Campaign {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_FIRE);
                     Conversation.setGlobal("gotFireQuest", "true");
                     this.runAction("enable", null, ["tree", "tree1"]);
-                    break;
-                case "givebeard":
-                    // this.gameScene.player.setBeard(true);
                     break;
                 case "endgameA":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
@@ -274,6 +294,7 @@ export class Campaign {
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {
                         this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_STONE);
                     }
+
                     break;
                 case "pickupstone":
                     this.gameScene.stone.pickUp();
@@ -285,17 +306,20 @@ export class Campaign {
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
                         this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE_WITH_WOOD);
                     }
+
                     break;
                 case "dance":
                     setTimeout(() => {
                         this.gameScene!.player.startDance(+params[0] || 1);
                     }, 500);
+
                     break;
                 case "wakeupchest":
                     this.gameScene.mimic.nextState();
                     break;
                 case "enable":
                     const char = params[0], dialogName = params[1];
+
                     const npcMap: Record<string, NPC> = {
                         "fire": this.gameScene.fire,
                         "stone": this.gameScene.stone,
@@ -309,14 +333,18 @@ export class Campaign {
                         "shiba": this.gameScene.shiba,
                         "powershiba": this.gameScene.powerShiba
                     };
+
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
+
                     if (targetNpc && dialog) {
                         targetNpc.conversation = new Conversation(dialog, targetNpc);
                     }
+
                     break;
                 case "disable":
                     const char1 = params[0];
+
                     const npcMap1: Record<string, NPC> = {
                         "fire": this.gameScene.fire,
                         "stone": this.gameScene.stone,
@@ -330,10 +358,13 @@ export class Campaign {
                         "shiba": this.gameScene.shiba,
                         "powershiba": this.gameScene.powerShiba
                     };
+
                     const targetNpc1 = npcMap1[char1];
+
                     if (targetNpc1) {
                         targetNpc1.conversation = null;
                     }
+
                     break;
             }
         }

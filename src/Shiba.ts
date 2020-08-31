@@ -57,8 +57,9 @@ export class Shiba extends ScriptableNPC {
     private saidFarewell = false;
     public peeing = false;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 28, 24);
+
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
         this.setMaxVelocity(2);
@@ -177,15 +178,20 @@ export class Shiba extends ScriptableNPC {
     public draw(ctx: CanvasRenderingContext2D): void {
         if (this.move === 0) {
             const tag = this.peeing ? "peeing" : "idle";
-            this.scene.renderer.addAseprite(Shiba.sprite, tag, this.x, this.y, RenderingLayer.ENTITIES, this.direction)
+
+            this.scene.renderer.addAseprite(
+                Shiba.sprite, tag, this.x, this.y, RenderingLayer.ENTITIES, this.direction
+            );
         } else {
-            this.scene.renderer.addAseprite(Shiba.sprite, "walk", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
+            this.scene.renderer.addAseprite(
+                Shiba.sprite, "walk", this.x, this.y, RenderingLayer.ENTITIES, this.direction
+            );
         }
 
         if (this.scene.showBounds) this.drawBounds();
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
+            this.drawDialoguePrompt();
         }
 
         if (this.thinkBubble) {
@@ -246,7 +252,15 @@ export class Shiba extends ScriptableNPC {
 
     private walkToFireLogic(triggerCollisions: GameObjectInfo[]): void {
         this.move = -1;
-        if (this.scene.world.collidesWithVerticalLine(this.x - (this.width / 2), this.y + this.height, this.height, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+
+        if (
+            this.scene.world.collidesWithVerticalLine(
+                this.x - (this.width / 2), this.y + this.height,
+                this.height,
+                [ this ],
+                [ Environment.PLATFORM, Environment.WATER ]
+            )
+        ) {
             this.jump();
         }
 
