@@ -12,8 +12,8 @@
         "Well, then make yourself comfortable.",
         "At least I'm not stuck here alone anymore.",
         "►What? Can't we just exit the cave?",
-        "The platforms on the way up are too high...",
-        "►F...",
+        "The platforms on the way up are too high…",
+        "►F…",
         "Game over, man!",
         "GAME OVER! !endgameC !end"
     ],
@@ -28,13 +28,13 @@
         "►Yeah, it's a long story.",
         "I couldn't cross the broken bridge after falling down from the sky.",
         "I tried many times but I couldn't jump far enough.",
-        "Since there wasn't anything better to do, I found about the skip-jump by accident and ended up on this side of the river. @skipjump"
+        "Since there wasn't anything better to do, I found out about the skip-jump by accident and ended up on this side of the river. @skipjump"
     ],
     "skipjump": [
         "It's a secret jumping technique I mastered. !set visited",
-        "Just at the momemnt of impact, I was able to jump on the water and cross the river this way!",
+        "Just at the moment of impact, I was able to jump on the water and cross the river this way!",
         "Just like a stone skips on water when you throw it at the right angle. Hence the name.",
-        "Patent pendeng.",
+        "Patent pending.",
         "And now I'm stuck here… @bug"
     ],
     "bug": [
