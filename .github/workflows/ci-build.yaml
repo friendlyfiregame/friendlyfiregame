@@ -59,7 +59,7 @@ jobs:
         publish_branch: gh-pages
         publish_dir: ./dist
         force_orphan: true
-        cname: friendlyfiregame.com
+        cname: play.friendlyfiregame.com
 
   build_electron_app:
     needs: build_webapp
