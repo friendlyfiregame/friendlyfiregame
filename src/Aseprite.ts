@@ -13,6 +13,7 @@ export class Aseprite {
     private readonly frameTags: Record<string, AsepriteFrameTagJSON> = {};
     private readonly frameTagDurations: Record<string, number> = {};
     private readonly duration: number;
+    private readonly fallbackTag = 'idle';
 
     private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
@@ -134,12 +135,10 @@ export class Aseprite {
      * @return The frame index to draw.
      */
     public getTaggedFrameIndex(tag: string, time: number = now()): number {
-        const frameTag = this.frameTags[tag];
-
+        const frameTag = this.frameTags[tag] || this.frameTags[this.fallbackTag];
         if (frameTag == null) {
-            throw new Error("Frame tag not found: " + tag);
+            throw new Error(`Frame tag not found and fallback is not available as well. Tag: '${tag}' | FallbackTag: '${this.fallbackTag}'`);
         }
-
         return this.calculateFrameIndex(
             time, this.frameTagDurations[tag], frameTag.from, frameTag.to, frameTag.direction
         );
@@ -152,10 +151,9 @@ export class Aseprite {
      * @return The animation duration.
      */
     public getAnimationDurationByTag(tag: string): number {
-        const duration = this.frameTagDurations[tag];
-
+        const duration = this.frameTagDurations[tag] || this.frameTagDurations[this.fallbackTag];
         if (duration == null) {
-            throw new Error("Frame tag not found: " + tag);
+            throw new Error(`Frame tag not found and fallback is not available as well. Tag: '${tag}' | FallbackTag: '${this.fallbackTag}'`);
         }
 
         return duration;
