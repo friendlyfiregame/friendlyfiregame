@@ -16,9 +16,8 @@ const earlyActions = [
     "bored"
 ];
 
-const globalVariables: Record<string, string> = {};
-
 export class Conversation {
+    private static globalVariables: Record<string, string> = {};
     private states: string[];
     private data: {[key: string]: ConversationLine[]};
     private state!: string;
@@ -115,7 +114,7 @@ export class Conversation {
     private setVariable(name = "", value = "true"): void {
         if (name.startsWith("$")) {
             // Global variable
-            globalVariables[name] = value;
+            Conversation.globalVariables[name] = value;
         } else {
             // Local variable
             this.localVariables[name] = value;
@@ -127,16 +126,20 @@ export class Conversation {
             varname = "$" + varname;
         }
 
-        globalVariables[varname] = value;
+        Conversation.globalVariables[varname] = value;
     }
 
     public static getGlobals(): Record<string, string> {
-        return globalVariables;
+        return Conversation.globalVariables;
+    }
+
+    public static resetGlobals(): void {
+        Conversation.globalVariables = {}
     }
 
     private getVariable(name: string): string {
         if (name.startsWith("$")) {
-            return globalVariables[name];
+            return Conversation.globalVariables[name];
         } else {
             return this.localVariables[name];
         }

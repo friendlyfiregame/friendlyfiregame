@@ -280,7 +280,6 @@ export class Campaign {
                     this.gameScene.player.enableRunning();
                     break;
                 case "doublejump":
-                    Conversation.setGlobal("hasDoubleJump", "true");
                     this.gameScene.player.enableDoubleJump();
                     break;
                 case "multijump":

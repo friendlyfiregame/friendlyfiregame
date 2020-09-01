@@ -221,6 +221,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackFactor = 0;
         this.apocalypse = false;
         this.fireFuryEndTime = 0;
+        Conversation.resetGlobals();
 
         this.gameObjects = [
             this.world = new World(this),

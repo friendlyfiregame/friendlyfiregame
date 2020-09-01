@@ -297,6 +297,7 @@ export class Player extends PhysicsEntity {
     }
 
     public enableDoubleJump(): void {
+        Conversation.setGlobal("hasDoubleJump", "true");
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
 
         if (!this.doubleJump) {
