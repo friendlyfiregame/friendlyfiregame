@@ -11,11 +11,13 @@ on:
 jobs:
 
   build_webapp:
-    name: Build Webapp
+    name: Build game webapp
     runs-on: ubuntu-20.04
     steps:
     - name: git checkout
       uses: actions/checkout@v2
+      with:
+        path: game
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
@@ -31,27 +33,75 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
-    - run: yarn install
-    - run: yarn compile
-    - run: yarn dist
+    - name: Install dependencies of the game
+      run: yarn install
+      working-directory: ./game
+    - name: Compile game
+      run: yarn compile
+      working-directory: ./game
+    - name: dist game
+      run: yarn dist
+      working-directory: ./game
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
       with:
-        name: webapp-dist
-        path: dist
+        name: game-dist
+        path: game/dist
+
+  build_website:
+    name: Build static website
+    runs-on: ubuntu-20.04
+    steps:
+    - name: git checkout
+      uses: actions/checkout@v2
+      with: 
+        repository: friendlyfiregame/staticgamesite
+        path: staticWebsite
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: "12.x"
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: Install dependecies of static website
+      run: yarn install
+      working-directory: ./staticWebsite
+    - name: Build static website
+      run: yarn build:dist
+      working-directory: ./staticWebsite
+    - name: Archive dist folder
+      uses: actions/upload-artifact@v1
+      with:
+        name: static-website-dist
+        path: staticWebsite/dist
+
 
   deploy_webapp:
     name: Deploy Webapp
     needs: build_webapp
     runs-on: ubuntu-20.04
     steps:
-    - name: Download archived dist folder
+    - name: Download archived static website dist folder
       uses: actions/download-artifact@master
       with:
-        name: webapp-dist
+        name: static-website-dist
         path: dist
+    - name: Download archived game dist folder
+      uses: actions/download-artifact@master
+      with:
+        name: game-dist
+        path: dist/game
 
-    - name: Publish browser game
+    - name: Publish browser game and static website
       if: github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
