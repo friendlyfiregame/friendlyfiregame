@@ -53,7 +53,7 @@ jobs:
       with:
         args: >
           -Dsonar.projectVersion=${{steps.version.outputs.prop}}
-          -sonar.branch.name=${BRANCH_NAME}
+          -Dsonar.branch.name=${BRANCH_NAME}
     - run: npm run dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
