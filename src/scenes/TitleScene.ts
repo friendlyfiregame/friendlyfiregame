@@ -70,7 +70,6 @@ export class TitleScene extends Scene<FriendlyFire> {
     private static font: BitmapFont;
 
     private menu = new MenuList(MenuAlignment.CENTER);
-    private time = 0;
     private animationDuration = 3;
 
     private titleBasePosition = {
@@ -90,7 +89,6 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         this.zIndex = 1;
-        this.time = 0;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
         this.menu.reset();
@@ -268,14 +266,6 @@ export class TitleScene extends Scene<FriendlyFire> {
             }
         }
 
-    }
-
-    public update(dt: number): void {
-        super.update(dt);
-        this.time += dt;
-        if (this.time > this.animationDuration && !this.animationIsDone()) {
-            this.finishAnimation();
-        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
