@@ -167,22 +167,24 @@ export class SceneNode<T extends Game> {
         return this.anchor;
     }
 
-    public setAnchor(anchor: Direction) {
+    public setAnchor(anchor: Direction): this {
         if (anchor !== this.anchor) {
             this.anchor = anchor;
             this.invalidate();
         }
+        return this;
     }
 
     public getChildAnchor(): Direction {
         return this.childAnchor;
     }
 
-    public setChildAnchor(childAnchor: Direction) {
+    public setChildAnchor(childAnchor: Direction): this {
         if (childAnchor !== this.childAnchor) {
             this.childAnchor = childAnchor;
             this.invalidate();
         }
+        return this;
     }
 
     /**
