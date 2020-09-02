@@ -28,8 +28,8 @@ export interface ParticleEmitterArguments {
     angleSpeed?: number | NumberGenerator;
     renderingLayer?: RenderingLayer;
     zIndex?: number;
-    update?: (p: Particle) => void
-};
+    update?: (p: Particle) => void;
+}
 
 export class Particles {
     private scene: GameScene;
@@ -304,7 +304,7 @@ export class ValueCurve {
 }
 
 function trapezeFunction(v: number, v1: number = v): ((p: number) => number) {
-    return (p: number) => p < v ? p / v : p > 1 - v1 ? (1 - p) / v1 : 1
+    return (p: number) => p < v ? p / v : p > 1 - v1 ? (1 - p) / v1 : 1;
 }
 
 export const valueCurves = {

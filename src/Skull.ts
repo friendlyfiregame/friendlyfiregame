@@ -10,7 +10,7 @@ export class Skull extends PhysicsEntity {
     @asset("sprites/skull.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 16, 16);
     }
 

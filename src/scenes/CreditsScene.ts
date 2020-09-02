@@ -125,7 +125,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             "white"
         );
 
-        return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20
+        return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20;
     }
 
     private drawParagraph(
@@ -152,7 +152,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         names.forEach(name => {
             CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
             y += this.standardCharHeight;
-        })
+        });
         return y + 40;
     }
 

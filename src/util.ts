@@ -149,5 +149,5 @@ export function calculateVolume(
     return Math.max(
         0,
         maxVolume - ((distance * METER_PER_PIXEL) / (SOUND_INTENSITY_MULTIPLIER * intensity))
-    )
+    );
 }

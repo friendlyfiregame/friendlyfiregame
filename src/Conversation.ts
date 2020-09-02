@@ -5,7 +5,7 @@ export interface Interaction {
     npcLine: ConversationLine | null;
     options: ConversationLine[];
     spoiledOptions: ConversationLine[];
-};
+}
 
 // Actions that shall be executed before an NPC talks, not after
 const earlyActions = [
@@ -134,7 +134,7 @@ export class Conversation {
     }
 
     public static resetGlobals(): void {
-        Conversation.globalVariables = {}
+        Conversation.globalVariables = {};
     }
 
     private getVariable(name: string): string {
@@ -183,10 +183,10 @@ export class Conversation {
             } else {
                 if (s.includes("!=")) {
                     const values = s.split("!=").map(s => s.trim());
-                    return self.getVariable(values[0]) != values[1];
+                    return self.getVariable(values[0]) !== values[1];
                 } else if (s.includes("=")) {
                     const values = s.split("=").map(s => s.trim());
-                    return self.getVariable(values[0]) == values[1];
+                    return self.getVariable(values[0]) === values[1];
                 } else if (s.includes(">")) {
                     const values = s.split(">").map(s => s.trim());
                     return parseFloat(self.getVariable(values[0])) > parseFloat(values[1]);
@@ -198,7 +198,7 @@ export class Conversation {
 
             // Variable name only
             const v = self.getVariable(s.trim());
-            return v != null && v != "" && v != "0" && v != "false";
+            return v != null && v !== "" && v !== "0" && v !== "false";
         }
     }
 
@@ -274,7 +274,7 @@ export class ConversationLine {
         }
 
         // Remove actions and state changes
-        const atPos = line.indexOf("@")
+        const atPos = line.indexOf("@");
         const exclPos = line.search(/\![a-zA-Z]/);
 
         if (atPos >= 0 || exclPos >= 0) {

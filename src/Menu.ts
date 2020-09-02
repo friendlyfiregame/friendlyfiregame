@@ -3,7 +3,7 @@ import { BitmapFont } from "./BitmapFont";
 import { Signal } from "./Signal";
 import { Sound } from "./Sound";
 
-export enum MenuAlignment { LEFT, CENTER, RIGHT };
+export enum MenuAlignment { LEFT, CENTER, RIGHT }
 
 /**
  * Simple MenuItem Class for usage in a MenuList.

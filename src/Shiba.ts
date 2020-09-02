@@ -217,7 +217,7 @@ export class Shiba extends ScriptableNPC {
             this.move = 0;
         } else {
             if (this.state === ShibaState.ON_TREE) {
-                this.onTreeUpdateLogic(triggerCollisions, dt)
+                this.onTreeUpdateLogic(triggerCollisions, dt);
             } else if (this.state === ShibaState.FLYING_AWAY) {
                 this.flyingAwayUpdateLogic(dt);
             } else if (this.state === ShibaState.GOING_TO_FIRE) {

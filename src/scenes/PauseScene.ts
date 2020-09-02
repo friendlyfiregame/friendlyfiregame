@@ -46,12 +46,12 @@ export class PauseScene extends Scene<FriendlyFire> {
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
             new MenuItem(MenuItemKey.CONTROLS, "Controls and Options", PauseScene.font, "white", 75, 145),
             new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 160),
-        )
+        );
     }
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
-        this.menu.onActivated.connect(this.handleMenuAction, this)
+        this.menu.onActivated.connect(this.handleMenuAction, this);
     }
 
     public deactivate(): void {
@@ -60,7 +60,7 @@ export class PauseScene extends Scene<FriendlyFire> {
     }
 
     public async handleMenuAction(buttonId: string): Promise<void> {
-        switch(buttonId) {
+        switch (buttonId) {
             case MenuItemKey.RESUME:
                 PauseScene.music.stop();
                 this.scenes.popScene();

@@ -32,7 +32,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
     private itemPosition = {
         x: 0,
         y: 0
-    }
+    };
 
     private time = 0;
     private stopped = false;
@@ -46,7 +46,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         "Flying Wings Knock-off",
         "Dancing Dave",
         "Eternal Friendship"
-    ]
+    ];
 
     private subtitles = [
         [

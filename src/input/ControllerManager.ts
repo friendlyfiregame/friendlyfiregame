@@ -49,7 +49,7 @@ export class ControllerManager {
 
     public get controllerSprite(): ControllerSpriteMap {
         if (this.currentControllerFamily === ControllerFamily.GAMEPAD) {
-            switch(ControllerManager.getInstance().selectedGamepadStyle) {
+            switch (ControllerManager.getInstance().selectedGamepadStyle) {
                 case GamepadStyle.PLAYSTATION:
                     return ControllerSpriteMap.PLAYSTATION;
                 case GamepadStyle.XBOX:
@@ -58,6 +58,6 @@ export class ControllerManager {
         }
 
         // Fallback to Keyboard
-        return ControllerSpriteMap.KEYBOARD
+        return ControllerSpriteMap.KEYBOARD;
     }
 }

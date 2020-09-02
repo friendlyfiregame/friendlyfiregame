@@ -75,7 +75,7 @@ class GamepadButtonWrapper {
         const oldPressed = this.pressed;
         this.pressed = pressed;
 
-        if (oldPressed != pressed) {
+        if (oldPressed !== pressed) {
             if (pressed) {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
@@ -188,7 +188,7 @@ class GamepadWrapper {
     public gamepadModel: GamepadModel;
     constructor(gamepad: Gamepad) {
         this.index = gamepad.index;
-        this.id = gamepad.id
+        this.id = gamepad.id;
         this.gamepadModel = GamepadModel.fromString(this.id);
         this.buttons = new Array(gamepad.buttons.length);
 

@@ -93,7 +93,7 @@ export class Fire extends NPC {
             renderingLayer: RenderingLayer.ENTITIES,
             zIndex: 1,
             breakFactor: 0.5
-        })
+        });
 
         this.sparkEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
@@ -163,7 +163,7 @@ export class Fire extends NPC {
             return;
         }
 
-        this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this })
+        this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this });
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {

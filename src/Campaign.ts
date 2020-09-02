@@ -110,7 +110,7 @@ export class Campaign {
         // Rest quest progress
         this.quests.forEach(q => {
             q.reset();
-        })
+        });
 
         this.getQuest(QuestKey.A).trigger(QuestATrigger.JUST_ARRIVED);
 
@@ -157,7 +157,7 @@ export class Campaign {
      */
     public runAction(action: string, npc?: NPC | null, params: string[] = []): void {
         if (this.gameScene) {
-            switch(action) {
+            switch (action) {
                 case "angry":
                     npc?.face?.setMode(FaceModes.ANGRY);
                     break;
@@ -174,10 +174,10 @@ export class Campaign {
                     npc?.face?.setMode(FaceModes.SAD);
                     break;
                 case "zoomin":
-                    this.gameScene.camera.zoom += 1
+                    this.gameScene.camera.zoom += 1;
                     break;
                 case "zoomout":
-                    this.gameScene.camera.zoom -= 1
+                    this.gameScene.camera.zoom -= 1;
                     break;
                 case "treezoom":
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");

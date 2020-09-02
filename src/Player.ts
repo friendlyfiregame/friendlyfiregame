@@ -66,7 +66,7 @@ const drowningThoughts = [
 export enum Gender {
     FEMALE = 0,
     MALE = 1
-};
+}
 
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
@@ -79,7 +79,7 @@ type AutoMove = {
     destinationX: number;
     lastX: number;
     turnAround: boolean;
-}
+};
 
 @entity("player")
 export class Player extends PhysicsEntity {
@@ -815,9 +815,9 @@ export class Player extends PhysicsEntity {
         if (this.playerSpriteMetadata == null) {
             this.playerSpriteMetadata = Player.playerSprites.map(sprite => {
                 const metaDataJSON = sprite.getLayer("Meta")?.data;
-                return metaDataJSON ? JSON.parse(metaDataJSON): {};
+                return metaDataJSON ? JSON.parse(metaDataJSON) : {};
             });
-        };
+        }
 
         return this.playerSpriteMetadata;
     }
@@ -935,10 +935,10 @@ export class Player extends PhysicsEntity {
         const acceleration = this.flying ? PLAYER_ACCELERATION_AIR : PLAYER_ACCELERATION;
 
         if (!isDrowning) {
-            if(this.running) {
-                this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED)
+            if (this.running) {
+                this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
             } else {
-                this.setMaxVelocity(MAX_PLAYER_SPEED)
+                this.setMaxVelocity(MAX_PLAYER_SPEED);
             }
 
             if (this.moveRight) {
@@ -1058,7 +1058,7 @@ export class Player extends PhysicsEntity {
 
                 if (err < 1 || suc < 3) {
                     if (err <= suc) {
-                        if (err == 0) {
+                        if (err === 0) {
                             this.currentFailAnimation = rndInt(1, 3);
                         }
 
@@ -1108,7 +1108,7 @@ export class Player extends PhysicsEntity {
                         ) as Wall | undefined;
 
                         if (targetWall) {
-                            targetWall.crumble()
+                            targetWall.crumble();
                         }
                     }
 
@@ -1166,7 +1166,7 @@ export class Player extends PhysicsEntity {
                 const globalConversationProps = {
                     key: trigger.properties.setGlobalKey,
                     value: trigger.properties.setGlobalVal
-                }
+                };
 
                 if (globalConversationProps.key && globalConversationProps.value) {
                     Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
@@ -1176,7 +1176,7 @@ export class Player extends PhysicsEntity {
                 const enableConversationProps = {
                     key: trigger.properties.setDialogEntity,
                     value: trigger.properties.setDialogValue
-                }
+                };
 
                 if (enableConversationProps.key && enableConversationProps.value) {
                     this.scene.game.campaign.runAction(

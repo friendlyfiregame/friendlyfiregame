@@ -18,7 +18,7 @@ import { CharacterSelectionScene } from "./CharacterSelectionScene";
 type MainMenuParams = {
     label: string;
     electronOnly?: boolean;
-}
+};
 
 enum MenuItemKey {
     START = "start",
@@ -74,17 +74,17 @@ export class TitleScene extends Scene<FriendlyFire> {
     private titleBasePosition = {
         x: this.game.width / 2 - TitleScene.logoImage.width / 2,
         y: 60
-    }
+    };
 
-    private titleLayer1Position = { x: 0, y: 70 }
-    private titleLayer2Position = { x: 0, y: 163 }
-    private titleLayer3Position = { x: 0, y: -125 }
+    private titleLayer1Position = { x: 0, y: 70 };
+    private titleLayer2Position = { x: 0, y: 163 };
+    private titleLayer3Position = { x: 0, y: -125 };
 
     private menuBasePosition = {
         x: this.game.width / 2,
         y: 190,
         gap: 15,
-    }
+    };
 
     public setup(): void {
         this.zIndex = 1;
@@ -120,7 +120,7 @@ export class TitleScene extends Scene<FriendlyFire> {
     }
 
     public handleMenuAction(buttonId: string): void {
-        switch(buttonId) {
+        switch (buttonId) {
             case MenuItemKey.START:
                 // this.stopMusicTrack();
                 this.game.scenes.pushScene(CharacterSelectionScene);
@@ -141,7 +141,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
-        this.menu.onActivated.connect(this.handleMenuAction, this)
+        this.menu.onActivated.connect(this.handleMenuAction, this);
         this.playMusicTrack();
     }
 
@@ -171,8 +171,8 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.time += dt;
 
         if (this.time < this.animationDuration && !this.animationIsDone()) {
-            this.animationProgress = -Math.pow((1/this.animationDuration * this.time - 1), 2) + 1;
-            this.logoAlphaProgress = -Math.pow((1/(this.animationDuration / 2) * this.time - 2), 2) + 1;
+            this.animationProgress = -Math.pow((1 / this.animationDuration * this.time - 1), 2) + 1;
+            this.logoAlphaProgress = -Math.pow((1 / (this.animationDuration / 2) * this.time - 2), 2) + 1;
         } else {
             this.finishAnimation();
         }

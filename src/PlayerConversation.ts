@@ -26,9 +26,9 @@ export class PlayerConversation {
 
             if (Math.abs(player.x - npc.x) < minDis) {
                 if (player.x < npc.x) {
-                    player.startAutoMove(npc.x - minDis, true)
+                    player.startAutoMove(npc.x - minDis, true);
                 } else {
-                    player.startAutoMove(npc.x + minDis, true)
+                    player.startAutoMove(npc.x + minDis, true);
                 }
             }
         }

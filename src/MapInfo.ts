@@ -11,7 +11,7 @@ export enum MapObjectType {
 }
 
 export interface GameObjectProperties {
-    direction?: "up" | "down" | "left" | "right",
+    direction?: "up" | "down" | "left" | "right";
     distance: number;
     velocity: number;
     target?: string;
@@ -60,7 +60,7 @@ export class MapInfo {
         const object = this.getObject("player");
 
         if (object) {
-            return { x: object.x, y: mapHeight - object.y }
+            return { x: object.x, y: mapHeight - object.y };
         } else {
             return { x: 0, y: 0 };
         }
@@ -118,6 +118,6 @@ export class MapInfo {
         return {
             width: json.width * json.tilewidth,
             height: json.height * json.tileheight
-        }
+        };
     }
 }

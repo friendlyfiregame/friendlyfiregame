@@ -137,7 +137,7 @@ export class Scenes<T extends Game> {
             if (scene.currentTransition != null) {
                 scene.currentTransition.draw(ctx, () => scene.draw(ctx, width, height), width, height);
             } else {
-                scene.draw(ctx, width, height)
+                scene.draw(ctx, width, height);
             }
             ctx.restore();
         });

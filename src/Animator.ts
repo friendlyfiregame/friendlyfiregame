@@ -5,7 +5,7 @@ import { RenderingLayer } from "./Renderer";
 export type AnimationConfig = {
     loop?: boolean;
     callback?: Function;
-}
+};
 
 export type CurrentAnimationState = {
     tag: string;
@@ -14,7 +14,7 @@ export type CurrentAnimationState = {
     duration: number;
     config?: AnimationConfig;
     direction?: number;
-}
+};
 
 /**
  * The Animator class can be used to orchestrate and draw aseprite animations of an entity
@@ -28,7 +28,7 @@ export class Animator {
         start: 0,
         duration: 0,
         finished: false,
-    }
+    };
 
     public constructor (entity: Entity) {
         this.entity = entity;
@@ -113,7 +113,7 @@ export class Animator {
             this.entity.scene.renderer.addAseprite(
                 this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y,
                 RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
-            )
+            );
         }
     }
 }

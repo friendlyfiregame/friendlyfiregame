@@ -6,7 +6,7 @@ import { NPC } from "./NPC";
 export class ConversationProxy extends NPC {
     public conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y:number, properties: GameObjectProperties) {
+    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
 
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
@@ -22,7 +22,7 @@ export class ConversationProxy extends NPC {
     }
 
     private generateConversation(lines: string[]): Conversation {
-        const json: Record<string, string[]> = { "entry": [] }
+        const json: Record<string, string[]> = { "entry": [] };
 
         lines.forEach((line, index) => {
             if (index === lines.length - 1) {

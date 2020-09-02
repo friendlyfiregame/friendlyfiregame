@@ -12,7 +12,7 @@ export class StoneDisciple extends NPC {
     @asset("sprites/stonedisciple.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 32, 26);
         this.direction = -1;
         this.lookAtPlayer = true;

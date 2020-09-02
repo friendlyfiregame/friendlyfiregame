@@ -28,7 +28,7 @@ export class BitmapFont {
         this.charReverseMap = {};
 
         for (var i = 0; i < this.charCount; i++) {
-            this.charStartPoints[i] = (i == 0) ? 0 : this.charStartPoints[i - 1] + this.charWidths[i - 1] + charMargin;
+            this.charStartPoints[i] = (i === 0) ? 0 : this.charStartPoints[i - 1] + this.charWidths[i - 1] + charMargin;
             const char = this.charMap[i];
             this.charReverseMap[char] = i;
         }
@@ -45,8 +45,8 @@ export class BitmapFont {
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.image, baseURL));
         const characters = json.characterMapping.map(charDef => charDef.char).join("");
-        const widths = json.characterMapping.map(charDef => charDef.width)
-        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || [])
+        const widths = json.characterMapping.map(charDef => charDef.width);
+        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || []);
 
         return new BitmapFont(image, json.colors, characters, widths, compactablePrecursors, json.margin);
     }
@@ -83,7 +83,7 @@ export class BitmapFont {
         ctx.globalCompositeOperation = "source-over";
 
         return result;
-    };
+    }
 
     private getCharIndex(char: string): number {
         let charIndex = this.charReverseMap[char];
@@ -100,7 +100,7 @@ export class BitmapFont {
         ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string
     ): void {
         const colorIndex = this.colorMap[color];
-        const charIndex = (typeof char == "number") ? char : this.getCharIndex(char);
+        const charIndex = (typeof char === "number") ? char : this.getCharIndex(char);
         const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
 
         ctx.drawImage(
@@ -116,7 +116,7 @@ export class BitmapFont {
         text = "" + text;
         ctx.globalAlpha = alpha;
         let width = 0;
-        let precursorChar = null
+        let precursorChar = null;
 
         for (var currentChar of text) {
             const index = this.getCharIndex(currentChar);
@@ -124,14 +124,14 @@ export class BitmapFont {
             const compactablePrecursors = this.compactablePrecursors[index];
 
             if (precursorChar && compactablePrecursors.includes(precursorChar)) {
-                width -= 1
+                width -= 1;
             }
 
-            precursorChar = currentChar
+            precursorChar = currentChar;
         }
 
         const offX = Math.round(-align * width);
-        precursorChar = null
+        precursorChar = null;
 
         for (let i = 0; i < text.length; i++) {
             const currentChar = text[i];
@@ -178,12 +178,12 @@ export class BitmapFont {
     ): void {
         for (let yOffset = yPos - 1; yOffset <= yPos + 1; yOffset++) {
             for (let xOffset = xPos - 1; xOffset <= xPos + 1; xOffset++) {
-                if (xOffset != xPos || yOffset != yPos) {
+                if (xOffset !== xPos || yOffset !== yPos) {
                     this.drawText(ctx, text, xOffset, yOffset, outlineColor, align);
                 }
             }
         }
 
         this.drawText(ctx, text, xPos, yPos, textColor, align);
-    };
+    }
 }

@@ -12,7 +12,7 @@ export class DummyNPC extends NPC {
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 20, 30);
         this.greeting = new Greeting(this.scene, this, dialogData);
     }

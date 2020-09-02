@@ -30,7 +30,7 @@ const assetRequests: AssetRequest[] = [];
 export function asset(src: string | string[], options: AssetOptions = {}): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol): void => {
         assetRequests.push(new AssetRequest(target, propertyKey, src, options));
-    }
+    };
 }
 
 export class Assets {
@@ -49,7 +49,7 @@ export class Assets {
             } else if (src.endsWith(".ogg")) {
                 asset = await Sound.load("assets/" + src);
             } else if (src === "appinfo.json") {
-                asset = await (await fetch("appinfo.json")).json() as AppInfoJSON
+                asset = await (await fetch("appinfo.json")).json() as AppInfoJSON;
             } else {
                 throw new Error("Unknown asset format: " + src);
             }

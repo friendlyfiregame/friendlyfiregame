@@ -13,7 +13,7 @@ export class Sign extends NPC {
     private static sprite: Aseprite;
     public conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y:number, properties: GameObjectProperties) {
+    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
     }
@@ -55,7 +55,7 @@ export class Sign extends NPC {
             asset: Sign.sprite,
             animationTag: "idle",
             time: this.scene.gameTime * 1000
-        })
+        });
 
         if (this.scene.showBounds) {
             this.drawBounds();

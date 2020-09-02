@@ -16,8 +16,8 @@ export function roundRect(
     const rightPos = x + w;
     const bottomPos = y + h;
 
-    if (w < 2 * r) { r = halfWidth };
-    if (h < 2 * r) { r = halfHeight };
+    if (w < 2 * r) { r = halfWidth; }
+    if (h < 2 * r) { r = halfHeight; }
 
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -113,16 +113,16 @@ export class SpeechBubble {
         for (let char of message) {
             if (!char) {
                 index++;
-                continue
+                continue;
             }
             if (char === "\n") {
                 index++;
-                this.messageLines.push("")
-                continue
+                this.messageLines.push("");
+                continue;
             }
             this.messageLines[index] += char;
             if (this.isCurrentlyWriting) {
-                await sleep(this.messageVelocity)
+                await sleep(this.messageVelocity);
             }
             this.updateContent();
         }
@@ -168,7 +168,7 @@ export class SpeechBubble {
             posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
         } else {
             // Check if Speech Bubble clips the viewport and correct position
-            const visibleRect = this.scene.camera.getVisibleRect()
+            const visibleRect = this.scene.camera.getVisibleRect();
             const relativeX = posX - visibleRect.x;
 
             const clipAmount = Math.max(

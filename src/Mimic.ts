@@ -19,7 +19,7 @@ export class Mimic extends NPC {
 
     private state = MimicState.SLEEPING;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 46, 24);
         this.lookAtPlayer = false;
         this.direction = 1;

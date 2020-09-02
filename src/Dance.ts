@@ -130,7 +130,7 @@ export class Dance {
                 if (this.keys[nxt] && this.keys[nxt].includes(key)) {
                     if (this.progress - (nxt + 0.5) < this.timeTolerance) {
                         this.keySuccess(key, nxt);
-                        return
+                        return;
                     }
                 }
 
@@ -141,7 +141,7 @@ export class Dance {
 
     private keySuccess(key: string, index = this.currentIndex): void {
         for (let char of key) {
-            if (index == this.currentIndex) {
+            if (index === this.currentIndex) {
                 this.currentKey = this.currentKey.replace(char, "");
             }
 
@@ -167,7 +167,7 @@ export class Dance {
             }
         }
 
-        this.registerMistake()
+        this.registerMistake();
     }
 
     private registerMistake(): void {
@@ -273,9 +273,9 @@ export class Dance {
         ctx.translate(this.x, -this.y);
 
         // Key Bar
-        const w = 100
-        const h = 18
-        const w2 = w / 2
+        const w = 100;
+        const h = 18;
+        const w2 = w / 2;
         const h2 = h / 2;
 
         ctx.drawImage(Dance.bar, Dance.bar.width / -2, 1 + Dance.bar.height / -2);

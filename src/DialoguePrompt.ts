@@ -14,7 +14,7 @@ export class DialoguePrompt {
     private floatAmount = 2;
     private floatSpeed = 5;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         this.scene = scene;
         this.x = x;
         this.y = y;

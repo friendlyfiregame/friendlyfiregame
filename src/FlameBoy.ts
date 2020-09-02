@@ -18,7 +18,7 @@ export class FlameBoy extends NPC {
     private static fireAmbience: Sound;
     private soundEmitter: SoundEmitter;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 26, 54);
         this.face = new Face(scene, this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED;

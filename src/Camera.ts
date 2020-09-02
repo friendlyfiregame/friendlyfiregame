@@ -5,7 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { ValueCurve, valueCurves } from "./Particles";
 
-export interface camFocus {
+export interface CamFocus {
     x: number;
     y: number;
     duration: number;
@@ -18,28 +18,28 @@ export interface camFocus {
     force: number;
     curve: ValueCurve;
     resolve?: Function;
-};
+}
 
 interface Rectangle {
     x: number;
     y: number;
     width: number;
     height: number;
-};
+}
 
 type OverBoundData = {
     left: boolean;
     right: boolean;
     top: boolean;
     bottom: boolean;
-}
+};
 
 export class Camera {
     public x = 0;
     public y = 0;
     public zoom = 1;
     public rotation = 0;
-    private focuses: camFocus[] = [];
+    private focuses: CamFocus[] = [];
     private time = 0;
     private interpolationTime!: number;
     private zoomingOut = false;
@@ -149,7 +149,7 @@ export class Camera {
                 right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.x + this.bounds.width),
                 top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.y,
                 bottom: targetVisibleRect.y < (this.bounds.y - this.bounds.height)
-            }
+            };
 
             // Bound clip left / right
             if (targetVisibleRect.width >= this.bounds.width) {
@@ -183,7 +183,7 @@ export class Camera {
         return {
             x: xTarget,
             y: yTarget
-        }
+        };
     }
 
     public update(dt: number, time: number): void {
@@ -257,7 +257,7 @@ export class Camera {
         duration: number, x: number, y: number, zoom = 1, rotation = 0,
         curve = valueCurves.cos(this.interpolationTime)
     ): Promise<void> {
-        const focus: camFocus = {
+        const focus: CamFocus = {
             x,
             y,
             duration,
@@ -279,7 +279,7 @@ export class Camera {
         });
     }
 
-    public updateAndApplyFocus(focus: camFocus): void {
+    public updateAndApplyFocus(focus: CamFocus): void {
         focus.progress = clamp((this.time - focus.startTime) / focus.duration, 0, 1);
         focus.dead = (focus.progress >= 1);
 

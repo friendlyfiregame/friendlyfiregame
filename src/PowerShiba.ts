@@ -23,7 +23,7 @@ export class PowerShiba extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 22, 22);
         this.conversation = new Conversation(powershiba1, this);
     }

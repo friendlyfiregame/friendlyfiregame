@@ -49,7 +49,7 @@ export class Keyboard {
                 ControllerFamily.KEYBOARD, ControllerEventType.PRESS,
                 keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
             )
-        )
+        );
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
@@ -64,7 +64,7 @@ export class Keyboard {
                 ControllerFamily.KEYBOARD, ControllerEventType.DOWN,
                 keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
             )
-        )
+        );
     }
 
     private handleKeyUp(event: KeyboardEvent): void {
@@ -79,7 +79,7 @@ export class Keyboard {
                 ControllerFamily.KEYBOARD, ControllerEventType.UP,
                 keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
             )
-        )
+        );
     }
 
     public isPressed(key: string): boolean {

@@ -14,7 +14,7 @@ export type Bounds = {
     y: number;
     width: number;
     height: number;
-}
+};
 
 type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
 

@@ -25,7 +25,7 @@ const characterMenuItemY = 20;
 const voiceMenuItemY = 50;
 const startMenuItemY = 124;
 const selectionItemsYDistance = 12;
-const selectionItemsXDistance = 12
+const selectionItemsXDistance = 12;
 
 export class CharacterSelectionScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -76,12 +76,12 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 MenuItemKey.START, "Start Game", CharacterSelectionScene.font, "black",
                 menuItemX, startMenuItemY
             )
-        )
+        );
     }
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
-        this.menu.onActivated.connect(this.handleMenuAction, this)
+        this.menu.onActivated.connect(this.handleMenuAction, this);
     }
 
     public deactivate(): void {
@@ -90,7 +90,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
     }
 
     public async handleMenuAction(buttonId: string): Promise<void> {
-        switch(buttonId) {
+        switch (buttonId) {
             case MenuItemKey.CHARACTER:
                 this.game.campaign.toggleCharacterAsset();
                 break;
@@ -129,7 +129,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
 
         const textPositionY = y;
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, x, y)
+        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, x, y);
 
         CharacterSelectionScene.font.drawTextWithOutline(
             ctx,

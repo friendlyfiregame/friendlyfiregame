@@ -51,7 +51,7 @@ export class Bird extends NPC {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
-        this.setMaxVelocity(MAX_SPEED)
+        this.setMaxVelocity(MAX_SPEED);
     }
 
     private isWaiting(): boolean {
@@ -175,7 +175,7 @@ export class Bird extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction)
+        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }

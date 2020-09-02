@@ -16,7 +16,7 @@ export class Portal extends Entity {
 
     private animationState = PortalAnimationState.WAITING;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 32, 50, false);
         this.animator.assignSprite(Portal.sprite);
     }

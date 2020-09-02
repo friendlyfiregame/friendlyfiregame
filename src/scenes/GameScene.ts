@@ -79,7 +79,7 @@ export type BackgroundTrack = {
     id: BgmId;
     sound: Sound,
     baseVolume: number;
-}
+};
 
 export class GameScene extends Scene<FriendlyFire> {
     @asset("music/theme_01.ogg")
@@ -109,7 +109,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public readonly ambientSounds: Record<AmbientSoundId, Sound> = {
         [AmbientSoundId.STREAM]: GameScene.ambientStream,
         [AmbientSoundId.WIND]: GameScene.ambientWind
-    }
+    };
 
     private readonly backgroundTracks: BackgroundTrack[] = [
         {
@@ -148,7 +148,7 @@ export class GameScene extends Scene<FriendlyFire> {
             sound: GameScene.bgmWings,
             baseVolume: 0.75
         }
-    ]
+    ];
 
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
@@ -209,7 +209,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         this.mapInfo = new MapInfo();
-        this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o))
+        this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
@@ -317,9 +317,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.backgroundTracks.forEach(t => {
             if (t.active) {
                 if (inverse) {
-                    t.sound.setVolume(t.baseVolume * (1 - fade))
+                    t.sound.setVolume(t.baseVolume * (1 - fade));
                 } else {
-                    t.sound.setVolume(t.baseVolume * fade)
+                    t.sound.setVolume(t.baseVolume * fade);
                 }
             }
         });
@@ -711,7 +711,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
 
-            this.camera.setBounds(this.player.getCurrentMapBounds())
+            this.camera.setBounds(this.player.getCurrentMapBounds());
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);
@@ -733,7 +733,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public resume(): void {
-        this.resetMusicVolumes()
+        this.resetMusicVolumes();
         this.togglePause(false);
     }
 }

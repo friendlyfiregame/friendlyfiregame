@@ -44,17 +44,17 @@ export const LAYER_ORDER: RenderingLayer[] = [
     RenderingLayer.PLATFORMS,
     RenderingLayer.TILEMAP_MAP,
     RenderingLayer.TILEMAP_BACKGROUND,
-]
+];
 
 export type Coordinates = {
     x: number;
     y: number;
-}
+};
 
 export type Dimension = {
     width: number;
     height: number;
-}
+};
 
 export type BaseRenderingItem = {
     type: RenderingType;
@@ -66,26 +66,26 @@ export type BaseRenderingItem = {
     alpha?: number;
     globalCompositeOperation?: string;
     relativeToScreen?: boolean,
-}
+};
 
 export type ParticleEmitterRenderingItem = {
     type: RenderingType.PARTICLE_EMITTER;
     layer: RenderingLayer;
     zIndex: number;
     emitter: ParticleEmitter;
-}
+};
 
 export type FireRenderingItem = {
     type: RenderingType.FIRE;
     layer: RenderingLayer;
     entity: Fire;
-}
+};
 
 export type DanceRenderingItem = {
     type: RenderingType.DANCE;
     layer: RenderingLayer;
     dance: Dance;
-}
+};
 
 export type BlackBarsRenderingItem = {
     type: RenderingType.BLACK_BARS;
@@ -93,7 +93,7 @@ export type BlackBarsRenderingItem = {
     force: number;
     height: number;
     color: string;
-}
+};
 
 export type RectRenderingItem = BaseRenderingItem & {
     type: RenderingType.RECT;
@@ -101,7 +101,7 @@ export type RectRenderingItem = BaseRenderingItem & {
     lineColor?: string,
     lineWidth?: number;
     dimension: Dimension;
-}
+};
 
 export type SpeechBubbleRenderingItem = BaseRenderingItem & {
     type: RenderingType.SPEECH_BUBBLE;
@@ -109,7 +109,7 @@ export type SpeechBubbleRenderingItem = BaseRenderingItem & {
     radius: number;
     offsetX: number;
     dimension: Dimension;
-}
+};
 
 export type TextRenderingItem = BaseRenderingItem & {
     type: RenderingType.TEXT;
@@ -117,19 +117,19 @@ export type TextRenderingItem = BaseRenderingItem & {
     text: string,
     textColor: string,
     outlineColor?: string,
-}
+};
 
 export type DrawImageRenderingItem = BaseRenderingItem & {
     type: RenderingType.DRAW_IMAGE;
     asset: HTMLImageElement;
-}
+};
 
 export type AsepriteRenderingItem = BaseRenderingItem & {
     type: RenderingType.ASEPRITE;
     asset: Aseprite;
     animationTag: string;
     time?: number;
-}
+};
 
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
                             TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | FireRenderingItem | DanceRenderingItem;
@@ -164,7 +164,7 @@ export class Renderer {
                     if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
                     if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
-                    switch(item.type) {
+                    switch (item.type) {
                         case RenderingType.DRAW_IMAGE:
                             ctx.drawImage(item.asset, item.position.x, item.position.y);
                             break;

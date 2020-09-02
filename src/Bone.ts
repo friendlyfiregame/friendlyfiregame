@@ -16,7 +16,7 @@ export class Bone extends PhysicsEntity {
     @asset("sounds/throwing/success.mp3")
     private static successSound: Sound;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 20, 10);
     }
 

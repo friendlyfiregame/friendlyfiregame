@@ -12,7 +12,7 @@ export enum FaceModes {
     AMUSED = "amused",
     SAD = "sad",
     DISGUSTED = "disgusted"
-};
+}
 
 export enum EyeType {
     STANDARD = 0,

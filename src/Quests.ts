@@ -41,7 +41,7 @@ export enum QuestCTrigger {
 type TriggerDefinition = {
     index: number;
     isTriggered: boolean;
-}
+};
 
 export abstract class Quest {
     public readonly key: QuestKey;
@@ -63,7 +63,7 @@ export abstract class Quest {
 
     public reset(): void {
         this.finished = false;
-        this.triggers.forEach((t, i) => { this.untrigger(i) })
+        this.triggers.forEach((t, i) => { this.untrigger(i); });
     }
 
     public trigger(index: number): void {
@@ -112,7 +112,7 @@ export class QuestA extends Quest {
             QuestKey.A,
             campaign,
             "[A]POCALYPSE NOT NOW",
-            Object.values(QuestATrigger).filter((i):i is number => typeof i === "number")
+            Object.values(QuestATrigger).filter((i): i is number => typeof i === "number")
         );
     }
 }
@@ -126,7 +126,7 @@ export class QuestB extends Quest {
             QuestKey.B,
             campaign,
             "GOOD [B]OY",
-            Object.values(QuestBTrigger).filter((i):i is number => typeof i === "number")
+            Object.values(QuestBTrigger).filter((i): i is number => typeof i === "number")
         );
     }
 }
@@ -140,7 +140,7 @@ export class QuestC extends Quest {
             QuestKey.C,
             campaign,
             "SOFT LO[C]KED",
-            Object.values(QuestCTrigger).filter((i):i is number => typeof i === "number")
+            Object.values(QuestCTrigger).filter((i): i is number => typeof i === "number")
         );
     }
 }

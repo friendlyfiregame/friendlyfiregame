@@ -21,7 +21,7 @@ export class Spider extends NPC {
     private spriteMetadata: SpiderSpriteMetadata | null = null;
     private eyeOffsetY = 0;
 
-    public constructor(scene: GameScene, x: number, y:number) {
+    public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 36, 36);
         Conversation.setGlobal("talkedToSpider", "false");
     }
