@@ -8,6 +8,10 @@ on:
   pull_request:
     branches:
     - master
+    types:
+    - opened
+    - synchronize
+    - reopened
 jobs:
 
   build_webapp:
@@ -33,6 +37,11 @@ jobs:
           ${{ runner.os }}-
     - run: npm install
     - run: npm run compile
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - run: npm run dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
