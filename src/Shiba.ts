@@ -1,21 +1,21 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { calculateVolume, rnd, rndItem } from './util';
-import { Conversation } from './Conversation';
-import conversation from '../assets/dialog/bird.dialog.json';
-import { DOUBLE_JUMP_COLORS, GRAVITY } from './constants';
-import { entity } from './Entity';
-import { Environment } from './World';
-import { FaceModes } from './Face';
-import { FireState, SHRINK_SIZE } from './Fire';
-import { GameObjectInfo } from './MapInfo';
-import { GameScene } from './scenes/GameScene';
-import { ParticleEmitter, valueCurves } from './Particles';
-import { QuestKey } from './Quests';
-import { RenderingLayer } from './Renderer';
-import { ScriptableNPC } from './ScriptableNPC';
-import shiba1 from '../assets/dialog/shiba1.dialog.json';
-import { Sound } from './Sound';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { calculateVolume, rnd, rndItem } from "./util";
+import { Conversation } from "./Conversation";
+import conversation from "../assets/dialog/bird.dialog.json";
+import { DOUBLE_JUMP_COLORS, GRAVITY } from "./constants";
+import { entity } from "./Entity";
+import { Environment } from "./World";
+import { FaceModes } from "./Face";
+import { FireState, SHRINK_SIZE } from "./Fire";
+import { GameObjectInfo } from "./MapInfo";
+import { GameScene } from "./scenes/GameScene";
+import { ParticleEmitter, valueCurves } from "./Particles";
+import { QuestKey } from "./Quests";
+import { RenderingLayer } from "./Renderer";
+import { ScriptableNPC } from "./ScriptableNPC";
+import shiba1 from "../assets/dialog/shiba1.dialog.json";
+import { Sound } from "./Sound";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -98,7 +98,7 @@ export class Shiba extends ScriptableNPC {
                 poi => poi.name === "shiba_mountain_spawn"
             );
 
-            if (!spawn) throw new Error('Shiba mountain spawn missing');
+            if (!spawn) throw new Error("Shiba mountain spawn missing");
             this.x = spawn.x;
             this.y = spawn.y;
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
@@ -121,11 +121,11 @@ export class Shiba extends ScriptableNPC {
         } else if (this.state === ShibaState.KILLING_FIRE) {
             this.move = 0;
 
-            setTimeout(() => this.think('Wow!', 1500), 500);
+            setTimeout(() => this.think("Wow!", 1500), 500);
             setTimeout(() => (this.direction = 1), 1000);
 
             setTimeout(() => {
-                this.think('Bad fire!', 2000);
+                this.think("Bad fire!", 2000);
                 this.scene.fire.setState(FireState.BEING_PUT_OUT);
                 this.scene.fire.growthTarget = SHRINK_SIZE;
                 this.peeing = true;
@@ -133,18 +133,18 @@ export class Shiba extends ScriptableNPC {
                 Shiba.putOutSound.play();
             }, 2000);
 
-            setTimeout(() => this.scene.fire.think('Oh God…', 2000), 4500);
-            setTimeout(() => this.scene.fire.think('Disgusting…', 3000), 8000);
+            setTimeout(() => this.scene.fire.think("Oh God…", 2000), 4500);
+            setTimeout(() => this.scene.fire.think("Disgusting…", 3000), 8000);
         } else if (this.state === ShibaState.FIRE_KILLED) {
             this.peeing = false;
             this.scene.fire.state = FireState.PUT_OUT;
             Shiba.putOutSound.stop();
 
             setTimeout(() => (this.direction = -1), 1000);
-            setTimeout(() => this.think('I help friend!', 1500), 1500);
+            setTimeout(() => this.think("I help friend!", 1500), 1500);
 
             setTimeout(() => {
-                this.scene.fire.think('Yeah, great.', 2000);
+                this.scene.fire.think("Yeah, great.", 2000);
                 this.scene.fire.face?.setMode(FaceModes.BORED);
                 this.scene.player.isControllable = true;
                 this.scene.friendshipCutscene = false;
@@ -265,7 +265,7 @@ export class Shiba extends ScriptableNPC {
         }
 
         if (triggerCollisions.length > 0) {
-            const event = triggerCollisions.find(t => t.name === 'shiba_stop');
+            const event = triggerCollisions.find(t => t.name === "shiba_stop");
 
             if (event) {
                 this.nextState();
@@ -275,7 +275,7 @@ export class Shiba extends ScriptableNPC {
 
     private onTreeUpdateLogic(triggerCollisions: GameObjectInfo[], dt: number): void {
         if (triggerCollisions.length > 0) {
-            const event = triggerCollisions.find(t => t.name === 'shiba_action');
+            const event = triggerCollisions.find(t => t.name === "shiba_action");
 
             if (event && event.properties.velocity) {
                 this.autoMoveDirection = event.properties.velocity > 0 ? 1 : -1;
@@ -306,11 +306,11 @@ export class Shiba extends ScriptableNPC {
         // Check if bone is near
         if (
             Conversation.getGlobals()["$gotBoneQuest"]
-            && !Conversation.getGlobals()['$broughtBone']
+            && !Conversation.getGlobals()["$broughtBone"]
             && this.distanceTo(this.scene.bone) < 100
         ) {
-            Conversation.setGlobal('broughtBone', 'true');
-            this.think('Wow! Bone!!!', 2000);
+            Conversation.setGlobal("broughtBone", "true");
+            this.think("Wow! Bone!!!", 2000);
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba2"]);
         }
     }
@@ -334,7 +334,7 @@ export class Shiba extends ScriptableNPC {
 
         if (!this.saidFarewell && this.flyingTime > 2) {
             this.saidFarewell = true;
-            this.think('See you on the mountain!', 3000);
+            this.think("See you on the mountain!", 3000);
         }
 
         if (this.flyingTime >= FLYING_DURATION) {

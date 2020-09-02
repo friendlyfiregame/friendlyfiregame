@@ -1,19 +1,19 @@
-import { Aseprite } from '../Aseprite';
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { ControllerEvent } from '../input/ControllerEvent';
-import { ControlsScene } from './ControlsScene';
-import { CreditsScene } from './CreditsScene';
-import { CurtainTransition } from '../transitions/CurtainTransition';
-import { DIALOG_FONT } from '../constants';
-import { easeInSine } from '../easings';
-import { FadeTransition } from '../transitions/FadeTransition';
-import { FriendlyFire } from '../FriendlyFire';
-import { isElectron } from '../util';
-import { MenuAlignment, MenuItem, MenuList } from '../Menu';
-import { Scene } from '../Scene';
-import { Sound } from '../Sound';
-import { CharacterSelectionScene } from './CharacterSelectionScene';
+import { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { ControlsScene } from "./ControlsScene";
+import { CreditsScene } from "./CreditsScene";
+import { CurtainTransition } from "../transitions/CurtainTransition";
+import { DIALOG_FONT } from "../constants";
+import { easeInSine } from "../easings";
+import { FadeTransition } from "../transitions/FadeTransition";
+import { FriendlyFire } from "../FriendlyFire";
+import { isElectron } from "../util";
+import { MenuAlignment, MenuItem, MenuList } from "../Menu";
+import { Scene } from "../Scene";
+import { Sound } from "../Sound";
+import { CharacterSelectionScene } from "./CharacterSelectionScene";
 
 type MainMenuParams = {
     label: string;
@@ -21,10 +21,10 @@ type MainMenuParams = {
 }
 
 enum MenuItemKey {
-    START = 'start',
-    CONTROLS = 'controls',
-    CREDITS = 'credits',
-    EXIT = 'exit'
+    START = "start",
+    CONTROLS = "controls",
+    CREDITS = "credits",
+    EXIT = "exit"
 }
 
 const MenuLabels: Record<MenuItemKey, MainMenuParams> = {

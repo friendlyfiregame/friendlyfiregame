@@ -1,6 +1,6 @@
-import { Aseprite } from './Aseprite';
-import { Entity } from './Entity';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { Entity } from "./Entity";
+import { RenderingLayer } from "./Renderer";
 
 export type AnimationConfig = {
     loop?: boolean;
@@ -24,7 +24,7 @@ export class Animator {
     private sprite?: Aseprite;
 
     private currentAnimation: CurrentAnimationState = {
-        tag: '',
+        tag: "",
         start: 0,
         duration: 0,
         finished: false,

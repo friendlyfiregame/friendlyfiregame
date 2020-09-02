@@ -1,5 +1,5 @@
-import { clamp, rndItem } from './util';
-import { getImageData } from './graphics';
+import { clamp, rndItem } from "./util";
+import { getImageData } from "./graphics";
 
 export class ColorGradient {
     constructor(private mapping: (p: number) => number[]) {}

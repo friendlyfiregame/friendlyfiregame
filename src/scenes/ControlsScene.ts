@@ -1,14 +1,14 @@
-import { Aseprite } from '../Aseprite';
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { ControllerAnimationTags, ControllerSpriteMap } from '../input/ControllerFamily';
-import { ControllerEvent } from '../input/ControllerEvent';
-import { ControllerManager } from '../input/ControllerManager';
-import { DIALOG_FONT } from '../constants';
-import { easeOutCubic } from '../easings';
-import { FriendlyFire } from '../FriendlyFire';
-import { Scene } from '../Scene';
-import { SlideTransition } from '../transitions/SlideTransition';
+import { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { ControllerManager } from "../input/ControllerManager";
+import { DIALOG_FONT } from "../constants";
+import { easeOutCubic } from "../easings";
+import { FriendlyFire } from "../FriendlyFire";
+import { Scene } from "../Scene";
+import { SlideTransition } from "../transitions/SlideTransition";
 
 export class ControlsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -99,7 +99,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
         ctx.save();
 
         ctx.globalAlpha = 0.8;
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
 
         ctx.globalAlpha = 1;
@@ -120,21 +120,21 @@ export class ControlsScene extends Scene<FriendlyFire> {
         this.drawTooltip(
             ctx,
             0, ControlsScene.panelImage.height,
-            'Toggle Gamepad Button Prompts',
+            "Toggle Gamepad Button Prompts",
             ControllerAnimationTags.ACTION
         );
 
         this.drawTooltip(
             ctx,
             0, ControlsScene.panelImage.height + 16,
-            'Back',
+            "Back",
             ControllerAnimationTags.BACK
         );
 
-        ctx.font = '20px sans-serif';
-        ctx.fillStyle = 'white';
+        ctx.font = "20px sans-serif";
+        ctx.fillStyle = "white";
 
-        const fontColor = 'black';
+        const fontColor = "black";
 
         let textOffsetY = startingY;
 

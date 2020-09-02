@@ -52,6 +52,8 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
     - run: npm install
+    - name: Run linters
+      run: npm run lint
     - run: npm run compile
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.4

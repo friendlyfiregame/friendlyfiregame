@@ -1,16 +1,16 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { calculateVolume, rnd, rndItem } from './util';
-import { Conversation } from './Conversation';
-import conversation from '../assets/dialog/bird.dialog.json';
-import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from './constants';
-import { entity } from './Entity';
-import { Environment } from './World';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { ParticleEmitter, valueCurves } from './Particles';
-import { RenderingLayer } from './Renderer';
-import { Sound } from './Sound';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { calculateVolume, rnd, rndItem } from "./util";
+import { Conversation } from "./Conversation";
+import conversation from "../assets/dialog/bird.dialog.json";
+import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
+import { entity } from "./Entity";
+import { Environment } from "./World";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { ParticleEmitter, valueCurves } from "./Particles";
+import { RenderingLayer } from "./Renderer";
+import { Sound } from "./Sound";
 
 enum BirdState {
     WAITING_LEFT,
@@ -208,11 +208,11 @@ export class Bird extends NPC {
                 this.jump();
             }
 
-            if (this.state === BirdState.FLYING_RIGHT && triggerCollisions.length > 0 && triggerCollisions.find(t => t.name === 'bird_nest_right')) {
+            if (this.state === BirdState.FLYING_RIGHT && triggerCollisions.length > 0 && triggerCollisions.find(t => t.name === "bird_nest_right")) {
                 this.nextState();
             }
 
-            if (this.state === BirdState.FLYING_LEFT && triggerCollisions.length > 0 && triggerCollisions.find(t => t.name === 'bird_nest_left')) {
+            if (this.state === BirdState.FLYING_LEFT && triggerCollisions.length > 0 && triggerCollisions.find(t => t.name === "bird_nest_left")) {
                 this.nextState();
             }
         }

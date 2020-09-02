@@ -1,8 +1,8 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { entity, Entity } from './Entity';
-import { GameScene } from './scenes/GameScene';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { entity, Entity } from "./Entity";
+import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer } from "./Renderer";
 
 @entity("campfire")
 export class Campfire extends Entity {

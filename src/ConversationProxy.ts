@@ -1,7 +1,7 @@
-import { Conversation } from './Conversation';
-import { GameObjectProperties } from './MapInfo';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
+import { Conversation } from "./Conversation";
+import { GameObjectProperties } from "./MapInfo";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
 
 export class ConversationProxy extends NPC {
     public conversation: Conversation;
@@ -15,7 +15,7 @@ export class ConversationProxy extends NPC {
 
     private prepareContent(content?: string ): string[] {
         if (!content) {
-            return ['Nothing…'];
+            return ["Nothing…"];
         }
 
         return content.split(":::");

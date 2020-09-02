@@ -1,9 +1,9 @@
-import { Bounds } from './Entity';
-import { clamp, isDev, rnd, shiftValue, Vector2 } from './util';
-import { Fire } from './Fire';
-import { GameScene } from './scenes/GameScene';
-import { RenderingLayer, RenderingType } from './Renderer';
-import { ValueCurve, valueCurves } from './Particles';
+import { Bounds } from "./Entity";
+import { clamp, isDev, rnd, shiftValue, Vector2 } from "./util";
+import { Fire } from "./Fire";
+import { GameScene } from "./scenes/GameScene";
+import { RenderingLayer, RenderingType } from "./Renderer";
+import { ValueCurve, valueCurves } from "./Particles";
 
 export interface camFocus {
     x: number;
@@ -84,7 +84,7 @@ export class Camera {
     }
 
     private handleKeyUp(e: KeyboardEvent): void {
-        if (e.key === 'Tab') {
+        if (e.key === "Tab") {
             this.zoomingOut = false;
             e.stopPropagation();
             e.preventDefault();

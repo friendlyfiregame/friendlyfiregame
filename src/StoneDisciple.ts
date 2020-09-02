@@ -1,11 +1,11 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { Conversation } from './Conversation';
-import { entity } from './Entity';
-import { EyeType, Face } from './Face';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { Conversation } from "./Conversation";
+import { entity } from "./Entity";
+import { EyeType, Face } from "./Face";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { RenderingLayer } from "./Renderer";
 
 @entity("stonedisciple")
 export class StoneDisciple extends NPC {
@@ -24,9 +24,9 @@ export class StoneDisciple extends NPC {
             return false;
         }
 
-        const talkedToStoneDisciple = Conversation.getGlobals()['$talkedToStoneDisciple'];
-        const talkedToStoneDiscipleAgain = Conversation.getGlobals()['$talkedToStoneDiscipleAgain'];
-        const gotTeleported = Conversation.getGlobals()['$gotTeleported'];
+        const talkedToStoneDisciple = Conversation.getGlobals()["$talkedToStoneDisciple"];
+        const talkedToStoneDiscipleAgain = Conversation.getGlobals()["$talkedToStoneDiscipleAgain"];
+        const gotTeleported = Conversation.getGlobals()["$gotTeleported"];
 
         return (
             talkedToStoneDisciple === undefined

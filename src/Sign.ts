@@ -1,11 +1,11 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { Conversation } from './Conversation';
-import { entity } from './Entity';
-import { GameObjectProperties } from './MapInfo';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { RenderingLayer, RenderingType } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { Conversation } from "./Conversation";
+import { entity } from "./Entity";
+import { GameObjectProperties } from "./MapInfo";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { RenderingLayer, RenderingType } from "./Renderer";
 
 @entity("sign")
 export class Sign extends NPC {
@@ -20,7 +20,7 @@ export class Sign extends NPC {
 
     private prepareContent(content?: string ): string[] {
         if (!content) {
-            return ['The sign is empty.'];
+            return ["The sign is empty."];
         }
 
         return content.split(":::");

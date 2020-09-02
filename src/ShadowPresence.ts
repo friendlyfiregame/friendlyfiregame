@@ -1,12 +1,12 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { entity } from './Entity';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer, RenderingType } from './Renderer';
-import { Sound } from './Sound';
-import { SoundEmitter } from './SoundEmitter';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { entity } from "./Entity";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer, RenderingType } from "./Renderer";
+import { Sound } from "./Sound";
+import { SoundEmitter } from "./SoundEmitter";
 
 enum AnimationTag {
     INVISIBLE = "invisible",

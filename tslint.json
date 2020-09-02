@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tslint#",
+    "defaultSeverity": "error",
+    "rules": {
+        "quotemark": {
+            "options": ["double"]
+        }
+    }
+}

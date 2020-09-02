@@ -1,11 +1,11 @@
-import { asset } from './Assets';
-import { Bounds, Entity } from './Entity';
-import { boundsFromMapObject, rnd, rndInt } from './util';
-import { GameObject, GameScene, isCollidableGameObject } from './scenes/GameScene';
-import { GameObjectInfo } from './MapInfo';
-import { getImageData } from './graphics';
-import { ParticleEmitter, Particles, valueCurves } from './Particles';
-import { RenderingLayer, RenderingType } from './Renderer';
+import { asset } from "./Assets";
+import { Bounds, Entity } from "./Entity";
+import { boundsFromMapObject, rnd, rndInt } from "./util";
+import { GameObject, GameScene, isCollidableGameObject } from "./scenes/GameScene";
+import { GameObjectInfo } from "./MapInfo";
+import { getImageData } from "./graphics";
+import { ParticleEmitter, Particles, valueCurves } from "./Particles";
+import { RenderingLayer, RenderingType } from "./Renderer";
 
 export enum Environment {
     AIR = 0,
@@ -46,7 +46,7 @@ export class World implements GameObject {
         this.scene = scene;
 
         const rainSpawnPosition = this.scene.pointsOfInterest.find(
-            o => o.name === 'rain_spawn_position'
+            o => o.name === "rain_spawn_position"
         );
 
         if (!rainSpawnPosition) {

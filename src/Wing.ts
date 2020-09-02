@@ -1,10 +1,10 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { entity } from './Entity';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { entity } from "./Entity";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer } from "./Renderer";
 
 @entity("wing")
 export class Wing extends NPC {

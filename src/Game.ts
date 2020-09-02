@@ -1,12 +1,12 @@
-import { Assets } from './Assets';
-import { Campaign } from './Campaign';
-import { clamp } from './util';
-import { ControllerManager } from './input/ControllerManager';
-import { createCanvas, getRenderingContext } from './graphics';
-import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from './constants';
-import { GamepadInput } from './input/GamepadInput';
-import { Keyboard } from './input/Keyboard';
-import { Scenes } from './Scenes';
+import { Assets } from "./Assets";
+import { Campaign } from "./Campaign";
+import { clamp } from "./util";
+import { ControllerManager } from "./input/ControllerManager";
+import { createCanvas, getRenderingContext } from "./graphics";
+import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
+import { GamepadInput } from "./input/GamepadInput";
+import { Keyboard } from "./input/Keyboard";
+import { Scenes } from "./Scenes";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want

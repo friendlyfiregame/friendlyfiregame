@@ -1,5 +1,5 @@
-import { DialogJSON } from '*.dialog.json';
-import { NPC } from './NPC';
+import { DialogJSON } from "*.dialog.json";
+import { NPC } from "./NPC";
 
 export interface Interaction {
     npcLine: ConversationLine | null;
@@ -172,26 +172,26 @@ export class Conversation {
 
     private testCondition(condition: string): boolean {
         const self = this;
-        const subconditions = condition.split(',');
+        const subconditions = condition.split(",");
         const result = subconditions.some(evaluateFragment);
 
         return result;
 
         function evaluateFragment(s: string): boolean {
-            if (s.startsWith('not ')) {
+            if (s.startsWith("not ")) {
                 return !evaluateFragment(s.substr(4));
             } else {
-                if (s.includes('!=')) {
-                    const values = s.split('!=').map(s => s.trim());
+                if (s.includes("!=")) {
+                    const values = s.split("!=").map(s => s.trim());
                     return self.getVariable(values[0]) != values[1];
-                } else if (s.includes('=')) {
-                    const values = s.split('=').map(s => s.trim());
+                } else if (s.includes("=")) {
+                    const values = s.split("=").map(s => s.trim());
                     return self.getVariable(values[0]) == values[1];
-                } else if (s.includes('>')) {
-                    const values = s.split('>').map(s => s.trim());
+                } else if (s.includes(">")) {
+                    const values = s.split(">").map(s => s.trim());
                     return parseFloat(self.getVariable(values[0])) > parseFloat(values[1]);
-                } else if (s.includes('<')) {
-                    const values = s.split('<').map(s => s.trim());
+                } else if (s.includes("<")) {
+                    const values = s.split("<").map(s => s.trim());
                     return parseFloat(self.getVariable(values[0])) < parseFloat(values[1]);
                 }
             }
@@ -210,7 +210,7 @@ export class Conversation {
 const MAX_CHARS_PER_LINE = 50;
 
 export class ConversationLine {
-    public static OPTION_MARKER = '►';
+    public static OPTION_MARKER = "►";
     public readonly line: string;
     public readonly condition: string | null;
     public readonly targetState: string | null;

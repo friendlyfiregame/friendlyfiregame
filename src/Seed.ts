@@ -1,17 +1,17 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { Conversation } from './Conversation';
-import { entity } from './Entity';
-import { Environment } from './World';
-import { EyeType, Face } from './Face';
-import { GameObjectInfo } from './MapInfo';
-import { GameScene } from './scenes/GameScene';
-import { now } from './util';
-import { NPC } from './NPC';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer } from './Renderer';
-import { Sound } from './Sound';
-import { Wood } from './Wood';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { Conversation } from "./Conversation";
+import { entity } from "./Entity";
+import { Environment } from "./World";
+import { EyeType, Face } from "./Face";
+import { GameObjectInfo } from "./MapInfo";
+import { GameScene } from "./scenes/GameScene";
+import { now } from "./util";
+import { NPC } from "./NPC";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer } from "./Renderer";
+import { Sound } from "./Sound";
+import { Wood } from "./Wood";
 
 export enum SeedState {
     FREE = 0,
@@ -37,10 +37,10 @@ export class Seed extends NPC {
         this.wood = new Wood(scene, x, y);
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
 
-        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'recover_floating_position');
+        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
 
         if (!floatingPosition) {
-            throw new Error ('Could not find “recover_floating_position” point of interest in game scene.');
+            throw new Error ("Could not find “recover_floating_position” point of interest in game scene.");
         }
 
         this.floatingPosition = floatingPosition;
@@ -111,9 +111,9 @@ export class Seed extends NPC {
                 !this.isCarried()
                 && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
             ) {
-                const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === 'seedposition');
+                const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
 
-                if (!seedPosition) throw new Error('Seed position is missing in points of interest array');
+                if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 
                 this.state = SeedState.PLANTED;
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);

@@ -1,13 +1,13 @@
-import json, { MapLayerJSONType, MapObjectJSON } from '../assets/maps/level.json';
-import { Vector2 } from './util';
+import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
+import { Vector2 } from "./util";
 
 export enum MapObjectType {
-    ENTITY = 'entity',
-    TRIGGER = 'trigger',
-    POINTER = 'pointer',
-    GATE = 'gate',
-    BOUNDS = 'bounds',
-    SOUND = 'sound'
+    ENTITY = "entity",
+    TRIGGER = "trigger",
+    POINTER = "pointer",
+    GATE = "gate",
+    BOUNDS = "bounds",
+    SOUND = "sound"
 }
 
 export interface GameObjectProperties {

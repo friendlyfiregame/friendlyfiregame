@@ -1,13 +1,13 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { entity } from './Entity';
-import { EyeType, Face } from './Face';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer } from './Renderer';
-import { Seed } from './Seed';
-import { Wood } from './Wood';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { entity } from "./Entity";
+import { EyeType, Face } from "./Face";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer } from "./Renderer";
+import { Seed } from "./Seed";
+import { Wood } from "./Wood";
 
 @entity("tree")
 export class Tree extends NPC {

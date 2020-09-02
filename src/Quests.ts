@@ -1,9 +1,9 @@
-import { Campaign } from './Campaign';
+import { Campaign } from "./Campaign";
 
 export enum QuestKey {
-    A = 'questA',
-    B = 'questB',
-    C = 'questC'
+    A = "questA",
+    B = "questB",
+    C = "questC"
 }
 
 export enum QuestATrigger {
@@ -111,8 +111,8 @@ export class QuestA extends Quest {
         super(
             QuestKey.A,
             campaign,
-            '[A]POCALYPSE NOT NOW',
-            Object.values(QuestATrigger).filter((i):i is number => typeof i === 'number')
+            "[A]POCALYPSE NOT NOW",
+            Object.values(QuestATrigger).filter((i):i is number => typeof i === "number")
         );
     }
 }
@@ -125,8 +125,8 @@ export class QuestB extends Quest {
         super(
             QuestKey.B,
             campaign,
-            'GOOD [B]OY',
-            Object.values(QuestBTrigger).filter((i):i is number => typeof i === 'number')
+            "GOOD [B]OY",
+            Object.values(QuestBTrigger).filter((i):i is number => typeof i === "number")
         );
     }
 }
@@ -139,8 +139,8 @@ export class QuestC extends Quest {
         super(
             QuestKey.C,
             campaign,
-            'SOFT LO[C]KED',
-            Object.values(QuestCTrigger).filter((i):i is number => typeof i === 'number')
+            "SOFT LO[C]KED",
+            Object.values(QuestCTrigger).filter((i):i is number => typeof i === "number")
         );
     }
 }

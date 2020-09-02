@@ -1,9 +1,9 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { entity } from './Entity';
-import { GameScene } from './scenes/GameScene';
-import { PhysicsEntity } from './PhysicsEntity';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { entity } from "./Entity";
+import { GameScene } from "./scenes/GameScene";
+import { PhysicsEntity } from "./PhysicsEntity";
+import { RenderingLayer } from "./Renderer";
 
 @entity("skull")
 export class Skull extends PhysicsEntity {

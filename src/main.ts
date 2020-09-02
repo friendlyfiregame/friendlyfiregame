@@ -1,6 +1,6 @@
-import { app, BrowserWindow } from 'electron';
-import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from './constants';
-import path from 'path';
+import { app, BrowserWindow } from "electron";
+import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
+import path from "path";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) { // eslint-disable-line global-require

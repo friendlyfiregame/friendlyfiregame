@@ -2,7 +2,7 @@ import { ControllerManager } from "./ControllerManager";
 import { ControllerIntent } from "./ControllerIntent";
 import { ControllerEventType } from "./ControllerEventType";
 import { GamepadControllerEvent } from "./ControllerEvent";
-import { GamepadModel } from './GamepadModel';
+import { GamepadModel } from "./GamepadModel";
 
 /**
  * Game Pad Buttons

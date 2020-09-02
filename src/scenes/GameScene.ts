@@ -1,49 +1,49 @@
-import { Player } from '../Player';
-import { asset } from '../Assets';
-import { Bird } from '../Bird';
-import { BitmapFont } from '../BitmapFont';
-import { Bone } from '../Bone';
-import { Bounds, createEntity } from '../Entity';
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from '../util';
-import { Camera } from '../Camera';
-import { Campfire } from '../Campfire';
-import { Caveman } from '../Caveman';
-import { Chicken } from '../Chicken';
-import { Cloud } from '../Cloud';
-import { ControllerEvent } from '../input/ControllerEvent';
-import { Conversation } from '../Conversation';
-import { DIALOG_FONT } from '../constants';
-import { EndScene } from './EndScene';
-import { Fire, FireState } from '../Fire';
-import { FireGfx } from '../FireGfx';
-import { FlameBoy } from '../FlameBoy';
-import { FriendlyFire } from '../FriendlyFire';
-import { GameObjectInfo, MapInfo } from '../MapInfo';
-import { MenuList } from '../Menu';
-import { Mimic } from '../Mimic';
-import { MountainRiddle } from '../MountainRiddle';
-import { MovingPlatform } from '../MovingPlatform';
-import { ParticleEmitter, Particles, valueCurves } from '../Particles';
-import { PauseScene } from './PauseScene';
-import { Portal } from '../Portal';
-import { PowerShiba } from '../PowerShiba';
-import { QuestATrigger, QuestKey } from '../Quests';
-import { Radio } from '../Radio';
-import { Renderer, RenderingLayer, RenderingType } from '../Renderer';
-import { RiddleStone } from '../RiddleStone';
-import { Scene } from '../Scene';
-import { Seed } from '../Seed';
-import { ShadowPresence } from '../ShadowPresence';
-import { Shiba, ShibaState } from '../Shiba';
-import { Skull } from '../Skull';
-import { Sound } from '../Sound';
-import { SoundEmitter } from '../SoundEmitter';
-import { Stone } from '../Stone';
-import { StoneDisciple } from '../StoneDisciple';
-import { SuperThrow } from '../SuperThrow';
-import { Tree } from '../Tree';
-import { Wing } from '../Wing';
-import { World } from '../World';
+import { Player } from "../Player";
+import { asset } from "../Assets";
+import { Bird } from "../Bird";
+import { BitmapFont } from "../BitmapFont";
+import { Bone } from "../Bone";
+import { Bounds, createEntity } from "../Entity";
+import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from "../util";
+import { Camera } from "../Camera";
+import { Campfire } from "../Campfire";
+import { Caveman } from "../Caveman";
+import { Chicken } from "../Chicken";
+import { Cloud } from "../Cloud";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { Conversation } from "../Conversation";
+import { DIALOG_FONT } from "../constants";
+import { EndScene } from "./EndScene";
+import { Fire, FireState } from "../Fire";
+import { FireGfx } from "../FireGfx";
+import { FlameBoy } from "../FlameBoy";
+import { FriendlyFire } from "../FriendlyFire";
+import { GameObjectInfo, MapInfo } from "../MapInfo";
+import { MenuList } from "../Menu";
+import { Mimic } from "../Mimic";
+import { MountainRiddle } from "../MountainRiddle";
+import { MovingPlatform } from "../MovingPlatform";
+import { ParticleEmitter, Particles, valueCurves } from "../Particles";
+import { PauseScene } from "./PauseScene";
+import { Portal } from "../Portal";
+import { PowerShiba } from "../PowerShiba";
+import { QuestATrigger, QuestKey } from "../Quests";
+import { Radio } from "../Radio";
+import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
+import { RiddleStone } from "../RiddleStone";
+import { Scene } from "../Scene";
+import { Seed } from "../Seed";
+import { ShadowPresence } from "../ShadowPresence";
+import { Shiba, ShibaState } from "../Shiba";
+import { Skull } from "../Skull";
+import { Sound } from "../Sound";
+import { SoundEmitter } from "../SoundEmitter";
+import { Stone } from "../Stone";
+import { StoneDisciple } from "../StoneDisciple";
+import { SuperThrow } from "../SuperThrow";
+import { Tree } from "../Tree";
+import { Wing } from "../Wing";
+import { World } from "../World";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -61,17 +61,17 @@ export function isCollidableGameObject(object: GameObject): object is Collidable
 }
 
 export enum BgmId {
-    OVERWORLD = 'overworld',
-    INFERNO = 'inferno',
-    CAVE = 'cave',
-    RIDDLE = 'riddle',
-    RADIO = 'radio',
-    WINGS = 'wings'
+    OVERWORLD = "overworld",
+    INFERNO = "inferno",
+    CAVE = "cave",
+    RIDDLE = "riddle",
+    RADIO = "radio",
+    WINGS = "wings"
 }
 
 export enum AmbientSoundId {
-    STREAM = 'stream',
-    WIND = 'wind',
+    STREAM = "stream",
+    WIND = "wind",
 }
 
 export type BackgroundTrack = {
@@ -229,21 +229,21 @@ export class GameScene extends Scene<FriendlyFire> {
             ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
-                    case 'riddlestone':
+                    case "riddlestone":
                         return new RiddleStone(this, entity.x, entity.y, entity.properties);
-                    case 'campfire':
+                    case "campfire":
                         return new Campfire(this, entity.x, entity.y);
-                    case 'radio':
+                    case "radio":
                         return new Radio(this, entity.x, entity.y);
-                    case 'movingplatform':
+                    case "movingplatform":
                         return new MovingPlatform(this, entity.x, entity.y, entity.properties);
-                    case 'skull':
+                    case "skull":
                         return new Skull(this, entity.x, entity.y);
-                    case 'chicken':
+                    case "chicken":
                         return new Chicken(this, entity.x, entity.y);
-                    case 'superthrow':
+                    case "superthrow":
                         return new SuperThrow(this, entity.x, entity.y);
-                    case 'portal':
+                    case "portal":
                         return new Portal(this, entity.x, entity.y);
                     default:
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
@@ -670,10 +670,10 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === 'friendship_player_position');
+        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position");
 
         if (!playerTargetPos) {
-            throw new Error ('cannot initiate friendship ending because some points of interest are missing');
+            throw new Error ("cannot initiate friendship ending because some points of interest are missing");
         }
 
         this.player.startAutoMove(playerTargetPos.x, true);
@@ -684,8 +684,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.apocalypse = true;
         this.world.stopRain();
 
-        const bossPosition = this.pointsOfInterest.find(poi => poi.name === 'boss_spawn');
-        const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === 'bosscloud');
+        const bossPosition = this.pointsOfInterest.find(poi => poi.name === "boss_spawn");
+        const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === "bosscloud");
 
         if (bossPosition && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {
@@ -717,7 +717,7 @@ export class GameScene extends Scene<FriendlyFire> {
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);
             setTimeout(() => this.player.think("There's still something I can do.", 4000), 12000);
         } else {
-            throw new Error('Cannot begin apocalypse because boss_spawn or bosscloud trigger is missing in map.');
+            throw new Error("Cannot begin apocalypse because boss_spawn or bosscloud trigger is missing in map.");
         }
     }
 

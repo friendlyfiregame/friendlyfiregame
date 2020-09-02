@@ -1,15 +1,15 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { CollidableGameObject, GameScene } from './scenes/GameScene';
-import { entity } from './Entity';
-import { Environment } from './World';
-import { EyeType, Face, FaceModes } from './Face';
-import { GameObjectInfo } from './MapInfo';
-import { now } from './util';
-import { NPC } from './NPC';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer } from './Renderer';
-import { Sound } from './Sound';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { CollidableGameObject, GameScene } from "./scenes/GameScene";
+import { entity } from "./Entity";
+import { Environment } from "./World";
+import { EyeType, Face, FaceModes } from "./Face";
+import { GameObjectInfo } from "./MapInfo";
+import { now } from "./util";
+import { NPC } from "./NPC";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer } from "./Renderer";
+import { Sound } from "./Sound";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -38,11 +38,11 @@ export class Stone extends NPC implements CollidableGameObject {
         this.carryHeight = 16;
 
         const floatingPosition = this.scene.pointsOfInterest.find(
-            poi => poi.name === 'stone_floating_position'
+            poi => poi.name === "stone_floating_position"
         );
 
         if (!floatingPosition) {
-            throw new Error ('Could not find "stone_floating_position" point of interest in game scene');
+            throw new Error ("Could not find \"stone_floating_position\" point of interest in game scene");
         }
 
         this.floatingPosition = floatingPosition;

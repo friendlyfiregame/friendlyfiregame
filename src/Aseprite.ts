@@ -1,8 +1,8 @@
 import type {
     AsepriteDirection, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteJSON, AsepriteLayerJSON
-} from '*.aseprite.json';
-import { loadImage } from './graphics';
-import { now } from './util';
+} from "*.aseprite.json";
+import { loadImage } from "./graphics";
+import { now } from "./util";
 
 /**
  * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous [[load]] method to load the
@@ -13,7 +13,7 @@ export class Aseprite {
     private readonly frameTags: Record<string, AsepriteFrameTagJSON> = {};
     private readonly frameTagDurations: Record<string, number> = {};
     private readonly duration: number;
-    private readonly fallbackTag = 'idle';
+    private readonly fallbackTag = "idle";
 
     private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);

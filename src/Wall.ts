@@ -1,10 +1,10 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { CollidableGameObject, GameScene } from './scenes/GameScene';
-import { entity, Entity } from './Entity';
-import { Environment } from './World';
-import { GameObjectProperties } from './MapInfo';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { CollidableGameObject, GameScene } from "./scenes/GameScene";
+import { entity, Entity } from "./Entity";
+import { Environment } from "./World";
+import { GameObjectProperties } from "./MapInfo";
+import { RenderingLayer } from "./Renderer";
 
 enum WallState { SOLID, CRUMBLED }
 
@@ -19,14 +19,14 @@ export class Wall extends Entity implements CollidableGameObject {
         super(scene, x, y, 24, 72, false);
 
         if (!properties.identifier) {
-            throw new Error ('Cannot create Wall entity with no identifier property');
+            throw new Error ("Cannot create Wall entity with no identifier property");
         }
 
         this.identifier = properties.identifier;
     }
 
     public draw(): void {
-        const animationTag = this.state === WallState.SOLID ? 'solid' : 'crumbled'
+        const animationTag = this.state === WallState.SOLID ? "solid" : "crumbled"
         this.scene.renderer.addAseprite(Wall.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES);
 
         if (this.scene.showBounds) {

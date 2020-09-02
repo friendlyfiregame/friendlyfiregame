@@ -1,5 +1,5 @@
-import { FontJSON } from '*.font.json';
-import { loadImage } from './graphics.js';
+import { FontJSON } from "*.font.json";
+import { loadImage } from "./graphics.js";
 
 export class BitmapFont {
     private sourceImage: HTMLImageElement;
@@ -44,7 +44,7 @@ export class BitmapFont {
         const json = await (await fetch(source)).json() as FontJSON;
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.image, baseURL));
-        const characters = json.characterMapping.map(charDef => charDef.char).join('');
+        const characters = json.characterMapping.map(charDef => charDef.char).join("");
         const widths = json.characterMapping.map(charDef => charDef.width)
         const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || [])
 
@@ -68,7 +68,7 @@ export class BitmapFont {
         }
 
         // Colorize
-        ctx.globalCompositeOperation = 'source-in';
+        ctx.globalCompositeOperation = "source-in";
 
         for (let i = 0; i < count; i++) {
             ctx.fillStyle = colorMap[colors[i]];
@@ -80,7 +80,7 @@ export class BitmapFont {
             ctx.restore();
         }
 
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalCompositeOperation = "source-over";
 
         return result;
     };
@@ -113,7 +113,7 @@ export class BitmapFont {
         ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
         alpha = 1
     ): void {
-        text = '' + text;
+        text = "" + text;
         ctx.globalAlpha = alpha;
         let width = 0;
         let precursorChar = null

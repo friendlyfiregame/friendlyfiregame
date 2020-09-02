@@ -1,13 +1,13 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { entity } from './Entity';
-import { EyeType, Face, FaceModes } from './Face';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer } from './Renderer';
-import { Sound } from './Sound';
-import { SoundEmitter } from './SoundEmitter';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { entity } from "./Entity";
+import { EyeType, Face, FaceModes } from "./Face";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer } from "./Renderer";
+import { Sound } from "./Sound";
+import { SoundEmitter } from "./SoundEmitter";
 
 @entity("flameboy")
 export class FlameBoy extends NPC {
@@ -38,7 +38,7 @@ export class FlameBoy extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        const animationTag = 'idle';
+        const animationTag = "idle";
         this.scene.renderer.addAseprite(FlameBoy.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES, this.direction);
 
         if (this.scene.showBounds) {

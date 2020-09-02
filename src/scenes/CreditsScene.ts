@@ -1,16 +1,16 @@
-import { AppInfoJSON } from 'appinfo.json';
-import { Aseprite } from '../Aseprite';
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { ControllerEvent } from '../input/ControllerEvent';
-import { DIALOG_FONT } from '../constants';
-import { easeOutCubic } from '../easings';
-import { FadeTransition } from '../transitions/FadeTransition';
-import { FriendlyFire } from '../FriendlyFire';
-import { isDev } from '../util';
-import { Scene } from '../Scene';
-import { Sound } from '../Sound';
-import { TitleScene } from './TitleScene';
+import { AppInfoJSON } from "appinfo.json";
+import { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { DIALOG_FONT } from "../constants";
+import { easeOutCubic } from "../easings";
+import { FadeTransition } from "../transitions/FadeTransition";
+import { FriendlyFire } from "../FriendlyFire";
+import { isDev } from "../util";
+import { Scene } from "../Scene";
+import { Sound } from "../Sound";
+import { TitleScene } from "./TitleScene";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([
@@ -116,13 +116,13 @@ export class CreditsScene extends Scene<FriendlyFire> {
         const titleText = "Friendly Fire";
         const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
 
-        CreditsScene.headlineFont.drawText(ctx, titleText, posX, posY, 'white');
+        CreditsScene.headlineFont.drawText(ctx, titleText, posX, posY, "white");
 
         CreditsScene.standardFont.drawText(
             ctx,
             versionText,
             posX, posY + this.headlineCharHeight + gap,
-            'white'
+            "white"
         );
 
         return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20
@@ -194,83 +194,83 @@ export class CreditsScene extends Scene<FriendlyFire> {
         posY = this.drawTitle(ctx, posY, posX);
 
         posY = this.drawParagraph(ctx, posY, posX, [
-            'Originally made as a team',
-            'effort for Ludum Dare 46',
-            'in three days by'
+            "Originally made as a team",
+            "effort for Ludum Dare 46",
+            "in three days by"
         ]);
 
         posY = this.drawParagraph(ctx, posY, posX, [
-            'Eduard But, Nico Hülscher,',
-            'Benjamin Jung, Nils Kreutzer,',
-            'Bastian Lang, Ranjit Mevius,',
-            'Markus Over, Klaus Reimer,',
-            'and Jennifer van Veen'
+            "Eduard But, Nico Hülscher,",
+            "Benjamin Jung, Nils Kreutzer,",
+            "Bastian Lang, Ranjit Mevius,",
+            "Markus Over, Klaus Reimer,",
+            "and Jennifer van Veen"
         ], 50);
 
-        posY = this.drawCredit(ctx, posY, posX, 'GAME DESIGN', ['Everyone']);
+        posY = this.drawCredit(ctx, posY, posX, "GAME DESIGN", ["Everyone"]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'STORY', [
-            'Markus Over',
-            'Jennifer van Veen',
-            'Ranjit Mevius',
-            'Nils Kreutzer'
+        posY = this.drawCredit(ctx, posY, posX, "STORY", [
+            "Markus Over",
+            "Jennifer van Veen",
+            "Ranjit Mevius",
+            "Nils Kreutzer"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'PROGRAMMING', [
-            'Nico Hülscher',
-            'Benjaming Jung',
-            'Nils Kreutzer',
-            'Ranjit Mevius',
-            'Markus Over',
-            'Klaus Reimer',
-            'Eduard But',
-            'Matthias Wetter'
+        posY = this.drawCredit(ctx, posY, posX, "PROGRAMMING", [
+            "Nico Hülscher",
+            "Benjaming Jung",
+            "Nils Kreutzer",
+            "Ranjit Mevius",
+            "Markus Over",
+            "Klaus Reimer",
+            "Eduard But",
+            "Matthias Wetter"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'SCRIPTING', [
-            'Markus Over',
-            'Eduard But'
+        posY = this.drawCredit(ctx, posY, posX, "SCRIPTING", [
+            "Markus Over",
+            "Eduard But"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'ART DIRECTION', ['Eduard But']);
+        posY = this.drawCredit(ctx, posY, posX, "ART DIRECTION", ["Eduard But"]);
 
-        posY = this.drawCredit(ctx, posY, posX, '2D ART', [
-            'Eduard But',
-            'Nils Kreutzer',
-            'Christina Schneider',
-            'Jennifer van Veen',
-            'Matthias Wetter'
+        posY = this.drawCredit(ctx, posY, posX, "2D ART", [
+            "Eduard But",
+            "Nils Kreutzer",
+            "Christina Schneider",
+            "Jennifer van Veen",
+            "Matthias Wetter"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'WRITING', [
-            'Markus Over',
-            'Jennifer van Veen',
-            'Eduard But'
+        posY = this.drawCredit(ctx, posY, posX, "WRITING", [
+            "Markus Over",
+            "Jennifer van Veen",
+            "Eduard But"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'LEVEL DESIGN', [
-            'Eduard But',
-            'Nils Kreutzer',
-            'Jennifer van Veen'
+        posY = this.drawCredit(ctx, posY, posX, "LEVEL DESIGN", [
+            "Eduard But",
+            "Nils Kreutzer",
+            "Jennifer van Veen"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'DISTRIBUTION', [
-            'Benjamin Jung',
+        posY = this.drawCredit(ctx, posY, posX, "DISTRIBUTION", [
+            "Benjamin Jung",
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'MUSIC', [
-            'Bastian Lang',
-            'Benjamin Jung',
-            'Eduard But',
-            'Matthias Wetter'
+        posY = this.drawCredit(ctx, posY, posX, "MUSIC", [
+            "Bastian Lang",
+            "Benjamin Jung",
+            "Eduard But",
+            "Matthias Wetter"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'QA', [
-            'Jennifer van Veen',
-            'Matthias Wetter'
+        posY = this.drawCredit(ctx, posY, posX, "QA", [
+            "Jennifer van Veen",
+            "Matthias Wetter"
         ]);
 
-        posY = this.drawCredit(ctx, posY, posX, 'SFX', ['freesound.org']);
+        posY = this.drawCredit(ctx, posY, posX, "SFX", ["freesound.org"]);
 
         if (this.totalCrawlHeight === 0) {
             this.totalCrawlHeight = posY;

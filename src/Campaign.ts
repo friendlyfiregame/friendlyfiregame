@@ -1,37 +1,37 @@
-import caveman from '../assets/dialog/caveman.dialog.json';
-import { Conversation } from './Conversation';
-import type { DialogJSON } from '*.dialog.json';
-import { FaceModes } from './Face';
-import fire0 from '../assets/dialog/fire0.dialog.json';
-import fire1 from '../assets/dialog/fire1.dialog.json';
-import fire2 from '../assets/dialog/fire2.dialog.json';
-import fire3 from '../assets/dialog/fire3.dialog.json';
-import fire4 from '../assets/dialog/fire4.dialog.json';
-import flameboy1 from '../assets/dialog/flameboy1.dialog.json';
-import flameboy2 from '../assets/dialog/flameboy2.dialog.json';
-import { Game } from './Game';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import powershiba2 from '../assets/dialog/powershiba2.dialog.json';
-import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC } from './Quests';
-import seed1 from '../assets/dialog/seed1.dialog.json';
-import shadowpresence1 from '../assets/dialog/shadowpresence1.dialog.json';
-import shiba1 from '../assets/dialog/shiba1.dialog.json';
-import shiba2 from '../assets/dialog/shiba2.dialog.json';
-import shiba3 from '../assets/dialog/shiba3.dialog.json';
-import shiba4 from '../assets/dialog/shiba4.dialog.json';
-import shiba5 from '../assets/dialog/shiba5.dialog.json';
-import { Signal } from './Signal';
-import spider1 from '../assets/dialog/spider1.dialog.json';
-import stone1 from '../assets/dialog/stone1.dialog.json';
-import stone2 from '../assets/dialog/stone2.dialog.json';
-import stonedisciple1 from '../assets/dialog/stonedisciple1.dialog.json';
-import stonedisciple2 from '../assets/dialog/stonedisciple2.dialog.json';
-import tree0 from '../assets/dialog/tree0.dialog.json';
-import tree1 from '../assets/dialog/tree1.dialog.json';
-import tree2 from '../assets/dialog/tree2.dialog.json';
-import { valueCurves } from './Particles';
-import wing1 from '../assets/dialog/wing1.dialog.json';
+import caveman from "../assets/dialog/caveman.dialog.json";
+import { Conversation } from "./Conversation";
+import type { DialogJSON } from "*.dialog.json";
+import { FaceModes } from "./Face";
+import fire0 from "../assets/dialog/fire0.dialog.json";
+import fire1 from "../assets/dialog/fire1.dialog.json";
+import fire2 from "../assets/dialog/fire2.dialog.json";
+import fire3 from "../assets/dialog/fire3.dialog.json";
+import fire4 from "../assets/dialog/fire4.dialog.json";
+import flameboy1 from "../assets/dialog/flameboy1.dialog.json";
+import flameboy2 from "../assets/dialog/flameboy2.dialog.json";
+import { Game } from "./Game";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
+import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC } from "./Quests";
+import seed1 from "../assets/dialog/seed1.dialog.json";
+import shadowpresence1 from "../assets/dialog/shadowpresence1.dialog.json";
+import shiba1 from "../assets/dialog/shiba1.dialog.json";
+import shiba2 from "../assets/dialog/shiba2.dialog.json";
+import shiba3 from "../assets/dialog/shiba3.dialog.json";
+import shiba4 from "../assets/dialog/shiba4.dialog.json";
+import shiba5 from "../assets/dialog/shiba5.dialog.json";
+import { Signal } from "./Signal";
+import spider1 from "../assets/dialog/spider1.dialog.json";
+import stone1 from "../assets/dialog/stone1.dialog.json";
+import stone2 from "../assets/dialog/stone2.dialog.json";
+import stonedisciple1 from "../assets/dialog/stonedisciple1.dialog.json";
+import stonedisciple2 from "../assets/dialog/stonedisciple2.dialog.json";
+import tree0 from "../assets/dialog/tree0.dialog.json";
+import tree1 from "../assets/dialog/tree1.dialog.json";
+import tree2 from "../assets/dialog/tree2.dialog.json";
+import { valueCurves } from "./Particles";
+import wing1 from "../assets/dialog/wing1.dialog.json";
 
 export type CampaignState = "start" | "finished";
 
@@ -180,7 +180,7 @@ export class Campaign {
                     this.gameScene.camera.zoom -= 1
                     break;
                 case "treezoom":
-                    const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'forest');
+                    const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");
 
                     if (forestPointer) {
                         this.gameScene.camera.focusOn(
@@ -194,7 +194,7 @@ export class Campaign {
 
                     break;
                 case "mountainzoom":
-                    const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'mountain');
+                    const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "mountain");
 
                     if (mountainPointer) {
                         this.gameScene.camera.focusOn(
@@ -208,7 +208,7 @@ export class Campaign {
 
                     break;
                 case "riverzoom":
-                    const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === 'river');
+                    const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "river");
 
                     if (riverPointer) {
                         this.gameScene.camera.focusOn(
@@ -242,7 +242,7 @@ export class Campaign {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
                     break;
                 case "giveBone":
-                    Conversation.setGlobal('gaveBoneToPowerShiba', 'true');
+                    Conversation.setGlobal("gaveBoneToPowerShiba", "true");
                     this.runAction("enable", null, ["shiba", "shiba3"]);
                     this.runAction("enable", null, ["powershiba", "powershiba2"]);
                     break;

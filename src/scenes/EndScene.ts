@@ -1,12 +1,12 @@
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { ControllerFamily } from '../input/ControllerFamily';
-import { CreditsScene } from './CreditsScene';
-import { DIALOG_FONT } from '../constants';
-import { FriendlyFire } from '../FriendlyFire';
-import { Quest } from '../Quests';
-import { Scene } from '../Scene';
-import { Sound } from '../Sound';
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerFamily } from "../input/ControllerFamily";
+import { CreditsScene } from "./CreditsScene";
+import { DIALOG_FONT } from "../constants";
+import { FriendlyFire } from "../FriendlyFire";
+import { Quest } from "../Quests";
+import { Scene } from "../Scene";
+import { Sound } from "../Sound";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -59,7 +59,7 @@ export class EndScene extends Scene<FriendlyFire> {
         );
 
         if (this.time > this.subtitleDelay) {
-            const endingLabel = this.ending ? this.ending.title : 'Unknown [E]nding';
+            const endingLabel = this.ending ? this.ending.title : "Unknown [E]nding";
             const size = EndScene.font.measureText(endingLabel);
 
             EndScene.font.drawText(

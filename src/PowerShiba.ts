@@ -1,12 +1,12 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { Conversation } from './Conversation';
-import { entity } from './Entity';
-import { GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import powershiba1 from '../assets/dialog/powershiba1.dialog.json';
-import powershiba3 from '../assets/dialog/powershiba3.dialog.json';
-import { RenderingLayer } from './Renderer';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { Conversation } from "./Conversation";
+import { entity } from "./Entity";
+import { GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import powershiba1 from "../assets/dialog/powershiba1.dialog.json";
+import powershiba3 from "../assets/dialog/powershiba3.dialog.json";
+import { RenderingLayer } from "./Renderer";
 
 export enum PowerShibaState {
     IN_CLOUDS,
@@ -34,7 +34,7 @@ export class PowerShiba extends NPC {
         if (this.state === PowerShibaState.ON_MOUNTAIN) {
             const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "powershiba_mountain_spawn");
 
-            if (!spawn) throw new Error('PowerShiba mountain spawn missing');
+            if (!spawn) throw new Error("PowerShiba mountain spawn missing");
 
             this.floatSpeed = 2;
             this.floatAmount = 4;
@@ -56,8 +56,8 @@ export class PowerShiba extends NPC {
     public feed(): void {
         this.floatSpeed = 3;
         this.floatAmount = 5;
-        this.scene.game.campaign.runAction('giveBone');
-        this.think('Oh… I remember…', 3000);
+        this.scene.game.campaign.runAction("giveBone");
+        this.think("Oh… I remember…", 3000);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

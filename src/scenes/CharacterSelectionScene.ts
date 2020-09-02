@@ -1,23 +1,23 @@
-import { Aseprite } from '../Aseprite';
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { CharacterAsset, VoiceAsset } from '../Campaign';
-import { ControllerAnimationTags, ControllerSpriteMap } from '../input/ControllerFamily';
-import { ControllerEvent } from '../input/ControllerEvent';
-import { ControllerManager } from '../input/ControllerManager';
-import { DIALOG_FONT } from '../constants';
-import { easeOutCubic } from '../easings';
-import { FriendlyFire } from '../FriendlyFire';
-import { GameScene } from './GameScene';
-import { MenuItem, MenuList } from '../Menu';
-import { Scene } from '../Scene';
-import { SlideTransition } from '../transitions/SlideTransition';
-import { TitleScene } from './TitleScene';
+import { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { CharacterAsset, VoiceAsset } from "../Campaign";
+import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { ControllerManager } from "../input/ControllerManager";
+import { DIALOG_FONT } from "../constants";
+import { easeOutCubic } from "../easings";
+import { FriendlyFire } from "../FriendlyFire";
+import { GameScene } from "./GameScene";
+import { MenuItem, MenuList } from "../Menu";
+import { Scene } from "../Scene";
+import { SlideTransition } from "../transitions/SlideTransition";
+import { TitleScene } from "./TitleScene";
 
 enum MenuItemKey {
-    CHARACTER = 'character',
-    VOICE = 'voice',
-    START = 'start'
+    CHARACTER = "character",
+    VOICE = "voice",
+    START = "start"
 }
 
 const menuItemX = 12;

@@ -1,5 +1,5 @@
-import { Game } from './Game';
-import { Scene, SceneConstructor, SceneProperties } from './Scene';
+import { Game } from "./Game";
+import { Scene, SceneConstructor, SceneProperties } from "./Scene";
 
 export class Scenes<T extends Game> {
     public activeScene: Scene<T> | null = null;

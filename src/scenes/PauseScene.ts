@@ -1,22 +1,22 @@
-import { AppInfoJSON } from 'appinfo.json';
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { ControllerEvent } from '../input/ControllerEvent';
-import { ControlsScene } from './ControlsScene';
-import { DIALOG_FONT } from '../constants';
-import { easeOutBounce } from '../easings';
-import { FriendlyFire } from '../FriendlyFire';
-import { isDev } from '../util';
-import { MenuItem, MenuList } from '../Menu';
-import { Scene } from '../Scene';
-import { SlideTransition } from '../transitions/SlideTransition';
-import { Sound } from '../Sound';
-import { TitleScene } from './TitleScene';
+import { AppInfoJSON } from "appinfo.json";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { ControllerEvent } from "../input/ControllerEvent";
+import { ControlsScene } from "./ControlsScene";
+import { DIALOG_FONT } from "../constants";
+import { easeOutBounce } from "../easings";
+import { FriendlyFire } from "../FriendlyFire";
+import { isDev } from "../util";
+import { MenuItem, MenuList } from "../Menu";
+import { Scene } from "../Scene";
+import { SlideTransition } from "../transitions/SlideTransition";
+import { Sound } from "../Sound";
+import { TitleScene } from "./TitleScene";
 
 enum MenuItemKey {
-    RESUME = 'resume',
-    CONTROLS = 'controls',
-    EXIT = 'exit'
+    RESUME = "resume",
+    CONTROLS = "controls",
+    EXIT = "exit"
 }
 
 export class PauseScene extends Scene<FriendlyFire> {
@@ -95,7 +95,7 @@ export class PauseScene extends Scene<FriendlyFire> {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, width, height);
 
-        PauseScene.headlineFont.drawText(ctx, 'GAME PAUSED', 75, 100, "white");
+        PauseScene.headlineFont.drawText(ctx, "GAME PAUSED", 75, 100, "white");
 
         const versionText = isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
         const versionTextSize = PauseScene.font.measureText(versionText);

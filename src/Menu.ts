@@ -1,7 +1,7 @@
-import { asset } from './Assets';
-import { BitmapFont } from './BitmapFont';
-import { Signal } from './Signal';
-import { Sound } from './Sound';
+import { asset } from "./Assets";
+import { BitmapFont } from "./BitmapFont";
+import { Signal } from "./Signal";
+import { Sound } from "./Sound";
 
 export enum MenuAlignment { LEFT, CENTER, RIGHT };
 

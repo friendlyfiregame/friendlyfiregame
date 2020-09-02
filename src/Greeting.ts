@@ -1,9 +1,9 @@
-import { Campaign, CampaignState } from './Campaign';
-import { GameObject, GameScene } from './scenes/GameScene';
-import { NPC } from './NPC';
-import { rndItem } from './util';
-import { ScriptedDialogJSON } from '../assets/dummy.texts.json';
-import { SpeechBubble } from './SpeechBubble';
+import { Campaign, CampaignState } from "./Campaign";
+import { GameObject, GameScene } from "./scenes/GameScene";
+import { NPC } from "./NPC";
+import { rndItem } from "./util";
+import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
+import { SpeechBubble } from "./SpeechBubble";
 
 export class Greeting implements GameObject {
     public greetingRange = 120;

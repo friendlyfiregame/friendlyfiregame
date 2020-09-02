@@ -1,6 +1,6 @@
-import { Conversation } from './Conversation';
-import { GameScene } from './scenes/GameScene';
-import { GotItemScene } from './scenes/GotItemScene';
+import { Conversation } from "./Conversation";
+import { GameScene } from "./scenes/GameScene";
+import { GotItemScene } from "./scenes/GotItemScene";
 
 const AMOUNT_GATE_COLS = 3;
 const AMOUNT_GATE_ROWS = 5;

@@ -1,10 +1,10 @@
-import { Aseprite } from './Aseprite';
-import { BitmapFont } from './BitmapFont';
-import { Dance } from './Dance';
-import { Fire } from './Fire';
-import { GameScene } from './scenes/GameScene';
-import { ParticleEmitter } from './Particles';
-import { roundRect } from './SpeechBubble';
+import { Aseprite } from "./Aseprite";
+import { BitmapFont } from "./BitmapFont";
+import { Dance } from "./Dance";
+import { Fire } from "./Fire";
+import { GameScene } from "./scenes/GameScene";
+import { ParticleEmitter } from "./Particles";
+import { roundRect } from "./SpeechBubble";
 
 export enum RenderingType {
     PARTICLE_EMITTER,
@@ -19,17 +19,17 @@ export enum RenderingType {
 }
 
 export enum RenderingLayer {
-    DEBUG = 'debug',
-    FULLSCREEN_FX = 'fullscreenFX',
-    UI = 'ui',
-    BLACK_BARS = 'blackBars',
-    TILEMAP_FOREGROUND = 'tilemapForeground',
-    PLAYER = 'player',
-    ENTITIES = 'entities',
-    PLATFORMS = 'platforms',
-    TILEMAP_MAP = 'tilemapMap',
-    TILEMAP_BACKGROUND = 'tilemapBackground',
-    PARTICLES = 'particles'
+    DEBUG = "debug",
+    FULLSCREEN_FX = "fullscreenFX",
+    UI = "ui",
+    BLACK_BARS = "blackBars",
+    TILEMAP_FOREGROUND = "tilemapForeground",
+    PLAYER = "player",
+    ENTITIES = "entities",
+    PLATFORMS = "platforms",
+    TILEMAP_MAP = "tilemapMap",
+    TILEMAP_BACKGROUND = "tilemapBackground",
+    PARTICLES = "particles"
 }
 
 export const LAYER_ORDER: RenderingLayer[] = [

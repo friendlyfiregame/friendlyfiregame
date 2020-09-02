@@ -1,40 +1,40 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { BgmId, FadeDirection, GameScene } from './scenes/GameScene';
-import { BitmapFont } from './BitmapFont';
-import { Bounds, entity } from './Entity';
-import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from './util';
-import { CharacterAsset, VoiceAsset } from './Campaign';
-import { Cloud } from './Cloud';
-import { ControllerAnimationTags, ControllerSpriteMap } from './input/ControllerFamily';
-import { ControllerEvent } from './input/ControllerEvent';
-import { ControllerManager } from './input/ControllerManager';
-import { Conversation } from './Conversation';
-import { ConversationProxy } from './ConversationProxy';
-import { Dance } from './Dance';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { BgmId, FadeDirection, GameScene } from "./scenes/GameScene";
+import { BitmapFont } from "./BitmapFont";
+import { Bounds, entity } from "./Entity";
+import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "./util";
+import { CharacterAsset, VoiceAsset } from "./Campaign";
+import { Cloud } from "./Cloud";
+import { ControllerAnimationTags, ControllerSpriteMap } from "./input/ControllerFamily";
+import { ControllerEvent } from "./input/ControllerEvent";
+import { ControllerManager } from "./input/ControllerManager";
+import { Conversation } from "./Conversation";
+import { ConversationProxy } from "./ConversationProxy";
+import { Dance } from "./Dance";
 import {
     DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
     PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
     PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
     SHORT_JUMP_GRAVITY
-} from './constants';
-import { Environment } from './World';
-import { GameObjectInfo } from './MapInfo';
-import { GotItemScene, Item } from './scenes/GotItemScene';
-import { NPC } from './NPC';
-import { ParticleEmitter, valueCurves } from './Particles';
-import { PhysicsEntity } from './PhysicsEntity';
-import { PlayerConversation } from './PlayerConversation';
-import { QuestATrigger, QuestKey } from './Quests';
-import { RenderingLayer, RenderingType } from './Renderer';
-import { Seed, SeedState } from './Seed';
-import { Sign } from './Sign';
-import { Snowball } from './Snowball';
-import { Sound } from './Sound';
-import { SpeechBubble } from './SpeechBubble';
-import { Stone, StoneState } from './Stone';
-import { Wall } from './Wall';
-import { Wood, WoodState } from './Wood';
+} from "./constants";
+import { Environment } from "./World";
+import { GameObjectInfo } from "./MapInfo";
+import { GotItemScene, Item } from "./scenes/GotItemScene";
+import { NPC } from "./NPC";
+import { ParticleEmitter, valueCurves } from "./Particles";
+import { PhysicsEntity } from "./PhysicsEntity";
+import { PlayerConversation } from "./PlayerConversation";
+import { QuestATrigger, QuestKey } from "./Quests";
+import { RenderingLayer, RenderingType } from "./Renderer";
+import { Seed, SeedState } from "./Seed";
+import { Sign } from "./Sign";
+import { Snowball } from "./Snowball";
+import { Sound } from "./Sound";
+import { SpeechBubble } from "./SpeechBubble";
+import { Stone, StoneState } from "./Stone";
+import { Wall } from "./Wall";
+import { Wood, WoodState } from "./Wood";
 
 const groundColors = [
     "#806057",
@@ -206,9 +206,9 @@ export class Player extends PhysicsEntity {
 
         if (isDev()) {
             console.log(
-                'Dev mode, press “C” to dance anywhere, “P” to spawn the stone, “O” to spawn the '
-                + 'seed, “I” to spawn wood, “T” to throw useless snowball, “K” to learn all '
-                + 'abilities, “M” to show bounds of entities and triggers.'
+                "Dev mode, press “C” to dance anywhere, “P” to spawn the stone, “O” to spawn the "
+                + "seed, “I” to spawn wood, “T” to throw useless snowball, “K” to learn all "
+                + "abilities, “M” to show bounds of entities and triggers."
             );
         }
 
@@ -763,16 +763,16 @@ export class Player extends PhysicsEntity {
     }
 
     public debugCollisions(): void {
-        console.log('Entities: ',this.scene.world.getEntityCollisions(this));
-        console.log('Triggers: ',this.scene.world.getTriggerCollisions(this));
-        console.log('Gates: ',this.scene.world.getGateCollisions(this));
+        console.log("Entities: ",this.scene.world.getEntityCollisions(this));
+        console.log("Triggers: ",this.scene.world.getTriggerCollisions(this));
+        console.log("Gates: ",this.scene.world.getGateCollisions(this));
     }
 
     private getReadableTrigger(): GameObjectInfo | undefined {
         const triggers = this.scene.world.getTriggerCollisions(this);
         if (triggers.length === 0) return undefined;
 
-        return triggers.find(t => t.name === 'readable');
+        return triggers.find(t => t.name === "readable");
     }
 
     private canDanceToMakeRain(): boolean {
@@ -782,7 +782,7 @@ export class Player extends PhysicsEntity {
 
         return (
             (
-                this.isCollidingWithTrigger('raincloud_sky')
+                this.isCollidingWithTrigger("raincloud_sky")
                 && !this.scene.world.isRaining()
                 && this.carrying === null
                 && !this.scene.apocalypse
@@ -852,7 +852,7 @@ export class Player extends PhysicsEntity {
         if (this.carrying) {
             if (this.running) {
                 this.running = false;
-                this.animation = 'walk';
+                this.animation = "walk";
             }
 
             this.carrying.x = this.x;
@@ -1083,7 +1083,7 @@ export class Player extends PhysicsEntity {
 
                         // Camera focus to boss for each triggered rain cloud
                         const bossPointer = this.scene.pointsOfInterest.find(
-                            poi => poi.name === 'boss_spawn'
+                            poi => poi.name === "boss_spawn"
                         );
 
                         if (bossPointer) {
@@ -1112,7 +1112,7 @@ export class Player extends PhysicsEntity {
                         }
                     }
 
-                    if (this.isCollidingWithTrigger('raincloud_sky')) {
+                    if (this.isCollidingWithTrigger("raincloud_sky")) {
                         this.scene.world.startRain();
                     }
                 }
@@ -1126,11 +1126,11 @@ export class Player extends PhysicsEntity {
         if (triggerCollisions.length > 0) {
             triggerCollisions.forEach(trigger => {
                 // Handle MountainRiddle logic
-                if (trigger.name === 'reset_mountain') {
+                if (trigger.name === "reset_mountain") {
                     this.scene.mountainRiddle.resetRiddle();
                 }
 
-                if (trigger.name === 'mountaingate') {
+                if (trigger.name === "mountaingate") {
                     const row = trigger.properties.row;
                     const col = trigger.properties.col;
 
@@ -1140,7 +1140,7 @@ export class Player extends PhysicsEntity {
                 }
 
                 if (
-                    trigger.name === 'teleporter'
+                    trigger.name === "teleporter"
                     && this.scene.mountainRiddle.isFailed()
                     && !this.scene.mountainRiddle.isCleared()
                 ) {
@@ -1151,7 +1151,7 @@ export class Player extends PhysicsEntity {
                     }
                 }
 
-                if (trigger.name === 'finish_mountain_riddle') {
+                if (trigger.name === "finish_mountain_riddle") {
                     this.scene.mountainRiddle.clearRiddle();
                 }
 

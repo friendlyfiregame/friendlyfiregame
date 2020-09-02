@@ -29,8 +29,8 @@ spoken by NPC or player, the dialog will continue in that state (with its first 
 ### Actions
 
 Any kind of side effect in the game. Always starts with an exclamation mark, followed by the action name
-and possibly additional parameters. Includes camera behavior (e.g. "!zoomin", "!zoomout", "!zoomto <NPC name>"),
-NPC moods ("!angry", "!scared", … whatever we support), game progress ("!enabledialog <NPC name> <dialog name>")
+and possibly additional parameters. Includes camera behavior (e.g. "!zoomin", "!zoomout", "!zoomto &lt;NPC name&gt;"),
+NPC moods ("!angry", "!scared", … whatever we support), game progress ("!enabledialog &lt;NPC name&gt; &lt;dialog name&gt;")
 and more.
 
 ### Interpretation
@@ -40,7 +40,7 @@ to press Enter to proceed to the next one. When an NPC line is followed by playe
 see both at the same time. Multiple options after one another will always be visible at once.
 It's possible to have one player option lead to more player options using state changes though:
 
-```
+```json
     …
     "myState": [
         "I'm NPC XY and say stuff",
@@ -58,7 +58,7 @@ Having many states can quickly become hard to read though.
 It's sometimes possible to not use all that many states for every single player option,
 but stay mostly in a single one linearly:
 
-```
+```json
     …
     "entry": [
         "Hello you!",
@@ -69,8 +69,7 @@ but stay mostly in a single one linearly:
         "►Whoa! A talking stone!",
         "►You rock!",
         "►What do you want from me? @want",
-        "Well yes, thank you! And you are?",
-        …
+        "Well yes, thank you! And you are?"
     ]
     …
 ```

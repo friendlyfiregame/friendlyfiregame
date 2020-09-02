@@ -1,7 +1,7 @@
-import { ControllerEventType } from './ControllerEventType';
-import { ControllerFamily } from './ControllerFamily';
-import { ControllerIntent } from './ControllerIntent';
-import { GamepadModel } from './GamepadModel';
+import { ControllerEventType } from "./ControllerEventType";
+import { ControllerFamily } from "./ControllerFamily";
+import { ControllerIntent } from "./ControllerIntent";
+import { GamepadModel } from "./GamepadModel";
 
 const controllerFamilySymbol = Symbol("controllerFamily");
 const intentsSymbol = Symbol("intent");

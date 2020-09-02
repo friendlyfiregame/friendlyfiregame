@@ -1,12 +1,12 @@
-import { Aseprite } from '../Aseprite';
-import { asset } from '../Assets';
-import { BitmapFont } from '../BitmapFont';
-import { DIALOG_FONT } from '../constants';
-import { easeInExpo, easeOutExpo } from '../easings';
-import { FriendlyFire } from '../FriendlyFire';
-import { Scene } from '../Scene';
-import { SlideTransition } from '../transitions/SlideTransition';
-import { Sound } from '../Sound';
+import { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import { DIALOG_FONT } from "../constants";
+import { easeInExpo, easeOutExpo } from "../easings";
+import { FriendlyFire } from "../FriendlyFire";
+import { Scene } from "../Scene";
+import { SlideTransition } from "../transitions/SlideTransition";
+import { Sound } from "../Sound";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 
@@ -78,7 +78,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
         ]
     ];
 
-    private selectedSubtitle = '';
+    private selectedSubtitle = "";
 
     public setup(): void {
         GotItemScene.sound.setVolume(0.7);
@@ -117,7 +117,7 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
         ctx.save();
         ctx.globalAlpha = 0.5;
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = "black";
         ctx.fillRect(0, centerY - 1, width, 50);
 
         const itemNameText = this.titles[this.targetItem];

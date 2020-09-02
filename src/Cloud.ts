@@ -1,14 +1,14 @@
-import { Aseprite } from './Aseprite';
-import { asset } from './Assets';
-import { CollidableGameObject, GameScene } from './scenes/GameScene';
-import { entity } from './Entity';
-import { Environment } from './World';
-import { GameObjectProperties } from './MapInfo';
-import { ParticleEmitter, valueCurves } from './Particles';
-import { PhysicsEntity } from './PhysicsEntity';
-import { PIXEL_PER_METER } from './constants';
-import { RenderingLayer } from './Renderer';
-import { rnd, rndInt, timedRnd } from './util';
+import { Aseprite } from "./Aseprite";
+import { asset } from "./Assets";
+import { CollidableGameObject, GameScene } from "./scenes/GameScene";
+import { entity } from "./Entity";
+import { Environment } from "./World";
+import { GameObjectProperties } from "./MapInfo";
+import { ParticleEmitter, valueCurves } from "./Particles";
+import { PhysicsEntity } from "./PhysicsEntity";
+import { PIXEL_PER_METER } from "./constants";
+import { RenderingLayer } from "./Renderer";
+import { rnd, rndInt, timedRnd } from "./util";
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {

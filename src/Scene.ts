@@ -1,8 +1,8 @@
-import { ControllerManager } from './input/ControllerManager';
-import { Game } from './Game';
-import { Keyboard } from './input/Keyboard';
-import { Scenes } from './Scenes';
-import { Transition } from './Transition';
+import { ControllerManager } from "./input/ControllerManager";
+import { Game } from "./Game";
+import { Keyboard } from "./input/Keyboard";
+import { Scenes } from "./Scenes";
+import { Transition } from "./Transition";
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
 export type SceneProperties = Record<string, string | number | boolean> | null;
