@@ -3,6 +3,7 @@ import { Game } from "./Game";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
 import { Transition } from "./Transition";
+import { RootNode, UpdateRootNode, DrawRootNode } from "./scene/RootNode";
 
 export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
 export type SceneProperties = Record<string, string | number | boolean> | null;
@@ -13,8 +14,16 @@ export abstract class Scene<T extends Game> {
     public inTransition: Transition | null = null;
     public outTransition: Transition | null = null;
     public properties: SceneProperties = null;
+    public readonly rootNode: RootNode<T>;
+    private updateRootNode!: UpdateRootNode;
+    private drawRootNode!: DrawRootNode;
 
-    public constructor(public readonly game: T) {}
+    public constructor(public readonly game: T) {
+        this.rootNode = new RootNode(this, (update, draw) => {
+            this.updateRootNode = update;
+            this.drawRootNode = draw;
+        });
+    }
 
     public get keyboard(): Keyboard {
         return this.game.keyboard;
@@ -56,7 +65,11 @@ export abstract class Scene<T extends Game> {
      */
     public cleanup(): Promise<void> | void {}
 
-    public update(dt: number): void {}
+    public update(dt: number): void {
+        this.updateRootNode(dt);
+    }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {}
+    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+        this.drawRootNode(ctx, width, height);
+    }
 }
