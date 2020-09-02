@@ -19,7 +19,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: "14.x"
+        node-version: '14.x'
     - name: Cache node modules
       uses: actions/cache@v2
       env:
@@ -43,6 +43,7 @@ jobs:
   deploy_webapp:
     name: Deploy Webapp
     needs: build_webapp
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-20.04
     steps:
     - name: Download archived dist folder
@@ -77,7 +78,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: "14.x"
+        node-version: '14.x'
     - name: Cache node modules
       uses: actions/cache@v2
       env:
