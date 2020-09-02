@@ -2,7 +2,8 @@ name: Build Game
 on:
   push:
     branches:
-    - master
+    - '**'
+    - '!gh-pages'
     tags:
     - 'v*.*.*'
   pull_request:
@@ -20,6 +21,10 @@ jobs:
     steps:
     - name: git checkout
       uses: actions/checkout@v2
+    - uses: jwalton/gh-find-current-pr@v1
+      id: pr
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Read version from package.json
       id: version
       uses: notiz-dev/github-action-json-property@v0.1.0
@@ -50,10 +55,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        PR: ${{ steps.pr.outputs.pr }}
       with:
         args: >
           -Dsonar.projectVersion=${{steps.version.outputs.prop}}
           -Dsonar.branch.name=${BRANCH_NAME}
+          -Dsonar.pullrequest.key=${PR}
+          -Dsonar.pullrequest.branch=${GITHUB_HEAD_REF}
+          -Dsonar.pullrequest.base=${GITHUB_BASE_REF}
     - run: npm run dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
@@ -64,7 +73,7 @@ jobs:
   deploy_webapp:
     name: Deploy Webapp
     needs: build_webapp
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: ${BRANCH_NAME} == 'master' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-20.04
     steps:
     - name: Download archived dist folder
@@ -74,7 +83,6 @@ jobs:
         path: dist
 
     - name: Publish browser game
-      if: github.ref == 'refs/heads/master'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -84,6 +92,7 @@ jobs:
         cname: play.friendlyfiregame.com
 
   build_electron_app:
+    if: ${BRANCH_NAME} == 'master'
     needs: build_webapp
     name: Build Electron Apps
     runs-on: ${{ matrix.os }}
