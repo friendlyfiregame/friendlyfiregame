@@ -16,3 +16,6 @@ indent_size = 2
 
 [*.xml]
 indent_size = 2
+
+[*.properties]
+charset = latin1
