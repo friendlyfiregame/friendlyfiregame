@@ -28,7 +28,7 @@ Alternatively you can run `npm i` on the CLI to compile the project once or
 There are four alternatives to run the game in the browser:
 
 * In Visual Studio Code press *Ctrl-Shift-D* and launch the `webpack-dev-server` and
-  one of the available browsed that can be selected by clicking on the drop down menu next to
+  one of the available browsers that can be selected by clicking on the drop down menu next to
   the "launch" button.
 * Run `npm start` and point your browser to <http://localhost:8000/>. The browser automatically
   reloads the game when changes are detected (You still need to run the compiler in watch mode in VS
@@ -41,5 +41,4 @@ There are four alternatives to run the game in the browser:
 
 ### Publishing the game
 
-The game will be automatically be published on every push to the `master` branch by
-a Github workflow.
+The game will be automatically published on every push to the `master` branch by a Github workflow.
