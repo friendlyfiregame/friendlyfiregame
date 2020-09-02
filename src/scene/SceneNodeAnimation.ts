@@ -41,7 +41,7 @@ export class SceneNodeAnimation<T extends Game = Game> {
         this.elapsed += dt;
         if (this.elapsed < this.lifetime) {
             if (this.elapsed > this.delay) {
-                const timeIndex = ((this.elapsed - this.delay) / this.duration) % 1
+                const timeIndex = ((this.elapsed - this.delay) / this.duration) % 1;
                 this.animator(this.sceneNode, this.easing(timeIndex));
             }
             return false;
