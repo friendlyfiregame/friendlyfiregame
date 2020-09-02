@@ -4,7 +4,7 @@ on:
     branches:
     - master
     tags:
-      - 'v*.*.*'
+    - 'v*.*.*'
   pull_request:
     branches:
     - master
@@ -20,6 +20,14 @@ jobs:
     steps:
     - name: git checkout
       uses: actions/checkout@v2
+    - name: Read version from package.json
+      id: version
+      uses: notiz-dev/github-action-json-property@v0.1.0
+      with:
+        path: 'package.json'
+        prop_path: 'version'
+    - name: Determine Git branch name
+      uses: nelonoel/branch-name@v1
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
@@ -42,6 +50,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectVersion=${{steps.version.outputs.prop}}
+          -sonar.branch.name=${BRANCH_NAME}
     - run: npm run dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
