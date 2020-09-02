@@ -115,7 +115,7 @@ export class Shiba extends ScriptableNPC {
 
             this.scene.startFriendshipMusic();
 
-            if (!shibaSpawnPos) throw new Error(`'friendship_shiba_spawn' point in map is missing`);
+            if (!shibaSpawnPos) throw new Error("'friendship_shiba_spawn' point in map is missing");
             this.x = shibaSpawnPos.x;
             this.y = shibaSpawnPos.y;
         } else if (this.state === ShibaState.KILLING_FIRE) {

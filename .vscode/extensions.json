@@ -1,11 +1,11 @@
 {
     "recommendations": [
+        "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
         "geekidos.vdf",
         "github.vscode-pull-request-github",
         "msjsdiag.debugger-for-chrome",
         "firefox-devtools.vscode-firefox-debug",
-        "msjsdiag.debugger-for-edge",
-        "ms-vscode.vscode-typescript-tslint-plugin"
+        "msjsdiag.debugger-for-edge"
     ]
 }
