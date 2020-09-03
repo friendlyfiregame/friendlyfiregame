@@ -515,8 +515,8 @@ export class GameScene extends Scene<FriendlyFire> {
             },
             lineColor: color,
             dimension: {
-               width: bounds.width,
-               height: bounds.height
+                width: bounds.width,
+                height: bounds.height
             }
         });
     }
