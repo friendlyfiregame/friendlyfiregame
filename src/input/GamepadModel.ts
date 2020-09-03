@@ -10,7 +10,7 @@ typemap.set(/^.*054c.*$/, GamepadStyle.PLAYSTATION);
 /**
  * Regular expression to extract vendor and product identifier.
  */
-const productAndVendorMatcher = /^.*?[Vv]endor\:?\s*(?<vendorId>.{4}).*?[Pp]roduct\:?\s*(?<productId>.{4}).*?$/;
+const productAndVendorMatcher = /^.*?[Vv]endor:?\s*(?<vendorId>.{4}).*?[Pp]roduct:?\s*(?<productId>.{4}).*?$/;
 
 export class GamepadModel {
 

@@ -110,7 +110,7 @@ export class SpeechBubble {
         this.longestLine = this.determineMaxLineLength(message.split("\n"));
         let index = 0;
 
-        for (let char of message) {
+        for (const char of message) {
             if (!char) {
                 index++;
                 continue;

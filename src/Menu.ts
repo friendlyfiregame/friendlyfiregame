@@ -49,7 +49,7 @@ export class MenuItem {
         const alpha = this.enabled ? 1 : 0.35;
 
         let x = this.x;
-        let y = this.y;
+        const y = this.y;
 
         const text = this.label;
         const width = this.font.measureText(text).width;

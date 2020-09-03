@@ -59,7 +59,7 @@ export class SoundEmitter extends Entity {
                 );
             }
         } else {
-            throw new Error(`Cannot create sound emitter because 'sound' property is empty.`);
+            throw new Error("Cannot create sound emitter because 'sound' property is empty.");
         }
     }
 }

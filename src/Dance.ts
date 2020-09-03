@@ -140,7 +140,7 @@ export class Dance {
     }
 
     private keySuccess(key: string, index = this.currentIndex): void {
-        for (let char of key) {
+        for (const char of key) {
             if (index === this.currentIndex) {
                 this.currentKey = this.currentKey.replace(char, "");
             }
@@ -162,7 +162,7 @@ export class Dance {
 
     private keyMissed(key: string): void {
         if (this.performance[this.currentIndex]) {
-            for (let char of key) {
+            for (const char of key) {
                 this.performance[this.currentIndex][char] = false;
             }
         }
@@ -204,7 +204,7 @@ export class Dance {
             // Proceed
             this.currentKey = this.keys[this.currentIndex] || "";
 
-            for (let char of this.currentKey) {
+            for (const char of this.currentKey) {
                 if (this.performance[this.currentIndex] && this.performance[this.currentIndex][char]) {
                     this.currentKey = this.currentKey.replace(char, "");
                 }

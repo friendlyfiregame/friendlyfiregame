@@ -159,7 +159,7 @@ export class Conversation {
             return null;
         }
 
-        let line = this.data[this.state][this.stateIndex++];
+        const line = this.data[this.state][this.stateIndex++];
 
         // console.log(line.condition);
         if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {

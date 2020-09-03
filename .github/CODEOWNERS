@@ -14,10 +14,12 @@
 *.aseprite.json @eduke2k
 *.png @eduke2k
 
-
 # Dialogues
 /assets/dialog/*.dialog.json @eduke2k
 
 # Music and SFX
 /assets/music/* @headcr4sh @eduke2k @m2u-84 @BastianLangBonn
 
+# TypeScript code style
+/tsconfig.json @kayahr
+/.eslintrc @kayahr
