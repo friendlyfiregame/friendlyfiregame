@@ -9,7 +9,7 @@
 * Clone the source code:
 
   ```sh
-  git clone git@github.com:/iplabs/ludum-dare-46
+  git clone git@github.com:/friendlyfiregame/friendlyfiregame
   ```
 
 * Initially run `npm i` in the project folder to install/update dependencies.
@@ -21,7 +21,7 @@ TypeScript sources in the `src` folder to JavaScript in the `lib` folder. It als
 folder for changes so changed files are compiled on-save.
 
 Alternatively you can run `npm i` on the CLI to compile the project once or
-`npm run watch` to continously compile the project in watch mode.
+`npm run watch` to continuously compile the project in watch mode.
 
 ### Running the game in a browser
 

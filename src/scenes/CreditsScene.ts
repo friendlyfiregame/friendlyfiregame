@@ -129,7 +129,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     private drawParagraph(
-        ctx: CanvasRenderingContext2D, posY: number, posX: number, lines: string[], marginBotton = 10
+        ctx: CanvasRenderingContext2D, posY: number, posX: number, lines: string[], marginBottom = 10
     ): number {
         let y = posY;
 
@@ -138,7 +138,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
             y += this.standardCharHeight;
         });
 
-        return y + marginBotton;
+        return y + marginBottom;
     }
 
     private drawCredit(
@@ -218,7 +218,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
         posY = this.drawCredit(ctx, posY, posX, "PROGRAMMING", [
             "Nico Hülscher",
-            "Benjaming Jung",
+            "Benjamin Jung",
             "Nils Kreutzer",
             "Ranjit Mevius",
             "Markus Over",

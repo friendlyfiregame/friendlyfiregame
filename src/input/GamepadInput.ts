@@ -103,7 +103,7 @@ class GamepadAxisWrapper {
      * 0.9 (much force needed) can be used here.
      *
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
-     * might lead to button flibber flubber…
+     * might lead to button flibber flubber...
      */
     private threshold = 0.5;
 

@@ -23,6 +23,10 @@
   "scripts": {
     "clean": "rimraf lib dist out",
     "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && htmlhint && eslint --ext .ts ./src/",
+    "check": "jest",
+    "cspell": "cspell '**/*'",
+    "coverage": "jest --coverage",
+    "test": "npm run -s cspell && npm run -s lint && npm run -s check",
     "compile": "tsc",
     "watch": "tsc -w",
     "prepare": "npm run -s clean && npm run -s compile",
@@ -34,6 +38,22 @@
   "config": {
     "forge": "electron-forge.config.js"
   },
+  "jest": {
+    "projects": [
+      {
+        "displayName": "electron",
+        "runner": "@jest-runner/electron",
+        "testEnvironment": "@jest-runner/electron/environment",
+        "testMatch": [
+          "<rootDir>/lib/test/**/*.test.js"
+        ]
+      }
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/lib/**/*.js",
+      "!<rootDir>/lib/test/**"
+    ]
+  },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.53",
     "@electron-forge/maker-deb": "6.0.0-beta.53",
@@ -41,14 +61,19 @@
     "@electron-forge/maker-squirrel": "6.0.0-beta.53",
     "@electron-forge/maker-zip": "6.0.0-beta.53",
     "@electron-forge/plugin-webpack": "6.0.0-beta.53",
-    "@typescript-eslint/parser": "^4.0.1",
+    "@jest-runner/electron": "3.0.0",
+    "@types/jest": "26.0.13",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
     "copy-webpack-plugin": "6.1.0",
+    "cspell": "4.1.0",
     "electron": "10.1.1",
     "eslint": "^7.8.1",
     "generate-json-webpack-plugin": "^1.0.0",
     "git-revision-webpack-plugin": "^3.0.6",
     "htmlhint": "^0.14.1",
+    "jest": "26.4.2",
+    "jest-extended": "0.11.5",
     "markdownlint": "^0.20.4",
     "markdownlint-cli": "^0.23.2",
     "rimraf": "3.0.2",

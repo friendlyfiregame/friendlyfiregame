@@ -95,7 +95,7 @@ export class MenuList {
     }
 
     /**
-     * Adds an arbitray number of menu items to the menu list
+     * Adds an arbitrary number of menu items to the menu list
      * The first available menu item will be focused automatically
      * @param items
      */

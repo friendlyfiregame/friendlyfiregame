@@ -172,7 +172,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const character = this.game.campaign.selectedCharacter;
         const charSelectionTextY = characterMenuItemY + selectionItemsYDistance;
         const charSelectionTextX = menuItemX + selectionItemsXDistance;
-        const charSelectenTextGap = 55;
+        const charSelectionTextGap = 55;
 
         if (character === CharacterAsset.MALE) {
             CharacterSelectionScene.font.drawText(
@@ -180,7 +180,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
             );
 
             CharacterSelectionScene.font.drawTextWithOutline(
-                ctx, "Variant 2", charSelectionTextX + charSelectenTextGap, charSelectionTextY,
+                ctx, "Variant 2", charSelectionTextX + charSelectionTextGap, charSelectionTextY,
                 "white", "black"
             );
         } else {
@@ -190,7 +190,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
             );
 
             CharacterSelectionScene.font.drawText(
-                ctx, "Variant 2", charSelectionTextX + charSelectenTextGap, charSelectionTextY,
+                ctx, "Variant 2", charSelectionTextX + charSelectionTextGap, charSelectionTextY,
                 "grey"
             );
         }
@@ -200,7 +200,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         const voice = this.game.campaign.selectedVoice;
         const voiceSelectionTextY = voiceMenuItemY + selectionItemsYDistance;
         const voiceSelectionTextX = menuItemX + selectionItemsXDistance;
-        const voiceSelectenTextGap = 55;
+        const voiceSelectionTextGap = 55;
 
         if (voice === VoiceAsset.MALE) {
             CharacterSelectionScene.font.drawText(
@@ -208,7 +208,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
             );
 
             CharacterSelectionScene.font.drawTextWithOutline(
-                ctx, "Low Pitch", voiceSelectionTextX + voiceSelectenTextGap, voiceSelectionTextY,
+                ctx, "Low Pitch", voiceSelectionTextX + voiceSelectionTextGap, voiceSelectionTextY,
                 "white", "black"
             );
         } else {
@@ -217,7 +217,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
             );
 
             CharacterSelectionScene.font.drawText(
-                ctx, "Low Pitch", voiceSelectionTextX + voiceSelectenTextGap, voiceSelectionTextY,
+                ctx, "Low Pitch", voiceSelectionTextX + voiceSelectionTextGap, voiceSelectionTextY,
                 "grey"
             );
         }

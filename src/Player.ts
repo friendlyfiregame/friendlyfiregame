@@ -555,8 +555,8 @@ export class Player extends PhysicsEntity {
     }
 
     /**
-     * Teleport the player fromt he source gate to it's corresponding target gate.
-     * The teleport is not instand but accompanied by a fade to black to obscure the teleportation.
+     * Teleport the player from the source gate to it's corresponding target gate.
+     * The teleport is not instant but accompanied by a fade to black to obscure the teleportation.
      * Also sets the camera bounds to the target position
      * @param gate the source the player enters
      */

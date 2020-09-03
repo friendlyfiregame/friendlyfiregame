@@ -4,6 +4,7 @@
 [Tt]humbs.db
 
 # Build output
+/coverage/
 /node_modules/
 /lib/
 /out/

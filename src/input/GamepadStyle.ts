@@ -8,7 +8,7 @@
 export enum GamepadStyle {
 
     /** Default gamepad type if nothing else matches. */
-    UNKNOWN = "unkown",
+    UNKNOWN = "unknown",
 
     XBOX = "xbox",
     PLAYSTATION = "playstation",
