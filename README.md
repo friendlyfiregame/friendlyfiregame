@@ -38,7 +38,3 @@ There are four alternatives to run the game in the browser:
 * Run `npm run dist` to package the game into the `dist` folder. Open the `dist/index.html` in your
   browser to run the game. To publish the game simply copy the contents of the `dist` folder to a
   public web server.
-
-### Publishing the game
-
-The game will be automatically published on every push to the `master` branch by a Github workflow.
