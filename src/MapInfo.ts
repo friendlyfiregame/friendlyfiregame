@@ -109,7 +109,7 @@ export class MapInfo {
 
     public static normalizeCoordinates(objects: MapObjectJSON[]): MapObjectJSON[] {
         const mapHeight = MapInfo.getMapSize().height;
-        objects.forEach(o => o.y = mapHeight - o.y);
+        objects.forEach(o => { o.y = mapHeight - o.y });
 
         return objects;
     }

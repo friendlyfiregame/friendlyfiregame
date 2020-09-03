@@ -22,7 +22,7 @@
   "main": ".webpack/main",
   "scripts": {
     "clean": "rimraf lib dist out",
-    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && eslint ./src/",
+    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && eslint --ext .ts ./src/",
     "compile": "tsc",
     "watch": "tsc -w",
     "prepare": "npm run -s clean && npm run -s compile",
