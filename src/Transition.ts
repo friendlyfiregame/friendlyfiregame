@@ -42,7 +42,7 @@ export class Transition {
         if (this.promise == null) {
             this.type = type;
             this.elapsed = 0;
-            this.promise = new Promise(resolve => this.resolve = resolve);
+            this.promise = new Promise(resolve => { this.resolve = resolve });
         }
         return this.promise;
     }

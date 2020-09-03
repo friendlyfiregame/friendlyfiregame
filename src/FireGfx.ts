@@ -95,7 +95,9 @@ export class FireGfx {
     private updateStep(): void {
         const data = this.data;
         let fromRow = data[0];
-        let fromX = 0, toCenter = 0, midX = (this.w - 1) * 0.5, toCenter1 = 1;
+        let fromX = 0, toCenter = 0;
+        let  toCenter1 = 1;
+        const midX = (this.w - 1) * 0.5;
         const yThreshold = this.coneShaped ? this.h * 0.8 : Infinity;
 
         // Let all fire rows move upward, so update rows from top to bottom
@@ -130,7 +132,7 @@ export class FireGfx {
         const exponent = (skew > 0) ? 1 + skew : 1 / (1 - skew);
 
         for (let x = 0; x < this.w; x++) {
-            let f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
+            const f = 1.2 + (0.8 * Math.sin(t) * Math.sin(0.1 * x * t) * Math.sin(-0.07 * x * t)) ** 2;
             const baseX = Math.floor((this.w - 1) * (x / (this.w - 1)) ** exponent);
             row[x] = this.bottomLine[baseX] * f;
         }

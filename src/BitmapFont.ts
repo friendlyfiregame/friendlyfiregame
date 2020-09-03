@@ -27,7 +27,7 @@ export class BitmapFont {
         this.charCount = charMap.length;
         this.charReverseMap = {};
 
-        for (var i = 0; i < this.charCount; i++) {
+        for (let i = 0; i < this.charCount; i++) {
             this.charStartPoints[i] = (i === 0) ? 0 : this.charStartPoints[i - 1] + this.charWidths[i - 1] + charMargin;
             const char = this.charMap[i];
             this.charReverseMap[char] = i;
@@ -118,7 +118,7 @@ export class BitmapFont {
         let width = 0;
         let precursorChar = null;
 
-        for (var currentChar of text) {
+        for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
             width += this.charWidths[index] + 1;
             const compactablePrecursors = this.compactablePrecursors[index];
@@ -138,7 +138,7 @@ export class BitmapFont {
             const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
 
-            let xPos = Math.round(x + offX) - spaceReduction;
+            const xPos = Math.round(x + offX) - spaceReduction;
 
             this.drawCharacter(ctx, index, xPos, Math.round(y), color);
             x += this.charWidths[index] - spaceReduction + 1;
@@ -152,7 +152,7 @@ export class BitmapFont {
         let width = 0;
         let precursorChar = null;
 
-        for (var char of text) {
+        for (const char of text) {
             const index = this.getCharIndex(char);
             const compactablePrecursors = this.compactablePrecursors[index];
 

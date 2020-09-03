@@ -326,7 +326,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public setActiveBgmTrack(id: BgmId): void {
-        this.backgroundTracks.forEach(t => t.active = false);
+        this.backgroundTracks.forEach(t => { t.active = false });
         const track = this.backgroundTracks.find(t => t.id === id);
 
         if (track) {
@@ -342,7 +342,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public fadeToBackgroundTrack(id: BgmId): void {
         const track = this.getBackgroundTrack(id);
         this.muteMusic();
-        this.backgroundTracks.forEach(t => t.active = false);
+        this.backgroundTracks.forEach(t => { t.active = false });
         track.active = true;
         track.sound.setVolume(track.baseVolume);
 
@@ -515,8 +515,8 @@ export class GameScene extends Scene<FriendlyFire> {
             },
             lineColor: color,
             dimension: {
-               width: bounds.width,
-               height: bounds.height
+                width: bounds.width,
+                height: bounds.height
             }
         });
     }

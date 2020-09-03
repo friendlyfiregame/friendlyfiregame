@@ -44,7 +44,7 @@ export class ShadowPresence extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        let scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
+        const scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
 
         this.scene.renderer.add({
