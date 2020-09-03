@@ -46,7 +46,8 @@
         "testEnvironment": "@jest-runner/electron/environment",
         "testMatch": [
           "<rootDir>/lib/test/**/*.test.js"
-        ]
+        ],
+        "testResultsProcessor": "jest-sonar-reporter"
       }
     ],
     "collectCoverageFrom": [
@@ -74,6 +75,7 @@
     "htmlhint": "^0.14.1",
     "jest": "26.4.2",
     "jest-extended": "0.11.5",
+    "jest-sonar-reporter": "^2.0.0",
     "markdownlint": "^0.20.4",
     "markdownlint-cli": "^0.23.2",
     "rimraf": "3.0.2",
