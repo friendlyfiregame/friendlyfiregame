@@ -90,7 +90,7 @@ export class Animator {
 
         /**
          * Forcefully stop the loop at the last frame, if looping is disabled.
-         * We substract an arbitrary small number the animation duration, since the exact animation
+         * We subtract an arbitrary small number the animation duration, since the exact animation
          * duration time will play frame 1 of the animation.
          */
         if (config?.loop === false) {

@@ -115,7 +115,7 @@ export class GamepadControllerEvent extends ControllerEvent {
         super(ControllerFamily.GAMEPAD, eventType, intents, repeat);
         this[gamepadModelSymbol] = gamepadModel;
     }
-    get getpadModel(): GamepadModel {
+    get gamepadModel(): GamepadModel {
         return this[gamepadModelSymbol];
     }
 }

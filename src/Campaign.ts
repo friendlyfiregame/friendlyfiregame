@@ -238,7 +238,7 @@ export class Campaign {
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();
                     break;
-                case  "talkedtofire":
+                case "talkedtofire":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
                     break;
                 case "giveBone":
@@ -249,7 +249,7 @@ export class Campaign {
                 case "shibaNextState":
                     this.gameScene!.shiba.nextState();
                     break;
-                case  "talkedtotree":
+                case "talkedtotree":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
                     break;
                 case "gotFireQuest":
@@ -300,7 +300,6 @@ export class Campaign {
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {
                         this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_STONE);
                     }
-
                     break;
                 case "pickupstone":
                     this.gameScene.stone.pickUp();
@@ -312,7 +311,6 @@ export class Campaign {
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.GOT_WOOD) {
                         this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE_WITH_WOOD);
                     }
-
                     break;
                 case "dance":
                     setTimeout(() => {
