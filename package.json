@@ -22,7 +22,7 @@
   "main": ".webpack/main",
   "scripts": {
     "clean": "rimraf lib dist out",
-    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && htmlhint && eslint --ext .ts ./src/",
+    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && htmlhint ./index.html && eslint --ext .ts ./src/",
     "check": "jest",
     "cspell": "cspell '**/*'",
     "coverage": "jest --coverage",
