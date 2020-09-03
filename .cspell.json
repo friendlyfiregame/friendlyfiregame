@@ -9,7 +9,7 @@
         "json",
         "jsonc",
         "plaintext"
-     ],
+    ],
     "ignorePaths": [
         "node_modules",
         "coverage",
@@ -162,6 +162,7 @@
         "stoneplatform",
         "subconditions",
         "superthrow",
+        "tagname",
         "talkedtofire",
         "talkedtotree",
         "teleporter",
