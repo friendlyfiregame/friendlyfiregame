@@ -21,6 +21,9 @@ jobs:
     steps:
     - name: git checkout
       uses: actions/checkout@v2
+      with:
+        # SonarCloud doesn't like shallow clones.
+        fetch-depth: 0
     - uses: jwalton/gh-find-current-pr@v1
       id: pr
       with:
