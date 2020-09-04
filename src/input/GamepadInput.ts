@@ -212,7 +212,7 @@ class GamepadWrapper {
         }
     }
 
-    public toString(): String {
+    public toString(): string {
         return `Gamepad (index: ${this.index}, id: ${this.id})`;
     }
 }
