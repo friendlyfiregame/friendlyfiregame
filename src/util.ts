@@ -3,8 +3,6 @@ import { GameObjectInfo } from "./MapInfo";
 import { MapObjectJSON } from "*/level.json";
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from "./constants";
 
-export type Vector2 = {x: number, y: number};
-
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {
         return minOrMax + Math.random() * (max - minOrMax);
