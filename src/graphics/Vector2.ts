@@ -8,10 +8,72 @@ export interface Vector2Like {
     y: number;
 }
 
+export interface ReadonlyVector2Like {
+    readonly x: number;
+    readonly y: number;
+}
+
+export interface ReadonlyVector2 extends ReadonlyVector2Like {
+    /**
+     * Returns the length of the vector. If you only need to compare vector lengths so the real length doesn't matter
+     * then consider using the faster [[getSquareLength]] method which omits the expensive square root calculation.
+     *
+     * @return The vector length.
+     */
+    getLength(): number;
+
+    /**
+     * Returns the squared length of the vector. In some cases (Like comparing vector lengths) it is not necessary to
+     * compare the real length, it is enough to compare the squared length. This is faster because it only does
+     * addition and multiplication without a square root. If you need the real vector length then use the
+     * [[getLength]] method instead.
+     *
+     * @return The squared vector length.
+     */
+    getSquareLength(): number;
+
+    /**
+     * Returns the distance between this vector and the specified one. If you only need to compare vector distances so
+     * the real distance doesn't matter then consider using the faster [[getSquareDistance]] method which omits the
+     * expensive square root calculation.
+     *
+     * @param v - The other vector.
+     * @return The distance between this vector and the specified one.
+     */
+    getDistance(v: ReadonlyVector2Like): number;
+
+    /**
+     * Returns the squared distance between this vector and the specified one. In some cases (Like comparing
+     * vector distances) it is not necessary to compare the real distance, it is enough to compare the squared
+     * distance. This is faster because it only does addition and multiplication without a square root. If you need
+     * the real vector distance then use the [[getDistance]] method instead.
+     *
+     * @param v - The other vector.
+     * @return The squared distance between the two vectors.
+     */
+    getSquareDistance(v: ReadonlyVector2Like): number;
+
+    /**
+     * Returns the dot product of this vector and the specified one.
+     *
+     * @param v - The other vector.
+     * @return The dot product.
+     */
+    dot(v: ReadonlyVector2Like): number;
+
+    /**
+     * Returns a human-readable string representation of the vector.
+     *
+     * @param maxFractionDigits - Optional number of maximum fraction digits to use in the string. Defaults to 5.
+     * @return The human-readable string representation of the vector.
+     */
+    toString(maxFractionDigits?: number): string;
+}
+
 /**
  * Vector with two floating point components.
  */
-export class Vector2 implements Vector2Like {
+export class Vector2 implements ReadonlyVector2Like, Vector2Like {
     /**
      * Creates a new vector with all components set to 0.
      */
@@ -30,11 +92,7 @@ export class Vector2 implements Vector2Like {
         public y: number = 0
     ) {}
 
-    /**
-     * Returns a human-readable string representation of the vector.
-     *
-     * @return The human-readable string representation of the vector.
-     */
+    /** @inheritDoc */
     public toString(): string {
         return `[ ${this.x}, ${this.y} ]`;
     }
@@ -67,59 +125,27 @@ export class Vector2 implements Vector2Like {
         return new Vector2(this.x, this.y);
     }
 
-    /**
-     * Returns the squared length of the vector. In some cases (Like comparing vector lengths) it is not necessary to
-     * compare the real length, it is enough to compare the squared length. This is faster because it only does
-     * addition and multiplication without a square root. If you need the real vector length then use the
-     * [[getLength]] method instead.
-     *
-     * @return The squared vector length.
-     */
+    /** @inheritDoc */
     public getSquareLength(): number {
         return this.x ** 2 + this.y ** 2;
     }
 
-    /**
-     * Returns the length of the vector. If you only need to compare vector lengths so the real length doesn't matter
-     * then consider using the faster [[getSquareLength]] method which omits the expensive square root calculation.
-     *
-     * @return The vector length.
-     */
+    /** @inheritDoc */
     public getLength(): number {
         return Math.sqrt(this.getSquareLength());
     }
 
-    /**
-     * Returns the squared distance between this vector and the specified one. In some cases (Like comparing
-     * vector distances) it is not necessary to compare the real distance, it is enough to compare the squared
-     * distance. This is faster because it only does addition and multiplication without a square root. If you need
-     * the real vector distance then use the [[getDistance]] method instead.
-     *
-     * @param v - The other vector.
-     * @return The squared distance between the two vectors.
-     */
+    /** @inheritDoc */
     public getSquareDistance(v: Vector2Like): number {
         return (this.x - v.x) ** 2 + (this.y - v.y) ** 2;
     }
 
-    /**
-     * Returns the distance between this vector and the specified one. If you only need to compare vector distances so
-     * the real distance doesn't matter then consider using the faster [[getSquareDistance]] method which omits the
-     * expensive square root calculation.
-     *
-     * @param v - The other vector.
-     * @return The distance between this vector and the specified one.
-     */
+    /** @inheritDoc */
     public getDistance(v: Vector2Like): number {
         return Math.sqrt(this.getSquareDistance(v));
     }
 
-    /**
-     * Returns the dot product of this vector and the specified one.
-     *
-     * @param v - The other vector.
-     * @return The dot product.
-     */
+    /** @inheritDoc */
     public dot(v: Vector2Like): number {
         return this.x * v.x + this.y * v.y;
     }

@@ -1,9 +1,10 @@
 import { Scene } from "../Scene";
 import { Game } from "../Game";
 import { Direction } from "../geom/Direction";
-import { Polygon } from "../geom/Polygon";
 import { AnimationArgs, SceneNodeAnimation } from "./SceneNodeAnimation";
 import { AffineTransform } from "../graphics/AffineTransform";
+import { Polygon2 } from "../graphics/Polygon2";
+import { Vector2 } from "../graphics/Vector2";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -124,7 +125,7 @@ export class SceneNode<T extends Game = Game> {
      * The bounds polygon. This is updated on demand and automatically invalidated when node size changes. Node
      * has to call [[invalidateBounds]] manually when something else influences the bounds.
      */
-    private boundsPolygon: Polygon = new Polygon();
+    private boundsPolygon: Polygon2 = new Polygon2();
 
     /**
      * The transformation matrix of this node. This transformation is applied to the node before moving the node to
@@ -859,7 +860,7 @@ export class SceneNode<T extends Game = Game> {
      * when some other aspect of the node which may influence the bounds is changed.
      */
     public invalidateBounds(): this {
-        this.boundsPolygon.length = 0;
+        this.boundsPolygon.clear();
         return this;
     }
 
@@ -869,11 +870,11 @@ export class SceneNode<T extends Game = Game> {
      *
      * @param bounds - The empty bounds polygon to be filled with points by this method.
      */
-    protected updateBoundsPolygon(bounds: Polygon): void {
-        bounds.push(new DOMPoint(0, 0));
-        bounds.push(new DOMPoint(this.width, 0));
-        bounds.push(new DOMPoint(this.width, this.height));
-        bounds.push(new DOMPoint(0, this.height));
+    protected updateBoundsPolygon(bounds: Polygon2): void {
+        bounds.addVertex(new Vector2(0, 0));
+        bounds.addVertex(new Vector2(this.width, 0));
+        bounds.addVertex(new Vector2(this.width, this.height));
+        bounds.addVertex(new Vector2(0, this.height));
     }
 
     /**
@@ -881,8 +882,8 @@ export class SceneNode<T extends Game = Game> {
      *
      * @return The bounds polygon.
      */
-    public getBoundsPolygon(): Polygon {
-        if (this.boundsPolygon.length === 0) {
+    public getBoundsPolygon(): Polygon2 {
+        if (!this.boundsPolygon.hasVertices()) {
             this.updateBoundsPolygon(this.boundsPolygon);
         }
         return this.boundsPolygon;
@@ -1078,17 +1079,9 @@ export class SceneNode<T extends Game = Game> {
             ctx.save();
             this.sceneTransformation.setCanvasTransform(ctx);
             ctx.beginPath();
-            bounds.slice().forEach((point, index) => {
-                if (index === 0) {
-                    ctx.moveTo(point.x, point.y);
-                } else {
-                    ctx.lineTo(point.x, point.y);
-                }
-            });
+            bounds.draw(ctx);
             ctx.clip();
-            ctx.closePath();
             ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.lineWidth = 2;
             ctx.strokeStyle = "red";
             ctx.stroke();
