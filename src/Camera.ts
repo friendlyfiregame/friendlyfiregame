@@ -67,10 +67,16 @@ export class Camera {
 
         this.currentBarTarget = 0;
         this.currentBarHeight = 0;
+        this.x = target.x;
+        this.y = target.y;
     }
 
     public setBounds(bounds: Bounds | undefined): void {
         this.bounds = bounds;
+    }
+
+    public getBounds(): Bounds | undefined {
+        return this.bounds;
     }
 
     private handleKeyDown(e: KeyboardEvent): void {
@@ -111,8 +117,10 @@ export class Camera {
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
         const cnv = this.scene.game.canvas;
-        const cw = cnv.width, ch = cnv.height;
-        const offx = cw / 2 / this.zoom, offy = ch / 2 / this.zoom;
+        const cw = cnv.width
+        const ch = cnv.height;
+        const offx = cw / 2 / this.zoom
+        const offy = ch / 2 / this.zoom;
 
         return {
             x: x - offx,

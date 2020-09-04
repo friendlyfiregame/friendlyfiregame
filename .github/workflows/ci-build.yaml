@@ -54,10 +54,18 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
-    - run: npm install
+    - name: Install NPM dependencies
+      run: npm install
+    - name: Check spelling
+      run: npm run -s cspell
     - name: Run linters
-      run: npm run lint
-    - run: npm run compile
+      run: npm run -s lint
+    - name: Compile sources
+      run: npm run -s compile
+    #- name: Run unit tests
+    #  run: npm run -s coverage
+    #  env:
+    #    SONAR_SCANNER_ENABLED: 'true'
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.4
       env:
@@ -71,7 +79,7 @@ jobs:
           -Dsonar.pullrequest.key=${GITHUB_PULL_REQUEST_ID}
           -Dsonar.pullrequest.branch=${GITHUB_HEAD_REF}
           -Dsonar.pullrequest.base=${GITHUB_BASE_REF}
-    - run: npm run dist
+    - run: npm run -s dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
       with:
@@ -110,8 +118,23 @@ jobs:
         - macos-10.15
         - windows-2019
     steps:
-    - name: git checkout
+    - name: Retrieve Operating System Information from Builder
+      id: build_info
+      shell: bash
+      env:
+        RUNNER_OS: ${{runner.os}}
+      run: |
+        RUNNER_OS_LOWER=`echo "${RUNNER_OS}" | tr '[:upper:]' '[:lower:]'`
+        echo ::set-output name=os::${RUNNER_OS_LOWER}
+        echo ::set-output name=arch::x64
+    - name: Checkout code
       uses: actions/checkout@v2
+    - name: Read version from package.json
+      id: version
+      uses: notiz-dev/github-action-json-property@v0.1.0
+      with:
+        path: 'package.json'
+        prop_path: 'version'
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
@@ -128,5 +151,10 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
     - run: npm install
-    - run: npm run compile
-    - run: npm run package
+    - run: npm run -s compile
+    - run: npm run -s package
+    - name: Archive Electron game package
+      uses: actions/upload-artifact@v1
+      with:
+        name: friendlyfiregame-v${{steps.version.outputs.prop}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
+        path: out

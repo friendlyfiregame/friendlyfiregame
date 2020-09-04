@@ -1,8 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/package#",
   "name": "friendlyfire",
-  "version": "2.1.1-pre",
+  "version": "2.1.2-pre",
   "description": "Explore the world of “Friendly Fire” and meet all its inhabitants in a quest to save the world from an unknown destiny.",
+  "homepage": "https://www.friendlyfiregame.com/",
   "author": "The Cat Hive Developers",
   "maintainers": [],
   "keywords": [
@@ -22,7 +23,7 @@
   "main": ".webpack/main",
   "scripts": {
     "clean": "rimraf lib dist out",
-    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && htmlhint && eslint --ext .ts ./src/",
+    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && htmlhint ./index.html && eslint --ext .ts ./src/",
     "check": "jest",
     "cspell": "cspell '**/*'",
     "coverage": "jest --coverage",
@@ -37,22 +38,6 @@
   },
   "config": {
     "forge": "electron-forge.config.js"
-  },
-  "jest": {
-    "projects": [
-      {
-        "displayName": "electron",
-        "runner": "@jest-runner/electron",
-        "testEnvironment": "@jest-runner/electron/environment",
-        "testMatch": [
-          "<rootDir>/lib/test/**/*.test.js"
-        ]
-      }
-    ],
-    "collectCoverageFrom": [
-      "<rootDir>/lib/**/*.js",
-      "!<rootDir>/lib/test/**"
-    ]
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.53",
@@ -74,6 +59,7 @@
     "htmlhint": "^0.14.1",
     "jest": "26.4.2",
     "jest-extended": "0.11.5",
+    "jest-sonar-reporter": "^2.0.0",
     "markdownlint": "^0.20.4",
     "markdownlint-cli": "^0.23.2",
     "rimraf": "3.0.2",

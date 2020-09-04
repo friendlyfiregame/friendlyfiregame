@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2020-09-04
+
+### Fixed
+
+- The wise stone was still referencing the gender fairy. This reference has now been removed.
+- A wrong directional hint when talking to the bird about the bird's nest has been fixed.
+
 ## [2.1.0] - 2020-09-02
 
 ### Added
@@ -28,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include ending C for players who 'successfully' manage to end up soft-locked in the cave too early.
 - An occasional game-restart bug has been fixed.
 - Wrong gamepad button tooltips in control scheme have been fixed.
-- A bunch of typos and have been fixed.
+- A bunch of typos have been fixed.
 
 ## [2.0.2] - 2020-08-27
 

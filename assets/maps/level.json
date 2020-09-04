@@ -2420,6 +2420,18 @@
                  "width":0,
                  "x":3336,
                  "y":563
+                }, 
+                {
+                 "height":0,
+                 "id":179,
+                 "name":"player_reset_position",
+                 "point":true,
+                 "rotation":0,
+                 "type":"pointer",
+                 "visible":true,
+                 "width":0,
+                 "x":1261,
+                 "y":1573
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2428,7 +2440,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":179,
+ "nextobjectid":180,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",

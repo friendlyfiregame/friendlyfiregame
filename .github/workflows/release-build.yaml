@@ -1,0 +1,46 @@
+name: Release Game
+
+on:
+  push:
+    tags:
+    - 'v*.*.*'
+
+jobs:
+  create_github_release:
+    name: Create Github Release
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Read version from package.json
+      id: version
+      uses: notiz-dev/github-action-json-property@v0.1.0
+      with:
+        path: 'package.json'
+        prop_path: 'version'
+    - name: Assert version in package.json matches Git tag
+      shell: bash
+      env:
+        VERSION: ${{steps.version.outputs.prop}}
+      run: |
+        GIT_TAG= "${GITHUB_REF#refs/tags/}"
+        if [[ "${GIT_TAG}" != "${VERSION}" ]]; then
+          echo ::error ::Version mismatch. Git tag (${GIT_TAG}) doesn't match version (${VERSION}) from package.json"
+        fi
+    - name: Get Changelog Entry
+      id: changelog_reader
+      uses: mindsers/changelog-reader-action@v2
+      with:
+        version: ${{steps.version.outputs.prop}}
+        path: ./CHANGELOG.md
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{steps.version.outputs.prop}}
+        body: ${{ steps.changelog_reader.outputs.changes }}
+        prerelease: ${{ steps.changelog_reader.outputs.status == 'prereleased' }}
+        draft: ${{ steps.changelog_reader.outputs.status == 'unreleased' }}

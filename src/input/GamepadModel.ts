@@ -3,14 +3,22 @@
 import { GamepadStyle } from "./GamepadStyle";
 
 const typemap: Map<RegExp,GamepadStyle> = new Map();
+
+/* spell-checker: disable */
 typemap.set(/^.*?[Xx][Ii][Nn][Pp][Uu][Tt].*$/, GamepadStyle.XBOX);
-typemap.set(/Stadia\\ Controller/, GamepadStyle.STADIA);
+// Vendor ID of Microsoft Corp.
+typemap.set(/^.*045e.*$/, GamepadStyle.XBOX);
+typemap.set(/^.*?[Ss]tadia\ [Cc]ontroller.*$/, GamepadStyle.STADIA);
+// Anything with playstation in its name
+typemap.set(/^.*?[Pp][Ll][Aa][Yy][Ss][Tt][Aa][Ii][Oo][Nn].*$/, GamepadStyle.XBOX);
+// Vendor ID of Sony Inc.
 typemap.set(/^.*054c.*$/, GamepadStyle.PLAYSTATION);
 
 /**
  * Regular expression to extract vendor and product identifier.
  */
 const productAndVendorMatcher = /^.*?[Vv]endor:?\s*(?<vendorId>.{4}).*?[Pp]roduct:?\s*(?<productId>.{4}).*?$/;
+/* spell-checker: enable */
 
 export class GamepadModel {
 

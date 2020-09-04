@@ -259,7 +259,7 @@ export class World implements GameObject {
      * @param box2 second bounding box
      * @return `true` when the bounding boxes are touching, `false` if not.
      */
-    private boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
+    public boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
         return !(
             ((box1.y - box1.height) > (box2.y)) ||
             (box1.y < (box2.y - box2.height)) ||
