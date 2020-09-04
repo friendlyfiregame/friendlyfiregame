@@ -799,6 +799,9 @@ export class Player extends PhysicsEntity {
         return !this.flying && !this.carrying && this.scene.world.getGateCollisions(this).length > 0;
     }
 
+    /**
+     * Returns the bounds of the map area the player currently resides in
+     */
     public getCurrentMapBounds(): Bounds | undefined {
         const collisions = this.scene.world.getCameraBounds(this);
         if (collisions.length === 0) return undefined;
@@ -828,10 +831,34 @@ export class Player extends PhysicsEntity {
         this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
     }
 
+    private isOutOfBounds (): boolean {
+        if (!this.isControllable) return false;
+        const mapBounds = this.scene.camera.getBounds();
+        if (!mapBounds) return false;
+
+        return !this.scene.world.boundingBoxesCollide(this.getBounds(), {
+            x: mapBounds.x + 4,
+            y: mapBounds.y - 4,
+            width: mapBounds.width - 8,
+            height: mapBounds.height - 8
+        });
+    }
+
     public update(dt: number): void {
         super.update(dt);
-
         const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+
+        // Check if the player left the current map bounds and teleport him back to a valid position.
+        if (this.isOutOfBounds()) {
+            const pos = this.scene.apocalypse ?
+                this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn') :
+                this.scene.pointsOfInterest.find(poi => poi.name === 'player_reset_position');
+            if (pos) {
+                this.x = pos.x;
+                this.y = pos.y;
+                this.scene.camera.setBounds(this.getCurrentMapBounds());
+            }
+        }
 
         this.speechBubble.update(this.x, this.y);
 
