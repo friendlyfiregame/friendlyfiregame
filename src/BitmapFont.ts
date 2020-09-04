@@ -114,7 +114,7 @@ export class BitmapFont {
         alpha = 1
     ): void {
         text = "" + text;
-        ctx.globalAlpha = alpha;
+        ctx.globalAlpha *= alpha;
         let width = 0;
         let precursorChar = null;
 

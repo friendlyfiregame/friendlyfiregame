@@ -2,16 +2,35 @@ import { Game } from "../Game";
 import { SceneNode, SceneNodeArgs } from "./SceneNode";
 import { Aseprite } from "../Aseprite";
 
+/**
+ * Constructor arguments for [[AsepriteNode]].
+ */
 export interface AsepriteNodeArgs extends SceneNodeArgs {
+    /** The Aseprite to display. */
     aseprite: Aseprite;
+
+    /** Optional animation tag to draw. */
     tag?: string;
 }
 
+/**
+ * Scene node for displaying an [[Aseprite]].
+ *
+ * @param T - Optional owner game class.
+ */
 export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
+    /** The displayed aseprite. */
     private readonly aseprite: Aseprite;
+
+    /** The animation tag to draw. Null to draw whole animation. */
     private tag: string | null;
+
+    /** The current time index of the animation. */
     private time = 0;
 
+    /**
+     * Creates a new scene node displaying the given Aseprite.
+     */
     public constructor({ aseprite, ...args }: AsepriteNodeArgs) {
         super({
             width: aseprite.width,
@@ -22,23 +41,40 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         this.tag = args.tag ?? null;
     }
 
+    /**
+     * Returns the displayed Aseprite.
+     *
+     * @return The displayed Aseprite.
+     */
     public getAseprite(): Aseprite {
         return this.aseprite;
     }
 
+    /**
+     * Returns the current animation tag. Null if whole animation is displayed.
+     *
+     * @return The current animation tag or null for whole animation.
+     */
     public getTag(): string | null {
         return this.tag;
     }
 
+    /**
+     * Sets the animation tag. Null to display whole animation.
+     *
+     * @param tag - The animation tag to set. Null to unset.
+     */
     public setTag(tag: string | null): this {
         this.tag = tag;
         return this;
     }
 
+    /** @inheritDoc */
     public update(dt: number) {
         this.time += dt;
     }
 
+    /** @inheritDoc */
     public draw(ctx: CanvasRenderingContext2D): void {
         if (this.tag != null) {
             this.aseprite.drawTag(ctx, this.tag, 0, 0, this.time * 1000);

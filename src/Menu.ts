@@ -2,6 +2,8 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { Signal } from "./Signal";
 import { Sound } from "./Sound";
+import { SceneNode } from "./scene/SceneNode";
+import { FriendlyFire } from "./FriendlyFire";
 
 export enum MenuAlignment { LEFT, CENTER, RIGHT }
 
@@ -76,7 +78,7 @@ export class MenuItem {
  * automatically when navigating. The draw method of the list instance has to be called to have all
  * containing buttons be drawn automatically.
  */
-export class MenuList {
+export class MenuList extends SceneNode<FriendlyFire> {
     @asset("sounds/interface/click.mp3")
     public static click: Sound;
     @asset("sounds/interface/confirm.mp3")
@@ -91,6 +93,7 @@ export class MenuList {
     public onActivated = new Signal<string>();
 
     public constructor(align = MenuAlignment.LEFT) {
+        super();
         this.align = align;
     }
 

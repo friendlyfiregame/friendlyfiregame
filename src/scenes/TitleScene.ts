@@ -69,7 +69,8 @@ export class TitleScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
-    private menu = new MenuList(MenuAlignment.CENTER);
+    private menu!: MenuList;
+
     private animationDuration = 3;
 
     private titleBasePosition = {
@@ -87,14 +88,18 @@ export class TitleScene extends Scene<FriendlyFire> {
         gap: 15,
     };
 
+    public cleanup(): void {
+        this.rootNode.clear();
+    }
+
     public setup(): void {
         this.zIndex = 1;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
-        this.menu.reset();
 
         // The sky background layer
         new AsepriteNode({
+            id: "titleLayer3",
             aseprite: TitleScene.titleLayer3,
             tag: "idle",
             x: this.titleLayer3Position.x,
@@ -108,6 +113,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
         // The background layer with the sea animated to move in from the bottom
         new AsepriteNode({
+            id: "titleLayer2",
             aseprite: TitleScene.titleLayer2,
             tag: "idle",
             x: this.titleLayer2Position.x,
@@ -122,6 +128,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         // The two floating islands in the background animated to moving in from the bottom
         new SceneNode().appendChild(
             new AsepriteNode({
+                id: "titleIsland1",
                 aseprite: TitleScene.titleIsland1,
                 tag: "idle",
                 anchor: Direction.TOP_LEFT,
@@ -130,6 +137,7 @@ export class TitleScene extends Scene<FriendlyFire> {
             })
         ).appendChild(
             new AsepriteNode({
+                id: "titleIsland2",
                 aseprite: TitleScene.titleIsland2,
                 tag: "idle",
                 anchor: Direction.TOP_LEFT,
@@ -144,6 +152,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
         // The girl standing on the ground animated to move in from the bottom
         new AsepriteNode({
+            id: "person",
             aseprite: TitleScene.person,
             tag: "idle",
             x: 22,
@@ -157,6 +166,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
         // The ground layer animated to move in from the bottom
         new AsepriteNode({
+            id: "titleLayer1",
             aseprite: TitleScene.titleLayer1,
             tag: "idle",
             x: this.titleLayer1Position.x,
@@ -175,6 +185,7 @@ export class TitleScene extends Scene<FriendlyFire> {
             y: this.titleBasePosition.y
         }).appendChild(
             new AsepriteNode({
+                id: "flameicon",
                 aseprite: TitleScene.flameicon,
                 tag: "idle",
                 anchor: Direction.TOP_LEFT,
@@ -183,6 +194,7 @@ export class TitleScene extends Scene<FriendlyFire> {
             })
         ).appendChild(
             new ImageNode({
+                id: "logoImage",
                 image: TitleScene.logoImage,
                 anchor: Direction.TOP_LEFT
             })
@@ -194,6 +206,13 @@ export class TitleScene extends Scene<FriendlyFire> {
             animator: (node, value) => node.setOpacity(value),
             delay: this.animationDuration / 2,
             duration: this.animationDuration / 2,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        this.menu = new MenuList(MenuAlignment.CENTER).setId("menu").setOpacity(0).animate({
+            animator: (node, value) => node.setOpacity(value),
+            delay: 2.5,
+            duration: 0.5,
             easing: easeOutQuad
         }).appendTo(this.rootNode);
 
@@ -266,13 +285,6 @@ export class TitleScene extends Scene<FriendlyFire> {
             }
         }
 
-    }
-
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        super.draw(ctx, width, height);
-        if (this.animationIsDone()) {
-            this.menu.draw(ctx);
-        }
     }
 
     private stopMusicTrack(): void {
