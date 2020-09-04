@@ -1,6 +1,6 @@
 {
     "version": "0.1",
-    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json",
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json#",
     "language": "en",
     "enabledLanguageIds": [
         "markdown",
@@ -57,7 +57,6 @@
         "downlevel",
         "easings",
         "Eduard",
-        "endor",
         "Entrypoint",
         "FADEIN",
         "fairydust",
@@ -145,7 +144,6 @@
         "respawn",
         "riddlestone",
         "riverzoom",
-        "roduct",
         "Scriptable",
         "seedgrown",
         "seedplanted",

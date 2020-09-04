@@ -64,6 +64,8 @@ jobs:
       run: npm run -s compile
     #- name: Run unit tests
     #  run: npm run -s coverage
+    #  env:
+    #    SONAR_SCANNER_ENABLED: 'true'
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.4
       env:
