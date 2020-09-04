@@ -851,8 +851,8 @@ export class Player extends PhysicsEntity {
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
             const pos = this.scene.apocalypse ?
-                this.scene.pointsOfInterest.find(poi => poi.name === 'boss_spawn') :
-                this.scene.pointsOfInterest.find(poi => poi.name === 'player_reset_position');
+                this.scene.pointsOfInterest.find(poi => poi.name === "boss_spawn") :
+                this.scene.pointsOfInterest.find(poi => poi.name === "player_reset_position");
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
