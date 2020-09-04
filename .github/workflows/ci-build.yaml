@@ -118,8 +118,23 @@ jobs:
         - macos-10.15
         - windows-2019
     steps:
-    - name: git checkout
+    - name: Retrieve Operating System Information from Builder
+      id: build_info
+      shell: bash
+      env:
+        RUNNER_OS: ${{runner.os}}
+      run: |
+        RUNNER_OS_LOWER=`echo RUNNER_OS | tr '[:upper:]' '[:lower:]'`
+        echo ::set-output name=os::${RUNNER_OS_LOWER}
+        echo ::set-output name=arch::x64
+    - name: Checkout code
       uses: actions/checkout@v2
+    - name: Read version from package.json
+      id: version
+      uses: notiz-dev/github-action-json-property@v0.1.0
+      with:
+        path: 'package.json'
+        prop_path: 'version'
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
@@ -138,3 +153,8 @@ jobs:
     - run: npm install
     - run: npm run -s compile
     - run: npm run -s package
+    - name: Archive Electron game package
+      uses: actions/upload-artifact@v1
+      with:
+        name: friendlyfiregame-v${{steps.version.outputs.prop}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
+        path: out
