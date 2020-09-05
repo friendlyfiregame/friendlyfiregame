@@ -209,7 +209,11 @@ export class TitleScene extends Scene<FriendlyFire> {
             easing: easeOutQuad
         }).appendTo(this.rootNode);
 
-        this.menu = new MenuList(MenuAlignment.CENTER).setId("menu").setOpacity(0).animate({
+        this.menu = new MenuList({
+            id: "menu",
+            opacity: 0,
+            align: MenuAlignment.CENTER
+        }).animate({
             animator: (node, value) => node.setOpacity(value),
             delay: 2.5,
             duration: 0.5,

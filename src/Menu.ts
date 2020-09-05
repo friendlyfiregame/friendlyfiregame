@@ -2,7 +2,7 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { Signal } from "./Signal";
 import { Sound } from "./Sound";
-import { SceneNode } from "./scene/SceneNode";
+import { SceneNode, SceneNodeArgs } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
 
 export enum MenuAlignment { LEFT, CENTER, RIGHT }
@@ -71,6 +71,10 @@ export class MenuItem {
     }
 }
 
+export interface MenuListArgs extends SceneNodeArgs {
+    align?: MenuAlignment;
+}
+
 /**
  * A simple MenuList that can hold MenuItems and navigate them in two directions via methods. On
  * each navigational change, the new MenuItem is focused. When calling the `executeAction` method a
@@ -92,8 +96,8 @@ export class MenuList extends SceneNode<FriendlyFire> {
     private items: MenuItem[] = [];
     public onActivated = new Signal<string>();
 
-    public constructor(align = MenuAlignment.LEFT) {
-        super();
+    public constructor({ align = MenuAlignment.LEFT, ...args }: MenuListArgs = {}) {
+        super(args);
         this.align = align;
     }
 
