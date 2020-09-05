@@ -165,10 +165,11 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Leaf
         CreditsScene.leaf.drawTag(ctx, "idle", 414, 163, this.time * 1000);
 
-        ctx.globalAlpha = .75;
+        ctx.save();
+        ctx.globalAlpha *= .75;
         ctx.drawImage(CreditsScene.overlayImage, 0, 0);
+        ctx.restore();
 
-        ctx.globalAlpha = 1;
         const posX = 20;
         let posY = CreditsScene.backgroundImage.height + 50 - (this.time * 1000 / 36);
 
