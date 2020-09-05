@@ -53,6 +53,8 @@ export class Keyboard {
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
+        event.preventDefault();
+
         if (!event.repeat) {
             this.pressed.add(event.key);
         }
