@@ -13,13 +13,8 @@ import { Sound } from "../Sound";
 import { TitleScene } from "./TitleScene";
 
 export class CreditsScene extends Scene<FriendlyFire> {
-    @asset([
-        "music/a-vision-of-fire.mp3",
-        "music/a-vision-of-fire-acoustic.ogg"
-    ])
-    public static music: Sound[];
-
-    private songIndex = 1;
+    @asset("music/a-vision-of-fire-acoustic.ogg")
+    public static music: Sound;
 
     @asset([
         "sprites/stars/star1.aseprite.json",
@@ -87,14 +82,14 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        CreditsScene.music[this.songIndex].setLoop(true);
-        CreditsScene.music[this.songIndex].setVolume(1);
-        CreditsScene.music[this.songIndex].play();
+        CreditsScene.music.setLoop(true);
+        CreditsScene.music.setVolume(1);
+        CreditsScene.music.play();
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
-        CreditsScene.music[this.songIndex].stop();
+        CreditsScene.music.stop();
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
