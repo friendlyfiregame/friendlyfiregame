@@ -51,7 +51,8 @@ export class ControlTooltipNode extends SceneNode<FriendlyFire> {
             anchor: Direction.LEFT,
             text: label,
             color: "white",
-            outlineColor: "black"
+            outlineColor: "black",
+            y: -1
         }).appendTo(this);
         this.updateLayout();
     }

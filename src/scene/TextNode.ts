@@ -127,11 +127,11 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /**
-     * Sets the text color.
+     * Sets the text outline color.
      *
-     * @param outlineColor - The text color to set.
+     * @param outlineColor - The text outline color to set.
      */
-    public setOutlineColor(outlineColor: string): this {
+    public setOutlineColor(outlineColor: string | null): this {
         if (outlineColor !== this.outlineColor) {
             this.outlineColor = outlineColor;
             this.invalidate();
