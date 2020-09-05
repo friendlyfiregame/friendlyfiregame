@@ -7,6 +7,11 @@ import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
 import { Sound } from "../Sound";
+import { ImageNode } from "../scene/ImageNode";
+import { Direction } from "../geom/Direction";
+import { AsepriteNode } from "../scene/AsepriteNode";
+import { SceneNode } from "../scene/SceneNode";
+import { TextNode } from "../scene/TextNode";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 
@@ -18,7 +23,7 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
     private static headlineFont: BitmapFont;
 
     @asset("sounds/item/fanfare.mp3")
-    public static sound: Sound;
+    private static sound: Sound;
 
     @asset([
         "sprites/powerup_running.png",
@@ -29,14 +34,6 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
     ])
     private static itemImages: (HTMLImageElement | Aseprite)[];
 
-    private itemPosition = {
-        x: 0,
-        y: 0
-    };
-
-    private time = 0;
-    private stopped = false;
-    private targetItem: Item = Item.DOUBLEJUMP;
     private floatAmount = 3;
     private floatSpeed = 4;
 
@@ -78,74 +75,62 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         ]
     ];
 
-    private selectedSubtitle = "";
-
     public setup(item: Item): void {
         GotItemScene.sound.setVolume(0.7);
         GotItemScene.sound.play();
 
-        this.targetItem = item
-
-        this.selectedSubtitle = "“" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "”";
-        this.stopped = false;
-        this.time = 0;
         this.inTransition = new SlideTransition({ duration: .5, direction: "bottom", easing: easeOutExpo });
         this.outTransition = new SlideTransition({ duration: .5, direction: "bottom", easing: easeInExpo });
+
+        const subtitle = "“" + this.subtitles[item][Math.floor(Math.random() * this.subtitles[item].length)] + "”";
+        const image = GotItemScene.itemImages[item];
+
+        // The powerup name
+        new TextNode({
+            font: GotItemScene.headlineFont,
+            text: this.titles[item],
+            x: this.game.width >> 1,
+            y: (this.game.height >> 1) + 17,
+            color: "white"
+        }).appendTo(this.rootNode);
+
+        // The powerup subtitle
+        new TextNode({
+            font: GotItemScene.font,
+            text: subtitle,
+            color: "white",
+            x: this.game.width >> 1,
+            y: (this.game.height >> 1) + 36
+        }).appendTo(this.rootNode);
+
+        // The power up image bobbling up and down
+        new SceneNode({
+            x: this.game.width >> 1,
+            y: this.game.height >> 1
+        }).animate({
+            animator: node => node.transform(m => m.setScale(2).translateY(Math.sin(Date.now() / 1000
+                * this.floatSpeed) * this.floatAmount)),
+            duration: Infinity
+        }).appendChild(image instanceof HTMLImageElement
+            ? new ImageNode({ image, anchor: Direction.BOTTOM })
+            : new AsepriteNode({ aseprite: image, tag: "idle", anchor: Direction.BOTTOM })
+        ).appendTo(this.rootNode);
     }
 
-    public update(dt: number): void {
-        if (!this.stopped) {
-            this.time += dt;
+    public activate(): void {
+        // Close this scene after 4 seconds
+        setTimeout(() => this.scenes.popScene(), 4000);
+    }
 
-            if (this.time > 4) {
-                this.stopped = true;
-                this.scenes.popScene();
-            }
-        }
+    public cleanup(): void {
+        this.rootNode.clear();
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        let metrics;
-        const centerY = height >> 1;
-        const centerX = (width / 2) - GotItemScene.itemImages[this.targetItem].width;
-        const floatOffsetY = Math.sin(this.time * this.floatSpeed) * this.floatAmount;
-
-        this.itemPosition.x = centerX;
-        this.itemPosition.y = centerY - 40 - floatOffsetY;
-
         ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, centerY - 1, width, 50);
-
-        const itemNameText = this.titles[this.targetItem];
-        metrics = GotItemScene.headlineFont.measureText(itemNameText);
-
-        GotItemScene.headlineFont.drawText(
-            ctx,
-            itemNameText,
-            (width - metrics.width) >> 1, centerY + 10,
-            "white"
-        );
-
-        metrics = GotItemScene.font.measureText(this.selectedSubtitle);
-
-        GotItemScene.font.drawText(
-            ctx,
-            this.selectedSubtitle,
-            (width - metrics.width) >> 1, centerY + 30,
-            "white"
-        );
-
-        ctx.scale(2, 2);
-        const image = GotItemScene.itemImages[this.targetItem];
-
-        if (image instanceof HTMLImageElement) {
-            ctx.drawImage(image, this.itemPosition.x / 2, this.itemPosition.y / 2);
-        } else {
-            image.drawTag(ctx, "idle", this.itemPosition.x / 2, this.itemPosition.y / 2);
-        }
-
+        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+        ctx.fillRect(0, (height >> 1) - 1, width, 50);
         ctx.restore();
+        super.draw(ctx, width, height);
     }
 }
