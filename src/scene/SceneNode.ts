@@ -1107,9 +1107,20 @@ export class SceneNode<T extends Game = Game> {
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
-        this.sceneTransformation.setCanvasTransform(ctx);
+        ctx.translate(this.x, this.y)
+        this.transformation.transformCanvas(ctx);
+        ctx.translate(
+            -(Direction.getX(this.anchor) + 1) / 2 * this.width,
+            -(Direction.getY(this.anchor) + 1) / 2 * this.height
+        );
         const postDraw = layer === this.layer ? this.draw(ctx, width, height) : null;
+        ctx.save();
+        ctx.translate(
+            (Direction.getX(this.childAnchor) + 1) / 2 * this.width,
+            (Direction.getY(this.childAnchor) + 1) / 2 * this.height
+        );
         let flags = this.drawChildren(ctx, layer, width, height);
+        ctx.restore();
         if (postDraw != null) {
             if (postDraw === true) {
                 flags |= PostDrawHints.CONTINUE_DRAWING;

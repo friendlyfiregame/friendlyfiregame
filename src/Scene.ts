@@ -20,6 +20,7 @@ export abstract class Scene<T extends Game> {
     private drawRootNode!: DrawRootNode;
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
+    private backgroundStyle: string | null = null;
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {
@@ -96,6 +97,25 @@ export abstract class Scene<T extends Game> {
     }
 
     /**
+     * Returns the background style of this scene. This style is used to fill the background of the scene when set.
+     *
+     * @return The scene background style.
+     */
+    public getBackgroundStyle(): string | null {
+        return this.backgroundStyle;
+    }
+
+    /**
+     * Sets the background style of this scene. This style is used to fill the background of the scene when set.
+     *
+     * @param backgroundStyle - The background style to set.
+     */
+    public setBackgroundStyle(backgroundStyle: string | null): this {
+        this.backgroundStyle = backgroundStyle;
+        return this;
+    }
+
+    /**
      * Checks if this scene is active.
      *
      * @return True if scene is active, false it not.
@@ -143,6 +163,11 @@ export abstract class Scene<T extends Game> {
      * @param height - The scene height.
      */
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+        if (this.backgroundStyle != null) {
+            ctx.save();
+            ctx.fillStyle = this.backgroundStyle;
+            ctx.fillRect(0, 0, width, height);
+        }
         let layer = 1;
         let usedLayers = this.usedLayers & ~this.hiddenLayers;
         while (usedLayers !== 0) {

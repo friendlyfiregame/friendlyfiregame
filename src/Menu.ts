@@ -121,11 +121,11 @@ export class MenuList extends SceneNode<FriendlyFire> {
     /**
      * Sets an arbitrary number of menu items to the menu list and overrides any previously added
      * items. The first available menu item will be focused automatically.
-     * @param items
      */
-    public setItems(...items: MenuItem[]): void {
+    public setItems(...items: MenuItem[]): this {
         this.items = [...items];
         this.focusFirstItem();
+        return this;
     }
 
     /**
