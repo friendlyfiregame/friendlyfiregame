@@ -1106,7 +1106,7 @@ export class SceneNode<T extends Game = Game> {
      */
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
         ctx.save();
-        ctx.globalAlpha = this.getEffectiveOpacity();
+        ctx.globalAlpha *= this.getEffectiveOpacity();
         this.sceneTransformation.setCanvasTransform(ctx);
         const postDraw = layer === this.layer ? this.draw(ctx, width, height) : null;
         let flags = this.drawChildren(ctx, layer, width, height);
