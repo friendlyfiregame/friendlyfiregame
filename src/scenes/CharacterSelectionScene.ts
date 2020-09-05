@@ -17,6 +17,7 @@ import { Direction } from "../geom/Direction";
 import { TextNode } from "../scene/TextNode";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
+import { Sound } from "../Sound";
 
 enum MenuItemKey {
     CHARACTER = "character",
@@ -43,6 +44,12 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         "sprites/pc/male.aseprite.json"
     ])
     public static playerSprites: Aseprite[];
+
+    @asset([
+        "sounds/jumping/jumping_female.mp3",
+        "sounds/jumping/jumping.mp3"
+    ])
+    private static voices: Sound[];
 
     @asset("images/panel.png")
     private static panelImage: HTMLImageElement;
@@ -73,6 +80,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
             case MenuItemKey.VOICE:
                 this.game.campaign.toggleVoiceAsset();
                 this.updateSelection();
+                CharacterSelectionScene.voices[this.game.campaign.selectedVoice].play();
                 break;
             case MenuItemKey.START:
                 await this.game.scenes.popScene({ noTransition: false });
