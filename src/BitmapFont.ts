@@ -1,6 +1,8 @@
 import { FontJSON } from "*.font.json";
 import { loadImage } from "./graphics.js";
 
+const CHAR_SPACING = 1;
+
 export class BitmapFont {
     private sourceImage: HTMLImageElement;
     private canvas: HTMLCanvasElement;
@@ -96,16 +98,14 @@ export class BitmapFont {
         return charIndex;
     }
 
-    private drawCharacter(
-        ctx: CanvasRenderingContext2D, char: number, x: number, y: number, color: string
-    ): void {
+    private drawCharacter(ctx: CanvasRenderingContext2D, char: number, color: string): void {
         const colorIndex = this.colorMap[color];
         const charIndex = (typeof char === "number") ? char : this.getCharIndex(char);
         const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
 
         ctx.drawImage(
             this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
-            Math.round(x), Math.round(y), this.charWidths[charIndex], this.charHeight
+            0, 0, this.charWidths[charIndex], this.charHeight
         );
     }
 
@@ -113,56 +113,47 @@ export class BitmapFont {
         ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
         alpha = 1
     ): void {
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
+        // when exactly between two pixels (Firefox doesn't have this problem).
+        if (ctx.getTransform) {
+            const transform = ctx.getTransform();
+            ctx.translate(
+                Math.round(transform.e) - transform.e,
+                Math.round(transform.f) - transform.f
+            );
+        }
+
         text = "" + text;
-        ctx.globalAlpha = alpha;
-        let width = 0;
+        ctx.globalAlpha *= alpha;
+
+        const { width } = this.measureText(text);
+        ctx.translate(-align * width, 0);
+
         let precursorChar = null;
 
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
-            width += this.charWidths[index] + 1;
-            const compactablePrecursors = this.compactablePrecursors[index];
-
-            if (precursorChar && compactablePrecursors.includes(precursorChar)) {
-                width -= 1;
-            }
-
-            precursorChar = currentChar;
-        }
-
-        const offX = Math.round(-align * width);
-        precursorChar = null;
-
-        for (let i = 0; i < text.length; i++) {
-            const currentChar = text[i];
-            const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
-
-            const xPos = Math.round(x + offX) - spaceReduction;
-
-            this.drawCharacter(ctx, index, xPos, Math.round(y), color);
-            x += this.charWidths[index] - spaceReduction + 1;
-
+            ctx.translate(-spaceReduction, 0);
+            this.drawCharacter(ctx, index, color);
+            ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
             precursorChar = currentChar;
         }
+
+        ctx.restore();
     }
 
     public measureText(text: string): { width: number, height: number } {
-        const CHAR_SPACING = 1;
         let width = 0;
         let precursorChar = null;
-
-        for (const char of text) {
-            const index = this.getCharIndex(char);
-            const compactablePrecursors = this.compactablePrecursors[index];
-
-            width += this.charWidths[index];
-
-            if (precursorChar && !(compactablePrecursors.includes(precursorChar))) {
-                width += CHAR_SPACING;
-            }
-
-            precursorChar = char;
+        for (const currentChar of text) {
+            const index = this.getCharIndex(currentChar);
+            const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
+            width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
+            precursorChar = currentChar;
         }
 
         if (text.length > 0) {
