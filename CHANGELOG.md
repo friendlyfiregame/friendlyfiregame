@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 2020-09-05
+
+### Fixed
+
+- Player is teleported back into level when accidentally dropping out of bounds.
+
 ## [2.1.1] - 2020-09-04
 
 ### Fixed
