@@ -71,7 +71,6 @@ export interface SceneNodeArgs {
  * Base scene node. Is used as base class for more specialized scene nodes but can also be used standalone as parent
  * node for other nodes (similar to a DIV element in HTML for example).
  *
- * TODO Implement activate/deactivate life-cycle.
  * TODO Implement scene invalidation properly.
  */
 export class SceneNode<T extends Game = Game> {
@@ -456,15 +455,25 @@ export class SceneNode<T extends Game = Game> {
     private setScene(scene: Scene<T> | null): void {
         if (scene !== this.scene) {
             if (this.scene) {
-                // this.deactivate();
+                this.deactivate();
             }
             this.scene = scene;
             if (scene) {
-                // this.activate();
+                this.activate();
             }
             this.forEachChild(node => node.setScene(scene));
         }
     }
+
+    /**
+     * Called when node is added to scene. Can be overwritten to connect event handlers for example.
+     */
+    protected activate(): void {}
+
+    /**
+     * Called when node is removed from scene. Can be overwritten to disconnect event handlers for example.
+     */
+    protected deactivate(): void {}
 
     /**
      * Returns the parent node of this node or null if node is not attached to a parent or is the root node.

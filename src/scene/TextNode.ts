@@ -14,10 +14,13 @@ export interface TextNodeArgs extends SceneNodeArgs {
 
     /** Optional initial text color. Defaults to "white". */
     color?: string;
+
+    /** Optional initial outline text color. Default is null which means no outline is drawn. */
+    outlineColor?: string | null;
 }
 
 /**
- * Scene node for displaying a text.
+ * Scene node for displaying a text with an optional icon left to it.
  *
  * @param T - Optional owner game class.
  */
@@ -31,14 +34,18 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
     /** The text color. */
     private color: string;
 
+    /** Optional outline color. */
+    private outlineColor: string | null;
+
     /**
      * Creates a new scene node displaying the given image.
      */
-    public constructor({ font, text = "", color = "white", ...args }: TextNodeArgs) {
+    public constructor({ font, text = "", color = "white", outlineColor = null, ...args } : TextNodeArgs) {
         super(args);
         this.font = font;
-        this.color = color;
         this.text = text;
+        this.color = color;
+        this.outlineColor = outlineColor;
         this.updateSize();
     }
 
@@ -111,6 +118,28 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /**
+     * Returns the text outline color. Null if none.
+     *
+     * @return The text outline color. Null if none.
+     */
+    public getOutlineColor(): string | null {
+        return this.outlineColor;
+    }
+
+    /**
+     * Sets the text color.
+     *
+     * @param outlineColor - The text color to set.
+     */
+    public setOutlineColor(outlineColor: string): this {
+        if (outlineColor !== this.outlineColor) {
+            this.outlineColor = outlineColor;
+            this.invalidate();
+        }
+        return this;
+    }
+
+    /**
      * Updates the node size according to the text measurements.
      */
     private updateSize(): void {
@@ -120,6 +149,10 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
 
     /** @inheritDoc */
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.font.drawText(ctx, this.text, 0, 0, this.color);
+        if (this.outlineColor != null) {
+            this.font.drawTextWithOutline(ctx, this.text, 0, 0, this.color, this.outlineColor);
+        } else {
+            this.font.drawText(ctx, this.text, 0, 0, this.color);
+        }
     }
 }

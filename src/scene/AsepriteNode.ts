@@ -20,7 +20,7 @@ export interface AsepriteNodeArgs extends SceneNodeArgs {
  */
 export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     /** The displayed aseprite. */
-    private readonly aseprite: Aseprite;
+    private aseprite: Aseprite;
 
     /** The animation tag to draw. Null to draw whole animation. */
     private tag: string | null;
@@ -51,6 +51,20 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /**
+     * Sets the Aseprite.
+     *
+     * @param aseprite - The Aseprite to draw.
+     */
+    public setAseprite(aseprite: Aseprite): this {
+        if (aseprite !== this.aseprite) {
+            this.aseprite = aseprite;
+            this.resizeTo(aseprite.width, aseprite.height);
+            this.invalidate();
+        }
+        return this;
+    }
+
+    /**
      * Returns the current animation tag. Null if whole animation is displayed.
      *
      * @return The current animation tag or null for whole animation.
@@ -65,7 +79,10 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
      * @param tag - The animation tag to set. Null to unset.
      */
     public setTag(tag: string | null): this {
-        this.tag = tag;
+        if (tag !== this.tag) {
+            this.tag = tag;
+            this.invalidate();
+        }
         return this;
     }
 

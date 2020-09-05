@@ -16,6 +16,7 @@ export class ControllerManager {
     public readonly onButtonDown = new Signal<ControllerEvent>();
     public readonly onButtonUp = new Signal<ControllerEvent>();
     public readonly onButtonPress = new Signal<ControllerEvent>();
+    public readonly onControllerFamilyChange = new Signal<ControllerFamily>();
 
     public selectedGamepadStyle = GamepadStyle.XBOX;
 
@@ -32,7 +33,10 @@ export class ControllerManager {
     }
 
     public set currentControllerFamily(controllerFamily: ControllerFamily) {
-        this[currentControllerFamilySymbol] = controllerFamily;
+        if (controllerFamily !== this[currentControllerFamilySymbol]) {
+            this[currentControllerFamilySymbol] = controllerFamily;
+            this.onControllerFamilyChange.emit(controllerFamily);
+        }
     }
 
     /**
