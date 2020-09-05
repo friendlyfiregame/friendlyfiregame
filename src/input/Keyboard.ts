@@ -5,6 +5,10 @@ import { ControllerIntent } from "./ControllerIntent";
 import { ControllerManager } from "./ControllerManager";
 import { Signal } from "../Signal";
 
+const preventDefaultKeyCodes: string[] = [
+    "ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft", "Space"
+];
+
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
 
 keyToIntentMappings.set("Space", [ControllerIntent.PLAYER_JUMP]);
@@ -53,7 +57,9 @@ export class Keyboard {
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
-        event.preventDefault();
+        if (preventDefaultKeyCodes.includes(event.code)) {
+            event.preventDefault();
+        }
 
         if (!event.repeat) {
             this.pressed.add(event.key);
