@@ -6,15 +6,27 @@ import { Transition } from "./Transition";
 import { RootNode, UpdateRootNode, DrawRootNode } from "./scene/RootNode";
 import { SceneNode } from "./scene/SceneNode";
 
-export type SceneConstructor<T extends Game> = new (game: T) => Scene<T>;
-export type SceneProperties = Record<string, string | number | boolean> | null;
+/**
+ * Constructor type of a scene.
+ *
+ * @param T - The game type.
+ * @param A - Optional scene argument type. A value of this type must be specified when setting or pushing a scene.
+ *            Defaults to no argument (void type)
+ */
+export type SceneConstructor<T extends Game, A = void> = new (game: T) => Scene<T, A>;
 
-export abstract class Scene<T extends Game> {
+/**
+ * Abstract base class of a scene.
+ *
+ * @param T - The game type.
+ * @param A - Optional scene argument type. A value of this type must be specified when setting or pushing a scene.
+ *            Defaults to no argument (void type)
+ */
+export abstract class Scene<T extends Game, A = void> {
     public zIndex: number = 0;
     public currentTransition: Transition | null = null;
     public inTransition: Transition | null = null;
     public outTransition: Transition | null = null;
-    public properties: SceneProperties = null;
     public readonly rootNode: RootNode<T>;
     private updateRootNode!: UpdateRootNode;
     private drawRootNode!: DrawRootNode;
@@ -40,10 +52,6 @@ export abstract class Scene<T extends Game> {
 
     public get scenes(): Scenes<T> {
         return this.game.scenes;
-    }
-
-    public setProperties(properties: SceneProperties) {
-        this.properties = properties;
     }
 
     /**
@@ -126,8 +134,10 @@ export abstract class Scene<T extends Game> {
 
     /**
      * Called when the scene is pushed onto the stack and before any transitions.
+     *
+     * @param args - The scene arguments (if any).
      */
-    public setup(): Promise<void> | void {}
+    public setup(args: A): Promise<void> | void {}
 
     /**
      * Called when the scene becomes the top scene on the stack and after the on-stage transition is complete.

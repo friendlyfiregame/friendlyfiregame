@@ -1,15 +1,15 @@
 import { Game } from "./Game";
-import { Scene, SceneConstructor, SceneProperties } from "./Scene";
+import { Scene, SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {
-    public activeScene: Scene<T> | null = null;
-    private sceneCache = new WeakMap<SceneConstructor<T>, Scene<T>>();
-    private scenes: Scene<T>[] = [];
-    private sortedScenes: Scene<T>[] = [];
+    public activeScene: Scene<T, unknown> | null = null;
+    private sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
+    private scenes: Scene<T, unknown>[] = [];
+    private sortedScenes: Scene<T, unknown>[] = [];
 
     public constructor(public readonly game: T) {}
 
-    private createScene(sceneClass: SceneConstructor<T>): Scene<T> {
+    private createScene<A>(sceneClass: SceneConstructor<T, A>): Scene<T, A> {
         let scene = this.sceneCache.get(sceneClass);
 
         if (scene == null) {
@@ -20,18 +20,16 @@ export class Scenes<T extends Game> {
         return scene;
     }
 
-    public async pushScene(sceneClass: SceneConstructor<T>, properties: SceneProperties = null): Promise<void> {
+    public async pushScene<A>(sceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
+    public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
+    public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
         if (this.activeScene != null) {
             await this.activeScene.deactivate();
         }
 
         const scene = this.createScene(sceneClass);
 
-        if (properties) {
-            scene.setProperties(properties);
-        }
-
-        await scene.setup();
+        await scene.setup(args);
         this.scenes.push(scene);
         this.updateSortedScenes();
 
@@ -74,11 +72,13 @@ export class Scenes<T extends Game> {
         return activeScene;
     }
 
-    public async setScene(newSceneClass: SceneConstructor<T>): Promise<void> {
+    public async setScene<A>(newSceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
+    public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
+    public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
         const currentScene = this.activeScene;
 
         if (currentScene == null) {
-            return this.pushScene(newSceneClass);
+            return this.pushScene(newSceneClass, args);
         }
 
         await currentScene.deactivate();
@@ -91,7 +91,7 @@ export class Scenes<T extends Game> {
 
         const currentSceneIndex = this.scenes.length - 1;
         const newScene = this.createScene(newSceneClass);
-        await newScene.setup();
+        await newScene.setup(args);
         this.scenes.push(newScene);
         this.updateSortedScenes();
 

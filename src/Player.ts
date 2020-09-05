@@ -282,7 +282,7 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
 
         if (!this.canRun) {
-            this.scene.scenes.pushScene(GotItemScene, { item: Item.RUNNING });
+            this.scene.scenes.pushScene(GotItemScene, Item.RUNNING);
             this.canRun = true;
         }
     }
@@ -291,7 +291,7 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
 
         if (!this.canRainDance) {
-            this.scene.scenes.pushScene(GotItemScene, { item: Item.RAINDANCE });
+            this.scene.scenes.pushScene(GotItemScene, Item.RAINDANCE);
             this.canRainDance = true;
         }
     }
@@ -301,7 +301,7 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
 
         if (!this.doubleJump) {
-            this.scene.scenes.pushScene(GotItemScene, { item: Item.DOUBLEJUMP });
+            this.scene.scenes.pushScene(GotItemScene, Item.DOUBLEJUMP);
             this.doubleJump = true;
         }
     }
@@ -310,7 +310,7 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
 
         if (!this.multiJump) {
-            this.scene.scenes.pushScene(GotItemScene, { item: Item.MULTIJUMP });
+            this.scene.scenes.pushScene(GotItemScene, Item.MULTIJUMP);
             this.multiJump = true;
         }
     }
@@ -321,7 +321,7 @@ export class Player extends PhysicsEntity {
 
     public enableFriendship(): void {
         if (!this.hasFriendship) {
-            this.scene.scenes.pushScene(GotItemScene, { item: Item.FRIENDSHIP });
+            this.scene.scenes.pushScene(GotItemScene, Item.FRIENDSHIP);
             this.hasFriendship = true;
             Conversation.setGlobal("hasFriendship", "true");
             this.scene.removeGameObject(this.scene.powerShiba);

@@ -90,7 +90,7 @@ export class SceneNode<T extends Game = Game> {
     private lastChild: SceneNode<T> | null = null;
 
     /** The scene this node is connected to. Null if none. */
-    protected scene: Scene<T> | null = null;
+    protected scene: Scene<T, unknown> | null = null;
 
     /** The ID of the node. Null if none. */
     private id: string | null;

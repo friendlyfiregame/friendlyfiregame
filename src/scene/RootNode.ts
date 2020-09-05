@@ -30,7 +30,7 @@ export class RootNode<T extends Game = Game> extends SceneNode<T> {
      * @param expose - Callback for exposing the update/draw methods of the root node to the scene so the scene can
      *                 call it without making the methods public.
      */
-    public constructor(scene: Scene<T>, expose: (update: UpdateRootNode, draw: DrawRootNode) => void) {
+    public constructor(scene: Scene<T, unknown>, expose: (update: UpdateRootNode, draw: DrawRootNode) => void) {
         super({ anchor: Direction.TOP_LEFT, childAnchor: Direction.TOP_LEFT });
         this.scene = scene;
         expose(this.updateAll.bind(this), this.drawAllWithBounds.bind(this));
