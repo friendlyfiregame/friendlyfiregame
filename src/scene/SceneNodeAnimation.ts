@@ -3,10 +3,11 @@ import { SceneNode } from "./SceneNode";
 import { linear, Easing } from "../easings";
 
 /**
- * Function signature for a scene node animator. Function is called with the scene node to animate as first parameter
- * and the current animation time index (0.0 - 1.0).
+ * Function signature for a scene node animator. Function is called with the scene node to animate as first parameter,
+ * the current animation time index (0.0 - 1.0) and the elapsed time in seconds as third parameter.
  */
-export type SceneNodeAnimator<T extends Game = Game> = (sceneNode: SceneNode<T>, value: number) => void;
+export type SceneNodeAnimator<T extends Game = Game> = (sceneNode: SceneNode<T>, value: number,
+    elapsed: number) => void;
 
 /**
  * Constructor arguments for [[SceneNodeAnimation]]
@@ -76,11 +77,11 @@ export class SceneNodeAnimation<T extends Game = Game> {
         if (this.elapsed < this.lifetime) {
             if (this.elapsed > this.delay) {
                 const timeIndex = ((this.elapsed - this.delay) / this.duration) % 1;
-                this.animator(this.sceneNode, this.easing(timeIndex));
+                this.animator(this.sceneNode, this.easing(timeIndex), this.elapsed);
             }
             return false;
         } else {
-            this.animator(this.sceneNode, 1);
+            this.animator(this.sceneNode, 1, this.lifetime);
             return true;
         }
     }
