@@ -13,6 +13,7 @@ import { MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
 import { TitleScene } from "./TitleScene";
+import { Sound } from "../Sound";
 
 enum MenuItemKey {
     CHARACTER = "character",
@@ -39,6 +40,12 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         "sprites/pc/male.aseprite.json"
     ])
     public static playerSprites: Aseprite[];
+
+    @asset([
+        "sounds/jumping/jumping_female.mp3",
+        "sounds/jumping/jumping.mp3"
+    ])
+    private static voices: Sound[];
 
     @asset("images/panel.png")
     private static panelImage: HTMLImageElement;
@@ -96,6 +103,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 break;
             case MenuItemKey.VOICE:
                 this.game.campaign.toggleVoiceAsset();
+                CharacterSelectionScene.voices[this.game.campaign.selectedVoice].play();
                 break;
             case MenuItemKey.START:
                 await this.game.scenes.popScene({ noTransition: false });
