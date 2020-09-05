@@ -10,7 +10,7 @@ import { Sound } from "../Sound";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 
-export class GotItemScene extends Scene<FriendlyFire> {
+export class GotItemScene extends Scene<FriendlyFire, Item> {
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
@@ -80,13 +80,11 @@ export class GotItemScene extends Scene<FriendlyFire> {
 
     private selectedSubtitle = "";
 
-    public setup(): void {
+    public setup(item: Item): void {
         GotItemScene.sound.setVolume(0.7);
         GotItemScene.sound.play();
 
-        if (this.properties?.item !== undefined) {
-            this.targetItem = this.properties.item as Item;
-        }
+        this.targetItem = item
 
         this.selectedSubtitle = "“" + this.subtitles[this.targetItem][Math.floor(Math.random() * this.subtitles[this.targetItem].length)] + "”";
         this.stopped = false;
