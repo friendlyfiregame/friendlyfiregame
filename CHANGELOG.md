@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- A preview sound is being played When switching the character's voice to indicate
+  how the choice will affect perceived gameplay.
+
+## Fixed
+
+- Default key functionality in browsers is now prevented to suppress unwanted scrolling
+  when using space and/or cursor keys. This affects scenarios where the game is embedded
+  into another website.
+
+- Text placement issues in conjunction with rendering issues and wrong placements of single
+  characters have been fixed
+
+- Some transparency issues when rendering overlays have been fixed.
+
 ## [2.1.2] - 2020-09-05
 
 ### Fixed
