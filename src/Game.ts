@@ -54,13 +54,14 @@ export abstract class Game {
         // Use Alt+Enter to toggle fullscreen mode.
         window.addEventListener("keydown", async (event) => {
             if (event.altKey && event.key === "Enter") {
+                const lockingEnabled = "keyboard" in navigator && "lock" in navigator.keyboard && typeof navigator.keyboard.lock === "function";
                 if (document.fullscreenElement === null) {
-                    if ("keyboard" in navigator && "lock" in navigator.keyboard && typeof navigator.keyboard.lock === "function") {
+                    if (lockingEnabled) {
                         await navigator.keyboard.lock(["Escape"]);
                     }
                     await this.canvas.requestFullscreen();
                 } else {
-                    if ("keyboard" in navigator && "lock" in navigator.keyboard && typeof navigator.keyboard.lock === "function") {
+                    if (lockingEnabled) {
                         navigator.keyboard.unlock();
                     }
                     await document.exitFullscreen();
