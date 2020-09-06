@@ -35,8 +35,8 @@ export class ConversationProxy extends NPC {
         return new Conversation(json, this);
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        this.speechBubble.draw(ctx);
+    public draw(): void {
+        // Nothing to do here.
     }
 
     public update(dt: number): void {

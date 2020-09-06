@@ -69,8 +69,6 @@ export class Stone extends NPC implements CollidableGameObject {
         );
 
         this.drawFace(ctx, false);
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

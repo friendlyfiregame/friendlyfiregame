@@ -55,7 +55,5 @@ export class Mimic extends NPC {
                 this.animator.play("idle", ctx, this.direction);
                 break;
         }
-
-        this.speechBubble.draw(ctx);
     }
 }

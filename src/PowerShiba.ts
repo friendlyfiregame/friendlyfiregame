@@ -69,12 +69,6 @@ export class PowerShiba extends NPC {
             PowerShiba.sprite, "idle", 0, -floatOffsetY,
             1
         );
-
-        if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
-        }
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

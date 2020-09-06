@@ -41,8 +41,6 @@ export class StoneDisciple extends NPC {
         );
 
         this.drawFace(ctx, false);
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

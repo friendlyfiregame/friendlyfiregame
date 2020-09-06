@@ -70,8 +70,6 @@ export class Seed extends NPC {
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }
-
-        this.speechBubble.draw(ctx);
     }
 
     public isCarried(): boolean {

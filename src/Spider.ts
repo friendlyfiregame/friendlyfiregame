@@ -65,8 +65,6 @@ export class Spider extends NPC {
             animationTag: "blink",
             time: this.scene.gameTime * 1000
         });
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

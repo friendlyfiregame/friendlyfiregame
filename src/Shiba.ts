@@ -187,12 +187,6 @@ export class Shiba extends ScriptableNPC {
                 ctx, Shiba.sprite, "walk", 0, 0, this.direction
             );
         }
-
-        if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
-        }
-
-        this.speechBubble.draw(ctx);
     }
 
     public showDialoguePrompt(): boolean {

@@ -43,8 +43,6 @@ export class FlameBoy extends NPC {
         this.scene.renderer.drawAseprite(ctx, FlameBoy.sprite, animationTag, 0, 0, this.direction);
 
         this.drawFace(ctx, false);
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

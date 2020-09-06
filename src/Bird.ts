@@ -177,7 +177,6 @@ export class Bird extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.drawAseprite(ctx, Bird.sprite, "idle", 0, 0, this.direction);
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

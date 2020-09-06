@@ -161,12 +161,6 @@ export class Fire extends NPC {
         ctx.restore();
 
         this.drawFace(ctx);
-
-        if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
-        }
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

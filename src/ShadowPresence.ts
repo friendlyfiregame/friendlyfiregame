@@ -59,8 +59,6 @@ export class ShadowPresence extends NPC {
             animationTag,
             time: this.scene.gameTime * 1000
         });
-
-        this.speechBubble.draw(ctx);
     }
 
     public checkPlayerDistance(): void {

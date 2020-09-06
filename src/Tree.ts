@@ -43,8 +43,6 @@ export class Tree extends NPC {
         this.scene.renderer.drawAseprite(ctx, Tree.sprite, "idle", 0, 0, 1);
 
         this.drawFace(ctx);
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

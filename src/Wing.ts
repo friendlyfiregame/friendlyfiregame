@@ -40,8 +40,6 @@ export class Wing extends NPC {
             0, -floatOffsetY,
             1
         );
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {

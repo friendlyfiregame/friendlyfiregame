@@ -39,7 +39,5 @@ export class SuperThrow extends NPC {
             0, -floatOffsetY,
             this.direction
         );
-
-        this.speechBubble.draw(ctx);
     }
 }

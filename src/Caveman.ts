@@ -23,7 +23,5 @@ export class Caveman extends NPC {
             0, 0,
             this.direction
         );
-
-        this.speechBubble.draw(ctx);
     }
 }
