@@ -55,8 +55,14 @@ export abstract class Game {
         window.addEventListener("keydown", async (event) => {
             if (event.altKey && event.key === "Enter") {
                 if (document.fullscreenElement === null) {
+                    if ("keyboard" in navigator && "lock" in navigator.keyboard && typeof navigator.keyboard.lock === "function") {
+                        await navigator.keyboard.lock(["Escape"]);
+                    }
                     await this.canvas.requestFullscreen();
                 } else {
+                    if ("keyboard" in navigator && "lock" in navigator.keyboard && typeof navigator.keyboard.lock === "function") {
+                        navigator.keyboard.unlock();
+                    }
                     await document.exitFullscreen();
                 }
             }
