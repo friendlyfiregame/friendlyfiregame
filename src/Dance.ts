@@ -4,11 +4,12 @@ import { ControllerEvent } from "./input/ControllerEvent";
 import { ControllerManager } from "./input/ControllerManager";
 import { ControllerSpriteMap } from "./input/ControllerFamily";
 import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 import { Sound } from "./Sound";
 import { ValueCurve, valueCurves } from "./Particles";
+import { SceneNode } from "./scene/SceneNode";
 
-export class Dance {
+export class Dance extends SceneNode {
     @asset("sounds/dancing/success.mp3")
     private static successSound: Sound;
 
@@ -51,8 +52,8 @@ export class Dance {
 
     constructor(
         private scene: GameScene,
-        private x: number,
-        private y: number,
+        x: number,
+        y: number,
         private bpm = 128,
         keys = "", // can contain "1" or "2" for single keys, or "3" for both at once
         private warmupBeats = 8,
@@ -61,6 +62,7 @@ export class Dance {
         private readonly withMusic = true,
         private readonly musicIndex = 1 // 0 tree-dance, 1 for raindance
     ){
+        super({ x, y, layer: RenderingLayer.UI });
         this.duration = keys.length;
         this.keys = [];
         this.performance = [];
@@ -185,7 +187,7 @@ export class Dance {
         this.begin();
     }
 
-    public update(): boolean {
+    public updateDance(): boolean {
         const time = this.scene.gameTime - this.startTime;
         this.progress = time * this.bpm / 60;
         const prevIndex = this.currentIndex;
@@ -259,14 +261,6 @@ export class Dance {
         this.scene.resetMusicVolumes();
     }
 
-    public drawDance(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.DANCE,
-            layer: RenderingLayer.UI,
-            dance: this
-        });
-    }
-
     public draw(ctx: CanvasRenderingContext2D): void {
         const controller: ControllerSpriteMap = ControllerManager.getInstance().controllerSprite;
         ctx.save();
@@ -275,10 +269,10 @@ export class Dance {
         // Key Bar
         const w = 100;
         const h = 18;
-        const w2 = w / 2;
-        const h2 = h / 2;
+        const w2 = w >> 1;
+        const h2 = h >> 1;
 
-        ctx.drawImage(Dance.bar, Dance.bar.width / -2, 1 + Dance.bar.height / -2);
+        ctx.drawImage(Dance.bar, -Dance.bar.width >> 1, 1 - (Dance.bar.height >> 1));
 
         // Feedback
         if (this.progress - this.lastMistake < 1) {
@@ -321,7 +315,7 @@ export class Dance {
                         Dance.keys.drawTag(
                             ctx,
                             `${controller}-dance1`,
-                            x + Dance.keys.width / -2, y1
+                            x - (Dance.keys.width >> 1), y1
                         );
                     }
                 }
@@ -336,7 +330,7 @@ export class Dance {
                         Dance.keys.drawTag(
                             ctx,
                             `${controller}-dance2`,
-                            x + Dance.keys.width / -2, y2
+                            x - (Dance.keys.width >> 1), y2
                         );
                     }
                 }
@@ -345,8 +339,8 @@ export class Dance {
 
         // Sweet spot
         ctx.globalAlpha = 1;
-        ctx.drawImage(Dance.indicator, sweetX - 8, 1 + Dance.indicator.height / -2);
-        ctx.drawImage(Dance.indicator, sweetX + 4, 1 + Dance.indicator.height / -2);
+        ctx.drawImage(Dance.indicator, sweetX - 8, 1 - (Dance.indicator.height >> 1));
+        ctx.drawImage(Dance.indicator, sweetX + 4, 1 - (Dance.indicator.height >> 1));
         ctx.restore();
     }
 }

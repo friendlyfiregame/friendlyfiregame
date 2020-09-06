@@ -1200,6 +1200,17 @@ export class SceneNode<T extends Game = Game> {
             -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
             -(Direction.getY(this.anchor) + 1) / 2 * this.#height
         );
+
+        // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
+        // when exactly between two pixels (Firefox doesn't have this problem).
+        if (ctx.getTransform) {
+            const transform = ctx.getTransform();
+            ctx.translate(
+                Math.round(transform.e) - transform.e,
+                Math.round(transform.f) - transform.f
+            );
+        }
+
         const postDraw = layer === this.layer ? this.draw(ctx, width, height) : null;
         ctx.save();
         ctx.translate(

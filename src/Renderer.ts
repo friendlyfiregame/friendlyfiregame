@@ -1,6 +1,5 @@
 import { Aseprite } from "./Aseprite";
 import { BitmapFont } from "./BitmapFont";
-import { Dance } from "./Dance";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter } from "./Particles";
 import { roundRect } from "./SpeechBubble";
@@ -74,12 +73,6 @@ export type ParticleEmitterRenderingItem = {
     emitter: ParticleEmitter;
 };
 
-export type DanceRenderingItem = {
-    type: RenderingType.DANCE;
-    layer: RenderingLayer;
-    dance: Dance;
-};
-
 export type BlackBarsRenderingItem = {
     type: RenderingType.BLACK_BARS;
     layer: RenderingLayer;
@@ -125,7 +118,7 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
 };
 
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
-                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | DanceRenderingItem;
+                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem;
 
 export class Renderer {
     private scene: GameScene;
@@ -139,8 +132,6 @@ export class Renderer {
             this.scene.camera.drawBars(ctx);
         } else if (item.type === RenderingType.PARTICLE_EMITTER) {
             item.emitter.draw(ctx);
-        } else if (item.type === RenderingType.DANCE) {
-            item.dance.draw(ctx);
         } else {
             ctx.save();
             if (item.translation) ctx.translate(item.translation.x, item.translation.y);

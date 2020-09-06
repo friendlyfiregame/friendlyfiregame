@@ -338,7 +338,10 @@ export class Player extends PhysicsEntity {
     }
 
     public cancelDance(): void {
-        this.dance = null;
+        if (this.dance != null) {
+            this.dance.remove();
+            this.dance = null;
+        }
     }
 
     public async handleButtonDown(event: ControllerEvent): Promise<void> {
@@ -518,7 +521,7 @@ export class Player extends PhysicsEntity {
                         undefined,
                         true,
                         0
-                    );
+                    ).appendTo(this);
                     break;
                 case 2:
                     this.dance = new Dance(
@@ -528,7 +531,7 @@ export class Player extends PhysicsEntity {
                         "1   2   1 1 2 2 121 212 121 212 3    ",
                         undefined,
                         3
-                    );
+                    ).appendTo(this);
                     break;
                 case 3:
                     this.dance = new Dance(
@@ -538,7 +541,7 @@ export class Player extends PhysicsEntity {
                         "112 221 312 123 2121121 111 222 3    ",
                         undefined,
                         4
-                    );
+                    ).appendTo(this);
                     break;
                 default:
                     this.dance = new Dance(
@@ -546,7 +549,7 @@ export class Player extends PhysicsEntity {
                         0, -25,
                         192,
                         "3"
-                    );
+                    ).appendTo(this);
             }
         }
     }
@@ -722,10 +725,6 @@ export class Player extends PhysicsEntity {
             this.drawTooltip(ctx, "Plant seed", ControllerAnimationTags.ACTION);
         } else if (this.canDanceToMakeRain()) {
             this.drawTooltip(ctx, "Dance", ControllerAnimationTags.INTERACT);
-        }
-
-        if (this.dance) {
-            this.dance.drawDance(ctx);
         }
 
         this.speechBubble.draw(ctx);
@@ -1086,7 +1085,7 @@ export class Player extends PhysicsEntity {
             }
 
             this.dance.setPosition(0, -16);
-            const done = this.dance.update();
+            const done = this.dance.updateDance();
 
             if (done) {
                 // On cloud -> make it rain
@@ -1135,6 +1134,7 @@ export class Player extends PhysicsEntity {
                         this.scene.world.startRain();
                     }
                 }
+                this.dance.remove();
                 this.dance = null;
             }
         }
