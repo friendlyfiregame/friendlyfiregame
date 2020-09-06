@@ -46,9 +46,10 @@ export class Particles extends SceneNode<FriendlyFire> {
         this.emitters.forEach(emitter => emitter.update(dt));
     }
 
-    public addEmittersToRenderingQueue(): void {
+    // Direct drawing of particles is deactivated since it's handled via rendering engine
+    public draw(ctx: CanvasRenderingContext2D): void {
         this.emitters.forEach(emitter => {
-            this.scene.renderer.add({
+            this.scene.renderer.draw(ctx, {
                 type: RenderingType.PARTICLE_EMITTER,
                 layer: emitter.renderingLayer,
                 zIndex: emitter.zIndex,
@@ -56,9 +57,6 @@ export class Particles extends SceneNode<FriendlyFire> {
             });
         });
     }
-
-    // Direct drawing of particles is deactivated since it's handled via rendering engine
-    public draw(ctx: CanvasRenderingContext2D): void {}
 
     public addEmitter(emitter: ParticleEmitter): void {
         this.emitters.push(emitter);

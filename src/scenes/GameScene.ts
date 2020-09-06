@@ -443,9 +443,6 @@ export class GameScene extends Scene<FriendlyFire> {
         // Draw stuff
         this.camera.applyTransform(ctx);
 
-        // Add all particle emitters to rendering queue
-        this.particles.addEmittersToRenderingQueue();
-
         // Add all debug bounds to rendering queue
         this.addAllDebugBoundsToRenderingQueue();
 
