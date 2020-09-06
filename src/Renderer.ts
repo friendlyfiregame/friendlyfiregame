@@ -1,17 +1,13 @@
 import { Aseprite } from "./Aseprite";
-import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter } from "./Particles";
 
 export enum RenderingType {
     PARTICLE_EMITTER,
-    FIRE,
-    DANCE,
     BLACK_BARS,
     DRAW_IMAGE,
     ASEPRITE,
-    RECT,
-    TEXT
+    RECT
 }
 
 export enum RenderingLayer {
@@ -87,14 +83,6 @@ export type RectRenderingItem = BaseRenderingItem & {
     dimension: Dimension;
 };
 
-export type TextRenderingItem = BaseRenderingItem & {
-    type: RenderingType.TEXT;
-    asset: BitmapFont;
-    text: string,
-    textColor: string,
-    outlineColor?: string,
-};
-
 export type DrawImageRenderingItem = BaseRenderingItem & {
     type: RenderingType.DRAW_IMAGE;
     asset: HTMLImageElement;
@@ -107,8 +95,8 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
     time?: number;
 };
 
-export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
-                            TextRenderingItem | ParticleEmitterRenderingItem;
+export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem
+    | ParticleEmitterRenderingItem;
 
 export class Renderer {
     private scene: GameScene;
@@ -145,13 +133,6 @@ export class Renderer {
                     } else if (item.fillColor) {
                         ctx.fillStyle = item.fillColor;
                         ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                    }
-                    break;
-                case RenderingType.TEXT:
-                    if (item.outlineColor) {
-                        item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
-                    } else {
-                        item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
                     }
                     break;
             }
