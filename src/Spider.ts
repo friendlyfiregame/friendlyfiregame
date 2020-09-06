@@ -4,7 +4,7 @@ import { Conversation } from "./Conversation";
 import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 
 interface SpiderSpriteMetadata {
     eyeOffsetFrames?: number[];
@@ -49,22 +49,11 @@ export class Spider extends NPC {
         ctx.scale(this.direction, 1);
         Spider.sprite.drawTag(ctx, "idle", -Spider.sprite.width >> 1, -Spider.sprite.height);
 
-        const scale = (this.direction < 0) ? { x: -1, y: 1 } : undefined;
         const totalOffsetY = -10 - this.eyeOffsetY;
         const totalOffsetX = 5;
 
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            asset: Spider.eyes,
-            scale,
-            position: {
-                x: (-Spider.eyes.width >> 1) + totalOffsetX,
-                y: -Spider.eyes.height + totalOffsetY
-            },
-            animationTag: "blink",
-            time: this.scene.gameTime * 1000
-        });
+        Spider.eyes.drawTag(ctx, "blink", -Spider.eyes.width >> 1 + totalOffsetX, -Spider.eyes.height + totalOffsetY);
+
         ctx.restore();
     }
 

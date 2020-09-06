@@ -1,7 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 import { SceneNode } from "./scene/SceneNode";
 
 export enum FaceModes {
@@ -61,27 +61,11 @@ export class Face extends SceneNode {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
         const sprite = Face.sprites[this.eyeType];
-
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            asset: sprite,
-            scale: {
-                x: this.direction,
-                y: 1
-            },
-            translation: {
-                x: this.offX,
-                y: -this.offY
-            },
-            position: {
-                x: -sprite.width >> 1,
-                y: -sprite.height
-            },
-            animationTag: this.mode,
-            time: this.scene.gameTime * 1000
-        });
+        ctx.scale(this.direction, 1);
+        sprite.drawTag(ctx, this.mode, (-sprite.width >> 1) + this.offX, -sprite.height - this.offY);
+        ctx.restore();
     }
 
     public toggleDirection(direction = this.direction > 0 ? -1 : 1): void {

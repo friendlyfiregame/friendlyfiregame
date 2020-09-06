@@ -1,11 +1,9 @@
-import { Aseprite } from "./Aseprite";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter } from "./Particles";
 
 export enum RenderingType {
     PARTICLE_EMITTER,
     BLACK_BARS,
-    ASEPRITE,
     RECT
 }
 
@@ -80,15 +78,7 @@ export type RectRenderingItem = BaseRenderingItem & {
     dimension: Dimension;
 };
 
-export type AsepriteRenderingItem = BaseRenderingItem & {
-    type: RenderingType.ASEPRITE;
-    asset: Aseprite;
-    animationTag: string;
-    time?: number;
-};
-
-export type RenderingItem = BlackBarsRenderingItem | AsepriteRenderingItem | RectRenderingItem
-    | ParticleEmitterRenderingItem;
+export type RenderingItem = BlackBarsRenderingItem | RectRenderingItem | ParticleEmitterRenderingItem;
 
 export class Renderer {
     private scene: GameScene;
@@ -111,9 +101,6 @@ export class Renderer {
             if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
             switch (item.type) {
-                case RenderingType.ASEPRITE:
-                    item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
-                    break;
                 case RenderingType.RECT:
                     if (item.lineColor) {
                         ctx.strokeStyle = item.lineColor;

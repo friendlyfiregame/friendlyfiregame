@@ -4,7 +4,7 @@ import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 import { Sound } from "./Sound";
 import { SoundEmitter } from "./SoundEmitter";
 
@@ -26,6 +26,7 @@ export class ShadowPresence extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 12, 46);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.direction = -1;
         this.lookAtPlayer = false;
         this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
@@ -44,21 +45,12 @@ export class ShadowPresence extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        const scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
+        ctx.save();
+        ctx.scale(this.direction, 1);
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
-
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            position: {
-                x: -ShadowPresence.sprite.width >> 1,
-                y: -ShadowPresence.sprite.height
-            },
-            scale,
-            asset: ShadowPresence.sprite,
-            animationTag,
-            time: this.scene.gameTime * 1000
-        });
+        ShadowPresence.sprite.drawTag(ctx, animationTag, -ShadowPresence.sprite.width >> 1,
+            -ShadowPresence.sprite.height);
+        ctx.restore();
     }
 
     public checkPlayerDistance(): void {

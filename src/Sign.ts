@@ -5,7 +5,7 @@ import { entity } from "./Entity";
 import { GameObjectProperties } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 
 @entity("sign")
 export class Sign extends NPC {
@@ -15,6 +15,7 @@ export class Sign extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
     }
 
@@ -44,17 +45,7 @@ export class Sign extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            position: {
-                x: -Sign.sprite.width >> 1,
-                y: -Sign.sprite.height
-            },
-            asset: Sign.sprite,
-            animationTag: "idle",
-            time: this.scene.gameTime * 1000
-        });
+        Sign.sprite.drawTag(ctx, "idle", -Sign.sprite.width >> 1, -Sign.sprite.height);
     }
 
     public update(): void {
