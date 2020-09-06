@@ -2,9 +2,8 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
 import { CharacterAsset, VoiceAsset } from "../Campaign";
-import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
+import { ControllerAnimationTags } from "../input/ControllerFamily";
 import { ControllerEvent } from "../input/ControllerEvent";
-import { ControllerManager } from "../input/ControllerManager";
 import { DIALOG_FONT } from "../constants";
 import { easeOutCubic } from "../easings";
 import { FriendlyFire } from "../FriendlyFire";
@@ -13,6 +12,11 @@ import { MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
 import { TitleScene } from "./TitleScene";
+import { ImageNode } from "../scene/ImageNode";
+import { Direction } from "../geom/Direction";
+import { TextNode } from "../scene/TextNode";
+import { ControlTooltipNode } from "../scene/ControlTooltipNode";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { Sound } from "../Sound";
 
 enum MenuItemKey {
@@ -50,41 +54,12 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
     @asset("images/panel.png")
     private static panelImage: HTMLImageElement;
 
-    @asset([
-        "sprites/buttons_keyboard.aseprite.json",
-        "sprites/buttons_xbox.aseprite.json",
-        "sprites/buttons_playstation.aseprite.json"
-    ])
-    public static buttons: Aseprite[];
-
-    public controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
-        [ControllerSpriteMap.KEYBOARD]: CharacterSelectionScene.buttons[0],
-        [ControllerSpriteMap.XBOX]: CharacterSelectionScene.buttons[1],
-        [ControllerSpriteMap.PLAYSTATION]: CharacterSelectionScene.buttons[2]
-    };
-
-    private menu = new MenuList();
-
-    public setup(): void {
-        this.zIndex = 2;
-        this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
-        this.outTransition = new SlideTransition({ duration: 0.25 });
-
-        this.menu.setItems(
-            new MenuItem(
-                MenuItemKey.CHARACTER, "Character:", CharacterSelectionScene.font, "black",
-                menuItemX, characterMenuItemY
-            ),
-            new MenuItem(
-                MenuItemKey.VOICE, "Voice:", CharacterSelectionScene.font, "black",
-                menuItemX, voiceMenuItemY
-            ),
-            new MenuItem(
-                MenuItemKey.START, "Start Game", CharacterSelectionScene.font, "black",
-                menuItemX, startMenuItemY
-            )
-        );
-    }
+    private menu!: MenuList;
+    private variant1!: TextNode;
+    private variant2!: TextNode;
+    private voice1!: TextNode;
+    private voice2!: TextNode;
+    private character!: AsepriteNode;
 
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
@@ -100,9 +75,11 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         switch (buttonId) {
             case MenuItemKey.CHARACTER:
                 this.game.campaign.toggleCharacterAsset();
+                this.updateSelection();
                 break;
             case MenuItemKey.VOICE:
                 this.game.campaign.toggleVoiceAsset();
+                this.updateSelection();
                 CharacterSelectionScene.voices[this.game.campaign.selectedVoice].play();
                 break;
             case MenuItemKey.START:
@@ -124,115 +101,135 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         }
     }
 
-    // TODO: Should be unified with `drawTooltip(…)` in ControlScene
-    private drawTooltip(
-        ctx: CanvasRenderingContext2D, x: number, y: number, text: string,
-        animationTag: ControllerAnimationTags
-    ): void {
-        const gap = 6;
+    private updateSelection(): void {
+        if (this.game.campaign.selectedCharacter === CharacterAsset.MALE) {
+            this.variant1.setColor("grey").setOutlineColor(null);
+            this.variant2.setColor("white").setOutlineColor("black");
+        } else {
+            this.variant1.setColor("white").setOutlineColor("black");
+            this.variant2.setColor("grey").setOutlineColor(null);
+        }
 
-        const textPositionX = Math.round(
-            x + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap
-        );
+        if (this.game.campaign.selectedVoice === VoiceAsset.MALE) {
+            this.voice1.setColor("grey").setOutlineColor(null);
+            this.voice2.setColor("white").setOutlineColor("black");
+        } else {
+            this.voice1.setColor("white").setOutlineColor("black");
+            this.voice2.setColor("grey").setOutlineColor(null);
+        }
 
-        const textPositionY = y;
-        const controllerSprite = ControllerManager.getInstance().controllerSprite;
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(ctx, animationTag, x, y);
-
-        CharacterSelectionScene.font.drawTextWithOutline(
-            ctx,
-            text,
-            textPositionX, textPositionY,
-            "white",
-            "black"
-        );
+        this.character.setAseprite(CharacterSelectionScene.playerSprites[this.game.campaign.selectedCharacter]);
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.save();
+    public setup(): void {
+        this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
 
-        ctx.globalAlpha = 0.8;
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
+        this.zIndex = 2;
+        this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
+        this.outTransition = new SlideTransition({ duration: 0.25 });
 
-        ctx.globalAlpha = 1;
-
-        const x = (width / 2) - CharacterSelectionScene.panelImage.width / 2;
-        const y = (height / 2) - (CharacterSelectionScene.panelImage.height / 2) - 16;
-        ctx.translate(x, y);
-
-        ctx.drawImage(CharacterSelectionScene.panelImage, 0, 0);
-
-        CharacterSelectionScene.headlineFont.drawText(
-            ctx, "CHARACTER CUSTOMIZATION", 0, -14, "white"
-        );
-
-        this.drawTooltip(
-            ctx, 0, CharacterSelectionScene.panelImage.height, "Select or Change",
-            ControllerAnimationTags.CONFIRM
-        );
-
-        this.drawTooltip(
-            ctx, 0, CharacterSelectionScene.panelImage.height + 16, "Back",
-            ControllerAnimationTags.BACK
-        );
-
-        const character = this.game.campaign.selectedCharacter;
         const charSelectionTextY = characterMenuItemY + selectionItemsYDistance;
         const charSelectionTextX = menuItemX + selectionItemsXDistance;
         const charSelectionTextGap = 55;
 
-        if (character === CharacterAsset.MALE) {
-            CharacterSelectionScene.font.drawText(
-                ctx, "Variant 1", charSelectionTextX, charSelectionTextY, "grey"
-            );
-
-            CharacterSelectionScene.font.drawTextWithOutline(
-                ctx, "Variant 2", charSelectionTextX + charSelectionTextGap, charSelectionTextY,
-                "white", "black"
-            );
-        } else {
-            CharacterSelectionScene.font.drawTextWithOutline(
-                ctx, "Variant 1", charSelectionTextX, charSelectionTextY,
-                "white", "black"
-            );
-
-            CharacterSelectionScene.font.drawText(
-                ctx, "Variant 2", charSelectionTextX + charSelectionTextGap, charSelectionTextY,
-                "grey"
-            );
-        }
-
-        CharacterSelectionScene.playerSprites[character].drawTag(ctx, "idle", 213, 46);
-
-        const voice = this.game.campaign.selectedVoice;
         const voiceSelectionTextY = voiceMenuItemY + selectionItemsYDistance;
         const voiceSelectionTextX = menuItemX + selectionItemsXDistance;
         const voiceSelectionTextGap = 55;
 
-        if (voice === VoiceAsset.MALE) {
-            CharacterSelectionScene.font.drawText(
-                ctx, "High Pitch", voiceSelectionTextX, voiceSelectionTextY, "grey"
-            );
+        const character = this.game.campaign.selectedCharacter;
 
-            CharacterSelectionScene.font.drawTextWithOutline(
-                ctx, "Low Pitch", voiceSelectionTextX + voiceSelectionTextGap, voiceSelectionTextY,
-                "white", "black"
-            );
-        } else {
-            CharacterSelectionScene.font.drawTextWithOutline(
-                ctx, "High Pitch", voiceSelectionTextX, voiceSelectionTextY, "white", "black"
-            );
+        const panel = new ImageNode({
+            image: CharacterSelectionScene.panelImage,
+            childAnchor: Direction.TOP_LEFT,
+            x: this.game.width >> 1,
+            y: (this.game.height >> 1) - 16
+        }).appendChild(
+            new TextNode({
+                font: CharacterSelectionScene.headlineFont,
+                text: "CHARACTER CUSTOMIZATION",
+                anchor: Direction.BOTTOM_LEFT,
+                y: -5,
+                color: "white"
+            })
+        ).appendChild(
+            this.variant1 = new TextNode({
+                font: CharacterSelectionScene.font,
+                text: "Variant 1",
+                anchor: Direction.TOP_LEFT,
+                x: charSelectionTextX,
+                y: charSelectionTextY,
+                color: "grey"
+            })
+        ).appendChild(
+            this.variant2 = new TextNode({
+                font: CharacterSelectionScene.font,
+                text: "Variant 2",
+                anchor: Direction.TOP_LEFT,
+                x: charSelectionTextX + charSelectionTextGap,
+                y: charSelectionTextY,
+                color: "grey"
+            })
+        ).appendChild(
+            this.voice1 = new TextNode({
+                font: CharacterSelectionScene.font,
+                text: "High Pitch",
+                anchor: Direction.TOP_LEFT,
+                x: voiceSelectionTextX,
+                y: voiceSelectionTextY,
+                color: "grey"
+            })
+        ).appendChild(
+            this.voice2 = new TextNode({
+                font: CharacterSelectionScene.font,
+                text: "Low Pitch",
+                anchor: Direction.TOP_LEFT,
+                x: voiceSelectionTextX + voiceSelectionTextGap,
+                y: voiceSelectionTextY,
+                color: "grey"
+            })
+        ).appendChild(
+            this.character = new AsepriteNode({
+                aseprite: CharacterSelectionScene.playerSprites[character],
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: 213,
+                y: 46
+            })
+        ).appendChild(
+            new ControlTooltipNode({
+                control: ControllerAnimationTags.CONFIRM,
+                label: "Select or Change",
+                anchor: Direction.TOP_LEFT,
+                y: CharacterSelectionScene.panelImage.height + 2
+            })
+        ).appendChild(
+            new ControlTooltipNode({
+                control: ControllerAnimationTags.BACK,
+                label: "Back",
+                anchor: Direction.TOP_LEFT,
+                y: CharacterSelectionScene.panelImage.height + 18
+            })
+        ).appendTo(this.rootNode);
 
-            CharacterSelectionScene.font.drawText(
-                ctx, "Low Pitch", voiceSelectionTextX + voiceSelectionTextGap, voiceSelectionTextY,
-                "grey"
-            );
-        }
+        this.menu = new MenuList().setItems(
+            new MenuItem(
+                MenuItemKey.CHARACTER, "Character:", CharacterSelectionScene.font, "black",
+                menuItemX, characterMenuItemY
+            ),
+            new MenuItem(
+                MenuItemKey.VOICE, "Voice:", CharacterSelectionScene.font, "black",
+                menuItemX, voiceMenuItemY
+            ),
+            new MenuItem(
+                MenuItemKey.START, "Start Game", CharacterSelectionScene.font, "black",
+                menuItemX, startMenuItemY
+            )
+        ).appendTo(panel);
 
-        ctx.font = "20px sans-serif";
-        ctx.fillStyle = "white";
-        this.menu.draw(ctx);
-        ctx.restore();
+        this.updateSelection();
+    }
+
+    public cleanup(): void {
+        this.rootNode.clear();
     }
 }

@@ -1,5 +1,5 @@
 import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
-import { Vector2 } from "./util";
+import { Vector2Like } from "./graphics/Vector2";
 
 export enum MapObjectType {
     ENTITY = "entity",
@@ -55,7 +55,7 @@ export class MapInfo {
         return this.getLayer("objectgroup", "objects")?.objects.filter(object => !type || object.type === type) ?? [];
     }
 
-    public getPlayerStart(): Vector2 {
+    public getPlayerStart(): Vector2Like {
         const mapHeight = MapInfo.getMapSize().height;
         const object = this.getObject("player");
 

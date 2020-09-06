@@ -2,6 +2,8 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { Signal } from "./Signal";
 import { Sound } from "./Sound";
+import { SceneNode, SceneNodeArgs } from "./scene/SceneNode";
+import { FriendlyFire } from "./FriendlyFire";
 
 export enum MenuAlignment { LEFT, CENTER, RIGHT }
 
@@ -69,6 +71,10 @@ export class MenuItem {
     }
 }
 
+export interface MenuListArgs extends SceneNodeArgs {
+    align?: MenuAlignment;
+}
+
 /**
  * A simple MenuList that can hold MenuItems and navigate them in two directions via methods. On
  * each navigational change, the new MenuItem is focused. When calling the `executeAction` method a
@@ -76,7 +82,7 @@ export class MenuItem {
  * automatically when navigating. The draw method of the list instance has to be called to have all
  * containing buttons be drawn automatically.
  */
-export class MenuList {
+export class MenuList extends SceneNode<FriendlyFire> {
     @asset("sounds/interface/click.mp3")
     public static click: Sound;
     @asset("sounds/interface/confirm.mp3")
@@ -90,7 +96,8 @@ export class MenuList {
     private items: MenuItem[] = [];
     public onActivated = new Signal<string>();
 
-    public constructor(align = MenuAlignment.LEFT) {
+    public constructor({ align = MenuAlignment.LEFT, ...args }: MenuListArgs = {}) {
+        super(args);
         this.align = align;
     }
 
@@ -114,11 +121,11 @@ export class MenuList {
     /**
      * Sets an arbitrary number of menu items to the menu list and overrides any previously added
      * items. The first available menu item will be focused automatically.
-     * @param items
      */
-    public setItems(...items: MenuItem[]): void {
+    public setItems(...items: MenuItem[]): this {
         this.items = [...items];
         this.focusFirstItem();
+        return this;
     }
 
     /**

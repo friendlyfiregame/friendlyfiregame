@@ -11,6 +11,11 @@ import { isDev } from "../util";
 import { Scene } from "../Scene";
 import { Sound } from "../Sound";
 import { TitleScene } from "./TitleScene";
+import { Direction } from "../geom/Direction";
+import { TextNode } from "../scene/TextNode";
+import { SceneNode } from "../scene/SceneNode";
+import { ImageNode } from "../scene/ImageNode";
+import { AsepriteNode } from "../scene/AsepriteNode";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset("music/a-vision-of-fire-acoustic.ogg")
@@ -64,21 +69,160 @@ export class CreditsScene extends Scene<FriendlyFire> {
     @asset("appinfo.json")
     private static appInfo: AppInfoJSON;
 
-    private time: number = 0;
     private lineSpacing = 4;
-    private headlineCharHeight = 0;
-    private standardCharHeight = 0;
-    private creditsFontHeight = 0;
-    private totalCrawlHeight = 0;
 
     public async setup(): Promise<void> {
-        this.time = 0;
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
         this.outTransition = new FadeTransition({ duration: 0.25 });
-        this.headlineCharHeight = CreditsScene.headlineFont.charHeight;
-        this.standardCharHeight = CreditsScene.standardFont.charHeight;
-        this.creditsFontHeight = CreditsScene.creditsFont.charHeight;
+
+        // The background
+        new ImageNode({
+            image: CreditsScene.backgroundImage,
+            anchor: Direction.TOP_LEFT
+        }).appendTo(this.rootNode);
+
+        // The blinking stars
+        this.starPositions.forEach((pos, index) => {
+            new AsepriteNode({
+                aseprite: CreditsScene.stars[index % CreditsScene.stars.length],
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: pos[0],
+                y: pos[1]
+            }).appendTo(this.rootNode);
+        });
+
+        // The tree leaf
+        new AsepriteNode({
+            aseprite: CreditsScene.leaf,
+            tag: "idle",
+            anchor: Direction.TOP_LEFT,
+            x: 414,
+            y: 163
+        }).appendTo(this.rootNode);
+
+        // The gradient background behind the scrolling credits text
+        new ImageNode({
+            image: CreditsScene.overlayImage,
+            anchor: Direction.TOP_LEFT,
+            opacity: 0.75
+        }).appendTo(this.rootNode);
+
+        // The scrolling credits text
+        this.createCreditsNode().appendTo(this.rootNode);
+
+        // Shortened Git commit hash to provide support
+        new TextNode({
+            font: CreditsScene.standardFont,
+            text: CreditsScene.appInfo.gitCommitHash.substr(0, 16),
+            anchor: Direction.BOTTOM_RIGHT,
+            x: this.game.width - 7,
+            y: this.game.height - 4,
+            color: "white"
+        }).appendTo(this.rootNode);
+    }
+
+    public cleanup() {
+        this.rootNode.clear();
+    }
+
+    private createCreditsNode(): SceneNode {
+        const startY = this.game.height + 50;
+        let totalCrawlHeight = 0;
+
+        const credits = new SceneNode().appendTo(this.rootNode).animate({
+            animator: (node, value, elapsed) => {
+                node.setY(startY - (elapsed * 1000 / 36) % (totalCrawlHeight + startY));
+            },
+            duration: Infinity
+        });
+
+        const x = 20;
+        let y = this.addTitle(credits, 0, x);
+
+        y = this.addParagraph(credits, y, x, [
+            "Originally made as a team",
+            "effort for Ludum Dare 46",
+            "in three days by"
+        ]);
+
+        y = this.addParagraph(credits, y, x, [
+            "Eduard But, Nico Hülscher,",
+            "Benjamin Jung, Nils Kreutzer,",
+            "Bastian Lang, Ranjit Mevius,",
+            "Markus Over, Klaus Reimer,",
+            "and Jennifer van Veen"
+        ], 50);
+
+        y = this.addCredit(credits, y, x, "GAME DESIGN", ["Everyone"]);
+
+        y = this.addCredit(credits, y, x, "STORY", [
+            "Markus Over",
+            "Jennifer van Veen",
+            "Ranjit Mevius",
+            "Nils Kreutzer"
+        ]);
+
+        y = this.addCredit(credits, y, x, "PROGRAMMING", [
+            "Nico Hülscher",
+            "Benjamin Jung",
+            "Nils Kreutzer",
+            "Ranjit Mevius",
+            "Markus Over",
+            "Klaus Reimer",
+            "Eduard But",
+            "Matthias Wetter"
+        ]);
+
+        y = this.addCredit(credits, y, x, "SCRIPTING", [
+            "Markus Over",
+            "Eduard But"
+        ]);
+
+        y = this.addCredit(credits, y, x, "ART DIRECTION", ["Eduard But"]);
+
+        y = this.addCredit(credits, y, x, "2D ART", [
+            "Eduard But",
+            "Nils Kreutzer",
+            "Christina Schneider",
+            "Jennifer van Veen",
+            "Matthias Wetter"
+        ]);
+
+        y = this.addCredit(credits, y, x, "WRITING", [
+            "Markus Over",
+            "Jennifer van Veen",
+            "Eduard But"
+        ]);
+
+        y = this.addCredit(credits, y, x, "LEVEL DESIGN", [
+            "Eduard But",
+            "Nils Kreutzer",
+            "Jennifer van Veen"
+        ]);
+
+        y = this.addCredit(credits, y, x, "DISTRIBUTION", [
+            "Benjamin Jung",
+        ]);
+
+        y = this.addCredit(credits, y, x, "MUSIC", [
+            "Bastian Lang",
+            "Benjamin Jung",
+            "Eduard But",
+            "Matthias Wetter"
+        ]);
+
+        y = this.addCredit(credits, y, x, "QA", [
+            "Jennifer van Veen",
+            "Matthias Wetter"
+        ]);
+
+        y = this.addCredit(credits, y, x, "SFX", ["freesound.org"]);
+
+        totalCrawlHeight = y;
+
+        return credits;
     }
 
     public activate(): void {
@@ -102,188 +246,68 @@ export class CreditsScene extends Scene<FriendlyFire> {
         }
     }
 
-    public update(dt: number) {
-        this.time += dt;
-    }
-
-    private drawTitle(ctx: CanvasRenderingContext2D, posY: number, posX: number): number {
+    private addTitle(credits: SceneNode, y: number, x: number): number {
         const gap = 5;
         const titleText = "Friendly Fire";
         const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
 
-        CreditsScene.headlineFont.drawText(ctx, titleText, posX, posY, "white");
+        y += new TextNode({
+            font: CreditsScene.headlineFont,
+            text: titleText,
+            anchor: Direction.TOP_LEFT,
+            x, y,
+            color: "white"
+        }).appendTo(credits).getHeight();
 
-        CreditsScene.standardFont.drawText(
-            ctx,
-            versionText,
-            posX, posY + this.headlineCharHeight + gap,
-            "white"
-        );
+        y += gap;
 
-        return posY + this.headlineCharHeight + this.standardCharHeight + gap + 20;
+        y += new TextNode({
+            font: CreditsScene.standardFont,
+            text: versionText,
+            anchor: Direction.TOP_LEFT,
+            x, y,
+            color: "white"
+        }).appendTo(credits).getHeight();
+
+        return y + gap + 20;
     }
 
-    private drawParagraph(
-        ctx: CanvasRenderingContext2D, posY: number, posX: number, lines: string[], marginBottom = 10
-    ): number {
-        let y = posY;
-
+    private addParagraph(credits: SceneNode, y: number, x: number, lines: string[], marginBottom = 10): number {
         lines.forEach(line => {
-            CreditsScene.standardFont.drawText(ctx, line, posX, y, "white");
-            y += this.standardCharHeight;
+            y += new TextNode({
+                font: CreditsScene.standardFont,
+                text: line,
+                anchor: Direction.TOP_LEFT,
+                x, y,
+                color: "white"
+            }).appendTo(credits).getHeight();
         });
-
         return y + marginBottom;
     }
 
-    private drawCredit(
-        ctx: CanvasRenderingContext2D, posY: number, posX: number, title: string, names: string[]
-    ): number {
-        let y = posY;
+    private addCredit(credits: SceneNode, y: number, x: number, title: string, names: string[]): number {
         const gap = 5;
-        CreditsScene.creditsFont.drawText(ctx, title, posX, y, "white");
-        y += this.creditsFontHeight + this.lineSpacing + gap;
+
+        y += new TextNode({
+            font: CreditsScene.creditsFont,
+            text: title,
+            anchor: Direction.TOP_LEFT,
+            x, y,
+            color: "white"
+        }).appendTo(credits).getHeight();
+
+        y += this.lineSpacing + gap;
 
         names.forEach(name => {
-            CreditsScene.standardFont.drawText(ctx, name, posX, y, "white");
-            y += this.standardCharHeight;
+            y += new TextNode({
+                font: CreditsScene.standardFont,
+                text: name,
+                anchor: Direction.TOP_LEFT,
+                x, y,
+                color: "white"
+            }).appendTo(credits).getHeight();
         });
+
         return y + 40;
-    }
-
-
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
-        ctx.save();
-        ctx.drawImage(CreditsScene.backgroundImage, 0, 0);
-
-        // Stars
-        this.starPositions.forEach((pos, index) => {
-            const starIndex = index % CreditsScene.stars.length;
-            CreditsScene.stars[starIndex].drawTag(ctx, "idle", pos[0], pos[1], this.time * 1000);
-        });
-
-        // Leaf
-        CreditsScene.leaf.drawTag(ctx, "idle", 414, 163, this.time * 1000);
-
-        ctx.save();
-        ctx.globalAlpha *= .75;
-        ctx.drawImage(CreditsScene.overlayImage, 0, 0);
-        ctx.restore();
-
-        const posX = 20;
-        let posY = CreditsScene.backgroundImage.height + 50 - (this.time * 1000 / 36);
-
-        // Reset Credits Crawl when it's over
-        if (
-            this.totalCrawlHeight > 0
-            && posY <= -this.totalCrawlHeight + CreditsScene.backgroundImage.height
-        ) {
-            this.time = 0;
-            posY = CreditsScene.backgroundImage.height;
-        }
-
-        ctx.font = "20px sans-serif";
-        ctx.fillStyle = "white";
-
-        const color = "white";
-
-        posY = this.drawTitle(ctx, posY, posX);
-
-        posY = this.drawParagraph(ctx, posY, posX, [
-            "Originally made as a team",
-            "effort for Ludum Dare 46",
-            "in three days by"
-        ]);
-
-        posY = this.drawParagraph(ctx, posY, posX, [
-            "Eduard But, Nico Hülscher,",
-            "Benjamin Jung, Nils Kreutzer,",
-            "Bastian Lang, Ranjit Mevius,",
-            "Markus Over, Klaus Reimer,",
-            "and Jennifer van Veen"
-        ], 50);
-
-        posY = this.drawCredit(ctx, posY, posX, "GAME DESIGN", ["Everyone"]);
-
-        posY = this.drawCredit(ctx, posY, posX, "STORY", [
-            "Markus Over",
-            "Jennifer van Veen",
-            "Ranjit Mevius",
-            "Nils Kreutzer"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "PROGRAMMING", [
-            "Nico Hülscher",
-            "Benjamin Jung",
-            "Nils Kreutzer",
-            "Ranjit Mevius",
-            "Markus Over",
-            "Klaus Reimer",
-            "Eduard But",
-            "Matthias Wetter"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "SCRIPTING", [
-            "Markus Over",
-            "Eduard But"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "ART DIRECTION", ["Eduard But"]);
-
-        posY = this.drawCredit(ctx, posY, posX, "2D ART", [
-            "Eduard But",
-            "Nils Kreutzer",
-            "Christina Schneider",
-            "Jennifer van Veen",
-            "Matthias Wetter"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "WRITING", [
-            "Markus Over",
-            "Jennifer van Veen",
-            "Eduard But"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "LEVEL DESIGN", [
-            "Eduard But",
-            "Nils Kreutzer",
-            "Jennifer van Veen"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "DISTRIBUTION", [
-            "Benjamin Jung",
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "MUSIC", [
-            "Bastian Lang",
-            "Benjamin Jung",
-            "Eduard But",
-            "Matthias Wetter"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "QA", [
-            "Jennifer van Veen",
-            "Matthias Wetter"
-        ]);
-
-        posY = this.drawCredit(ctx, posY, posX, "SFX", ["freesound.org"]);
-
-        if (this.totalCrawlHeight === 0) {
-            this.totalCrawlHeight = posY;
-        }
-
-        // Shortened Git commit hash to provide support.
-        const shortenedGitCommitHash = CreditsScene.appInfo.gitCommitHash.substr(0, 16);
-        const shortenedGitCommitHashTextSize = CreditsScene.standardFont.measureText(shortenedGitCommitHash);
-
-        CreditsScene.standardFont.drawText(
-            ctx,
-            shortenedGitCommitHash,
-            CreditsScene.backgroundImage.width - shortenedGitCommitHashTextSize.width - 7,
-            CreditsScene.backgroundImage.height - shortenedGitCommitHashTextSize.height - 4,
-            color
-        );
-
-        ctx.restore();
     }
 }

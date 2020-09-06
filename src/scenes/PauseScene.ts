@@ -12,6 +12,8 @@ import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
 import { Sound } from "../Sound";
 import { TitleScene } from "./TitleScene";
+import { TextNode } from "../scene/TextNode";
+import { Direction } from "../geom/Direction";
 
 enum MenuItemKey {
     RESUME = "resume",
@@ -32,9 +34,15 @@ export class PauseScene extends Scene<FriendlyFire> {
     @asset("appinfo.json")
     private static appInfo: AppInfoJSON;
 
-    private menu = new MenuList();
+    private menu!: MenuList;
+
+    public cleanup(): void {
+        this.rootNode.clear();
+    }
 
     public setup(): void {
+        this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
+
         this.inTransition = new SlideTransition({ duration: 1, direction: "top", easing: easeOutBounce });
         this.outTransition = new SlideTransition({ duration: 0.25 });
 
@@ -42,7 +50,26 @@ export class PauseScene extends Scene<FriendlyFire> {
         PauseScene.music.setVolume(0.5);
         PauseScene.music.play();
 
-        this.menu.setItems(
+        new TextNode({
+            font: PauseScene.headlineFont,
+            text: "GAME PAUSED",
+            color: "white",
+            anchor: Direction.TOP_LEFT,
+            x: 75,
+            y: 100
+        }).appendTo(this.rootNode);
+
+        new TextNode({
+            font: PauseScene.font,
+            text: isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version,
+            color: "white",
+            anchor: Direction.BOTTOM_RIGHT,
+            x: this.game.width - 7,
+            y: this.game.height - 4,
+            opacity: 0.6
+        }).appendTo(this.rootNode);
+
+        this.menu = new MenuList().appendTo(this.rootNode).setItems(
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
             new MenuItem(MenuItemKey.CONTROLS, "Controls and Options", PauseScene.font, "white", 75, 145),
             new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 160),
@@ -87,31 +114,5 @@ export class PauseScene extends Scene<FriendlyFire> {
         } else if (event.isMenuDown) {
             this.menu.next();
         }
-    }
-
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.save();
-        ctx.globalAlpha = 0.8;
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
-
-        PauseScene.headlineFont.drawText(ctx, "GAME PAUSED", 75, 100, "white");
-
-        const versionText = isDev() ? "DEVELOPMENT VERSION" : PauseScene.appInfo.version;
-        const versionTextSize = PauseScene.font.measureText(versionText);
-
-        PauseScene.font.drawText(
-            ctx,
-            versionText,
-            this.game.width - versionTextSize.width - 7,
-            this.game.height - versionTextSize.height - 4,
-            "white",
-            0,
-            0.6
-        );
-
-        ctx.restore();
-
-        this.menu.draw(ctx);
     }
 }

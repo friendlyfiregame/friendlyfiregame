@@ -6,7 +6,7 @@ import { ControlsScene } from "./ControlsScene";
 import { CreditsScene } from "./CreditsScene";
 import { CurtainTransition } from "../transitions/CurtainTransition";
 import { DIALOG_FONT } from "../constants";
-import { easeInSine } from "../easings";
+import { easeInSine, easeOutQuad } from "../easings";
 import { FadeTransition } from "../transitions/FadeTransition";
 import { FriendlyFire } from "../FriendlyFire";
 import { isElectron } from "../util";
@@ -14,6 +14,10 @@ import { MenuAlignment, MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
 import { Sound } from "../Sound";
 import { CharacterSelectionScene } from "./CharacterSelectionScene";
+import { AsepriteNode } from "../scene/AsepriteNode";
+import { Direction } from "../geom/Direction";
+import { ImageNode } from "../scene/ImageNode";
+import { SceneNode } from "../scene/SceneNode";
 
 type MainMenuParams = {
     label: string;
@@ -65,10 +69,8 @@ export class TitleScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
 
-    private menu = new MenuList(MenuAlignment.CENTER);
-    private time = 0;
-    private animationProgress = 0;
-    private logoAlphaProgress = 0;
+    private menu!: MenuList;
+
     private animationDuration = 3;
 
     private titleBasePosition = {
@@ -86,14 +88,137 @@ export class TitleScene extends Scene<FriendlyFire> {
         gap: 15,
     };
 
+    public cleanup(): void {
+        this.rootNode.clear();
+    }
+
     public setup(): void {
         this.zIndex = 1;
-        this.time = 0;
-        this.animationProgress = 0;
-        this.logoAlphaProgress = 0;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
-        this.menu.reset();
+
+        // The sky background layer
+        new AsepriteNode({
+            id: "titleLayer3",
+            aseprite: TitleScene.titleLayer3,
+            tag: "idle",
+            x: this.titleLayer3Position.x,
+            y: this.titleLayer3Position.y,
+            anchor: Direction.TOP_LEFT
+        }).animate({
+            animator: (node, value) => node.setY(this.titleLayer3Position.y + (1 - value) * 100),
+            duration: this.animationDuration,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        // The background layer with the sea animated to move in from the bottom
+        new AsepriteNode({
+            id: "titleLayer2",
+            aseprite: TitleScene.titleLayer2,
+            tag: "idle",
+            x: this.titleLayer2Position.x,
+            y: this.titleLayer2Position.y,
+            anchor: Direction.TOP_LEFT
+        }).animate({
+            animator: (node, value) => node.setY(this.titleLayer2Position.y + (1 - value) * 200),
+            duration: this.animationDuration,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        // The two floating islands in the background animated to moving in from the bottom
+        new SceneNode().appendChild(
+            new AsepriteNode({
+                id: "titleIsland1",
+                aseprite: TitleScene.titleIsland1,
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: 90,
+                y: 168
+            })
+        ).appendChild(
+            new AsepriteNode({
+                id: "titleIsland2",
+                aseprite: TitleScene.titleIsland2,
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: 323,
+                y: 178
+            })
+        ).animate({
+            animator: (node, value) => node.setY((1 - value) * 250),
+            duration: this.animationDuration,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        // The girl standing on the ground animated to move in from the bottom
+        new AsepriteNode({
+            id: "person",
+            aseprite: TitleScene.person,
+            tag: "idle",
+            x: 22,
+            y: 155,
+            anchor: Direction.TOP_LEFT
+        }).animate({
+            animator: (node, value) => node.setY(155 + (1 - value) * 330),
+            duration: this.animationDuration,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        // The ground layer animated to move in from the bottom
+        new AsepriteNode({
+            id: "titleLayer1",
+            aseprite: TitleScene.titleLayer1,
+            tag: "idle",
+            x: this.titleLayer1Position.x,
+            y: this.titleLayer1Position.y,
+            anchor: Direction.TOP_LEFT
+        }).animate({
+            animator: (node, value) => node.setY(this.titleLayer1Position.y + (1 - value) * 300),
+            duration: this.animationDuration,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        // The title text with flame icon fading in and moving to the top
+        new SceneNode({
+            opacity: 0,
+            x: this.titleBasePosition.x,
+            y: this.titleBasePosition.y
+        }).appendChild(
+            new AsepriteNode({
+                id: "flameicon",
+                aseprite: TitleScene.flameicon,
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: 147,
+                y: -10
+            })
+        ).appendChild(
+            new ImageNode({
+                id: "logoImage",
+                image: TitleScene.logoImage,
+                anchor: Direction.TOP_LEFT
+            })
+        ).animate({
+            animator: (node, value) => node.setY(this.titleBasePosition.y - 10 + 150 * (1 - value)),
+            duration: this.animationDuration,
+            easing: easeOutQuad
+        }).animate({
+            animator: (node, value) => node.setOpacity(value),
+            delay: this.animationDuration / 2,
+            duration: this.animationDuration / 2,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        this.menu = new MenuList({
+            id: "menu",
+            opacity:0,
+            align: MenuAlignment.CENTER
+        }).animate({
+            animator: (node, value) => node.setOpacity(value),
+            delay: 2.5,
+            duration: 0.5,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
 
         Object.values(MenuItemKey).forEach((key, index) => {
             if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {
@@ -111,12 +236,11 @@ export class TitleScene extends Scene<FriendlyFire> {
     }
 
     public animationIsDone(): boolean {
-        return this.animationProgress === 1;
+        return !this.rootNode.hasAnimations();
     }
 
     public finishAnimation(): void {
-        this.animationProgress = 1;
-        this.logoAlphaProgress = 1;
+        this.rootNode.finishAnimations();
     }
 
     public handleMenuAction(buttonId: string): void {
@@ -165,63 +289,6 @@ export class TitleScene extends Scene<FriendlyFire> {
             }
         }
 
-    }
-
-    public update(dt: number): void {
-        this.time += dt;
-
-        if (this.time < this.animationDuration && !this.animationIsDone()) {
-            this.animationProgress = -Math.pow((1 / this.animationDuration * this.time - 1), 2) + 1;
-            this.logoAlphaProgress = -Math.pow((1 / (this.animationDuration / 2) * this.time - 2), 2) + 1;
-        } else {
-            this.finishAnimation();
-        }
-    }
-
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.save();
-        ctx.beginPath();
-
-        const layer3OffY = (1 - this.animationProgress) * 100;
-
-        TitleScene.titleLayer3.drawTag(
-            ctx, "idle", this.titleLayer3Position.x, this.titleLayer3Position.y + layer3OffY, this.time * 1000
-        );
-
-        const layer2OffY = (1 - this.animationProgress) * 200;
-
-        TitleScene.titleLayer2.drawTag(
-            ctx, "idle", this.titleLayer2Position.x, this.titleLayer2Position.y + layer2OffY, this.time * 1000
-        );
-
-        const islandOffY = (1 - this.animationProgress) * 250;
-
-        TitleScene.titleIsland1.drawTag(ctx, "idle", 90, 168 + islandOffY, this.time * 1000);
-        TitleScene.titleIsland2.drawTag(ctx, "idle", 323, 178 + islandOffY, this.time * 1000);
-
-        const personOff = (1 - this.animationProgress) * 330;
-
-        TitleScene.person.drawTag(ctx, "idle", 22, 155 + personOff, this.time * 1000);
-
-        const layer1OffY = (1 - this.animationProgress) * 300;
-
-        TitleScene.titleLayer1.drawTag(
-            ctx, "idle", this.titleLayer1Position.x, this.titleLayer1Position.y + layer1OffY, this.time * 1000
-        );
-
-        ctx.globalAlpha = Math.max(this.logoAlphaProgress, 0);
-        const menuOffY = (1 - this.animationProgress) * 150;
-        ctx.drawImage(TitleScene.logoImage, this.titleBasePosition.x, this.titleBasePosition.y + menuOffY);
-
-        TitleScene.flameicon.drawTag(
-            ctx, "idle", this.titleBasePosition.x + 147, this.titleBasePosition.y - 10 + menuOffY, this.time * 1000
-        );
-
-        ctx.restore();
-
-        if (this.animationIsDone()) {
-            this.menu.draw(ctx);
-        }
     }
 
     private stopMusicTrack(): void {

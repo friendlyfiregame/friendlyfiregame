@@ -1,7 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
-import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
+import { ControllerAnimationTags } from "../input/ControllerFamily";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { ControllerManager } from "../input/ControllerManager";
 import { DIALOG_FONT } from "../constants";
@@ -9,6 +9,11 @@ import { easeOutCubic } from "../easings";
 import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
+import { ImageNode } from "../scene/ImageNode";
+import { AsepriteNode } from "../scene/AsepriteNode";
+import { Direction } from "../geom/Direction";
+import { TextNode } from "../scene/TextNode";
+import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 
 export class ControlsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -26,18 +31,6 @@ export class ControlsScene extends Scene<FriendlyFire> {
     @asset("images/controls_gamepad.aseprite.json")
     private static gamepadControls: Aseprite;
 
-    @asset([
-        "sprites/buttons_keyboard.aseprite.json",
-        "sprites/buttons_xbox.aseprite.json",
-        "sprites/buttons_playstation.aseprite.json"
-    ])
-    public static buttons: Aseprite[];
-    public controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
-        [ControllerSpriteMap.KEYBOARD]: ControlsScene.buttons[0],
-        [ControllerSpriteMap.XBOX]: ControlsScene.buttons[1],
-        [ControllerSpriteMap.PLAYSTATION]: ControlsScene.buttons[2]
-    };
-
     private controls: string[] = [
         "Walk",
         "Jump",
@@ -48,10 +41,76 @@ export class ControlsScene extends Scene<FriendlyFire> {
         "Pause"
     ];
 
+    private gamepadSelection!: AsepriteNode;
+    private gamepadControls!: AsepriteNode;
+
     public setup(): void {
+        this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
         this.zIndex = 2;
         this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
         this.outTransition = new SlideTransition({ duration: 0.25 });
+
+        const controllerManager = ControllerManager.getInstance();
+        const gamepadStyle = controllerManager.selectedGamepadStyle;
+
+        const panel = new ImageNode({
+            image: ControlsScene.panelImage,
+            x: this.game.width / 2,
+            y: this.game.height / 2 - 16,
+            childAnchor: Direction.TOP_LEFT
+        }).appendChild(
+            this.gamepadSelection = new AsepriteNode({
+                aseprite: ControlsScene.gamepadSelection,
+                tag: gamepadStyle,
+                anchor: Direction.TOP_LEFT,
+                x: 204,
+                y: 2
+            })
+        ).appendChild(
+            new ImageNode({
+                image: ControlsScene.keyboardKeys,
+                anchor: Direction.TOP_LEFT,
+                x: 123,
+                y: 35
+            })
+        ).appendChild(
+            this.gamepadControls = new AsepriteNode({
+                aseprite: ControlsScene.gamepadControls,
+                tag: gamepadStyle,
+                anchor: Direction.TOP_LEFT,
+                x: 206,
+                y: 35
+            })
+        ).appendChild(
+            new ControlTooltipNode({
+                label: "Toggle Gamepad Button Prompts",
+                control: ControllerAnimationTags.ACTION,
+                anchor: Direction.TOP_LEFT,
+                y: ControlsScene.panelImage.height + 2
+            })
+        ).appendChild(
+            new ControlTooltipNode({
+                label: "Back",
+                control: ControllerAnimationTags.BACK,
+                anchor: Direction.TOP_LEFT,
+                y: ControlsScene.panelImage.height + 18
+            })
+        ).appendTo(this.rootNode);
+
+        this.controls.forEach((label, index) => {
+            panel.appendChild(new TextNode({
+                font: ControlsScene.font,
+                text: label,
+                anchor: Direction.TOP_LEFT,
+                x: 10,
+                y: 35 + index * 20,
+                color: "black"
+            }));
+        });
+    }
+
+    public cleanup(): void {
+        this.rootNode.clear();
     }
 
     public activate(): void {
@@ -67,83 +126,10 @@ export class ControlsScene extends Scene<FriendlyFire> {
             this.scenes.popScene();
         }
         if (event.isPlayerAction) {
-            ControllerManager.getInstance().toggleSelectedGamepadStyle();
+            const controllerManager = ControllerManager.getInstance();
+            controllerManager.toggleSelectedGamepadStyle();
+            this.gamepadControls.setTag(controllerManager.selectedGamepadStyle);
+            this.gamepadSelection.setTag(controllerManager.selectedGamepadStyle);
         }
-    }
-
-    // TODO: Should be unified with `drawTooltip(…)` in CharacterSelectionScene
-    private drawTooltip (
-        ctx: CanvasRenderingContext2D, x: number, y: number, text: string, animationTag: ControllerAnimationTags
-    ): void {
-        const gap = 6;
-        const textPositionX = Math.round(x + this.controllerSpriteMapRecords[ControllerSpriteMap.KEYBOARD].width + gap);
-        const textPositionY = y;
-        const controllerSprite = ControllerManager.getInstance().controllerSprite;
-
-        this.controllerSpriteMapRecords[controllerSprite].drawTag(
-            ctx,
-            animationTag,
-            x, y
-        );
-
-        ControlsScene.font.drawTextWithOutline(
-            ctx,
-            text,
-            textPositionX, textPositionY,
-            "white",
-            "black"
-        );
-    }
-
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.save();
-
-        ctx.globalAlpha = 0.8;
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
-
-        ctx.globalAlpha = 1;
-
-        const x = (width / 2) - ControlsScene.panelImage.width / 2;
-        const y = (height / 2) - (ControlsScene.panelImage.height / 2) - 16;
-        const textOffsetX = 10;
-        const startingY = 35;
-        const gap = 20;
-
-        ctx.translate(x, y);
-        ctx.drawImage(ControlsScene.panelImage, 0, 0);
-
-        const controllerSprite = ControllerManager.getInstance().selectedGamepadStyle;
-        ControlsScene.gamepadSelection.drawTag(ctx, controllerSprite, 204, 2);
-        ControlsScene.gamepadControls.drawTag(ctx, controllerSprite, 206, 35);
-
-        this.drawTooltip(
-            ctx,
-            0, ControlsScene.panelImage.height,
-            "Toggle Gamepad Button Prompts",
-            ControllerAnimationTags.ACTION
-        );
-
-        this.drawTooltip(
-            ctx,
-            0, ControlsScene.panelImage.height + 16,
-            "Back",
-            ControllerAnimationTags.BACK
-        );
-
-        ctx.font = "20px sans-serif";
-        ctx.fillStyle = "white";
-
-        const fontColor = "black";
-
-        let textOffsetY = startingY;
-
-        this.controls.forEach(label => {
-            ControlsScene.font.drawText(ctx, label, textOffsetX, textOffsetY, fontColor);
-            textOffsetY += gap;
-        });
-
-        ctx.drawImage(ControlsScene.keyboardKeys, 123, startingY - 2);
-        ctx.restore();
     }
 }

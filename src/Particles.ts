@@ -1,24 +1,24 @@
 import { GameScene } from "./scenes/GameScene";
 import { GRAVITY } from "./constants";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import { Vector2 } from "./util";
+import { Vector2Like } from "./graphics/Vector2";
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
 type NumberGenerator = () => number;
 
-type VectorGenerator = () => Vector2;
+type VectorGenerator = () => Vector2Like;
 
 type ParticleAppearanceGenerator = () => ParticleAppearance;
 
 export interface ParticleEmitterArguments {
-    position: Vector2;
-    offset?: Vector2 | VectorGenerator;
-    velocity?: Vector2 | VectorGenerator;
+    position: Vector2Like;
+    offset?: Vector2Like | VectorGenerator;
+    velocity?: Vector2Like | VectorGenerator;
     color?: ParticleAppearance | ParticleAppearanceGenerator;
     alpha?: number | NumberGenerator;
     size?: number | NumberGenerator;
-    gravity?: Vector2 | VectorGenerator;
+    gravity?: Vector2Like | VectorGenerator;
     lifetime?: number | NumberGenerator;
     breakFactor?: number;
     blendMode?: string;
@@ -93,7 +93,7 @@ export class ParticleEmitter {
     private alphaGenerator: NumberGenerator;
     private angleGenerator: NumberGenerator;
     private angleSpeedGenerator: NumberGenerator;
-    public gravity: Vector2;
+    public gravity: Vector2Like;
     public breakFactor: number;
     private blendMode: string;
     public alphaCurve: ValueCurve;

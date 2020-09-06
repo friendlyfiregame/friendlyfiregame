@@ -4,9 +4,12 @@ import { ControllerFamily } from "../input/ControllerFamily";
 import { CreditsScene } from "./CreditsScene";
 import { DIALOG_FONT } from "../constants";
 import { FriendlyFire } from "../FriendlyFire";
-import { Quest } from "../Quests";
 import { Scene } from "../Scene";
 import { Sound } from "../Sound";
+import { ImageNode } from "../scene/ImageNode";
+import { TextNode } from "../scene/TextNode";
+import { easeOutQuad } from "../easings";
+import { Direction } from "../geom/Direction";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -18,69 +21,69 @@ export class EndScene extends Scene<FriendlyFire> {
     @asset("sounds/ending/boom.mp3")
     private static boom: Sound;
 
-    private ending: Quest | undefined;
-    private time = 0;
-    private boomPlayed = false;
     private subtitleDelay = 2;
     private inputDelay = 4;
 
-    public setup (): void {
-        this.ending = this.game.campaign.quests.find(q => q.isFinished());
+    public setup(): void {
+        const ending = this.game.campaign.quests.find(q => q.isFinished());
+
+        // The logo image
+        new ImageNode({
+            image: EndScene.logo,
+            x: this.game.width >> 1,
+            y: (this.game.height >> 1) - 15
+        }).appendTo(this.rootNode);
+
+        // Fade in subtitle after a delay
+        new TextNode({
+            font: EndScene.font,
+            text: ending?.title ?? "Unknown [E]nding",
+            x: this.game.width >> 1,
+            y: (this.game.height >> 1) + 11,
+            color: "red",
+            opacity: 0
+        }).animate({
+            animator: (node, value) => node.setOpacity(value),
+            delay: this.subtitleDelay,
+            duration: 0.5,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
+
+        // Inform the user, that it's possible to return to the title
+        const text = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD
+            ? "key" : "button"} to continue.`;
+        new TextNode({
+            font: EndScene.font,
+            text,
+            anchor: Direction.BOTTOM,
+            x: this.game.width >> 1,
+            y: this.game.height - 15,
+            color: "darkgrey",
+            opacity: 0
+        }).animate({
+            animator: (node, value) => node.setOpacity(value),
+            delay: this.inputDelay,
+            duration: 0.5,
+            easing: easeOutQuad
+        }).appendTo(this.rootNode);
     }
 
     public activate(): void {
-        this.input.onButtonDown.connect(this.handleButtonDown, this);
+        setTimeout(() => {
+            EndScene.boom.setLoop(false);
+            EndScene.boom.play();
+        }, this.subtitleDelay * 1000);
+
+        setTimeout(() => {
+            this.input.onButtonDown.connect(this.gotoCreditsScene, this);
+        }, this.inputDelay * 1000);
     }
 
     public deactivate(): void {
-        this.input.onButtonDown.disconnect(this.handleButtonDown, this);
+        this.input.onButtonDown.disconnect(this.gotoCreditsScene, this);
     }
 
-    private handleButtonDown(): void {
-        if (this.time > this.inputDelay) {
-            this.game.scenes.setScene(CreditsScene);
-        }
-    }
-
-    public update(dt: number) {
-        this.time += dt;
-
-        if (this.time > this.subtitleDelay && !this.boomPlayed) {
-            EndScene.boom.setLoop(false);
-            EndScene.boom.play();
-            this.boomPlayed = true;
-        }
-    }
-
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.drawImage(
-            EndScene.logo,
-            width / 2 - EndScene.logo.width / 2, height / 2 - EndScene.logo.height / 2 - 15
-        );
-
-        if (this.time > this.subtitleDelay) {
-            const endingLabel = this.ending ? this.ending.title : "Unknown [E]nding";
-            const size = EndScene.font.measureText(endingLabel);
-
-            EndScene.font.drawText(
-                ctx,
-                endingLabel,
-                width / 2 - size.width / 2, height / 2 - EndScene.logo.height / 2 + 20,
-                "red"
-            );
-        }
-
-        // Inform the user, that it's possible to return to the title
-        if (this.time > this.inputDelay) {
-            const txt = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD ? "key" : "button"} to continue.`;
-            const txtSize = EndScene.font.measureText(txt);
-
-            EndScene.font.drawText(
-                ctx,
-                txt,
-                width / 2 - txtSize.width / 2 , height - txtSize.height - 15,
-                "darkgrey"
-            );
-        }
+    private gotoCreditsScene(): void {
+        this.game.scenes.setScene(CreditsScene);
     }
 }

@@ -1,9 +1,10 @@
 import { Bounds } from "./Entity";
-import { clamp, isDev, rnd, shiftValue, Vector2 } from "./util";
+import { clamp, isDev, rnd, shiftValue } from "./util";
 import { Fire } from "./Fire";
 import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { ValueCurve, valueCurves } from "./Particles";
+import { Vector2Like } from "./graphics/Vector2";
 
 export interface CamFocus {
     x: number;
@@ -48,7 +49,7 @@ export class Camera {
     private bounds?: Bounds;
 
     constructor(
-        protected scene: GameScene, private target: Vector2, interpolationTime = 0.5,
+        protected scene: GameScene, private target: Vector2Like, interpolationTime = 0.5,
         private barHeight = 0.1
     ) {
         if (interpolationTime > 1) {

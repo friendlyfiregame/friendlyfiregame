@@ -1,6 +1,7 @@
 import { Conversation } from "./Conversation";
 import { GameScene } from "./scenes/GameScene";
-import { GotItemScene } from "./scenes/GotItemScene";
+import { Sound } from "./Sound";
+import { asset } from "./Assets";
 
 const AMOUNT_GATE_COLS = 3;
 const AMOUNT_GATE_ROWS = 5;
@@ -10,6 +11,9 @@ export class MountainRiddle {
     private failed = false;
     private cleared = false;
     private solution: number[];
+
+    @asset("sounds/item/fanfare.mp3")
+    private static sound: Sound;
 
     public constructor() {
         this.solution = this.getRandomizedSolution();
@@ -67,7 +71,7 @@ export class MountainRiddle {
 
     public clearRiddle(): void {
         if (!this.cleared) {
-            GotItemScene.sound.play();
+            MountainRiddle.sound.play();
             this.failed = false;
             this.cleared = true;
         }
