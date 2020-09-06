@@ -48,6 +48,14 @@ export class Keyboard {
     private handleKeyPress(event: KeyboardEvent): void {
         this.onKeyPress.emit(event);
 
+        // Quick workaround to make sure, that modifier keys never trigger a game-related
+        // controller event. Especially necessary to make other non-game related actions
+        // possible. (Shift is used as a modifier key to enable running and is therefore
+        // excluded from the list below)
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+        }
+
         this.controllerManager.onButtonPress.emit(
             new ControllerEvent(
                 ControllerFamily.KEYBOARD, ControllerEventType.PRESS,
@@ -67,6 +75,10 @@ export class Keyboard {
 
         this.onKeyDown.emit(event);
 
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+        }
+
         this.controllerManager.onButtonDown.emit(
             new ControllerEvent(
                 ControllerFamily.KEYBOARD, ControllerEventType.DOWN,
@@ -81,6 +93,10 @@ export class Keyboard {
         }
 
         this.onKeyUp.emit(event);
+
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+            return;
+        }
 
         this.controllerManager.onButtonUp.emit(
             new ControllerEvent(
