@@ -313,10 +313,10 @@ export class Camera {
         }
     }
 
-    public addCinematicBarsToRenderer(force = this.getFocusForce()): void {
+    public addCinematicBarsToRenderer(ctx: CanvasRenderingContext2D, force = this.getFocusForce()): void {
         force = Math.max(force, this.getFocusForce(), this.currentBarHeight);
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.BLACK_BARS,
             layer: RenderingLayer.BLACK_BARS,
             color: "black",

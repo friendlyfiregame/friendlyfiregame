@@ -136,83 +136,12 @@ export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | As
 
 export class Renderer {
     private scene: GameScene;
-    private layers = LAYER_ORDER;
-    private queue: RenderingItem[] = [];
 
     public constructor(scene: GameScene) {
         this.scene = scene;
     }
 
-    private drawAll(ctx: CanvasRenderingContext2D): void {
-        [...this.layers].reverse().forEach(layer => {
-            const itemsInLayer = this.queue.filter(item => item.layer === layer);
-
-            itemsInLayer.forEach(item => {
-                if (item.type === RenderingType.BLACK_BARS) {
-                    this.scene.camera.drawBars(ctx);
-                } else if (item.type === RenderingType.PARTICLE_EMITTER) {
-                    item.emitter.draw(ctx);
-                } else if (item.type === RenderingType.FIRE) {
-                    item.entity.drawToCanvas(ctx);
-                } else if (item.type === RenderingType.DANCE) {
-                    item.dance.draw(ctx);
-                } else {
-                    ctx.save();
-                    if (item.translation) ctx.translate(item.translation.x, item.translation.y);
-                    if (item.scale) ctx.scale(item.scale.x, item.scale.y);
-                    if (item.relativeToScreen) ctx.setTransform(1, 0, 0, 1, 0, 0);
-                    if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
-                    if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
-
-                    switch (item.type) {
-                        case RenderingType.DRAW_IMAGE:
-                            ctx.drawImage(item.asset, item.position.x, item.position.y);
-                            break;
-                        case RenderingType.ASEPRITE:
-                            item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
-                            break;
-                        case RenderingType.RECT:
-                            if (item.lineColor) {
-                                ctx.strokeStyle = item.lineColor;
-                                ctx.lineWidth = item.lineWidth || 1;
-                                ctx.strokeRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                            } else if (item.fillColor) {
-                                ctx.fillStyle = item.fillColor;
-                                ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                            }
-                            break;
-                        case RenderingType.SPEECH_BUBBLE:
-                            ctx.beginPath();
-                            ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width), Math.round(item.dimension.height), item.radius, item.relativeToScreen, Math.round(item.offsetX));
-                            ctx.fillStyle = item.fillColor;
-                            ctx.fill();
-                            ctx.closePath();
-                            break;
-                        case RenderingType.TEXT:
-                            if (item.outlineColor) {
-                                item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
-                            } else {
-                                item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
-                            }
-                            break;
-                    }
-
-                    ctx.restore();
-                }
-            });
-        });
-
-        this.queue = [];
-    }
-
-    public add(item: RenderingItem): void {
-        this.queue.push(item);
-    }
-
-    public draw(ctx: CanvasRenderingContext2D, item?: RenderingItem): void {
-        if (item == null) {
-            return this.drawAll(ctx);
-        }
+    public draw(ctx: CanvasRenderingContext2D, item: RenderingItem): void {
         if (item.type === RenderingType.BLACK_BARS) {
             this.scene.camera.drawBars(ctx);
         } else if (item.type === RenderingType.PARTICLE_EMITTER) {

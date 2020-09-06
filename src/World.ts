@@ -84,23 +84,15 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        const camX = this.scene.camera.x;
-        const camY = this.scene.camera.y;
+        const camX = -this.scene.camera.x;
+        const camY = -this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
-
-        this.scene.renderer.add({
-            type: RenderingType.DRAW_IMAGE,
-            layer: RenderingLayer.TILEMAP_MAP,
-            translation: { x: camX, y: -camY },
-            position: { x: -camX, y: -this.getHeight() + camY },
-            asset: World.foreground
-        });
 
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
 
-            this.scene.renderer.add({
+            this.scene.renderer.draw(ctx, {
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
                 translation: { x: camX, y: -camY },
@@ -111,6 +103,13 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
                 asset: background
             });
         }
+        this.scene.renderer.draw(ctx, {
+            type: RenderingType.DRAW_IMAGE,
+            layer: RenderingLayer.TILEMAP_MAP,
+            translation: { x: camX, y: -camY },
+            position: { x: -camX, y: -this.getHeight() + camY },
+            asset: World.foreground
+        });
     }
 
     public getEnvironment(x: number, y: number): Environment {

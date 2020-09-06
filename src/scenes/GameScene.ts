@@ -466,13 +466,10 @@ export class GameScene extends Scene<FriendlyFire> {
             this.drawFade(ctx, this.fadeToBlackFactor, "black");
         }
 
-        // Cinematic bars
-        this.camera.addCinematicBarsToRenderer();
-
-        // Draw stuff from Rendering queue
-        this.renderer.draw(ctx);
-
         super.draw(ctx, width, height);
+
+        // Cinematic bars
+        this.camera.addCinematicBarsToRenderer(ctx);
 
         ctx.restore();
 
@@ -591,7 +588,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.updateApocalypse();
         this.camera.setCinematicBar(this.apocalypseFactor);
 
-        this.renderer.add({
+        this.renderer.draw(ctx, {
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
             position: { x: 0, y: 0 },
@@ -604,7 +601,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black"): void {
-        this.renderer.add({
+        this.renderer.draw(ctx, {
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,
             position: { x: 0, y: 0 },
