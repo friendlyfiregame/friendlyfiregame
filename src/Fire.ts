@@ -151,7 +151,6 @@ export class Fire extends NPC {
 
     public drawToCanvas(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        ctx.translate(this.x, -this.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
         this.fireGfx.draw(ctx, 0, 0);
 
@@ -163,7 +162,7 @@ export class Fire extends NPC {
             return;
         }
 
-        this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this });
+        this.scene.renderer.draw(ctx, { type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this });
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
