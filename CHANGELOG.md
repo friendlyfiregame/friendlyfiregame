@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2020-09-06
+
 ### Added
 
 - A preview sound is being played When switching the character's voice to indicate
@@ -18,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A brand new scene graph API is now used to render certain parts of the game.
 
-## Fixed
+### Fixed
 
 - Default key functionality in browsers is now prevented to suppress unwanted scrolling
   when using space and/or cursor keys. This affects scenarios where the game is embedded
