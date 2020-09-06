@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A preview sound is being played When switching the character's voice to indicate
   how the choice will affect perceived gameplay.
 
+- The key combination Alt+Enter can now be used to toggle full screen mode.
+
+### Changed
+
+- A brand new scene graph API is now used to render certain parts of the game.
+
 ## Fixed
 
 - Default key functionality in browsers is now prevented to suppress unwanted scrolling
