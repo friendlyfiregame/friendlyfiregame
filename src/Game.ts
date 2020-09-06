@@ -59,7 +59,7 @@ export abstract class Game {
                     if (lockingEnabled) {
                         await navigator.keyboard.lock(["Escape"]);
                     }
-                    await this.canvas.requestFullscreen();
+                    await document.body.requestFullscreen();
                 } else {
                     if (lockingEnabled) {
                         navigator.keyboard.unlock();
