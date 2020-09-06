@@ -107,7 +107,7 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
-        this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
+        this.face = new Face(scene, EyeType.STANDARD, 0, 6);
     }
 
     public showDialoguePrompt(): boolean {
@@ -167,7 +167,7 @@ export class Fire extends NPC {
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         if (this.thinkBubble) {
@@ -175,10 +175,6 @@ export class Fire extends NPC {
         }
 
         this.speechBubble.draw(ctx);
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public update(dt: number): void {
@@ -239,10 +235,8 @@ export class Fire extends NPC {
         }
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x, this.y + 32);
+            this.dialoguePrompt.update(dt, 0, 32);
         }
-
-        this.speechBubble.update(this.x, this.y);
     }
 
     public feed(wood: Wood): void {

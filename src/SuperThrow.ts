@@ -31,24 +31,15 @@ export class SuperThrow extends NPC {
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
-        this.scene.renderer.addAseprite(
+        this.scene.renderer.drawAseprite(
+            ctx,
             SuperThrow.sprite,
             "idle",
-            this.x, this.y - floatOffsetY,
+            0, -floatOffsetY,
             RenderingLayer.ENTITIES,
             this.direction
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.speechBubble.draw(ctx);
-    }
-
-    public update(dt: number): void {
-        super.update(dt);
-
-        this.speechBubble.update(this.x, this.y);
     }
 }

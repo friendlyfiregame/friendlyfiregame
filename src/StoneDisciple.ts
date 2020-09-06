@@ -16,7 +16,7 @@ export class StoneDisciple extends NPC {
         super(scene, x, y, 32, 26);
         this.direction = -1;
         this.lookAtPlayer = true;
-        this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);
+        this.face = new Face(scene, EyeType.STONEDISCIPLE, 0, 0);
     }
 
     protected showDialoguePrompt(): boolean {
@@ -35,18 +35,14 @@ export class StoneDisciple extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(
-            StoneDisciple.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction
+        this.scene.renderer.drawAseprite(
+            ctx, StoneDisciple.sprite, "idle", 0, 0, RenderingLayer.ENTITIES, this.direction
         );
 
         this.drawFace(ctx, false);
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         this.speechBubble.draw(ctx);
@@ -54,8 +50,6 @@ export class StoneDisciple extends NPC {
 
     public update(dt: number): void {
         super.update(dt);
-
-        this.dialoguePrompt.update(dt, this.x, this.y + this.height);
-        this.speechBubble.update(this.x, this.y);
+        this.dialoguePrompt.update(dt, 0, this.height);
     }
 }

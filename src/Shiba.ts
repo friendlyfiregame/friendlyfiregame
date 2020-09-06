@@ -179,19 +179,17 @@ export class Shiba extends ScriptableNPC {
         if (this.move === 0) {
             const tag = this.peeing ? "peeing" : "idle";
 
-            this.scene.renderer.addAseprite(
-                Shiba.sprite, tag, this.x, this.y, RenderingLayer.ENTITIES, this.direction
+            this.scene.renderer.drawAseprite(
+                ctx, Shiba.sprite, tag, 0, 0, RenderingLayer.ENTITIES, this.direction
             );
         } else {
-            this.scene.renderer.addAseprite(
-                Shiba.sprite, "walk", this.x, this.y, RenderingLayer.ENTITIES, this.direction
+            this.scene.renderer.drawAseprite(
+                ctx, Shiba.sprite, "walk", 0, 0, RenderingLayer.ENTITIES, this.direction
             );
         }
 
-        if (this.scene.showBounds) this.drawBounds();
-
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         if (this.thinkBubble) {
@@ -236,12 +234,7 @@ export class Shiba extends ScriptableNPC {
             }
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 20);
-        this.speechBubble.update(this.x, this.y);
-
-        if (this.thinkBubble) {
-            this.thinkBubble.update(this.x, this.y);
-        }
+        this.dialoguePrompt.update(dt, 0, 20);
     }
 
     public isReadyForConversation(): boolean | null {

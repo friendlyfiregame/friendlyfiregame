@@ -16,9 +16,9 @@ export abstract class NPC extends PhysicsEntity {
     public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public thinkBubble: SpeechBubble | null = null;
-    public speechBubble = new SpeechBubble(this.scene, this.x, this.y);
+    public speechBubble = new SpeechBubble(this.scene);
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
+    public dialoguePrompt = new DialoguePrompt(this.scene);
     private lastEndedConversation = -Infinity;
     protected met = false;
 
@@ -42,7 +42,7 @@ export abstract class NPC extends PhysicsEntity {
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y);
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene);
         thinkBubble.setMessage(message);
         thinkBubble.show();
 
@@ -74,8 +74,8 @@ export abstract class NPC extends PhysicsEntity {
         return true;
     }
 
-    protected drawDialoguePrompt(): void {
-        this.dialoguePrompt.draw();
+    protected drawDialoguePrompt(ctx: CanvasRenderingContext2D): void {
+        this.dialoguePrompt.draw(ctx);
     }
 
     protected drawGreeting(ctx: CanvasRenderingContext2D): void {

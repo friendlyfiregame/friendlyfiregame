@@ -175,8 +175,7 @@ export class Bird extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
-        if (this.scene.showBounds) this.drawBounds();
+        this.scene.renderer.drawAseprite(ctx, Bird.sprite, "idle", 0, 0, RenderingLayer.ENTITIES, this.direction);
         this.speechBubble.draw(ctx);
     }
 
@@ -228,7 +227,5 @@ export class Bird extends NPC {
                 this.decelerateX(-PLAYER_ACCELERATION_AIR * dt);
             }
         }
-
-        this.speechBubble.update(this.x, this.y);
     }
 }

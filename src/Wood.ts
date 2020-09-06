@@ -40,10 +40,8 @@ export class Wood extends PhysicsEntity {
         this.floatingPosition = floatingPosition;
     }
 
-    public draw(): void {
-        this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-        if (this.scene.showBounds) this.drawBounds();
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.drawAseprite(ctx, Wood.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
     }
 
     public isCarried(): boolean {

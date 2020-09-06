@@ -25,27 +25,23 @@ export class Portal extends Entity {
         this.animationState++;
     }
 
-    public draw(): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         switch (this.animationState) {
             case PortalAnimationState.WAITING:
-                this.animator.play("empty", 1);
+                this.animator.play("empty", ctx, 1);
                 break;
             case PortalAnimationState.FADEIN:
-                this.animator.play("fadein", 1, { loop: false, callback: this.nextAnimationState.bind(this) });
+                this.animator.play("fadein", ctx, 1, { loop: false, callback: this.nextAnimationState.bind(this) });
                 break;
             case PortalAnimationState.IDLE:
-                this.animator.play("idle", 1);
+                this.animator.play("idle", ctx, 1);
                 break;
             case PortalAnimationState.FADEOUT:
-                this.animator.play("fadeout", 1, { loop: false, callback: this.nextAnimationState.bind(this) });
+                this.animator.play("fadeout", ctx, 1, { loop: false, callback: this.nextAnimationState.bind(this) });
                 break;
             case PortalAnimationState.GONE:
-                this.animator.play("empty", 1);
+                this.animator.play("empty", ctx, 1);
                 break;
-        }
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
         }
     }
 

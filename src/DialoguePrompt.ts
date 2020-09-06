@@ -8,22 +8,21 @@ export class DialoguePrompt {
     private static sprite: Aseprite;
 
     private scene: GameScene;
-    private x: number;
-    private y: number;
+    private x = 0;
+    private y = 0;
     private timeAlive = 0;
     private floatAmount = 2;
     private floatSpeed = 5;
 
-    public constructor(scene: GameScene, x: number, y: number) {
+    public constructor(scene: GameScene) {
         this.scene = scene;
-        this.x = x;
-        this.y = y;
     }
 
-    public draw(): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
-        this.scene.renderer.addAseprite(
+        this.scene.renderer.drawAseprite(
+            ctx,
             DialoguePrompt.sprite,
             "idle",
             this.x, this.y - floatOffsetY,

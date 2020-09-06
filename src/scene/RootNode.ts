@@ -32,7 +32,7 @@ export class RootNode<T extends Game = Game> extends SceneNode<T> {
      */
     public constructor(scene: Scene<T, unknown>, expose: (update: UpdateRootNode, draw: DrawRootNode) => void) {
         super({ anchor: Direction.TOP_LEFT, childAnchor: Direction.TOP_LEFT });
-        this.scene = scene;
+        this.setScene(scene);
         expose(this.updateAll.bind(this), this.drawAllWithBounds.bind(this));
     }
 

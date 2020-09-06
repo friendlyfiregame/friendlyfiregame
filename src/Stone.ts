@@ -33,7 +33,7 @@ export class Stone extends NPC implements CollidableGameObject {
         super(scene, x, y, 26, 50);
 
         this.direction = -1;
-        this.face = new Face(scene, this, EyeType.STONE, 0, 21);
+        this.face = new Face(scene, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 
@@ -60,22 +60,19 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(
+        this.scene.renderer.drawAseprite(
+            ctx,
             Stone.sprite,
             "idle",
-            this.x, this.y - 1,
+            0, -1,
             RenderingLayer.ENTITIES,
             this.direction
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.drawFace(ctx, false);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         this.speechBubble.draw(ctx);
@@ -117,8 +114,7 @@ export class Stone extends NPC implements CollidableGameObject {
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 48);
-        this.speechBubble.update(this.x, this.y);
+        this.dialoguePrompt.update(dt, 0, 48);
     }
 
     public collidesWith(x: number, y: number): number {

@@ -169,7 +169,6 @@ export class Player extends PhysicsEntity {
 
     public speechBubble = new SpeechBubble(
         this.scene,
-        this.x, this.y,
         undefined,
         undefined, undefined, undefined, undefined,
         undefined,
@@ -462,7 +461,7 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.scene.gameObjects.push(
+                this.scene.rootNode.appendChild(
                     new Snowball(
                         this.scene,
                         this.x, this.y + this.height * 0.75,
@@ -492,9 +491,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(
-            this.scene, this.x, this.y
-        );
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene);
 
         thinkBubble.setMessage(message);
         thinkBubble.show();
@@ -647,17 +644,18 @@ export class Player extends PhysicsEntity {
     }
 
     private drawTooltip(
+        ctx: CanvasRenderingContext2D,
         text: string, buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
     ): void {
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         const measure = Player.font.measureText(text);
         const gap = 6;
         const offsetY = 12;
-        const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
-        const textPositionY = -this.y + offsetY;
+        const textPositionX = Math.round(-((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
+        const textPositionY = offsetY;
 
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.UI,
             position: {
@@ -668,7 +666,7 @@ export class Player extends PhysicsEntity {
             animationTag: buttonTag,
         });
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.TEXT,
             layer: RenderingLayer.UI,
             text,
@@ -698,17 +696,14 @@ export class Player extends PhysicsEntity {
             animation = animation + "-carry";
         }
 
-        this.scene.renderer.addAseprite(
+        this.scene.renderer.drawAseprite(
+            ctx,
             sprite,
             animation,
-            this.x, this.y - 1,
+            0, -1,
             RenderingLayer.PLAYER,
             this.direction
         );
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
 
         if (
             this.closestNPC
@@ -716,17 +711,17 @@ export class Player extends PhysicsEntity {
             && !this.playerConversation
             && this.closestNPC.isReadyForConversation()
         ) {
-            this.drawTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
+            this.drawTooltip(ctx, this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
         } else if (this.readableTrigger) {
-            this.drawTooltip("Examine", ControllerAnimationTags.INTERACT);
+            this.drawTooltip(ctx, "Examine", ControllerAnimationTags.INTERACT);
         } else if (this.canEnterDoor()) {
-            this.drawTooltip("Enter", ControllerAnimationTags.OPEN_DOOR);
+            this.drawTooltip(ctx, "Enter", ControllerAnimationTags.OPEN_DOOR);
         } else if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip("Throw stone", ControllerAnimationTags.ACTION);
+            this.drawTooltip(ctx, "Throw stone", ControllerAnimationTags.ACTION);
         } else if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip("Plant seed", ControllerAnimationTags.ACTION);
+            this.drawTooltip(ctx, "Plant seed", ControllerAnimationTags.ACTION);
         } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip("Dance", ControllerAnimationTags.INTERACT);
+            this.drawTooltip(ctx, "Dance", ControllerAnimationTags.INTERACT);
         }
 
         if (this.dance) {
@@ -858,12 +853,6 @@ export class Player extends PhysicsEntity {
                 this.y = pos.y;
                 this.scene.camera.setBounds(this.getCurrentMapBounds());
             }
-        }
-
-        this.speechBubble.update(this.x, this.y);
-
-        if (this.thinkBubble) {
-            this.thinkBubble.update(this.x, this.y);
         }
 
         if (this.playerConversation) {
@@ -1124,13 +1113,16 @@ export class Player extends PhysicsEntity {
                         }
 
                         // Remove a single boss fight barrier
-                        const rainingCloudCount = this.scene.gameObjects.filter(
-                            o => o instanceof Cloud && o.isRaining()
-                        ).length;
+                        let rainingCloudCount = 0;
+                        this.scene.rootNode.forEachChild(child => {
+                            if (child instanceof Cloud && child.isRaining()) {
+                                rainingCloudCount++;
+                            }
+                        });
 
                         const wallIdentifier = `wall${rainingCloudCount - 1}`;
 
-                        const targetWall = this.scene.gameObjects.find(
+                        const targetWall = this.scene.rootNode.findChild(
                             o => o instanceof Wall && o.identifier === wallIdentifier
                         ) as Wall | undefined;
 

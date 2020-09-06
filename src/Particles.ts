@@ -2,6 +2,8 @@ import { GameScene } from "./scenes/GameScene";
 import { GRAVITY } from "./constants";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { Vector2Like } from "./graphics/Vector2";
+import { SceneNode } from "./scene/SceneNode";
+import { FriendlyFire } from "./FriendlyFire";
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
@@ -31,11 +33,12 @@ export interface ParticleEmitterArguments {
     update?: (p: Particle) => void;
 }
 
-export class Particles {
+export class Particles extends SceneNode<FriendlyFire> {
     private scene: GameScene;
     private emitters: ParticleEmitter[] = [];
 
     public constructor(scene: GameScene) {
+        super();
         this.scene = scene;
     }
 

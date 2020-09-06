@@ -13,17 +13,14 @@ export class Campfire extends Entity {
         super(scene, x, y, 14, 28, false);
     }
 
-    public draw(): void {
-        this.scene.renderer.addAseprite(
+    public draw(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.drawAseprite(
+            ctx,
             Campfire.sprite,
             "idle",
-            this.x, this.y - 2,
+            0, -2,
             RenderingLayer.ENTITIES
         );
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public update(): void {}

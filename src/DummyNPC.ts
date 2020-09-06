@@ -36,7 +36,7 @@ export class DummyNPC extends NPC {
         );
 
         ctx.restore();
-        this.drawDialoguePrompt();
+        this.drawDialoguePrompt(ctx);
         this.drawGreeting(ctx);
     }
 

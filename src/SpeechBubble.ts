@@ -74,8 +74,6 @@ export class SpeechBubble {
 
     constructor(
         private scene: GameScene,
-        public anchorX: number,
-        public anchorY: number,
         private lineHeightFactor = 1,
         private paddingTop = 3,
         private paddingBottom = 4,
@@ -84,8 +82,8 @@ export class SpeechBubble {
         private color = "white",
         private relativeToScreen = false
     ) {
-        this.x = Math.round(anchorX + this.offset.x);
-        this.y = Math.round(anchorY + this.offset.y);
+        this.x = Math.round(this.offset.x);
+        this.y = Math.round(this.offset.y);
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
         this.paddingHorizontal = this.paddingLeft + this.paddingRight;
         this.paddingVertical = this.paddingTop + this.paddingBottom;
@@ -168,7 +166,7 @@ export class SpeechBubble {
             posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
         } else {
             // Check if Speech Bubble clips the viewport and correct position
-            const visibleRect = this.scene.camera.getVisibleRect();
+            const visibleRect = this.scene.camera.getVisibleRect(0, 0);
             const relativeX = posX - visibleRect.x;
 
             const clipAmount = Math.max(
@@ -187,7 +185,7 @@ export class SpeechBubble {
         const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.paddingLeft;
         const bubbleYPos = -posY - this.height;
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.SPEECH_BUBBLE,
             layer: RenderingLayer.UI,
             fillColor: this.color,
@@ -210,7 +208,7 @@ export class SpeechBubble {
         for (let i = 0; i < this.messageLines.length; i++) {
             const textYPos = Math.round(bubbleYPos + this.paddingTop + i * this.lineHeight);
 
-            this.scene.renderer.add({
+            this.scene.renderer.draw(ctx, {
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
                 text: this.messageLines[i],
@@ -229,7 +227,7 @@ export class SpeechBubble {
             const textYPos = Math.round(bubbleYPos + this.paddingTop + i * this.lineHeight);
 
             if (isSelected) {
-                this.scene.renderer.add({
+                this.scene.renderer.draw(ctx, {
                     type: RenderingType.TEXT,
                     layer: RenderingLayer.UI,
                     text: ConversationLine.OPTION_MARKER,
@@ -243,7 +241,7 @@ export class SpeechBubble {
                 });
             }
 
-            this.scene.renderer.add({
+            this.scene.renderer.draw(ctx, {
                 type: RenderingType.TEXT,
                 layer: RenderingLayer.UI,
                 text: this.options[i],
@@ -256,11 +254,6 @@ export class SpeechBubble {
                 asset: SpeechBubble.font
             });
         }
-    }
-
-    public update(anchorX: number, anchorY: number): void {
-        this.x = Math.round(anchorX + this.offset.x);
-        this.y = Math.round(anchorY + this.offset.y);
     }
 
     private determineMaxLineLength(message: string[]): number {

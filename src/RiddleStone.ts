@@ -18,13 +18,9 @@ export class RiddleStone extends Entity {
         this.row = properties.row || 0;
     }
 
-    public draw(): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
-            this.scene.renderer.addAseprite(RiddleStone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-            if (this.scene.showBounds) {
-                this.drawBounds();
-            }
+            this.scene.renderer.drawAseprite(ctx, RiddleStone.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
         }
     }
 

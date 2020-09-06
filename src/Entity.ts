@@ -1,7 +1,9 @@
 import { Animator } from "./Animator";
 import { GameObject, GameScene } from "./scenes/GameScene";
 import { GameObjectProperties } from "./MapInfo";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { FriendlyFire } from "./FriendlyFire";
+import { SceneNode } from "./scene/SceneNode";
+import { Direction } from "./geom/Direction";
 
 export interface EntityDistance {
     source: Entity;
@@ -38,18 +40,21 @@ export function createEntity(
     return new constructor(scene, x, y, properties);
 }
 
-export abstract class Entity implements GameObject {
+export abstract class Entity extends SceneNode<FriendlyFire> implements GameObject {
     protected timeAlive = 0;
     protected animator = new Animator(this);
 
     constructor(
         public scene: GameScene,
-        public x: number,
-        public y: number,
-        public width = 0,
-        public height = 0,
+        x: number,
+        y: number,
+        width = 0,
+        height = 0,
         public isTrigger = true
-    ) {}
+    ) {
+        super({ x, y, width, height, anchor: Direction.TOP_LEFT });
+        this.mirroredY = true;
+    }
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
 
@@ -58,8 +63,8 @@ export abstract class Entity implements GameObject {
     }
 
     public distanceTo(entity: Entity): number {
-        const a = this.x - entity.x;
-        const b = this.y - entity.y;
+        const a = this.getX() - entity.getX();
+        const b = this.getY() - entity.getY();
 
         return Math.sqrt(a * a + b * b);
     }
@@ -83,7 +88,7 @@ export abstract class Entity implements GameObject {
     protected getEntitiesInRange(range: number): EntityDistance[] {
         const entitiesInRange: EntityDistance[] = [];
 
-        this.scene.gameObjects.forEach(gameObject => {
+        this.scene.rootNode.forEachChild(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
 
@@ -99,7 +104,7 @@ export abstract class Entity implements GameObject {
     protected getClosestEntity(): Entity {
         const entitiesInRange: EntityDistance[] = [];
 
-        this.scene.gameObjects.forEach(gameObject => {
+        this.scene.rootNode.forEachChild(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
                 entitiesInRange.push({source: this, target: gameObject, distance});
@@ -112,27 +117,11 @@ export abstract class Entity implements GameObject {
     }
 
     public getBounds(margin = 0): Bounds {
-        const width = this.width + (margin * 2);
-        const height = this.height + (margin * 2);
-        const x = this.x - (this.width / 2) - margin;
-        const y = this.y - -this.height + margin;
+        const width = this.getWidth() + (margin * 2);
+        const height = this.getHeight() + (margin * 2);
+        const x = this.getX() - (this.getWidth() / 2) - margin;
+        const y = this.getY() - -this.getHeight() + margin;
         return { x, y, width, height };
-    }
-
-    protected drawBounds(): void {
-        this.scene.renderer.add({
-            type: RenderingType.RECT,
-            layer: RenderingLayer.DEBUG,
-            position: {
-                x: this.getBounds().x,
-                y: -this.getBounds().y
-            },
-            lineColor: "red",
-            dimension: {
-               width: this.getBounds().width,
-               height: this.getBounds().height
-            }
-        });
     }
 
     /**
@@ -147,9 +136,5 @@ export abstract class Entity implements GameObject {
         }
 
         return collisions.findIndex(o => o.name === triggerName) > -1;
-    }
-
-    public remove(): void {
-        this.scene.removeGameObject(this);
     }
 }

@@ -20,11 +20,9 @@ export class Tree extends NPC {
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 78, 140);
 
-        this.face = new Face(scene, this, EyeType.TREE, 5, 94);
+        this.face = new Face(scene, EyeType.TREE, 5, 94);
         this.seed = new Seed(scene, x, y);
         this.wood = new Wood(scene, x, y);
-
-        this.startDialog();
     }
 
     public showDialoguePrompt(): boolean {
@@ -42,16 +40,12 @@ export class Tree extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
+        this.scene.renderer.drawAseprite(ctx, Tree.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
 
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         this.speechBubble.draw(ctx);
@@ -61,16 +55,12 @@ export class Tree extends NPC {
         super.update(dt);
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x + 4, this.y + 128);
+            this.dialoguePrompt.update(dt, 4, 128);
         }
     }
 
-    public startDialog(): void {
-        this.speechBubble.update(this.x, this.y);
-    }
-
     public spawnSeed(): Seed {
-        if (!this.scene.gameObjects.includes(this.seed)) {
+        if (!this.seed.isInScene()) {
             this.scene.addGameObject(this.seed);
         }
 
@@ -82,7 +72,7 @@ export class Tree extends NPC {
     }
 
     public spawnWood(): Wood {
-        if (!this.scene.gameObjects.includes(this.wood)) {
+        if (!this.wood.isInScene()) {
             this.scene.addGameObject(this.wood);
         }
 

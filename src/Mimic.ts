@@ -44,27 +44,18 @@ export class Mimic extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         switch (this.state) {
             case MimicState.SLEEPING:
-                this.animator.play("sleeping", this.direction);
+                this.animator.play("sleeping", ctx, this.direction);
                 break;
             case MimicState.OPEN_UP:
-                this.animator.play("open", this.direction, { loop: false, callback: this.nextState.bind(this) });
+                this.animator.play("open", ctx, this.direction, { loop: false, callback: this.nextState.bind(this) });
                 break;
             case MimicState.IDLE:
-                this.animator.play("idle", this.direction);
+                this.animator.play("idle", ctx, this.direction);
                 break;
         }
 
         this.speechBubble.draw(ctx);
-    }
-
-    public update(dt: number): void {
-        super.update(dt);
-        this.speechBubble.update(this.x, this.y);
     }
 }

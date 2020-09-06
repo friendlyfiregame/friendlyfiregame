@@ -6,6 +6,8 @@ import { GameObjectInfo } from "./MapInfo";
 import { getImageData } from "./graphics";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import { SceneNode } from "./scene/SceneNode";
+import { FriendlyFire } from "./FriendlyFire";
 
 export enum Environment {
     AIR = 0,
@@ -19,7 +21,7 @@ export enum Environment {
 
 export const validEnvironments = Object.values(Environment);
 
-export class World implements GameObject {
+export class World extends SceneNode<FriendlyFire> implements GameObject {
     @asset("maps/level.png")
     private static foreground: HTMLImageElement;
 
@@ -43,6 +45,7 @@ export class World implements GameObject {
     private raining = false;
 
     public constructor(scene: GameScene) {
+        super();
         this.scene = scene;
 
         const rainSpawnPosition = this.scene.pointsOfInterest.find(
@@ -129,9 +132,9 @@ export class World implements GameObject {
      *         which has specific meaning which isn't defined yet).
      */
     public collidesWith(
-        x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
+        x: number, y: number, ignoreObjects: SceneNode[] = [], ignore: Environment[] = []
     ): number {
-        for (const gameObject of this.scene.gameObjects) {
+        for (const gameObject of this.scene.rootNode.descendants()) {
             if (
                 gameObject !== this
                 && !ignoreObjects.includes(gameObject)
@@ -180,7 +183,7 @@ export class World implements GameObject {
     ): Entity[] {
         const collidesWith: Entity[] = [];
 
-        for (const gameObject of this.scene.gameObjects) {
+        for (const gameObject of this.scene.rootNode.descendants()) {
             if (
                 gameObject !== sourceEntity
                 && !(gameObject instanceof Particles)
@@ -269,9 +272,9 @@ export class World implements GameObject {
     }
 
     public getObjectAt(
-        x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
-    ): GameObject | null {
-        for (const gameObject of this.scene.gameObjects) {
+        x: number, y: number, ignoreObjects: SceneNode[] = [], ignore: Environment[] = []
+    ): SceneNode | null {
+        for (const gameObject of this.scene.rootNode.descendants()) {
             if (
                 gameObject !== this
                 && !ignoreObjects.includes(gameObject)
@@ -297,7 +300,7 @@ export class World implements GameObject {
      * @return 0 if no collision. Type of first collision along the line otherwise.
      */
     public collidesWithVerticalLine(
-        x: number, y: number, height: number, ignoreObjects?: GameObject[], ignore?: Environment[]
+        x: number, y: number, height: number, ignoreObjects?: SceneNode[], ignore?: Environment[]
     ): number {
         for (let i = 0; i < height; i++) {
             const collision = this.collidesWith(
@@ -320,7 +323,7 @@ export class World implements GameObject {
      * @return The Y coordinate of the ground below the given coordinate.
      */
     public getGround(
-        x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]
+        x: number, y: number, ignoreObjects?: SceneNode[], ignore?: Environment[]
     ): number {
         while (
             y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)

@@ -15,23 +15,15 @@ export class Caveman extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(
+        this.scene.renderer.drawAseprite(
+            ctx,
             Caveman.sprite,
             "idle",
-            this.x, this.y,
+            0, 0,
             RenderingLayer.ENTITIES,
             this.direction
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.speechBubble.draw(ctx);
-    }
-
-    public update(dt: number): void {
-        super.update(dt);
-        this.speechBubble.update(this.x, this.y);
     }
 }

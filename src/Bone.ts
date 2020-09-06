@@ -18,14 +18,14 @@ export class Bone extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 20, 10);
+        this.setLayer(RenderingLayer.ENTITIES);
+        this.setShowBounds(true);
     }
 
-    public draw(): void {
-        this.scene.renderer.addAseprite(Bone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
+    public draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
+        this.scene.renderer.drawAseprite(ctx, Bone.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
+        ctx.restore();
     }
 
     public isCarried(): boolean {

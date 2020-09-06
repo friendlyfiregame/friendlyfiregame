@@ -35,7 +35,7 @@ export class Seed extends NPC {
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);
         this.wood = new Wood(scene, x, y);
-        this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
+        this.face = new Face(scene, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
 
@@ -58,17 +58,14 @@ export class Seed extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(
+        this.scene.renderer.drawAseprite(
+            ctx,
             Seed.sprite,
             this.getSpriteTag(),
-            this.x, this.y - 1,
+            0, -1,
             RenderingLayer.ENTITIES,
             undefined
         );
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
 
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
@@ -142,12 +139,10 @@ export class Seed extends NPC {
         } else if (this.state === SeedState.GROWN) {
             // TODO Special update behavior when grown
         }
-
-        this.speechBubble.update(this.x, this.y);
     }
 
     public spawnWood(): Wood {
-        if (!this.scene.gameObjects.includes(this.wood)) {
+        if (!this.wood.isInScene()) {
             this.scene.addGameObject(this.wood);
         }
         this.wood.x = this.x;

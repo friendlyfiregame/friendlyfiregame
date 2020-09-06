@@ -90,22 +90,24 @@ export class SceneNode<T extends Game = Game> {
     private lastChild: SceneNode<T> | null = null;
 
     /** The scene this node is connected to. Null if none. */
-    protected scene: Scene<T, unknown> | null = null;
+    #scene: Scene<T, unknown> | null = null;
 
     /** The ID of the node. Null if none. */
     private id: string | null;
 
     /** The horizontal position relative to parent node. */
-    private x: number;
+    #x: number;
 
     /** The vertical position relative to parent node. */
-    private y: number;
+    #y: number;
+
+    public mirroredY = false;
 
     /** The node width. */
-    private width: number;
+    #width: number;
 
     /** The node height. */
-    private height: number;
+    #height: number;
 
     /**
      * The anchor defining the origin of this scene node. When set to TOP_LEFT for example then the X/Y coordinates of
@@ -163,10 +165,10 @@ export class SceneNode<T extends Game = Game> {
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
             childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = 0 }: SceneNodeArgs = {}) {
         this.id = id;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.#x = x;
+        this.#y = y;
+        this.#width = width;
+        this.#height = height;
         this.opacity = opacity;
         this.anchor = anchor;
         this.childAnchor = childAnchor;
@@ -199,7 +201,23 @@ export class SceneNode<T extends Game = Game> {
      * @return The X position.
      */
     public getX(): number {
-        return this.x;
+        return this.#x;
+    }
+
+    public get x(): number {
+        return this.#x;
+    }
+
+    public set x(x: number) {
+        this.setX(x);
+    }
+
+    public get y(): number {
+        return this.#y;
+    }
+
+    public set y(y: number) {
+        this.setY(y);
     }
 
     /**
@@ -208,8 +226,8 @@ export class SceneNode<T extends Game = Game> {
      * @param x - The horizontal position to set.
      */
     public setX(x: number): this {
-        if (x !== this.x) {
-            this.x = x;
+        if (x !== this.#x) {
+            this.#x = x;
             this.invalidate();
         }
         return this;
@@ -221,7 +239,7 @@ export class SceneNode<T extends Game = Game> {
      * @return The Y position.
      */
     public getY(): number {
-        return this.y;
+        return this.#y;
     }
 
     /**
@@ -230,8 +248,8 @@ export class SceneNode<T extends Game = Game> {
      * @param y - The vertical position to set.
      */
     public setY(y: number): this {
-        if (y !== this.y) {
-            this.y = y;
+        if (y !== this.#y) {
+            this.#y = y;
             this.invalidate();
         }
         return this;
@@ -245,8 +263,8 @@ export class SceneNode<T extends Game = Game> {
      */
     public moveBy(x: number, y: number): this {
         if (x !== 0 || y !== 0) {
-            this.x += x;
-            this.y += y;
+            this.#x += x;
+            this.#y += y;
             this.invalidate();
         }
         return this;
@@ -259,9 +277,9 @@ export class SceneNode<T extends Game = Game> {
      * @param y - The vertical position to move to.
      */
     public moveTo(x: number, y: number): this {
-        if (x !== this.x || y !== this.y) {
-            this.x = x;
-            this.y = y;
+        if (x !== this.#x || y !== this.#y) {
+            this.#x = x;
+            this.#y = y;
             this.invalidate();
         }
         return this;
@@ -273,7 +291,15 @@ export class SceneNode<T extends Game = Game> {
      * @return The node width.
      */
     public getWidth(): number {
-        return this.width;
+        return this.#width;
+    }
+
+    public get width(): number {
+        return this.#width;
+    }
+
+    public set width(width: number) {
+        this.setHeight(width);
     }
 
     /**
@@ -282,8 +308,8 @@ export class SceneNode<T extends Game = Game> {
      * @param width - The width to set.
      */
     public setWidth(width: number): this {
-        if (width !== this.width) {
-            this.width = width;
+        if (width !== this.#width) {
+            this.#width = width;
             this.invalidate();
             this.invalidateBounds();
         }
@@ -296,8 +322,17 @@ export class SceneNode<T extends Game = Game> {
      * @return The node width.
      */
     public getHeight(): number {
-        return this.height;
+        return this.#height;
     }
+
+    public get height(): number {
+        return this.#height;
+    }
+
+    public set height(height: number) {
+        this.setHeight(height);
+    }
+
 
     /**
      * Sets the height of the node.
@@ -305,8 +340,8 @@ export class SceneNode<T extends Game = Game> {
      * @param height - The height to set.
      */
     public setHeight(height: number): this {
-        if (height !== this.height) {
-            this.height = height;
+        if (height !== this.#height) {
+            this.#height = height;
             this.invalidate();
             this.invalidateBounds();
         }
@@ -320,9 +355,9 @@ export class SceneNode<T extends Game = Game> {
      * @param height - The height to set.
      */
     public resizeTo(width: number, height: number): this {
-        if (width !== this.width || height !== this.height) {
-            this.width = width;
-            this.height = height;
+        if (width !== this.#width || height !== this.#height) {
+            this.#width = width;
+            this.#height = height;
             this.invalidate();
             this.invalidateBounds();
         }
@@ -443,7 +478,7 @@ export class SceneNode<T extends Game = Game> {
      * @return The current scene or null if none.
      */
     public getScene(): Scene<T> | null {
-        return this.scene;
+        return this.#scene;
     }
 
     /**
@@ -452,17 +487,26 @@ export class SceneNode<T extends Game = Game> {
      *
      * @param scene - The scene the node belongs to from now on. null to unset the current scene.
      */
-    private setScene(scene: Scene<T> | null): void {
-        if (scene !== this.scene) {
-            if (this.scene) {
+    protected setScene(scene: Scene<T> | null): void {
+        if (scene !== this.#scene) {
+            if (this.#scene) {
                 this.deactivate();
             }
-            this.scene = scene;
+            this.#scene = scene;
             if (scene) {
                 this.activate();
             }
             this.forEachChild(node => node.setScene(scene));
         }
+    }
+
+    /**
+     * Checks if scene node is present in a scene.
+     *
+     * @return True if in scene, false if not.
+     */
+    public isInScene(): boolean {
+        return this.#scene != null;
     }
 
     /**
@@ -556,7 +600,7 @@ export class SceneNode<T extends Game = Game> {
             this.firstChild = node;
         }
         node.parent = this;
-        node.setScene(this.scene);
+        node.setScene(this.#scene);
 
         node.invalidate();
         this.invalidate();
@@ -668,7 +712,7 @@ export class SceneNode<T extends Game = Game> {
         newNode.previousSibling = oldPrevious;
         newNode.nextSibling = refNode;
         newNode.parent = this;
-        newNode.setScene(this.scene);
+        newNode.setScene(this.#scene);
 
         return this.invalidate();
     }
@@ -753,6 +797,20 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns an iterator over all child nodes of this node.
+     *
+     * @return The child iterator.
+     */
+    public *children(): IterableIterator<SceneNode<T>> {
+        let node = this.firstChild;
+        while (node) {
+            const next = node.nextSibling;
+            yield node;
+            node = next;
+        }
+    }
+
+    /**
      * Iterates over all descendant nodes and calls the given callback with the currently iterated node as parameter.
      *
      * @param callback - The callback to call for each descendant node.
@@ -772,6 +830,26 @@ export class SceneNode<T extends Game = Game> {
             node = next;
         }
         return this;
+    }
+
+    /**
+     * Returns an iterator over all child nodes of this node.
+     *
+     * @return The child iterator.
+     */
+    public *descendants(): IterableIterator<SceneNode<T>> {
+        let node = this.firstChild;
+        while (node != null && node !== this) {
+            let next = node.firstChild;
+            if (next == null) {
+                next = node.nextSibling;
+            }
+            if (next == null) {
+                next = node.parent?.nextSibling ?? null;
+            }
+            yield(node);
+            node = next;
+        }
     }
 
     /**
@@ -881,9 +959,9 @@ export class SceneNode<T extends Game = Game> {
      */
     protected updateBoundsPolygon(bounds: Polygon2): void {
         bounds.addVertex(new Vector2(0, 0));
-        bounds.addVertex(new Vector2(this.width, 0));
-        bounds.addVertex(new Vector2(this.width, this.height));
-        bounds.addVertex(new Vector2(0, this.height));
+        bounds.addVertex(new Vector2(this.#width, 0));
+        bounds.addVertex(new Vector2(this.#width, this.#height));
+        bounds.addVertex(new Vector2(0, this.#height));
     }
 
     /**
@@ -1029,17 +1107,17 @@ export class SceneNode<T extends Game = Game> {
         if (parent != null) {
             this.sceneTransformation.setMatrix(parent.sceneTransformation);
             this.sceneTransformation.translate(
-                (Direction.getX(parent.childAnchor) + 1) / 2 * parent.width,
-                (Direction.getY(parent.childAnchor) + 1) / 2 * parent.height
+                (Direction.getX(parent.childAnchor) + 1) / 2 * parent.#width,
+                (Direction.getY(parent.childAnchor) + 1) / 2 * parent.#height
             );
         } else {
             this.sceneTransformation.reset();
         }
-        this.sceneTransformation.translate(this.x, this.y);
+        this.sceneTransformation.translate(this.#x, this.mirroredY ? -this.#y : this.#y);
         this.sceneTransformation.mul(this.transformation);
         this.sceneTransformation.translate(
-            -(Direction.getX(this.anchor) + 1) / 2 * this.width,
-            -(Direction.getY(this.anchor) + 1) / 2 * this.height
+            -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
+            -(Direction.getY(this.anchor) + 1) / 2 * this.#height
         );
 
         // Update child nodes
@@ -1116,17 +1194,17 @@ export class SceneNode<T extends Game = Game> {
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
-        ctx.translate(this.x, this.y);
+        ctx.translate(this.#x, this.mirroredY ? -this.#y : this.#y);
         this.transformation.transformCanvas(ctx);
         ctx.translate(
-            -(Direction.getX(this.anchor) + 1) / 2 * this.width,
-            -(Direction.getY(this.anchor) + 1) / 2 * this.height
+            -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
+            -(Direction.getY(this.anchor) + 1) / 2 * this.#height
         );
         const postDraw = layer === this.layer ? this.draw(ctx, width, height) : null;
         ctx.save();
         ctx.translate(
-            (Direction.getX(this.childAnchor) + 1) / 2 * this.width,
-            (Direction.getY(this.childAnchor) + 1) / 2 * this.height
+            (Direction.getX(this.childAnchor) + 1) / 2 * this.#width,
+            (Direction.getY(this.childAnchor) + 1) / 2 * this.#height
         );
         let flags = this.drawChildren(ctx, layer, width, height);
         ctx.restore();

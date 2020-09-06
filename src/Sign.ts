@@ -44,10 +44,9 @@ export class Sign extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
             position: {
                 x: -Sign.sprite.width >> 1,
                 y: -Sign.sprite.height
@@ -56,10 +55,6 @@ export class Sign extends NPC {
             animationTag: "idle",
             time: this.scene.gameTime * 1000
         });
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
 
         this.speechBubble.draw(ctx);
     }

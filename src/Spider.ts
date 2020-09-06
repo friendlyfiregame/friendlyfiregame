@@ -44,8 +44,8 @@ export class Spider extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(
-            Spider.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction
+        this.scene.renderer.drawAseprite(
+            ctx, Spider.sprite, "idle", 0, 0, RenderingLayer.ENTITIES, this.direction
         );
 
         const scale = (this.direction < 0) ? { x: -1, y: 1 } : undefined;
@@ -69,10 +69,8 @@ export class Spider extends NPC {
             time: this.scene.gameTime * 1000
         });
 
-        if (this.scene.showBounds) this.drawBounds();
-
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         this.speechBubble.draw(ctx);
@@ -86,7 +84,6 @@ export class Spider extends NPC {
         const eyeOffsetFrames = this.getSpriteMetadata().eyeOffsetFrames ?? [];
         this.eyeOffsetY = eyeOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 32);
-        this.speechBubble.update(this.x, this.y);
+        this.dialoguePrompt.update(dt, 0, 32);
     }
 }

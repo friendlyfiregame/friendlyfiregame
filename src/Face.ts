@@ -1,7 +1,6 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { NPC } from "./NPC";
 import { RenderingLayer, RenderingType } from "./Renderer";
 
 export enum FaceModes {
@@ -37,7 +36,6 @@ export class Face {
 
     constructor(
         private scene: GameScene,
-        private owner: NPC,
         private eyeType: EyeType,
         private offX = 0,
         private offY = 20
@@ -50,7 +48,7 @@ export class Face {
     public draw(ctx: CanvasRenderingContext2D): void {
         const sprite = Face.sprites[this.eyeType];
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
             asset: sprite,
@@ -59,8 +57,8 @@ export class Face {
                 y: 1
             },
             translation: {
-                x: this.owner.x + this.offX,
-                y: -this.owner.y - this.offY
+                x: this.offX,
+                y: -this.offY
             },
             position: {
                 x: -sprite.width >> 1,

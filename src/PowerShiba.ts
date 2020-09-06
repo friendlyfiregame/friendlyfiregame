@@ -63,15 +63,14 @@ export class PowerShiba extends NPC {
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
-        this.scene.renderer.addAseprite(
-            PowerShiba.sprite, "idle", this.x, this.y - floatOffsetY,
+        this.scene.renderer.drawAseprite(
+            ctx,
+            PowerShiba.sprite, "idle", 0, -floatOffsetY,
             RenderingLayer.ENTITIES
         );
 
-        if (this.scene.showBounds) this.drawBounds();
-
         if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
+            this.drawDialoguePrompt(ctx);
         }
 
         if (this.thinkBubble) {
@@ -83,11 +82,6 @@ export class PowerShiba extends NPC {
 
     public update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, this.x, this.y + 16);
-        this.speechBubble.update(this.x, this.y);
-
-        if (this.thinkBubble) {
-            this.thinkBubble.update(this.x, this.y);
-        }
+        this.dialoguePrompt.update(dt, 0, 16);
     }
 }

@@ -82,7 +82,7 @@ export class Animator {
      * @param ctx    - The canvas context to draw to.
      * @param config - Optional animation configuration.
      */
-    public play(tag: string, direction: number, config?: AnimationConfig): void {
+    public play(tag: string, ctx: CanvasRenderingContext2D, direction: number, config?: AnimationConfig): void {
         this.currentAnimation.direction = direction;
         this.updateAnimation(tag, config);
 
@@ -105,13 +105,13 @@ export class Animator {
          */
         if (animationTime === 0) animationTime += 1;
 
-        this.draw(animationTime);
+        this.draw(ctx, animationTime);
     }
 
-    private draw(animationTime: number): void {
+    private draw(ctx: CanvasRenderingContext2D, animationTime: number): void {
         if (this.sprite) {
-            this.entity.scene.renderer.addAseprite(
-                this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y,
+            this.entity.scene.renderer.drawAseprite(ctx,
+                this.sprite, this.currentAnimation.tag, 0, 0,
                 RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
             );
         }

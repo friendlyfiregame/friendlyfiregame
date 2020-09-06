@@ -3,8 +3,8 @@ import { asset } from "../Assets";
 import { Bird } from "../Bird";
 import { BitmapFont } from "../BitmapFont";
 import { Bone } from "../Bone";
-import { Bounds, createEntity } from "../Entity";
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from "../util";
+import { createEntity } from "../Entity";
+import { clamp, isDev, rnd, rndItem, timedRnd } from "../util";
 import { Camera } from "../Camera";
 import { Campfire } from "../Campfire";
 import { Caveman } from "../Caveman";
@@ -44,6 +44,7 @@ import { SuperThrow } from "../SuperThrow";
 import { Tree } from "../Tree";
 import { Wing } from "../Wing";
 import { World } from "../World";
+import { SceneNode } from "../scene/SceneNode";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -52,11 +53,11 @@ export interface GameObject {
     update(dt: number): void;
 }
 
-export interface CollidableGameObject extends GameObject {
+export interface CollidableGameObject extends SceneNode {
     collidesWith(x: number, y: number): number;
 }
 
-export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
+export function isCollidableGameObject(object: SceneNode): object is CollidableGameObject  {
     return typeof (object as CollidableGameObject).collidesWith === "function";
 }
 
@@ -162,7 +163,6 @@ export class GameScene extends Scene<FriendlyFire> {
     /* Total game time (time passed while game not paused) */
     public gameTime = 0;
 
-    public gameObjects: GameObject[] = [];
     public soundEmitters: SoundEmitter[] = [];
     public pointsOfInterest: GameObjectInfo[] = [];
     public triggerObjects: GameObjectInfo[] = [];
@@ -222,7 +222,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fireFuryEndTime = 0;
         Conversation.resetGlobals();
 
-        this.gameObjects = [
+        [
             this.world = new World(this),
             this.particles,
             ...this.soundEmitters,
@@ -248,7 +248,7 @@ export class GameScene extends Scene<FriendlyFire> {
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
                 }
             })
-        ];
+        ].forEach(node => node.appendTo(this.rootNode));
 
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
@@ -285,19 +285,16 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.fpsInterval != null) {
             clearInterval(this.fpsInterval);
         }
+        this.rootNode.clear();
     }
 
-    public addGameObject(object: GameObject): void {
+    public addGameObject(object: SceneNode): void {
         // Insert new item right before the player so player is always in front
-        this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, object);
+        this.rootNode.insertBefore(object, this.player);
     }
 
-    public removeGameObject(object: GameObject): void {
-        const index = this.gameObjects.indexOf(object);
-
-        if (index >= 0) {
-            this.gameObjects.splice(index, 1);
-        }
+    public removeGameObject(object: SceneNode): void {
+        object.remove();
     }
 
     public getBackgroundTrack(id: BgmId): BackgroundTrack {
@@ -361,13 +358,11 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private getGameObject<T>(type: new (...args: any[]) => T): T {
-        for (const gameObject of this.gameObjects) {
-            if (gameObject instanceof type) {
-                return gameObject;
-            }
+        const found = this.rootNode.findDescendant(descendant => descendant instanceof type);
+        if (found == null) {
+            throw new Error(`Game object of type ${type.name} not found.`);
         }
-
-        throw new Error(`Game object of type ${type.name} not found.`);
+        return found as unknown as T;
     }
 
     public activate(): void {
@@ -420,9 +415,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.dt = dt;
         this.gameTime += dt;
 
-        for (const obj of this.gameObjects) {
-            obj.update(dt);
-        }
+        super.update(dt);
 
         this.camera.update(dt, this.gameTime);
 
@@ -449,10 +442,6 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Draw stuff
         this.camera.applyTransform(ctx);
-
-        for (const obj of this.gameObjects) {
-            obj.draw(ctx, width, height);
-        }
 
         // Add all particle emitters to rendering queue
         this.particles.addEmittersToRenderingQueue();
@@ -486,6 +475,8 @@ export class GameScene extends Scene<FriendlyFire> {
         // Draw stuff from Rendering queue
         this.renderer.draw(ctx);
 
+        super.draw(ctx, width, height);
+
         ctx.restore();
 
         // Display FPS counter
@@ -501,23 +492,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.frameCounter++;
     }
 
-    private addSingleDebugBoundsToRenderingQueue(bounds: Bounds, color: string): void {
-        this.renderer.add({
-            type: RenderingType.RECT,
-            layer: RenderingLayer.DEBUG,
-            position: {
-                x: bounds.x,
-                y: -bounds.y
-            },
-            lineColor: color,
-            dimension: {
-                width: bounds.width,
-                height: bounds.height
-            }
-        });
-    }
-
     private addAllDebugBoundsToRenderingQueue(): void {
+        /* TODO Redirect to scene graph
         if (this.showBounds) {
             // Draw trigger bounds for collisions
             for (const obj of this.triggerObjects) {
@@ -535,6 +511,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "green");
             }
         }
+        */
     }
 
     public startApocalypseMusic(): void {
@@ -581,9 +558,14 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fireEmitter.emit();
         }
 
-        this.fire.growthTarget = Math.max(2, 20 - 6 * this.gameObjects.filter(
-            o => o instanceof Cloud && o.isRaining()
-        ).length);
+        let numRainClouds = 0;
+        this.rootNode.forEachChild(child => {
+            if (child instanceof Cloud && child.isRaining) {
+                numRainClouds++;
+            }
+        });
+
+        this.fire.growthTarget = Math.max(2, 20 - 6 * numRainClouds);
 
         if (this.fire.intensity < 6) {
             this.fire.intensity = Math.max(this.fire.intensity, 4);
@@ -695,7 +677,7 @@ export class GameScene extends Scene<FriendlyFire> {
                     true
                 );
 
-                this.gameObjects.push(cloud);
+                this.rootNode.appendChild(cloud);
             });
 
             // Teleport player and fire to boss spawn position
