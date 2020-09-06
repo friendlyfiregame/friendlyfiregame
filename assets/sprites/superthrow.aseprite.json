@@ -1,28 +1,28 @@
 { "frames": [
    {
     "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 17, "h": 22 },
+    "frame": { "x": 0, "y": 0, "w": 18, "h": 22 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 22 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 22 },
     "sourceSize": { "w": 18, "h": 22 },
     "duration": 150
    },
    {
     "filename": "1",
-    "frame": { "x": 17, "y": 0, "w": 17, "h": 22 },
+    "frame": { "x": 18, "y": 0, "w": 18, "h": 22 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 22 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 22 },
     "sourceSize": { "w": 18, "h": 22 },
     "duration": 150
    },
    {
     "filename": "2",
-    "frame": { "x": 0, "y": 22, "w": 17, "h": 22 },
+    "frame": { "x": 36, "y": 0, "w": 18, "h": 22 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 22 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 22 },
     "sourceSize": { "w": 18, "h": 22 },
     "duration": 150
    }
@@ -32,7 +32,7 @@
   "version": "1.2.21-x64",
   "image": "superthrow.png",
   "format": "RGBA8888",
-  "size": { "w": 34, "h": 44 },
+  "size": { "w": 54, "h": 22 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 2, "direction": "pingpong" }

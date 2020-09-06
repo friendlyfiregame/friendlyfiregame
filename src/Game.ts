@@ -50,6 +50,26 @@ export abstract class Game {
         this.updateCanvasSize();
         window.addEventListener("resize", () => this.updateCanvasSize());
         window.addEventListener("pointermove", () => this.mouseMoved());
+
+        // Use Alt+Enter to toggle fullscreen mode.
+        window.addEventListener("keydown", async (event) => {
+            if (event.altKey && event.key === "Enter") {
+                const lockingEnabled = "keyboard" in navigator && "lock" in navigator.keyboard && typeof navigator.keyboard.lock === "function";
+                // If the browser is in full screen mode AND fullscreen has been triggered by our own keyboard shortcut...
+                if (window.matchMedia("(display-mode: fullscreen)").matches && document.fullscreenElement != null) {
+                    if (lockingEnabled) {
+                        navigator.keyboard.unlock();
+                    }
+                    await document.exitFullscreen();
+                } else {
+                    if (lockingEnabled) {
+                        await navigator.keyboard.lock(["Escape"]);
+                    }
+                    await document.body.requestFullscreen();
+                }
+            }
+        });
+
     }
 
     private mouseMoved(): void {
