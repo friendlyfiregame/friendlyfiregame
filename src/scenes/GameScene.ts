@@ -196,7 +196,6 @@ export class GameScene extends Scene<FriendlyFire> {
     private frameCounter = 0;
     private framesPerSecond = 0;
     public showBounds = false;
-    private scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
     private fpsInterval: any = null;
@@ -448,9 +447,6 @@ export class GameScene extends Scene<FriendlyFire> {
         // Center coordinate system
         ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
-        // Scale by three because everything was based on 480x300 canvas and now its three times larger
-        ctx.scale(this.scale, this.scale);
-
         // Draw stuff
         this.camera.applyTransform(ctx);
 
@@ -497,7 +493,7 @@ export class GameScene extends Scene<FriendlyFire> {
             GameScene.font.drawText(
                 ctx,
                 `${this.framesPerSecond} FPS`,
-                2 * this.scale, 2 * this.scale - 3,
+                2, 2 - 3,
                 "white"
             );
         }
