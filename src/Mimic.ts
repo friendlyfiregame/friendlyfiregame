@@ -6,6 +6,7 @@ import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import { Sound } from "./Sound";
+import { RenderingLayer } from "./Renderer";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
 
@@ -21,6 +22,7 @@ export class Mimic extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 46, 24);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.lookAtPlayer = false;
         this.direction = 1;
         this.conversation = new Conversation(conversation, this);

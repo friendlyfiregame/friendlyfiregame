@@ -1,6 +1,5 @@
 import { Aseprite } from "./Aseprite";
 import { Entity } from "./Entity";
-import { RenderingLayer } from "./Renderer";
 
 export type AnimationConfig = {
     loop?: boolean;
@@ -110,10 +109,11 @@ export class Animator {
 
     private draw(ctx: CanvasRenderingContext2D, animationTime: number): void {
         if (this.sprite) {
-            this.entity.scene.renderer.drawAnimatedAseprite(ctx,
-                this.sprite, this.currentAnimation.tag, 0, 0,
-                RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
-            );
+            ctx.save();
+            ctx.scale(this.currentAnimation.direction ?? 1, 1);
+            this.sprite.drawTag(ctx, this.currentAnimation.tag,
+                -this.sprite.width >> 1, -this.sprite.height, animationTime);
+            ctx.restore();
         }
     }
 }

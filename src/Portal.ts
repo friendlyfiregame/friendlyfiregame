@@ -3,6 +3,7 @@ import { asset } from "./Assets";
 import { entity, Entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { Sound } from "./Sound";
+import { RenderingLayer } from "./Renderer";
 
 enum PortalAnimationState { WAITING, FADEIN, IDLE, FADEOUT, GONE }
 
@@ -18,6 +19,7 @@ export class Portal extends Entity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 32, 50, false);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.animator.assignSprite(Portal.sprite);
     }
 
