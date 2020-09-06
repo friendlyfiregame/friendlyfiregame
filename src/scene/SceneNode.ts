@@ -60,8 +60,10 @@ export interface SceneNodeArgs {
      */
     opacity?: number;
 
-    /** Optional initial layer (0-31) to put the node onto. Defaults to 0. */
-    layer?: number;
+    /**
+     * Optional initial layer (0-31) to put the node onto. Defaults to null which means inheriting layer from parent.
+     */
+    layer?: number | null;
 
     /** Optional initial showBounds flag. Set to true to show bounds around the node for debugging purposes. */
     showBounds?: boolean;
@@ -155,15 +157,16 @@ export class SceneNode<T extends Game = Game> {
 
     /**
      * The layer this node is drawn on. Internal representation is stored in `2^n` while setter and getter works
-     * with `n` instead. This is because the layering system internally works with fast bit masks.
+     * with `n` instead. This is because the layering system internally works with fast bit masks. Can be set to
+     * null to inherit layer from parent.
      */
-    private layer: number;
+    private layer: number | null;
 
     /**
      * Creates a new scene node with the given initial settings.
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
-            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = 0 }: SceneNodeArgs = {}) {
+            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null }: SceneNodeArgs = {}) {
         this.id = id;
         this.#x = x;
         this.#y = y;
@@ -173,7 +176,7 @@ export class SceneNode<T extends Game = Game> {
         this.anchor = anchor;
         this.childAnchor = childAnchor;
         this.showBounds = showBounds;
-        this.layer = 1 << layer;
+        this.layer = layer == null ? null : (1 << layer);
     }
 
     /**
@@ -1059,10 +1062,10 @@ export class SceneNode<T extends Game = Game> {
     /**
      * Returns the layer of this node.
      *
-     * @return The node's layer (0-31).
+     * @return The node's layer (0-31). Null if inherited from parent.
      */
-    public getLayer(): number {
-        return Math.log2(this.layer);
+    public getLayer(): number | null {
+        return this.layer == null ? null : Math.log2(this.layer);
     }
 
     /**
@@ -1070,16 +1073,33 @@ export class SceneNode<T extends Game = Game> {
      *
      * @param layer - The layer to set (0-31).
      */
-    public setLayer(layer: number): this {
-        if (layer < 0 || layer > 31) {
+    public setLayer(layer: number | null): this {
+        if (layer != null && (layer < 0 || layer > 31)) {
             throw new Error(`Valid layer range is 0-31 but was ${layer}`);
         }
-        layer = 1 << layer;
+        layer = layer == null ? null : (1 << layer);
         if (layer !== this.layer) {
             this.layer = layer;
             this.invalidate();
         }
         return this;
+    }
+
+    /**
+     * Returns the effective layer of this node.
+     *
+     * @return The effective layer.
+     */
+    protected getEffectiveLayer(): number {
+        if (this.layer == null) {
+            if (this.parent == null) {
+                return 1;
+            } else {
+                return this.parent.getEffectiveLayer();
+            }
+        } else {
+            return this.layer;
+        }
     }
 
     /**
@@ -1129,7 +1149,7 @@ export class SceneNode<T extends Game = Game> {
         );
 
         // Update child nodes
-        const layers = this.updateChildren(dt) | this.layer;
+        const layers = this.updateChildren(dt) | this.getEffectiveLayer();
 
         // When update method returned a post-update function then call it now
         if (postUpdate != null) {
@@ -1219,7 +1239,7 @@ export class SceneNode<T extends Game = Game> {
             );
         }
 
-        const postDraw = layer === this.layer ? this.draw(ctx, width, height) : null;
+        const postDraw = layer === this.getEffectiveLayer() ? this.draw(ctx, width, height) : null;
         ctx.save();
         ctx.translate(
             (Direction.getX(this.childAnchor) + 1) / 2 * this.#width,
