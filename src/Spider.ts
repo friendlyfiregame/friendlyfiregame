@@ -52,15 +52,11 @@ export class Spider extends NPC {
         const totalOffsetY = -10 - this.eyeOffsetY;
         const totalOffsetX = 5;
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
             asset: Spider.eyes,
             scale,
-            translation: {
-                x: this.x,
-                y: -this.y,
-            },
             position: {
                 x: (-Spider.eyes.width >> 1) + totalOffsetX,
                 y: -Spider.eyes.height + totalOffsetY

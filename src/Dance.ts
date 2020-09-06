@@ -259,8 +259,8 @@ export class Dance {
         this.scene.resetMusicVolumes();
     }
 
-    public addDanceToRenderQueue(): void {
-        this.scene.renderer.add({
+    public drawDance(ctx: CanvasRenderingContext2D): void {
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.DANCE,
             layer: RenderingLayer.UI,
             dance: this

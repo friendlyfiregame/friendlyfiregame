@@ -510,7 +510,7 @@ export class Player extends PhysicsEntity {
                 case 1:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        0, -25,
                         100,
                         "  1 1 2 2 1 2 1 3",
                         undefined,
@@ -523,7 +523,7 @@ export class Player extends PhysicsEntity {
                 case 2:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        0, -25,
                         192,
                         "1   2   1 1 2 2 121 212 121 212 3    ",
                         undefined,
@@ -533,7 +533,7 @@ export class Player extends PhysicsEntity {
                 case 3:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        0, -25,
                         192,
                         "112 221 312 123 2121121 111 222 3    ",
                         undefined,
@@ -543,7 +543,7 @@ export class Player extends PhysicsEntity {
                 default:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        0, -25,
                         192,
                         "3"
                     );
@@ -725,7 +725,7 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.dance) {
-            this.dance.addDanceToRenderQueue();
+            this.dance.drawDance(ctx);
         }
 
         this.speechBubble.draw(ctx);
@@ -1085,7 +1085,7 @@ export class Player extends PhysicsEntity {
                 }
             }
 
-            this.dance.setPosition(this.x, this.y - 16);
+            this.dance.setPosition(0, -16);
             const done = this.dance.update();
 
             if (done) {

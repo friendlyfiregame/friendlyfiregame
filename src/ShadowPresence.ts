@@ -47,10 +47,9 @@ export class ShadowPresence extends NPC {
         const scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
 
-        this.scene.renderer.add({
+        this.scene.renderer.draw(ctx, {
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
             position: {
                 x: -ShadowPresence.sprite.width >> 1,
                 y: -ShadowPresence.sprite.height
