@@ -1,8 +1,3 @@
-/*
- * Copyright (C) 2019 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
- */
-
 import { Vector2 } from "../../graphics/Vector2";
 import { AffineTransform } from "../../graphics/AffineTransform";
 
