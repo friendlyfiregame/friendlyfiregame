@@ -1,7 +1,6 @@
 import { Conversation } from "./Conversation";
 import { DialoguePrompt } from "./DialoguePrompt";
 import { Face, FaceModes } from "./Face";
-import { Greeting } from "./Greeting";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { sleep } from "./util";
 import { SpeechBubble } from "./SpeechBubble";
@@ -13,10 +12,9 @@ export abstract class NPC extends PhysicsEntity {
     public direction = 1;
     public face: Face | null = null;
     public defaultFaceMode = FaceModes.NEUTRAL;
-    public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public thinkBubble: SpeechBubble | null = null;
-    public speechBubble = new SpeechBubble(this.scene);
+    public speechBubble = new SpeechBubble(this.scene).appendTo(this);
     public lookAtPlayer = true;
     public dialoguePrompt = new DialoguePrompt(this.scene);
     private lastEndedConversation = -Infinity;
@@ -39,10 +37,11 @@ export abstract class NPC extends PhysicsEntity {
     public async think(message: string, time: number): Promise<void> {
         if (this.thinkBubble) {
             this.thinkBubble.hide();
+            this.thinkBubble.remove();
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene);
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene).appendTo(this);
         thinkBubble.setMessage(message);
         thinkBubble.show();
 
@@ -50,6 +49,7 @@ export abstract class NPC extends PhysicsEntity {
 
         if (this.thinkBubble === thinkBubble) {
             thinkBubble.hide();
+            this.thinkBubble.remove();
             this.thinkBubble = null;
         }
     }
@@ -76,14 +76,6 @@ export abstract class NPC extends PhysicsEntity {
 
     protected drawDialoguePrompt(ctx: CanvasRenderingContext2D): void {
         this.dialoguePrompt.draw(ctx);
-    }
-
-    protected drawGreeting(ctx: CanvasRenderingContext2D): void {
-        this.greeting?.draw(ctx);
-    }
-
-    protected updateGreeting(): void {
-        this.greeting?.update();
     }
 
     public registerEndedConversation(): void {

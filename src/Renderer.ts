@@ -2,7 +2,6 @@ import { Aseprite } from "./Aseprite";
 import { BitmapFont } from "./BitmapFont";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter } from "./Particles";
-import { roundRect } from "./SpeechBubble";
 
 export enum RenderingType {
     PARTICLE_EMITTER,
@@ -12,7 +11,6 @@ export enum RenderingType {
     DRAW_IMAGE,
     ASEPRITE,
     RECT,
-    SPEECH_BUBBLE,
     TEXT
 }
 
@@ -89,14 +87,6 @@ export type RectRenderingItem = BaseRenderingItem & {
     dimension: Dimension;
 };
 
-export type SpeechBubbleRenderingItem = BaseRenderingItem & {
-    type: RenderingType.SPEECH_BUBBLE;
-    fillColor: string,
-    radius: number;
-    offsetX: number;
-    dimension: Dimension;
-};
-
 export type TextRenderingItem = BaseRenderingItem & {
     type: RenderingType.TEXT;
     asset: BitmapFont;
@@ -118,7 +108,7 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
 };
 
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
-                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem;
+                            TextRenderingItem | ParticleEmitterRenderingItem;
 
 export class Renderer {
     private scene: GameScene;
@@ -156,13 +146,6 @@ export class Renderer {
                         ctx.fillStyle = item.fillColor;
                         ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
                     }
-                    break;
-                case RenderingType.SPEECH_BUBBLE:
-                    ctx.beginPath();
-                    ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width), Math.round(item.dimension.height), item.radius, item.relativeToScreen, Math.round(item.offsetX));
-                    ctx.fillStyle = item.fillColor;
-                    ctx.fill();
-                    ctx.closePath();
                     break;
                 case RenderingType.TEXT:
                     if (item.outlineColor) {

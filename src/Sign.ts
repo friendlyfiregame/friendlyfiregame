@@ -55,8 +55,6 @@ export class Sign extends NPC {
             animationTag: "idle",
             time: this.scene.gameTime * 1000
         });
-
-        this.speechBubble.draw(ctx);
     }
 
     public update(): void {}

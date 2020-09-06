@@ -52,7 +52,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
         height = 0,
         public isTrigger = true
     ) {
-        super({ x, y, width, height, anchor: Direction.TOP_LEFT });
+        super({ x, y, width, height, anchor: Direction.TOP_LEFT, childAnchor: Direction.TOP_LEFT });
         this.mirroredY = true;
     }
 

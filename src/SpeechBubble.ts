@@ -3,8 +3,9 @@ import { BitmapFont } from "./BitmapFont";
 import { ConversationLine } from "./Conversation";
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "./constants";
 import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 import { sleep } from "./util";
+import { SceneNode } from "./scene/SceneNode";
 
 export function roundRect(
     ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
@@ -44,7 +45,7 @@ export function roundRect(
     return ctx;
 }
 
-export class SpeechBubble {
+export class SpeechBubble extends SceneNode {
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
     private static OPTION_BUBBLE_INDENTATION = 11;
@@ -54,12 +55,12 @@ export class SpeechBubble {
     public selectedOptionIndex = -1;
     private fontSize = SpeechBubble.font.charHeight;
     private lineHeight = this.fontSize;
-    private height = 0;
-    private offset = { x: 0, y: 40 };
+    private textHeight = 0;
+    private offsetX = 0;
+    private offsetY = 40;
+
     private messageVelocity = 20;
 
-    private x: number;
-    private y: number;
     private paddingHorizontal: number;
     private paddingVertical: number;
     public isCurrentlyWriting = false;
@@ -82,8 +83,7 @@ export class SpeechBubble {
         private color = "white",
         private relativeToScreen = false
     ) {
-        this.x = Math.round(this.offset.x);
-        this.y = Math.round(this.offset.y);
+        super({ layer: RenderingLayer.UI });
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
         this.paddingHorizontal = this.paddingLeft + this.paddingRight;
         this.paddingVertical = this.paddingTop + this.paddingBottom;
@@ -144,7 +144,7 @@ export class SpeechBubble {
 
     private updateContent(): void {
         this.content = this.messageLines.concat(this.options);
-        this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
+        this.textHeight = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -157,13 +157,14 @@ export class SpeechBubble {
             return;
         }
 
-        let posX = this.x;
-        let posY = this.y;
+        let posX = this.offsetX;
+        let posY = this.offsetY;
         let offsetX = 0;
 
         if (this.relativeToScreen) {
-            posX = Math.round(ctx.canvas.width / 2);
-            posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
+            const transform = ctx.getTransform();
+            posX = Math.round(ctx.canvas.width / 2) - transform.e;
+            posY = Math.round(-ctx.canvas.height * 0.63 - this.textHeight) + transform.f;
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const visibleRect = this.scene.camera.getVisibleRect(0, 0);
@@ -183,43 +184,22 @@ export class SpeechBubble {
         posX -= offsetX;
 
         const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.paddingLeft;
-        const bubbleYPos = -posY - this.height;
+        const bubbleYPos = -posY - this.textHeight;
 
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.SPEECH_BUBBLE,
-            layer: RenderingLayer.UI,
-            fillColor: this.color,
-            position: {
-                x: bubbleXPos,
-                y: bubbleYPos
-            },
-            dimension: {
-                width: this.longestLine + this.paddingHorizontal,
-                height: this.height
-            },
-            radius: 5,
-            relativeToScreen: this.relativeToScreen,
-            offsetX
-        });
+        ctx.beginPath();
+        ctx = roundRect(ctx, Math.round(bubbleXPos), Math.round(bubbleYPos),
+            Math.round(this.longestLine + this.paddingHorizontal),
+            Math.round(this.textHeight), 5, this.relativeToScreen, Math.round(offsetX));
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
 
         const textXPos = bubbleXPos + this.paddingLeft;
         const textColor = "black";
 
         for (let i = 0; i < this.messageLines.length; i++) {
             const textYPos = Math.round(bubbleYPos + this.paddingTop + i * this.lineHeight);
-
-            this.scene.renderer.draw(ctx, {
-                type: RenderingType.TEXT,
-                layer: RenderingLayer.UI,
-                text: this.messageLines[i],
-                textColor: textColor,
-                relativeToScreen: this.relativeToScreen,
-                position: {
-                    x: textXPos,
-                    y: textYPos
-                },
-                asset: SpeechBubble.font,
-            });
+            SpeechBubble.font.drawText(ctx, this.messageLines[i], textXPos, textYPos, textColor);
         }
 
         for (let i = 0; i < this.options.length; i++) {
@@ -227,32 +207,11 @@ export class SpeechBubble {
             const textYPos = Math.round(bubbleYPos + this.paddingTop + i * this.lineHeight);
 
             if (isSelected) {
-                this.scene.renderer.draw(ctx, {
-                    type: RenderingType.TEXT,
-                    layer: RenderingLayer.UI,
-                    text: ConversationLine.OPTION_MARKER,
-                    textColor: textColor,
-                    relativeToScreen: this.relativeToScreen,
-                    position: {
-                        x: textXPos,
-                        y: textYPos
-                    },
-                    asset: SpeechBubble.font
-                });
+                SpeechBubble.font.drawText(ctx, ConversationLine.OPTION_MARKER, textXPos, textYPos, textColor);
             }
 
-            this.scene.renderer.draw(ctx, {
-                type: RenderingType.TEXT,
-                layer: RenderingLayer.UI,
-                text: this.options[i],
-                textColor: textColor,
-                relativeToScreen: this.relativeToScreen,
-                position: {
-                    x: textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION,
-                    y: textYPos
-                },
-                asset: SpeechBubble.font
-            });
+            SpeechBubble.font.drawText(ctx, this.options[i], textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION,
+                textYPos, textColor);
         }
     }
 

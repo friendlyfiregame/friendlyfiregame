@@ -173,7 +173,7 @@ export class Player extends PhysicsEntity {
         undefined, undefined, undefined, undefined,
         undefined,
         true
-    );
+    ).appendTo(this);
 
     public thinkBubble: SpeechBubble | null = null;
 
@@ -490,11 +490,11 @@ export class Player extends PhysicsEntity {
 
     public async think(message: string, time: number): Promise<void> {
         if (this.thinkBubble) {
-            this.thinkBubble.hide();
+            this.thinkBubble.remove();
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene);
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene).appendTo(this);
 
         thinkBubble.setMessage(message);
         thinkBubble.show();
@@ -502,7 +502,7 @@ export class Player extends PhysicsEntity {
         await sleep(time);
 
         if (this.thinkBubble === thinkBubble) {
-            thinkBubble.hide();
+            thinkBubble.remove();
             this.thinkBubble = null;
         }
     }
@@ -725,12 +725,6 @@ export class Player extends PhysicsEntity {
             this.drawTooltip(ctx, "Plant seed", ControllerAnimationTags.ACTION);
         } else if (this.canDanceToMakeRain()) {
             this.drawTooltip(ctx, "Dance", ControllerAnimationTags.INTERACT);
-        }
-
-        this.speechBubble.draw(ctx);
-
-        if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
         }
     }
 
