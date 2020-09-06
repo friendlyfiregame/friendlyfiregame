@@ -2,8 +2,8 @@ const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const GenerateJsonPlugin = require("generate-json-webpack-plugin");
-const GitRevisionPlugin = require("git-revision-webpack-plugin")
-const gitRevisionPlugin = new GitRevisionPlugin()
+const GitRevisionPlugin = require("git-revision-webpack-plugin");
+const gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = {
     mode: "production",
@@ -30,4 +30,4 @@ module.exports = {
             { from: "style.css" }
         ]})
     ]
-}
+};

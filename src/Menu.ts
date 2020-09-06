@@ -150,7 +150,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
     }
 
     private unfocusAllItems(): void {
-        this.items.forEach(item => { item.focused = false });
+        this.items.forEach(item => { item.focused = false; });
     }
 
     private focusItem(item: MenuItem): void {

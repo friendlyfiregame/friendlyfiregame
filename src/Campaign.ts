@@ -247,7 +247,7 @@ export class Campaign {
                     this.runAction("enable", null, ["powershiba", "powershiba2"]);
                     break;
                 case "shibaNextState":
-                    this.gameScene!.shiba.nextState();
+                    this.gameScene.shiba.nextState();
                     break;
                 case "talkedtotree":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
@@ -261,17 +261,17 @@ export class Campaign {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                     this.getQuest(QuestKey.A).finish();
                     this.gameScene.fire.conversation = null;
-                    this.gameScene!.gameOver();
+                    this.gameScene.gameOver();
                     break;
                 case "endgameB":
                     this.getQuest(QuestKey.B).finish();
                     this.gameScene.fire.conversation = null;
-                    this.gameScene!.gameOver();
+                    this.gameScene.gameOver();
                     break;
                 case "endgameC":
                     this.getQuest(QuestKey.C).finish();
                     this.gameScene.caveman.conversation = null;
-                    this.gameScene!.gameOver();
+                    this.gameScene.gameOver();
                     break;
                 case "game":
                     this.addState(params[0] as any);

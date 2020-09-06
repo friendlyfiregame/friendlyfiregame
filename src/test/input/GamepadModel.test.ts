@@ -32,14 +32,14 @@ const unknownModels = [
     "Hockus Pockus Wibbly Wobbly JoySt1ck",
     "Flibber Flubber Thingy",
     "Microz0ft YBox Controlla"
-]
+];
 /* spell-checker: enable */
 
 describe("Gamepad model detection", () => {
     describe("detects XInput/XBox controllers", () => {
         xboxModels.forEach((str) => {
             it(`given the string "${str}"`, () => {
-                const model = GamepadModel.fromString(str)
+                const model = GamepadModel.fromString(str);
                 expect(model.style).toBe(GamepadStyle.XBOX);
             });
         });
@@ -47,7 +47,7 @@ describe("Gamepad model detection", () => {
     describe("detects PlayStation-like controllers", () => {
         psModels.forEach((str) => {
             it(`given the string "${str}"`, () => {
-                const model = GamepadModel.fromString(str)
+                const model = GamepadModel.fromString(str);
                 expect(model.style).toBe(GamepadStyle.PLAYSTATION);
             });
         });
@@ -55,7 +55,7 @@ describe("Gamepad model detection", () => {
     describe("detects Google Stadia controllers", () => {
         stadiaModels.forEach((str) => {
             it(`given the string "${str}"`, () => {
-                const model = GamepadModel.fromString(str)
+                const model = GamepadModel.fromString(str);
                 expect(model.style).toBe(GamepadStyle.STADIA);
             });
         });
@@ -63,16 +63,16 @@ describe("Gamepad model detection", () => {
     describe("reports unknown unknown controllers", () => {
         unknownModels.forEach((str) => {
             it(`given the string "${str}"`, () => {
-                const model = GamepadModel.fromString(str)
+                const model = GamepadModel.fromString(str);
                 expect(model.style).toBe(GamepadStyle.UNKNOWN);
             });
         });
-    })
+    });
 });
 
 describe("Default gamepad model", () => {
     it("should be 'unknown'", () => {
         expect(DEFAULT_GAMEPAD_MODEL).not.toBeNull;
         expect(DEFAULT_GAMEPAD_MODEL.style).toBe(GamepadStyle.UNKNOWN);
-    })
-})
+    });
+});

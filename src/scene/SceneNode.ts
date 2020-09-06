@@ -1035,7 +1035,7 @@ export class SceneNode<T extends Game = Game> {
         } else {
             this.sceneTransformation.reset();
         }
-        this.sceneTransformation.translate(this.x, this.y)
+        this.sceneTransformation.translate(this.x, this.y);
         this.sceneTransformation.mul(this.transformation);
         this.sceneTransformation.translate(
             -(Direction.getX(this.anchor) + 1) / 2 * this.width,
@@ -1116,7 +1116,7 @@ export class SceneNode<T extends Game = Game> {
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
-        ctx.translate(this.x, this.y)
+        ctx.translate(this.x, this.y);
         this.transformation.transformCanvas(ctx);
         ctx.translate(
             -(Direction.getX(this.anchor) + 1) / 2 * this.width,

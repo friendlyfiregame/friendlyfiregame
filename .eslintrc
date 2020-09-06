@@ -30,6 +30,7 @@
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/semi": ["warn", "always"],
         "dot-location": [ "warn", "property" ],
         "eqeqeq": [
             "warn",
@@ -64,6 +65,7 @@
         "no-unmodified-loop-condition": "warn",
         "no-useless-escape": "off",
         "prefer-regex-literals": "warn",
-        "quotes": [ "error", "double" ]
+        "quotes": [ "error", "double" ],
+        "semi": "off"
     }
 }

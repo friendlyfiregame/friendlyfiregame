@@ -117,9 +117,9 @@ export class Camera {
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
         const cnv = this.scene.game.canvas;
-        const cw = cnv.width
+        const cw = cnv.width;
         const ch = cnv.height;
-        const offx = cw / 2 / this.zoom
+        const offx = cw / 2 / this.zoom;
         const offy = ch / 2 / this.zoom;
 
         return {
