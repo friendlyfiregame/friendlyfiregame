@@ -167,8 +167,9 @@ export class SpeechBubble extends SceneNode {
             posY = Math.round(-ctx.canvas.height * 0.63 - this.textHeight) + transform.f;
         } else {
             // Check if Speech Bubble clips the viewport and correct position
-            const visibleRect = this.scene.camera.getVisibleRect(0, 0);
-            const relativeX = posX - visibleRect.x;
+            const parentX = (this.getParent()?.x ?? 0);
+            const visibleRect = this.scene.camera.getVisibleRect();
+            const relativeX = parentX + posX - visibleRect.x;
 
             const clipAmount = Math.max(
                 (this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0)
