@@ -57,6 +57,22 @@ export class ControlTooltipNode extends SceneNode<FriendlyFire> {
         this.updateLayout();
     }
 
+    public setControl(control: ControllerAnimationTags): this {
+        if (this.icon.getTag() !== control) {
+            this.icon.setTag(control);
+            this.updateLayout();
+        }
+        return this;
+    }
+
+    public setLabel(label: string): this {
+        if (this.label.getText() !== label) {
+            this.label.setText(label);
+            this.updateLayout();
+        }
+        return this;
+    }
+
     /** @inheritDoc */
     protected activate(): void {
         this.controllerManager.onControllerFamilyChange.connect(this.updateControllerFamily, this);

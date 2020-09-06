@@ -1,19 +1,17 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { BgmId, FadeDirection, GameScene } from "./scenes/GameScene";
-import { BitmapFont } from "./BitmapFont";
 import { Bounds, entity } from "./Entity";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "./util";
 import { CharacterAsset, VoiceAsset } from "./Campaign";
 import { Cloud } from "./Cloud";
 import { ControllerAnimationTags, ControllerSpriteMap } from "./input/ControllerFamily";
 import { ControllerEvent } from "./input/ControllerEvent";
-import { ControllerManager } from "./input/ControllerManager";
 import { Conversation } from "./Conversation";
 import { ConversationProxy } from "./ConversationProxy";
 import { Dance } from "./Dance";
 import {
-    DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
+    DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
     PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
     PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
     SHORT_JUMP_GRAVITY
@@ -26,7 +24,7 @@ import { ParticleEmitter, valueCurves } from "./Particles";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PlayerConversation } from "./PlayerConversation";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
@@ -35,6 +33,8 @@ import { SpeechBubble } from "./SpeechBubble";
 import { Stone, StoneState } from "./Stone";
 import { Wall } from "./Wall";
 import { Wood, WoodState } from "./Wood";
+import { ControlTooltipNode } from "./scene/ControlTooltipNode";
+import { Direction } from "./geom/Direction";
 
 const groundColors = [
     "#806057",
@@ -129,9 +129,6 @@ export class Player extends PhysicsEntity {
     @asset("sounds/jumping/squish.mp3")
     private static bouncingSound: Sound;
 
-    @asset(DIALOG_FONT)
-    private static font: BitmapFont;
-
     private lastHint = Date.now();
     private flying = false;
     public direction = 1;
@@ -183,9 +180,11 @@ export class Player extends PhysicsEntity {
     private bounceEmitter: ParticleEmitter;
     private doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
+    private tooltip: ControlTooltipNode | null = null;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        this.setLayer(RenderingLayer.PLAYER);
 
         this.isControllable = false;
         this.setFloating(true);
@@ -646,43 +645,6 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    private drawTooltip(
-        ctx: CanvasRenderingContext2D,
-        text: string, buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
-    ): void {
-        const controllerSprite = ControllerManager.getInstance().controllerSprite;
-        const measure = Player.font.measureText(text);
-        const gap = 6;
-        const offsetY = 12;
-        const textPositionX = Math.round(-((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
-        const textPositionY = offsetY;
-
-
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.UI,
-            position: {
-                x: textPositionX - this.controllerSpriteMapRecords[controllerSprite].width - gap,
-                y: textPositionY
-            },
-            asset: this.controllerSpriteMapRecords[controllerSprite],
-            animationTag: buttonTag,
-        });
-
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.TEXT,
-            layer: RenderingLayer.UI,
-            text,
-            textColor: "white",
-            outlineColor: "black",
-            position: {
-                x: textPositionX,
-                y: textPositionY
-            },
-            asset: Player.font,
-        });
-    }
-
     public draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) {
             return;
@@ -707,24 +669,22 @@ export class Player extends PhysicsEntity {
             RenderingLayer.PLAYER,
             this.direction
         );
+    }
 
-        if (
-            this.closestNPC
-            && !this.dance
-            && !this.playerConversation
-            && this.closestNPC.isReadyForConversation()
-        ) {
-            this.drawTooltip(ctx, this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
-        } else if (this.readableTrigger) {
-            this.drawTooltip(ctx, "Examine", ControllerAnimationTags.INTERACT);
-        } else if (this.canEnterDoor()) {
-            this.drawTooltip(ctx, "Enter", ControllerAnimationTags.OPEN_DOOR);
-        } else if (this.canThrowStoneIntoWater()) {
-            this.drawTooltip(ctx, "Throw stone", ControllerAnimationTags.ACTION);
-        } else if (this.canThrowSeedIntoSoil()) {
-            this.drawTooltip(ctx, "Plant seed", ControllerAnimationTags.ACTION);
-        } else if (this.canDanceToMakeRain()) {
-            this.drawTooltip(ctx, "Dance", ControllerAnimationTags.INTERACT);
+    private showTooltip(label: string, control: ControllerAnimationTags) {
+        if (this.tooltip == null) {
+            this.tooltip = new ControlTooltipNode({
+                control, label, anchor: Direction.TOP, y: 12, layer: RenderingLayer.UI
+            }).appendTo(this);
+        } else {
+            this.tooltip.setControl(control).setLabel(label);
+        }
+    }
+
+    private hideTooltip(): void {
+        if (this.tooltip != null) {
+            this.tooltip.remove();
+            this.tooltip = null;
         }
     }
 
@@ -1197,6 +1157,31 @@ export class Player extends PhysicsEntity {
                     );
                 }
             });
+        }
+
+        if (this.visible) {
+            if (
+                this.closestNPC
+                && !this.dance
+                && !this.playerConversation
+                && this.closestNPC.isReadyForConversation()
+            ) {
+                this.showTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
+            } else if (this.readableTrigger) {
+                this.showTooltip("Examine", ControllerAnimationTags.INTERACT);
+            } else if (this.canEnterDoor()) {
+                this.showTooltip("Enter", ControllerAnimationTags.OPEN_DOOR);
+            } else if (this.canThrowStoneIntoWater()) {
+                this.showTooltip("Throw stone", ControllerAnimationTags.ACTION);
+            } else if (this.canThrowSeedIntoSoil()) {
+                this.showTooltip("Plant seed", ControllerAnimationTags.ACTION);
+            } else if (this.canDanceToMakeRain()) {
+                this.showTooltip("Dance", ControllerAnimationTags.INTERACT);
+            } else {
+                this.hideTooltip();
+            }
+        } else {
+            this.hideTooltip();
         }
     }
 
