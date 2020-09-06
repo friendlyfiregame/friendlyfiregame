@@ -13,14 +13,14 @@ export class RiddleStone extends Entity {
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16, false);
-
+        this.setLayer(RenderingLayer.ENTITIES);
         this.col = properties.col || 0;
         this.row = properties.row || 0;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
         if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
-            this.scene.renderer.drawAseprite(ctx, RiddleStone.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
+            this.scene.renderer.drawAseprite(ctx, RiddleStone.sprite, "idle", 0, 0, 1);
         }
     }
 

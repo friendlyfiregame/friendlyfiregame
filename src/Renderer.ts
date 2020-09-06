@@ -131,8 +131,32 @@ export class Renderer {
 
     public drawAseprite (
         ctx: CanvasRenderingContext2D,
+        sprite: Aseprite, animationTag: string, x: number, y: number, direction: number
+    ): void {
+        const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
+
+        this.draw(ctx, {
+            type: RenderingType.ASEPRITE,
+            layer: RenderingLayer.ENTITIES,
+            translation: {
+                x: x,
+                y: -y
+            },
+            position: {
+                x: -sprite.width >> 1,
+                y: -sprite.height
+            },
+            scale,
+            asset: sprite,
+            animationTag,
+            time: this.scene.gameTime * 1000
+        });
+    }
+
+    public drawAnimatedAseprite (
+        ctx: CanvasRenderingContext2D,
         sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer,
-        direction = 1, time?: number
+        direction = 1, time: number
     ): void {
         const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
 
@@ -150,7 +174,7 @@ export class Renderer {
             scale,
             asset: sprite,
             animationTag,
-            time: time || this.scene.gameTime * 1000
+            time
         });
     }
 }

@@ -87,8 +87,4 @@ export abstract class ScriptableNPC extends NPC {
 
         return pulled;
     }
-
-    public update(dt: number): void {
-        super.update(dt);
-    }
 }

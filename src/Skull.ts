@@ -12,10 +12,11 @@ export class Skull extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 16, 16);
+        this.setLayer(RenderingLayer.ENTITIES);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Skull.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
+        this.scene.renderer.drawAseprite(ctx, Skull.sprite, "idle", 0, 0, 1);
     }
 
     public isCarried(): boolean {

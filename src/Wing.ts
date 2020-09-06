@@ -16,6 +16,7 @@ export class Wing extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);
+        this.setLayer(RenderingLayer.ENTITIES);
     }
 
     protected showDialoguePrompt(): boolean {
@@ -37,19 +38,14 @@ export class Wing extends NPC {
             Wing.sprite,
             "idle",
             0, -floatOffsetY,
-            RenderingLayer.ENTITIES
+            1
         );
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
-        }
 
         this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {
         super.update(dt);
-
-        this.dialoguePrompt.update(dt, 0, 16);
+        this.dialoguePrompt.updatePosition(0, 16);
     }
 }

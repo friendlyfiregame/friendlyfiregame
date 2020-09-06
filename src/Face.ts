@@ -74,6 +74,7 @@ export class Face {
             this.direction = direction;
         }
     }
+
     public setDirection(direction: number): void {
         this.direction = direction;
     }

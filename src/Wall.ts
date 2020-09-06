@@ -17,6 +17,7 @@ export class Wall extends Entity implements CollidableGameObject {
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 24, 72, false);
+        this.setLayer(RenderingLayer.ENTITIES);
 
         if (!properties.identifier) {
             throw new Error ("Cannot create Wall entity with no identifier property");
@@ -27,7 +28,7 @@ export class Wall extends Entity implements CollidableGameObject {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const animationTag = this.state === WallState.SOLID ? "solid" : "crumbled";
-        this.scene.renderer.drawAseprite(ctx, Wall.sprite, animationTag, 0, 0, RenderingLayer.ENTITIES);
+        this.scene.renderer.drawAseprite(ctx, Wall.sprite, animationTag, 0, 0, 1);
     }
 
     public update(): void {}

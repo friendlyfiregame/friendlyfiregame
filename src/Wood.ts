@@ -28,6 +28,7 @@ export class Wood extends PhysicsEntity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 26, 16);
+        this.setLayer(RenderingLayer.ENTITIES);
 
         const floatingPosition = this.scene.pointsOfInterest.find(
             poi => poi.name === "recover_floating_position"
@@ -41,7 +42,7 @@ export class Wood extends PhysicsEntity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Wood.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
+        this.scene.renderer.drawAseprite(ctx, Wood.sprite, "idle", 0, 0, 1);
     }
 
     public isCarried(): boolean {

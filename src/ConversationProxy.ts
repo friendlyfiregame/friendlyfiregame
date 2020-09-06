@@ -39,7 +39,8 @@ export class ConversationProxy extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(): void {
+    public update(dt: number): void {
+        super.update(dt);
         if (!this.hasActiveConversation()) {
             this.scene.removeGameObject(this);
         }

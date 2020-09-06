@@ -110,7 +110,7 @@ export class Animator {
 
     private draw(ctx: CanvasRenderingContext2D, animationTime: number): void {
         if (this.sprite) {
-            this.entity.scene.renderer.drawAseprite(ctx,
+            this.entity.scene.renderer.drawAnimatedAseprite(ctx,
                 this.sprite, this.currentAnimation.tag, 0, 0,
                 RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
             );

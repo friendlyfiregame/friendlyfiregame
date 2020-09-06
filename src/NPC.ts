@@ -74,10 +74,6 @@ export abstract class NPC extends PhysicsEntity {
         return true;
     }
 
-    protected drawDialoguePrompt(ctx: CanvasRenderingContext2D): void {
-        this.dialoguePrompt.draw(ctx);
-    }
-
     public registerEndedConversation(): void {
         this.lastEndedConversation = this.scene.gameTime;
     }
@@ -104,6 +100,13 @@ export abstract class NPC extends PhysicsEntity {
         if (this.lookAtPlayer) {
             const dx = this.scene.player.x - this.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
+        }
+        if (this.showDialoguePrompt()) {
+            if (this.dialoguePrompt.getParent() !== this) {
+                this.dialoguePrompt.appendTo(this);
+            }
+        } else {
+            this.dialoguePrompt.remove();
         }
 
         super.update(dt);

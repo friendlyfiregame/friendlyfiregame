@@ -30,6 +30,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties, canRain = false) {
         super(scene, x, y, 74, 5);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
@@ -84,7 +85,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             Cloud.sprite,
             "idle",
             0, 0,
-            RenderingLayer.PLATFORMS
+            1
         );
     }
 

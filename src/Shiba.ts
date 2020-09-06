@@ -59,7 +59,7 @@ export class Shiba extends ScriptableNPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 28, 24);
-
+        this.setLayer(RenderingLayer.ENTITIES);
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
         this.setMaxVelocity(2);
@@ -180,16 +180,12 @@ export class Shiba extends ScriptableNPC {
             const tag = this.peeing ? "peeing" : "idle";
 
             this.scene.renderer.drawAseprite(
-                ctx, Shiba.sprite, tag, 0, 0, RenderingLayer.ENTITIES, this.direction
+                ctx, Shiba.sprite, tag, 0, 0, this.direction
             );
         } else {
             this.scene.renderer.drawAseprite(
-                ctx, Shiba.sprite, "walk", 0, 0, RenderingLayer.ENTITIES, this.direction
+                ctx, Shiba.sprite, "walk", 0, 0, this.direction
             );
-        }
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
         }
 
         if (this.thinkBubble) {
@@ -234,7 +230,7 @@ export class Shiba extends ScriptableNPC {
             }
         }
 
-        this.dialoguePrompt.update(dt, 0, 20);
+        this.dialoguePrompt.updatePosition(0, 20);
     }
 
     public isReadyForConversation(): boolean | null {

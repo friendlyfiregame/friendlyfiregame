@@ -31,7 +31,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 26, 50);
-
+        this.setLayer(RenderingLayer.ENTITIES);
         this.direction = -1;
         this.face = new Face(scene, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
@@ -65,15 +65,10 @@ export class Stone extends NPC implements CollidableGameObject {
             Stone.sprite,
             "idle",
             0, -1,
-            RenderingLayer.ENTITIES,
             this.direction
         );
 
         this.drawFace(ctx, false);
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
-        }
 
         this.speechBubble.draw(ctx);
     }
@@ -114,7 +109,7 @@ export class Stone extends NPC implements CollidableGameObject {
             this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
         }
 
-        this.dialoguePrompt.update(dt, 0, 48);
+        this.dialoguePrompt.updatePosition(0, 48);
     }
 
     public collidesWith(x: number, y: number): number {

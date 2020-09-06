@@ -21,6 +21,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 68, 12);
+        this.setLayer(RenderingLayer.PLATFORMS);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
@@ -41,7 +42,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, MovingPlatform.sprite, "idle", 0, 0, RenderingLayer.PLATFORMS);
+        this.scene.renderer.drawAseprite(ctx, MovingPlatform.sprite, "idle", 0, 0, 1);
     }
 
     public update(dt: number): void {

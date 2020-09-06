@@ -34,6 +34,7 @@ export class Seed extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.wood = new Wood(scene, x, y);
         this.face = new Face(scene, EyeType.STANDARD, 0, 8);
 
@@ -63,8 +64,7 @@ export class Seed extends NPC {
             Seed.sprite,
             this.getSpriteTag(),
             0, -1,
-            RenderingLayer.ENTITIES,
-            undefined
+            1
         );
 
         if (this.state === SeedState.GROWN) {

@@ -16,6 +16,7 @@ export class SuperThrow extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 18, 22);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }
@@ -36,7 +37,6 @@ export class SuperThrow extends NPC {
             SuperThrow.sprite,
             "idle",
             0, -floatOffsetY,
-            RenderingLayer.ENTITIES,
             this.direction
         );
 

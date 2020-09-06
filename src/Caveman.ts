@@ -12,6 +12,7 @@ export class Caveman extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 18, 24);
+        this.setLayer(RenderingLayer.ENTITIES);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -20,7 +21,6 @@ export class Caveman extends NPC {
             Caveman.sprite,
             "idle",
             0, 0,
-            RenderingLayer.ENTITIES,
             this.direction
         );
 

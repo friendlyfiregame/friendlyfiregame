@@ -11,10 +11,11 @@ export class Radio extends Entity {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24, false);
+        this.setLayer(RenderingLayer.ENTITIES);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Radio.sprite, "idle", 0, 0, RenderingLayer.ENTITIES);
+        this.scene.renderer.drawAseprite(ctx, Radio.sprite, "idle", 0, 0, 1);
     }
 
     public update(): void {}

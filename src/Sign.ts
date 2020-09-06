@@ -57,5 +57,7 @@ export class Sign extends NPC {
         });
     }
 
-    public update(): void {}
+    public update(): void {
+        // Intentionally not calling parent here. This "NPC" must not have physics.
+    }
 }

@@ -25,6 +25,7 @@ export class PowerShiba extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 22, 22);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.conversation = new Conversation(powershiba1, this);
     }
 
@@ -66,12 +67,8 @@ export class PowerShiba extends NPC {
         this.scene.renderer.drawAseprite(
             ctx,
             PowerShiba.sprite, "idle", 0, -floatOffsetY,
-            RenderingLayer.ENTITIES
+            1
         );
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
-        }
 
         if (this.thinkBubble) {
             this.thinkBubble.draw(ctx);
@@ -82,6 +79,6 @@ export class PowerShiba extends NPC {
 
     public update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, 0, 16);
+        this.dialoguePrompt.updatePosition(0, 16);
     }
 }

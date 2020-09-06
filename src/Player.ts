@@ -666,7 +666,6 @@ export class Player extends PhysicsEntity {
             sprite,
             animation,
             0, -1,
-            RenderingLayer.PLAYER,
             this.direction
         );
     }

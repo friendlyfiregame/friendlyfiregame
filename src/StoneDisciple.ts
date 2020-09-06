@@ -14,6 +14,7 @@ export class StoneDisciple extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 32, 26);
+        this.setLayer(RenderingLayer.ENTITIES);
         this.direction = -1;
         this.lookAtPlayer = true;
         this.face = new Face(scene, EyeType.STONEDISCIPLE, 0, 0);
@@ -36,20 +37,16 @@ export class StoneDisciple extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.drawAseprite(
-            ctx, StoneDisciple.sprite, "idle", 0, 0, RenderingLayer.ENTITIES, this.direction
+            ctx, StoneDisciple.sprite, "idle", 0, 0, this.direction
         );
 
         this.drawFace(ctx, false);
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
-        }
 
         this.speechBubble.draw(ctx);
     }
 
     public update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, 0, this.height);
+        this.dialoguePrompt.updatePosition(0, this.height);
     }
 }

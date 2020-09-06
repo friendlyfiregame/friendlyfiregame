@@ -162,10 +162,6 @@ export class Fire extends NPC {
 
         this.drawFace(ctx);
 
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt(ctx);
-        }
-
         if (this.thinkBubble) {
             this.thinkBubble.draw(ctx);
         }
@@ -174,6 +170,7 @@ export class Fire extends NPC {
     }
 
     public update(dt: number): void {
+        super.update(dt);
         if (this.state === FireState.ANGRY && !this.beingPutOut) {
             this.face?.setMode(FaceModes.ANGRY);
         } else if (this.state === FireState.BEING_PUT_OUT) {
@@ -231,7 +228,7 @@ export class Fire extends NPC {
         }
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, 0, 32);
+            this.dialoguePrompt.updatePosition(0, 32);
         }
     }
 

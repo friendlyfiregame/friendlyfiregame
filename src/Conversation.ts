@@ -161,7 +161,6 @@ export class Conversation {
 
         const line = this.data[this.state][this.stateIndex++];
 
-        // console.log(line.condition);
         if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {
             this.skippedLines++;
             return this.getNextLine(ignoreDisabled);
