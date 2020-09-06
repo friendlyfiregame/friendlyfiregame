@@ -824,7 +824,11 @@ export class SceneNode<T extends Game = Game> {
                 next = node.nextSibling;
             }
             if (next == null) {
-                next = node.parent?.nextSibling ?? null;
+                let parent = node.parent;
+                while (parent != null && parent.nextSibling == null) {
+                    parent = parent.parent;
+                }
+                next = parent?.nextSibling ?? null;
             }
             callback.call(thisArg, node);
             node = next;
@@ -845,7 +849,11 @@ export class SceneNode<T extends Game = Game> {
                 next = node.nextSibling;
             }
             if (next == null) {
-                next = node.parent?.nextSibling ?? null;
+                let parent = node.parent;
+                while (parent != null && parent.nextSibling == null) {
+                    parent = parent.parent;
+                }
+                next = parent?.nextSibling ?? null;
             }
             yield(node);
             node = next;
