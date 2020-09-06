@@ -20,20 +20,6 @@ export abstract class NPC extends PhysicsEntity {
     private lastEndedConversation = -Infinity;
     protected met = false;
 
-    protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {
-        if (this.face) {
-            // Look at player
-            if (lookAtPlayer) {
-                const dx = this.scene.player.x - this.x;
-                this.face.toggleDirection((dx > 0) ? 1 : -1);
-                this.face.draw(ctx);
-            } else {
-                this.face.setDirection(this.direction);
-                this.face.draw(ctx);
-            }
-        }
-    }
-
     public async think(message: string, time: number): Promise<void> {
         if (this.thinkBubble) {
             this.thinkBubble.hide();

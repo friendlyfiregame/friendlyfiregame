@@ -36,7 +36,6 @@ export class Seed extends NPC {
         super(scene, x, y, 24, 24);
         this.setLayer(RenderingLayer.ENTITIES);
         this.wood = new Wood(scene, x, y);
-        this.face = new Face(scene, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
 
@@ -66,10 +65,6 @@ export class Seed extends NPC {
             0, -1,
             1
         );
-
-        if (this.state === SeedState.GROWN) {
-            this.drawFace(ctx);
-        }
     }
 
     public isCarried(): boolean {
@@ -80,6 +75,7 @@ export class Seed extends NPC {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
             this.scene.seed = this;
+            this.face = new Face(this.scene, EyeType.STANDARD, false, 0, 8).appendTo(this);
             Conversation.setGlobal("seedgrown", "true");
             this.scene.game.campaign.runAction("enable", null, ["tree", "tree2"]);
             this.scene.game.campaign.runAction("enable", null, ["seed", "seed1"]);

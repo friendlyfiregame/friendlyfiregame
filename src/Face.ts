@@ -2,6 +2,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import { SceneNode } from "./scene/SceneNode";
 
 export enum FaceModes {
     BLINK = "blink",
@@ -21,7 +22,7 @@ export enum EyeType {
     STONEDISCIPLE = 4
 }
 
-export class Face {
+export class Face extends SceneNode {
     @asset([
         "sprites/eyes/standard.aseprite.json",
         "sprites/eyes/tree.aseprite.json",
@@ -37,12 +38,26 @@ export class Face {
     constructor(
         private scene: GameScene,
         private eyeType: EyeType,
+        private lookAtPlayer: boolean,
         private offX = 0,
         private offY = 20
-    ) {}
+    ) {
+        super({ layer: RenderingLayer.ENTITIES });
+    }
 
     public setMode(mode: FaceModes): void {
         this.mode = mode;
+    }
+
+    public update() {
+        // Look at player
+        const parent = this.getParent();
+        if (parent != null && this.lookAtPlayer) {
+            const dx = this.scene.player.x - parent.x;
+            this.toggleDirection((dx > 0) ? 1 : -1);
+        } else {
+            this.setDirection(this.direction);
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

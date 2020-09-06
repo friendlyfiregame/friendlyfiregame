@@ -20,7 +20,7 @@ export class Tree extends NPC {
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 78, 140);
         this.setLayer(RenderingLayer.ENTITIES);
-        this.face = new Face(scene, EyeType.TREE, 5, 94);
+        this.face = new Face(scene, EyeType.TREE, false, 5, 94).appendTo(this);
         this.seed = new Seed(scene, x, y);
         this.wood = new Wood(scene, x, y);
     }
@@ -41,8 +41,6 @@ export class Tree extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.drawAseprite(ctx, Tree.sprite, "idle", 0, 0, 1);
-
-        this.drawFace(ctx);
     }
 
     public update(dt: number): void {

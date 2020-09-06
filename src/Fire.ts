@@ -108,7 +108,7 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
-        this.face = new Face(scene, EyeType.STANDARD, 0, 6);
+        this.face = new Face(scene, EyeType.STANDARD, true, 0, 6).appendTo(this);
     }
 
     public showDialoguePrompt(): boolean {
@@ -159,8 +159,6 @@ export class Fire extends NPC {
         ctx.scale(this.intensity / 5, this.intensity / 5);
         this.fireGfx.draw(ctx, 0, 0);
         ctx.restore();
-
-        this.drawFace(ctx);
     }
 
     public update(dt: number): void {

@@ -18,5 +18,7 @@ export class Radio extends Entity {
         this.scene.renderer.drawAseprite(ctx, Radio.sprite, "idle", 0, 0, 1);
     }
 
-    public update(): void {}
+    public update(): void {
+        // Intentionally not calling parent to disable physics
+    }
 }

@@ -19,6 +19,10 @@ export class Chicken extends NPC {
         this.conversation = new Conversation(conversation, this);
     }
 
+    public showDialoguePrompt(): boolean {
+        return false;
+    }
+
     public getInteractionText(): string {
         if (!this.met) {
             return "Touch";

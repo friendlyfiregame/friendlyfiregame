@@ -43,6 +43,10 @@ export class Mimic extends NPC {
         }
     }
 
+    public showDialoguePrompt(): boolean {
+        return false;
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         switch (this.state) {
             case MimicState.SLEEPING:

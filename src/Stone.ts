@@ -33,7 +33,7 @@ export class Stone extends NPC implements CollidableGameObject {
         super(scene, x, y, 26, 50);
         this.setLayer(RenderingLayer.ENTITIES);
         this.direction = -1;
-        this.face = new Face(scene, EyeType.STONE, 0, 21);
+        this.face = new Face(scene, EyeType.STONE, false, 0, 21).appendTo(this);
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 
@@ -67,8 +67,6 @@ export class Stone extends NPC implements CollidableGameObject {
             0, -1,
             this.direction
         );
-
-        this.drawFace(ctx, false);
     }
 
     public update(dt: number): void {

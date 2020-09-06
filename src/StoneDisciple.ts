@@ -17,7 +17,7 @@ export class StoneDisciple extends NPC {
         this.setLayer(RenderingLayer.ENTITIES);
         this.direction = -1;
         this.lookAtPlayer = true;
-        this.face = new Face(scene, EyeType.STONEDISCIPLE, 0, 0);
+        this.face = new Face(scene, EyeType.STONEDISCIPLE, false, 0, 0).appendTo(this);
     }
 
     protected showDialoguePrompt(): boolean {
@@ -39,8 +39,6 @@ export class StoneDisciple extends NPC {
         this.scene.renderer.drawAseprite(
             ctx, StoneDisciple.sprite, "idle", 0, 0, this.direction
         );
-
-        this.drawFace(ctx, false);
     }
 
     public update(dt: number): void {
