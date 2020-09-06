@@ -50,6 +50,18 @@ export abstract class Game {
         this.updateCanvasSize();
         window.addEventListener("resize", () => this.updateCanvasSize());
         window.addEventListener("pointermove", () => this.mouseMoved());
+
+        // Use Alt+Enter to toggle fullscreen mode.
+        window.addEventListener("keydown", async (event) => {
+            if (event.altKey && event.key === "Enter") {
+                if (document.fullscreenElement === null) {
+                    await this.canvas.requestFullscreen();
+                } else {
+                    await document.exitFullscreen();
+                }
+            }
+        });
+
     }
 
     private mouseMoved(): void {
