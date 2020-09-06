@@ -45,9 +45,9 @@ export class Spider extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx, Spider.sprite, "idle", 0, 0, this.direction
-        );
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        Spider.sprite.drawTag(ctx, "idle", -Spider.sprite.width >> 1, -Spider.sprite.height);
 
         const scale = (this.direction < 0) ? { x: -1, y: 1 } : undefined;
         const totalOffsetY = -10 - this.eyeOffsetY;
@@ -65,6 +65,7 @@ export class Spider extends NPC {
             animationTag: "blink",
             time: this.scene.gameTime * 1000
         });
+        ctx.restore();
     }
 
     public update(dt: number): void {

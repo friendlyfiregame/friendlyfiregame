@@ -42,7 +42,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, MovingPlatform.sprite, "idle", 0, 0, 1);
+        MovingPlatform.sprite.drawTag(ctx, "idle", -MovingPlatform.sprite.width >> 1, -MovingPlatform.sprite.height);
     }
 
     public update(dt: number): void {

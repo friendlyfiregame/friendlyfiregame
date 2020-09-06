@@ -39,8 +39,10 @@ export class FlameBoy extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        const animationTag = "idle";
-        this.scene.renderer.drawAseprite(ctx, FlameBoy.sprite, animationTag, 0, 0, this.direction);
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        FlameBoy.sprite.drawTag(ctx, "idle", -FlameBoy.sprite.width >> 1, -FlameBoy.sprite.height);
+        ctx.restore();
     }
 
     public update(dt: number): void {

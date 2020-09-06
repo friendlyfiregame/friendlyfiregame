@@ -23,9 +23,7 @@ export class Bone extends PhysicsEntity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        this.scene.renderer.drawAseprite(ctx, Bone.sprite, "idle", 0, 0, 1);
-        ctx.restore();
+        Bone.sprite.drawTag(ctx, "idle", -Bone.sprite.width >> 1, -Bone.sprite.height);
     }
 
     public isCarried(): boolean {

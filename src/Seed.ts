@@ -58,13 +58,7 @@ export class Seed extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Seed.sprite,
-            this.getSpriteTag(),
-            0, -1,
-            1
-        );
+        Seed.sprite.drawTag(ctx, this.getSpriteTag(), -Seed.sprite.width >> 1, -Seed.sprite.height + 1);
     }
 
     public isCarried(): boolean {

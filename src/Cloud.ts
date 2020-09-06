@@ -80,13 +80,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Cloud.sprite,
-            "idle",
-            0, 0,
-            1
-        );
+        Cloud.sprite.drawTag(ctx, "idle", -Cloud.sprite.width >> 1, -Cloud.sprite.height);
     }
 
     public update(dt: number): void {

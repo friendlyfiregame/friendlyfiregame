@@ -15,13 +15,7 @@ export class Campfire extends Entity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Campfire.sprite,
-            "idle",
-            0, -2,
-            1
-        );
+        Campfire.sprite.drawTag(ctx, "idle", -Campfire.sprite.width >> 1, -Campfire.sprite.height + 2);
     }
 
     public update(): void {}

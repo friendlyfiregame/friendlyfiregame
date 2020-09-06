@@ -9,7 +9,7 @@ import powershiba3 from "../assets/dialog/powershiba3.dialog.json";
 import { RenderingLayer } from "./Renderer";
 
 export enum PowerShibaState {
-    IN_CLOUDS,
+    IN_PowerShibaS,
     ON_MOUNTAIN,
     CONSUMED
 }
@@ -18,7 +18,7 @@ export enum PowerShibaState {
 export class PowerShiba extends NPC {
     @asset("sprites/powershiba.aseprite.json")
     private static sprite: Aseprite;
-    private state = PowerShibaState.IN_CLOUDS;
+    private state = PowerShibaState.IN_PowerShibaS;
 
     private floatAmount = 4;
     private floatSpeed = 2;
@@ -63,12 +63,7 @@ export class PowerShiba extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-
-        this.scene.renderer.drawAseprite(
-            ctx,
-            PowerShiba.sprite, "idle", 0, -floatOffsetY,
-            1
-        );
+        PowerShiba.sprite.drawTag(ctx, "idle", -PowerShiba.sprite.width >> 1, -PowerShiba.sprite.height + floatOffsetY);
     }
 
     public update(dt: number): void {

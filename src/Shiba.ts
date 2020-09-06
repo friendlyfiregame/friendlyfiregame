@@ -176,17 +176,11 @@ export class Shiba extends ScriptableNPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (this.move === 0) {
-            const tag = this.peeing ? "peeing" : "idle";
-
-            this.scene.renderer.drawAseprite(
-                ctx, Shiba.sprite, tag, 0, 0, this.direction
-            );
-        } else {
-            this.scene.renderer.drawAseprite(
-                ctx, Shiba.sprite, "walk", 0, 0, this.direction
-            );
-        }
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        const tag = this.move === 0 ? this.peeing ? "peeing" : "idle" : "walk";
+        Shiba.sprite.drawTag(ctx, tag, -Shiba.sprite.width >> 1, -Shiba.sprite.height);
+        ctx.restore();
     }
 
     public showDialoguePrompt(): boolean {

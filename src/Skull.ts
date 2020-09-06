@@ -16,7 +16,7 @@ export class Skull extends PhysicsEntity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Skull.sprite, "idle", 0, 0, 1);
+        Skull.sprite.drawTag(ctx, "idle", -Skull.sprite.width >> 1, -Skull.sprite.height);
     }
 
     public isCarried(): boolean {

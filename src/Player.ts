@@ -661,13 +661,10 @@ export class Player extends PhysicsEntity {
             animation = animation + "-carry";
         }
 
-        this.scene.renderer.drawAseprite(
-            ctx,
-            sprite,
-            animation,
-            0, -1,
-            this.direction
-        );
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height + 1);
+        ctx.restore();
     }
 
     private showTooltip(label: string, control: ControllerAnimationTags) {

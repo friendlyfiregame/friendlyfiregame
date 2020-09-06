@@ -42,7 +42,7 @@ export class Wood extends PhysicsEntity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Wood.sprite, "idle", 0, 0, 1);
+        Wood.sprite.drawTag(ctx, "idle", -Wood.sprite.width >> 1, -Wood.sprite.height);
     }
 
     public isCarried(): boolean {

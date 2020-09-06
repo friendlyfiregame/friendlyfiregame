@@ -30,14 +30,10 @@ export class SuperThrow extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-
-        this.scene.renderer.drawAseprite(
-            ctx,
-            SuperThrow.sprite,
-            "idle",
-            0, -floatOffsetY,
-            this.direction
-        );
+        ctx.scale(this.direction, 1);
+        SuperThrow.sprite.drawTag(ctx, "idle", -SuperThrow.sprite >> 1, -SuperThrow.sprite.height + floatOffsetY);
+        ctx.restore();
     }
 }

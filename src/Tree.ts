@@ -40,7 +40,7 @@ export class Tree extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Tree.sprite, "idle", 0, 0, 1);
+        Tree.sprite.drawTag(ctx, "idle", -Tree.sprite.width >> 1, -Tree.sprite.height);
     }
 
     public update(dt: number): void {

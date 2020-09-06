@@ -15,7 +15,7 @@ export class Radio extends Entity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Radio.sprite, "idle", 0, 0, 1);
+        Radio.sprite.drawTag(ctx, "idle", -Radio.sprite.width >> 1, -Radio.sprite.height);
     }
 
     public update(): void {

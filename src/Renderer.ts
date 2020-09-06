@@ -128,28 +128,4 @@ export class Renderer {
             ctx.restore();
         }
     }
-
-    public drawAseprite (
-        ctx: CanvasRenderingContext2D,
-        sprite: Aseprite, animationTag: string, x: number, y: number, direction: number
-    ): void {
-        const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
-
-        this.draw(ctx, {
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            translation: {
-                x: x,
-                y: -y
-            },
-            position: {
-                x: -sprite.width >> 1,
-                y: -sprite.height
-            },
-            scale,
-            asset: sprite,
-            animationTag,
-            time: this.scene.gameTime * 1000
-        });
-    }
 }

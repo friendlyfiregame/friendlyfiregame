@@ -32,12 +32,9 @@ export class Chicken extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Chicken.sprite,
-            "idle",
-            0, 0,
-            this.direction
-        );
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        Chicken.sprite.drawTag(ctx, "idle", -Chicken.sprite.width >> 1, -Chicken.sprite.height);
+        ctx.restore();
     }
 }

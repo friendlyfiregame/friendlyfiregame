@@ -16,7 +16,7 @@ export abstract class NPC extends PhysicsEntity {
     public thinkBubble: SpeechBubble | null = null;
     public speechBubble = new SpeechBubble(this.scene).appendTo(this);
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.scene);
+    public dialoguePrompt = new DialoguePrompt();
     private lastEndedConversation = -Infinity;
     protected met = false;
 

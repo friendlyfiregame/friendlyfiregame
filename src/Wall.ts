@@ -28,7 +28,7 @@ export class Wall extends Entity implements CollidableGameObject {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const animationTag = this.state === WallState.SOLID ? "solid" : "crumbled";
-        this.scene.renderer.drawAseprite(ctx, Wall.sprite, animationTag, 0, 0, 1);
+        Wall.sprite.drawTag(ctx, animationTag, -Wall.sprite.width >> 1, -Wall.sprite.height);
     }
 
     public update(): void {}

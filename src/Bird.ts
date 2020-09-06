@@ -176,7 +176,10 @@ export class Bird extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(ctx, Bird.sprite, "idle", 0, 0, this.direction);
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        Bird.sprite.drawTag(ctx, "idle", -Bird.sprite.width >> 1, -Bird.sprite.height);
+        ctx.restore();
     }
 
     public update(dt: number): void {

@@ -32,14 +32,7 @@ export class Wing extends NPC {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Wing.sprite,
-            "idle",
-            0, -floatOffsetY,
-            1
-        );
+        Wing.sprite.drawTag(ctx, "idle", -Wing.sprite.width >> 1, -Wing.sprite.height + floatOffsetY);
     }
 
     public update(dt: number): void {

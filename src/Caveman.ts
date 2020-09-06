@@ -15,13 +15,14 @@ export class Caveman extends NPC {
         this.setLayer(RenderingLayer.ENTITIES);
     }
 
+    public showDialoguePrompt(): boolean {
+        return false;
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Caveman.sprite,
-            "idle",
-            0, 0,
-            this.direction
-        );
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        Caveman.sprite.drawTag(ctx, "idle", -Caveman.sprite.width >> 1, -Caveman.sprite.height);
+        ctx.restore();
     }
 }

@@ -60,13 +60,10 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.drawAseprite(
-            ctx,
-            Stone.sprite,
-            "idle",
-            0, -1,
-            this.direction
-        );
+        ctx.save();
+        ctx.scale(this.direction, 1);
+        Stone.sprite.drawTag(ctx, "idle", -Stone.sprite.width >> 1, -Stone.sprite.height + 1);
+        ctx.restore();
     }
 
     public update(dt: number): void {
