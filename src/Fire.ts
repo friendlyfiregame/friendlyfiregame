@@ -7,7 +7,7 @@ import { NPC } from "./NPC";
 import { ParticleEmitter, valueCurves } from "./Particles";
 import { PIXEL_PER_METER } from "./constants";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./Renderer";
 import { rnd, rndInt, shiftValue } from "./util";
 import { ShibaState } from "./Shiba";
 import { Sound } from "./Sound";
@@ -60,6 +60,7 @@ export class Fire extends NPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+        this.setLayer(RenderingLayer.ENTITIES);
 
         this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
 
@@ -149,20 +150,16 @@ export class Fire extends NPC {
         }
     }
 
-    public drawToCanvas(ctx: CanvasRenderingContext2D): void {
-        ctx.save();
-        ctx.scale(this.intensity / 5, this.intensity / 5);
-        this.fireGfx.draw(ctx, 0, 0);
-
-        ctx.restore();
-    }
-
     public draw(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible) {
             return;
         }
 
-        this.scene.renderer.draw(ctx, { type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this });
+        ctx.save();
+        ctx.scale(this.intensity / 5, this.intensity / 5);
+        this.fireGfx.draw(ctx, 0, 0);
+        ctx.restore();
+
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {
