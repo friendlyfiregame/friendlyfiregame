@@ -5,22 +5,20 @@ import { ParticleEmitter } from "./Particles";
 export enum RenderingType {
     PARTICLE_EMITTER,
     BLACK_BARS,
-    DRAW_IMAGE,
     ASEPRITE,
     RECT
 }
 
 export enum RenderingLayer {
-    DEBUG = 10,
-    FULLSCREEN_FX = 9,
-    UI = 8,
-    BLACK_BARS = 7,
-    TILEMAP_FOREGROUND = 6,
-    PLAYER = 5,
-    ENTITIES = 4,
-    PARTICLES = 3,
-    PLATFORMS = 2,
-    TILEMAP_MAP = 1,
+    DEBUG = 9,
+    FULLSCREEN_FX = 8,
+    UI = 7,
+    BLACK_BARS = 6,
+    TILEMAP_FOREGROUND = 5,
+    PLAYER = 4,
+    ENTITIES = 3,
+    PARTICLES = 2,
+    PLATFORMS = 1,
     TILEMAP_BACKGROUND = 0
 }
 
@@ -34,8 +32,7 @@ export const LAYER_ORDER: RenderingLayer[] = [
     RenderingLayer.ENTITIES,
     RenderingLayer.PARTICLES,
     RenderingLayer.PLATFORMS,
-    RenderingLayer.TILEMAP_MAP,
-    RenderingLayer.TILEMAP_BACKGROUND,
+    RenderingLayer.TILEMAP_BACKGROUND
 ];
 
 export type Coordinates = {
@@ -83,11 +80,6 @@ export type RectRenderingItem = BaseRenderingItem & {
     dimension: Dimension;
 };
 
-export type DrawImageRenderingItem = BaseRenderingItem & {
-    type: RenderingType.DRAW_IMAGE;
-    asset: HTMLImageElement;
-};
-
 export type AsepriteRenderingItem = BaseRenderingItem & {
     type: RenderingType.ASEPRITE;
     asset: Aseprite;
@@ -95,7 +87,7 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
     time?: number;
 };
 
-export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem
+export type RenderingItem = BlackBarsRenderingItem | AsepriteRenderingItem | RectRenderingItem
     | ParticleEmitterRenderingItem;
 
 export class Renderer {
@@ -119,9 +111,6 @@ export class Renderer {
             if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
             switch (item.type) {
-                case RenderingType.DRAW_IMAGE:
-                    ctx.drawImage(item.asset, item.position.x, item.position.y);
-                    break;
                 case RenderingType.ASEPRITE:
                     item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
                     break;

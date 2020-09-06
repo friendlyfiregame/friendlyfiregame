@@ -5,9 +5,9 @@ import { GameObject, GameScene, isCollidableGameObject } from "./scenes/GameScen
 import { GameObjectInfo } from "./MapInfo";
 import { getImageData } from "./graphics";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
-import { RenderingLayer, RenderingType } from "./Renderer";
 import { SceneNode } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
+import { RenderingLayer } from "./Renderer";
 
 export enum Environment {
     AIR = 0,
@@ -45,7 +45,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     private raining = false;
 
     public constructor(scene: GameScene) {
-        super();
+        super({ layer: RenderingLayer.TILEMAP_BACKGROUND });
         this.scene = scene;
 
         const rainSpawnPosition = this.scene.pointsOfInterest.find(
@@ -88,28 +88,19 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
         const camY = -this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
 
+        ctx.save();
+        ctx.translate(camX, -camY);
         for (const background of World.backgrounds) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
 
-            this.scene.renderer.draw(ctx, {
-                type: RenderingType.DRAW_IMAGE,
-                layer: RenderingLayer.TILEMAP_BACKGROUND,
-                translation: { x: camX, y: -camY },
-                position: {
-                    x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
-                    y: (-this.getHeight() + camY) / bgY
-                },
-                asset: background
-            });
+            ctx.drawImage(background,
+                (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                (-this.getHeight() + camY) / bgY
+            );
         }
-        this.scene.renderer.draw(ctx, {
-            type: RenderingType.DRAW_IMAGE,
-            layer: RenderingLayer.TILEMAP_MAP,
-            translation: { x: camX, y: -camY },
-            position: { x: -camX, y: -this.getHeight() + camY },
-            asset: World.foreground
-        });
+        ctx.drawImage(World.foreground, -camX, -this.getHeight() + camY);
+        ctx.restore();
     }
 
     public getEnvironment(x: number, y: number): Environment {
