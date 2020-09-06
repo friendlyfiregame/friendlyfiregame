@@ -20,19 +20,6 @@ export enum RenderingLayer {
     TILEMAP_BACKGROUND = 0
 }
 
-export const LAYER_ORDER: RenderingLayer[] = [
-    RenderingLayer.DEBUG,
-    RenderingLayer.FULLSCREEN_FX,
-    RenderingLayer.UI,
-    RenderingLayer.BLACK_BARS,
-    RenderingLayer.TILEMAP_FOREGROUND,
-    RenderingLayer.PLAYER,
-    RenderingLayer.ENTITIES,
-    RenderingLayer.PARTICLES,
-    RenderingLayer.PLATFORMS,
-    RenderingLayer.TILEMAP_BACKGROUND
-];
-
 export type Coordinates = {
     x: number;
     y: number;
