@@ -10,6 +10,7 @@ import { ImageNode } from "../scene/ImageNode";
 import { TextNode } from "../scene/TextNode";
 import { easeOutQuad } from "../easings";
 import { Direction } from "../geom/Direction";
+import { Animator } from "../scene/animations/Animator";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -42,12 +43,14 @@ export class EndScene extends Scene<FriendlyFire> {
             y: (this.game.height >> 1) + 11,
             color: "red",
             opacity: 0
-        }).animate({
-            animator: (node, value) => node.setOpacity(value),
-            delay: this.subtitleDelay,
-            duration: 0.5,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setOpacity(value),
+            {
+                delay: this.subtitleDelay,
+                duration: 0.5,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         // Inform the user, that it's possible to return to the title
         const text = `Press any ${this.input.currentControllerFamily === ControllerFamily.KEYBOARD
@@ -60,12 +63,14 @@ export class EndScene extends Scene<FriendlyFire> {
             y: this.game.height - 15,
             color: "darkgrey",
             opacity: 0
-        }).animate({
-            animator: (node, value) => node.setOpacity(value),
-            delay: this.inputDelay,
-            duration: 0.5,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setOpacity(value),
+            {
+                delay: this.inputDelay,
+                duration: 0.5,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
     }
 
     public activate(): void {

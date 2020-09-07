@@ -11,12 +11,12 @@ export interface EntityDistance {
     distance: number;
 }
 
-export type Bounds = {
-    x: number;
-    y: number;
+export interface Bounds {
+    minX: number;
+    minY: number;
     width: number;
     height: number;
-};
+}
 
 type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
 
@@ -116,12 +116,13 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
         return entitiesInRange[0].target;
     }
 
-    public getBounds(margin = 0): Bounds {
+    // TODO Merge with getBounds from SceneNode?
+    public getOldBounds(margin = 0): Bounds {
         const width = this.getWidth() + (margin * 2);
         const height = this.getHeight() + (margin * 2);
-        const x = this.getX() - (this.getWidth() / 2) - margin;
-        const y = this.getY() - -this.getHeight() + margin;
-        return { x, y, width, height };
+        const minX = this.getX() - (this.getWidth() / 2) - margin;
+        const minY = this.getY() - -this.getHeight() + margin;
+        return { minX, minY, width, height };
     }
 
     /**

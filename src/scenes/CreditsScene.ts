@@ -16,6 +16,7 @@ import { TextNode } from "../scene/TextNode";
 import { SceneNode } from "../scene/SceneNode";
 import { ImageNode } from "../scene/ImageNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
+import { Animator } from "../scene/animations/Animator";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset("music/a-vision-of-fire-acoustic.ogg")
@@ -131,12 +132,10 @@ export class CreditsScene extends Scene<FriendlyFire> {
         const startY = this.game.height + 50;
         let totalCrawlHeight = 0;
 
-        const credits = new SceneNode().appendTo(this.rootNode).animate({
-            animator: (node, value, elapsed) => {
-                node.setY(startY - (elapsed * 1000 / 36) % (totalCrawlHeight + startY));
-            },
-            duration: Infinity
-        });
+        const credits = new SceneNode().appendTo(this.rootNode).addAnimation(new Animator(
+            (node, value, elapsed) => node.setY(startY - (elapsed * 1000 / 36) % (totalCrawlHeight + startY)),
+            { duration: Infinity }
+        ));
 
         const x = 20;
         let y = this.addTitle(credits, 0, x);

@@ -106,7 +106,7 @@ export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 
     const x = o.x - margin;
     const y = o.y + margin;
 
-    return { x, y, width, height };
+    return { minX: x, minY: y, width, height };
 }
 
 export function isElectron(): boolean {

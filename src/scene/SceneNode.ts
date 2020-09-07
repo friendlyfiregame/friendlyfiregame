@@ -1,10 +1,11 @@
 import { Scene } from "../Scene";
 import { Game } from "../Game";
 import { Direction } from "../geom/Direction";
-import { AnimationArgs, SceneNodeAnimation } from "./SceneNodeAnimation";
 import { AffineTransform } from "../graphics/AffineTransform";
 import { Polygon2 } from "../graphics/Polygon2";
 import { Vector2 } from "../graphics/Vector2";
+import { Bounds2 } from "../graphics/Bounds2";
+import { Animation } from "./animations/Animation";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -125,10 +126,17 @@ export class SceneNode<T extends Game = Game> {
     private childAnchor: Direction;
 
     /**
-     * The bounds polygon. This is updated on demand and automatically invalidated when node size changes. Node
-     * has to call [[invalidateBounds]] manually when something else influences the bounds.
+     * The bounds polygon in local coordinate system. This is updated on demand and automatically invalidated when
+     * node size changes. Node has to call [[invalidateBounds]] manually when something else influences the bounds.
      */
-    private boundsPolygon: Polygon2 = new Polygon2();
+    private readonly boundsPolygon: Polygon2 = new Polygon2();
+
+    /**
+     * The bounds polygon in scene coordinates. This is updated on demand and automatically invalidated when node
+     * size or scene transformation changes. Node has to call [[invalidateBounds]] manually when something else
+     * influences the bounds.
+     */
+    private readonly sceneBoundsPolygon: Polygon2 = new Polygon2();
 
     /**
      * The transformation matrix of this node. This transformation is applied to the node before moving the node to
@@ -143,8 +151,11 @@ export class SceneNode<T extends Game = Game> {
      */
     private readonly sceneTransformation = new AffineTransform();
 
+    /** If scene transformation is valid or must be recalculated. */
+    private sceneTransformationValid = false;
+
     /** Array with currently active animations. Animations are automatically removed from the array when finished.*/
-    private readonly animations: SceneNodeAnimation<T>[] = [];
+    private readonly animations: Animation<this>[] = [];
 
     /**
      * The current opacity of the node. 0.0 means fully transparent and 1.0 means fully opaque. Can be larger
@@ -224,6 +235,23 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Invalidates the scene transformation. Must be called when the local transformation or a parent transformation
+     * is changed. It does nothing when scene transformation is already invalid. Otherwise it marks the scene
+     * transformation and the scene bounds polygon as invalid and then recursively invalidates the scene
+     * transformation of all child nodes.
+     *
+     * The scene transformation is automatically re-calculated on-demand the next time [[getSceneTransformation]] is
+     * called.
+     */
+    private invalidateSceneTransformation(): void {
+        if (this.sceneTransformationValid) {
+            this.sceneTransformationValid = false;
+            this.sceneBoundsPolygon.clear();
+            this.forEachChild(child => child.invalidateSceneTransformation());
+        }
+    }
+
+    /**
      * Sets the horizontal position relative to the parent node.
      *
      * @param x - The horizontal position to set.
@@ -231,6 +259,7 @@ export class SceneNode<T extends Game = Game> {
     public setX(x: number): this {
         if (x !== this.#x) {
             this.#x = x;
+            this.invalidateSceneTransformation();
             this.invalidate();
         }
         return this;
@@ -253,6 +282,7 @@ export class SceneNode<T extends Game = Game> {
     public setY(y: number): this {
         if (y !== this.#y) {
             this.#y = y;
+            this.invalidateSceneTransformation();
             this.invalidate();
         }
         return this;
@@ -268,6 +298,7 @@ export class SceneNode<T extends Game = Game> {
         if (x !== 0 || y !== 0) {
             this.#x += x;
             this.#y += y;
+            this.invalidateSceneTransformation();
             this.invalidate();
         }
         return this;
@@ -283,6 +314,7 @@ export class SceneNode<T extends Game = Game> {
         if (x !== this.#x || y !== this.#y) {
             this.#x = x;
             this.#y = y;
+            this.invalidateSceneTransformation();
             this.invalidate();
         }
         return this;
@@ -313,6 +345,7 @@ export class SceneNode<T extends Game = Game> {
     public setWidth(width: number): this {
         if (width !== this.#width) {
             this.#width = width;
+            this.invalidateSceneTransformation();
             this.invalidate();
             this.invalidateBounds();
         }
@@ -344,6 +377,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public setHeight(height: number): this {
         if (height !== this.#height) {
+            this.invalidateSceneTransformation();
             this.#height = height;
             this.invalidate();
             this.invalidateBounds();
@@ -361,6 +395,7 @@ export class SceneNode<T extends Game = Game> {
         if (width !== this.#width || height !== this.#height) {
             this.#width = width;
             this.#height = height;
+            this.invalidateSceneTransformation();
             this.invalidate();
             this.invalidateBounds();
         }
@@ -424,6 +459,7 @@ export class SceneNode<T extends Game = Game> {
     public setAnchor(anchor: Direction): this {
         if (anchor !== this.anchor) {
             this.anchor = anchor;
+            this.invalidateSceneTransformation();
             this.invalidate();
         }
         return this;
@@ -448,6 +484,7 @@ export class SceneNode<T extends Game = Game> {
     public setChildAnchor(childAnchor: Direction): this {
         if (childAnchor !== this.childAnchor) {
             this.childAnchor = childAnchor;
+            this.forEachChild(child => child.invalidateSceneTransformation());
             this.invalidate();
         }
         return this;
@@ -465,6 +502,37 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns the scene transformation of this node. This is cached and automatically recalculated when
+     * local transformation of this node or one of its parents is changed.
+     *
+     * @return The scene transformation.
+     */
+    public getSceneTransformation(): AffineTransform {
+        if (!this.sceneTransformationValid) {
+            const parent = this.parent;
+            if (parent != null) {
+                this.sceneTransformation.setMatrix(parent.getSceneTransformation());
+                this.sceneTransformation.translate(
+                    (Direction.getX(parent.childAnchor) + 1) / 2 * parent.#width,
+                    (Direction.getY(parent.childAnchor) + 1) / 2 * parent.#height
+                );
+            /*} else if (this.#scene != null) {
+                this.sceneTransformation.setMatrix(this.#scene.camera.getSceneTransformation());*/
+            } else {
+                this.sceneTransformation.reset();
+            }
+            this.sceneTransformation.translate(this.#x, this.mirroredY ? -this.#y : this.#y);
+            this.sceneTransformation.mul(this.transformation);
+            this.sceneTransformation.translate(
+                -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
+                -(Direction.getY(this.anchor) + 1) / 2 * this.#height
+            );
+            this.sceneTransformationValid = true;
+        }
+        return this.sceneTransformation;
+    }
+
+    /**
      * Modifies the custom transformation matrix of this node. Calls the given transformer function which can then
      * modify the given transformation matrix. After this the node is invalidated to recalculate bounds and redraw it.
      *
@@ -472,6 +540,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public transform(transformer: (transformation: AffineTransform) => void): this {
         transformer(this.transformation);
+        this.invalidateSceneTransformation();
         return this.invalidate();
     }
 
@@ -605,6 +674,7 @@ export class SceneNode<T extends Game = Game> {
         node.parent = this;
         node.setScene(this.#scene);
 
+        node.invalidateSceneTransformation();
         node.invalidate();
         this.invalidate();
         return this;
@@ -657,6 +727,7 @@ export class SceneNode<T extends Game = Game> {
         node.previousSibling = null;
         node.setScene(null);
 
+        node.invalidateSceneTransformation();
         node.invalidate();
         this.invalidate();
 
@@ -716,6 +787,9 @@ export class SceneNode<T extends Game = Game> {
         newNode.nextSibling = refNode;
         newNode.parent = this;
         newNode.setScene(this.#scene);
+
+        newNode.invalidateSceneTransformation();
+        newNode.invalidate();
 
         return this.invalidate();
     }
@@ -959,6 +1033,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public invalidateBounds(): this {
         this.boundsPolygon.clear();
+        this.sceneBoundsPolygon.clear();
         return this;
     }
 
@@ -988,6 +1063,40 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns the node bounds within local coordinate system.
+     *
+     * @return The bounds of this node.
+     */
+    public getBounds(): Bounds2 {
+        return this.getBoundsPolygon().getBounds();
+    }
+
+    /**
+     * Returns the scene bounds polygon of the node.
+     *
+     * @return The scene bounds polygon.
+     */
+    public getSceneBoundsPolygon(): Polygon2 {
+        if (!this.sceneBoundsPolygon.hasVertices()) {
+            const boundsPolygon = this.getBoundsPolygon();
+            for (const vertex of boundsPolygon.vertices) {
+                this.sceneBoundsPolygon.addVertex(vertex.clone());
+            }
+            this.sceneBoundsPolygon.transform(this.getSceneTransformation());
+        }
+        return this.sceneBoundsPolygon;
+    }
+
+    /**
+     * Returns the node bounds within scene coordinate system.
+     *
+     * @return The scene bounds.
+     */
+    public getSceneBounds(): Bounds2 {
+        return this.getSceneBoundsPolygon().getBounds();
+    }
+
+    /**
      * Marks this node, all parent nodes and the scene as invalid to trigger a scene revalidation. This must be
      * called every time when some aspect of the node is changed which requires a redraw of the scene node.
      *
@@ -1010,10 +1119,10 @@ export class SceneNode<T extends Game = Game> {
     /**
      * Adds a new animation to the scene.
      *
-     * @param animationArgs - The arguments defining the animation to add.
+     * @param animation - The animation to add.
      */
-    public animate(animationArgs: AnimationArgs<T>): this {
-        this.animations.push(new SceneNodeAnimation(this, animationArgs));
+    public addAnimation(animation: Animation<this>): this {
+        this.animations.push(animation);
         return this;
     }
 
@@ -1110,7 +1219,7 @@ export class SceneNode<T extends Game = Game> {
         let numAnimations = animations.length;
         let i = 0;
         while (i < numAnimations) {
-            if (animations[i].update(dt)) {
+            if (animations[i].update(this, dt)) {
                 animations.splice(i, 1);
                 numAnimations--;
             } else {
@@ -1129,24 +1238,6 @@ export class SceneNode<T extends Game = Game> {
         // Update this node and run animations
         const postUpdate = this.update(dt);
         this.updateAnimations(dt);
-
-        // Update the scene transformation for this node
-        const parent = this.parent;
-        if (parent != null) {
-            this.sceneTransformation.setMatrix(parent.sceneTransformation);
-            this.sceneTransformation.translate(
-                (Direction.getX(parent.childAnchor) + 1) / 2 * parent.#width,
-                (Direction.getY(parent.childAnchor) + 1) / 2 * parent.#height
-            );
-        } else {
-            this.sceneTransformation.reset();
-        }
-        this.sceneTransformation.translate(this.#x, this.mirroredY ? -this.#y : this.#y);
-        this.sceneTransformation.mul(this.transformation);
-        this.sceneTransformation.translate(
-            -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
-            -(Direction.getY(this.anchor) + 1) / 2 * this.#height
-        );
 
         // Update child nodes
         const layers = this.updateChildren(dt) | this.getEffectiveLayer();
@@ -1190,19 +1281,40 @@ export class SceneNode<T extends Game = Game> {
      */
     protected drawBounds(ctx: CanvasRenderingContext2D): this {
         if (this.showBounds) {
-            const bounds = this.getBoundsPolygon();
+            const lineDashOffset = Math.round(Date.now() / 100) % 8;
+
+            // Draw bounds polygon
+            const boundsPolygon = this.getSceneBoundsPolygon();
             ctx.save();
-            this.sceneTransformation.setCanvasTransform(ctx);
+            ctx.beginPath();
+            boundsPolygon.draw(ctx);
+            ctx.clip();
+            ctx.save();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "red";
+            ctx.setLineDash([2, 6]);
+            ctx.lineDashOffset = lineDashOffset;
+            ctx.stroke();
+            ctx.strokeStyle = "white";
+            ctx.lineDashOffset = lineDashOffset + 2;
+            ctx.stroke();
+            ctx.restore();
+            ctx.restore();
+
+            // Draw bounds rectangle
+            const bounds = this.getSceneBounds();
+            ctx.save();
             ctx.beginPath();
             bounds.draw(ctx);
             ctx.clip();
             ctx.save();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = "red";
+            ctx.strokeStyle = "blue";
+            ctx.setLineDash([2, 6]);
+            ctx.lineDashOffset = lineDashOffset + 4;
             ctx.stroke();
-            ctx.setLineDash([4, 4]);
             ctx.strokeStyle = "white";
-            ctx.lineDashOffset = Math.round(Date.now() / 100) % 8;
+            ctx.lineDashOffset = lineDashOffset + 6;
             ctx.stroke();
             ctx.restore();
             ctx.restore();
@@ -1231,6 +1343,7 @@ export class SceneNode<T extends Game = Game> {
 
         // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
         // when exactly between two pixels (Firefox doesn't have this problem).
+        /*
         if (ctx.getTransform) {
             const transform = ctx.getTransform();
             ctx.translate(
@@ -1238,6 +1351,7 @@ export class SceneNode<T extends Game = Game> {
                 Math.round(transform.f) - transform.f
             );
         }
+        */
 
         const postDraw = layer === this.getEffectiveLayer() ? this.draw(ctx, width, height) : null;
         ctx.save();

@@ -154,37 +154,37 @@ export class Camera {
             const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
 
             const overBounds: OverBoundData = {
-                left: (targetVisibleRect.x < this.bounds.x),
-                right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.x + this.bounds.width),
-                top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.y,
-                bottom: targetVisibleRect.y < (this.bounds.y - this.bounds.height)
+                left: (targetVisibleRect.x < this.bounds.minX),
+                right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.minX + this.bounds.width),
+                top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.minY,
+                bottom: targetVisibleRect.y < (this.bounds.minY - this.bounds.height)
             };
 
             // Bound clip left / right
             if (targetVisibleRect.width >= this.bounds.width) {
                 const visibleCenterX = targetVisibleRect.x + targetVisibleRect.width / 2;
-                const boundCenterX = this.bounds.x + this.bounds.width / 2;
+                const boundCenterX = this.bounds.minX + this.bounds.width / 2;
                 const diff = boundCenterX - visibleCenterX;
                 xTarget += diff;
             } else if (overBounds.left) {
-                const diff = this.bounds.x - targetVisibleRect.x;
+                const diff = this.bounds.minX - targetVisibleRect.x;
                 xTarget += diff;
             } else if (overBounds.right) {
-                const diff = (this.bounds.x + this.bounds.width) - (targetVisibleRect.x + targetVisibleRect.width);
+                const diff = (this.bounds.minX + this.bounds.width) - (targetVisibleRect.x + targetVisibleRect.width);
                 xTarget += diff;
             }
 
             // Bound clip top / bottom
             if (targetVisibleRect.height >= this.bounds.height) {
                 const visibleCenterY = (targetVisibleRect.y + targetVisibleRect.height) - targetVisibleRect.height / 2;
-                const boundCenterY = this.bounds.y - this.bounds.height / 2;
+                const boundCenterY = this.bounds.minY - this.bounds.height / 2;
                 const diff = boundCenterY - visibleCenterY;
                 yTarget += diff;
             } else if (overBounds.top) {
-                const diff = this.bounds.y - (targetVisibleRect.y + targetVisibleRect.height);
+                const diff = this.bounds.minY - (targetVisibleRect.y + targetVisibleRect.height);
                 yTarget += diff;
             } else if (overBounds.bottom) {
-                const diff = (this.bounds.y - this.bounds.height) - targetVisibleRect.y;
+                const diff = (this.bounds.minY - this.bounds.height) - targetVisibleRect.y;
                 yTarget += diff;
             }
         }

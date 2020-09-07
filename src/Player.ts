@@ -781,8 +781,8 @@ export class Player extends PhysicsEntity {
         if (!mapBounds) return false;
 
         return !this.scene.world.boundingBoxesCollide(this.getBounds(), {
-            x: mapBounds.x + 4,
-            y: mapBounds.y - 4,
+            minX: mapBounds.minX + 4,
+            minY: mapBounds.minY - 4,
             width: mapBounds.width - 8,
             height: mapBounds.height - 8
         });

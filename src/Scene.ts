@@ -5,6 +5,7 @@ import { Scenes } from "./Scenes";
 import { Transition } from "./Transition";
 import { RootNode, UpdateRootNode, DrawRootNode } from "./scene/RootNode";
 import { SceneNode } from "./scene/SceneNode";
+import { Camera } from "./scene/Camera";
 
 /**
  * Constructor type of a scene.
@@ -33,6 +34,7 @@ export abstract class Scene<T extends Game, A = void> {
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
     private backgroundStyle: string | null = null;
+    private currentCamera: Camera = new Camera(this.game);
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {
@@ -40,6 +42,14 @@ export abstract class Scene<T extends Game, A = void> {
             this.drawRootNode = draw;
         });
         this.rootNode.resizeTo(this.game.width, this.game.height);
+    }
+
+    public setCamera(camera: Camera): void {
+        this.currentCamera = camera;
+    }
+
+    public getCamera(): Camera {
+        return this.currentCamera;
     }
 
     public get keyboard(): Keyboard {
@@ -160,6 +170,7 @@ export abstract class Scene<T extends Game, A = void> {
      * updated.
      */
     public update(dt: number): void {
+        this.currentCamera.update(dt);
         this.usedLayers = this.updateRootNode(dt);
     }
 
@@ -177,7 +188,10 @@ export abstract class Scene<T extends Game, A = void> {
             ctx.save();
             ctx.fillStyle = this.backgroundStyle;
             ctx.fillRect(0, 0, width, height);
+            ctx.restore();
         }
+        ctx.save();
+        const postDraw = this.currentCamera.draw(ctx, width, height);
         let layer = 1;
         let usedLayers = this.usedLayers & ~this.hiddenLayers;
         while (usedLayers !== 0) {
@@ -187,5 +201,13 @@ export abstract class Scene<T extends Game, A = void> {
             usedLayers >>>= 1;
             layer <<= 1;
         }
+        if (postDraw != null) {
+            if (postDraw === true) {
+                // TODO
+            } else if (postDraw !== false) {
+                postDraw();
+            }
+        }
+        ctx.restore();
     }
 }

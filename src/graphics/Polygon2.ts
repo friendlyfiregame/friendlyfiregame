@@ -1,5 +1,7 @@
 import { Line2 } from "./Line2";
 import { ReadonlyVector2, Vector2 } from "./Vector2";
+import { AffineTransform } from "./AffineTransform";
+import { Bounds2 } from "./Bounds2";
 
 /**
  * A polygon with any number of vertices.
@@ -8,6 +10,7 @@ export class Polygon2 {
     public readonly vertices: Vector2[];
     public readonly edges: Line2[] = [];
     private readonly normals: Vector2[] = [];
+    private readonly bounds = new Bounds2();
 
     /**
      * Creates a polygon with the given initial vertices.
@@ -47,6 +50,7 @@ export class Polygon2 {
         } else {
             edge.end = this.vertices[0];
         }
+        this.bounds.reset();
         return this;
     }
 
@@ -67,6 +71,7 @@ export class Polygon2 {
             }
             this.vertices.splice(index, 1);
             this.edges.splice(index, 1);
+            this.bounds.reset();
         }
         return this;
     }
@@ -75,9 +80,12 @@ export class Polygon2 {
      * Removes all vertices from the polygon.
      */
     public clear(): this {
-        this.vertices.length = 0;
-        this.edges.length = 0;
-        this.normals.length = 0;
+        if (this.hasVertices()) {
+            this.vertices.length = 0;
+            this.edges.length = 0;
+            this.normals.length = 0;
+            this.bounds.reset();
+        }
         return this;
     }
 
@@ -149,5 +157,31 @@ export class Polygon2 {
             ctx.lineTo(vertex.x + normal.x * len, vertex.y + normal.y * len);
         });
         return this;
+    }
+
+    /**
+     * Transforms this polygon with the given transformation matrix.
+     *
+     * @param m - The transformation to apply.
+     */
+    public transform(m: AffineTransform): this {
+        for (const vertex of this.vertices) {
+            vertex.mul(m);
+        }
+        this.bounds.reset();
+        return this;
+    }
+
+    /**
+     * Returns the bounds of the polygon. Bounds are cached and automatically invalidated when polygon is changed
+     * or transformed.
+     *
+     * @return The polygon bounds.
+     */
+    public getBounds(): Bounds2 {
+        if (this.bounds.isEmpty()) {
+            this.bounds.addPolygon(this);
+        }
+        return this.bounds;
     }
 }

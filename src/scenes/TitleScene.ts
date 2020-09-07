@@ -18,6 +18,7 @@ import { AsepriteNode } from "../scene/AsepriteNode";
 import { Direction } from "../geom/Direction";
 import { ImageNode } from "../scene/ImageNode";
 import { SceneNode } from "../scene/SceneNode";
+import { Animator } from "../scene/animations/Animator";
 
 type MainMenuParams = {
     label: string;
@@ -105,11 +106,13 @@ export class TitleScene extends Scene<FriendlyFire> {
             x: this.titleLayer3Position.x,
             y: this.titleLayer3Position.y,
             anchor: Direction.TOP_LEFT
-        }).animate({
-            animator: (node, value) => node.setY(this.titleLayer3Position.y + (1 - value) * 100),
-            duration: this.animationDuration,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setY(this.titleLayer3Position.y + (1 - value) * 100),
+            {
+                duration: this.animationDuration,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         // The background layer with the sea animated to move in from the bottom
         new AsepriteNode({
@@ -119,11 +122,13 @@ export class TitleScene extends Scene<FriendlyFire> {
             x: this.titleLayer2Position.x,
             y: this.titleLayer2Position.y,
             anchor: Direction.TOP_LEFT
-        }).animate({
-            animator: (node, value) => node.setY(this.titleLayer2Position.y + (1 - value) * 200),
-            duration: this.animationDuration,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setY(this.titleLayer2Position.y + (1 - value) * 200),
+            {
+                duration: this.animationDuration,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         // The two floating islands in the background animated to moving in from the bottom
         new SceneNode().appendChild(
@@ -144,11 +149,13 @@ export class TitleScene extends Scene<FriendlyFire> {
                 x: 323,
                 y: 178
             })
-        ).animate({
-            animator: (node, value) => node.setY((1 - value) * 250),
-            duration: this.animationDuration,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        ).addAnimation(new Animator(
+            (node, value) => node.setY((1 - value) * 250),
+            {
+                duration: this.animationDuration,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         // The girl standing on the ground animated to move in from the bottom
         new AsepriteNode({
@@ -158,11 +165,13 @@ export class TitleScene extends Scene<FriendlyFire> {
             x: 22,
             y: 155,
             anchor: Direction.TOP_LEFT
-        }).animate({
-            animator: (node, value) => node.setY(155 + (1 - value) * 330),
-            duration: this.animationDuration,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setY(155 + (1 - value) * 330),
+            {
+                duration: this.animationDuration,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         // The ground layer animated to move in from the bottom
         new AsepriteNode({
@@ -172,11 +181,13 @@ export class TitleScene extends Scene<FriendlyFire> {
             x: this.titleLayer1Position.x,
             y: this.titleLayer1Position.y,
             anchor: Direction.TOP_LEFT
-        }).animate({
-            animator: (node, value) => node.setY(this.titleLayer1Position.y + (1 - value) * 300),
-            duration: this.animationDuration,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setY(this.titleLayer1Position.y + (1 - value) * 300),
+            {
+                duration: this.animationDuration,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         // The title text with flame icon fading in and moving to the top
         new SceneNode({
@@ -198,27 +209,33 @@ export class TitleScene extends Scene<FriendlyFire> {
                 image: TitleScene.logoImage,
                 anchor: Direction.TOP_LEFT
             })
-        ).animate({
-            animator: (node, value) => node.setY(this.titleBasePosition.y - 10 + 150 * (1 - value)),
-            duration: this.animationDuration,
-            easing: easeOutQuad
-        }).animate({
-            animator: (node, value) => node.setOpacity(value),
-            delay: this.animationDuration / 2,
-            duration: this.animationDuration / 2,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        ).addAnimation(new Animator(
+            (node, value) => node.setY(this.titleBasePosition.y - 10 + 150 * (1 - value)),
+            {
+                duration: this.animationDuration,
+                easing: easeOutQuad
+            }
+        )).addAnimation(new Animator(
+            (node, value) => node.setOpacity(value),
+            {
+                delay: this.animationDuration / 2,
+                duration: this.animationDuration / 2,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         this.menu = new MenuList({
             id: "menu",
             opacity:0,
             align: MenuAlignment.CENTER
-        }).animate({
-            animator: (node, value) => node.setOpacity(value),
-            delay: 2.5,
-            duration: 0.5,
-            easing: easeOutQuad
-        }).appendTo(this.rootNode);
+        }).addAnimation(new Animator(
+            (node, value) => node.setOpacity(value),
+            {
+                delay: 2.5,
+                duration: 0.5,
+                easing: easeOutQuad
+            }
+        )).appendTo(this.rootNode);
 
         Object.values(MenuItemKey).forEach((key, index) => {
             if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {

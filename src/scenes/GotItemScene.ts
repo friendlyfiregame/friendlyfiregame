@@ -12,6 +12,7 @@ import { Direction } from "../geom/Direction";
 import { AsepriteNode } from "../scene/AsepriteNode";
 import { SceneNode } from "../scene/SceneNode";
 import { TextNode } from "../scene/TextNode";
+import { Animator } from "../scene/animations/Animator";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 
@@ -107,11 +108,11 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         new SceneNode({
             x: this.game.width >> 1,
             y: this.game.height >> 1
-        }).animate({
-            animator: node => node.transform(m => m.setScale(2).translateY(Math.sin(Date.now() / 1000
+        }).addAnimation(new Animator(
+            node => node.transform(m => m.setScale(2).translateY(Math.sin(Date.now() / 1000
                 * this.floatSpeed) * this.floatAmount)),
-            duration: Infinity
-        }).appendChild(image instanceof HTMLImageElement
+            { duration: Infinity }
+        )).appendChild(image instanceof HTMLImageElement
             ? new ImageNode({ image, anchor: Direction.BOTTOM })
             : new AsepriteNode({ aseprite: image, tag: "idle", anchor: Direction.BOTTOM })
         ).appendTo(this.rootNode);

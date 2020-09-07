@@ -182,7 +182,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
                 && !ignoreEntities.includes(gameObject)
             ) {
                 const colliding = this.boundingBoxesCollide(
-                    sourceEntity.getBounds(margin), gameObject.getBounds(margin)
+                    sourceEntity.getOldBounds(margin), gameObject.getOldBounds(margin)
                 );
 
                 if (colliding) {
@@ -254,10 +254,10 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
      */
     public boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
         return !(
-            ((box1.y - box1.height) > (box2.y)) ||
-            (box1.y < (box2.y - box2.height)) ||
-            ((box1.x + box1.width) < box2.x) ||
-            (box1.x > (box2.x + box2.width))
+            ((box1.minY - box1.height) > (box2.minY)) ||
+            (box1.minY < (box2.minY - box2.height)) ||
+            ((box1.minX + box1.width) < box2.minX) ||
+            (box1.minX > (box2.minX + box2.width))
         );
     }
 

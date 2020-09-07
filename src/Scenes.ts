@@ -39,8 +39,8 @@ export class Scenes<T extends Game> {
             scene.currentTransition = null;
         }
 
-        await scene.activate();
         this.activeScene = scene;
+        await scene.activate();
     }
 
     public getPreviousScene(): Scene<T> | null {
