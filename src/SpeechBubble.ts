@@ -138,7 +138,7 @@ export class SpeechBubble extends SceneNode {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.hasContent() || this.scene.getCamera().isFocusing() || !this.scene.isActive()) {
+        if (!this.hasContent() || this.scene.camera.isFocusing() || !this.scene.isActive()) {
             return;
         }
 
@@ -153,7 +153,7 @@ export class SpeechBubble extends SceneNode {
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const parentX = (this.getParent()?.x ?? 0);
-            const visibleRect = this.scene.getCamera().getVisibleRect();
+            const visibleRect = this.scene.camera.getVisibleRect();
             const relativeX = parentX + posX - visibleRect.getLeft();
 
             const clipAmount = Math.max(

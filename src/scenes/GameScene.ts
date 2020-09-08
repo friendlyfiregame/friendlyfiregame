@@ -256,9 +256,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.caveman = this.getGameObject(Caveman);
         this.bone = this.getGameObject(Bone);
 
-        this.getCamera().mirroredY = true;
-        this.getCamera().setBounds(this.player.getCurrentMapBounds());
-        this.getCamera().setFollow(() => ({ x: this.player.x, y: this.player.y + 30 }));
+        this.camera.mirroredY = true;
+        this.camera.setBounds(this.player.getCurrentMapBounds());
+        this.camera.setFollow(() => ({ x: this.player.x, y: this.player.y + 30 }));
 
         this.fpsInterval = setInterval(() => {
             this.framesPerSecond = this.frameCounter;
@@ -428,7 +428,7 @@ export class GameScene extends Scene<FriendlyFire> {
             const diff = this.fireFuryEndTime - this.gameTime;
             const p = diff / 16;
             const fade = valueCurves.trapeze(0.4).get(p);
-            this.getCamera().fadeToBlack.set(fade);
+            this.camera.fadeToBlack.set(fade);
         }
 
         if (this.apocalypse) {
@@ -530,8 +530,8 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D): void {
         this.updateApocalypse();
-        this.getCamera().cinematicBars.set(0.1 * this.apocalypseFactor);
-        this.getCamera().fadeToBlack.set(0.7 * this.apocalypseFactor, "darkred");
+        this.camera.cinematicBars.set(0.1 * this.apocalypseFactor);
+        this.camera.fadeToBlack.set(0.7 * this.apocalypseFactor, "darkred");
     }
 
     public loadApocalypse(): void {
@@ -560,7 +560,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public beginFriendshipEnding(): void {
-        this.getCamera().cinematicBars.show();
+        this.camera.cinematicBars.show();
         this.friendshipCutscene = true;
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
@@ -607,7 +607,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
 
-            this.getCamera().setBounds(this.player.getCurrentMapBounds());
+            this.camera.setBounds(this.player.getCurrentMapBounds());
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);
@@ -634,7 +634,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public async lookAtPOI(name: string): Promise<void> {
-        const camera = this.getCamera();
+        const camera = this.camera;
         const pointer = this.pointsOfInterest.find(poi => poi.name === name);
         if (pointer) {
             const oldFollow = camera.getFollow();

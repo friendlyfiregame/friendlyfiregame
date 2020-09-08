@@ -34,7 +34,7 @@ export abstract class Scene<T extends Game, A = void> {
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
     private backgroundStyle: string | null = null;
-    private currentCamera = new Camera(this.game);
+    public readonly camera = new Camera(this.game);
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {
@@ -42,14 +42,6 @@ export abstract class Scene<T extends Game, A = void> {
             this.drawRootNode = draw;
         });
         this.rootNode.resizeTo(this.game.width, this.game.height);
-    }
-
-    public setCamera(camera: Camera<T>): void {
-        this.currentCamera = camera;
-    }
-
-    public getCamera(): Camera<T> {
-        return this.currentCamera;
     }
 
     public get keyboard(): Keyboard {
@@ -170,7 +162,7 @@ export abstract class Scene<T extends Game, A = void> {
      * updated.
      */
     public update(dt: number): void {
-        this.currentCamera.update(dt);
+        this.camera.update(dt);
         this.usedLayers = this.updateRootNode(dt);
     }
 
@@ -191,7 +183,7 @@ export abstract class Scene<T extends Game, A = void> {
             ctx.restore();
         }
         ctx.save();
-        const postDraw = this.currentCamera.draw(ctx, width, height);
+        const postDraw = this.camera.draw(ctx, width, height);
         let layer = 1;
         let usedLayers = this.usedLayers & ~this.hiddenLayers;
         while (usedLayers !== 0) {

@@ -176,10 +176,10 @@ export class Campaign {
                     break;
                 case "zoomin":
                     // TODO Needed?
-                    this.gameScene.getCamera().setScale(this.gameScene.getCamera().getScale() + 1);
+                    this.gameScene.camera.setScale(this.gameScene.camera.getScale() + 1);
                     break;
                 case "zoomout":
-                    this.gameScene.getCamera().setScale(this.gameScene.getCamera().getScale() - 1);
+                    this.gameScene.camera.setScale(this.gameScene.camera.getScale() - 1);
                     break;
                 case "treezoom":
                     this.gameScene.lookAtPOI("forest");
@@ -195,14 +195,14 @@ export class Campaign {
                     const duration = 12;
                     // TODO Re-implement crazy rotation (-2 * Math.PI, valueCurves.cubic) and scaling (8)
                     // TODO Fire is not displayed when zooming into it
-                    await this.gameScene.getCamera().focus(new Vector2(this.gameScene.fire.x, -this.gameScene.fire.y + 15), {
+                    await this.gameScene.camera.focus(new Vector2(this.gameScene.fire.x, -this.gameScene.fire.y + 15), {
                         duration: 8,
                         easing: easeOutCubic
                     });
                     this.gameScene.beginApocalypse();
                     this.gameScene.fire.conversation = null;
                     this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
-                    this.gameScene.getCamera().cinematicBars.show();
+                    this.gameScene.camera.cinematicBars.show();
                     break;
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();

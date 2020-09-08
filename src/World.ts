@@ -86,8 +86,8 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
     // TODO Background rendering totally broken
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        const camX = -this.scene.getCamera().getX();
-        const camY = -this.scene.getCamera().getY();
+        const camX = -this.scene.camera.getX();
+        const camY = -this.scene.camera.getY();
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
 
         ctx.save();

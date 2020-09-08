@@ -175,7 +175,7 @@ export class Fire extends NPC {
             this.scene.shiba.nextState();
         }
 
-        if (!this.scene.getCamera().isPointVisible(this.x, this.y, 200)) {
+        if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
             this.hide();
             return;
         }

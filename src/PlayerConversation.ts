@@ -18,7 +18,7 @@ export class PlayerConversation {
         this.setSelectedOption(0);
         this.setBubblesContent();
         this.interaction?.npcLine?.executeBeforeLine();
-        this.player.getScene()?.getCamera().cinematicBars.show();
+        this.player.getScene()?.camera.cinematicBars.show();
         npc.meet();
 
         // Ensure safe distance to NPC
@@ -156,6 +156,6 @@ export class PlayerConversation {
         this.player.speechBubble.hide();
         this.npc.speechBubble.hide();
         this.npc.registerEndedConversation();
-        this.player.getScene()?.getCamera().cinematicBars.hide();
+        this.player.getScene()?.camera.cinematicBars.hide();
     }
 }

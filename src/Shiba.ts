@@ -104,7 +104,7 @@ export class Shiba extends ScriptableNPC {
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
             this.scene.powerShiba.nextState();
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
-            this.scene.getCamera().cinematicBars.show();
+            this.scene.camera.cinematicBars.show();
 
             const shibaSpawnPos = this.scene.pointsOfInterest.find(
                 poi => poi.name === "friendship_shiba_spawn"
@@ -136,7 +136,7 @@ export class Shiba extends ScriptableNPC {
             setTimeout(() => this.scene.fire.think("Oh God…", 2000), 4500);
             setTimeout(() => this.scene.fire.think("Disgusting…", 3000), 8000);
         } else if (this.state === ShibaState.FIRE_KILLED) {
-            this.scene.getCamera().cinematicBars.hide();
+            this.scene.camera.cinematicBars.hide();
             this.peeing = false;
             this.scene.fire.state = FireState.PUT_OUT;
             Shiba.putOutSound.stop();
@@ -149,7 +149,7 @@ export class Shiba extends ScriptableNPC {
                 this.scene.fire.face?.setMode(FaceModes.BORED);
                 this.scene.player.isControllable = true;
                 this.scene.friendshipCutscene = false;
-                this.scene.getCamera().cinematicBars.hide();
+                this.scene.camera.cinematicBars.hide();
                 this.lookAtPlayer = true;
                 this.scene.game.campaign.runAction("enable", null, ["fire", "fire4"]);
                 this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba5"]);

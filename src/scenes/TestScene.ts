@@ -52,7 +52,7 @@ export class TestScene extends Scene<FriendlyFire> {
         this.rootNode.setShowBounds(true);
         this.rootNode.setChildAnchor(Direction.CENTER);
 
-        (window as any).camera = this.getCamera();
+        (window as any).camera = this.camera;
         (window as any).node1 = node1;
         (window as any).node2 = node2;
         (window as any).node3 = node3;

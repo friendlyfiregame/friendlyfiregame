@@ -391,7 +391,7 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        if (this.scene.getCamera().isFocusing() || event.repeat) {
+        if (this.scene.camera.isFocusing() || event.repeat) {
             return;
         }
 
@@ -496,7 +496,7 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        if (this.scene.getCamera().isFocusing() || event.repeat) {
+        if (this.scene.camera.isFocusing() || event.repeat) {
             return;
         }
 
@@ -625,7 +625,7 @@ export class Player extends PhysicsEntity {
             if (targetGate) {
                 Player.enterGateSound.stop();
                 Player.enterGateSound.play();
-                await this.scene.getCamera().fadeToBlack.fadeOut();
+                await this.scene.camera.fadeToBlack.fadeOut();
                 if (targetBgmId) {
                     this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                 }
@@ -635,10 +635,10 @@ export class Player extends PhysicsEntity {
                 this.x = targetGate.x + (targetGate.width / 2);
                 this.y = targetGate.y - targetGate.height;
 
-                this.scene.getCamera().setBounds(this.getCurrentMapBounds());
+                this.scene.camera.setBounds(this.getCurrentMapBounds());
                 this.isControllable = true;
 
-                await this.scene.getCamera().fadeToBlack.fadeIn();
+                await this.scene.camera.fadeToBlack.fadeIn();
             }
         }
     }
@@ -801,7 +801,7 @@ export class Player extends PhysicsEntity {
 
     private isOutOfBounds (): boolean {
         if (!this.isControllable) return false;
-        const mapBounds = this.scene.getCamera().getBounds();
+        const mapBounds = this.scene.camera.getBounds();
         if (!mapBounds) return false;
 
         return !this.scene.world.boundingBoxesCollide(this.getOldBounds(), new Rect(
@@ -824,7 +824,7 @@ export class Player extends PhysicsEntity {
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
-                this.scene.getCamera().setBounds(this.getCurrentMapBounds());
+                this.scene.camera.setBounds(this.getCurrentMapBounds());
             }
         }
 
@@ -916,7 +916,7 @@ export class Player extends PhysicsEntity {
         }
 
         // Player movement
-        if (this.scene.getCamera().isFocusing()) {
+        if (this.scene.camera.isFocusing()) {
             this.moveRight = false;
             this.moveLeft = false;
         }
@@ -1077,14 +1077,14 @@ export class Player extends PhysicsEntity {
 
                         void (async () => {
                             if (bossPointer) {
-                                const oldFollow = this.scene.getCamera().getFollow();
-                                await this.scene.getCamera().focus(new Vector2(bossPointer.x, -bossPointer.y - 60), {
+                                const oldFollow = this.scene.camera.getFollow();
+                                await this.scene.camera.focus(new Vector2(bossPointer.x, -bossPointer.y - 60), {
                                     duration: 1.5,
                                     easing: easeInOutSine
                                 });
                                 if (oldFollow) {
                                     await sleep(1000);
-                                    await this.scene.getCamera().focus(oldFollow, {
+                                    await this.scene.camera.focus(oldFollow, {
                                         duration: 1.5,
                                         easing: easeInOutSine,
                                         follow: true
