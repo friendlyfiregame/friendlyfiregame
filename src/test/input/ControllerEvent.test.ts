@@ -1,7 +1,7 @@
 import { ControllerEvent } from "../../input/ControllerEvent";
 import { ControllerFamily } from "../../input/ControllerFamily";
 import { ControllerEventType } from "../../input/ControllerEventType";
-import { ControllerIntent } from '../../input/ControllerIntent';
+import { ControllerIntent } from "../../input/ControllerIntent";
 
 describe("ControllerEvent", () => {
     describe("constructor", () => {
