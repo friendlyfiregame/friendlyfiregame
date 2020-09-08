@@ -1,6 +1,5 @@
-import { GameScene } from "./scenes/GameScene";
 import { GRAVITY } from "./constants";
-import { RenderingLayer, RenderingType } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Vector2Like } from "./graphics/Vector2";
 import { SceneNode } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
@@ -34,13 +33,7 @@ export interface ParticleEmitterArguments {
 }
 
 export class Particles extends SceneNode<FriendlyFire> {
-    private scene: GameScene;
     private emitters: ParticleEmitter[] = [];
-
-    public constructor(scene: GameScene) {
-        super();
-        this.scene = scene;
-    }
 
     public update(dt: number): void {
         this.emitters.forEach(emitter => emitter.update(dt));
@@ -49,12 +42,7 @@ export class Particles extends SceneNode<FriendlyFire> {
     // Direct drawing of particles is deactivated since it's handled via rendering engine
     public draw(ctx: CanvasRenderingContext2D): void {
         this.emitters.forEach(emitter => {
-            this.scene.renderer.draw(ctx, {
-                type: RenderingType.PARTICLE_EMITTER,
-                layer: emitter.renderingLayer,
-                zIndex: emitter.zIndex,
-                emitter
-            });
+            emitter.draw(ctx);
         });
     }
 

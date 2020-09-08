@@ -9,10 +9,13 @@ export class ParallelAnimations<T> implements Animation<T> {
     private readonly animations: Animation<T>[];
 
     /** The promise to resolve when all animations are finished. */
-    private promise: Promise<T>;
+    private promise: Promise<boolean>;
 
     /** Resolve function to call for resolving the animation promise. */
-    private resolvePromise: null | ((target: T) => void) = null;
+    private resolvePromise: null | ((finished: boolean) => void) = null;
+
+    /** Flag set to true when animation was canceled. */
+    private canceled: boolean = false;
 
     /**
      * Creates a new group of parallel animations.
@@ -37,7 +40,7 @@ export class ParallelAnimations<T> implements Animation<T> {
                 numAnimations--;
                 if (numAnimations === 0) {
                     if (this.resolvePromise != null) {
-                        this.resolvePromise(target);
+                        this.resolvePromise(!this.canceled);
                         this.resolvePromise = null;
                     }
                     return true;
@@ -57,7 +60,30 @@ export class ParallelAnimations<T> implements Animation<T> {
     }
 
     /** @inheritDoc */
-    public getPromise(): Promise<T> {
+    public cancel(): void {
+        this.canceled = true;
+        for (const animation of this.animations) {
+            animation.cancel();
+        }
+    }
+
+    /** @inheritDoc */
+    public getPromise(): Promise<boolean> {
         return this.promise;
+    }
+
+    /** @inheritDoc */
+    public isFinished(): boolean {
+        return this.animations.length === 0 && !this.canceled;
+    }
+
+    /** @inheritDoc */
+    public isCanceled(): boolean {
+        return this.canceled;
+    }
+
+    /** @inheritDoc */
+    public isRunning(): boolean {
+        return this.animations.length > 0 && !this.canceled;
     }
 }

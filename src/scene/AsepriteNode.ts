@@ -11,6 +11,9 @@ export interface AsepriteNodeArgs extends SceneNodeArgs {
 
     /** Optional animation tag to draw. */
     tag?: string;
+
+    /** Optional initial X mirroring of the sprite. */
+    mirrorX?: boolean;
 }
 
 /**
@@ -28,6 +31,8 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     /** The current time index of the animation. */
     private time = 0;
 
+    private mirrorX: boolean;
+
     /**
      * Creates a new scene node displaying the given Aseprite.
      */
@@ -39,6 +44,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         });
         this.aseprite = aseprite;
         this.tag = args.tag ?? null;
+        this.mirrorX = args.mirrorX ?? false;
     }
 
     /**
@@ -86,6 +92,18 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         return this;
     }
 
+    public setMirrorX(mirrorX: boolean): this {
+        if (mirrorX !== this.mirrorX) {
+            this.mirrorX = mirrorX;
+            this.invalidate();
+        }
+        return this;
+    }
+
+    public isMirrorX(): boolean {
+        return this.mirrorX;
+    }
+
     /** @inheritDoc */
     public update(dt: number) {
         this.time += dt;
@@ -93,10 +111,16 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
 
     /** @inheritDoc */
     public draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
+        if (this.mirrorX) {
+            ctx.translate(this.aseprite.width, 0);
+            ctx.scale(-1, 1);
+        }
         if (this.tag != null) {
             this.aseprite.drawTag(ctx, this.tag, 0, 0, this.time * 1000);
         } else {
             this.aseprite.draw(ctx, 0, 0, this.time * 1000);
         }
+        ctx.restore();
     }
 }

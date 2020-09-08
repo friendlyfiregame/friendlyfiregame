@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 @entity("skull")
 export class Skull extends PhysicsEntity {

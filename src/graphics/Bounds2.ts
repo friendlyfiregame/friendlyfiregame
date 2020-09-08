@@ -1,5 +1,5 @@
 import { Line2 } from "./Line2";
-import { Vector2 } from "./Vector2";
+import { ReadonlyVector2Like } from "./Vector2";
 import { Polygon2 } from "./Polygon2";
 import { Rect } from "../geom/Rect";
 
@@ -35,7 +35,7 @@ export class Bounds2 {
         return this.minX > this.maxX || this.minY > this.maxY;
     }
 
-    public addVertex(vertex: Vector2): this {
+    public addVertex(vertex: ReadonlyVector2Like): this {
         this.minX = Math.min(this.minX, vertex.x);
         this.maxX = Math.max(this.maxX, vertex.x);
         this.minY = Math.min(this.minY, vertex.y);

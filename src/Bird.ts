@@ -9,7 +9,7 @@ import { Environment } from "./World";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import { ParticleEmitter, valueCurves } from "./Particles";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Sound } from "./Sound";
 
 enum BirdState {

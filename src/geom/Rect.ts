@@ -23,11 +23,11 @@ export class Rect {
     }
 
     public getRight(): number {
-        return this.width - this.left;
+        return this.width + this.left;
     }
 
     public getBottom(): number {
-        return this.height - this.top;
+        return this.height + this.top;
     }
 
     public getCenterX(): number {

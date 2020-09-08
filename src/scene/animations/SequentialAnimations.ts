@@ -12,10 +12,13 @@ export class SequentialAnimations<T> implements Animation<T> {
     private current: Animation<T> | null = null;
 
     /** The promise to resolve when animation is finished. */
-    private promise: Promise<T>;
+    private promise: Promise<boolean>;
 
     /** Resolve function to call for resolving the animation promise. */
-    private resolvePromise: null | ((target: T) => void) = null;
+    private resolvePromise: null | ((finished: boolean) => void) = null;
+
+    /** Flag set to true when animation was canceled. */
+    private canceled: boolean = false;
 
     /**
      * Creates a new group of sequential animations.
@@ -40,7 +43,7 @@ export class SequentialAnimations<T> implements Animation<T> {
             return false;
         } else {
             if (this.resolvePromise != null) {
-                this.resolvePromise(target);
+                this.resolvePromise(!this.canceled);
                 this.resolvePromise = null;
             }
             return  true;
@@ -58,7 +61,33 @@ export class SequentialAnimations<T> implements Animation<T> {
     }
 
     /** @inheritDoc */
-    public getPromise(): Promise<T> {
+    public cancel(): void {
+        if (this.current != null) {
+            this.current.cancel();
+        }
+        for (const animation of this.animations) {
+            animation.cancel();
+        }
+    }
+
+    /** @inheritDoc */
+    public getPromise(): Promise<boolean> {
         return this.promise;
+    }
+
+
+    /** @inheritDoc */
+    public isFinished(): boolean {
+        return this.animations.length === 0 && !this.canceled;
+    }
+
+    /** @inheritDoc */
+    public isCanceled(): boolean {
+        return this.canceled;
+    }
+
+    /** @inheritDoc */
+    public isRunning(): boolean {
+        return this.animations.length > 0 && !this.canceled;
     }
 }

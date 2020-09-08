@@ -4,8 +4,7 @@ import { Bird } from "../Bird";
 import { BitmapFont } from "../BitmapFont";
 import { Bone } from "../Bone";
 import { createEntity } from "../Entity";
-import { clamp, isDev, rnd, rndItem, timedRnd } from "../util";
-import { Camera } from "../Camera";
+import { clamp, isDev, rnd, rndItem, timedRnd, sleep } from "../util";
 import { Campfire } from "../Campfire";
 import { Caveman } from "../Caveman";
 import { Chicken } from "../Chicken";
@@ -29,7 +28,6 @@ import { Portal } from "../Portal";
 import { PowerShiba } from "../PowerShiba";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Radio } from "../Radio";
-import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { RiddleStone } from "../RiddleStone";
 import { Scene } from "../Scene";
 import { Seed } from "../Seed";
@@ -45,6 +43,8 @@ import { Tree } from "../Tree";
 import { Wing } from "../Wing";
 import { World } from "../World";
 import { SceneNode } from "../scene/SceneNode";
+import { easeInOutQuad } from "../easings";
+import { Vector2 } from "../graphics/Vector2";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -170,7 +170,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public gateObjects: GameObjectInfo[] = [];
     public paused = false;
     public world!: World;
-    public camera!: Camera;
     public player!: Player;
     public stone!: Stone;
     public stoneDisciple!: StoneDisciple;
@@ -199,11 +198,6 @@ export class GameScene extends Scene<FriendlyFire> {
     private mapInfo!: MapInfo;
     public dt: number = 0;
     private fpsInterval: any = null;
-    private fadeToBlackEndTime = 0;
-    private fadeToBlackStartTime = 0;
-    private fadeToBlackFactor = 0;
-    private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
-    public readonly renderer = new Renderer(this);
     public readonly mountainRiddle = new MountainRiddle();
 
     public setup(): void {
@@ -215,9 +209,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gateObjects = this.mapInfo.getGateObjects();
 
         this.gameTime = 0;
-        this.fadeToBlackEndTime = 0;
-        this.fadeToBlackStartTime = 0;
-        this.fadeToBlackFactor = 0;
         this.apocalypse = false;
         this.fireFuryEndTime = 0;
         Conversation.resetGlobals();
@@ -265,8 +256,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.caveman = this.getGameObject(Caveman);
         this.bone = this.getGameObject(Bone);
 
-        this.camera = new Camera(this, this.player);
-        this.camera.setBounds(this.player.getCurrentMapBounds());
+        this.getCamera().mirroredY = true;
+        this.getCamera().setBounds(this.player.getCurrentMapBounds());
+        this.getCamera().setFollow(() => ({ x: this.player.x, y: this.player.y + 30 }));
 
         this.fpsInterval = setInterval(() => {
             this.framesPerSecond = this.frameCounter;
@@ -416,60 +408,34 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gameTime += dt;
 
         super.update(dt);
-
-        this.camera.update(dt, this.gameTime);
-
-        if (this.fadeToBlackEndTime > this.gameTime) {
-            let fade = (this.gameTime - this.fadeToBlackStartTime) / (this.fadeToBlackEndTime - this.fadeToBlackStartTime);
-
-            if (this.faceToBlackDirection === FadeDirection.FADE_IN) {
-                fade = 1 - fade;
-            }
-
-            this.fadeToBlackFactor = fade;
-        }
-
-        if (this.friendshipCutscene) {
-            this.updateFriendshipEndingCutscene(dt);
-        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
 
         // Center coordinate system
-        ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+        // ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
         // Draw stuff
-        this.camera.applyTransform(ctx);
+        // this.camera.applyTransform(ctx);
 
         // Add all debug bounds to rendering queue
         this.addAllDebugBoundsToRenderingQueue();
 
         // Apocalypse
         if (this.fireFuryEndTime) {
-            this.camera.setCinematicBar(1);
             // Fade out
             const diff = this.fireFuryEndTime - this.gameTime;
             const p = diff / 16;
             const fade = valueCurves.trapeze(0.4).get(p);
-            this.drawFade(ctx, fade, "black");
+            this.getCamera().fadeToBlack.set(fade);
         }
 
         if (this.apocalypse) {
             this.drawApocalypseOverlay(ctx);
         }
 
-        // Gate Fade
-        if (this.fadeToBlackFactor > 0) {
-            this.fadeActiveBackgroundTrack(this.fadeToBlackFactor, true);
-            this.drawFade(ctx, this.fadeToBlackFactor, "black");
-        }
-
         super.draw(ctx, width, height);
-
-        // Cinematic bars
-        this.camera.addCinematicBarsToRenderer(ctx);
 
         ctx.restore();
 
@@ -526,24 +492,6 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    public async fadeToBlack(duration: number, direction: FadeDirection): Promise<void> {
-        return new Promise((resolve) => {
-            this.fadeToBlackStartTime = this.gameTime;
-            this.fadeToBlackEndTime = this.gameTime + duration;
-            this.faceToBlackDirection = direction;
-
-            setTimeout(() => {
-                if (direction === FadeDirection.FADE_OUT) {
-                    this.fadeToBlackFactor = 1;
-                } else {
-                    this.fadeToBlackFactor = 0;
-                }
-
-                resolve();
-            }, duration * 1000);
-        });
-    }
-
     private updateApocalypse(): void {
         this.fireEmitter.setPosition(this.player.x, this.player.y);
         this.fireEffects.forEach(e => e.update());
@@ -580,36 +528,10 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    private updateFriendshipEndingCutscene(dt: number): void {
-        this.camera.setCinematicBar(1);
-    }
-
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D): void {
         this.updateApocalypse();
-        this.camera.setCinematicBar(this.apocalypseFactor);
-
-        this.renderer.draw(ctx, {
-            type: RenderingType.RECT,
-            layer: RenderingLayer.FULLSCREEN_FX,
-            position: { x: 0, y: 0 },
-            fillColor: "darkred",
-            globalCompositeOperation: "color",
-            alpha: 0.7 * this.apocalypseFactor,
-            relativeToScreen: true,
-            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
-        });
-    }
-
-    private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black"): void {
-        this.renderer.draw(ctx, {
-            type: RenderingType.RECT,
-            layer: RenderingLayer.FULLSCREEN_FX,
-            position: { x: 0, y: 0 },
-            fillColor: color,
-            alpha,
-            relativeToScreen: true,
-            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
-        });
+        this.getCamera().cinematicBars.set(0.1 * this.apocalypseFactor);
+        this.getCamera().fadeToBlack.set(0.7 * this.apocalypseFactor, "darkred");
     }
 
     public loadApocalypse(): void {
@@ -638,6 +560,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public beginFriendshipEnding(): void {
+        this.getCamera().cinematicBars.show();
         this.friendshipCutscene = true;
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
@@ -677,13 +600,14 @@ export class GameScene extends Scene<FriendlyFire> {
             // Teleport player and fire to boss spawn position
             this.player.x = bossPosition.x - 36;
             this.player.y = bossPosition.y;
+            // TODO Needed? this.getCamera().setFollow(this.player);
 
             this.player.removePowerUps();
             this.player.enableRainDance();
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
 
-            this.camera.setBounds(this.player.getCurrentMapBounds());
+            this.getCamera().setBounds(this.player.getCurrentMapBounds());
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);
@@ -707,5 +631,25 @@ export class GameScene extends Scene<FriendlyFire> {
     public resume(): void {
         this.resetMusicVolumes();
         this.togglePause(false);
+    }
+
+    public async lookAtPOI(name: string): Promise<void> {
+        const camera = this.getCamera();
+        const pointer = this.pointsOfInterest.find(poi => poi.name === name);
+        if (pointer) {
+            const oldFollow = camera.getFollow();
+            await camera.focus(new Vector2(pointer.x, -pointer.y), {
+                duration: 3,
+                easing: easeInOutQuad
+            });
+            if (oldFollow) {
+                await sleep(2000);
+                await camera.focus(oldFollow, {
+                    duration: 3,
+                    easing: easeInOutQuad,
+                    follow: true
+                });
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
-import { Bounds } from "./Entity";
 import { GameObjectInfo } from "./MapInfo";
 import { MapObjectJSON } from "*/level.json";
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from "./constants";
+import { Rect } from "./geom/Rect";
 
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {
@@ -100,13 +100,13 @@ export function shuffle<T>(array: T[]): T[] {
     return array;
 }
 
-export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 0): Bounds {
+export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 0): Rect {
     const width = o.width + (margin * 2);
     const height = o.height + (margin * 2);
     const x = o.x - margin;
     const y = o.y + margin;
 
-    return { minX: x, minY: y, width, height };
+    return new Rect(x, y, width, height);
 }
 
 export function isElectron(): boolean {

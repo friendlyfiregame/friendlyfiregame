@@ -3,7 +3,7 @@ import { BitmapFont } from "./BitmapFont";
 import { ConversationLine } from "./Conversation";
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "./constants";
 import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { sleep } from "./util";
 import { SceneNode } from "./scene/SceneNode";
 
@@ -66,8 +66,6 @@ export class SpeechBubble extends SceneNode {
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
-    private isVisible = false;
-
     private content: string [] = [];
     private longestLine: number = 0;
 
@@ -87,14 +85,6 @@ export class SpeechBubble extends SceneNode {
         this.lineHeight = Math.round(this.fontSize * this.lineHeightFactor);
         this.paddingHorizontal = this.paddingLeft + this.paddingRight;
         this.paddingVertical = this.paddingTop + this.paddingBottom;
-    }
-
-    public show(): void {
-        this.isVisible = true;
-    }
-
-    public hide(): void {
-        this.isVisible = false;
     }
 
     public hasContent(): boolean {
@@ -148,12 +138,7 @@ export class SpeechBubble extends SceneNode {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (
-            !this.isVisible
-            || !this.hasContent()
-            || !this.scene.camera.isOnTarget()
-            || !this.scene.isActive()
-        ) {
+        if (!this.hasContent() || this.scene.getCamera().isFocusing() || !this.scene.isActive()) {
             return;
         }
 
@@ -168,8 +153,8 @@ export class SpeechBubble extends SceneNode {
         } else {
             // Check if Speech Bubble clips the viewport and correct position
             const parentX = (this.getParent()?.x ?? 0);
-            const visibleRect = this.scene.camera.getVisibleRect();
-            const relativeX = parentX + posX - visibleRect.x;
+            const visibleRect = this.scene.getCamera().getVisibleRect();
+            const relativeX = parentX + posX - visibleRect.getLeft();
 
             const clipAmount = Math.max(
                 (this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0)

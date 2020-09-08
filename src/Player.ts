@@ -1,7 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { BgmId, FadeDirection, GameScene } from "./scenes/GameScene";
-import { Bounds, entity } from "./Entity";
+import { BgmId, GameScene } from "./scenes/GameScene";
+import { entity } from "./Entity";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "./util";
 import { CharacterAsset, VoiceAsset } from "./Campaign";
 import { Cloud } from "./Cloud";
@@ -24,7 +24,7 @@ import { ParticleEmitter, valueCurves } from "./Particles";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PlayerConversation } from "./PlayerConversation";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
@@ -35,6 +35,10 @@ import { Wall } from "./Wall";
 import { Wood, WoodState } from "./Wood";
 import { ControlTooltipNode } from "./scene/ControlTooltipNode";
 import { Direction } from "./geom/Direction";
+import { AsepriteNode } from "./scene/AsepriteNode";
+import { Vector2 } from "./graphics/Vector2";
+import { easeInOutSine } from "./easings";
+import { Rect } from "./geom/Rect";
 
 const groundColors = [
     "#806057",
@@ -131,12 +135,9 @@ export class Player extends PhysicsEntity {
 
     private lastHint = Date.now();
     private flying = false;
-    public direction = 1;
     private playerSpriteMetadata: PlayerSpriteMetadata[] | null = null;
-    public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
-    private visible = false;
 
     private running: boolean = false;
 
@@ -147,7 +148,7 @@ export class Player extends PhysicsEntity {
     private drowning = 0;
     private dance: Dance | null = null;
     private currentFailAnimation = 1;
-    private carrying: PhysicsEntity | null = null;
+    private _carrying: PhysicsEntity | null = null;
     private canRun = false;
     private canRainDance = false;
     private doubleJump = false;
@@ -181,9 +182,14 @@ export class Player extends PhysicsEntity {
     private doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
     private tooltip: ControlTooltipNode | null = null;
+    private spriteNode: AsepriteNode;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        this.setId("player");
+        this.hide();
+        this.setAnchor(Direction.BOTTOM);
+        this.setChildAnchor(Direction.BOTTOM);
         this.setLayer(RenderingLayer.PLAYER);
 
         this.isControllable = false;
@@ -194,9 +200,17 @@ export class Player extends PhysicsEntity {
         this.voiceAsset = this.scene.game.campaign.selectedVoice;
         Conversation.setGlobal("ismale", this.characterAsset === CharacterAsset.MALE ? "true" : "false");
 
+        this.spriteNode = new AsepriteNode({
+            aseprite: Player.playerSprites[this.characterAsset],
+            tag: "idle",
+            anchor: Direction.BOTTOM,
+            showBounds: true,
+            y: 1
+        }).appendTo(this);
+
         setTimeout(() => {
             this.isControllable = true;
-            this.visible = true;
+            this.show();
             this.setFloating(false);
         }, 2200);
 
@@ -243,6 +257,22 @@ export class Player extends PhysicsEntity {
         });
     }
 
+    private get animation(): string {
+        return this.spriteNode.getTag() as string;
+    }
+
+    private set animation(animation: string) {
+        // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
+        if (
+            this.carrying
+            && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")
+        ) {
+            animation = animation + "-carry";
+        }
+
+        this.spriteNode.setTag(animation);
+    }
+
     public getControllable(): boolean {
         return this.isControllable;
     }
@@ -264,6 +294,14 @@ export class Player extends PhysicsEntity {
         setTimeout(() => {
             if (this.autoMove) this.stopAutoMove();
         }, 1000);
+    }
+
+    private get direction(): number {
+        return this.spriteNode.isMirrorX() ? -1 : 1;
+    }
+
+    private set direction(direction: number) {
+        this.spriteNode.setMirrorX(direction === -1);
     }
 
     public stopAutoMove(): void {
@@ -353,7 +391,7 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        if (!this.scene.camera.isOnTarget() || event.repeat) {
+        if (this.scene.getCamera().isFocusing() || event.repeat) {
             return;
         }
 
@@ -421,6 +459,19 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    private get carrying(): PhysicsEntity | null {
+        return this._carrying;
+    }
+
+    private set carrying(carrying: PhysicsEntity | null) {
+        this._carrying = carrying;
+
+        // Make sure to call animation setter to update carrying animation
+        // TODO Clean up this mess
+        const animation = this.animation;
+        this.animation = animation;
+    }
+
     public throw(): void {
         if (!this.carrying || (this.carrying instanceof Stone && !this.canThrowStoneIntoWater())) {
             return;
@@ -445,7 +496,7 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        if (!this.scene.camera.isOnTarget() || event.repeat) {
+        if (this.scene.getCamera().isFocusing() || event.repeat) {
             return;
         }
 
@@ -559,7 +610,7 @@ export class Player extends PhysicsEntity {
      * Also sets the camera bounds to the target position
      * @param gate the source the player enters
      */
-    private enterGate(gate: GameObjectInfo): void {
+    private async enterGate(gate: GameObjectInfo): Promise<void> {
         if (gate && gate.properties.target) {
             this.isControllable = false;
             this.moveRight = false;
@@ -574,25 +625,20 @@ export class Player extends PhysicsEntity {
             if (targetGate) {
                 Player.enterGateSound.stop();
                 Player.enterGateSound.play();
+                await this.scene.getCamera().fadeToBlack.fadeOut();
+                if (targetBgmId) {
+                    this.scene.setActiveBgmTrack(targetBgmId as BgmId);
+                }
+                Player.leaveGateSound.stop();
+                Player.leaveGateSound.play();
 
-                this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
-                    .then(() => {
-                        if (targetBgmId) {
-                            this.scene.setActiveBgmTrack(targetBgmId as BgmId);
-                        }
+                this.x = targetGate.x + (targetGate.width / 2);
+                this.y = targetGate.y - targetGate.height;
 
-                        Player.leaveGateSound.stop();
-                        Player.leaveGateSound.play();
+                this.scene.getCamera().setBounds(this.getCurrentMapBounds());
+                this.isControllable = true;
 
-                        this.x = targetGate.x + (targetGate.width / 2);
-                        this.y = targetGate.y - targetGate.height;
-
-                        this.scene.camera.setBounds(this.getCurrentMapBounds());
-
-                        this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
-                            this.isControllable = true;
-                        });
-                    });
+                await this.scene.getCamera().fadeToBlack.fadeIn();
             }
         }
     }
@@ -618,7 +664,7 @@ export class Player extends PhysicsEntity {
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
-            if (!this.disableParticles && this.visible) {
+            if (!this.disableParticles && this.isVisible()) {
                 this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
                 this.doubleJumpEmitter.emit(20);
             }
@@ -643,28 +689,6 @@ export class Player extends PhysicsEntity {
         } else if (event.isPlayerRun) {
             this.running = false;
         }
-    }
-
-    public draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.visible) {
-            return;
-        }
-
-        const sprite = Player.playerSprites[this.characterAsset];
-        let animation = this.animation;
-
-        // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
-        if (
-            this.carrying
-            && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")
-        ) {
-            animation = animation + "-carry";
-        }
-
-        ctx.save();
-        ctx.scale(this.direction, 1);
-        sprite.drawTag(ctx, animation, -sprite.width >> 1, -sprite.height + 1);
-        ctx.restore();
     }
 
     private showTooltip(label: string, control: ControllerAnimationTags) {
@@ -746,9 +770,9 @@ export class Player extends PhysicsEntity {
     /**
      * Returns the bounds of the map area the player currently resides in
      */
-    public getCurrentMapBounds(): Bounds | undefined {
+    public getCurrentMapBounds(): Rect | null {
         const collisions = this.scene.world.getCameraBounds(this);
-        if (collisions.length === 0) return undefined;
+        if (collisions.length === 0) return null;
         return boundsFromMapObject(collisions[0]);
     }
 
@@ -777,15 +801,15 @@ export class Player extends PhysicsEntity {
 
     private isOutOfBounds (): boolean {
         if (!this.isControllable) return false;
-        const mapBounds = this.scene.camera.getBounds();
+        const mapBounds = this.scene.getCamera().getBounds();
         if (!mapBounds) return false;
 
-        return !this.scene.world.boundingBoxesCollide(this.getBounds(), {
-            minX: mapBounds.minX + 4,
-            minY: mapBounds.minY - 4,
-            width: mapBounds.width - 8,
-            height: mapBounds.height - 8
-        });
+        return !this.scene.world.boundingBoxesCollide(this.getOldBounds(), new Rect(
+            mapBounds.getLeft() + 4,
+            mapBounds.getTop() - 4,
+            mapBounds.getWidth() - 8,
+            mapBounds.getHeight() - 8
+        ));
     }
 
     public update(dt: number): void {
@@ -800,7 +824,7 @@ export class Player extends PhysicsEntity {
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
-                this.scene.camera.setBounds(this.getCurrentMapBounds());
+                this.scene.getCamera().setBounds(this.getCurrentMapBounds());
             }
         }
 
@@ -892,7 +916,7 @@ export class Player extends PhysicsEntity {
         }
 
         // Player movement
-        if (!this.scene.camera.isOnTarget()) {
+        if (this.scene.getCamera().isFocusing()) {
             this.moveRight = false;
             this.moveLeft = false;
         }
@@ -989,7 +1013,7 @@ export class Player extends PhysicsEntity {
         this.readableTrigger = this.getReadableTrigger();
 
         // Spawn random dust particles while walking
-        if (!this.disableParticles && this.visible) {
+        if (!this.disableParticles && this.isVisible()) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
                     this.dustEmitter.setPosition(this.x, this.y);
@@ -1051,15 +1075,23 @@ export class Player extends PhysicsEntity {
                             poi => poi.name === "boss_spawn"
                         );
 
-                        if (bossPointer) {
-                            this.scene.camera.focusOn(
-                                3,
-                                bossPointer.x, bossPointer.y + 60,
-                                1,
-                                0,
-                                valueCurves.cos(0.35)
-                            );
-                        }
+                        void (async () => {
+                            if (bossPointer) {
+                                const oldFollow = this.scene.getCamera().getFollow();
+                                await this.scene.getCamera().focus(new Vector2(bossPointer.x, -bossPointer.y - 60), {
+                                    duration: 1.5,
+                                    easing: easeInOutSine
+                                });
+                                if (oldFollow) {
+                                    await sleep(1000);
+                                    await this.scene.getCamera().focus(oldFollow, {
+                                        duration: 1.5,
+                                        easing: easeInOutSine,
+                                        follow: true
+                                    });
+                                }
+                            }
+                        })();
 
                         // Remove a single boss fight barrier
                         let rainingCloudCount = 0;
@@ -1155,7 +1187,7 @@ export class Player extends PhysicsEntity {
             });
         }
 
-        if (this.visible) {
+        if (this.isVisible()) {
             if (
                 this.closestNPC
                 && !this.dance
@@ -1180,7 +1212,6 @@ export class Player extends PhysicsEntity {
             this.hideTooltip();
         }
     }
-
 
     /**
      * If given coordinate collides with the world then the first free y coordinate above is

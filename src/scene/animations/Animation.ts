@@ -19,4 +19,37 @@ export interface Animation<T> {
      * [[update]] method must always return true after this finish method is called.
      */
     finish(): void;
+
+    /**
+     * Cancels the animation by stopping it immediately. The [[update]] method must not be called again after calling
+     * this cancel method.
+     */
+    cancel(): void;
+
+    /**
+     * Checks if animation is finished.
+     *
+     * @return True if animation is finished, false if not.
+     */
+    isFinished(): boolean;
+
+    /**
+     * Checks if animation is canceled.
+     *
+     * @return True if animation is canceled, false if not.
+     */
+    isCanceled(): boolean;
+
+    /**
+     * Checks if animation is running (not finished and not canceled).
+     *
+     * @return True if animation is running.
+     */
+    isRunning(): boolean;
+
+    /**
+     * Returns a promise which is resolved when animation stopped running. The promise is resolved with true when
+     * animation was finished and false if it was canceled.
+     */
+    getPromise(): Promise<boolean>
 }

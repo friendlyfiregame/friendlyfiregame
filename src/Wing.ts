@@ -4,7 +4,7 @@ import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 @entity("wing")
 export class Wing extends NPC {

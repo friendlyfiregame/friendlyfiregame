@@ -5,7 +5,7 @@ import { EyeType, Face, FaceModes } from "./Face";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Sound } from "./Sound";
 import { SoundEmitter } from "./SoundEmitter";
 

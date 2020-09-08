@@ -12,7 +12,7 @@ import { GameObjectInfo } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter, valueCurves } from "./Particles";
 import { QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { ScriptableNPC } from "./ScriptableNPC";
 import shiba1 from "../assets/dialog/shiba1.dialog.json";
 import { Sound } from "./Sound";
@@ -104,7 +104,7 @@ export class Shiba extends ScriptableNPC {
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
             this.scene.powerShiba.nextState();
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
-            this.scene.camera.setCinematicBar(1);
+            this.scene.getCamera().cinematicBars.show();
 
             const shibaSpawnPos = this.scene.pointsOfInterest.find(
                 poi => poi.name === "friendship_shiba_spawn"
@@ -136,6 +136,7 @@ export class Shiba extends ScriptableNPC {
             setTimeout(() => this.scene.fire.think("Oh God…", 2000), 4500);
             setTimeout(() => this.scene.fire.think("Disgusting…", 3000), 8000);
         } else if (this.state === ShibaState.FIRE_KILLED) {
+            this.scene.getCamera().cinematicBars.hide();
             this.peeing = false;
             this.scene.fire.state = FireState.PUT_OUT;
             Shiba.putOutSound.stop();
@@ -148,6 +149,7 @@ export class Shiba extends ScriptableNPC {
                 this.scene.fire.face?.setMode(FaceModes.BORED);
                 this.scene.player.isControllable = true;
                 this.scene.friendshipCutscene = false;
+                this.scene.getCamera().cinematicBars.hide();
                 this.lookAtPlayer = true;
                 this.scene.game.campaign.runAction("enable", null, ["fire", "fire4"]);
                 this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba5"]);

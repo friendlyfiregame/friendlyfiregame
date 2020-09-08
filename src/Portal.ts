@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { entity, Entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { Sound } from "./Sound";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 enum PortalAnimationState { WAITING, FADEIN, IDLE, FADEOUT, GONE }
 

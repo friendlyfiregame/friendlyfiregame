@@ -7,7 +7,7 @@ import { GameObjectProperties } from "./MapInfo";
 import { ParticleEmitter, valueCurves } from "./Particles";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "./constants";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { rnd, rndInt, timedRnd } from "./util";
 
 @entity("cloud")

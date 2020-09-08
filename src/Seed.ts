@@ -9,7 +9,7 @@ import { GameScene } from "./scenes/GameScene";
 import { now } from "./util";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Sound } from "./Sound";
 import { Wood } from "./Wood";
 

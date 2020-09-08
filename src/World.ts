@@ -7,7 +7,8 @@ import { getImageData } from "./graphics";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { SceneNode } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
+import { Rect } from "./geom/Rect";
 
 export enum Environment {
     AIR = 0,
@@ -83,9 +84,10 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
         }
     }
 
+    // TODO Background rendering totally broken
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        const camX = -this.scene.camera.x;
-        const camY = -this.scene.camera.y;
+        const camX = -this.scene.getCamera().getX();
+        const camY = -this.scene.getCamera().getY();
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
 
         ctx.save();
@@ -181,8 +183,10 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
                 && gameObject.isTrigger
                 && !ignoreEntities.includes(gameObject)
             ) {
+                const oldBounds = gameObject.getOldBounds(margin);
                 const colliding = this.boundingBoxesCollide(
-                    sourceEntity.getOldBounds(margin), gameObject.getOldBounds(margin)
+                    sourceEntity.getOldBounds(margin), new Rect(oldBounds.x, oldBounds.y, oldBounds.width,
+                        oldBounds.height)
                 );
 
                 if (colliding) {
@@ -203,7 +207,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
         for (const triggerObject of this.scene.triggerObjects) {
             const colliding = this.boundingBoxesCollide(
-                sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
+                sourceEntity.getOldBounds(), boundsFromMapObject(triggerObject)
             );
 
             if (colliding) {
@@ -219,7 +223,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
         for (const gateObject of this.scene.gateObjects) {
             const colliding = this.boundingBoxesCollide(
-                sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
+                sourceEntity.getOldBounds(), boundsFromMapObject(gateObject, 0)
             );
 
             if (colliding) {
@@ -235,7 +239,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
         for (const triggerObject of this.scene.boundObjects) {
             const colliding = this.boundingBoxesCollide(
-                sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
+                sourceEntity.getOldBounds(), boundsFromMapObject(triggerObject)
             );
 
             if (colliding) {
@@ -252,12 +256,12 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
      * @param box2 second bounding box
      * @return `true` when the bounding boxes are touching, `false` if not.
      */
-    public boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
+    public boundingBoxesCollide(box1: Bounds, box2: Rect): boolean {
         return !(
-            ((box1.minY - box1.height) > (box2.minY)) ||
-            (box1.minY < (box2.minY - box2.height)) ||
-            ((box1.minX + box1.width) < box2.minX) ||
-            (box1.minX > (box2.minX + box2.width))
+            ((box1.y - box1.height) > (box2.getTop())) ||
+            (box1.y < (box2.getTop() - box2.getHeight())) ||
+            ((box1.x + box1.width) < box2.getLeft()) ||
+            (box1.x > (box2.getLeft() + box2.getWidth()))
         );
     }
 

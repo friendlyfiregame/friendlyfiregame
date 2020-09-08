@@ -1,7 +1,7 @@
 import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { ProgressBarNode } from "../scene/ProgressBarNode";
-import { TestScene } from "./TestScene";
+import { GameScene } from "./GameScene";
 
 export class LoadingScene extends Scene<FriendlyFire> {
     private progressBar!: ProgressBarNode;
@@ -19,7 +19,7 @@ export class LoadingScene extends Scene<FriendlyFire> {
 
     public async activate(): Promise<void> {
         await this.game.assets.load(this.updateProgress.bind(this));
-        this.game.scenes.setScene(TestScene);
+        this.game.scenes.setScene(GameScene);
     }
 
     private updateProgress(total: number, loaded: number): void {

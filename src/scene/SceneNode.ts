@@ -1,9 +1,9 @@
 import { Scene } from "../Scene";
 import { Game } from "../Game";
 import { Direction } from "../geom/Direction";
-import { AffineTransform } from "../graphics/AffineTransform";
+import { AffineTransform, ReadonlyAffineTransform } from "../graphics/AffineTransform";
 import { Polygon2 } from "../graphics/Polygon2";
-import { Vector2 } from "../graphics/Vector2";
+import { Vector2, ReadonlyVector2 } from "../graphics/Vector2";
 import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
 
@@ -68,6 +68,9 @@ export interface SceneNodeArgs {
 
     /** Optional initial showBounds flag. Set to true to show bounds around the node for debugging purposes. */
     showBounds?: boolean;
+
+    /** Optional initial hidden flag. Set to true to hide the node. */
+    hidden?: boolean;
 }
 
 /**
@@ -98,12 +101,16 @@ export class SceneNode<T extends Game = Game> {
     /** The ID of the node. Null if none. */
     private id: string | null;
 
-    /** The horizontal position relative to parent node. */
-    #x: number;
+    /** The node position relative to the parent node. */
+    private position = new Vector2();
 
-    /** The vertical position relative to parent node. */
-    #y: number;
+    /** The node position within the scene. */
+    private scenePosition = new Vector2();
 
+     /** If scene position is valid or must be recalculated. */
+    private scenePositionValid = false;
+
+    /** TODO Find a clean way to do this */
     public mirroredY = false;
 
     /** The node width. */
@@ -173,14 +180,17 @@ export class SceneNode<T extends Game = Game> {
      */
     private layer: number | null;
 
+    /** True if node is hidden, false if not. A hidden node also hides all its child nodes. */
+    private hidden: boolean;
+
     /**
      * Creates a new scene node with the given initial settings.
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
-            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null }: SceneNodeArgs = {}) {
+            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false }:
+            SceneNodeArgs = {}) {
         this.id = id;
-        this.#x = x;
-        this.#y = y;
+        this.position.setComponents(x, y);
         this.#width = width;
         this.#height = height;
         this.opacity = opacity;
@@ -188,6 +198,7 @@ export class SceneNode<T extends Game = Game> {
         this.childAnchor = childAnchor;
         this.showBounds = showBounds;
         this.layer = layer == null ? null : (1 << layer);
+        this.hidden = hidden;
     }
 
     /**
@@ -215,23 +226,89 @@ export class SceneNode<T extends Game = Game> {
      * @return The X position.
      */
     public getX(): number {
-        return this.#x;
+        return this.position.x;
     }
 
     public get x(): number {
-        return this.#x;
+        return this.position.x;
     }
 
     public set x(x: number) {
         this.setX(x);
     }
 
+    /**
+     * Sets the horizontal position relative to the parent node.
+     *
+     * @param x - The horizontal position to set.
+     */
+    public setX(x: number): this {
+        if (x !== this.position.x) {
+            this.position.x = x;
+            this.invalidateSceneTransformation();
+            this.invalidate();
+        }
+        return this;
+    }
+
+    /**
+     * Returns the Y position of the node relative the parent node.
+     *
+     * @return The Y position.
+     */
+    public getY(): number {
+        return this.position.y;
+    }
+
     public get y(): number {
-        return this.#y;
+        return this.position.y;
     }
 
     public set y(y: number) {
         this.setY(y);
+    }
+
+    /**
+     * Sets the vertical position relative to the parent node.
+     *
+     * @param y - The vertical position to set.
+     */
+    public setY(y: number): this {
+        if (y !== this.position.y) {
+            this.position.y = y;
+            this.invalidateSceneTransformation();
+            this.invalidate();
+        }
+        return this;
+    }
+
+    /**
+     * Returns the node position relative to its parent.
+     *
+     * @return The node position relative to its parent.
+     */
+    public getPosition(): ReadonlyVector2 {
+        return this.position;
+    }
+
+    /**
+     * Returns the node position in the scene.
+     *
+     * @return The node position in the scene.
+     */
+    public getScenePosition(): ReadonlyVector2 {
+        if (!this.scenePositionValid) {
+            this.scenePosition.setComponents(this.x, this.mirroredY ? -this.y : this.y);
+            if (this.parent != null) {
+                this.scenePosition.mul(this.parent.getSceneTransformation());
+                this.scenePosition.translate(
+                    (Direction.getX(this.parent.childAnchor) + 1) / 2 * this.parent.width,
+                    (Direction.getY(this.parent.childAnchor) + 1) / 2 * this.parent.height
+                );
+            }
+            this.scenePositionValid = true;
+        }
+        return this.scenePosition;
     }
 
     /**
@@ -246,46 +323,10 @@ export class SceneNode<T extends Game = Game> {
     private invalidateSceneTransformation(): void {
         if (this.sceneTransformationValid) {
             this.sceneTransformationValid = false;
+            this.scenePositionValid = false;
             this.sceneBoundsPolygon.clear();
             this.forEachChild(child => child.invalidateSceneTransformation());
         }
-    }
-
-    /**
-     * Sets the horizontal position relative to the parent node.
-     *
-     * @param x - The horizontal position to set.
-     */
-    public setX(x: number): this {
-        if (x !== this.#x) {
-            this.#x = x;
-            this.invalidateSceneTransformation();
-            this.invalidate();
-        }
-        return this;
-    }
-
-    /**
-     * Returns the Y position of the node relative the parent node.
-     *
-     * @return The Y position.
-     */
-    public getY(): number {
-        return this.#y;
-    }
-
-    /**
-     * Sets the vertical position relative to the parent node.
-     *
-     * @param y - The vertical position to set.
-     */
-    public setY(y: number): this {
-        if (y !== this.#y) {
-            this.#y = y;
-            this.invalidateSceneTransformation();
-            this.invalidate();
-        }
-        return this;
     }
 
     /**
@@ -296,8 +337,8 @@ export class SceneNode<T extends Game = Game> {
      */
     public moveBy(x: number, y: number): this {
         if (x !== 0 || y !== 0) {
-            this.#x += x;
-            this.#y += y;
+            this.position.x += x;
+            this.position.y += y;
             this.invalidateSceneTransformation();
             this.invalidate();
         }
@@ -311,9 +352,9 @@ export class SceneNode<T extends Game = Game> {
      * @param y - The vertical position to move to.
      */
     public moveTo(x: number, y: number): this {
-        if (x !== this.#x || y !== this.#y) {
-            this.#x = x;
-            this.#y = y;
+        if (x !== this.position.x || y !== this.position.y) {
+            this.position.x = x;
+            this.position.y = y;
             this.invalidateSceneTransformation();
             this.invalidate();
         }
@@ -439,6 +480,60 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Shows or hides this node.
+     *
+     * @param hidden - True to hide the node, false to show it.
+     */
+    public setHidden(hidden: boolean): this {
+        if (hidden !== this.hidden) {
+            this.hidden = hidden;
+            this.invalidate();
+        }
+        return this;
+    }
+
+    /**
+     * Shows or hides this node.
+     *
+     * @param visible - True to show the node, false to hide it.
+     */
+    public setVisible(visible: boolean): this {
+        return this.setHidden(!visible);
+    }
+
+    /**
+     * Checks if node is hidden.
+     *
+     * @return True if node is hidden, false if not.
+     */
+    public isHidden(): boolean {
+        return this.hidden;
+    }
+
+    /**
+     * Checks if node is visible.
+     *
+     * @return True if node is visible, false if not.
+     */
+    public isVisible(): boolean {
+        return !this.hidden;
+    }
+
+    /**
+     * Hides this node.
+     */
+    public hide(): this {
+        return this.setHidden(true);
+    }
+
+    /**
+     * Show this node.
+     */
+    public show(): this {
+        return this.setHidden(false);
+    }
+
+    /**
      * Returns the node anchor which defines the meaning of the X/Y coordinates of the node. CENTER means the X/Y
      * coordinates define the center of the node. TOP_LEFT means the X/Y coordinates define the upper left corner of
      * the node.
@@ -497,7 +592,7 @@ export class SceneNode<T extends Game = Game> {
      *
      * @return The custom node transformation.
      */
-    public getTransformation(): AffineTransform {
+    public getTransformation(): ReadonlyAffineTransform {
         return this.transformation;
     }
 
@@ -507,7 +602,7 @@ export class SceneNode<T extends Game = Game> {
      *
      * @return The scene transformation.
      */
-    public getSceneTransformation(): AffineTransform {
+    public getSceneTransformation(): ReadonlyAffineTransform {
         if (!this.sceneTransformationValid) {
             const parent = this.parent;
             if (parent != null) {
@@ -516,12 +611,10 @@ export class SceneNode<T extends Game = Game> {
                     (Direction.getX(parent.childAnchor) + 1) / 2 * parent.#width,
                     (Direction.getY(parent.childAnchor) + 1) / 2 * parent.#height
                 );
-            /*} else if (this.#scene != null) {
-                this.sceneTransformation.setMatrix(this.#scene.camera.getSceneTransformation());*/
             } else {
                 this.sceneTransformation.reset();
             }
-            this.sceneTransformation.translate(this.#x, this.mirroredY ? -this.#y : this.#y);
+            this.sceneTransformation.translate(this.position.x, this.mirroredY ? -this.position.y : this.position.y);
             this.sceneTransformation.mul(this.transformation);
             this.sceneTransformation.translate(
                 -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
@@ -1332,9 +1425,13 @@ export class SceneNode<T extends Game = Game> {
      * @return Hints which suggests further actions after drawing.
      */
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
+        if (this.hidden) {
+            return 0;
+        }
+
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
-        ctx.translate(this.#x, this.mirroredY ? -this.#y : this.#y);
+        ctx.translate(this.position.x, this.mirroredY ? -this.position.y : this.position.y);
         this.transformation.transformCanvas(ctx);
         ctx.translate(
             -(Direction.getX(this.anchor) + 1) / 2 * this.#width,

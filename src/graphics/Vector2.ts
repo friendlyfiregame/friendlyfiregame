@@ -1,4 +1,4 @@
-import { AffineTransform } from "./AffineTransform";
+import { ReadonlyAffineTransform } from "./AffineTransform";
 
 /**
  * Minimal interface of a 2D vector.
@@ -114,7 +114,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param vector - The vector to copy the X and Y component values from.
      */
-    public setVector(vector: Vector2Like): this {
+    public setVector(vector: ReadonlyVector2Like): this {
         this.x = vector.x;
         this.y = vector.y;
         return this;
@@ -136,17 +136,17 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
     }
 
     /** @inheritDoc */
-    public getSquareDistance(v: Vector2Like): number {
+    public getSquareDistance(v: ReadonlyVector2Like): number {
         return (this.x - v.x) ** 2 + (this.y - v.y) ** 2;
     }
 
     /** @inheritDoc */
-    public getDistance(v: Vector2Like): number {
+    public getDistance(v: ReadonlyVector2Like): number {
         return Math.sqrt(this.getSquareDistance(v));
     }
 
     /** @inheritDoc */
-    public dot(v: Vector2Like): number {
+    public dot(v: ReadonlyVector2Like): number {
         return this.x * v.x + this.y * v.y;
     }
 
@@ -184,7 +184,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param summand - The vector to add.
      */
-    public add(summand: Vector2Like): this {
+    public add(summand: ReadonlyVector2Like): this {
         this.x += summand.x;
         this.y += summand.y;
         return this;
@@ -195,7 +195,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param subtrahend - The vector to subtract from this vector.
      */
-    public sub(subtrahend: Vector2Like): this {
+    public sub(subtrahend: ReadonlyVector2Like): this {
         this.x -= subtrahend.x;
         this.y -= subtrahend.y;
         return this;
@@ -206,7 +206,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param matrix - The matrix to multiply this vector with.
      */
-    public mul(arg: AffineTransform): this {
+    public mul(arg: ReadonlyAffineTransform): this {
         const x = this.x;
         const y = this.y;
         this.x = x * arg.m11 + y * arg.m21 + arg.dx;
@@ -219,7 +219,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param matrix - The matrix to divide this vector by.
      */
-    public div(arg: AffineTransform): this {
+    public div(arg: ReadonlyAffineTransform): this {
         const b11 = arg.m11, b12 = arg.m12;
         const b21 = arg.m21, b22 = arg.m22;
         const x = this.x;

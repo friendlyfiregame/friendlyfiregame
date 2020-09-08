@@ -6,7 +6,7 @@ import { Environment } from "./World";
 import { GameObjectProperties } from "./MapInfo";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "./constants";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 @entity("movingplatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {

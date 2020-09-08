@@ -12,8 +12,8 @@ export interface EntityDistance {
 }
 
 export interface Bounds {
-    minX: number;
-    minY: number;
+    x: number;
+    y: number;
     width: number;
     height: number;
 }
@@ -122,7 +122,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
         const height = this.getHeight() + (margin * 2);
         const minX = this.getX() - (this.getWidth() / 2) - margin;
         const minY = this.getY() - -this.getHeight() + margin;
-        return { minX, minY, width, height };
+        return { x: minX, y: minY, width, height };
     }
 
     /**

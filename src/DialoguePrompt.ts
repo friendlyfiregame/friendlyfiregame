@@ -1,6 +1,6 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { SceneNode } from "./scene/SceneNode";
 
 export class DialoguePrompt extends SceneNode {

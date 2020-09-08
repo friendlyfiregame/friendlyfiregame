@@ -30,8 +30,9 @@ import stonedisciple2 from "../assets/dialog/stonedisciple2.dialog.json";
 import tree0 from "../assets/dialog/tree0.dialog.json";
 import tree1 from "../assets/dialog/tree1.dialog.json";
 import tree2 from "../assets/dialog/tree2.dialog.json";
-import { valueCurves } from "./Particles";
 import wing1 from "../assets/dialog/wing1.dialog.json";
+import { easeOutCubic } from "./easings";
+import { Vector2 } from "./graphics/Vector2";
 
 export type CampaignState = "start" | "finished";
 
@@ -155,7 +156,7 @@ export class Campaign {
      * @param npc    - targeted npc
      * @param params - params consisting of string array
      */
-    public runAction(action: string, npc?: NPC | null, params: string[] = []): void {
+    public async runAction(action: string, npc?: NPC | null, params: string[] = []): Promise<void> {
         if (this.gameScene) {
             switch (action) {
                 case "angry":
@@ -174,66 +175,34 @@ export class Campaign {
                     npc?.face?.setMode(FaceModes.SAD);
                     break;
                 case "zoomin":
-                    this.gameScene.camera.zoom += 1;
+                    // TODO Needed?
+                    this.gameScene.getCamera().setScale(this.gameScene.getCamera().getScale() + 1);
                     break;
                 case "zoomout":
-                    this.gameScene.camera.zoom -= 1;
+                    this.gameScene.getCamera().setScale(this.gameScene.getCamera().getScale() - 1);
                     break;
                 case "treezoom":
-                    const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");
-
-                    if (forestPointer) {
-                        this.gameScene.camera.focusOn(
-                            8,
-                            forestPointer.x, forestPointer.y,
-                            1,
-                            0,
-                            valueCurves.cos(0.35)
-                        );
-                    }
-
+                    this.gameScene.lookAtPOI("forest");
                     break;
                 case "mountainzoom":
-                    const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "mountain");
-
-                    if (mountainPointer) {
-                        this.gameScene.camera.focusOn(
-                            8,
-                            mountainPointer.x, mountainPointer.y,
-                            1,
-                            0,
-                            valueCurves.cos(0.35)
-                        );
-                    }
-
+                    this.gameScene.lookAtPOI("mountain");
                     break;
                 case "riverzoom":
-                    const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "river");
-
-                    if (riverPointer) {
-                        this.gameScene.camera.focusOn(
-                            8,
-                            riverPointer.x, riverPointer.y,
-                            1,
-                            0,
-                            valueCurves.cos(0.35)
-                        );
-                    }
-
+                    this.gameScene.lookAtPOI("river");
                     break;
                 case "crazyzoom":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
-
-                    this.gameScene.camera.focusOn(
-                        duration,
-                        this.gameScene.fire.x, this.gameScene.fire.y + 15,
-                        8,
-                        -2 * Math.PI, valueCurves.cubic
-                    ).then(() => this.gameScene!.beginApocalypse());
-
+                    // TODO Re-implement crazy rotation (-2 * Math.PI, valueCurves.cubic) and scaling (8)
+                    // TODO Fire is not displayed when zooming into it
+                    await this.gameScene.getCamera().focus(new Vector2(this.gameScene.fire.x, -this.gameScene.fire.y + 15), {
+                        duration: 8,
+                        easing: easeOutCubic
+                    });
+                    this.gameScene.beginApocalypse();
                     this.gameScene.fire.conversation = null;
                     this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
+                    this.gameScene.getCamera().cinematicBars.show();
                     break;
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();

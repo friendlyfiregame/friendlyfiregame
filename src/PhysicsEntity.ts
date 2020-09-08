@@ -145,6 +145,10 @@ export abstract class PhysicsEntity extends Entity {
         }
     }
 
+    public draw(ctx: CanvasRenderingContext2D): void {
+        // Nothing to do here. Overwrite me.
+    }
+
     public update(dt: number): void {
         super.update(dt);
 

@@ -34,7 +34,7 @@ export abstract class Scene<T extends Game, A = void> {
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
     private backgroundStyle: string | null = null;
-    private currentCamera: Camera = new Camera(this.game);
+    private currentCamera = new Camera(this.game);
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {
@@ -44,11 +44,11 @@ export abstract class Scene<T extends Game, A = void> {
         this.rootNode.resizeTo(this.game.width, this.game.height);
     }
 
-    public setCamera(camera: Camera): void {
+    public setCamera(camera: Camera<T>): void {
         this.currentCamera = camera;
     }
 
-    public getCamera(): Camera {
+    public getCamera(): Camera<T> {
         return this.currentCamera;
     }
 

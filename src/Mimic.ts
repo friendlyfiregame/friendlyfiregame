@@ -6,7 +6,7 @@ import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import { Sound } from "./Sound";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
 

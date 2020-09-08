@@ -46,10 +46,13 @@ export class Animator<T> implements Animation<T> {
     private elapsed: number = 0;
 
     /** The promise to resolve when animation is finished. */
-    private promise: Promise<T>;
+    private promise: Promise<boolean>;
 
     /** Resolve function to call for resolving the animation promise. */
-    private resolvePromise: null | ((target: T) => void) = null;
+    private resolvePromise: null | ((finished: boolean) => void) = null;
+
+    /** Set to true when animation has been canceled. */
+    private canceled: boolean = false;
 
     /**
      * Creates an animation based on the given animator function. Some aspects of the animation can be configured with
@@ -70,17 +73,25 @@ export class Animator<T> implements Animation<T> {
 
     /** @inheritDoc */
     public update(target: T, dt: number): boolean {
-        this.elapsed += dt;
-        if (this.elapsed < this.lifetime) {
-            if (this.elapsed > this.delay) {
-                const timeIndex = ((this.elapsed - this.delay) / this.duration) % 1;
-                this.animator(target, this.easing(timeIndex), this.elapsed);
+        if (!this.canceled) {
+            this.elapsed += dt;
+            if (this.elapsed < this.lifetime) {
+                if (this.elapsed > this.delay) {
+                    const timeIndex = ((this.elapsed - this.delay) / this.duration) % 1;
+                    this.animator(target, this.easing(timeIndex), this.elapsed);
+                }
+                return false;
+            } else {
+                if (this.resolvePromise != null) {
+                    this.animator(target, 1, this.lifetime);
+                    this.resolvePromise(true);
+                    this.resolvePromise = null;
+                }
+                return true;
             }
-            return false;
         } else {
             if (this.resolvePromise != null) {
-                this.animator(target, 1, this.lifetime);
-                this.resolvePromise(target);
+                this.resolvePromise(false);
                 this.resolvePromise = null;
             }
             return true;
@@ -93,7 +104,27 @@ export class Animator<T> implements Animation<T> {
     }
 
     /** @inheritDoc */
-    public getPromise(): Promise<T> {
+    public cancel(): void {
+        this.canceled = true;
+    }
+
+    /** @inheritDoc */
+    public getPromise(): Promise<boolean> {
         return this.promise;
+    }
+
+    /** @inheritDoc */
+    public isFinished(): boolean {
+        return this.elapsed >= this.lifetime;
+    }
+
+    /** @inheritDoc */
+    public isCanceled(): boolean {
+        return this.canceled;
+    }
+
+    /** @inheritDoc */
+    public isRunning(): boolean {
+        return this.elapsed < this.lifetime && !this.canceled;
     }
 }

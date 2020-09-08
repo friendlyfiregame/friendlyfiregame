@@ -2,7 +2,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { entity, Entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 @entity("campfire")
 export class Campfire extends Entity {

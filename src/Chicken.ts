@@ -5,7 +5,7 @@ import conversation from "../assets/dialog/chicken.dialog.json";
 import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 @entity("chicken")
 export class Chicken extends NPC {

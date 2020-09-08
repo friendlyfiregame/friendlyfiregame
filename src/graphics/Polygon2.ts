@@ -1,6 +1,6 @@
 import { Line2 } from "./Line2";
 import { ReadonlyVector2, Vector2 } from "./Vector2";
-import { AffineTransform } from "./AffineTransform";
+import { ReadonlyAffineTransform } from "./AffineTransform";
 import { Bounds2 } from "./Bounds2";
 
 /**
@@ -164,7 +164,7 @@ export class Polygon2 {
      *
      * @param m - The transformation to apply.
      */
-    public transform(m: AffineTransform): this {
+    public transform(m: ReadonlyAffineTransform): this {
         for (const vertex of this.vertices) {
             vertex.mul(m);
         }

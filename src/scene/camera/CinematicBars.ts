@@ -13,18 +13,23 @@ export class CinematicBars {
         return this;
     }
 
-    public start({ target, duration }: { target?: number, duration?: number } = {}): this {
+    public show({ target, duration }: { target?: number, duration?: number } = {}): this {
         return this.move(target, duration);
     }
 
-    public stop({ duration }: { duration?: number } = {}): this {
+    public hide({ duration }: { duration?: number } = {}): this {
         return this.move(0, duration);
+    }
+
+    public set(target: number): this {
+        this.current = this.source = this.target = target;
+        return this;
     }
 
     public update(dt: number): void {
         if (this.current !== this.target) {
             const delta = (this.target - this.source) * this.time / this.duration;
-            if (this.target > this.source) {
+            if (this.target >= this.source) {
                 this.current = Math.min(this.target, this.source + delta);
             } else {
                 this.current = Math.max(this.target, this.source + delta);

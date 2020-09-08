@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 @entity("caveman")
 export class Caveman extends NPC {

@@ -4,7 +4,7 @@ import { Conversation } from "./Conversation";
 import { entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 interface SpiderSpriteMetadata {
     eyeOffsetFrames?: number[];

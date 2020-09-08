@@ -5,7 +5,7 @@ import { entity } from "./Entity";
 import { Environment } from "./World";
 import { GameScene } from "./scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Sound } from "./Sound";
 
 @entity("bone")

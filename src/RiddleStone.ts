@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { Entity } from "./Entity";
 import { GameObjectProperties } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")

@@ -7,7 +7,7 @@ import { NPC } from "./NPC";
 import { ParticleEmitter, valueCurves } from "./Particles";
 import { PIXEL_PER_METER } from "./constants";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { rnd, rndInt, shiftValue } from "./util";
 import { ShibaState } from "./Shiba";
 import { Sound } from "./Sound";
@@ -49,8 +49,6 @@ export class Fire extends NPC {
 
     private averageParticleDelay = 0.1;
     private averageSteamDelay = 0.05;
-
-    private isVisible = true;
 
     private fireGfx = new FireGfx();
 
@@ -127,10 +125,6 @@ export class Fire extends NPC {
         );
     }
 
-    public isRendered(): boolean {
-        return this.isVisible;
-    }
-
     public isAngry(): boolean {
         return this.state === FireState.ANGRY;
     }
@@ -181,12 +175,12 @@ export class Fire extends NPC {
             this.scene.shiba.nextState();
         }
 
-        if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
-            this.isVisible = false;
+        if (!this.scene.getCamera().isPointVisible(this.x, this.y, 200)) {
+            this.hide();
             return;
         }
 
-        this.isVisible = true;
+        this.show();
 
         if (!this.isBeingPutOut() && !this.isPutOut()) {
             let particleChance = dt - rnd() * this.averageParticleDelay;
@@ -215,7 +209,7 @@ export class Fire extends NPC {
             }
         }
 
-        if (this.isVisible) {
+        if (this.isVisible()) {
             this.fireGfx.update();
         }
 

@@ -6,7 +6,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import powershiba1 from "../assets/dialog/powershiba1.dialog.json";
 import powershiba3 from "../assets/dialog/powershiba3.dialog.json";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 
 export enum PowerShibaState {
     IN_PowerShibaS,

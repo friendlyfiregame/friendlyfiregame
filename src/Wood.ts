@@ -7,7 +7,7 @@ import { GameScene } from "./scenes/GameScene";
 import { now } from "./util";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { QuestATrigger, QuestKey } from "./Quests";
-import { RenderingLayer } from "./Renderer";
+import { RenderingLayer } from "./RenderingLayer";
 import { Sound } from "./Sound";
 
 export enum WoodState {
