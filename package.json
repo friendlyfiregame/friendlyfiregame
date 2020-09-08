@@ -23,7 +23,10 @@
   "main": ".webpack/main",
   "scripts": {
     "clean": "rimraf lib dist out",
-    "lint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ . && htmlhint ./index.html && eslint --ext .ts ./src/",
+    "markdownlint": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ .",
+    "htmlhint": "htmlhint ./index.html",
+    "eslint": "eslint --ext .ts ./src/",
+    "lint": "npm run -s markdownlint && npm run -s htmlhint && npm run -s eslint",
     "check": "jest",
     "cspell": "cspell '**/*'",
     "coverage": "jest --coverage",

@@ -59,7 +59,12 @@ jobs:
     - name: Check spelling
       run: npm run -s cspell
     - name: Run linters
-      run: npm run -s lint
+      id: run_linters
+      shell: bash
+      run: |
+        npm run -s markdownlint
+        npm run -s htmlhint
+        npm run -s eslint -- -o out/eslint.out --no-color
     - name: Compile sources
       run: npm run -s compile
     - name: Run headless tests
@@ -82,7 +87,8 @@ jobs:
           -Dsonar.pullrequest.key=${GITHUB_PULL_REQUEST_ID}
           -Dsonar.pullrequest.branch=${GITHUB_HEAD_REF}
           -Dsonar.pullrequest.base=${GITHUB_BASE_REF}
-          -Dsonar.testExecutionReportPaths=./coverage/
+          -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+          -Dsonar.eslint.reportPath=./out/eslint.out
     - run: npm run -s dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
