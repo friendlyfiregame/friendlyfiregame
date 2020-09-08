@@ -8,10 +8,17 @@ import { CinematicBars } from "./camera/CinematicBars";
 import { FadeToBlack as FadeToBlack } from "./camera/FadeToBlack";
 import { ReadonlyVector2Like } from "../graphics/Vector2";
 import { Rect } from "../geom/Rect";
+import { clamp } from "../util";
 
 /** Camera target type. Can be a simple position object, a scene node or a function which returns a camera target. */
 export type CameraTarget = ReadonlyVector2Like | SceneNode | (() => CameraTarget);
 
+/**
+ * Helper function to get the actual position of a camera target which can be of various types.
+ *
+ * @param target - The camera target.
+ * @return The camera target position.
+ */
 function getCameraTargetPosition(target: CameraTarget): ReadonlyVector2Like {
     if (target instanceof Function) {
         return getCameraTargetPosition(target());
@@ -51,13 +58,13 @@ export class Camera<T extends Game = Game> {
     private y: number = 0;
 
     /** The current camera scale. */
-    private scale: number = 1;
+    private zoom: number = 1;
 
     /** The current camera rotation in anti-clockwise RAD. */
     private rotation: number = 0;
 
     /** The reference to the game the camera is connected to. */
-    protected readonly game: T;
+    private readonly game: T;
 
     /**
      * The camera target to follow (if any). When set then the camera automatically follows this given target. When null
@@ -90,6 +97,12 @@ export class Camera<T extends Game = Game> {
     private focusAnimation: Animator<this> | null = null;
 
     /**
+     * The current camera limits. Null if no limits. When set then the followed target position is corrected so
+     * visible rectangle of camera is within these limits.
+     */
+    private limits: Rect | null = null;
+
+    /**
      * Creates a new standard camera for the given game. The camera position is initialized to look at the center
      * of the game screen.
      */
@@ -97,6 +110,24 @@ export class Camera<T extends Game = Game> {
         this.game = game;
         this.x = game.width / 2;
         this.y = game.height / 2;
+    }
+
+    /**
+     * Returns the width of the visible camera area.
+     *
+     * @return The camera width.
+     */
+    public getWidth() {
+        return this.game.width / this.zoom;
+    }
+
+    /**
+     * Returns the height of the visible camera area.
+     *
+     * @return The camera height.
+     */
+    public getHeight() {
+        return this.game.height / this.zoom;
     }
 
     /**
@@ -178,21 +209,62 @@ export class Camera<T extends Game = Game> {
     }
 
     /**
-     * Sets the camera scale.
+     * Returns the left edge of the visible camera area.
      *
-     * @param scale - The camera scale to set.
+     * @return The left camera edge.
      */
-    public setScale(scale: number): this {
-        if (scale !== this.scale) {
-            this.scale = scale;
+    public getLeft(): number {
+        return this.x - this.getWidth() / 2;
+    }
+
+    /**
+     * Returns the right edge of the visible camera area.
+     *
+     * @return The right camera edge.
+     */
+    public getRight(): number {
+        return this.x + this.getWidth() / 2;
+    }
+
+    /**
+     * Returns the top edge of the visible camera area.
+     *
+     * @return The top camera edge.
+     */
+    public getTop(): number {
+        return this.mirroredY ? this.y + this.getHeight() / 2 : this.y - this.getHeight() / 2;
+    }
+
+    /**
+     * Returns the bottom edge of the visible camera area.
+     *
+     * @return The bottom camera edge.
+     */
+    public getBottom(): number {
+        return this.mirroredY ? this.y - this.getHeight() / 2 : this.y + this.getHeight() / 2;
+    }
+
+    /**
+     * Sets the camera zoom.
+     *
+     * @param zoom - The camera zoom to set.
+     */
+    public setZoom(zoom: number): this {
+        if (zoom !== this.zoom) {
+            this.zoom = zoom;
             this.invalidateSceneTransformation();
             this.invalidate();
         }
         return this;
     }
 
-    public getScale(): number {
-        return this.scale;
+    /**
+     * Returns the current camera zoom.
+     *
+     * @return The current camera zoom.
+     */
+    public getZoom(): number {
+        return this.zoom;
     }
 
     /**
@@ -207,6 +279,15 @@ export class Camera<T extends Game = Game> {
             this.invalidate();
         }
         return this;
+    }
+
+    /**
+     * Returns the camera rotation.
+     *
+     * @return The current camera rotation.
+     */
+    public getRotation(): number {
+        return this.rotation;
     }
 
     /**
@@ -260,7 +341,7 @@ export class Camera<T extends Game = Game> {
             this.sceneTransformation.reset()
                 .translate(this.game.width / 2, this.game.height / 2)
                 .mul(this.transformation)
-                .scale(this.scale)
+                .scale(this.zoom)
                 .rotate(this.rotation)
                 .translate(-this.x, this.mirroredY ? this.y : -this.y);
             this.sceneTransformationValid = true;
@@ -348,7 +429,7 @@ export class Camera<T extends Game = Game> {
 
         const oldX = this.x;
         const oldY = this.y;
-        const oldScale = this.scale;
+        const oldScale = this.zoom;
         const newScale = args.scale ?? oldScale;
         const oldRotation = this.rotation;
         const newRotation = args.rotation ?? oldRotation;
@@ -371,7 +452,7 @@ export class Camera<T extends Game = Game> {
                     camera.rotation = oldRotation + deltaRotation * value;
                 }
                 if (deltaScale !== 0) {
-                    camera.scale = oldScale + deltaScale * value;
+                    camera.zoom = oldScale + deltaScale * value;
                 }
                 this.invalidate();
                 this.invalidateSceneTransformation();
@@ -431,88 +512,54 @@ export class Camera<T extends Game = Game> {
         return this.follow;
     }
 
-    public getVisibleRect(x = this.x, y = this.y): Rect {
-        // TODO Probably wrong implemented
-        const { width, height } = this.game;
-        const offx = width / 2 / this.scale;
-        const offy = height / 2 / this.scale;
-        return new Rect(x - offx, y - offy, offx * 2, offy * 2);
-    }
-
     public isPointVisible(x: number, y: number, radius = 0): boolean {
-        const visibleRect = this.getVisibleRect();
         return (
-            x >= visibleRect.getLeft() - radius
-            && y >= visibleRect.getTop() - radius
-            && x <= visibleRect.getRight() + radius
-            && y <= visibleRect.getBottom() + radius
+            x >= this.getLeft() - radius
+            && y >= this.getTop() - radius
+            && x <= this.getRight() + radius
+            && y <= this.getBottom() + radius
         );
     }
 
-    private bounds: Rect | null = null;
-
-    public setBounds(bounds: Rect | null): void {
-        this.bounds = bounds;
+    /**
+     * Sets the camera bounds limits. This applies when following a target (not when focusing). The camera position
+     * is limited so the camera bounds are inside the limits.
+     *
+     * @param limits - The limits to set. Null to unset.
+     */
+    public setLimits(limits: Rect | null): void {
+        this.limits = limits;
     }
 
-    public getBounds(): Rect | null {
-        return this.bounds;
+    /**
+     * Returns the current camera bounds limits.
+     *
+     * @return The current camera bounds limits.
+     */
+    public getLimits(): Rect | null {
+        return this.limits;
     }
 
-    // TODO WAY to complicated. There must be a much easier method (Which belongs into Rect class anyway)
-    private getBaseCameraTarget(target: ReadonlyVector2Like) {
-        let xTarget = target.x;
-        let yTarget = target.y;
-        if (this.bounds) {
-            const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
-
-            type OverBoundData = {
-                left: boolean;
-                right: boolean;
-                top: boolean;
-                bottom: boolean;
-            };
-
-            const overBounds: OverBoundData = {
-                left: (targetVisibleRect.getLeft() < this.bounds.getLeft()),
-                right: (targetVisibleRect.getLeft() + targetVisibleRect.getWidth()) > (this.bounds.getLeft() + this.bounds.getWidth()),
-                top: (targetVisibleRect.getTop() + targetVisibleRect.getHeight()) > this.bounds.getTop(),
-                bottom: targetVisibleRect.getTop() < (this.bounds.getTop() - this.bounds.getHeight())
-            };
-
-            // Bound clip left / right
-            if (targetVisibleRect.getWidth() >= this.bounds.getWidth()) {
-                const visibleCenterX = targetVisibleRect.getLeft() + targetVisibleRect.getWidth() / 2;
-                const boundCenterX = this.bounds.getLeft() + this.bounds.getWidth() / 2;
-                const diff = boundCenterX - visibleCenterX;
-                xTarget += diff;
-            } else if (overBounds.left) {
-                const diff = this.bounds.getLeft() - targetVisibleRect.getLeft();
-                xTarget += diff;
-            } else if (overBounds.right) {
-                const diff = (this.bounds.getLeft() + this.bounds.getWidth()) - (targetVisibleRect.getLeft() + targetVisibleRect.getWidth());
-                xTarget += diff;
-            }
-
-            // Bound clip top / bottom
-            if (targetVisibleRect.getHeight() >= this.bounds.getHeight()) {
-                const visibleCenterY = (targetVisibleRect.getTop() + targetVisibleRect.getHeight()) - targetVisibleRect.getHeight() / 2;
-                const boundCenterY = this.bounds.getTop() - this.bounds.getHeight() / 2;
-                const diff = boundCenterY - visibleCenterY;
-                yTarget += diff;
-            } else if (overBounds.top) {
-                const diff = this.bounds.getTop() - (targetVisibleRect.getTop() + targetVisibleRect.getHeight());
-                yTarget += diff;
-            } else if (overBounds.bottom) {
-                const diff = (this.bounds.getTop() - this.bounds.getHeight()) - targetVisibleRect.getTop();
-                yTarget += diff;
-            }
+    private limitX(x: number): number {
+        if (this.limits) {
+            return clamp(x, this.limits.getLeft() + this.getWidth() / 2, this.limits.getRight() - this.getWidth() / 2);
+        } else {
+            return x;
         }
+    }
 
-        return {
-            x: xTarget,
-            y: yTarget
-        };
+    private limitY(y: number): number {
+        if (this.limits) {
+            if (this.mirroredY) {
+                // TODO This darn mirrored Y. Even Rect is not compatible to it when calculating bottom...
+                return clamp(y, this.limits.getTop() - this.limits.getHeight() + this.getHeight() / 2,
+                    this.limits.getTop() - this.getHeight() / 2);
+            } else {
+                return clamp(y, this.limits.getTop() + this.getHeight() / 2, this.limits.getBottom() - this.getHeight() / 2);
+            }
+        } else {
+            return y;
+        }
     }
 
     /**
@@ -523,8 +570,8 @@ export class Camera<T extends Game = Game> {
     public update(dt: number): void {
         this.updateAnimations(dt);
         if (this.follow) {
-            const position = this.getBaseCameraTarget(getCameraTargetPosition(this.follow));
-            this.moveTo(position.x, position.y);
+            const position = getCameraTargetPosition(this.follow);
+            this.moveTo(this.limitX(position.x), this.limitY(position.y));
         }
         this.cinematicBars.update(dt);
         this.fadeToBlack.update(dt);

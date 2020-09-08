@@ -176,10 +176,10 @@ export class Campaign {
                     break;
                 case "zoomin":
                     // TODO Needed?
-                    this.gameScene.camera.setScale(this.gameScene.camera.getScale() + 1);
+                    this.gameScene.camera.setZoom(this.gameScene.camera.getZoom() + 1);
                     break;
                 case "zoomout":
-                    this.gameScene.camera.setScale(this.gameScene.camera.getScale() - 1);
+                    this.gameScene.camera.setZoom(this.gameScene.camera.getZoom() - 1);
                     break;
                 case "treezoom":
                     this.gameScene.lookAtPOI("forest");

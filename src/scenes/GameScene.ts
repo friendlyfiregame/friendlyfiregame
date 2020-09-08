@@ -257,7 +257,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.bone = this.getGameObject(Bone);
 
         this.camera.mirroredY = true;
-        this.camera.setBounds(this.player.getCurrentMapBounds());
+        this.camera.setLimits(this.player.getCurrentMapBounds());
         this.camera.setFollow(() => ({ x: this.player.x, y: this.player.y + 30 }));
 
         this.fpsInterval = setInterval(() => {
@@ -607,7 +607,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
 
-            this.camera.setBounds(this.player.getCurrentMapBounds());
+            this.camera.setLimits(this.player.getCurrentMapBounds());
 
             // Some helpful thoughts
             setTimeout(() => this.player.think("This is not over…", 2000), 9000);

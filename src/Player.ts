@@ -635,7 +635,7 @@ export class Player extends PhysicsEntity {
                 this.x = targetGate.x + (targetGate.width / 2);
                 this.y = targetGate.y - targetGate.height;
 
-                this.scene.camera.setBounds(this.getCurrentMapBounds());
+                this.scene.camera.setLimits(this.getCurrentMapBounds());
                 this.isControllable = true;
 
                 await this.scene.camera.fadeToBlack.fadeIn();
@@ -801,7 +801,7 @@ export class Player extends PhysicsEntity {
 
     private isOutOfBounds (): boolean {
         if (!this.isControllable) return false;
-        const mapBounds = this.scene.camera.getBounds();
+        const mapBounds = this.scene.camera.getLimits();
         if (!mapBounds) return false;
 
         return !this.scene.world.boundingBoxesCollide(this.getOldBounds(), new Rect(
@@ -824,7 +824,7 @@ export class Player extends PhysicsEntity {
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
-                this.scene.camera.setBounds(this.getCurrentMapBounds());
+                this.scene.camera.setLimits(this.getCurrentMapBounds());
             }
         }
 
