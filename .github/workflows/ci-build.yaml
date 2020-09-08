@@ -62,10 +62,13 @@ jobs:
       run: npm run -s lint
     - name: Compile sources
       run: npm run -s compile
-    #- name: Run unit tests
-    #  run: npm run -s coverage
-    #  env:
-    #    SONAR_SCANNER_ENABLED: 'true'
+    - name: Run headless tests
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        working-directory: ./ #optional
+        run: npm run -s coverage
+      env:
+        SONAR_SCANNER_ENABLED: 'true'
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.4
       env:
