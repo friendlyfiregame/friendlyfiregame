@@ -65,7 +65,7 @@ jobs:
     - name: Run headless tests
       uses: GabrielBB/xvfb-action@v1
       with:
-        working-directory: ./ #optional
+        working-directory: ./
         run: npm run -s coverage
       env:
         SONAR_SCANNER_ENABLED: 'true'
@@ -82,6 +82,7 @@ jobs:
           -Dsonar.pullrequest.key=${GITHUB_PULL_REQUEST_ID}
           -Dsonar.pullrequest.branch=${GITHUB_HEAD_REF}
           -Dsonar.pullrequest.base=${GITHUB_BASE_REF}
+          -Dsonar.testExecutionReportPaths=./coverage/
     - run: npm run -s dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v1
