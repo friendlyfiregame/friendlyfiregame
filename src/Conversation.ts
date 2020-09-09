@@ -107,7 +107,7 @@ export class Conversation {
                 this.setVariable(action[1], action[2]);
                 break;
             default:
-                this.npc.scene.game.campaign.runAction(action[0], this.npc, action.slice(1));
+                this.npc.gameScene.game.campaign.runAction(action[0], this.npc, action.slice(1));
         }
     }
 

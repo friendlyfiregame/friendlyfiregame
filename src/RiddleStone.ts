@@ -19,7 +19,7 @@ export class RiddleStone extends Entity {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
+        if (this.gameScene.mountainRiddle.isCorrectGate(this.col, this.row)) {
             RiddleStone.sprite.drawTag(ctx, "idle", -RiddleStone.sprite.width >> 1, -RiddleStone.sprite.height);
         }
     }

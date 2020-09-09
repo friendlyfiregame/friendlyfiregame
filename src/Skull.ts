@@ -20,13 +20,13 @@ export class Skull extends PhysicsEntity {
     }
 
     public isCarried(): boolean {
-        return this.scene.player.isCarrying(this);
+        return this.gameScene.player.isCarrying(this);
     }
 
     public update(dt: number): void {
         super.update(dt);
 
-        const player = this.scene.player;
+        const player = this.gameScene.player;
 
         if (!this.isCarried() && this.distanceTo(player) < 20) {
             player.carry(this);

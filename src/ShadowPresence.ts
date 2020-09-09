@@ -29,7 +29,7 @@ export class ShadowPresence extends NPC {
         this.setLayer(RenderingLayer.ENTITIES);
         this.direction = -1;
         this.lookAtPlayer = false;
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
+        this.soundEmitter = new SoundEmitter(this.gameScene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
     }
 
     protected showDialoguePrompt(): boolean {
@@ -39,8 +39,8 @@ export class ShadowPresence extends NPC {
 
         return (
             this.isNearPlayer
-            && this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.TALKED_TO_FIRE)
-            && !this.scene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.GOT_RUNNING_ABILITY)
+            && this.gameScene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.TALKED_TO_FIRE)
+            && !this.gameScene.game.campaign.getQuest(QuestKey.A).isTriggered(QuestATrigger.GOT_RUNNING_ABILITY)
         );
     }
 
@@ -55,7 +55,7 @@ export class ShadowPresence extends NPC {
 
     public checkPlayerDistance(): void {
         this.isNearPlayer = false;
-        if (this.distanceTo(this.scene.player) < 60) {
+        if (this.distanceTo(this.gameScene.player) < 60) {
             this.isNearPlayer = true;
         }
     }

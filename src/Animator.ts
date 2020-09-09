@@ -51,9 +51,9 @@ export class Animator {
         // If current animation has a fixed duration, check if it was reached.
         // If so, the animation is set to finished.
         if (!this.currentAnimation.finished && this.currentAnimation.duration > 0) {
-            const animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
+            const animationTime = (this.entity.gameScene.gameTime * 1000) - this.currentAnimation.start;
 
-            if (animationTime + (this.entity.scene.dt * 1000) >= this.currentAnimation.duration) {
+            if (animationTime + (this.entity.gameScene.dt * 1000) >= this.currentAnimation.duration) {
                 this.currentAnimation.finished = true;
 
                 if (this.currentAnimation.config?.callback) {
@@ -68,7 +68,7 @@ export class Animator {
 
         // Update Animation with new payload
         this.currentAnimation.tag = tag;
-        this.currentAnimation.start = this.entity.scene.gameTime * 1000;
+        this.currentAnimation.start = this.entity.gameScene.gameTime * 1000;
         this.currentAnimation.config = config;
         this.currentAnimation.finished = false;
         this.currentAnimation.duration = this.sprite.getAnimationDurationByTag(tag) || 0;
@@ -85,7 +85,7 @@ export class Animator {
         this.currentAnimation.direction = direction;
         this.updateAnimation(tag, config);
 
-        let animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
+        let animationTime = (this.entity.gameScene.gameTime * 1000) - this.currentAnimation.start;
 
         /**
          * Forcefully stop the loop at the last frame, if looping is disabled.

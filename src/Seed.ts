@@ -37,7 +37,7 @@ export class Seed extends NPC {
         this.setLayer(RenderingLayer.ENTITIES);
         this.wood = new Wood(scene, x, y);
 
-        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
+        const floatingPosition = this.gameScene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
 
         if (!floatingPosition) {
             throw new Error ("Could not find “recover_floating_position” point of interest in game scene.");
@@ -62,17 +62,17 @@ export class Seed extends NPC {
     }
 
     public isCarried(): boolean {
-        return this.scene.player.isCarrying(this);
+        return this.gameScene.player.isCarrying(this);
     }
 
     public grow(): void {
         if (this.state === SeedState.PLANTED) {
             this.state = SeedState.GROWN;
-            this.scene.seed = this;
-            this.face = new Face(this.scene, EyeType.STANDARD, false, 0, 8).appendTo(this);
+            this.gameScene.seed = this;
+            this.face = new Face(this.gameScene, EyeType.STANDARD, false, 0, 8).appendTo(this);
             Conversation.setGlobal("seedgrown", "true");
-            this.scene.game.campaign.runAction("enable", null, ["tree", "tree2"]);
-            this.scene.game.campaign.runAction("enable", null, ["seed", "seed1"]);
+            this.gameScene.game.campaign.runAction("enable", null, ["tree", "tree2"]);
+            this.gameScene.game.campaign.runAction("enable", null, ["seed", "seed1"]);
         }
     }
 
@@ -87,21 +87,21 @@ export class Seed extends NPC {
         }
 
         if (this.state === SeedState.FREE || this.state === SeedState.SWIMMING) {
-            const player = this.scene.player;
+            const player = this.gameScene.player;
 
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
             }
             if (
                 !this.isCarried()
-                && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
+                && this.gameScene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
             ) {
-                const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
+                const seedPosition = this.gameScene.pointsOfInterest.find(poi => poi.name === "seedposition");
 
                 if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 
                 this.state = SeedState.PLANTED;
-                this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
+                this.gameScene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.PLANTED_SEED);
                 this.setFloating(true);
                 this.x = seedPosition.x;
                 this.y = seedPosition.y;
@@ -113,7 +113,7 @@ export class Seed extends NPC {
             if (
                 !this.isCarried()
                 && this.state !== SeedState.SWIMMING
-                && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                && this.gameScene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
@@ -121,7 +121,7 @@ export class Seed extends NPC {
                 this.y = this.floatingPosition.y;
             }
         } else if (this.state === SeedState.PLANTED) {
-            if (this.scene.world.isRaining()) {
+            if (this.gameScene.world.isRaining()) {
                 this.grow();
             }
         } else if (this.state === SeedState.GROWN) {
@@ -131,7 +131,7 @@ export class Seed extends NPC {
 
     public spawnWood(): Wood {
         if (!this.wood.isInScene()) {
-            this.scene.addGameObject(this.wood);
+            this.gameScene.addGameObject(this.wood);
         }
         this.wood.x = this.x;
         this.wood.y = this.y + this.height / 2;

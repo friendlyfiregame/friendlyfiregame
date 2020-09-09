@@ -60,9 +60,9 @@ export class Fire extends NPC {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
         this.setLayer(RenderingLayer.ENTITIES);
 
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
+        this.soundEmitter = new SoundEmitter(this.gameScene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
 
-        this.smokeEmitter = this.scene.particles.createEmitter({
+        this.smokeEmitter = this.gameScene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
             velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
@@ -77,7 +77,7 @@ export class Fire extends NPC {
             breakFactor: 0.85
         });
 
-        this.steamEmitter = this.scene.particles.createEmitter({
+        this.steamEmitter = this.gameScene.particles.createEmitter({
             position: {x: this.x + 10, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3, y: 0 }),
             velocity: () => ({ x: rnd(-1, 2) * 5, y: 50 + rnd(3) }),
@@ -94,7 +94,7 @@ export class Fire extends NPC {
             breakFactor: 0.5
         });
 
-        this.sparkEmitter = this.scene.particles.createEmitter({
+        this.sparkEmitter = this.gameScene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
             color: () => FireGfx.gradient.getCss(rnd() ** 0.5),
@@ -115,13 +115,13 @@ export class Fire extends NPC {
         }
 
         return (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.JUST_ARRIVED ||
             (
-                this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_WOOD &&
-                this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TALKED_TO_FIRE_WITH_WOOD
+                this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_WOOD &&
+                this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TALKED_TO_FIRE_WITH_WOOD
             ) ||
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.THROWN_WOOD_INTO_FIRE ||
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.BEAT_FIRE
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.THROWN_WOOD_INTO_FIRE ||
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.BEAT_FIRE
         );
     }
 
@@ -168,14 +168,14 @@ export class Fire extends NPC {
         }
 
         if (
-            this.scene.friendshipCutscene
-            && this.scene.shiba.getState() === ShibaState.KILLING_FIRE
+            this.gameScene.friendshipCutscene
+            && this.gameScene.shiba.getState() === ShibaState.KILLING_FIRE
             && this.intensity <= SHRINK_SIZE
         ) {
-            this.scene.shiba.nextState();
+            this.gameScene.shiba.nextState();
         }
 
-        if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
+        if (!this.gameScene.camera.isPointVisible(this.x, this.y, 200)) {
             this.hide();
             return;
         }
@@ -225,15 +225,15 @@ export class Fire extends NPC {
         this.state = FireState.ANGRY;
         this.growthTarget = 14;
 
-        this.scene.startApocalypseMusic();
+        this.gameScene.startApocalypseMusic();
 
         // Disable remaining dialogs
         this.conversation = null;
 
         // Remove any reachable NPCs
-        for (const npc of [this.scene.shadowPresence]) {
+        for (const npc of [this.gameScene.shadowPresence]) {
             if (npc) {
-                this.scene.removeGameObject(npc);
+                this.gameScene.removeGameObject(npc);
             }
         }
 
@@ -243,12 +243,12 @@ export class Fire extends NPC {
             ["What have I done?", 6, 3],
             ["I trusted you! I helped you!", 10, 3]
         ].forEach(line => setTimeout(() => {
-            this.scene.player.think(line[0] as string, line[2] as number * 1000);
+            this.gameScene.player.think(line[0] as string, line[2] as number * 1000);
         }, (line[1] as number) * 1000));
 
         // Give fire new dialog
         setTimeout(() => {
-            this.scene.game.campaign.runAction("enable", null, ["fire", "fire2"]);
+            this.gameScene.game.campaign.runAction("enable", null, ["fire", "fire2"]);
         }, 13500);
     }
 }

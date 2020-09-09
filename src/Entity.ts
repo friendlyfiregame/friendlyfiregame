@@ -45,7 +45,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
     protected animator = new Animator(this);
 
     constructor(
-        public scene: GameScene,
+        public gameScene: GameScene,
         x: number,
         y: number,
         width = 0,
@@ -70,7 +70,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
     }
 
     public get distanceToPlayer(): number {
-        return this.distanceTo(this.scene.player);
+        return this.distanceTo(this.gameScene.player);
     }
 
     protected getClosestEntityInRange(range: number): Entity | null {
@@ -88,7 +88,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
     protected getEntitiesInRange(range: number): EntityDistance[] {
         const entitiesInRange: EntityDistance[] = [];
 
-        this.scene.rootNode.forEachChild(gameObject => {
+        this.gameScene.rootNode.forEachChild(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
 
@@ -104,7 +104,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
     protected getClosestEntity(): Entity {
         const entitiesInRange: EntityDistance[] = [];
 
-        this.scene.rootNode.forEachChild(gameObject => {
+        this.gameScene.rootNode.forEachChild(gameObject => {
             if (gameObject instanceof Entity && gameObject !== this) {
                 const distance = this.distanceTo(gameObject);
                 entitiesInRange.push({source: this, target: gameObject, distance});
@@ -130,7 +130,7 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
      * @param triggerName the trigger name to check against.
      */
     protected isCollidingWithTrigger(triggerName: string): boolean {
-        const collisions = this.scene.world.getTriggerCollisions(this);
+        const collisions = this.gameScene.world.getTriggerCollisions(this);
 
         if (collisions.length === 0) {
             return false;

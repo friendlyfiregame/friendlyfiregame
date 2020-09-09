@@ -61,7 +61,7 @@ export class Spider extends NPC {
         super.update(dt);
 
         // Get y offset to match breathing motion
-        const currentFrameIndex = Spider.sprite.getTaggedFrameIndex("idle", this.scene.gameTime * 1000);
+        const currentFrameIndex = Spider.sprite.getTaggedFrameIndex("idle", this.gameScene.gameTime * 1000);
         const eyeOffsetFrames = this.getSpriteMetadata().eyeOffsetFrames ?? [];
         this.eyeOffsetY = eyeOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
 

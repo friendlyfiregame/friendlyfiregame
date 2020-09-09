@@ -96,7 +96,7 @@ export class SceneNode<T extends Game = Game> {
     private lastChild: SceneNode<T> | null = null;
 
     /** The scene this node is connected to. Null if none. */
-    #scene: Scene<T, unknown> | null = null;
+    private scene: Scene<T, unknown> | null = null;
 
     /** The ID of the node. Null if none. */
     private id: string | null;
@@ -643,7 +643,7 @@ export class SceneNode<T extends Game = Game> {
      * @return The current scene or null if none.
      */
     public getScene(): Scene<T> | null {
-        return this.#scene;
+        return this.scene;
     }
 
     /**
@@ -653,11 +653,11 @@ export class SceneNode<T extends Game = Game> {
      * @param scene - The scene the node belongs to from now on. null to unset the current scene.
      */
     protected setScene(scene: Scene<T> | null): void {
-        if (scene !== this.#scene) {
-            if (this.#scene) {
+        if (scene !== this.scene) {
+            if (this.scene) {
                 this.deactivate();
             }
-            this.#scene = scene;
+            this.scene = scene;
             if (scene) {
                 this.activate();
             }
@@ -671,7 +671,7 @@ export class SceneNode<T extends Game = Game> {
      * @return True if in scene, false if not.
      */
     public isInScene(): boolean {
-        return this.#scene != null;
+        return this.scene != null;
     }
 
     /**
@@ -765,7 +765,7 @@ export class SceneNode<T extends Game = Game> {
             this.firstChild = node;
         }
         node.parent = this;
-        node.setScene(this.#scene);
+        node.setScene(this.scene);
 
         node.invalidateSceneTransformation();
         node.invalidate();
@@ -879,7 +879,7 @@ export class SceneNode<T extends Game = Game> {
         newNode.previousSibling = oldPrevious;
         newNode.nextSibling = refNode;
         newNode.parent = this;
-        newNode.setScene(this.#scene);
+        newNode.setScene(this.scene);
 
         newNode.invalidateSceneTransformation();
         newNode.invalidate();

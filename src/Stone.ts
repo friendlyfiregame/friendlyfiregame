@@ -37,7 +37,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 
-        const floatingPosition = this.scene.pointsOfInterest.find(
+        const floatingPosition = this.gameScene.pointsOfInterest.find(
             poi => poi.name === "stone_floating_position"
         );
 
@@ -54,8 +54,8 @@ export class Stone extends NPC implements CollidableGameObject {
         }
 
         return (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.PLANTED_SEED &&
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_STONE
         );
     }
 
@@ -71,9 +71,9 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (
-                this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                this.gameScene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
-                this.scene.game.campaign.getQuest(QuestKey.A).trigger(
+                this.gameScene.game.campaign.getQuest(QuestKey.A).trigger(
                     QuestATrigger.THROWN_STONE_INTO_WATER
                 );
 
@@ -82,8 +82,8 @@ export class Stone extends NPC implements CollidableGameObject {
                 this.setFloating(true);
                 this.y = this.floatingPosition.y;
                 Stone.successSound.play();
-                this.scene.game.campaign.runAction("enable", null, ["stone", "stone2"]);
-                this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
+                this.gameScene.game.campaign.runAction("enable", null, ["stone", "stone2"]);
+                this.gameScene.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {
             const diffX = this.floatingPosition.x - this.x;
@@ -121,11 +121,11 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public isCarried(): boolean {
-        return this.scene.player.isCarrying(this);
+        return this.gameScene.player.isCarrying(this);
     }
 
     public pickUp(): void {
         this.face?.setMode(FaceModes.AMUSED);
-        this.scene.player.carry(this);
+        this.gameScene.player.carry(this);
     }
 }

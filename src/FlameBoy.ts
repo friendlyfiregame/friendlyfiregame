@@ -24,7 +24,7 @@ export class FlameBoy extends NPC {
         this.face = new Face(scene, EyeType.FLAMEBOY, false, 0, 5).appendTo(this);
         this.defaultFaceMode = FaceModes.BORED;
         this.face.setMode(this.defaultFaceMode);
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, FlameBoy.fireAmbience, 0.7, 0.2);
+        this.soundEmitter = new SoundEmitter(this.gameScene, this.x, this.y, FlameBoy.fireAmbience, 0.7, 0.2);
     }
 
     protected showDialoguePrompt(): boolean {
@@ -33,8 +33,8 @@ export class FlameBoy extends NPC {
         }
 
         return (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.THROWN_STONE_INTO_WATER
-            && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_MULTIJUMP
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.THROWN_STONE_INTO_WATER
+            && this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_MULTIJUMP
         );
     }
 

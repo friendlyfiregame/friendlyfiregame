@@ -36,7 +36,7 @@ export class Face extends SceneNode {
     private direction = 1; // 1 = right, -1 = left
 
     constructor(
-        private scene: GameScene,
+        private gameScene: GameScene,
         private eyeType: EyeType,
         private lookAtPlayer: boolean,
         private offX = 0,
@@ -53,7 +53,7 @@ export class Face extends SceneNode {
         // Look at player
         const parent = this.getParent();
         if (parent != null && this.lookAtPlayer) {
-            const dx = this.scene.player.x - parent.x;
+            const dx = this.gameScene.player.x - parent.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
         } else {
             this.setDirection(this.direction);

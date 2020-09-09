@@ -10,7 +10,7 @@ export class ConversationProxy extends NPC {
         super(scene, x, y, 16, 16);
 
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
-        this.scene.addGameObject(this);
+        this.gameScene.addGameObject(this);
     }
 
     private prepareContent(content?: string ): string[] {
@@ -42,7 +42,7 @@ export class ConversationProxy extends NPC {
     public update(dt: number): void {
         super.update(dt);
         if (!this.hasActiveConversation()) {
-            this.scene.removeGameObject(this);
+            this.gameScene.removeGameObject(this);
         }
     }
 }

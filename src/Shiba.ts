@@ -65,7 +65,7 @@ export class Shiba extends ScriptableNPC {
         this.setMaxVelocity(2);
         this.conversation = new Conversation(shiba1, this);
 
-        this.doubleJumpEmitter = this.scene.particles.createEmitter({
+        this.doubleJumpEmitter = this.gameScene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
@@ -89,31 +89,31 @@ export class Shiba extends ScriptableNPC {
 
         if (this.state === ShibaState.FLYING_AWAY) {
             this.lookAtPlayer = false;
-            this.scene.player.disableMultiJump();
+            this.gameScene.player.disableMultiJump();
             this.setMaxVelocity(3);
         } else if (this.state === ShibaState.ON_MOUNTAIN) {
             this.move = 0;
 
-            const spawn = this.scene.pointsOfInterest.find(
+            const spawn = this.gameScene.pointsOfInterest.find(
                 poi => poi.name === "shiba_mountain_spawn"
             );
 
             if (!spawn) throw new Error("Shiba mountain spawn missing");
             this.x = spawn.x;
             this.y = spawn.y;
-            this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
-            this.scene.powerShiba.nextState();
+            this.gameScene.game.campaign.runAction("enable", null, ["shiba", "shiba4"]);
+            this.gameScene.powerShiba.nextState();
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
-            this.scene.camera.cinematicBars.show();
+            this.gameScene.camera.cinematicBars.show();
 
-            const shibaSpawnPos = this.scene.pointsOfInterest.find(
+            const shibaSpawnPos = this.gameScene.pointsOfInterest.find(
                 poi => poi.name === "friendship_shiba_spawn"
             );
 
             this.lookAtPlayer = false;
             this.setMaxVelocity(2);
 
-            this.scene.startFriendshipMusic();
+            this.gameScene.startFriendshipMusic();
 
             if (!shibaSpawnPos) throw new Error("'friendship_shiba_spawn' point in map is missing");
             this.x = shibaSpawnPos.x;
@@ -126,34 +126,34 @@ export class Shiba extends ScriptableNPC {
 
             setTimeout(() => {
                 this.think("Bad fire!", 2000);
-                this.scene.fire.setState(FireState.BEING_PUT_OUT);
-                this.scene.fire.growthTarget = SHRINK_SIZE;
+                this.gameScene.fire.setState(FireState.BEING_PUT_OUT);
+                this.gameScene.fire.growthTarget = SHRINK_SIZE;
                 this.peeing = true;
                 Shiba.putOutSound.setVolume(.3);
                 Shiba.putOutSound.play();
             }, 2000);
 
-            setTimeout(() => this.scene.fire.think("Oh God…", 2000), 4500);
-            setTimeout(() => this.scene.fire.think("Disgusting…", 3000), 8000);
+            setTimeout(() => this.gameScene.fire.think("Oh God…", 2000), 4500);
+            setTimeout(() => this.gameScene.fire.think("Disgusting…", 3000), 8000);
         } else if (this.state === ShibaState.FIRE_KILLED) {
-            this.scene.camera.cinematicBars.hide();
+            this.gameScene.camera.cinematicBars.hide();
             this.peeing = false;
-            this.scene.fire.state = FireState.PUT_OUT;
+            this.gameScene.fire.state = FireState.PUT_OUT;
             Shiba.putOutSound.stop();
 
             setTimeout(() => (this.direction = -1), 1000);
             setTimeout(() => this.think("I help friend!", 1500), 1500);
 
             setTimeout(() => {
-                this.scene.fire.think("Yeah, great.", 2000);
-                this.scene.fire.face?.setMode(FaceModes.BORED);
-                this.scene.player.isControllable = true;
-                this.scene.friendshipCutscene = false;
-                this.scene.camera.cinematicBars.hide();
+                this.gameScene.fire.think("Yeah, great.", 2000);
+                this.gameScene.fire.face?.setMode(FaceModes.BORED);
+                this.gameScene.player.isControllable = true;
+                this.gameScene.friendshipCutscene = false;
+                this.gameScene.camera.cinematicBars.hide();
                 this.lookAtPlayer = true;
-                this.scene.game.campaign.runAction("enable", null, ["fire", "fire4"]);
-                this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba5"]);
-                this.scene.game.campaign.getQuest(QuestKey.B).finish();
+                this.gameScene.game.campaign.runAction("enable", null, ["fire", "fire4"]);
+                this.gameScene.game.campaign.runAction("enable", null, ["shiba", "shiba5"]);
+                this.gameScene.game.campaign.getQuest(QuestKey.B).finish();
             }, 3500);
         }
     }
@@ -195,7 +195,7 @@ export class Shiba extends ScriptableNPC {
         super.update(dt);
 
         // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.gameScene.world.getTriggerCollisions(this);
 
         if (this.hasActiveConversation()) {
             this.move = 0;
@@ -233,7 +233,7 @@ export class Shiba extends ScriptableNPC {
         this.move = -1;
 
         if (
-            this.scene.world.collidesWithVerticalLine(
+            this.gameScene.world.collidesWithVerticalLine(
                 this.x - (this.width / 2), this.y + this.height,
                 this.height,
                 [ this ],
@@ -286,11 +286,11 @@ export class Shiba extends ScriptableNPC {
         if (
             Conversation.getGlobals()["$gotBoneQuest"]
             && !Conversation.getGlobals()["$broughtBone"]
-            && this.distanceTo(this.scene.bone) < 100
+            && this.distanceTo(this.gameScene.bone) < 100
         ) {
             Conversation.setGlobal("broughtBone", "true");
             this.think("Wow! Bone!!!", 2000);
-            this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba2"]);
+            this.gameScene.game.campaign.runAction("enable", null, ["shiba", "shiba2"]);
         }
     }
 

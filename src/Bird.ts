@@ -43,7 +43,7 @@ export class Bird extends NPC {
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
 
-        this.doubleJumpEmitter = this.scene.particles.createEmitter({
+        this.doubleJumpEmitter = this.gameScene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
@@ -96,7 +96,7 @@ export class Bird extends NPC {
         let pulled = 0, col = 0;
 
         if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
+            const world = this.gameScene.world;
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
 
@@ -112,7 +112,7 @@ export class Bird extends NPC {
 
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.gameScene.world;
 
         while (
             this.y > 0
@@ -131,7 +131,7 @@ export class Bird extends NPC {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.gameScene.world;
 
         if (this.getVelocityX() > 0) {
             while (
@@ -187,7 +187,7 @@ export class Bird extends NPC {
         this.move = 0;
 
         // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.gameScene.world.getTriggerCollisions(this);
 
         if (this.jumpTimer > 0) {
             this.jumpTimer -= dt;

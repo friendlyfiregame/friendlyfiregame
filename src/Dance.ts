@@ -51,7 +51,7 @@ export class Dance extends SceneNode {
     private success = false;
 
     constructor(
-        private scene: GameScene,
+        private gameScene: GameScene,
         x: number,
         y: number,
         private bpm = 128,
@@ -94,7 +94,7 @@ export class Dance extends SceneNode {
     }
 
     private begin(): void {
-        this.openTime = this.scene.gameTime;
+        this.openTime = this.gameScene.gameTime;
         this.startTime = this.openTime + this.warmupBeats / this.bpm * 60;
         this.currentKey = "";
         this.currentDistanceToIdealTime = 0;
@@ -188,7 +188,7 @@ export class Dance extends SceneNode {
     }
 
     public updateDance(): boolean {
-        const time = this.scene.gameTime - this.startTime;
+        const time = this.gameScene.gameTime - this.startTime;
         this.progress = time * this.bpm / 60;
         const prevIndex = this.currentIndex;
         this.currentIndex = Math.floor(this.progress);
@@ -236,7 +236,7 @@ export class Dance extends SceneNode {
 
         if (this.progress < 0 && !Dance.raindance_music.isPlaying()) {
             const fade = -this.progress / this.warmupBeats;
-            this.scene.fadeActiveBackgroundTrack(fade);
+            this.gameScene.fadeActiveBackgroundTrack(fade);
         } else {
             // own music paused
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
@@ -258,7 +258,7 @@ export class Dance extends SceneNode {
     public resetMusic(): void {
         Dance.raindance_music.stop();
         Dance.treedance_music.stop();
-        this.scene.resetMusicVolumes();
+        this.gameScene.resetMusicVolumes();
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

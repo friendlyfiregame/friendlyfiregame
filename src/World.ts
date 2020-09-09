@@ -38,7 +38,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     ])
     private static backgrounds: HTMLImageElement[];
 
-    private scene: GameScene;
+    private gameScene: GameScene;
 
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
@@ -47,9 +47,9 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
     public constructor(scene: GameScene) {
         super({ layer: RenderingLayer.TILEMAP_BACKGROUND });
-        this.scene = scene;
+        this.gameScene = scene;
 
-        const rainSpawnPosition = this.scene.pointsOfInterest.find(
+        const rainSpawnPosition = this.gameScene.pointsOfInterest.find(
             o => o.name === "rain_spawn_position"
         );
 
@@ -57,7 +57,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
             throw new Error ("Missing 'rain_spawn_position' point in map data to place rain emitter");
         }
 
-        this.rainEmitter = this.scene.particles.createEmitter({
+        this.rainEmitter = this.gameScene.particles.createEmitter({
             position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
@@ -86,8 +86,8 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
     // TODO Background rendering totally broken
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        const camX = -this.scene.camera.getX();
-        const camY = -this.scene.camera.getY();
+        const camX = -this.gameScene.camera.getX();
+        const camY = -this.gameScene.camera.getY();
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
 
         ctx.save();
@@ -126,7 +126,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     public collidesWith(
         x: number, y: number, ignoreObjects: SceneNode[] = [], ignore: Environment[] = []
     ): number {
-        for (const gameObject of this.scene.rootNode.descendants()) {
+        for (const gameObject of this.gameScene.rootNode.descendants()) {
             if (
                 gameObject !== this
                 && !ignoreObjects.includes(gameObject)
@@ -175,7 +175,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     ): Entity[] {
         const collidesWith: Entity[] = [];
 
-        for (const gameObject of this.scene.rootNode.descendants()) {
+        for (const gameObject of this.gameScene.rootNode.descendants()) {
             if (
                 gameObject !== sourceEntity
                 && !(gameObject instanceof Particles)
@@ -205,7 +205,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     public getTriggerCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
 
-        for (const triggerObject of this.scene.triggerObjects) {
+        for (const triggerObject of this.gameScene.triggerObjects) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getOldBounds(), boundsFromMapObject(triggerObject)
             );
@@ -221,7 +221,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     public getGateCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
 
-        for (const gateObject of this.scene.gateObjects) {
+        for (const gateObject of this.gameScene.gateObjects) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getOldBounds(), boundsFromMapObject(gateObject, 0)
             );
@@ -237,7 +237,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     public getCameraBounds(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
 
-        for (const triggerObject of this.scene.boundObjects) {
+        for (const triggerObject of this.gameScene.boundObjects) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getOldBounds(), boundsFromMapObject(triggerObject)
             );
@@ -268,7 +268,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
     public getObjectAt(
         x: number, y: number, ignoreObjects: SceneNode[] = [], ignore: Environment[] = []
     ): SceneNode | null {
-        for (const gameObject of this.scene.rootNode.descendants()) {
+        for (const gameObject of this.gameScene.rootNode.descendants()) {
             if (
                 gameObject !== this
                 && !ignoreObjects.includes(gameObject)

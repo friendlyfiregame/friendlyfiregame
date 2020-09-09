@@ -31,11 +31,11 @@ export class Tree extends NPC {
         }
 
         return (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE
-            && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.GOT_QUEST_FROM_FIRE
+            && this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.GOT_QUEST_FROM_TREE
         ) || (
-            this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.MADE_RAIN
-            && this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TREE_DROPPED_WOOD
+            this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() >= QuestATrigger.MADE_RAIN
+            && this.gameScene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex() < QuestATrigger.TREE_DROPPED_WOOD
         );
     }
 
@@ -50,7 +50,7 @@ export class Tree extends NPC {
 
     public spawnSeed(): Seed {
         if (!this.seed.isInScene()) {
-            this.scene.addGameObject(this.seed);
+            this.gameScene.addGameObject(this.seed);
         }
 
         this.seed.x = this.x;
@@ -62,7 +62,7 @@ export class Tree extends NPC {
 
     public spawnWood(): Wood {
         if (!this.wood.isInScene()) {
-            this.scene.addGameObject(this.wood);
+            this.gameScene.addGameObject(this.wood);
         }
 
         this.wood.x = this.x;

@@ -30,7 +30,7 @@ export class Wood extends PhysicsEntity {
         super(scene, x, y, 26, 16);
         this.setLayer(RenderingLayer.ENTITIES);
 
-        const floatingPosition = this.scene.pointsOfInterest.find(
+        const floatingPosition = this.gameScene.pointsOfInterest.find(
             poi => poi.name === "recover_floating_position"
         );
 
@@ -46,7 +46,7 @@ export class Wood extends PhysicsEntity {
     }
 
     public isCarried(): boolean {
-        return this.scene.player.isCarrying(this);
+        return this.gameScene.player.isCarrying(this);
     }
 
     public update(dt: number): void {
@@ -60,7 +60,7 @@ export class Wood extends PhysicsEntity {
         }
 
         if (this.state === WoodState.FREE || this.state === WoodState.SWIMMING) {
-            const player = this.scene.player;
+            const player = this.gameScene.player;
 
             if (!this.isCarried() && this.distanceTo(player) < 20) {
                 player.carry(this);
@@ -69,7 +69,7 @@ export class Wood extends PhysicsEntity {
             if (
                 !this.isCarried()
                 && this.state !== WoodState.SWIMMING
-                && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                && this.gameScene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
@@ -78,9 +78,9 @@ export class Wood extends PhysicsEntity {
             }
         }
 
-        if (!this.isCarried() && this.distanceTo(this.scene.fire) < 20) {
-            this.scene.fire.feed(this);
-            this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_WOOD_INTO_FIRE);
+        if (!this.isCarried() && this.distanceTo(this.gameScene.fire) < 20) {
+            this.gameScene.fire.feed(this);
+            this.gameScene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.THROWN_WOOD_INTO_FIRE);
             Wood.successSound.play();
         }
     }

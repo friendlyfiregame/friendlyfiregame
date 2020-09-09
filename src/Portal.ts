@@ -60,7 +60,7 @@ export class Portal extends Entity {
                 this.nextAnimationState();
             }
         } else if (this.animationState === PortalAnimationState.GONE) {
-            this.scene.removeGameObject(this);
+            this.gameScene.removeGameObject(this);
         }
     }
 }

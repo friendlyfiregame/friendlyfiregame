@@ -33,7 +33,7 @@ export class PowerShiba extends NPC {
         this.state++;
 
         if (this.state === PowerShibaState.ON_MOUNTAIN) {
-            const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "powershiba_mountain_spawn");
+            const spawn = this.gameScene.pointsOfInterest.find(poi => poi.name === "powershiba_mountain_spawn");
 
             if (!spawn) throw new Error("PowerShiba mountain spawn missing");
 
@@ -57,7 +57,7 @@ export class PowerShiba extends NPC {
     public feed(): void {
         this.floatSpeed = 3;
         this.floatAmount = 5;
-        this.scene.game.campaign.runAction("giveBone");
+        this.gameScene.game.campaign.runAction("giveBone");
         this.think("Oh… I remember…", 3000);
     }
 

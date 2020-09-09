@@ -51,7 +51,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             this.setVelocityY(-this.velocity);
         }
 
-        this.rainEmitter = this.scene.particles.createEmitter({
+        this.rainEmitter = this.gameScene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({

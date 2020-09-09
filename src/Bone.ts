@@ -27,27 +27,27 @@ export class Bone extends PhysicsEntity {
     }
 
     public isCarried(): boolean {
-        return this.scene.player.isCarrying(this);
+        return this.gameScene.player.isCarrying(this);
     }
 
     public update(dt: number): void {
         super.update(dt);
 
-        const player = this.scene.player;
+        const player = this.gameScene.player;
 
         if (!this.isCarried() && this.distanceTo(player) < 20) {
             player.carry(this);
         }
 
-        if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+        if (!this.isCarried() && this.gameScene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
             const vx = this.getVelocityX();
             this.setVelocity(vx, 10);
         }
 
-        if (Conversation.getGlobals()["$gotBoneQuest"] && !this.isCarried() && this.distanceTo(this.scene.powerShiba) < 20) {
+        if (Conversation.getGlobals()["$gotBoneQuest"] && !this.isCarried() && this.distanceTo(this.gameScene.powerShiba) < 20) {
             Bone.successSound.play();
-            this.scene.powerShiba.feed();
-            this.scene.removeGameObject(this);
+            this.gameScene.powerShiba.feed();
+            this.gameScene.removeGameObject(this);
         }
     }
 }

@@ -26,7 +26,7 @@ export class SoundEmitter extends Entity {
     public draw(): void {}
 
     public update(): void {
-        const vol = this.scene.paused ? 0 : calculateVolume(
+        const vol = this.gameScene.paused ? 0 : calculateVolume(
             this.distanceToPlayer, this.maxVolume, this.intensity
         );
 
