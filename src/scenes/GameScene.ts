@@ -200,6 +200,11 @@ export class GameScene extends Scene<FriendlyFire> {
     private fpsInterval: any = null;
     public readonly mountainRiddle = new MountainRiddle();
 
+    public constructor(game: FriendlyFire) {
+        super(game);
+        this.yGoesUp = true;
+    }
+
     public setup(): void {
         this.mapInfo = new MapInfo();
         this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
@@ -256,7 +261,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.caveman = this.getGameObject(Caveman);
         this.bone = this.getGameObject(Bone);
 
-        this.camera.mirroredY = true;
         this.camera.setLimits(this.player.getCurrentMapBounds());
         this.camera.setFollow(() => ({ x: this.player.x, y: this.player.y + 30 }));
 

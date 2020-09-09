@@ -53,7 +53,6 @@ export abstract class Entity extends SceneNode<FriendlyFire> implements GameObje
         public isTrigger = true
     ) {
         super({ x, y, width, height, anchor: Direction.TOP_LEFT, childAnchor: Direction.TOP_LEFT });
-        this.mirroredY = true;
     }
 
     abstract draw(ctx: CanvasRenderingContext2D): void;

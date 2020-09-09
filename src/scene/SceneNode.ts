@@ -6,6 +6,7 @@ import { Polygon2 } from "../graphics/Polygon2";
 import { Vector2, ReadonlyVector2 } from "../graphics/Vector2";
 import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
+import { Size2 } from "../graphics/Size2";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -104,20 +105,14 @@ export class SceneNode<T extends Game = Game> {
     /** The node position relative to the parent node. */
     private position = new Vector2();
 
+    /** The size of the scene node. */
+    private size = new Size2();
+
     /** The node position within the scene. */
     private scenePosition = new Vector2();
 
      /** If scene position is valid or must be recalculated. */
     private scenePositionValid = false;
-
-    /** TODO Find a clean way to do this */
-    public mirroredY = false;
-
-    /** The node width. */
-    #width: number;
-
-    /** The node height. */
-    #height: number;
 
     /**
      * The anchor defining the origin of this scene node. When set to TOP_LEFT for example then the X/Y coordinates of
@@ -191,14 +186,18 @@ export class SceneNode<T extends Game = Game> {
             SceneNodeArgs = {}) {
         this.id = id;
         this.position.setComponents(x, y);
-        this.#width = width;
-        this.#height = height;
+        this.size.setDimensions(width, height);
         this.opacity = opacity;
         this.anchor = anchor;
         this.childAnchor = childAnchor;
         this.showBounds = showBounds;
         this.layer = layer == null ? null : (1 << layer);
         this.hidden = hidden;
+    }
+
+    /** TODO Only needed in FriendlyFire. Remove this in future game and always assume Y goes down. */
+    private get yGoesUp(): boolean {
+        return this.scene?.yGoesUp ?? false;
     }
 
     /**
@@ -298,7 +297,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public getScenePosition(): ReadonlyVector2 {
         if (!this.scenePositionValid) {
-            this.scenePosition.setComponents(this.x, this.mirroredY ? -this.y : this.y);
+            this.scenePosition.setComponents(this.x, this.yGoesUp ? -this.y : this.y);
             if (this.parent != null) {
                 this.scenePosition.mul(this.parent.getSceneTransformation());
                 this.scenePosition.translate(
@@ -367,11 +366,11 @@ export class SceneNode<T extends Game = Game> {
      * @return The node width.
      */
     public getWidth(): number {
-        return this.#width;
+        return this.size.width;
     }
 
     public get width(): number {
-        return this.#width;
+        return this.size.width;
     }
 
     public set width(width: number) {
@@ -384,8 +383,8 @@ export class SceneNode<T extends Game = Game> {
      * @param width - The width to set.
      */
     public setWidth(width: number): this {
-        if (width !== this.#width) {
-            this.#width = width;
+        if (width !== this.size.width) {
+            this.size.width = width;
             this.invalidateSceneTransformation();
             this.invalidate();
             this.invalidateBounds();
@@ -399,17 +398,16 @@ export class SceneNode<T extends Game = Game> {
      * @return The node width.
      */
     public getHeight(): number {
-        return this.#height;
+        return this.size.height;
     }
 
     public get height(): number {
-        return this.#height;
+        return this.size.height;
     }
 
     public set height(height: number) {
         this.setHeight(height);
     }
-
 
     /**
      * Sets the height of the node.
@@ -417,13 +415,93 @@ export class SceneNode<T extends Game = Game> {
      * @param height - The height to set.
      */
     public setHeight(height: number): this {
-        if (height !== this.#height) {
+        if (height !== this.size.height) {
             this.invalidateSceneTransformation();
-            this.#height = height;
+            this.size.height = height;
             this.invalidate();
             this.invalidateBounds();
         }
         return this;
+    }
+
+    /**
+     * Get the left edge of the scene node.
+     *
+     * @return The left edge of the scene node.
+     */
+    public getLeft(): number {
+        if (Direction.isLeft(this.anchor)) {
+            return this.position.x;
+        } else if (Direction.isRight(this.anchor)) {
+            return this.position.x - this.size.width;
+        } else {
+            return this.position.x - this.size.width / 2;
+        }
+    }
+
+    /**
+     * Get the left edge of the scene node.
+     *
+     * @return The left edge of the scene node.
+     */
+    public getRight(): number {
+        if (Direction.isRight(this.anchor)) {
+            return this.position.x;
+        } else if (Direction.isLeft(this.anchor)) {
+            return this.position.x + this.size.width;
+        } else {
+            return this.position.x + this.size.width / 2;
+        }
+    }
+
+    /**
+     * Get the top edge of the scene node.
+     *
+     * @return The top edge of the scene node.
+     */
+    public getTop(): number {
+        if (this.yGoesUp) {
+            if (Direction.isTop(this.anchor)) {
+                return this.position.y - this.size.height;
+            } else if (Direction.isBottom(this.anchor)) {
+                return this.position.y;
+            } else {
+                return this.position.y + this.size.height / 2;
+            }
+        } else {
+            if (Direction.isTop(this.anchor)) {
+                return this.position.y;
+            } else if (Direction.isBottom(this.anchor)) {
+                return this.position.y - this.size.height;
+            } else {
+                return this.position.y - this.size.height / 2;
+            }
+        }
+    }
+
+    /**
+     * Get the bottom edge of the scene node.
+     *
+     * @return The bottom edge of the scene node.
+     */
+    public getBottom(): number {
+        if (this.yGoesUp) {
+            if (Direction.isBottom(this.anchor)) {
+                return this.position.y + this.size.height;
+            } else if (Direction.isTop(this.anchor)) {
+                return this.position.y;
+            } else {
+                return this.position.y - this.size.height / 2;
+            }
+        } else {
+            if (Direction.isBottom(this.anchor)) {
+                return this.position.y;
+            } else if (Direction.isTop(this.anchor)) {
+                return this.position.y + this.size.height;
+            } else {
+                return this.position.y + this.size.height / 2;
+            }
+        }
     }
 
     /**
@@ -433,9 +511,10 @@ export class SceneNode<T extends Game = Game> {
      * @param height - The height to set.
      */
     public resizeTo(width: number, height: number): this {
-        if (width !== this.#width || height !== this.#height) {
-            this.#width = width;
-            this.#height = height;
+        const size = this.size;
+        if (width !== size.width || height !== size.height) {
+            size.width = width;
+            size.height = height;
             this.invalidateSceneTransformation();
             this.invalidate();
             this.invalidateBounds();
@@ -608,17 +687,17 @@ export class SceneNode<T extends Game = Game> {
             if (parent != null) {
                 this.sceneTransformation.setMatrix(parent.getSceneTransformation());
                 this.sceneTransformation.translate(
-                    (Direction.getX(parent.childAnchor) + 1) / 2 * parent.#width,
-                    (Direction.getY(parent.childAnchor) + 1) / 2 * parent.#height
+                    (Direction.getX(parent.childAnchor) + 1) / 2 * parent.size.width,
+                    (Direction.getY(parent.childAnchor) + 1) / 2 * parent.size.height
                 );
             } else {
                 this.sceneTransformation.reset();
             }
-            this.sceneTransformation.translate(this.position.x, this.mirroredY ? -this.position.y : this.position.y);
+            this.sceneTransformation.translate(this.position.x, this.yGoesUp ? -this.position.y : this.position.y);
             this.sceneTransformation.mul(this.transformation);
             this.sceneTransformation.translate(
-                -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
-                -(Direction.getY(this.anchor) + 1) / 2 * this.#height
+                -(Direction.getX(this.anchor) + 1) / 2 * this.size.width,
+                -(Direction.getY(this.anchor) + 1) / 2 * this.size.height
             );
             this.sceneTransformationValid = true;
         }
@@ -1138,9 +1217,9 @@ export class SceneNode<T extends Game = Game> {
      */
     protected updateBoundsPolygon(bounds: Polygon2): void {
         bounds.addVertex(new Vector2(0, 0));
-        bounds.addVertex(new Vector2(this.#width, 0));
-        bounds.addVertex(new Vector2(this.#width, this.#height));
-        bounds.addVertex(new Vector2(0, this.#height));
+        bounds.addVertex(new Vector2(this.size.width, 0));
+        bounds.addVertex(new Vector2(this.size.width, this.size.height));
+        bounds.addVertex(new Vector2(0, this.size.height));
     }
 
     /**
@@ -1431,11 +1510,11 @@ export class SceneNode<T extends Game = Game> {
 
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
-        ctx.translate(this.position.x, this.mirroredY ? -this.position.y : this.position.y);
+        ctx.translate(this.position.x, this.yGoesUp ? -this.position.y : this.position.y);
         this.transformation.transformCanvas(ctx);
         ctx.translate(
-            -(Direction.getX(this.anchor) + 1) / 2 * this.#width,
-            -(Direction.getY(this.anchor) + 1) / 2 * this.#height
+            -(Direction.getX(this.anchor) + 1) / 2 * this.size.width,
+            -(Direction.getY(this.anchor) + 1) / 2 * this.size.height
         );
 
         // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
@@ -1453,8 +1532,8 @@ export class SceneNode<T extends Game = Game> {
         const postDraw = layer === this.getEffectiveLayer() ? this.draw(ctx, width, height) : null;
         ctx.save();
         ctx.translate(
-            (Direction.getX(this.childAnchor) + 1) / 2 * this.#width,
-            (Direction.getY(this.childAnchor) + 1) / 2 * this.#height
+            (Direction.getX(this.childAnchor) + 1) / 2 * this.size.width,
+            (Direction.getY(this.childAnchor) + 1) / 2 * this.size.height
         );
         let flags = this.drawChildren(ctx, layer, width, height);
         ctx.restore();

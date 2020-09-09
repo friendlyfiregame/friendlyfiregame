@@ -9,6 +9,7 @@ import { FadeToBlack as FadeToBlack } from "./camera/FadeToBlack";
 import { ReadonlyVector2Like } from "../graphics/Vector2";
 import { Rect } from "../geom/Rect";
 import { clamp } from "../util";
+import { Scene } from "../Scene";
 
 /** Camera target type. Can be a simple position object, a scene node or a function which returns a camera target. */
 export type CameraTarget = ReadonlyVector2Like | SceneNode | (() => CameraTarget);
@@ -48,9 +49,6 @@ export interface FocusArgs extends AnimatorArgs {
  * Base camera implementation.
  */
 export class Camera<T extends Game = Game> {
-    /** TODO Find a clean way to do this */
-    public mirroredY = false;
-
         /** The current horizontal focus point of the camera within the scene. */
     private x: number = 0;
 
@@ -63,8 +61,11 @@ export class Camera<T extends Game = Game> {
     /** The current camera rotation in anti-clockwise RAD. */
     private rotation: number = 0;
 
-    /** The reference to the game the camera is connected to. */
+    /** The game this camera is connected to. */
     private readonly game: T;
+
+    /** The scene this camera is connected to. */
+    private readonly scene: Scene<T, unknown>;
 
     /**
      * The camera target to follow (if any). When set then the camera automatically follows this given target. When null
@@ -106,10 +107,16 @@ export class Camera<T extends Game = Game> {
      * Creates a new standard camera for the given game. The camera position is initialized to look at the center
      * of the game screen.
      */
-    public constructor(game: T) {
-        this.game = game;
-        this.x = game.width / 2;
-        this.y = game.height / 2;
+    public constructor(scene: Scene<T, unknown>) {
+        this.scene = scene;
+        this.game = scene.game;
+        this.x = this.game.width / 2;
+        this.y = this.game.height / 2;
+    }
+
+    /** TODO Only needed in FriendlyFire. Remove this in future game and always assume Y goes down. */
+    public get yGoesUp(): boolean {
+        return this.scene.yGoesUp;
     }
 
     /**
@@ -232,7 +239,7 @@ export class Camera<T extends Game = Game> {
      * @return The top camera edge.
      */
     public getTop(): number {
-        return this.mirroredY ? this.y + this.getHeight() / 2 : this.y - this.getHeight() / 2;
+        return this.yGoesUp ? this.y + this.getHeight() / 2 : this.y - this.getHeight() / 2;
     }
 
     /**
@@ -241,7 +248,7 @@ export class Camera<T extends Game = Game> {
      * @return The bottom camera edge.
      */
     public getBottom(): number {
-        return this.mirroredY ? this.y - this.getHeight() / 2 : this.y + this.getHeight() / 2;
+        return this.yGoesUp ? this.y - this.getHeight() / 2 : this.y + this.getHeight() / 2;
     }
 
     /**
@@ -343,7 +350,7 @@ export class Camera<T extends Game = Game> {
                 .mul(this.transformation)
                 .scale(this.zoom)
                 .rotate(this.rotation)
-                .translate(-this.x, this.mirroredY ? this.y : -this.y);
+                .translate(-this.x, this.yGoesUp ? this.y : -this.y);
             this.sceneTransformationValid = true;
         }
         return this.sceneTransformation;
@@ -550,7 +557,7 @@ export class Camera<T extends Game = Game> {
 
     private limitY(y: number): number {
         if (this.limits) {
-            if (this.mirroredY) {
+            if (this.yGoesUp) {
                 // TODO This darn mirrored Y. Even Rect is not compatible to it when calculating bottom...
                 return clamp(y, this.limits.getTop() - this.limits.getHeight() + this.getHeight() / 2,
                     this.limits.getTop() - this.getHeight() / 2);

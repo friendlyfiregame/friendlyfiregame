@@ -34,7 +34,14 @@ export abstract class Scene<T extends Game, A = void> {
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
     private backgroundStyle: string | null = null;
-    public readonly camera = new Camera(this.game);
+
+    /**
+     * TODO Y usually goes down but for FriendlyFire it goes up so GameScene sets this to true. When copying the
+     * scene graph to a new game then get rid of this and ALWAYS assume Y goes down, please!
+     */
+    public yGoesUp = false;
+
+    public readonly camera: Camera<T>;
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {
@@ -42,6 +49,7 @@ export abstract class Scene<T extends Game, A = void> {
             this.drawRootNode = draw;
         });
         this.rootNode.resizeTo(this.game.width, this.game.height);
+        this.camera = new Camera(this);
     }
 
     public get keyboard(): Keyboard {
