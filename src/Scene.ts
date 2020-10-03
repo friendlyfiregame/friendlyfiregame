@@ -23,7 +23,7 @@ export type SceneConstructor<T extends Game, A = void> = new (game: T) => Scene<
  * @param A - Optional scene argument type. A value of this type must be specified when setting or pushing a scene.
  *            Defaults to no argument (void type)
  */
-export abstract class Scene<T extends Game, A = void> {
+export abstract class Scene<T extends Game = Game, A = void> {
     public zIndex: number = 0;
     public currentTransition: Transition | null = null;
     public inTransition: Transition | null = null;

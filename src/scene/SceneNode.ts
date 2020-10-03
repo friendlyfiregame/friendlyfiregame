@@ -24,6 +24,27 @@ export enum PostDrawHints {
 }
 
 /**
+ * The various aspects of a scene node which can be invalidated to force a re-rendering or recalculation of
+ * positions, relayouting and so on.
+ */
+export enum SceneNodeAspect {
+    /** Node must be re-rendered. */
+    RENDERING = 1,
+
+    /** Scene transformation must be recalculated. */
+    SCENE_TRANSFORMATION = 2,
+
+    /** Scene position must be recalculated. */
+    SCENE_POSITION = 4,
+
+    /** The bounds (in local coordinate system) polygon must be recalculated. */
+    BOUNDS = 8,
+
+    /** The scene bounds (in scene coordinate system) polygon must be recalculated. */
+    SCENE_BOUNDS = 16
+}
+
+/**
  * Constructor arguments for [[SceneNode]].
  *
  * @param T - Optional owner game class.
@@ -77,8 +98,6 @@ export interface SceneNodeArgs {
 /**
  * Base scene node. Is used as base class for more specialized scene nodes but can also be used standalone as parent
  * node for other nodes (similar to a DIV element in HTML for example).
- *
- * TODO Implement scene invalidation properly.
  */
 export class SceneNode<T extends Game = Game> {
     /** The parent node. Null if none. */
@@ -111,9 +130,6 @@ export class SceneNode<T extends Game = Game> {
     /** The node position within the scene. */
     private scenePosition = new Vector2();
 
-     /** If scene position is valid or must be recalculated. */
-    private scenePositionValid = false;
-
     /**
      * The anchor defining the origin of this scene node. When set to TOP_LEFT for example then the X/Y coordinates of
      * this node define where to display the upper left corner of it. When set to CENTER then the node is centered at
@@ -129,14 +145,15 @@ export class SceneNode<T extends Game = Game> {
 
     /**
      * The bounds polygon in local coordinate system. This is updated on demand and automatically invalidated when
-     * node size changes. Node has to call [[invalidateBounds]] manually when something else influences the bounds.
+     * node size changes. Node has to call [[invalidate]] with BOUNDS argument manually when something else influences
+     * the bounds.
      */
     private readonly boundsPolygon: Polygon2 = new Polygon2();
 
     /**
      * The bounds polygon in scene coordinates. This is updated on demand and automatically invalidated when node
-     * size or scene transformation changes. Node has to call [[invalidateBounds]] manually when something else
-     * influences the bounds.
+     * size or scene transformation changes. Node has to call [[invalidate]] with the BOUNDS argument manually when
+     * something else influences the bounds.
      */
     private readonly sceneBoundsPolygon: Polygon2 = new Polygon2();
 
@@ -152,9 +169,6 @@ export class SceneNode<T extends Game = Game> {
      * calculated on-the-fly when a scene node is updated.
      */
     private readonly sceneTransformation = new AffineTransform();
-
-    /** If scene transformation is valid or must be recalculated. */
-    private sceneTransformationValid = false;
 
     /** Array with currently active animations. Animations are automatically removed from the array when finished.*/
     private readonly animations: Animation<this>[] = [];
@@ -177,6 +191,12 @@ export class SceneNode<T extends Game = Game> {
 
     /** True if node is hidden, false if not. A hidden node also hides all its child nodes. */
     private hidden: boolean;
+
+    /**
+     * The aspects of the scene node (like rendering, scene transformation, ...) which are currently valid.
+     * Used to automatically update the corresponding state of the scene node on the fly.
+     */
+    private valid: number = 0;
 
     /**
      * Creates a new scene node with the given initial settings.
@@ -244,8 +264,7 @@ export class SceneNode<T extends Game = Game> {
     public setX(x: number): this {
         if (x !== this.position.x) {
             this.position.x = x;
-            this.invalidateSceneTransformation();
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
         }
         return this;
     }
@@ -275,8 +294,7 @@ export class SceneNode<T extends Game = Game> {
     public setY(y: number): this {
         if (y !== this.position.y) {
             this.position.y = y;
-            this.invalidateSceneTransformation();
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
         }
         return this;
     }
@@ -296,7 +314,7 @@ export class SceneNode<T extends Game = Game> {
      * @return The node position in the scene.
      */
     public getScenePosition(): ReadonlyVector2 {
-        if (!this.scenePositionValid) {
+        if ((this.valid & SceneNodeAspect.SCENE_POSITION) === 0) {
             this.scenePosition.setComponents(this.x, this.yGoesUp ? -this.y : this.y);
             if (this.parent != null) {
                 this.scenePosition.mul(this.parent.getSceneTransformation());
@@ -305,27 +323,63 @@ export class SceneNode<T extends Game = Game> {
                     (Direction.getY(this.parent.childAnchor) + 1) / 2 * this.parent.height
                 );
             }
-            this.scenePositionValid = true;
+            this.valid |= SceneNodeAspect.SCENE_POSITION;
         }
         return this.scenePosition;
     }
 
     /**
-     * Invalidates the scene transformation. Must be called when the local transformation or a parent transformation
-     * is changed. It does nothing when scene transformation is already invalid. Otherwise it marks the scene
-     * transformation and the scene bounds polygon as invalid and then recursively invalidates the scene
-     * transformation of all child nodes.
+     * Invalidates the given scene node aspect. Depending on the aspect other aspects of this node, its parent node
+     * or its child nodes are also invalidated.
      *
-     * The scene transformation is automatically re-calculated on-demand the next time [[getSceneTransformation]] is
-     * called.
+     * @param aspect - The aspect to invalidate. Actually it's a bitmap so multiple aspects can be specified by
+     *                 ORing them. Defaults to RENDERING as this is the most invalidated aspect of a scene node.
      */
-    private invalidateSceneTransformation(): void {
-        if (this.sceneTransformationValid) {
-            this.sceneTransformationValid = false;
-            this.scenePositionValid = false;
-            this.sceneBoundsPolygon.clear();
-            this.forEachChild(child => child.invalidateSceneTransformation());
+    public invalidate(aspect: SceneNodeAspect = SceneNodeAspect.RENDERING): this {
+        let childAspects = 0;
+
+        // When bounds are invalidated then scene bounds and rendering and scene positions of children must also be
+        // invalidated
+        if ((aspect & SceneNodeAspect.BOUNDS) !== 0) {
+            aspect |= SceneNodeAspect.SCENE_BOUNDS;
+            aspect |= SceneNodeAspect.RENDERING;
+            childAspects |= SceneNodeAspect.SCENE_POSITION;
         }
+
+        // When scene position is invalidated then scene transformation must also be invalidated
+        if ((aspect & SceneNodeAspect.SCENE_POSITION) !== 0) {
+            aspect |= SceneNodeAspect.SCENE_TRANSFORMATION;
+        }
+
+        // When scene transformation is invalidated then scene bounds and rendering and scene positions of children
+        // must also be invalidated.
+        if ((aspect & SceneNodeAspect.SCENE_TRANSFORMATION) !== 0) {
+            aspect |= SceneNodeAspect.SCENE_BOUNDS;
+            aspect |= SceneNodeAspect.RENDERING;
+            childAspects |= SceneNodeAspect.SCENE_POSITION;
+        }
+
+        if ((aspect & this.valid) !== 0) {
+            this.valid &= ~aspect;
+
+            // Invalidate corresponding child aspects if needed
+            if (childAspects !== 0) {
+                this.forEachChild(child => child.invalidate(childAspects));
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Checks if given aspect of the scene node is valid. This method is most likely only needed in unit tests.
+     * The application usually does not need to care about invalidation because the various aspects are automatically
+     * validated again on-demand.
+     *
+     * @param aspect - The aspect to check. Actually it's a bitmap so multiple aspects can be specified by ORing them.
+     * @return True if aspect is valid (Or all specified aspects are valid), false if not.
+     */
+    public isValid(aspect: SceneNodeAspect): boolean {
+        return (this.valid & aspect) === aspect;
     }
 
     /**
@@ -338,8 +392,7 @@ export class SceneNode<T extends Game = Game> {
         if (x !== 0 || y !== 0) {
             this.position.x += x;
             this.position.y += y;
-            this.invalidateSceneTransformation();
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.SCENE_POSITION);
         }
         return this;
     }
@@ -354,8 +407,7 @@ export class SceneNode<T extends Game = Game> {
         if (x !== this.position.x || y !== this.position.y) {
             this.position.x = x;
             this.position.y = y;
-            this.invalidateSceneTransformation();
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.SCENE_POSITION);
         }
         return this;
     }
@@ -385,9 +437,7 @@ export class SceneNode<T extends Game = Game> {
     public setWidth(width: number): this {
         if (width !== this.size.width) {
             this.size.width = width;
-            this.invalidateSceneTransformation();
-            this.invalidate();
-            this.invalidateBounds();
+            this.invalidate(SceneNodeAspect.BOUNDS);
         }
         return this;
     }
@@ -416,10 +466,8 @@ export class SceneNode<T extends Game = Game> {
      */
     public setHeight(height: number): this {
         if (height !== this.size.height) {
-            this.invalidateSceneTransformation();
             this.size.height = height;
-            this.invalidate();
-            this.invalidateBounds();
+            this.invalidate(SceneNodeAspect.BOUNDS);
         }
         return this;
     }
@@ -515,9 +563,7 @@ export class SceneNode<T extends Game = Game> {
         if (width !== size.width || height !== size.height) {
             size.width = width;
             size.height = height;
-            this.invalidateSceneTransformation();
-            this.invalidate();
-            this.invalidateBounds();
+            this.invalidate(SceneNodeAspect.BOUNDS);
         }
         return this;
     }
@@ -633,8 +679,7 @@ export class SceneNode<T extends Game = Game> {
     public setAnchor(anchor: Direction): this {
         if (anchor !== this.anchor) {
             this.anchor = anchor;
-            this.invalidateSceneTransformation();
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
         }
         return this;
     }
@@ -658,8 +703,7 @@ export class SceneNode<T extends Game = Game> {
     public setChildAnchor(childAnchor: Direction): this {
         if (childAnchor !== this.childAnchor) {
             this.childAnchor = childAnchor;
-            this.forEachChild(child => child.invalidateSceneTransformation());
-            this.invalidate();
+            this.forEachChild(child => child.invalidate(SceneNodeAspect.SCENE_POSITION));
         }
         return this;
     }
@@ -682,7 +726,7 @@ export class SceneNode<T extends Game = Game> {
      * @return The scene transformation.
      */
     public getSceneTransformation(): ReadonlyAffineTransform {
-        if (!this.sceneTransformationValid) {
+        if ((this.valid & SceneNodeAspect.SCENE_TRANSFORMATION) === 0) {
             const parent = this.parent;
             if (parent != null) {
                 this.sceneTransformation.setMatrix(parent.getSceneTransformation());
@@ -699,7 +743,7 @@ export class SceneNode<T extends Game = Game> {
                 -(Direction.getX(this.anchor) + 1) / 2 * this.size.width,
                 -(Direction.getY(this.anchor) + 1) / 2 * this.size.height
             );
-            this.sceneTransformationValid = true;
+            this.valid |= SceneNodeAspect.SCENE_TRANSFORMATION;
         }
         return this.sceneTransformation;
     }
@@ -712,8 +756,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public transform(transformer: (transformation: AffineTransform) => void): this {
         transformer(this.transformation);
-        this.invalidateSceneTransformation();
-        return this.invalidate();
+        return this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
     }
 
     /**
@@ -846,9 +889,7 @@ export class SceneNode<T extends Game = Game> {
         node.parent = this;
         node.setScene(this.scene);
 
-        node.invalidateSceneTransformation();
-        node.invalidate();
-        this.invalidate();
+        node.invalidate(SceneNodeAspect.SCENE_POSITION);
         return this;
     }
 
@@ -859,7 +900,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public prependChild(node: SceneNode<T>): this {
         if (this.firstChild != null) {
-            return this.insertBefore(node, this.firstChild);
+            return this.insertChildBefore(node, this.firstChild);
         } else {
             return this.appendChild(node);
         }
@@ -899,9 +940,7 @@ export class SceneNode<T extends Game = Game> {
         node.previousSibling = null;
         node.setScene(null);
 
-        node.invalidateSceneTransformation();
-        node.invalidate();
-        this.invalidate();
+        node.invalidate(SceneNodeAspect.SCENE_POSITION);
 
         return this;
     }
@@ -933,7 +972,11 @@ export class SceneNode<T extends Game = Game> {
      * @param newNode - The child node to insert.
      * @param refNode - The reference node. The child node is inserted before this one.
      */
-    public insertBefore(newNode: SceneNode<T>, refNode: SceneNode<T>): this {
+    public insertChildBefore(newNode: SceneNode<T>, refNode: SceneNode<T>): this {
+        if (newNode === refNode) {
+            // Nothing to do when inserting before itself
+            return this;
+        }
         if (newNode === this) {
             throw new Error("Node can not be inserted into itself");
         }
@@ -943,13 +986,13 @@ export class SceneNode<T extends Game = Game> {
 
         // Remove from old parent if there is one
         const oldParent = newNode.parent;
-        if (oldParent) {
+        if (oldParent != null) {
             oldParent.removeChild(newNode);
         }
 
         // Insert the node
         const oldPrevious = refNode.previousSibling;
-        if (!oldPrevious) {
+        if (oldPrevious == null) {
             this.firstChild = newNode;
         } else {
             oldPrevious.nextSibling = newNode;
@@ -960,10 +1003,62 @@ export class SceneNode<T extends Game = Game> {
         newNode.parent = this;
         newNode.setScene(this.scene);
 
-        newNode.invalidateSceneTransformation();
-        newNode.invalidate();
+        newNode.invalidate(SceneNodeAspect.SCENE_POSITION);
 
-        return this.invalidate();
+        return this;
+    }
+
+    /**
+     * Inserts this node before the given reference node.
+     *
+     * @param refNode - The reference node. The node is inserted before this one.
+     */
+    public insertBefore(refNode: SceneNode<T>): this {
+        const parent = refNode.parent;
+        if (parent == null) {
+            throw new Error("Reference node has no parent");
+        }
+        parent.insertChildBefore(this, refNode);
+        return this;
+    }
+
+    /**
+     * Inserts the given child node after the specified reference child node.
+     *
+     * @param newNode - The child node to insert.
+     * @param refNode - The reference node. The child node is inserted after this one.
+     */
+    public insertChildAfter(newNode: SceneNode<T>, refNode: SceneNode<T>): this {
+        if (newNode === refNode) {
+            // Nothing to do when inserting after itself
+            return this;
+        }
+        if (newNode === this) {
+            throw new Error("Node can not be inserted into itself");
+        }
+        if (refNode.parent !== this) {
+            throw new Error("Reference node must be a child node");
+        }
+        const nextRefSibling = refNode.nextSibling;
+        if (nextRefSibling != null) {
+            return this.insertChildBefore(newNode, nextRefSibling);
+        } else {
+            return this.appendChild(newNode);
+        }
+    }
+
+    /**
+     * Inserts this node before the given reference node.
+     *
+     * @param refNode - The reference node. The node is inserted after this one.
+     */
+    public insertAfter(refNode: SceneNode<T>): this {
+        const parent = refNode.parent;
+        if (parent == null) {
+            throw new Error("Reference node has no parent");
+        }
+        parent.insertChildAfter(this, refNode);
+        return this;
     }
 
     /**
@@ -974,10 +1069,10 @@ export class SceneNode<T extends Game = Game> {
      */
     public replaceChild(oldNode: SceneNode<T>, newNode: SceneNode<T>): this {
         if (newNode === this) {
-            throw new Error("newNode must not be the parent node");
+            throw new Error("New node must not be the parent node");
         }
         if (oldNode.parent !== this) {
-            throw new Error("oldNode must be a child node");
+            throw new Error("Old node must be a child node");
         }
 
         // If new node is the same as the old node then do nothing
@@ -988,7 +1083,7 @@ export class SceneNode<T extends Game = Game> {
         const next = oldNode.nextSibling;
         this.removeChild(oldNode);
         if (next) {
-            this.insertBefore(newNode, next);
+            this.insertChildBefore(newNode, next);
         } else {
             this.appendChild(newNode);
         }
@@ -997,11 +1092,11 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Replace the given node with this one.
+     * Replace this node with the given one.
      *
-     * @param node - The node to replace.
+     * @param node - The node to replace this one with.
      */
-    public replace(node: SceneNode<T>): this {
+    public replaceWith(node: SceneNode<T>): this {
         if (this.parent) {
             this.parent.replaceChild(this, node);
         }
@@ -1028,13 +1123,17 @@ export class SceneNode<T extends Game = Game> {
         return this;
     }
 
+    public forEachChild<C>(callback: (this: C, node: SceneNode<T>, index: number) => void, thisArg: C): this;
+    public forEachChild(callback: (this: this, node: SceneNode<T>, index: number) => void): this;
+
     /**
      * Iterates over all child nodes and calls the given callback with the currently iterated node as parameter.
      *
      * @param callback - The callback to call for each child node.
      * @param thisArg  - Optional value to use as `this` when executing `callback`.
      */
-    public forEachChild(callback: (node: SceneNode<T>, index: number) => void, thisArg: any = this): this {
+    public forEachChild<C extends unknown>(callback: (this: C, node: SceneNode<T>, index: number) => void,
+            thisArg = this as C): this {
         let index = 0;
         let node = this.firstChild;
         while (node) {
@@ -1059,13 +1158,17 @@ export class SceneNode<T extends Game = Game> {
         }
     }
 
+    public forEachDescendant<C>(callback: (this: C, node: SceneNode<T>) => void, thisArg: C): this;
+    public forEachDescendant(callback: (this: this, node: SceneNode<T>) => void): this;
+
     /**
      * Iterates over all descendant nodes and calls the given callback with the currently iterated node as parameter.
      *
      * @param callback - The callback to call for each descendant node.
      * @param thisArg  - Optional value to use as `this` when executing `callback`.
      */
-    public forEachDescendant(callback: (node: SceneNode<T>) => void, thisArg: any = this): this {
+    public forEachDescendant<C extends unknown>(callback: (this: C, node: SceneNode<T>) => void,
+            thisArg = this as C): this {
         let node = this.firstChild;
         while (node != null && node !== this) {
             let next = node.firstChild;
@@ -1074,6 +1177,9 @@ export class SceneNode<T extends Game = Game> {
             }
             if (next == null) {
                 let parent = node.parent;
+                if (parent === this) {
+                    parent = null;
+                }
                 while (parent != null && parent.nextSibling == null) {
                     parent = parent.parent;
                 }
@@ -1099,6 +1205,9 @@ export class SceneNode<T extends Game = Game> {
             }
             if (next == null) {
                 let parent = node.parent;
+                if (parent === this) {
+                    parent = null;
+                }
                 while (parent != null && parent.nextSibling == null) {
                     parent = parent.parent;
                 }
@@ -1109,14 +1218,18 @@ export class SceneNode<T extends Game = Game> {
         }
     }
 
+    public findChild<C>(callback: (this: C, node: SceneNode<T>, index: number) => boolean,
+            thisArg: C): SceneNode<T> | null;
+    public findChild(callback: (this: this, node: SceneNode<T>, index: number) => boolean): SceneNode<T> | null;
+
     /**
      * Returns the first child node for which the given callback returns true.
      *
      * @param callback - The callback which checks if the iterated node is the one to look for.
      * @return The found matching child node or null if none.
      */
-    public findChild(callback: (node: SceneNode<T>, index: number) => boolean, thisArg: unknown = this):
-            SceneNode<T> | null {
+    public findChild<C extends unknown>(callback: (this: C, node: SceneNode<T>, index: number) => boolean,
+            thisArg = this as C): SceneNode<T> | null {
         let index = 0;
         let node = this.firstChild;
         while (node) {
@@ -1200,16 +1313,6 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Invalidates the bounds of the node. AUtomatically called when node size is changed. Must be called manually
-     * when some other aspect of the node which may influence the bounds is changed.
-     */
-    public invalidateBounds(): this {
-        this.boundsPolygon.clear();
-        this.sceneBoundsPolygon.clear();
-        return this;
-    }
-
-    /**
      * Updates the bounds polygon of the node. The default implementation simply sets a bounding box. Specialized nodes
      * can overwrite this method to define a more specific polygon.
      *
@@ -1228,8 +1331,9 @@ export class SceneNode<T extends Game = Game> {
      * @return The bounds polygon.
      */
     public getBoundsPolygon(): Polygon2 {
-        if (!this.boundsPolygon.hasVertices()) {
+        if ((this.valid & SceneNodeAspect.BOUNDS) === 0) {
             this.updateBoundsPolygon(this.boundsPolygon);
+            this.valid |= SceneNodeAspect.BOUNDS;
         }
         return this.boundsPolygon;
     }
@@ -1249,12 +1353,13 @@ export class SceneNode<T extends Game = Game> {
      * @return The scene bounds polygon.
      */
     public getSceneBoundsPolygon(): Polygon2 {
-        if (!this.sceneBoundsPolygon.hasVertices()) {
+        if ((this.valid & SceneNodeAspect.SCENE_BOUNDS) === 0) {
             const boundsPolygon = this.getBoundsPolygon();
             for (const vertex of boundsPolygon.vertices) {
                 this.sceneBoundsPolygon.addVertex(vertex.clone());
             }
             this.sceneBoundsPolygon.transform(this.getSceneTransformation());
+            this.valid |= SceneNodeAspect.SCENE_BOUNDS;
         }
         return this.sceneBoundsPolygon;
     }
@@ -1266,26 +1371,6 @@ export class SceneNode<T extends Game = Game> {
      */
     public getSceneBounds(): Bounds2 {
         return this.getSceneBoundsPolygon().getBounds();
-    }
-
-    /**
-     * Marks this node, all parent nodes and the scene as invalid to trigger a scene revalidation. This must be
-     * called every time when some aspect of the node is changed which requires a redraw of the scene node.
-     *
-     * TODO Not yet implemented, currently the scene is constantly redrawn.
-     */
-    public invalidate(): this {
-        /*
-        if (this.valid) {
-            this.valid = false;
-            if (this.parent) {
-                this.parent.invalidate();
-            } else if (this.scene) {
-                void this.scene.invalidate();
-            }
-        }
-        */
-       return this;
     }
 
     /**
@@ -1326,7 +1411,6 @@ export class SceneNode<T extends Game = Game> {
     public setShowBounds(showBounds: boolean): this {
         if(showBounds !== this.showBounds) {
             this.showBounds = showBounds;
-            this.invalidate();
         }
         return this;
     }
@@ -1361,7 +1445,6 @@ export class SceneNode<T extends Game = Game> {
         layer = layer == null ? null : (1 << layer);
         if (layer !== this.layer) {
             this.layer = layer;
-            this.invalidate();
         }
         return this;
     }
@@ -1505,6 +1588,7 @@ export class SceneNode<T extends Game = Game> {
      */
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
         if (this.hidden) {
+            this.valid |= SceneNodeAspect.RENDERING;
             return 0;
         }
 
@@ -1545,7 +1629,9 @@ export class SceneNode<T extends Game = Game> {
             }
         }
         ctx.restore();
-        return this.showBounds ? flags | PostDrawHints.DRAW_BOUNDS | PostDrawHints.CONTINUE_DRAWING : flags;
+        const hints = this.showBounds ? flags | PostDrawHints.DRAW_BOUNDS | PostDrawHints.CONTINUE_DRAWING : flags;
+        this.valid |= SceneNodeAspect.RENDERING;
+        return hints;
     }
 
     /**

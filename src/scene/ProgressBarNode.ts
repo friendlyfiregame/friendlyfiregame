@@ -1,5 +1,5 @@
 import { Game } from "../Game";
-import { SceneNode, SceneNodeArgs } from "./SceneNode";
+import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
 import { clamp } from "../util";
 
 const DEFAULT_BACKGROUND_STYLE = "#111";
@@ -47,7 +47,7 @@ export class ProgressBarNode<T extends Game = Game> extends SceneNode<T> {
         progress = clamp(progress, 0, 1);
         if (progress !== this.progress) {
             this.progress = progress;
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.RENDERING);
         }
         return this;
     }

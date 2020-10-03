@@ -286,7 +286,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public addGameObject(object: SceneNode): void {
         // Insert new item right before the player so player is always in front
-        this.rootNode.insertBefore(object, this.player);
+        this.rootNode.insertChildBefore(object, this.player);
     }
 
     public removeGameObject(object: SceneNode): void {

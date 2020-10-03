@@ -1,5 +1,5 @@
 import { Game } from "../Game";
-import { SceneNode, SceneNodeArgs } from "./SceneNode";
+import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
 import { Aseprite } from "../Aseprite";
 
 /**
@@ -65,7 +65,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         if (aseprite !== this.aseprite) {
             this.aseprite = aseprite;
             this.resizeTo(aseprite.width, aseprite.height);
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.RENDERING);
         }
         return this;
     }
@@ -87,7 +87,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     public setTag(tag: string | null): this {
         if (tag !== this.tag) {
             this.tag = tag;
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.RENDERING);
         }
         return this;
     }
@@ -95,7 +95,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     public setMirrorX(mirrorX: boolean): this {
         if (mirrorX !== this.mirrorX) {
             this.mirrorX = mirrorX;
-            this.invalidate();
+            this.invalidate(SceneNodeAspect.RENDERING);
         }
         return this;
     }
