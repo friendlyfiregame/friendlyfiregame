@@ -4,7 +4,7 @@ import { CollidableGameObject, GameScene } from "./scenes/GameScene";
 import { entity } from "./Entity";
 import { Environment } from "./World";
 import { GameObjectProperties } from "./MapInfo";
-import { ParticleEmitter, valueCurves } from "./Particles";
+import { ParticleNode, valueCurves } from "./Particles";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "./constants";
 import { RenderingLayer } from "./RenderingLayer";
@@ -24,7 +24,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private targetY: number;
     private velocity: number;
 
-    private rainEmitter: ParticleEmitter;
+    private rainEmitter: ParticleNode;
     private raining = 0;
     private isRainCloud = false;
 
@@ -51,8 +51,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             this.setVelocityY(-this.velocity);
         }
 
-        this.rainEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.rainEmitter = new ParticleNode({
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({
                 x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
@@ -64,7 +63,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
             lifetime: () => rnd(0.7, 1.2),
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
-        });
+        }).appendTo(this);
     }
 
     public startRain(time: number = Infinity) {
@@ -117,7 +116,6 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
                 this.raining = 0;
             } else {
                 if (timedRnd(dt, 0.1)) {
-                    this.rainEmitter.setPosition(this.x, this.y);
                     this.rainEmitter.emit(rndInt(1, 4));
                 }
             }

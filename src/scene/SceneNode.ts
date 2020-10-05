@@ -1,4 +1,3 @@
-import { Scene } from "../Scene";
 import { Game } from "../Game";
 import { Direction } from "../geom/Direction";
 import { AffineTransform, ReadonlyAffineTransform } from "../graphics/AffineTransform";
@@ -7,6 +6,9 @@ import { Vector2, ReadonlyVector2 } from "../graphics/Vector2";
 import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
 import { Size2 } from "../graphics/Size2";
+import { Scene } from "../Scene";
+
+export type Constructor<T = unknown, A extends unknown[] = any[]> = new (...args: A) => T;
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -93,6 +95,12 @@ export interface SceneNodeArgs {
 
     /** Optional initial hidden flag. Set to true to hide the node. */
     hidden?: boolean;
+
+    /**
+     * Optional initial collision mask. Only objects with the same bits set can collide with each other.
+     * Defaults to 0 (No collision detection)
+     */
+    collisionMask?: number;
 }
 
 /**
@@ -199,11 +207,20 @@ export class SceneNode<T extends Game = Game> {
     private valid: number = 0;
 
     /**
+     * Collision mask. Only objects with the same bits set can collide with each other.
+     * Defaults to 0 (No collision detection)
+     */
+    protected collisionMask: number = 0;
+
+    /** List of nodes this node is currently colliding with. */
+    protected collidingWith: SceneNode[] = [];
+
+    /**
      * Creates a new scene node with the given initial settings.
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
-            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false }:
-            SceneNodeArgs = {}) {
+            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false,
+            collisionMask = 0 }: SceneNodeArgs = {}) {
         this.id = id;
         this.position.setComponents(x, y);
         this.size.setDimensions(width, height);
@@ -213,6 +230,7 @@ export class SceneNode<T extends Game = Game> {
         this.showBounds = showBounds;
         this.layer = layer == null ? null : (1 << layer);
         this.hidden = hidden;
+        this.collisionMask = collisionMask;
     }
 
     /** TODO Only needed in FriendlyFire. Remove this in future game and always assume Y goes down. */
@@ -264,7 +282,7 @@ export class SceneNode<T extends Game = Game> {
     public setX(x: number): this {
         if (x !== this.position.x) {
             this.position.x = x;
-            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+            this.invalidate(SceneNodeAspect.SCENE_POSITION);
         }
         return this;
     }
@@ -294,7 +312,7 @@ export class SceneNode<T extends Game = Game> {
     public setY(y: number): this {
         if (y !== this.position.y) {
             this.position.y = y;
-            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+            this.invalidate(SceneNodeAspect.SCENE_POSITION);
         }
         return this;
     }
@@ -443,7 +461,7 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Returns the width of the node.
+     * Returns the height of the node.
      *
      * @return The node width.
      */
@@ -766,6 +784,18 @@ export class SceneNode<T extends Game = Game> {
      */
     public getScene(): Scene<T> | null {
         return this.scene;
+    }
+
+    /**
+     * Returns the game.
+     *
+     * @return The game.
+     */
+    public getGame(): T {
+        if (this.scene == null) {
+            throw new Error("Node is not in a scene and therefor can't access the game");
+        }
+        return this.scene.game;
     }
 
     /**
@@ -1248,16 +1278,22 @@ export class SceneNode<T extends Game = Game> {
      * @param callback - The callback which checks if the iterated node is the one to look for.
      * @return The found matching descendant node or null if none.
      */
-    public findDescendant(callback: (node: SceneNode<T>) => boolean, thisArg: unknown = this):
-            SceneNode<T> | null {
-                let node = this.firstChild;
+    public findDescendant(callback: (node: SceneNode<T>) => boolean, thisArg: unknown = this): SceneNode<T> | null {
+        let node = this.firstChild;
         while (node != null && node !== this) {
             let next = node.firstChild;
             if (next == null) {
                 next = node.nextSibling;
             }
             if (next == null) {
-                next = node.parent?.nextSibling ?? null;
+                let parent = node.parent;
+                if (parent === this) {
+                    parent = null;
+                }
+                while (parent != null && parent.nextSibling == null) {
+                    parent = parent.parent;
+                }
+                next = parent?.nextSibling ?? null;
             }
             if (callback.call(thisArg, node)) {
                 return node;
@@ -1313,6 +1349,38 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns the descendant node with the given type.
+     *
+     * @param type - The type to look for.
+     * @return The matching descendants. May be empty if none found.
+     */
+    public getDescendantsByType<T extends SceneNode>(type: Constructor<T>): T[] {
+        const descendants: T[] = [];
+        let node = this.firstChild;
+        while (node != null && node !== this) {
+            let next = node.firstChild;
+            if (next == null) {
+                next = node.nextSibling;
+            }
+            if (next == null) {
+                let parent = node.parent;
+                if (parent === this) {
+                    parent = null;
+                }
+                while (parent != null && parent.nextSibling == null) {
+                    parent = parent.parent;
+                }
+                next = parent?.nextSibling ?? null;
+            }
+            if (node instanceof type) {
+                descendants.push(node);
+            }
+            node = next;
+        }
+        return descendants;
+    }
+
+    /**
      * Updates the bounds polygon of the node. The default implementation simply sets a bounding box. Specialized nodes
      * can overwrite this method to define a more specific polygon.
      *
@@ -1332,6 +1400,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public getBoundsPolygon(): Polygon2 {
         if ((this.valid & SceneNodeAspect.BOUNDS) === 0) {
+            this.boundsPolygon.clear();
             this.updateBoundsPolygon(this.boundsPolygon);
             this.valid |= SceneNodeAspect.BOUNDS;
         }
@@ -1355,6 +1424,7 @@ export class SceneNode<T extends Game = Game> {
     public getSceneBoundsPolygon(): Polygon2 {
         if ((this.valid & SceneNodeAspect.SCENE_BOUNDS) === 0) {
             const boundsPolygon = this.getBoundsPolygon();
+            this.sceneBoundsPolygon.clear();
             for (const vertex of boundsPolygon.vertices) {
                 this.sceneBoundsPolygon.addVertex(vertex.clone());
             }
@@ -1464,6 +1534,27 @@ export class SceneNode<T extends Game = Game> {
         } else {
             return this.layer;
         }
+    }
+
+    /**
+     * Checks if this node collides with the given node.
+     *
+     * @param node - The other node to check collision with.
+     * @return True if nodes collide, false if not.
+     */
+    public collidesWithNode(node: SceneNode): boolean {
+        return this.getSceneBoundsPolygon().collidesWith(node.getSceneBoundsPolygon());
+    }
+
+    /**
+     * Checks if given point is contained by this node.
+     *
+     * @param x - The X coordinate in scene coordinate system.
+     * @param y - The Y coordinate in scene coordinate system.
+     * @return True if point is contained by the node, false if not.
+     */
+    public containsPoint(x: number, y: number): boolean {
+        return this.getSceneBoundsPolygon().containsPoint(x, y);
     }
 
     /**

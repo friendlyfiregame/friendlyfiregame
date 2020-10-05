@@ -1,25 +1,24 @@
 import { GRAVITY } from "./constants";
 import { RenderingLayer } from "./RenderingLayer";
-import { Vector2Like } from "./graphics/Vector2";
-import { SceneNode } from "./scene/SceneNode";
+import { ReadonlyVector2Like } from "./graphics/Vector2";
+import { SceneNode, SceneNodeArgs } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
 type NumberGenerator = () => number;
 
-type VectorGenerator = () => Vector2Like;
+type VectorGenerator = () => ReadonlyVector2Like;
 
 type ParticleAppearanceGenerator = () => ParticleAppearance;
 
-export interface ParticleEmitterArguments {
-    position: Vector2Like;
-    offset?: Vector2Like | VectorGenerator;
-    velocity?: Vector2Like | VectorGenerator;
+export interface ParticleNodeArgs extends SceneNodeArgs {
+    offset?: ReadonlyVector2Like | VectorGenerator;
+    velocity?: ReadonlyVector2Like | VectorGenerator;
     color?: ParticleAppearance | ParticleAppearanceGenerator;
     alpha?: number | NumberGenerator;
     size?: number | NumberGenerator;
-    gravity?: Vector2Like | VectorGenerator;
+    gravity?: ReadonlyVector2Like | VectorGenerator;
     lifetime?: number | NumberGenerator;
     breakFactor?: number;
     blendMode?: string;
@@ -32,47 +31,8 @@ export interface ParticleEmitterArguments {
     update?: (p: Particle) => void;
 }
 
-export class Particles extends SceneNode<FriendlyFire> {
-    private emitters: ParticleEmitter[] = [];
-
-    public update(dt: number): void {
-        this.emitters.forEach(emitter => emitter.update(dt));
-    }
-
-    // Direct drawing of particles is deactivated since it's handled via rendering engine
-    public draw(ctx: CanvasRenderingContext2D): void {
-        this.emitters.forEach(emitter => {
-            emitter.draw(ctx);
-        });
-    }
-
-    public addEmitter(emitter: ParticleEmitter): void {
-        this.emitters.push(emitter);
-    }
-
-    public dropEmitter(emitter: ParticleEmitter): boolean {
-        const index = this.emitters.indexOf(emitter);
-
-        if (index >= 0) {
-            this.emitters.splice(index, 1);
-            return true;
-        }
-
-        return false;
-    }
-
-    public createEmitter(args: ParticleEmitterArguments) {
-        const emitter = new ParticleEmitter(args);
-        this.addEmitter(emitter);
-
-        return emitter;
-    }
-}
-
-export class ParticleEmitter {
+export class ParticleNode extends SceneNode<FriendlyFire> {
     private particles: Particle[];
-    private x: number;
-    private y: number;
     private offsetGenerator: VectorGenerator;
     private velocityGenerator: VectorGenerator;
     private colorGenerator: ParticleAppearanceGenerator;
@@ -82,7 +42,7 @@ export class ParticleEmitter {
     private alphaGenerator: NumberGenerator;
     private angleGenerator: NumberGenerator;
     private angleSpeedGenerator: NumberGenerator;
-    public gravity: Vector2Like;
+    public gravity: ReadonlyVector2Like;
     public breakFactor: number;
     private blendMode: string;
     public alphaCurve: ValueCurve;
@@ -91,10 +51,9 @@ export class ParticleEmitter {
     public zIndex: number;
     private updateMethod: ((p: Particle) => void) | undefined;
 
-    constructor(args: ParticleEmitterArguments) {
+    public constructor(args: ParticleNodeArgs) {
+        super(args);
         this.particles = [];
-        this.x = args.position.x;
-        this.y = args.position.y;
         this.offsetGenerator = toGenerator(args.offset ?? ({x: 0, y: 0}));
         this.velocityGenerator = toGenerator(args.velocity ?? ({x: 0, y: 0}));
         this.colorGenerator = toGenerator(args.color ?? "white");
@@ -122,12 +81,7 @@ export class ParticleEmitter {
         }
     }
 
-    public setPosition(x: number, y: number): void {
-        this.x = x;
-        this.y = y;
-    }
-
-    public clear(): void {
+    public clearParticles(): void {
         this.particles = [];
     }
 
@@ -190,7 +144,7 @@ export class Particle {
     private progress: number = 0;
 
     constructor(
-        private emitter: ParticleEmitter,
+        private emitter: ParticleNode,
         public x: number,
         public y: number,
         public vx = 0,

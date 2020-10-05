@@ -184,4 +184,29 @@ export class Polygon2 {
         }
         return this.bounds;
     }
+
+    /**
+     * Checks if this polygon collides with the given one.
+     *
+     * @param other - The other polygon to check collision with.
+     * @return True if polygons collide, false if not.
+     */
+    public collidesWith(other: Polygon2): boolean {
+        // TODO Only bounding box collision is checked for now. Need real polygon check performed when bounding box
+        // collides
+        return this.getBounds().collidesWith(other.getBounds());
+    }
+
+    /**
+     * Checks if this polygon contains the given point.
+     *
+     * @param x - The X coordinate in scene coordinate system.
+     * @param y - The Y coordinate in scene coordinate system.
+     * @return True if polygon contains the point, false if not.
+     */
+    public containsPoint(x: number, y: number): boolean {
+        // TODO Only bounding box collision is checked for now. Need real polygon check performed when bounding box
+        // collides
+        return this.getBounds().containsPoint(x, y);
+    }
 }

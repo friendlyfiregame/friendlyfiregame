@@ -10,7 +10,7 @@ import { FaceModes } from "./Face";
 import { FireState, SHRINK_SIZE } from "./Fire";
 import { GameObjectInfo } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
-import { ParticleEmitter, valueCurves } from "./Particles";
+import { ParticleNode, valueCurves } from "./Particles";
 import { QuestKey } from "./Quests";
 import { RenderingLayer } from "./RenderingLayer";
 import { ScriptableNPC } from "./ScriptableNPC";
@@ -49,7 +49,7 @@ export class Shiba extends ScriptableNPC {
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
 
-    private doubleJumpEmitter: ParticleEmitter;
+    private doubleJumpEmitter: ParticleNode;
     private minAltitude: number;
     private jumpHeight = 1.5;
     private jumpTimer = 0;
@@ -65,15 +65,15 @@ export class Shiba extends ScriptableNPC {
         this.setMaxVelocity(2);
         this.conversation = new Conversation(shiba1, this);
 
-        this.doubleJumpEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.doubleJumpEmitter = new ParticleNode({
+            y: 20,
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1, 2),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
+        }).appendTo(this);
     }
 
     public setState(state: ShibaState): void {
@@ -161,7 +161,6 @@ export class Shiba extends ScriptableNPC {
     protected jump(): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
         this.doubleJumpEmitter.emit(20);
 
         const vol = calculateVolume(this.distanceToPlayer, 0.4);

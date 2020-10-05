@@ -22,7 +22,7 @@ import { MenuList } from "../Menu";
 import { Mimic } from "../Mimic";
 import { MountainRiddle } from "../MountainRiddle";
 import { MovingPlatform } from "../MovingPlatform";
-import { ParticleEmitter, Particles, valueCurves } from "../Particles";
+import { ParticleNode, valueCurves } from "../Particles";
 import { PauseScene } from "./PauseScene";
 import { Portal } from "../Portal";
 import { PowerShiba } from "../PowerShiba";
@@ -184,14 +184,13 @@ export class GameScene extends Scene<FriendlyFire> {
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
-    public particles = new Particles(this);
     public fire!: Fire;
     public fireFuryEndTime = 0;
     public apocalypse = false;
     public friendshipCutscene = false;
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
-    private fireEmitter!: ParticleEmitter;
+    private fireEmitter!: ParticleNode;
     private frameCounter = 0;
     private framesPerSecond = 0;
     public showBounds = false;
@@ -220,7 +219,6 @@ export class GameScene extends Scene<FriendlyFire> {
 
         [
             this.world = new World(this),
-            this.particles,
             ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
@@ -497,7 +495,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private updateApocalypse(): void {
-        this.fireEmitter.setPosition(this.player.x, this.player.y);
+        this.fireEmitter.moveTo(this.player.x, this.player.y);
         this.fireEffects.forEach(e => e.update());
 
         if (timedRnd(this.dt, 0.8)) {
@@ -541,8 +539,9 @@ export class GameScene extends Scene<FriendlyFire> {
     public loadApocalypse(): void {
         this.fireEffects = [1, 2].map(num =>  new FireGfx(32, 24, true, 2));
 
-        this.fireEmitter = this.particles.createEmitter({
-            position: {x: this.player.x, y: this.player.y},
+        this.fireEmitter = new ParticleNode({
+            x: this.player.x,
+            y: this.player.y,
             offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
             velocity: () => ({ x: 0, y: -25}),
             color: () => rndItem(this.fireEffects).getImage(),
@@ -560,7 +559,7 @@ export class GameScene extends Scene<FriendlyFire> {
                     particle.vy = 0;
                 }
             }
-        });
+        }).appendTo(this.rootNode);
     }
 
     public beginFriendshipEnding(): void {

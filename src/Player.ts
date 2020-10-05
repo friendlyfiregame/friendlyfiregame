@@ -20,7 +20,7 @@ import { Environment } from "./World";
 import { GameObjectInfo } from "./MapInfo";
 import { GotItemScene, Item } from "./scenes/GotItemScene";
 import { NPC } from "./NPC";
-import { ParticleEmitter, valueCurves } from "./Particles";
+import { ParticleNode, valueCurves } from "./Particles";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PlayerConversation } from "./PlayerConversation";
 import { QuestATrigger, QuestKey } from "./Quests";
@@ -177,9 +177,9 @@ export class Player extends PhysicsEntity {
 
     private closestNPC: NPC | null = null;
     private readableTrigger?: GameObjectInfo;
-    private dustEmitter: ParticleEmitter;
-    private bounceEmitter: ParticleEmitter;
-    private doubleJumpEmitter: ParticleEmitter;
+    private dustEmitter: ParticleNode;
+    private bounceEmitter: ParticleNode;
+    private doubleJumpEmitter: ParticleNode;
     private disableParticles = false;
     private tooltip: ControlTooltipNode | null = null;
     private spriteNode: AsepriteNode;
@@ -226,35 +226,33 @@ export class Player extends PhysicsEntity {
 
         this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
 
-        this.dustEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.dustEmitter = new ParticleNode({
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
             size: rnd(1, 2),
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
+        }).appendTo(this);
 
-        this.bounceEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.bounceEmitter = new ParticleNode({
+            y: -12,
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
             color: () => rndItem(bounceColors),
             size: rnd(1.5, 3),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
+        }).appendTo(this);
 
-        this.doubleJumpEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.doubleJumpEmitter = new ParticleNode({
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1.5, 3),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
+        }).appendTo(this);
     }
 
     private get animation(): string {
@@ -665,7 +663,6 @@ export class Player extends PhysicsEntity {
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
             if (!this.disableParticles && this.isVisible()) {
-                this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
                 this.doubleJumpEmitter.emit(20);
             }
         }
@@ -1016,7 +1013,6 @@ export class Player extends PhysicsEntity {
         if (!this.disableParticles && this.isVisible()) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
-                    this.dustEmitter.setPosition(this.x, this.y);
                     const count = wasFlying ? Math.ceil(Math.abs(prevVelocity) / 5) : 1;
                     this.dustEmitter.emit(count);
                 }
@@ -1247,7 +1243,6 @@ export class Player extends PhysicsEntity {
     private bounce(): void {
         this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
         // Nice bouncy particles
-        this.bounceEmitter.setPosition(this.x, this.y - 12);
         this.bounceEmitter.emit(20);
         this.dustEmitter.clear();
 

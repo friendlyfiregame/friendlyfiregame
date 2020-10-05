@@ -8,7 +8,7 @@ import { entity } from "./Entity";
 import { Environment } from "./World";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { ParticleEmitter, valueCurves } from "./Particles";
+import { ParticleNode, valueCurves } from "./Particles";
 import { RenderingLayer } from "./RenderingLayer";
 import { Sound } from "./Sound";
 
@@ -29,7 +29,7 @@ export class Bird extends NPC {
     private static sprite: Aseprite;
     @asset("sounds/jumping/jump_neutral.ogg")
     private static jumpSound: Sound;
-    private doubleJumpEmitter: ParticleEmitter;
+    private doubleJumpEmitter: ParticleNode;
     private move: 0 | 1 | -1  = 1;
     private minAltitude: number;
     private jumpHeight = 1.5;
@@ -43,15 +43,15 @@ export class Bird extends NPC {
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
 
-        this.doubleJumpEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.doubleJumpEmitter = new ParticleNode({
+            y: 20,
             velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1, 2),
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
+        }).appendTo(this);
         this.setMaxVelocity(MAX_SPEED);
     }
 
@@ -62,7 +62,6 @@ export class Bird extends NPC {
     protected jump(): void {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
         this.doubleJumpEmitter.emit(20);
 
         const vol = calculateVolume(this.distanceToPlayer, 0.4);

@@ -4,7 +4,7 @@ import { EyeType, Face, FaceModes } from "./Face";
 import { FireGfx } from "./FireGfx";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
-import { ParticleEmitter, valueCurves } from "./Particles";
+import { ParticleNode, valueCurves } from "./Particles";
 import { PIXEL_PER_METER } from "./constants";
 import { QuestATrigger, QuestKey } from "./Quests";
 import { RenderingLayer } from "./RenderingLayer";
@@ -52,9 +52,9 @@ export class Fire extends NPC {
 
     private fireGfx = new FireGfx();
 
-    private sparkEmitter: ParticleEmitter;
-    private smokeEmitter: ParticleEmitter;
-    private steamEmitter: ParticleEmitter;
+    private sparkEmitter: ParticleNode;
+    private smokeEmitter: ParticleNode;
+    private steamEmitter: ParticleNode;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
@@ -62,8 +62,7 @@ export class Fire extends NPC {
 
         this.soundEmitter = new SoundEmitter(this.gameScene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
 
-        this.smokeEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.smokeEmitter = new ParticleNode({
             offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
             velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
             color: () => Fire.smokeImage,
@@ -75,10 +74,9 @@ export class Fire extends NPC {
             blendMode: "source-over",
             alphaCurve: valueCurves.cos(0.1, 0.5),
             breakFactor: 0.85
-        });
+        }).appendTo(this);
 
-        this.steamEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x + 10, y: this.y},
+        this.steamEmitter = new ParticleNode({
             offset: () => ({ x: rnd(-1, 1) * 3, y: 0 }),
             velocity: () => ({ x: rnd(-1, 2) * 5, y: 50 + rnd(3) }),
             color: () => Fire.steamImage,
@@ -92,10 +90,9 @@ export class Fire extends NPC {
             renderingLayer: RenderingLayer.ENTITIES,
             zIndex: 1,
             breakFactor: 0.5
-        });
+        }).appendTo(this);
 
-        this.sparkEmitter = this.gameScene.particles.createEmitter({
-            position: {x: this.x, y: this.y},
+        this.sparkEmitter = new ParticleNode({
             velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
             color: () => FireGfx.gradient.getCss(rnd() ** 0.5),
             size: 2,
@@ -104,7 +101,7 @@ export class Fire extends NPC {
             blendMode: "screen",
             alpha: () => rnd(0.3, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
-        });
+        }).appendTo(this);
 
         this.face = new Face(scene, EyeType.STANDARD, true, 0, 6).appendTo(this);
     }

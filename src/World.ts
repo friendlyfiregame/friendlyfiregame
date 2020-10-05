@@ -4,7 +4,7 @@ import { boundsFromMapObject, rnd, rndInt } from "./util";
 import { GameObject, GameScene, isCollidableGameObject } from "./scenes/GameScene";
 import { GameObjectInfo } from "./MapInfo";
 import { getImageData } from "./graphics";
-import { ParticleEmitter, Particles, valueCurves } from "./Particles";
+import { ParticleNode, valueCurves } from "./Particles";
 import { SceneNode } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
 import { RenderingLayer } from "./RenderingLayer";
@@ -42,7 +42,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
 
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
-    private rainEmitter: ParticleEmitter;
+    private rainEmitter: ParticleNode;
     private raining = false;
 
     public constructor(scene: GameScene) {
@@ -57,8 +57,9 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
             throw new Error ("Missing 'rain_spawn_position' point in map data to place rain emitter");
         }
 
-        this.rainEmitter = this.gameScene.particles.createEmitter({
-            position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
+        this.rainEmitter = new ParticleNode({
+            x: rainSpawnPosition.x,
+            y: rainSpawnPosition.y,
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
             velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
             color: () => World.raindrop,
@@ -67,7 +68,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
             lifetime: () => 3,
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
-        });
+        }).appendTo(this);
     }
 
     public getWidth(): number {
@@ -178,7 +179,7 @@ export class World extends SceneNode<FriendlyFire> implements GameObject {
         for (const gameObject of this.gameScene.rootNode.descendants()) {
             if (
                 gameObject !== sourceEntity
-                && !(gameObject instanceof Particles)
+                && !(gameObject instanceof ParticleNode)
                 && gameObject instanceof Entity
                 && gameObject.isTrigger
                 && !ignoreEntities.includes(gameObject)
