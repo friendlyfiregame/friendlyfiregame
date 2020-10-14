@@ -1,5 +1,10 @@
 # Friendly Fire
 
+## Playing the Game
+
+Just head over to [friendlyfiregame.com](https://friendlyfiregame.com/) and pick the
+launch options that best fits your style.
+
 ## Development
 
 ### Getting started
@@ -9,7 +14,7 @@
 * Clone the source code:
 
   ```sh
-  git clone git@github.com:/friendlyfiregame/friendlyfiregame
+  git clone git@github.com:/friendlyfiregame/friendlyfiregame.git
   ```
 
 * Initially run `npm i` in the project folder to install/update dependencies.
