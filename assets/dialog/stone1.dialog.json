@@ -128,7 +128,8 @@
         "I will grant you incredible strength so you are able to carry me down the mountain.",
         "Beyond the river, you will find the answer to your quest in a sacred cave.",
         "►I am not sure if I really want to touch you… @nottouchyou",
-        "►By the power of Grayskull! @lift",
+        "►[$ismale]By the power of Grayskull! @lift",
+        "►[not $ismale]For the honor of Greyskull! @lift",
         "►Yes, master. @lift",
         "►On second thought, I don't like this… at all.",
         "What a hard disappointment… @visitedentry !end"
