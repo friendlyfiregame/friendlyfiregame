@@ -77,7 +77,7 @@ export function shiftValue(v: number, trg: number, inc: number): number {
 
 export async function sleep(ms = 0): Promise<void> {
     await new Promise((resolve) => {
-        setTimeout(() => resolve(), ms);
+        setTimeout(() => resolve, ms);
     });
 }
 
