@@ -27,7 +27,7 @@ jobs:
         if [[ "${GIT_TAG_VERSION}" != "v${VERSION}" ]]; then
           echo "::error ::Version mismatch. Git tag version ${GIT_TAG_VERSION} doesn't match version ${VERSION} from package.json"
         fi
-        echo "::set-env name=VERSION::${VERSION}"
+        echo "VERSION=${VERSION}" >> "${GITHUB_ENV}"
     - name: Get Changelog Entry
       id: changelog_reader
       uses: mindsers/changelog-reader-action@v2
