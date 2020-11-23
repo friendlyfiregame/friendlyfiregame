@@ -65,7 +65,7 @@ jobs:
         echo "::group::markdownlint"
         npm run -s markdownlint
         echo "::endgroup::"
-        echo "::group::markdownlint"
+        echo "::group::htmlhint"
         npm run -s htmlhint
         echo "::endgroup::"
         echo "::group::eslint"
