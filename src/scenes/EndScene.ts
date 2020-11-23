@@ -86,4 +86,8 @@ export class EndScene extends Scene<FriendlyFire> {
     private gotoCreditsScene(): void {
         this.game.scenes.setScene(CreditsScene);
     }
+
+    public cleanup() {
+        this.rootNode.clear();
+    }
 }
