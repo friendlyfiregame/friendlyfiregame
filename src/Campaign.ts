@@ -13,7 +13,7 @@ import { Game } from "./Game";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
-import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC } from "./Quests";
+import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD } from "./Quests";
 import seed1 from "../assets/dialog/seed1.dialog.json";
 import shadowpresence1 from "../assets/dialog/shadowpresence1.dialog.json";
 import shiba1 from "../assets/dialog/shiba1.dialog.json";
@@ -77,7 +77,8 @@ export class Campaign {
     public readonly quests = [
         new QuestA(this),
         new QuestB(this),
-        new QuestC(this)
+        new QuestC(this),
+        new QuestD(this)
     ];
     public gameScene?: GameScene | undefined;
 
@@ -320,6 +321,9 @@ export class Campaign {
                     break;
                 case "wakeupchest":
                     this.gameScene.mimic.nextState();
+                    break;
+                case "petDoggo":
+                    this.gameScene.beginPetEnding();
                     break;
                 case "enable":
                     const char = params[0], dialogName = params[1];

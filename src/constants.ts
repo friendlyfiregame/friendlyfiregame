@@ -60,3 +60,7 @@ export const PLAYER_CARRY_HEIGHT = 4;
 
 /** Fonts */
 export const DIALOG_FONT = "fonts/pixcelsior.font.json";
+
+/** Total duration in seconds until dog petting ending occurs */
+export const PETTING_ENDING_CUTSCENE_DURATION = 30;
+export const PETTING_ENDING_FADE_DURATION = 5;

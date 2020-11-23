@@ -353,7 +353,7 @@
    { "name": "dance", "from": 26, "to": 31, "direction": "pingpong" },
    { "name": "dance-fluke-1", "from": 32, "to": 32, "direction": "forward" },
    { "name": "dance-fluke-2", "from": 33, "to": 33, "direction": "forward" },
-   { "name": "pet", "from": 34, "to": 36, "direction": "forward" }
+   { "name": "petting", "from": 34, "to": 36, "direction": "forward" }
   ],
   "layers": [
    { "name": "Meta", "opacity": 255, "blendMode": "normal", "data": "{ \"carryOffsetFrames\": [ 16, 18 ]}" },

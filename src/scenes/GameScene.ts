@@ -12,7 +12,7 @@ import { Chicken } from "../Chicken";
 import { Cloud } from "../Cloud";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Conversation } from "../Conversation";
-import { DIALOG_FONT } from "../constants";
+import { DIALOG_FONT, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION } from "../constants";
 import { EndScene } from "./EndScene";
 import { Fire, FireState } from "../Fire";
 import { FireGfx } from "../FireGfx";
@@ -79,6 +79,11 @@ export type BackgroundTrack = {
     id: BgmId;
     sound: Sound,
     baseVolume: number;
+};
+
+type PetEndingText = {
+    label: string;
+    enter: number;
 };
 
 export class GameScene extends Scene<FriendlyFire> {
@@ -159,6 +164,16 @@ export class GameScene extends Scene<FriendlyFire> {
     @asset("sounds/gate/wrong.ogg")
     public static wrong: Sound;
 
+    private petEndingTexts: PetEndingText[] = [
+        { label: "This sensation lacks any kind of comparison.", enter: 0.1 },
+        { label: "All worldy matters seem so insignificant now.", enter: 0.2 },
+        { label: "Soon I will be swept away in ecstasy.", enter: 0.4 },
+        { label: "The world around me begins to fade.", enter: 0.6 },
+        { label: "What is my purpose? Who am I? ", enter: 0.8 },
+        { label: "If I don't move now, there will be no escape", enter: 0.9 },
+        { label: "No regrets... Farewell", enter: 1 },
+    ];
+
     /* Total game time (time passed while game not paused) */
     public gameTime = 0;
 
@@ -190,6 +205,9 @@ export class GameScene extends Scene<FriendlyFire> {
     public fireFuryEndTime = 0;
     public apocalypse = false;
     public friendshipCutscene = false;
+    public pettingCutscene = false;
+    public pettingCutsceneTime = 0;
+    private pettingEndingTriggered = false;
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
@@ -221,6 +239,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackFactor = 0;
         this.apocalypse = false;
         this.fireFuryEndTime = 0;
+        this.pettingCutscene = false;
+        this.pettingCutsceneTime = 0;
+        this.pettingEndingTriggered = false;
         Conversation.resetGlobals();
 
         this.gameObjects = [
@@ -440,6 +461,10 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.friendshipCutscene) {
             this.updateFriendshipEndingCutscene(dt);
         }
+
+        if (this.pettingCutscene) {
+            this.updatePettingEndingCutscene(dt);
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
@@ -612,6 +637,15 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera.setCinematicBar(1);
     }
 
+    private updatePettingEndingCutscene(dt: number): void {
+        this.pettingCutsceneTime += dt;
+        if (!this.pettingEndingTriggered && this.pettingCutsceneTime > PETTING_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION) {
+            this.pettingEndingTriggered = true;
+            this.game.campaign.getQuest(QuestKey.D).finish();
+            this.gameOver();
+        }
+    }
+
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D): void {
         this.updateApocalypse();
         this.camera.setCinematicBar(this.apocalypseFactor);
@@ -663,6 +697,22 @@ export class GameScene extends Scene<FriendlyFire> {
                 }
             }
         });
+    }
+
+    public beginPetEnding(): void {
+        this.pettingCutscene = true;
+        this.player.startPettingDog();
+        this.shiba.startBeingPetted();
+        this.faceToBlackDirection = FadeDirection.FADE_OUT;
+        this.fadeToBlackStartTime = this.gameTime + PETTING_ENDING_CUTSCENE_DURATION;
+        this.fadeToBlackEndTime = this.fadeToBlackStartTime + (PETTING_ENDING_FADE_DURATION);
+    }
+
+    public cancelPatEnding(): void {
+        this.pettingCutscene = false;
+        this.pettingCutsceneTime = 0;
+        this.player.stopPettingDog();
+        this.shiba.stopBeingPetted();
     }
 
     public beginFriendshipEnding(): void {

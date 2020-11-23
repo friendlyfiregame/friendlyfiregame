@@ -32,6 +32,7 @@ export enum ShibaState {
 
 const FLYING_DURATION = 8;
 const JUMP_INTERVAL = 0.3;
+const HEART_PARTICLE_DELAY = 0.5;
 
 @entity("shiba")
 export class Shiba extends ScriptableNPC {
@@ -44,18 +45,24 @@ export class Shiba extends ScriptableNPC {
     @asset("sounds/jumping/jump_neutral.ogg")
     private static jumpSound: Sound;
 
+    @asset("sprites/heart.png")
+    private static heartImage: HTMLImageElement;
+
     private state = ShibaState.ON_TREE;
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
 
     private doubleJumpEmitter: ParticleEmitter;
+    private heartEmitter: ParticleEmitter;
     private minAltitude: number;
     private jumpHeight = 1.5;
     private jumpTimer = 0;
     private flyingTime = 0;
     private saidFarewell = false;
     public peeing = false;
+    public isBeingPetted = false;
+    private nextHeartParticle = HEART_PARTICLE_DELAY;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 28, 24);
@@ -73,6 +80,18 @@ export class Shiba extends ScriptableNPC {
             gravity: {x: 0, y: -120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        });
+
+        this.heartEmitter = this.scene.particles.createEmitter({
+            position: {x: this.x, y: this.y},
+            offset: () => ({x: rnd(-8, 8), y: 18}),
+            velocity: () => ({ x: 0, y: 5 }),
+            color: () => Shiba.heartImage,
+            size: 3,
+            gravity: {x: 0, y: 0},
+            lifetime: () => rnd(1.5, 3),
+            blendMode: "source-over",
+            alphaCurve: valueCurves.cos(0.1, 0.5),
         });
     }
 
@@ -175,12 +194,26 @@ export class Shiba extends ScriptableNPC {
         return this.jumpTimer === 0;
     }
 
+    public startBeingPetted (): void {
+        this.isBeingPetted = true;
+        const x = this.direction > 0 ? this.x + 5 : this.x - 5;
+        this.heartEmitter.setPosition(x, this.y);
+    }
+
+    public stopBeingPetted (): void {
+        this.isBeingPetted = false;
+    }
+
+    public getAnimationTag (): string {
+        if (this.peeing) return "peeing";
+        if (this.isBeingPetted) return "petted";
+        return "idle";
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         if (this.move === 0) {
-            const tag = this.peeing ? "peeing" : "idle";
-
             this.scene.renderer.addAseprite(
-                Shiba.sprite, tag, this.x, this.y, RenderingLayer.ENTITIES, this.direction
+                Shiba.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
             );
         } else {
             this.scene.renderer.addAseprite(
@@ -210,10 +243,21 @@ export class Shiba extends ScriptableNPC {
     public update(dt: number): void {
         super.update(dt);
 
+        // Heart Emitter
+        if (this.isBeingPetted) {
+            this.nextHeartParticle -= dt;
+
+            if (this.nextHeartParticle < 0) {
+                this.heartEmitter.emit(1);
+                this.nextHeartParticle = HEART_PARTICLE_DELAY;
+            }
+            this.heartEmitter.update(dt);
+        }
+
         // Triggers
         const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
-        if (this.hasActiveConversation()) {
+        if (this.hasActiveConversation() || this.isBeingPetted) {
             this.move = 0;
         } else {
             if (this.state === ShibaState.ON_TREE) {
@@ -246,8 +290,7 @@ export class Shiba extends ScriptableNPC {
 
     public isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
-
-        return (superResult && this.state !== ShibaState.FLYING_AWAY);
+        return (superResult && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
     }
 
     private walkToFireLogic(triggerCollisions: GameObjectInfo[]): void {

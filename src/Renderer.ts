@@ -211,7 +211,7 @@ export class Renderer {
 
     public addAseprite (
         sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer,
-        direction = 1, time?: number
+        direction = 1, time?: number, alpha?: number
     ): void {
         const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
 
@@ -227,6 +227,7 @@ export class Renderer {
                 y: -sprite.height
             },
             scale,
+            alpha,
             asset: sprite,
             animationTag,
             time: time || this.scene.gameTime * 1000

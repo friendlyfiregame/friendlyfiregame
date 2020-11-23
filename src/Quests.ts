@@ -3,7 +3,8 @@ import { Campaign } from "./Campaign";
 export enum QuestKey {
     A = "questA",
     B = "questB",
-    C = "questC"
+    C = "questC",
+    D = "questD"
 }
 
 export enum QuestATrigger {
@@ -35,6 +36,10 @@ export enum QuestBTrigger {
 }
 
 export enum QuestCTrigger {
+    ENDING_TRIGGERED
+}
+
+export enum QuestDTrigger {
     ENDING_TRIGGERED
 }
 
@@ -141,6 +146,21 @@ export class QuestC extends Quest {
             campaign,
             "SOFT LO[C]KED",
             Object.values(QuestCTrigger).filter((i): i is number => typeof i === "number")
+        );
+    }
+}
+
+
+/**
+ * Ending D. Petted the dog for quite some time and transcended
+ */
+export class QuestD extends Quest {
+    public constructor (campaign: Campaign) {
+        super(
+            QuestKey.D,
+            campaign,
+            "[D]ROWNED IN ECSTASY",
+            Object.values(QuestDTrigger).filter((i): i is number => typeof i === "number")
         );
     }
 }

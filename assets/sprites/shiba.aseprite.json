@@ -191,7 +191,7 @@
    { "name": "idle", "from": 0, "to": 3, "direction": "forward" },
    { "name": "walk", "from": 4, "to": 11, "direction": "forward" },
    { "name": "peeing", "from": 12, "to": 15, "direction": "forward" },
-   { "name": "pet", "from": 16, "to": 19, "direction": "forward" }
+   { "name": "petted", "from": 16, "to": 19, "direction": "forward" }
   ]
  }
 }

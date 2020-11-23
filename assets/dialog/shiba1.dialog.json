@@ -14,6 +14,7 @@
         "►[not inTree]Why are you in a tree? @tree",
         "►[inTree]Can you tell me about your brother again? @reminder",
         "►We'll play another time.",
+        "►(Pet the Dog already!) !petDoggo !end @met",
         "♪ OK friend. !end @met"
     ],
     "met2": [
@@ -22,6 +23,7 @@
         "►[$metPowerShiba]I found your brother… @found",
         "►[inTree]Can you tell me about your brother again? @reminder",
         "►We'll play another time.",
+        "►(Pet the Dog already!) !petDoggo !end @met2",
         "♪ OK friend. !end @met2"
     ],
     "tree": [

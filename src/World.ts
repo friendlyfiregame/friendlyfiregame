@@ -6,6 +6,7 @@ import { GameObjectInfo } from "./MapInfo";
 import { getImageData } from "./graphics";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import { PETTING_ENDING_CUTSCENE_DURATION } from "./constants";
 
 export enum Environment {
     AIR = 0,
@@ -85,12 +86,18 @@ export class World implements GameObject {
         const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
 
+        let alpha = 1;
+        if (this.scene.pettingCutscene) {
+            alpha = Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION));
+        }
+
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
             layer: RenderingLayer.TILEMAP_MAP,
             translation: { x: camX, y: -camY },
             position: { x: -camX, y: -this.getHeight() + camY },
-            asset: World.foreground
+            asset: World.foreground,
+            alpha: alpha
         });
 
         for (const background of World.backgrounds) {
@@ -105,7 +112,8 @@ export class World implements GameObject {
                     x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
                     y: (-this.getHeight() + camY) / bgY
                 },
-                asset: background
+                asset: background,
+                alpha: alpha
             });
         }
     }

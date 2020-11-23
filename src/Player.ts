@@ -161,6 +161,7 @@ export class Player extends PhysicsEntity {
     private autoMove: AutoMove | null = null;
     public isControllable: boolean = true;
     private showHints = false;
+    private isPettingDog = false;
 
     private characterAsset: CharacterAsset;
     private voiceAsset: VoiceAsset;
@@ -278,6 +279,15 @@ export class Player extends PhysicsEntity {
         this.moveLeft = false;
     }
 
+    public startPettingDog(): void {
+        this.isPettingDog = true;
+        this.x = this.scene.shiba.direction > 0 ? this.scene.shiba.x + 18 : this.scene.shiba.x - 18;
+    }
+
+    public stopPettingDog(): void {
+        this.isPettingDog = false;
+    }
+
     public enableRunning(): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
 
@@ -344,6 +354,13 @@ export class Player extends PhysicsEntity {
 
     public async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (this.scene.paused || !this.isControllable || this.autoMove) {
+            return;
+        }
+
+        if (this.isPettingDog) {
+            if (event.isPlayerMoveLeft || event.isPlayerMoveRight) {
+                this.scene.cancelPatEnding();
+            }
             return;
         }
 
@@ -1148,6 +1165,11 @@ export class Player extends PhysicsEntity {
         }
 
         this.disableParticles = false;
+
+        // Pet Dog Animation
+        if (this.isPettingDog) {
+            this.animation = "petting";
+        }
 
         // Logic from triggers
         if (triggerCollisions.length > 0) {

@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { calculateVolume, rnd, rndItem } from "./util";
 import { Conversation } from "./Conversation";
 import conversation from "../assets/dialog/bird.dialog.json";
-import { DOUBLE_JUMP_COLORS, GRAVITY, PLAYER_ACCELERATION_AIR } from "./constants";
+import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "./constants";
 import { entity } from "./Entity";
 import { Environment } from "./World";
 import { GameScene } from "./scenes/GameScene";
@@ -62,14 +62,16 @@ export class Bird extends NPC {
         this.jumpTimer = JUMP_INTERVAL;
         this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
         this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
-        this.doubleJumpEmitter.emit(20);
 
-        const vol = calculateVolume(this.distanceToPlayer, 0.4);
+        if (!this.scene.pettingCutscene) {
+            this.doubleJumpEmitter.emit(20);
 
-        if (vol > 0) {
-            Bird.jumpSound.setVolume(vol);
-            Bird.jumpSound.stop();
-            Bird.jumpSound.play();
+            const vol = calculateVolume(this.distanceToPlayer, 0.4);
+            if (vol > 0) {
+                Bird.jumpSound.setVolume(vol);
+                Bird.jumpSound.stop();
+                Bird.jumpSound.play();
+            }
         }
     }
 
@@ -175,7 +177,12 @@ export class Bird extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction);
+        let alpha: number | undefined;
+        if (this.scene.pettingCutscene) {
+            alpha = Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION));
+        }
+
+        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction, undefined, alpha);
         if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
