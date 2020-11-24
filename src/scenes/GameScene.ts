@@ -12,7 +12,7 @@ import { Chicken } from "../Chicken";
 import { Cloud } from "../Cloud";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Conversation } from "../Conversation";
-import { DIALOG_FONT, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION } from "../constants";
+import { DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION } from "../constants";
 import { EndScene } from "./EndScene";
 import { Fire, FireState } from "../Fire";
 import { FireGfx } from "../FireGfx";
@@ -165,13 +165,13 @@ export class GameScene extends Scene<FriendlyFire> {
     public static wrong: Sound;
 
     private petEndingTexts: PetEndingText[] = [
-        { label: "This sensation lacks any kind of comparison.", enter: 0.1 },
-        { label: "All worldy matters seem so insignificant now.", enter: 0.2 },
-        { label: "Soon I will be swept away in ecstasy.", enter: 0.4 },
-        { label: "The world around me begins to fade.", enter: 0.6 },
-        { label: "What is my purpose? Who am I? ", enter: 0.8 },
-        { label: "If I don't move now, there will be no escape", enter: 0.9 },
-        { label: "No regrets... Farewell", enter: 1 },
+        { label: "The sensation lacks any kind of comparison.", enter: 0.1 },
+        { label: "All worldy matters seem so insignificant now.", enter: 0.25 },
+        { label: "Reality around me begins to fade.", enter: 0.4 },
+        { label: "Soon I will be swept away in ecstasy.", enter: 0.6 },
+        { label: "Can I muster up the strength to break free?", enter: 0.7 },
+        { label: "It might be too late already...", enter: 0.85 },
+        { label: "Is this really how it all ends?", enter: 0.95 }
     ];
 
     /* Total game time (time passed while game not paused) */
@@ -644,6 +644,22 @@ export class GameScene extends Scene<FriendlyFire> {
             this.game.campaign.getQuest(QuestKey.D).finish();
             this.gameOver();
         }
+        
+        this.petEndingTexts.forEach((t, index) => {
+            if (this.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION > t.enter) {
+                const fadeTime = PETTING_ENDING_CUTSCENE_DURATION / 10;
+                const enterTime = PETTING_ENDING_CUTSCENE_DURATION * t.enter;
+                const alpha = Math.max(0, Math.min(1, (this.pettingCutsceneTime - enterTime) / fadeTime));
+                const measure = GameScene.font.measureText(t.label);
+                this.renderer.add({
+                    type: RenderingType.TEXT, layer: RenderingLayer.UI, textColor: "white", relativeToScreen: true, alpha,
+                    text: t.label, position: {
+                        x: (GAME_CANVAS_WIDTH / 2) - (measure.width / 2),
+                        y: measure.height * index + (index * 3) + 20
+                    }, asset: GameScene.font,
+                });
+            }
+        });
     }
 
     private drawApocalypseOverlay(ctx: CanvasRenderingContext2D): void {
@@ -713,6 +729,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.pettingCutsceneTime = 0;
         this.player.stopPettingDog();
         this.shiba.stopBeingPetted();
+        this.fadeToBlackEndTime = 0;
+        this.fadeToBlackStartTime = 0;
+        this.fadeToBlackFactor = 0;
     }
 
     public beginFriendshipEnding(): void {
