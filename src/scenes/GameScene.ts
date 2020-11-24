@@ -722,16 +722,25 @@ export class GameScene extends Scene<FriendlyFire> {
         this.faceToBlackDirection = FadeDirection.FADE_OUT;
         this.fadeToBlackStartTime = this.gameTime + PETTING_ENDING_CUTSCENE_DURATION;
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (PETTING_ENDING_FADE_DURATION);
+        this.playBackgroundTrack(BgmId.RADIO);
     }
 
     public cancelPatEnding(): void {
-        this.pettingCutscene = false;
-        this.pettingCutsceneTime = 0;
-        this.player.stopPettingDog();
-        this.shiba.stopBeingPetted();
-        this.fadeToBlackEndTime = 0;
-        this.fadeToBlackStartTime = 0;
-        this.fadeToBlackFactor = 0;
+        console.log(this.canCancelPatEnding());
+        if (this.canCancelPatEnding()) {
+            this.pettingCutscene = false;
+            this.pettingCutsceneTime = 0;
+            this.player.stopPettingDog();
+            this.shiba.stopBeingPetted();
+            this.fadeToBlackEndTime = 0;
+            this.fadeToBlackStartTime = 0;
+            this.fadeToBlackFactor = 0;
+            this.playBackgroundTrack(BgmId.OVERWORLD);
+        }
+    }
+
+    private canCancelPatEnding(): boolean {
+        return this.pettingCutsceneTime < PETTING_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION;
     }
 
     public beginFriendshipEnding(): void {

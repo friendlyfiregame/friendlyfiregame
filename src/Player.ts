@@ -358,7 +358,7 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.isPettingDog) {
-            if (event.isPlayerMoveLeft || event.isPlayerMoveRight) {
+            if (event.isPlayerMoveLeft || event.isPlayerMoveRight || event.isPlayerAction) {
                 this.scene.cancelPatEnding();
             }
             return;
