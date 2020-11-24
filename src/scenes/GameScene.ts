@@ -66,7 +66,8 @@ export enum BgmId {
     CAVE = "cave",
     RIDDLE = "riddle",
     RADIO = "radio",
-    WINGS = "wings"
+    WINGS = "wings",
+    ECSTASY = "ecstasy"
 }
 
 export enum AmbientSoundId {
@@ -101,6 +102,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
     @asset("music/radio.ogg")
     public static bgmRadio: Sound;
+
+    @asset("music/ecstasy.ogg")
+    public static bgmEcstasy: Sound;
 
     @asset("music/wings.ogg")
     public static bgmWings: Sound;
@@ -152,6 +156,12 @@ export class GameScene extends Scene<FriendlyFire> {
             id: BgmId.WINGS,
             sound: GameScene.bgmWings,
             baseVolume: 0.75
+        },
+        {
+            active: false,
+            id: BgmId.ECSTASY,
+            sound: GameScene.bgmEcstasy,
+            baseVolume: 1
         }
     ];
 
@@ -166,12 +176,14 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private petEndingTexts: PetEndingText[] = [
         { label: "The sensation lacks any kind of comparison.", enter: 0.1 },
-        { label: "All worldy matters seem so insignificant now.", enter: 0.25 },
-        { label: "Reality around me begins to fade.", enter: 0.4 },
-        { label: "Soon I will be swept away in ecstasy.", enter: 0.6 },
-        { label: "Can I muster up the strength to break free?", enter: 0.7 },
-        { label: "It might be too late already...", enter: 0.85 },
-        { label: "Is this really how it all ends?", enter: 0.95 }
+        { label: "All worldly matters seem so insignificant now.", enter: 0.2 },
+        { label: "Reality around me begins to fade.", enter: 0.3 },
+        { label: "Soon, I will be swept away in ecstasy.", enter: 0.5 },
+        { label: "Can I muster up the strength to break free?", enter: 0.6 },
+        { label: "If I don't stop now, there will be no going back.", enter: 0.7 },
+        { label: "Is this really how it all ends?", enter: 0.8 },
+        { label: "I regret nothing...", enter: 0.9 },
+        { label: "Farewell, cruel world...", enter: 1 }
     ];
 
     /* Total game time (time passed while game not paused) */
@@ -647,15 +659,17 @@ export class GameScene extends Scene<FriendlyFire> {
         
         this.petEndingTexts.forEach((t, index) => {
             if (this.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION > t.enter) {
-                const fadeTime = PETTING_ENDING_CUTSCENE_DURATION / 10;
+                const fadeTime = 0.5;
                 const enterTime = PETTING_ENDING_CUTSCENE_DURATION * t.enter;
+                const yOffset = Math.pow((this.pettingCutsceneTime - enterTime) / 2, 2) * -1;
                 const alpha = Math.max(0, Math.min(1, (this.pettingCutsceneTime - enterTime) / fadeTime));
                 const measure = GameScene.font.measureText(t.label);
                 this.renderer.add({
                     type: RenderingType.TEXT, layer: RenderingLayer.UI, textColor: "white", relativeToScreen: true, alpha,
                     text: t.label, position: {
                         x: (GAME_CANVAS_WIDTH / 2) - (measure.width / 2),
-                        y: measure.height * index + (index * 3) + 20
+                        //y: measure.height * index + (index * 3) + 20
+                        y: 100 + yOffset
                     }, asset: GameScene.font,
                 });
             }
@@ -722,7 +736,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.faceToBlackDirection = FadeDirection.FADE_OUT;
         this.fadeToBlackStartTime = this.gameTime + PETTING_ENDING_CUTSCENE_DURATION;
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (PETTING_ENDING_FADE_DURATION);
-        this.playBackgroundTrack(BgmId.RADIO);
+        this.playBackgroundTrack(BgmId.ECSTASY);
     }
 
     public cancelPatEnding(): void {
