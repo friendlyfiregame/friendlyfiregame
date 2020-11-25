@@ -40,6 +40,11 @@ export class Wood extends PhysicsEntity {
         this.floatingPosition = floatingPosition;
     }
 
+    public resetState (): void {
+        this.setFloating(false);
+        this.state = WoodState.FREE;
+    }
+
     public draw(): void {
         this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
 
