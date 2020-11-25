@@ -46,6 +46,11 @@ export class Seed extends NPC {
         this.floatingPosition = floatingPosition;
     }
 
+    public resetState (): void {
+        this.setFloating(false);
+        this.state = SeedState.FREE;
+    }
+
     private getSpriteTag(): string {
         switch (this.state) {
             case SeedState.PLANTED:

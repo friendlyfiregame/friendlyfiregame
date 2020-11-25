@@ -74,6 +74,7 @@ export class Tree extends NPC {
             this.scene.addGameObject(this.seed);
         }
 
+        this.seed.resetState();
         this.seed.x = this.x;
         this.seed.y = this.y + this.height / 2;
         this.seed.setVelocity(5, 0);
