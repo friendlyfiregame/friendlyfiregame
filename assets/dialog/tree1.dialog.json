@@ -108,7 +108,14 @@
     "reminder": [
         "You know, you wanted to help me procreate. Bring my cone to the highest place in this area.",
         "►Got it! @reminder !end",
-        "►Sorry, I lost your cone!",
+        "►[not $seedplanted]Sorry, I lost your cone!",
+        "►[$seedplanted]I planted the seed. How about the reward? @reward",
         "You did… what? Thank god I have an unlimited supply of them. @reminder !spawnseed !end"
+    ],
+    "reward": [
+        "You will get a reward when my offspring sprouts. That was the deal.",
+        "►But... that might take forever!",
+        "Ho ho, maybe you can go the extra mile and make the little cone grow faster?",
+        "►I'll try... There might be some trick to it. !end @reminder"
     ]
 }
