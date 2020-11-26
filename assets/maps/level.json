@@ -2188,8 +2188,8 @@
                  "type":"entity",
                  "visible":true,
                  "width":0,
-                 "x":246,
-                 "y":1909
+                 "x":3252,
+                 "y":426
                 }, 
                 {
                  "height":0,
@@ -2487,7 +2487,7 @@
                         {
                          "name":"bgm",
                          "type":"string",
-                         "value":"cave"
+                         "value":"awake"
                         }, 
                         {
                          "name":"disabled",

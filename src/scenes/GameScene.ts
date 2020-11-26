@@ -69,7 +69,8 @@ export enum BgmId {
     RIDDLE = "riddle",
     RADIO = "radio",
     WINGS = "wings",
-    ECSTASY = "ecstasy"
+    ECSTASY = "ecstasy",
+    AWAKE = "awake"
 }
 
 export enum AmbientSoundId {
@@ -110,6 +111,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
     @asset("music/wings.ogg")
     public static bgmWings: Sound;
+
+    @asset("music/awake.ogg")
+    public static bgmAwake: Sound;
 
     @asset("sounds/ambient/stream.ogg")
     public static ambientStream: Sound;
@@ -157,6 +161,12 @@ export class GameScene extends Scene<FriendlyFire> {
             active: false,
             id: BgmId.WINGS,
             sound: GameScene.bgmWings,
+            baseVolume: 0.75
+        },
+        {
+            active: false,
+            id: BgmId.AWAKE,
+            sound: GameScene.bgmAwake,
             baseVolume: 0.75
         },
         {
