@@ -115,6 +115,9 @@ export class Player extends PhysicsEntity {
     @asset("sounds/gate/door_open.mp3")
     private static enterGateSound: Sound;
 
+    @asset("sounds/portal/enter-portal.ogg")
+    private static enterPortalSound: Sound;
+
     @asset("sounds/gate/door_close.mp3")
     private static leaveGateSound: Sound;
 
@@ -353,7 +356,6 @@ export class Player extends PhysicsEntity {
         this.canRun = false;
         this.multiJump = false;
         this.characterAsset = CharacterAsset.PATIENT;
-        this.setMaxVelocity(0.5);
         this.direction = -1;
     }
 
@@ -603,8 +605,16 @@ export class Player extends PhysicsEntity {
             const targetBgmId = gate.properties.bgm;
 
             if (targetGate) {
-                Player.enterGateSound.stop();
-                Player.enterGateSound.play();
+                if (gate.properties.enterSound) {
+                    if (gate.properties.enterSound === "portal") {
+                        Player.enterPortalSound.stop();
+                        Player.enterPortalSound.play();
+                    }
+                } else {
+                    Player.enterGateSound.stop();
+                    Player.enterGateSound.play();
+                }
+
 
                 this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
                     .then(async () => {
@@ -612,8 +622,16 @@ export class Player extends PhysicsEntity {
                             this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                         }
 
-                        Player.leaveGateSound.stop();
-                        Player.leaveGateSound.play();
+                        if (targetGate.properties.exitSound) {
+                            if (targetGate.properties.exitSound === "portal") {
+                                Player.enterPortalSound.stop();
+                                Player.enterPortalSound.play();
+                            }
+                        } else {
+                            Player.leaveGateSound.stop();
+                            Player.leaveGateSound.play();
+                        }
+
 
                         this.x = targetGate.x + (targetGate.width / 2);
                         this.y = targetGate.y - targetGate.height;
@@ -624,11 +642,11 @@ export class Player extends PhysicsEntity {
                             this.switchToReality();
                         }
 
-                        if (targetGate.properties.enterSleepTime) {
-                            await sleep(targetGate.properties.enterSleepTime * 1000);
+                        if (targetGate.properties.exitSleepTime) {
+                            await sleep(targetGate.properties.exitSleepTime * 1000);
                         }
                         
-                        const fadeInTime = targetGate.properties.enterFadeTime ? targetGate.properties.enterFadeTime : 0.8;
+                        const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
                         this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN).then(() => {
                             this.isControllable = true;
                         });
@@ -689,6 +707,8 @@ export class Player extends PhysicsEntity {
     private drawTooltip(
         text: string, buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
     ): void {
+        if (!this.isControllable) return;
+
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         const measure = Player.font.measureText(text);
         const gap = 6;
@@ -1005,7 +1025,7 @@ export class Player extends PhysicsEntity {
             if (this.running) {
                 this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
             } else {
-                this.setMaxVelocity(this.characterAsset === CharacterAsset.PATIENT ? 2 : MAX_PLAYER_SPEED);
+                this.setMaxVelocity(this.characterAsset === CharacterAsset.PATIENT ? 3 : MAX_PLAYER_SPEED);
             }
 
             if (this.moveRight) {

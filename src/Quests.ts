@@ -4,7 +4,8 @@ export enum QuestKey {
     A = "questA",
     B = "questB",
     C = "questC",
-    D = "questD"
+    D = "questD",
+    E = "questE"
 }
 
 export enum QuestATrigger {
@@ -40,6 +41,10 @@ export enum QuestCTrigger {
 }
 
 export enum QuestDTrigger {
+    ENDING_TRIGGERED
+}
+
+export enum QuestETrigger {
     ENDING_TRIGGERED
 }
 
@@ -164,3 +169,18 @@ export class QuestD extends Quest {
         );
     }
 }
+
+/**
+ * Ending E. Petted the dog for quite some time and transcended
+ */
+export class QuestE extends Quest {
+    public constructor (campaign: Campaign) {
+        super(
+            QuestKey.E,
+            campaign,
+            "AWAK[E]",
+            Object.values(QuestETrigger).filter((i): i is number => typeof i === "number")
+        );
+    }
+}
+

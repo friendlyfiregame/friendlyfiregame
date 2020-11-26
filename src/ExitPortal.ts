@@ -2,6 +2,7 @@ import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { entity, Entity } from "./Entity";
 import { GameScene } from "./scenes/GameScene";
+import { Sound } from "./Sound";
 
 enum PortalAnimationState { OFF, FADEIN, IDLE }
 
@@ -9,6 +10,9 @@ enum PortalAnimationState { OFF, FADEIN, IDLE }
 export class ExitPortal extends Entity {
     @asset("sprites/portal.aseprite.json")
     private static sprite: Aseprite;
+
+    @asset("sounds/portal/portal.ogg")
+    private static sound: Sound;
 
     private animationState = PortalAnimationState.OFF;
 
@@ -19,6 +23,7 @@ export class ExitPortal extends Entity {
 
     public activate (): void {
         if (this.animationState === PortalAnimationState.OFF) {
+            ExitPortal.sound.play();
             this.nextAnimationState();
         }
     }

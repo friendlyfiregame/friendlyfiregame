@@ -14,7 +14,7 @@ import { Game } from "./Game";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
 import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
-import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD } from "./Quests";
+import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE } from "./Quests";
 import seed1 from "../assets/dialog/seed1.dialog.json";
 import shadowpresence1 from "../assets/dialog/shadowpresence1.dialog.json";
 import shiba1 from "../assets/dialog/shiba1.dialog.json";
@@ -80,7 +80,8 @@ export class Campaign {
         new QuestA(this),
         new QuestB(this),
         new QuestC(this),
-        new QuestD(this)
+        new QuestD(this),
+        new QuestE(this)
     ];
     public gameScene?: GameScene | undefined;
 
@@ -348,6 +349,9 @@ export class Campaign {
                     break;
                 case "petDoggo":
                     this.gameScene.beginPetEnding();
+                    break;
+                case "lookThroughWindow":
+                    this.gameScene.beginWindowEnding();
                     break;
                 case "enable":
                     const char = params[0], dialogName = params[1];

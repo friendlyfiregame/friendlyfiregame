@@ -25,6 +25,10 @@ export interface GameObjectProperties {
     content?: string;
     enterFadeTime?: number;
     enterSleepTime?: number;
+    enterSound?: string;
+    exitFadeTime?: number;
+    exitSleepTime?: number;
+    exitSound?: string;
     bgm?: string;
     disabled?: boolean;
     identifier?: string;

@@ -12,7 +12,7 @@ import { Chicken } from "../Chicken";
 import { Cloud } from "../Cloud";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Conversation } from "../Conversation";
-import { DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION } from "../constants";
+import { DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_FADE_DURATION } from "../constants";
 import { EndScene } from "./EndScene";
 import { Fire, FireState } from "../Fire";
 import { FireGfx } from "../FireGfx";
@@ -45,6 +45,7 @@ import { Tree } from "../Tree";
 import { Wing } from "../Wing";
 import { World } from "../World";
 import { ExitPortal } from "../ExitPortal";
+import { Window } from "../Window";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -183,8 +184,20 @@ export class GameScene extends Scene<FriendlyFire> {
         { label: "Can I muster up the strength to break free?", enter: 0.6 },
         { label: "If I don't stop now, there will be no going back.", enter: 0.7 },
         { label: "Is this really how it all ends?", enter: 0.8 },
-        { label: "I regret nothing...", enter: 0.9 },
-        { label: "Farewell, cruel world...", enter: 1 }
+        { label: "I regret nothing…", enter: 0.9 },
+        { label: "Farewell, cruel world…", enter: 1 }
+    ];
+
+    private windowEndingTexts: PetEndingText[] = [
+        { label: "I wiped off the heavy dust layer on the glass.", enter: 0.1 },
+        { label: "The surface was as cold as the corpses around me.", enter: 0.2 },
+        { label: "It was hard to make out anything in the darkness on the other side…", enter: 0.3 },
+        { label: "", enter: 0.4 },
+        { label: "My legs gave away when I realized what I was looking at.", enter: 0.5 },
+        { label: "Nothing can compare to the dread I felt in this moment.", enter: 0.6 },
+        { label: "", enter: 0.7 },
+        { label: "I wished I could go back to the dream I faintly remember.", enter: 0.8 },
+        { label: "But there was nothing but an inevitable death waiting for me…", enter: 0.9 },
     ];
 
     /* Total game time (time passed while game not paused) */
@@ -220,8 +233,11 @@ export class GameScene extends Scene<FriendlyFire> {
     public apocalypse = false;
     public friendshipCutscene = false;
     public pettingCutscene = false;
+    public windowCutscene = false;
+    public windowCutsceneTime = 0;
     public pettingCutsceneTime = 0;
     private pettingEndingTriggered = false;
+    private windowEndingTriggered = false;
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
@@ -235,7 +251,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private fadeToBlackEndTime = 0;
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
-    private faceToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
+    private fadeToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
     public readonly renderer = new Renderer(this);
     public readonly mountainRiddle = new MountainRiddle();
 
@@ -256,6 +272,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.pettingCutscene = false;
         this.pettingCutsceneTime = 0;
         this.pettingEndingTriggered = false;
+        this.windowCutscene = false;
+        this.windowCutsceneTime = 0;
+        this.windowEndingTriggered = false;
         Conversation.resetGlobals();
 
         this.gameObjects = [
@@ -280,6 +299,8 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new SuperThrow(this, entity.x, entity.y);
                     case "portal":
                         return new Portal(this, entity.x, entity.y);
+                    case "window":
+                        return new Window(this, entity.x, entity.y);
                     default:
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
                 }
@@ -476,7 +497,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.fadeToBlackEndTime > this.gameTime) {
             let fade = (this.gameTime - this.fadeToBlackStartTime) / (this.fadeToBlackEndTime - this.fadeToBlackStartTime);
 
-            if (this.faceToBlackDirection === FadeDirection.FADE_IN) {
+            if (this.fadeToBlackDirection === FadeDirection.FADE_IN) {
                 fade = 1 - fade;
             }
 
@@ -489,6 +510,10 @@ export class GameScene extends Scene<FriendlyFire> {
 
         if (this.pettingCutscene) {
             this.updatePettingEndingCutscene(dt);
+        }
+
+        if (this.windowCutscene) {
+            this.updateWindowEndingCutscene(dt);
         }
     }
 
@@ -613,7 +638,7 @@ export class GameScene extends Scene<FriendlyFire> {
         return new Promise((resolve) => {
             this.fadeToBlackStartTime = this.gameTime;
             this.fadeToBlackEndTime = this.gameTime + duration;
-            this.faceToBlackDirection = direction;
+            this.fadeToBlackDirection = direction;
 
             setTimeout(() => {
                 if (direction === FadeDirection.FADE_OUT) {
@@ -660,6 +685,31 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private updateFriendshipEndingCutscene(dt: number): void {
         this.camera.setCinematicBar(1);
+    }
+
+    private updateWindowEndingCutscene(dt: number): void {
+        this.windowCutsceneTime += dt;
+        if (!this.windowEndingTriggered && this.windowCutsceneTime > WINDOW_ENDING_CUTSCENE_DURATION + WINDOW_ENDING_FADE_DURATION) {
+            this.windowEndingTriggered = true;
+            this.game.campaign.getQuest(QuestKey.E).finish();
+            this.gameOver();
+        }
+
+        this.windowEndingTexts.forEach((t, index) => {
+            if (this.windowCutsceneTime / WINDOW_ENDING_CUTSCENE_DURATION > t.enter) {
+                const fadeTime = 0.5;
+                const enterTime = WINDOW_ENDING_CUTSCENE_DURATION * t.enter;
+                const alpha = Math.max(0, Math.min(1, (this.windowCutsceneTime - enterTime) / fadeTime));
+                const measure = GameScene.font.measureText(t.label);
+                this.renderer.add({
+                    type: RenderingType.TEXT, layer: RenderingLayer.UI, textColor: "white", relativeToScreen: true, alpha,
+                    text: t.label, position: {
+                        x: (GAME_CANVAS_WIDTH / 2) - (measure.width / 2),
+                        y: measure.height * index + (index * 3) + 50
+                    }, asset: GameScene.font,
+                });
+            }
+        });
     }
 
     private updatePettingEndingCutscene(dt: number): void {
@@ -742,11 +792,23 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
+    public beginWindowEnding(): void {
+        this.windowCutscene = true;
+        this.player.setControllable(false);
+        this.fadeToBlackDirection = FadeDirection.FADE_OUT;
+        this.fadeToBlackStartTime = this.gameTime + WINDOW_ENDING_CUTSCENE_DURATION;
+        this.fadeToBlackEndTime = this.fadeToBlackStartTime + (WINDOW_ENDING_FADE_DURATION);
+        const target = this.pointsOfInterest.find(poi => poi.name === "windowzoomtarget");
+        if (target) {
+            this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
+        }
+    }
+
     public beginPetEnding(): void {
         this.pettingCutscene = true;
         this.player.startPettingDog();
         this.shiba.startBeingPetted();
-        this.faceToBlackDirection = FadeDirection.FADE_OUT;
+        this.fadeToBlackDirection = FadeDirection.FADE_OUT;
         this.fadeToBlackStartTime = this.gameTime + PETTING_ENDING_CUTSCENE_DURATION;
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (PETTING_ENDING_FADE_DURATION);
         this.playBackgroundTrack(BgmId.ECSTASY);

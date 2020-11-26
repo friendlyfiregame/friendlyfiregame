@@ -64,3 +64,7 @@ export const DIALOG_FONT = "fonts/pixcelsior.font.json";
 /** Total duration in seconds until dog petting ending occurs */
 export const PETTING_ENDING_CUTSCENE_DURATION = 135;
 export const PETTING_ENDING_FADE_DURATION = 5;
+
+/** Total duration in seconds of ending d cutscene */
+export const WINDOW_ENDING_CUTSCENE_DURATION = 50;
+export const WINDOW_ENDING_FADE_DURATION = 3;

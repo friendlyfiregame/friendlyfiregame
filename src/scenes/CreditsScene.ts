@@ -3,7 +3,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
 import { ControllerEvent } from "../input/ControllerEvent";
-import { DIALOG_FONT } from "../constants";
+import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "../constants";
 import { easeOutCubic } from "../easings";
 import { FadeTransition } from "../transitions/FadeTransition";
 import { FriendlyFire } from "../FriendlyFire";
@@ -16,6 +16,7 @@ import { TextNode } from "../scene/TextNode";
 import { SceneNode } from "../scene/SceneNode";
 import { ImageNode } from "../scene/ImageNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
+import { QuestKey } from '../Quests';
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset("music/a-vision-of-fire-acoustic.ogg")
@@ -32,6 +33,12 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
     @asset("sprites/credits/leaf.aseprite.json")
     private static leaf: Aseprite;
+
+    @asset("sprites/credits/spaceship.aseprite.json")
+    private static spaceship: Aseprite;
+
+    @asset("sprites/credits/spaceshipsmall.aseprite.json")
+    private static spaceshipsmall: Aseprite;
 
     private starPositions: number[][] = [
         [318, 10],
@@ -54,6 +61,9 @@ export class CreditsScene extends Scene<FriendlyFire> {
     @asset("images/credits/bg.png")
     private static backgroundImage: HTMLImageElement;
 
+    @asset("images/credits/bg-space.png")
+    private static backgroundImageSpace: HTMLImageElement;
+
     @asset("images/credits/overlay.png")
     private static overlayImage: HTMLImageElement;
 
@@ -72,36 +82,69 @@ export class CreditsScene extends Scene<FriendlyFire> {
     private lineSpacing = 4;
 
     public async setup(): Promise<void> {
+        const ending = this.game.campaign.quests.find(q => q.isFinished());
+        console.log(ending);
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
         this.outTransition = new FadeTransition({ duration: 0.25 });
 
-        // The background
-        new ImageNode({
-            image: CreditsScene.backgroundImage,
-            anchor: Direction.TOP_LEFT
-        }).appendTo(this.rootNode);
+        if (ending && ending.key === QuestKey.E) {
+            // The background
+            new ImageNode({
+                image: CreditsScene.backgroundImageSpace,
+                anchor: Direction.TOP_LEFT
+            }).appendTo(this.rootNode);
 
-        // The blinking stars
-        this.starPositions.forEach((pos, index) => {
+            // Spaceship
             new AsepriteNode({
-                aseprite: CreditsScene.stars[index % CreditsScene.stars.length],
+                aseprite: CreditsScene.spaceship,
                 tag: "idle",
                 anchor: Direction.TOP_LEFT,
-                x: pos[0],
-                y: pos[1]
+                x: GAME_CANVAS_WIDTH,
+                y: 200
+            }).animate({
+                animator: (node, value) => node.setX((GAME_CANVAS_WIDTH + 50) - value * GAME_CANVAS_WIDTH),
+                duration: 100,
             }).appendTo(this.rootNode);
-        });
 
-        // The tree leaf
-        new AsepriteNode({
-            aseprite: CreditsScene.leaf,
-            tag: "idle",
-            anchor: Direction.TOP_LEFT,
-            x: 414,
-            y: 163
-        }).appendTo(this.rootNode);
+            // Spaceship
+            new AsepriteNode({
+                aseprite: CreditsScene.spaceshipsmall,
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: GAME_CANVAS_WIDTH,
+                y: 185
+            }).animate({
+                animator: (node, value) => node.setX((GAME_CANVAS_WIDTH + 10) - value * GAME_CANVAS_WIDTH),
+                duration: 200,
+            }).appendTo(this.rootNode);
+        } else {
+            // The background
+            new ImageNode({
+                image: CreditsScene.backgroundImage,
+                anchor: Direction.TOP_LEFT
+            }).appendTo(this.rootNode);
 
+            // The blinking stars
+            this.starPositions.forEach((pos, index) => {
+                new AsepriteNode({
+                    aseprite: CreditsScene.stars[index % CreditsScene.stars.length],
+                    tag: "idle",
+                    anchor: Direction.TOP_LEFT,
+                    x: pos[0],
+                    y: pos[1]
+                }).appendTo(this.rootNode);
+            });
+
+            // The tree leaf
+            new AsepriteNode({
+                aseprite: CreditsScene.leaf,
+                tag: "idle",
+                anchor: Direction.TOP_LEFT,
+                x: 414,
+                y: 163
+            }).appendTo(this.rootNode);
+        }
         // The gradient background behind the scrolling credits text
         new ImageNode({
             image: CreditsScene.overlayImage,
