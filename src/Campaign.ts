@@ -243,7 +243,6 @@ export class Campaign {
                     this.gameScene.beginFriendshipEnding();
                     break;
                 case "activatefireportal":
-                    console.log("activateFirePortal");
                     this.gameScene.exitPortal.activate();
                     this.gameScene.flameboy.nextState();
                     break;

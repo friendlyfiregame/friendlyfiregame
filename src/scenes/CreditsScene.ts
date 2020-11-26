@@ -83,7 +83,6 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
     public async setup(): Promise<void> {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
-        console.log(ending);
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
         this.outTransition = new FadeTransition({ duration: 0.25 });

@@ -825,7 +825,6 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public cancelPatEnding(): void {
-        console.log(this.canCancelPatEnding());
         if (this.canCancelPatEnding()) {
             this.pettingCutscene = false;
             this.pettingCutsceneTime = 0;
