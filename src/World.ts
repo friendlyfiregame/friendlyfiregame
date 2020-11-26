@@ -237,7 +237,7 @@ export class World implements GameObject {
                 sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
             );
 
-            if (colliding) {
+            if (colliding && !gateObject.properties.disabled) {
                 collidesWith.push(gateObject);
             }
         }

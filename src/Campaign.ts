@@ -9,6 +9,7 @@ import fire3 from "../assets/dialog/fire3.dialog.json";
 import fire4 from "../assets/dialog/fire4.dialog.json";
 import flameboy1 from "../assets/dialog/flameboy1.dialog.json";
 import flameboy2 from "../assets/dialog/flameboy2.dialog.json";
+import flameboy3 from "../assets/dialog/flameboy3.dialog.json";
 import { Game } from "./Game";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
@@ -59,12 +60,13 @@ const allDialogs: Record<string, DialogJSON> = {
     "spider1": spider1,
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
+    "flameboy3": flameboy3,
     "wing1": wing1,
     "shadowpresence1": shadowpresence1,
 };
 
 export enum CharacterAsset {
-    FEMALE, MALE
+    FEMALE, MALE, PATIENT
 }
 
 export enum VoiceAsset {
@@ -239,8 +241,30 @@ export class Campaign {
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();
                     break;
+                case "activatefireportal":
+                    console.log("activateFirePortal");
+                    this.gameScene.exitPortal.activate();
+                    this.gameScene.flameboy.nextState();
+                    break;
                 case "talkedtofire":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_FIRE);
+                    break;
+                case "giveWoodToFlameboy":
+                    Conversation.setGlobal("gaveWoodToFlameboy", "true");
+                    this.gameScene.setGateDisabled("exitportaldoor_1", false);
+                    this.gameScene.player.removeMultiJump();
+                    this.gameScene.removeGameObject(this.gameScene.fire);
+                    this.gameScene.removeGameObject(this.gameScene.shiba);
+                    this.gameScene.removeGameObject(this.gameScene.powerShiba);
+                    this.gameScene.removeGameObject(this.gameScene.bird);
+                    this.gameScene.removeGameObject(this.gameScene.shadowPresence);
+                    this.gameScene.removeGameObject(this.gameScene.tree);
+                    this.gameScene.removeGameObject(this.gameScene.wing);
+                    this.gameScene.removeGameObject(this.gameScene.mimic);
+                    this.gameScene.removeGameObject(this.gameScene.stone);
+                    this.gameScene.removeGameObject(this.gameScene.stoneDisciple);
+
+                    this.runAction("enable", null, ["flameboy", "flameboy3"]);
                     break;
                 case "giveBone":
                     Conversation.setGlobal("gaveBoneToPowerShiba", "true");

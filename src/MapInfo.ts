@@ -23,7 +23,10 @@ export interface GameObjectProperties {
     setDialogEntity?: string;
     setDialogValue?: string;
     content?: string;
+    enterFadeTime?: number;
+    enterSleepTime?: number;
     bgm?: string;
+    disabled?: boolean;
     identifier?: string;
     intensity?: number;
     volume?: number;

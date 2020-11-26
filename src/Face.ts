@@ -19,7 +19,8 @@ export enum EyeType {
     TREE = 1,
     STONE = 2,
     FLAMEBOY = 3,
-    STONEDISCIPLE = 4
+    STONEDISCIPLE = 4,
+    FLAMEBOY2 = 5,
 }
 
 export class Face {
@@ -29,6 +30,7 @@ export class Face {
         "sprites/eyes/stone.aseprite.json",
         "sprites/eyes/flameboy.aseprite.json",
         "sprites/eyes/stonedisciple.aseprite.json",
+        "sprites/eyes/flameboy2.aseprite.json",
     ])
     private static sprites: Aseprite[];
 
@@ -45,6 +47,10 @@ export class Face {
 
     public setMode(mode: FaceModes): void {
         this.mode = mode;
+    }
+
+    public setOffY (offY: number): void {
+        this.offY = offY;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

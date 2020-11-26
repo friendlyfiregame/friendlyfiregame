@@ -44,6 +44,7 @@ import { SuperThrow } from "../SuperThrow";
 import { Tree } from "../Tree";
 import { Wing } from "../Wing";
 import { World } from "../World";
+import { ExitPortal } from "../ExitPortal";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -214,6 +215,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public caveman!: Caveman;
     public particles = new Particles(this);
     public fire!: Fire;
+    public exitPortal!: ExitPortal;
     public fireFuryEndTime = 0;
     public apocalypse = false;
     public friendshipCutscene = false;
@@ -298,6 +300,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);
         this.bone = this.getGameObject(Bone);
+        this.exitPortal = this.getGameObject(ExitPortal);
 
         this.camera = new Camera(this, this.player);
         this.camera.setBounds(this.player.getCurrentMapBounds());
@@ -332,6 +335,16 @@ export class GameScene extends Scene<FriendlyFire> {
         if (index >= 0) {
             this.gameObjects.splice(index, 1);
         }
+    }
+
+
+    public setGateDisabled(gateId: string, disabled: boolean): void {
+        const gate = this.gateObjects.find(o => o.name === gateId);
+        if (!gate) {
+            console.error(`cannot set disabled status of gate '${gateId}' because it does not exist`);
+            return;
+        }
+        gate.properties.disabled = disabled;
     }
 
     public getBackgroundTrack(id: BgmId): BackgroundTrack {
