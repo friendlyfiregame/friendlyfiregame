@@ -85,7 +85,8 @@ type AutoMove = {
 export class Player extends PhysicsEntity {
     @asset([
         "sprites/pc/female.aseprite.json",
-        "sprites/pc/male.aseprite.json"
+        "sprites/pc/male.aseprite.json",
+        "sprites/pc/patient.aseprite.json"
     ])
     public static playerSprites: Aseprite[];
 
@@ -113,6 +114,9 @@ export class Player extends PhysicsEntity {
 
     @asset("sounds/gate/door_open.mp3")
     private static enterGateSound: Sound;
+
+    @asset("sounds/portal/enter-portal.ogg")
+    private static enterPortalSound: Sound;
 
     @asset("sounds/gate/door_close.mp3")
     private static leaveGateSound: Sound;
@@ -342,6 +346,17 @@ export class Player extends PhysicsEntity {
         this.multiJump = false;
         this.doubleJump = false;
         this.canRun = false;
+    }
+
+    public removeMultiJump(): void {
+        this.multiJump = false;
+    }
+
+    public switchToReality(): void {
+        this.canRun = false;
+        this.multiJump = false;
+        this.characterAsset = CharacterAsset.PATIENT;
+        this.direction = -1;
     }
 
     public getDance(): Dance | null {
@@ -577,7 +592,7 @@ export class Player extends PhysicsEntity {
      * Also sets the camera bounds to the target position
      * @param gate the source the player enters
      */
-    private enterGate(gate: GameObjectInfo): void {
+    private async enterGate(gate: GameObjectInfo): Promise<void> {
         if (gate && gate.properties.target) {
             this.isControllable = false;
             this.moveRight = false;
@@ -590,24 +605,49 @@ export class Player extends PhysicsEntity {
             const targetBgmId = gate.properties.bgm;
 
             if (targetGate) {
-                Player.enterGateSound.stop();
-                Player.enterGateSound.play();
+                if (gate.properties.enterSound) {
+                    if (gate.properties.enterSound === "portal") {
+                        Player.enterPortalSound.stop();
+                        Player.enterPortalSound.play();
+                    }
+                } else {
+                    Player.enterGateSound.stop();
+                    Player.enterGateSound.play();
+                }
+
 
                 this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
-                    .then(() => {
+                    .then(async () => {
                         if (targetBgmId) {
                             this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                         }
 
-                        Player.leaveGateSound.stop();
-                        Player.leaveGateSound.play();
+                        if (targetGate.properties.exitSound) {
+                            if (targetGate.properties.exitSound === "portal") {
+                                Player.enterPortalSound.stop();
+                                Player.enterPortalSound.play();
+                            }
+                        } else {
+                            Player.leaveGateSound.stop();
+                            Player.leaveGateSound.play();
+                        }
+
 
                         this.x = targetGate.x + (targetGate.width / 2);
                         this.y = targetGate.y - targetGate.height;
 
                         this.scene.camera.setBounds(this.getCurrentMapBounds());
 
-                        this.scene.fadeToBlack(0.8, FadeDirection.FADE_IN).then(() => {
+                        if (targetGate.name === "exitportaldoor_2") {
+                            this.switchToReality();
+                        }
+
+                        if (targetGate.properties.exitSleepTime) {
+                            await sleep(targetGate.properties.exitSleepTime * 1000);
+                        }
+                        
+                        const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
+                        this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN).then(() => {
                             this.isControllable = true;
                         });
                     });
@@ -616,6 +656,7 @@ export class Player extends PhysicsEntity {
     }
 
     private canJump(): boolean {
+        if (this.characterAsset === CharacterAsset.PATIENT) return false;
         if (this.multiJump) {
             return true;
         } else if (!this.usedJump && this.jumpThresholdTimer > 0) {
@@ -666,6 +707,8 @@ export class Player extends PhysicsEntity {
     private drawTooltip(
         text: string, buttonTag: ControllerAnimationTags = ControllerAnimationTags.ACTION
     ): void {
+        if (!this.isControllable) return;
+
         const controllerSprite = ControllerManager.getInstance().controllerSprite;
         const measure = Player.font.measureText(text);
         const gap = 6;
@@ -982,7 +1025,7 @@ export class Player extends PhysicsEntity {
             if (this.running) {
                 this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
             } else {
-                this.setMaxVelocity(MAX_PLAYER_SPEED);
+                this.setMaxVelocity(this.characterAsset === CharacterAsset.PATIENT ? 3 : MAX_PLAYER_SPEED);
             }
 
             if (this.moveRight) {

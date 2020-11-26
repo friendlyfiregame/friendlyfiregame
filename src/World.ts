@@ -6,7 +6,7 @@ import { GameObjectInfo } from "./MapInfo";
 import { getImageData } from "./graphics";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import { PETTING_ENDING_CUTSCENE_DURATION } from "./constants";
+import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "./constants";
 
 export enum Environment {
     AIR = 0,
@@ -89,6 +89,9 @@ export class World implements GameObject {
         let alpha = 1;
         if (this.scene.pettingCutscene) {
             alpha = Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION));
+        }
+        if (this.scene.windowCutscene) {
+            alpha = Math.max(0, 1 - (this.scene.windowCutsceneTime / (WINDOW_ENDING_CUTSCENE_DURATION / 1.5 )));
         }
 
         this.scene.renderer.add({
@@ -237,7 +240,7 @@ export class World implements GameObject {
                 sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
             );
 
-            if (colliding) {
+            if (colliding && !gateObject.properties.disabled) {
                 collidesWith.push(gateObject);
             }
         }
