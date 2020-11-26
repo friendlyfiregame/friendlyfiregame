@@ -16,7 +16,7 @@ import { TextNode } from "../scene/TextNode";
 import { SceneNode } from "../scene/SceneNode";
 import { ImageNode } from "../scene/ImageNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
-import { QuestKey } from '../Quests';
+import { QuestKey } from "../Quests";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset("music/a-vision-of-fire-acoustic.ogg")
