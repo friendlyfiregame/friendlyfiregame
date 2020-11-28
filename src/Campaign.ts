@@ -1,4 +1,5 @@
-import caveman from "../assets/dialog/caveman.dialog.json";
+import caveman1 from "../assets/dialog/caveman1.dialog.json";
+import caveman2 from "../assets/dialog/caveman2.dialog.json";
 import { Conversation } from "./Conversation";
 import type { DialogJSON } from "*.dialog.json";
 import { FaceModes } from "./Face";
@@ -38,7 +39,8 @@ import wing1 from "../assets/dialog/wing1.dialog.json";
 export type CampaignState = "start" | "finished";
 
 const allDialogs: Record<string, DialogJSON> = {
-    "caveman": caveman,
+    "caveman1": caveman1,
+    "caveman2": caveman2,
     "fire0": fire0,
     "fire1": fire1,
     "fire2": fire2,
@@ -121,7 +123,7 @@ export class Campaign {
         this.getQuest(QuestKey.A).trigger(QuestATrigger.JUST_ARRIVED);
 
         // Setup initial NPC dialogs
-        this.runAction("enable", null, ["caveman", "caveman"]);
+        this.runAction("enable", null, ["caveman", "caveman1"]);
         this.runAction("enable", null, ["fire", "fire0"]);
         this.runAction("enable", null, ["tree", "tree0"]);
         this.runAction("enable", null, ["stone", "stone1"]);

@@ -99,6 +99,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 Stone.successSound.play();
                 this.scene.game.campaign.runAction("enable", null, ["stone", "stone2"]);
                 this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy2"]);
+                this.scene.game.campaign.runAction("enable", null, ["caveman", "caveman2"]);
             }
         } else if (this.state === StoneState.SWIMMING) {
             const diffX = this.floatingPosition.x - this.x;
