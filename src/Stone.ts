@@ -143,5 +143,6 @@ export class Stone extends NPC implements CollidableGameObject {
     public pickUp(): void {
         this.face?.setMode(FaceModes.AMUSED);
         this.scene.player.carry(this);
+        this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy4"]);
     }
 }

@@ -10,6 +10,7 @@ import fire4 from "../assets/dialog/fire4.dialog.json";
 import flameboy1 from "../assets/dialog/flameboy1.dialog.json";
 import flameboy2 from "../assets/dialog/flameboy2.dialog.json";
 import flameboy3 from "../assets/dialog/flameboy3.dialog.json";
+import flameboy4 from "../assets/dialog/flameboy4.dialog.json";
 import { Game } from "./Game";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./NPC";
@@ -61,6 +62,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
     "flameboy3": flameboy3,
+    "flameboy4": flameboy4,
     "wing1": wing1,
     "shadowpresence1": shadowpresence1,
 };
