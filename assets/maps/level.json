@@ -2694,7 +2694,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"The blinds are shut tight"
+                         "value":"The blinds are shut tight."
                         }, 
                         {
                          "name":"duration",
@@ -2716,7 +2716,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"The blinds are shut tight"
+                         "value":"The blinds are shut tight."
                         }, 
                         {
                          "name":"duration",
@@ -2738,7 +2738,7 @@
                         {
                          "name":"content",
                          "type":"string",
-                         "value":"The blinds are shut tight"
+                         "value":"The blinds are shut tight."
                         }, 
                         {
                          "name":"duration",
