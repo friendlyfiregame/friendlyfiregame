@@ -24,7 +24,7 @@ jobs:
         VERSION: ${{steps.version.outputs.prop}}
       run: |
         GIT_TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-        if [[ "${GIT_TAG_VERSION}" != "v${VERSION}" ]]; then
+        if [[ "${GIT_TAG_VERSION}" != "${VERSION}" ]]; then
           echo "::error ::Version mismatch. Git tag version ${GIT_TAG_VERSION} doesn't match version ${VERSION} from package.json"
         fi
         echo "VERSION=${VERSION}" >> "${GITHUB_ENV}"
