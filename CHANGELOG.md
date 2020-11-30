@@ -5,7 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.3.0] - 2020-11-30
+
+### Added
+
+- It is now possible to pet the dog! You heard that right... you can pet the dog!!
+- Excessive petting of the dog might even lead to a surprising new ending.
+- The fire can now be gifted to the smaller fire in the west as well for another surprising
+  alternative ending.
+
+### Updated
+
+- The Desktop apps are now based on Electron v11.0.3.
+  This runtime update introduces improved Gamepad support and should enable a whole bunch
+  of non-Xinput-devices to just work out of the box.
+
+### Fixed
+
+- A bunch of dialogues have been improved and some typos have been fixed.
 
 ## [2.2.0] - 2020-09-06
 
