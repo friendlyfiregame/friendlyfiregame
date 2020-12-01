@@ -5,6 +5,31 @@
 Just head over to [friendlyfiregame.com](https://friendlyfiregame.com/) and pick the
 launch options that best fits your style.
 
+## Achieving all possible endings
+
+There are multiple endings. Listed below you can find all endings and how to
+achieve them.
+
+### Ending A
+This is the regular jam ending. Play the game regularly and feed the wood to the fire who gave you the quest.
+This leads to a final boss fight.
+
+### Ending B
+Alternate ending. Play the game regularly but also finish the dog quest before feeding the wood to the fire.
+The final boss fight is skipped and replaced with a special cutscene.
+
+### Ending C
+This is a gag ending. This can be achieved by soft locking yourself in the cave under the flame boy npc and talking
+to the cave man. To get over the river without the double jump, you have to use the "stone skip jump" technique/bug.
+
+### Ending D
+This is a gag ending. As soon as you can fly, go to the tree in the west and talk to the dog. You'll have the option
+to pet the dog. If you let the petting sequence run it's course, the game will end.
+
+### Ending E
+Alternate ending. Play the game regularly, you can also skip the dog side quest since this has no impact on this ending.
+Instead of feeding the wood to the main fire, feed it to the flame boy. This will trigger the ending.
+
 ## Development
 
 ### Getting started
