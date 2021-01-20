@@ -11,23 +11,43 @@ app.name = "Friendly Fire";
 app.allowRendererProcessReuse = true;
 
 const createWindow = () => {
+
+    let fullscreen: boolean = true;
+    if (app.commandLine.hasSwitch("no-fullscreen")) {
+        fullscreen = false;
+    } else if (app.commandLine.hasSwitch("fullscreen")) {
+        fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
+    }
+
     // Create the browser window.
     const mainWindow = new BrowserWindow({
+        backgroundColor: "#202020",
         width: GAME_CANVAS_WIDTH,
         height: GAME_CANVAS_HEIGHT,
-        fullscreen: true,
+        useContentSize: true,
+        resizable: true,
+        center: true,
+        maximizable: true,
+        // Undefined means, switching to fullscreen is possible.
+        fullscreen: fullscreen || undefined,
         title: "Friendly Fire",
-        icon: path.join(__dirname, "../renderer/assets/appicon.iconset/icon_256x256.png"),
+        icon: path.join(__dirname, "..", "renderer", "assets", "appicon.iconset", "icon_256x256.png"),
         webPreferences: {
             contextIsolation: true
         }
     });
 
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
+    if (app.commandLine.hasSwitch("dev")) {
+        const devMode: boolean = ["", "true"].includes(app.commandLine.getSwitchValue("dev").toLowerCase());
+        if (devMode) {
+            mainWindow.webContents.openDevTools();
+        }
+    }
+
 
     // Hide menu
     mainWindow.setMenu(null);
@@ -54,6 +74,3 @@ app.on("activate", () => {
         createWindow();
     }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
