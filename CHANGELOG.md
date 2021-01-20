@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Two new command line flags have been added to the Desktop version of the game:
+  `--dev` can be used to enable the Chromium Developer Tools upon startup and
+  `--no-fullscreen` can be used to open the game in a window instead of switching
+  to fullscreen mode immediately.
+
 ## [2.3.0] - 2020-11-30
 
 ### Added
