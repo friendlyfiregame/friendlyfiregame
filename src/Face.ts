@@ -1,7 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { GameScene } from "./scenes/GameScene";
-import { NPC } from "./NPC";
+import { NPC } from "./entities/NPC";
 import { RenderingLayer, RenderingType } from "./Renderer";
 
 export enum FaceModes {

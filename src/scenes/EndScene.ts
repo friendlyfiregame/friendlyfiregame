@@ -10,6 +10,7 @@ import { ImageNode } from "../scene/ImageNode";
 import { TextNode } from "../scene/TextNode";
 import { easeOutQuad } from "../easings";
 import { Direction } from "../geom/Direction";
+import { GlobalState } from "../GlobalState";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
@@ -26,6 +27,11 @@ export class EndScene extends Scene<FriendlyFire> {
 
     public setup(): void {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
+
+        if (ending) {
+            GlobalState.setAchievedEnding(ending.key);
+            GlobalState.setHasBeatenGame();
+        }
 
         // The logo image
         new ImageNode({

@@ -1,6 +1,6 @@
 import { Campaign, CampaignState } from "./Campaign";
 import { GameObject, GameScene } from "./scenes/GameScene";
-import { NPC } from "./NPC";
+import { NPC } from "./entities/NPC";
 import { rndItem } from "./util";
 import { ScriptedDialogJSON } from "../assets/dummy.texts.json";
 import { SpeechBubble } from "./SpeechBubble";

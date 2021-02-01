@@ -1,7 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { BitmapFont } from "./BitmapFont";
 import { Dance } from "./Dance";
-import { Fire } from "./Fire";
+import { Fire } from "./entities/Fire";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter } from "./Particles";
 import { roundRect } from "./SpeechBubble";

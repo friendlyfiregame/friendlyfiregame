@@ -18,6 +18,8 @@ import { AsepriteNode } from "../scene/AsepriteNode";
 import { Direction } from "../geom/Direction";
 import { ImageNode } from "../scene/ImageNode";
 import { SceneNode } from "../scene/SceneNode";
+import { GlobalState } from "../GlobalState";
+import { QuestKey } from "../Quests";
 
 type MainMenuParams = {
     label: string;
@@ -65,6 +67,9 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     @asset("sprites/flameicon.aseprite.json")
     private static flameicon: Aseprite;
+
+    @asset("sprites/ending_cards.aseprite.json")
+    private static endingCards: Aseprite;
 
     @asset(DIALOG_FONT)
     private static font: BitmapFont;
@@ -220,6 +225,25 @@ export class TitleScene extends Scene<FriendlyFire> {
             easing: easeOutQuad
         }).appendTo(this.rootNode);
 
+        if (GlobalState.getHasBeatenGame()) {
+            new SceneNode({
+                opacity: 0,
+                x: 118,
+                y: 108,
+            })
+            .appendChild(this.addEndingCard(0, QuestKey.A))
+            .appendChild(this.addEndingCard(1, QuestKey.B))
+            .appendChild(this.addEndingCard(2, QuestKey.C))
+            .appendChild(this.addEndingCard(3, QuestKey.D))
+            .appendChild(this.addEndingCard(4, QuestKey.E))
+            .animate({
+                animator: (node, value) => node.setOpacity(value),
+                delay: 2.5,
+                duration: 0.5,
+                easing: easeOutQuad
+            }).appendTo(this.rootNode);
+        }
+
         Object.values(MenuItemKey).forEach((key, index) => {
             if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {
                 this.menu.addItems(
@@ -241,6 +265,29 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     public finishAnimation(): void {
         this.rootNode.finishAnimations();
+    }
+
+    public addEndingCard (index: number, key: QuestKey): AsepriteNode {
+        let tag = "";
+        switch (key) {
+            case QuestKey.A: tag = "a_"; break;
+            case QuestKey.B: tag = "b_"; break;
+            case QuestKey.C: tag = "c_"; break;
+            case QuestKey.D: tag = "d_"; break;
+            case QuestKey.E: tag = "e_"; break;
+        }
+
+        const isAchieved = GlobalState.getAchievedEndings().includes(key);
+        tag += isAchieved ? "on" : "off";
+
+        return new AsepriteNode({
+            id: `endingCard_${key}`,
+            aseprite: TitleScene.endingCards,
+            tag,
+            anchor: Direction.TOP_LEFT,
+            x: index * 40 + (index * 10),
+            y: 0
+        });
     }
 
     public handleMenuAction(buttonId: string): void {

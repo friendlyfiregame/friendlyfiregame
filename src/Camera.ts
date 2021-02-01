@@ -1,6 +1,6 @@
 import { Bounds } from "./Entity";
 import { clamp, isDev, rnd, shiftValue } from "./util";
-import { Fire } from "./Fire";
+import { Fire } from "./entities/Fire";
 import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { ValueCurve, valueCurves } from "./Particles";

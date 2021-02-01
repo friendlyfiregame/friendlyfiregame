@@ -14,7 +14,7 @@ import flameboy3 from "../assets/dialog/flameboy3.dialog.json";
 import flameboy4 from "../assets/dialog/flameboy4.dialog.json";
 import { Game } from "./Game";
 import { GameScene } from "./scenes/GameScene";
-import { NPC } from "./NPC";
+import { NPC } from "./entities/NPC";
 import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
 import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE } from "./Quests";
 import seed1 from "../assets/dialog/seed1.dialog.json";
