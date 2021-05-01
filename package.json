@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package#",
   "name": "friendlyfire",
-  "version": "2.3.1-pre",
+  "version": "2.4.0",
   "description": "Explore the world of “Friendly Fire” and meet all its inhabitants in a quest to save the world from an unknown destiny.",
   "homepage": "https://www.friendlyfiregame.com/",
   "author": "The Cat Hive Developers",

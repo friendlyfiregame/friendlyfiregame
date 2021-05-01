@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.4.0] - 2021-05-01
 
 ### Added
 
@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `--dev` can be used to enable the Chromium Developer Tools upon startup and
   `--no-fullscreen` can be used to open the game in a window instead of switching
   to fullscreen mode immediately.
+- Global state that keeps track of achieved endings (via localStorage)
+- Little ending icons that appear in the main menu after finishing the game once to
+  visualize which endings have been achieved and how many there are.
+- A new credit song arrangement with female vocals. The ending song is picked depending
+  on the selected character asset. Ending E will play a unused synth version of the
+  ending song (with male vocals)
 
 ## [2.3.0] - 2020-11-30
 
