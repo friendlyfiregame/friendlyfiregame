@@ -17,10 +17,15 @@ import { SceneNode } from "../scene/SceneNode";
 import { ImageNode } from "../scene/ImageNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
 import { QuestKey } from "../Quests";
+import { CharacterAsset } from "../Campaign";
 
 export class CreditsScene extends Scene<FriendlyFire> {
-    @asset("music/a-vision-of-fire-acoustic.ogg")
-    public static music: Sound;
+    @asset([
+        "music/a-vision-of-fire-acoustic.ogg",
+        "music/a-vision-of-fire-orchestral.ogg",
+        "music/a-vision-of-fire.ogg",
+    ])
+    public static music: Sound[];
 
     @asset([
         "sprites/stars/star1.aseprite.json",
@@ -80,12 +85,23 @@ export class CreditsScene extends Scene<FriendlyFire> {
     private static appInfo: AppInfoJSON;
 
     private lineSpacing = 4;
+    private targetMusic: Sound | null = null;
+
+    private getCorrectBackgroundTrack(): Sound {
+        const ending = this.game.campaign.quests.find(q => q.isFinished());
+        if (ending && ending.key === QuestKey.E) return CreditsScene.music[2];
+
+        if (this.game.campaign.selectedCharacter === CharacterAsset.FEMALE) return CreditsScene.music[1];
+        if (this.game.campaign.selectedCharacter === CharacterAsset.MALE) return CreditsScene.music[0];
+        return CreditsScene.music[2];
+    }
 
     public async setup(): Promise<void> {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
         this.outTransition = new FadeTransition({ duration: 0.25 });
+        this.targetMusic = this.getCorrectBackgroundTrack();
 
         if (ending && ending.key === QuestKey.E) {
             // The background
@@ -268,14 +284,18 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     public activate(): void {
-        CreditsScene.music.setLoop(true);
-        CreditsScene.music.setVolume(1);
-        CreditsScene.music.play();
+        if (this.targetMusic) {
+            this.targetMusic.setLoop(true);
+            this.targetMusic.setVolume(1);
+            this.targetMusic.play();
+        }
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
     public deactivate(): void {
-        CreditsScene.music.stop();
+        if (this.targetMusic) {
+            this.targetMusic.stop();
+        }
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
