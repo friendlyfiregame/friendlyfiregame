@@ -37,6 +37,7 @@ export interface GameObjectProperties {
     sound?: string;
     col?: number;
     row?: number;
+    newGamePlus?: boolean;
 }
 
 export interface GameObjectInfo {

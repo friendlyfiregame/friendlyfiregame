@@ -91,6 +91,7 @@ export class Campaign {
 
     public selectedCharacter = CharacterAsset.FEMALE;
     public selectedVoice = VoiceAsset.FEMALE;
+    public isNewGamePlus = false;
 
     constructor(public game: Game) {}
 
@@ -98,6 +99,10 @@ export class Campaign {
         const ending = this.quests.find(ending => ending.key === key);
         if (!ending) throw new Error(`Cannot find quest with key ${key}`);
         return ending;
+    }
+
+    public setNewGamePlus (isNewGamePlus: boolean) {
+        this.isNewGamePlus = isNewGamePlus;
     }
 
     public toggleCharacterAsset(): void {

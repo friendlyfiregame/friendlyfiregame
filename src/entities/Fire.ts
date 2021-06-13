@@ -248,6 +248,8 @@ export class Fire extends NPC {
     public feed(wood: Wood): void {
         wood.remove();
 
+        this.scene.setGateDisabled("shadowgate_door_1", false);
+
         // Handle end of the world
         this.state = FireState.ANGRY;
         this.growthTarget = 14;

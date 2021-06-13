@@ -70,7 +70,8 @@ export enum BgmId {
     RADIO = "radio",
     WINGS = "wings",
     ECSTASY = "ecstasy",
-    AWAKE = "awake"
+    AWAKE = "awake",
+    SHADOWGATE = "shadowgate"
 }
 
 export enum AmbientSoundId {
@@ -114,6 +115,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
     @asset("music/awake.ogg")
     public static bgmAwake: Sound;
+
+    @asset("music/shadowgate.ogg")
+    public static bgmShadowgate: Sound;
 
     @asset("sounds/ambient/stream.ogg")
     public static ambientStream: Sound;
@@ -173,6 +177,12 @@ export class GameScene extends Scene<FriendlyFire> {
             active: false,
             id: BgmId.ECSTASY,
             sound: GameScene.bgmEcstasy,
+            baseVolume: 1
+        },
+        {
+            active: false,
+            id: BgmId.SHADOWGATE,
+            sound: GameScene.bgmShadowgate,
             baseVolume: 1
         }
     ];
@@ -311,6 +321,9 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Portal(this, entity.x, entity.y);
                     case "window":
                         return new Window(this, entity.x, entity.y);
+                    case "player":
+                        const startingPos = this.getPlayerStartinPos();
+                        return new Player(this, startingPos.x, startingPos.y);
                     default:
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
                 }
@@ -343,10 +356,36 @@ export class GameScene extends Scene<FriendlyFire> {
 
         this.game.campaign.begin(this);
 
+        if (this.game.campaign.isNewGamePlus) {
+            this.initNewGamePlusState();
+        }
+
         this.playBackgroundTrack(BgmId.CAVE);
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
+    }
+
+    private initNewGamePlusState (): void {
+        this.player.enableRunning(true);
+        this.player.enableDoubleJump(true);
+        this.player.enableMultiJump(true);
+        this.tree.spawnSeed().bury();
+        this.stone.dropInWater();
+    }
+
+    private getPlayerStartinPos (): { x: number, y: number } {
+        const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
+        const defaultSpawn = spawns.find(s => !s.properties.newGamePlus);
+        const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);
+        
+        if (this.game.campaign.isNewGamePlus) {
+            if (!newGamePlusSpawn) throw new Error("Missing new game plus spawn point for player");
+            return { x: newGamePlusSpawn.x, y: newGamePlusSpawn.y };
+        } else {
+            if (!defaultSpawn) throw new Error("Missing default spawn point for player");
+            return { x: defaultSpawn.x, y: defaultSpawn.y };
+        }
     }
 
     public cleanup(): void {

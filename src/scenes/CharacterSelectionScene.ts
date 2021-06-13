@@ -18,11 +18,13 @@ import { TextNode } from "../scene/TextNode";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
 import { Sound } from "../Sound";
+import { GlobalState } from "../GlobalState";
 
 enum MenuItemKey {
     CHARACTER = "character",
     VOICE = "voice",
-    START = "start"
+    START = "start",
+    START_PLUS = "startPlus"
 }
 
 const menuItemX = 12;
@@ -83,6 +85,13 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 CharacterSelectionScene.voices[this.game.campaign.selectedVoice].play();
                 break;
             case MenuItemKey.START:
+                this.game.campaign.setNewGamePlus(false);
+                await this.game.scenes.popScene({ noTransition: false });
+                TitleScene.music.stop();
+                this.game.scenes.setScene(GameScene);
+                break;
+            case MenuItemKey.START_PLUS:
+                this.game.campaign.setNewGamePlus(true);
                 await this.game.scenes.popScene({ noTransition: false });
                 TitleScene.music.stop();
                 this.game.scenes.setScene(GameScene);
@@ -221,10 +230,19 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 menuItemX, voiceMenuItemY
             ),
             new MenuItem(
-                MenuItemKey.START, "Start Game", CharacterSelectionScene.font, "black",
-                menuItemX, startMenuItemY
+                MenuItemKey.START, "Start New Game", CharacterSelectionScene.font, "black",
+                menuItemX, startMenuItemY - (GlobalState.getHasBeatenGame() ? 12 : 0)
             )
-        ).appendTo(panel);
+        );
+
+        if (GlobalState.getHasBeatenGame()) {
+            this.menu.addItems(new MenuItem(
+                MenuItemKey.START_PLUS, "Start New Game +", CharacterSelectionScene.font, "black",
+                menuItemX, startMenuItemY
+            ));
+        }
+        
+        this.menu.appendTo(panel);
 
         this.updateSelection();
     }

@@ -156,6 +156,7 @@ export class Player extends PhysicsEntity {
     private currentFailAnimation = 1;
     private carrying: PhysicsEntity | null = null;
     private canRun = false;
+    private jumpDisabled = false;
     private canRainDance = false;
     private doubleJump = false;
     private multiJump = false;
@@ -166,6 +167,7 @@ export class Player extends PhysicsEntity {
     public isControllable: boolean = true;
     private showHints = false;
     private isPettingDog = false;
+    private walkingSpeed = MAX_PLAYER_SPEED;
 
     private characterAsset: CharacterAsset;
     private voiceAsset: VoiceAsset;
@@ -292,39 +294,39 @@ export class Player extends PhysicsEntity {
         this.isPettingDog = false;
     }
 
-    public enableRunning(): void {
+    public enableRunning(silent = false): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
 
         if (!this.canRun) {
-            this.scene.scenes.pushScene(GotItemScene, Item.RUNNING);
+            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.RUNNING);
             this.canRun = true;
         }
     }
 
-    public enableRainDance(): void {
+    public enableRainDance(silent = false): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
 
         if (!this.canRainDance) {
-            this.scene.scenes.pushScene(GotItemScene, Item.RAINDANCE);
+            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.RAINDANCE);
             this.canRainDance = true;
         }
     }
 
-    public enableDoubleJump(): void {
+    public enableDoubleJump(silent = false): void {
         Conversation.setGlobal("hasDoubleJump", "true");
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
 
         if (!this.doubleJump) {
-            this.scene.scenes.pushScene(GotItemScene, Item.DOUBLEJUMP);
+            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.DOUBLEJUMP);
             this.doubleJump = true;
         }
     }
 
-    public enableMultiJump(): void {
+    public enableMultiJump(silent = false): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
 
         if (!this.multiJump) {
-            this.scene.scenes.pushScene(GotItemScene, Item.MULTIJUMP);
+            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.MULTIJUMP);
             this.multiJump = true;
         }
     }
@@ -355,8 +357,17 @@ export class Player extends PhysicsEntity {
     public switchToReality(): void {
         this.canRun = false;
         this.multiJump = false;
+        this.jumpDisabled = true;
+        this.walkingSpeed = 3;
         this.characterAsset = CharacterAsset.PATIENT;
         this.direction = -1;
+    }
+
+    public enterShadowCave(): void {
+        this.canRun = false;
+        this.walkingSpeed = 3;
+        this.jumpDisabled = true;
+        this.multiJump = false;
     }
 
     public getDance(): Dance | null {
@@ -642,6 +653,10 @@ export class Player extends PhysicsEntity {
                             this.switchToReality();
                         }
 
+                        if (targetGate.name === "shadowgate_door_2") {
+                            this.enterShadowCave();
+                        }
+
                         if (targetGate.properties.exitSleepTime) {
                             await sleep(targetGate.properties.exitSleepTime * 1000);
                         }
@@ -656,7 +671,7 @@ export class Player extends PhysicsEntity {
     }
 
     private canJump(): boolean {
-        if (this.characterAsset === CharacterAsset.PATIENT) return false;
+        if (this.jumpDisabled) return false;
         if (this.multiJump) {
             return true;
         } else if (!this.usedJump && this.jumpThresholdTimer > 0) {
@@ -1025,7 +1040,8 @@ export class Player extends PhysicsEntity {
             if (this.running) {
                 this.setMaxVelocity(MAX_PLAYER_RUNNING_SPEED);
             } else {
-                this.setMaxVelocity(this.characterAsset === CharacterAsset.PATIENT ? 3 : MAX_PLAYER_SPEED);
+                this.setMaxVelocity(this.walkingSpeed);
+                // this.setMaxVelocity(this.characterAsset === CharacterAsset.PATIENT ? 3 : MAX_PLAYER_SPEED);
             }
 
             if (this.moveRight) {

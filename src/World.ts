@@ -224,7 +224,7 @@ export class World implements GameObject {
                 sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
             );
 
-            if (colliding) {
+            if (colliding && this.entityIsAvailableInNewGameState(triggerObject.properties.newGamePlus)) {
                 collidesWith.push(triggerObject);
             }
         }
@@ -232,15 +232,26 @@ export class World implements GameObject {
         return collidesWith;
     }
 
+    public entityIsAvailableInNewGameState (newGamePlusProp?: boolean): boolean {
+        return (
+            newGamePlusProp === undefined ||
+            (
+                newGamePlusProp === false && !this.scene.game.campaign.isNewGamePlus ||
+                newGamePlusProp === true && this.scene.game.campaign.isNewGamePlus
+            )
+        );
+    }
+
     public getGateCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
+
 
         for (const gateObject of this.scene.gateObjects) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
             );
 
-            if (colliding && !gateObject.properties.disabled) {
+            if (colliding && !gateObject.properties.disabled && this.entityIsAvailableInNewGameState(gateObject.properties.newGamePlus)) {
                 collidesWith.push(gateObject);
             }
         }

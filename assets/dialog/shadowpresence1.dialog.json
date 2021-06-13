@@ -19,10 +19,33 @@
     "visited": [
         "[visited]Welcome back, friend!",
         "►[not taught]Any idea how to get over that bridge? @bridge",
-        "►[not pokemon]What are you doing here exactly? @pokemon",
+        "►[not darkness]Why are you surrounded by darkness? @darkness",
+        "►[darkness]Can I still come by later? @comebye",
+        "►[not pokemon]Are you playing on your phone? @pokemon",
         "►[taught]How does the running work again? @running",
         "►I'll get going. !set visited",
         "Sure, keep up the good work. @visited !end"
+    ],
+    "darkness": [
+        "Makes me feel at ease.",
+        "I don't really like daylight, let alone fire.",
+        "This also serves as a gateway home. You can totally come by later if you have nothing better to do. !set darkness",
+        "►I'm kinda in the middle of something right now. @middleofsomething",
+        "►Sure, maybe later. @maybelater"
+    ],
+    "middleofsomething": [
+        "Too bad. I could use someone to play games with.",
+        "If you change your mind, you can always just slip through here. I have no other plans today after work.",
+        "►I'll think about it. @visited"
+    ],
+    "maybelater": [
+        "Awesome!",
+        "Just slip through this gateway when you're ready. I'll be home later this evening.",
+        "►I'll update my appointment schedule. @visited"
+    ],
+    "comebye": [
+        "Yes! My shift is almost over for today. Just head right through later and we can play some games",
+        "►Sounds like a plan. @visited"
     ],
     "bridge": [
         "That bridge is pretty busted, isn't it? !set visited",
@@ -49,11 +72,11 @@
         "See you around. @visited !end"
     ],
     "pokemon": [
-        "I'm hooked on Pokémon GO since last year.",
+        "Yeah, I'm hooked on Pokémon GO since last year.",
         "This bridge used to be a popular poke-stop, but the folks around here stopped playing.",
         "I might be the last one playing. Finishing raids like this is nearly impossible.",
         "►Can't you just stop playing as well?",
-        "I already invested so much time and effort. How could I stop now?",
+        "I already invested so much time and effort... how could I stop now?",
         "►Suit yourself. !set pokemon @visited"
     ]
 }
