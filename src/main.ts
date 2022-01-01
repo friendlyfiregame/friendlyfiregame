@@ -8,11 +8,10 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
 }
 
 app.name = "Friendly Fire";
-app.allowRendererProcessReuse = true;
 
 const createWindow = () => {
 
-    let fullscreen: boolean = true;
+    let fullscreen = true;
     if (app.commandLine.hasSwitch("no-fullscreen")) {
         fullscreen = false;
     } else if (app.commandLine.hasSwitch("fullscreen")) {
@@ -33,7 +32,10 @@ const createWindow = () => {
         title: "Friendly Fire",
         icon: path.join(__dirname, "..", "renderer", "assets", "appicon.iconset", "icon_256x256.png"),
         webPreferences: {
-            contextIsolation: true
+            contextIsolation: true,
+            enableWebSQL: false,
+            disableDialogs: true,
+            spellcheck: false
         }
     });
 

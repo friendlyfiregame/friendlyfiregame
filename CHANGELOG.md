@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- The Desktop apps are now based on Electron v11.4.4.
+- The Desktop apps are now based on Electron v16.0.5.
 
 ## [2.4.0] - 2021-05-01
 
