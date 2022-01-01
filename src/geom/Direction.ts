@@ -32,7 +32,7 @@ export namespace Direction {
     }
 
     export function isVertical(direction: Direction): boolean {
-        return isLeft(direction) || isRight(direction);
+        return isTop(direction) || isBottom(direction);
     }
 
     export function isEdge(direction: Direction): boolean {
