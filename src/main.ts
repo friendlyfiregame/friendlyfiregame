@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from "electron";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
-import { AppInfoJSON } from "appinfo.json";
 import path from "path";
 
 ((): void => {
@@ -8,8 +7,7 @@ import path from "path";
     // If the user wants to be informed about the version only, we'll print the version
     // and exit immediately.
     if (app.commandLine.hasSwitch("version")) {
-        const appInfo: AppInfoJSON = require("appinfo.json"); // eslint-disable-line @typescript-eslint/no-var-requires
-        process.stdout.write(`Friendly Fire v${appInfo.version} (${appInfo.gitCommitHash})\n`);
+        process.stdout.write(`Friendly Fire v${app.getVersion()}\n`);
         app.exit(0);
     }
 
