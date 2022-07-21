@@ -68,7 +68,7 @@ There are four alternatives to run the game in the browser:
 * Run `npm start` and point your browser to <http://localhost:8000/>. The browser automatically
   reloads the game when changes are detected (You still need to run the compiler in watch mode in VS
   Code or on the CLI to receive code changes).
-* If you already have a local webserver you can simply open the `index.html` file in the project
+* If you already have a local web server you can simply open the `index.html` file in the project
   folder in your browser. This only works with a http(s) URL, not with a file URL.
 * Run `npm run dist` to package the game into the `dist` folder. Open the `dist/index.html` in your
   browser to run the game. To publish the game simply copy the contents of the `dist` folder to a

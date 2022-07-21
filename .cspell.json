@@ -16,6 +16,7 @@
         "/coverage/**",
         "/package-lock.json",
         "/assets/**",
+        ".cspell.json",
         "/.git/**",
         "/.github/**",
         ".htmlhintrc",
