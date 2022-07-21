@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: git checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         # SonarCloud doesn't like shallow clones.
         fetch-depth: 0
@@ -145,7 +145,7 @@ jobs:
         echo ::set-output name=os::${RUNNER_OS_LOWER}
         echo ::set-output name=arch::x64
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Read version from package.json
       id: version
       uses: notiz-dev/github-action-json-property@v0.1.0
