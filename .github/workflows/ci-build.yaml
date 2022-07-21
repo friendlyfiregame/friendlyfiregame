@@ -98,7 +98,7 @@ jobs:
           -Dsonar.eslint.reportPath=./out/eslint.out
     - run: npm run -s dist
     - name: Archive dist folder
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: webapp-dist
         path: dist
@@ -171,7 +171,7 @@ jobs:
     - run: npm run -s compile
     - run: npm run -s package
     - name: Archive Electron game package
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: friendlyfiregame-v${{steps.version.outputs.prop}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
         path: out
