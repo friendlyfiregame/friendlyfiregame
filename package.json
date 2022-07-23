@@ -68,6 +68,7 @@
     "rimraf": "3.0.2",
     "source-map-loader": "1.1.2",
     "steal": "2.2.4",
+    "steamworks.js": "^0.0.19",
     "typescript": "^4.5.4",
     "webpack": "4.44.2",
     "webpack-cli": "3.3.12",

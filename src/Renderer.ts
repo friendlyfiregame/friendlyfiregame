@@ -64,7 +64,7 @@ export type BaseRenderingItem = {
     position: Coordinates;
     scale?: Coordinates;
     alpha?: number;
-    globalCompositeOperation?: string;
+    globalCompositeOperation?: GlobalCompositeOperation;
     relativeToScreen?: boolean,
 };
 
