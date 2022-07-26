@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron";
-// TODO STEAMWORKS_JS import * as steamworks from "steamworks.js";
+import * as steamworks from "steamworks.js";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
 import * as path from "node:path";
 
@@ -30,8 +30,8 @@ import * as path from "node:path";
     app.name = "Friendly Fire";
 
     if (app.commandLine.hasSwitch("steam-app")) {
-        // TODO STEAMWORKS_JS const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
-        // TODO STEAMWORKS_JS steamworks.init(steamAppId || undefined);
+        const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
+        steamworks.init(steamAppId || undefined);
 
     }
 
