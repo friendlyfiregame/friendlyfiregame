@@ -54,7 +54,7 @@
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
     "copy-webpack-plugin": "6.1.0",
-    "cspell": "6.4.0",
+    "cspell": "6.4.2",
     "electron": "16.0.5",
     "eslint": "^8.6.0",
     "generate-json-webpack-plugin": "^1.0.0",
