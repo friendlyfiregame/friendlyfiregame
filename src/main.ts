@@ -29,12 +29,6 @@ import * as path from "node:path";
 
     app.name = "Friendly Fire";
 
-    if (app.commandLine.hasSwitch("steam-app")) {
-        const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
-        steamworks.init(steamAppId || undefined);
-
-    }
-
     const createWindow = () => {
 
         let fullscreen = true;
@@ -42,6 +36,11 @@ import * as path from "node:path";
             fullscreen = false;
         } else if (app.commandLine.hasSwitch("fullscreen")) {
             fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
+        }
+
+        if (app.commandLine.hasSwitch("steam-app")) {
+            const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
+            steamworks.init(steamAppId || undefined);
         }
 
         // Create the browser window.
