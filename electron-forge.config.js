@@ -6,7 +6,9 @@ const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire
 
 module.exports = {
     packagerConfig: {
-        asar: true, // cspell:disable-line
+        asar: { // cspell:disable-line
+            unpack: ["*.so", "*.dll", "*.dylib"]
+        },
         name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
         win32metadata: {
