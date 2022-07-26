@@ -1,14 +1,14 @@
-{
+module.exports = {
     "$schema": "https://json.schemastore.org/eslintrc#",
     "root": true,
     "parserOptions": {
-        "tsconfigRootDir": ".",
-        "ecmaVersion": 11,
+        "tsconfigRootDir": __dirname,
+        "ecmaVersion": 13,
         "sourceType": "module",
         "ecmaFeatures": {
             "impliedStrict": true
         },
-        "project": "./tsconfig.json"
+        //"project": path.resolve(__dirname, "tsconfig.json")
     },
     "parser": "@typescript-eslint/parser",
     "plugins": [
@@ -68,4 +68,4 @@
         "quotes": [ "error", "double" ],
         "semi": "off"
     }
-}
+};

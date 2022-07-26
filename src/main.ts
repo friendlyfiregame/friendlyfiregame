@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
+// TODO STEAMWORKS_JS import * as steamworks from "steamworks.js";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
-import path from "path";
+import * as path from "node:path";
 
 ((): void => {
 
@@ -21,7 +22,18 @@ import path from "path";
         return app.quit();
     }
 
+    // Necessary for Steam Overlays to work.
+    // See: https://github.com/ceifa/steamworks.js#electron-instructions
+    app.commandLine.appendSwitch("in-process-gpu");
+    app.commandLine.appendSwitch("disable-direct-composition");
+
     app.name = "Friendly Fire";
+
+    if (app.commandLine.hasSwitch("steam-app")) {
+        // TODO STEAMWORKS_JS const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
+        // TODO STEAMWORKS_JS steamworks.init(steamAppId || undefined);
+
+    }
 
     const createWindow = () => {
 

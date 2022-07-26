@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/v6.4.0/cspell.schema.json#",
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/v6.4.2/cspell.schema.json#",
     "language": "en",
     "enabledLanguageIds": [
         "markdown",
@@ -153,6 +153,7 @@
         "Ranjit",
         "readables",
         "Reimer",
+        "relocator",
         "respawn",
         "riddlestone",
         "riverzoom",
@@ -171,6 +172,7 @@
         "spawnseed",
         "spawnwood",
         "statechange",
+        "steamworks",
         "stonedisciple",
         "stoneplatform",
         "subconditions",

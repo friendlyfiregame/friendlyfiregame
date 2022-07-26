@@ -2,12 +2,8 @@
 
 ## Supported Versions
 
-The following table shows all versions of this game that are supported:
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.0.x   | :white_check_mark: |
-| 1.0.x   | :x:                |
+Only the latest released version is supported.
+Releases can be found on the [GitHub Releases Page](https://github.com/friendlyfiregame/friendlyfiregame/releases).
 
 ## Reporting a Vulnerability
 

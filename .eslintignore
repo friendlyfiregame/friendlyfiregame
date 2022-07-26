@@ -1,0 +1,9 @@
+.eslintrc.js
+jest.config.js
+electron-forge.config.js
+webpack.*.config.js
+
+node_modules/**/*
+dist/**/*
+lib/**/*
+out/**/*

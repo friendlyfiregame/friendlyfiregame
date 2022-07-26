@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Updated
+
+- The Desktop apps are now based on Electron v19.0.9.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
 ## [2.5.0] - 2022-01-01
 
 ### Added

@@ -1,6 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig#",
     "compileOnSave": true,
+    "typeAcquisition": {
+        "enable": true
+    },
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "declaration": true,
@@ -10,8 +13,13 @@
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
-        "lib": [ "dom", "es6" ],
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ES6"
+        ],
         "module": "commonjs",
+        "moduleResolution": "Node16",
         "newLine": "lf",
         "noEmitOnError": false,
         "noFallthroughCasesInSwitch": true,
@@ -23,6 +31,12 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "target": "es6"
-    }
+        "target": "ES6"
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "webpack.config.ts"
+    ]
 }

@@ -1,19 +1,16 @@
-const path = require("path");
+const path = require("node:path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const GenerateJsonPlugin = require("generate-json-webpack-plugin");
-const GitRevisionPlugin = require("git-revision-webpack-plugin");
+const {GitRevisionPlugin} = require("git-revision-webpack-plugin");
 const gitRevisionPlugin = new GitRevisionPlugin();
 
-module.exports = {
+const config = {
     mode: "production",
     devtool: false,
     resolve: {
         symlinks: false,
         mainFields: ["browser", "main", "module"]
-    },
-    node: {
-        fs: "empty"
     },
     plugins: [
         new GenerateJsonPlugin("appinfo.json", {
@@ -31,3 +28,4 @@ module.exports = {
         ]})
     ]
 };
+module.exports = config;

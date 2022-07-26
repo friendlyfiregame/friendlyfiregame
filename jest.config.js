@@ -1,7 +1,7 @@
 const sonarScannerEnabled = (!!process.env.SONAR_SCANNER_ENABLED && process.env.SONAR_SCANNER_ENABLED !== "false") || false;
 
 module.exports = {
-    "projects": [
+  "projects": [
     {
       "displayName": "electron",
       "runner": "@jest-runner/electron",
@@ -15,5 +15,8 @@ module.exports = {
   "collectCoverageFrom": [
     "<rootDir>/lib/**/*.js",
     "!<rootDir>/lib/test/**"
+  ],
+  "setupFilesAfterEnv": [
+    "jest-extended/all"
   ]
 };

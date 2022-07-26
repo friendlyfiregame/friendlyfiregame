@@ -1,11 +1,12 @@
-const os = require("os");
-const path = require("path");
+const os = require("node:os");
+const path = require("node:path");
 
 // Package name for macOS should be different.
 const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
 
 module.exports = {
     packagerConfig: {
+        asar: true, // cspell:disable-line
         name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
         win32metadata: {
@@ -13,7 +14,7 @@ module.exports = {
             ProductName: "Friendly Fire"
         },
         icon: path.resolve(__dirname, "assets", "appicon.iconset"),
-        appCopyright: "Copyright (C) 2020 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
+        appCopyright: "Copyright (C) 2020–2022 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
         "Klaus Reimer and Jennifer van Veen",
         appVersion: require(path.resolve(__dirname, "package.json")).version
     },
@@ -22,10 +23,18 @@ module.exports = {
         name: "@electron-forge/maker-squirrel",
         config: {
           name: "friendlyfire"
-        }
+        },
+        enabled: true,
+        platforms: [
+            "linux",
+            "win32",
+            "darwin"
+        ]
       },
       {
         name: "@electron-forge/maker-zip",
+        config: {},
+        enabled: true,
         platforms: [
           "darwin"
         ]
@@ -39,11 +48,19 @@ module.exports = {
           categories: [
             "Game"
           ]
-        }
+        },
+        enabled: true,
+        platforms: [
+          "linux"
+        ]
       },
       {
         name: "@electron-forge/maker-rpm",
-        config: {}
+        enabled: true,
+        config: {},
+        platforms: [
+          "linux"
+        ]
       }
     ],
     plugins: [
@@ -60,7 +77,13 @@ module.exports = {
               }
             ]
           }
-        }
+        },
+      ],
+      [
+        "@electron-forge/plugin-auto-unpack-natives",
+        {}
       ]
-    ]
+    ],
+    publishers: [],
+    electronRebuildConfig: {}
   };
