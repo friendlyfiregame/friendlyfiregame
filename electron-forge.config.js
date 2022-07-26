@@ -4,7 +4,7 @@ const path = require("node:path");
 // Package name for macOS should be different.
 const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
 
-module.exports = {
+const config = {
     packagerConfig: {
         asar: { // cspell:disable-line
             unpack: ["*.so", "*.dll", "*.dylib"]
@@ -88,4 +88,5 @@ module.exports = {
     ],
     publishers: [],
     electronRebuildConfig: {}
-  };
+};
+module.exports = config;

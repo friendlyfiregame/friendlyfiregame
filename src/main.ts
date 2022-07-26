@@ -1,9 +1,67 @@
-import { app, BrowserWindow } from "electron";
-import * as steamworks from "steamworks.js";
+import * as electron from "electron";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
 import * as path from "node:path";
 
-((): void => {
+async function createWindow(app: Electron.App): Promise<void> {
+
+    let fullscreen = true;
+    if (app.commandLine.hasSwitch("no-fullscreen")) {
+        fullscreen = false;
+    } else if (app.commandLine.hasSwitch("fullscreen")) {
+        fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
+    }
+
+    if (app.commandLine.hasSwitch("steam-app")) {
+
+        // Necessary for Steam Overlays to work.
+        // See: https://github.com/ceifa/steamworks.js#electron-instructions
+        app.commandLine.appendSwitch("in-process-gpu");
+        app.commandLine.appendSwitch("disable-direct-composition");
+
+        const steamworks = await import("steamworks.js");
+        const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
+        steamworks.init(steamAppId || undefined);
+
+    }
+
+    // Create the browser window.
+    const mainWindow = new electron.BrowserWindow({
+        backgroundColor: "#202020",
+        width: GAME_CANVAS_WIDTH,
+        height: GAME_CANVAS_HEIGHT,
+        useContentSize: true,
+        resizable: true,
+        center: true,
+        maximizable: true,
+        // Undefined means, switching to fullscreen is possible.
+        fullscreen: fullscreen || undefined,
+        title: "Friendly Fire",
+        icon: path.join(__dirname, "..", "renderer", "assets", "appicon.iconset", "icon_256x256.png"),
+        webPreferences: {
+            contextIsolation: true,
+            enableWebSQL: false,
+            disableDialogs: true,
+            spellcheck: false
+        }
+    });
+
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
+
+    // Open the DevTools.
+    if (app.commandLine.hasSwitch("dev")) {
+        const devMode: boolean = ["", "true"].includes(app.commandLine.getSwitchValue("dev").toLowerCase());
+        if (devMode) {
+            mainWindow.webContents.openDevTools();
+        }
+    }
+
+
+    // Hide menu
+    mainWindow.setMenu(null);
+}
+
+((app: electron.App): void => {
 
     // If the user wants to be informed about the version only, we'll print the version
     // and exit immediately.
@@ -22,68 +80,12 @@ import * as path from "node:path";
         return app.quit();
     }
 
-    // Necessary for Steam Overlays to work.
-    // See: https://github.com/ceifa/steamworks.js#electron-instructions
-    app.commandLine.appendSwitch("in-process-gpu");
-    app.commandLine.appendSwitch("disable-direct-composition");
-
     app.name = "Friendly Fire";
-
-    const createWindow = () => {
-
-        let fullscreen = true;
-        if (app.commandLine.hasSwitch("no-fullscreen")) {
-            fullscreen = false;
-        } else if (app.commandLine.hasSwitch("fullscreen")) {
-            fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
-        }
-
-        if (app.commandLine.hasSwitch("steam-app")) {
-            const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
-            steamworks.init(steamAppId || undefined);
-        }
-
-        // Create the browser window.
-        const mainWindow = new BrowserWindow({
-            backgroundColor: "#202020",
-            width: GAME_CANVAS_WIDTH,
-            height: GAME_CANVAS_HEIGHT,
-            useContentSize: true,
-            resizable: true,
-            center: true,
-            maximizable: true,
-            // Undefined means, switching to fullscreen is possible.
-            fullscreen: fullscreen || undefined,
-            title: "Friendly Fire",
-            icon: path.join(__dirname, "..", "renderer", "assets", "appicon.iconset", "icon_256x256.png"),
-            webPreferences: {
-                contextIsolation: true,
-                enableWebSQL: false,
-                disableDialogs: true,
-                spellcheck: false
-            }
-        });
-
-        // and load the index.html of the app.
-        mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
-
-        // Open the DevTools.
-        if (app.commandLine.hasSwitch("dev")) {
-            const devMode: boolean = ["", "true"].includes(app.commandLine.getSwitchValue("dev").toLowerCase());
-            if (devMode) {
-                mainWindow.webContents.openDevTools();
-            }
-        }
-
-
-        // Hide menu
-        mainWindow.setMenu(null);
-    };
 
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    app.on("ready", createWindow);
+    app.on("ready", () => createWindow(app));
 
     // Quit when all windows are closed.
     app.on("window-all-closed", () => {
@@ -97,8 +99,8 @@ import * as path from "node:path";
     app.on("activate", () => {
         // On OS X it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
+        if (electron.BrowserWindow.getAllWindows().length === 0) {
+            createWindow(app);
         }
     });
-})();
+})(electron.app);
