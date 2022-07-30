@@ -1,7 +1,10 @@
 // cSpell:disable
+// @ts-check
+
 const sonarScannerEnabled = (!!process.env.SONAR_SCANNER_ENABLED && process.env.SONAR_SCANNER_ENABLED !== "false") || false;
 
-module.exports = {
+/** @type {import("jest").Config} */
+const config = {
   "projects": [
     {
       "displayName": "electron",
@@ -10,7 +13,8 @@ module.exports = {
       "testMatch": [
         "<rootDir>/lib/test/**/*.test.js"
       ],
-      "testResultsProcessor": sonarScannerEnabled ? "jest-sonar-reporter" : null
+      "sdfsdf": "sdfsdf",
+      //"testResultsProcessor": sonarScannerEnabled ? "jest-sonar-reporter" : null
     }
   ],
   "collectCoverageFrom": [
@@ -21,3 +25,4 @@ module.exports = {
     "jest-extended/all"
   ]
 };
+module.exports = config;

@@ -30,6 +30,7 @@
     "check": "jest",
     "cspell": "cspell '**/*'",
     "coverage": "jest --coverage",
+    "jest": "jest",
     "test": "npm run -s cspell && npm run -s lint && npm run -s check",
     "compile": "tsc",
     "watch": "tsc -w",

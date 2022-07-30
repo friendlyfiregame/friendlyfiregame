@@ -6,7 +6,6 @@
         "github.vscode-pull-request-github",
         "firefox-devtools.vscode-firefox-debug",
         "msjsdiag.debugger-for-edge",
-        "SonarSource.sonarlint-vscode",
         "streetsidesoftware.code-spell-checker"
     ]
 }

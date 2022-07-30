@@ -21,9 +21,6 @@ jobs:
     steps:
     - name: git checkout
       uses: actions/checkout@v3
-      with:
-        # SonarCloud doesn't like shallow clones.
-        fetch-depth: 0
     - uses: jwalton/gh-find-current-pr@v1
       id: pr
       with:
@@ -79,23 +76,6 @@ jobs:
       with:
         working-directory: ./
         run: npm run -s coverage
-      env:
-        SONAR_SCANNER_ENABLED: 'true'
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v1.6
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        GITHUB_PULL_REQUEST_ID: ${{ steps.pr.outputs.pr }}
-      with:
-        args: >
-          -Dsonar.projectVersion=${{steps.version.outputs.prop}}
-          -Dsonar.branch.name=${GIT_BRANCH_NAME}
-          -Dsonar.pullrequest.key=${GITHUB_PULL_REQUEST_ID}
-          -Dsonar.pullrequest.branch=${GITHUB_HEAD_REF}
-          -Dsonar.pullrequest.base=${GITHUB_BASE_REF}
-          -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
-          -Dsonar.eslint.reportPath=./out/eslint.out
     - run: npm run -s dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
