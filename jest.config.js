@@ -3,21 +3,21 @@
 
 /** @type {import("jest").Config} */
 const config = {
-  "projects": [
+  projects: [
     {
-      "displayName": "electron",
-      "runner": "@jest-runner/electron",
-      "testEnvironment": "@jest-runner/electron/environment",
-      "testMatch": [
+      displayName: "electron",
+      runner: '@kayahr/jest-electron-runner',
+      testEnvironment: '@kayahr/jest-electron-runner/environment',
+      testMatch: [
         "<rootDir>/lib/test/**/*.test.js"
       ]
     }
   ],
-  "collectCoverageFrom": [
+  collectCoverageFrom: [
     "<rootDir>/lib/**/*.js",
     "!<rootDir>/lib/test/**"
   ],
-  "setupFilesAfterEnv": [
+  setupFilesAfterEnv: [
     "jest-extended/all"
   ]
 };

@@ -446,7 +446,7 @@ describe("AffineTransform", () => {
         });
         it("throws exception when DOMMatrix is not a 2D matrix", () => {
             const domMatrix = new DOMMatrix([ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]);
-            expect(() => AffineTransform.fromDOMMatrix(domMatrix)).toThrowWithMessage(() => Error,
+            expect(() => AffineTransform.fromDOMMatrix(domMatrix)).toThrowError(
                 "Can only create Matrix3 from 2D DOMMatrix");
         });
     });
