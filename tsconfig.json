@@ -16,7 +16,7 @@
         "lib": [
             "DOM",
             "DOM.Iterable",
-            "ES6"
+            "ES2015"
         ],
         "module": "commonjs",
         "moduleResolution": "Node16",
@@ -31,7 +31,7 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "target": "ES6"
+        "target": "ES2015"
     },
     "include": [
         "src/**/*.ts"
