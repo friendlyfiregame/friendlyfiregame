@@ -1,9 +1,16 @@
 const os = require("node:os");
+const { win32 } = require("node:path");
 const path = require("node:path");
 
 // Package name for macOS should be different.
 const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
+const productName = "Friendly Fire";
+const win32Metadata = {
+    FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
+    ProductName: "Friendly Fire"
+};
 
+// cSpell:disable
 const config = {
     packagerConfig: {
         asar: { // cspell:disable-line
@@ -11,10 +18,7 @@ const config = {
         },
         name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
-        win32metadata: {
-            FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
-            ProductName: "Friendly Fire"
-        },
+        win32metadata: win32Metadata,
         icon: path.resolve(__dirname, "assets", "appicon.iconset"),
         appCopyright: "Copyright (C) 2020–2022 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
         "Klaus Reimer and Jennifer van Veen",
@@ -45,8 +49,8 @@ const config = {
         name: "@electron-forge/maker-deb",
         config: {
           icon: "./assets/appicon.iconset/icon_256x256.png",
-          productName: "Friendly Fire",
-          genericName: "Friendly Fire",
+          productName: productName,
+          genericName: productName,
           categories: [
             "Game"
           ]

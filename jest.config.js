@@ -1,3 +1,4 @@
+// cSpell:disable
 const sonarScannerEnabled = (!!process.env.SONAR_SCANNER_ENABLED && process.env.SONAR_SCANNER_ENABLED !== "false") || false;
 
 module.exports = {

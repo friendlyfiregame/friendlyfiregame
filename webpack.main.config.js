@@ -1,3 +1,7 @@
+// cSpell:disable
+// @ts-check
+
+/** @type {import("webpack").Configuration} */
 const config = {
     mode: "production",
     entry: "./lib/main.js",

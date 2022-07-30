@@ -1,3 +1,4 @@
+// cSpell:disable
 import * as path from "node:path";
 import {Configuration, WebpackPluginInstance} from "webpack";
 import "webpack-dev-server";

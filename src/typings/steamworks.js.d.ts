@@ -1,5 +1,5 @@
+// cSpell:disable
 /// <reference types="node" />
-
 declare module "steamworks.js" {
 
 

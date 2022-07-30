@@ -1,4 +1,8 @@
-module.exports = {
+// cSpell:disable
+// @ts-check
+
+/** @type {import("eslint").ESLint.Options} */
+const config = {
     "$schema": "https://json.schemastore.org/eslintrc#",
     "root": true,
     "parserOptions": {
@@ -13,7 +17,7 @@ module.exports = {
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint"
-    ],
+    ,
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
@@ -69,3 +73,4 @@ module.exports = {
         "semi": "off"
     }
 };
+module.exports = config;
