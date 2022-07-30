@@ -1,23 +1,25 @@
 // cSpell:disable
 // @ts-check
 
-/** @type {import("eslint").ESLint.Options} */
+/** @type {import("eslint").ESLint.ConfigData} */
 const config = {
-    "$schema": "https://json.schemastore.org/eslintrc#",
     "root": true,
     "parserOptions": {
         "tsconfigRootDir": __dirname,
-        "ecmaVersion": 13,
+        "ecmaVersion": 2022,
         "sourceType": "module",
         "ecmaFeatures": {
-            "impliedStrict": true
+            "experimentalObjectRestSpread": false,
+            "globalReturn": false,
+            "impliedStrict": true,
+            "jsx": false
         },
         //"project": path.resolve(__dirname, "tsconfig.json")
     },
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint"
-    ,
+    ],
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
