@@ -8,7 +8,7 @@ on:
     - 'v*.*.*'
   pull_request:
     branches:
-    - master
+    - main
     types:
     - opened
     - synchronize
@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Download archived dist folder
-      uses: actions/download-artifact@master
+      uses: actions/download-artifact@v3
       with:
         name: webapp-dist
         path: dist
