@@ -81,7 +81,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "steamworks.js": "^0.0.19",
+    "steamworks.js": "^0.0.21",
     "tslib": "^2.4.0"
   }
 }
