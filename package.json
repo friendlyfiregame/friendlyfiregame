@@ -60,7 +60,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "cspell": "^6.5.0",
     "electron": "^19.0.10",
-    "eslint": "^8.6.0",
+    "eslint": "^8.21.0",
     "generate-json-webpack-plugin": "^2.0.0",
     "git-revision-webpack-plugin": "^5.0.0",
     "htmlhint": "^1.1.0",
