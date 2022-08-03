@@ -171,7 +171,7 @@ export class QuestD extends Quest {
 }
 
 /**
- * Ending E. Petted the dog for quite some time and transcended
+ * Ending E. Awoke in outer space and realized the awful truth
  */
 export class QuestE extends Quest {
     public constructor (campaign: Campaign) {
