@@ -136,7 +136,7 @@ export class SpeechBubble {
         }, 300);
     }
 
-    public setOptions(options: string[], partnersBubble: SpeechBubble) {
+    public setOptions(options: string[], partnersBubble: SpeechBubble): void {
         this.partnersBubble = partnersBubble;
         this.options = options;
         this.selectedOptionIndex = this.options.length > 0 ? 0 : -1;

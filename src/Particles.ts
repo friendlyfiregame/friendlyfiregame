@@ -264,7 +264,7 @@ export class Particle {
             ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
         } else {
             // Color
-            ctx.fillStyle = (this.imageOrColor as string);
+            ctx.fillStyle = this.imageOrColor;
             ctx.fillRect(-this.halfSize, -this.halfSize, this.size, this.size);
         }
 

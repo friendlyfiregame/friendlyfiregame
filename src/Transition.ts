@@ -9,7 +9,7 @@ export interface TransitionOptions {
     easing?: Easing;
 }
 
-export class Transition {
+export abstract class Transition {
     private type: TransitionType = "out";
     private readonly duration: number;
     private readonly easing: Easing;
@@ -36,7 +36,7 @@ export class Transition {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number): void {}
+    public abstract draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number): void;
 
     public async start(type: TransitionType): Promise<void> {
         if (this.promise == null) {
