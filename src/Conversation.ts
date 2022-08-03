@@ -161,7 +161,6 @@ export class Conversation {
 
         const line = this.data[this.state][this.stateIndex++];
 
-        // console.log(line.condition);
         if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {
             this.skippedLines++;
             return this.getNextLine(ignoreDisabled);
@@ -179,7 +178,7 @@ export class Conversation {
 
         function evaluateFragment(s: string): boolean {
             if (s.startsWith("not ")) {
-                return !evaluateFragment(s.substr(4));
+                return !evaluateFragment(s.substring(4));
             } else {
                 if (s.includes("!=")) {
                     const values = s.split("!=").map(s => s.trim());
@@ -266,11 +265,11 @@ export class ConversationLine {
 
     private static extractText(line: string, autoWrap = false): string {
         // Remove player option sign
-        if (line.startsWith(ConversationLine.OPTION_MARKER)) { line = line.substr(1); }
+        if (line.startsWith(ConversationLine.OPTION_MARKER)) { line = line.substring(1); }
 
         // Remove conditions
         if (line.trim().startsWith("[") && line.includes("]")) {
-            line = line.substr(line.indexOf("]") + 1).trim();
+            line = line.substring(line.indexOf("]") + 1).trim();
         }
 
         // Remove actions and state changes
@@ -279,7 +278,7 @@ export class ConversationLine {
 
         if (atPos >= 0 || exclPos >= 0) {
             const minPos = (atPos >= 0 && exclPos >= 0) ? Math.min(atPos, exclPos) : (atPos >= 0) ? atPos : exclPos;
-            line = line.substr(0, minPos).trim();
+            line = line.substring(0, minPos).trim();
         }
 
         // Auto wrap to some character count
@@ -294,7 +293,7 @@ export class ConversationLine {
         const conditionString = line.match(/\[[a-zA-Z0-9\_\<\>\!\=\$ ]+\]/g);
 
         if (conditionString && conditionString[0]) {
-            return conditionString[0].substr(1, conditionString[0].length - 2);
+            return conditionString[0].substring(1, conditionString[0].length - 2);
         }
 
         return null;
@@ -304,7 +303,7 @@ export class ConversationLine {
         const stateChanges = line.match(/(@[a-zA-Z0-9\_]+)/g);
 
         if (stateChanges && stateChanges.length > 0) {
-            const stateName = stateChanges[0].substr(1);
+            const stateName = stateChanges[0].substring(1);
             return stateName;
         }
 
@@ -346,12 +345,12 @@ export class ConversationLine {
                 if (currentLength >= charsPerLine) {
                     if (lastSpace >= 0) {
                         // Add cut at last space
-                        s = s.substr(0, lastSpace) + "\n" + s.substr(lastSpace + 1);
+                        s = s.substring(0, lastSpace) + "\n" + s.substring(lastSpace + 1);
                         currentLength = i - lastSpace;
                         lastSpace = -1;
                     } else {
                         // Cut mid-word
-                        s = s.substr(0, i + 1) + "\n" + s.substr(i + 1);
+                        s = s.substring(0, i + 1) + "\n" + s.substring(i + 1);
                         currentLength = 0;
                     }
                 }
