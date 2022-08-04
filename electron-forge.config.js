@@ -120,8 +120,12 @@ const config = {
             config: "./webpack.renderer.config.js",
             entryPoints: [
               {
+                //html: "index.html",
                 js: "./lib/FriendlyFire.js",
-                name: "./"
+                name: "./",
+                preload: {
+                    js: "./lib/electron-preload.js"
+                }
               }
             ]
           }

@@ -4,6 +4,7 @@ import * as electron from "electron";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "./constants";
 import * as path from "node:path";
 import * as process from "node:process";
+
 async function createWindow(app: Electron.App): Promise<void> {
 
     let fullscreen = true;
@@ -22,13 +23,37 @@ async function createWindow(app: Electron.App): Promise<void> {
 
         try {
             const steamworks = await import("steamworks.js");
-            const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
-            steamworks.init(steamAppId || STEAM_APP_ID);
+            const steamAppId = Number(app.commandLine.getSwitchValue("steam-app")) || STEAM_APP_ID;
+            const steamClient = steamworks.init(steamAppId);
+
+            electron.ipcMain.handle("steamworks", async (event, args) => {
+                const fn = `${args[0]}#${args[1]}`;
+                switch (fn) {
+                    case "#available":
+                        return true;
+                    case "localplayer#getName":
+                        return steamClient.localplayer.getName();
+                    case "localplayer#getSteamId":
+                        return steamClient.localplayer.getSteamId();
+                    default:
+                        throw new Error(`Unknown function call: ${fn} received.`);
+                }
+            });
+
         } catch (e) {
             process.stderr.write(`Initialization of Steamworks API failed.${path.sep}${path.sep}${e}${path.sep}`);
             app.exit(19);
         }
 
+    } else {
+        electron.ipcMain.handle("steamworks", async (event, args) => {
+            const fn = `${args[0]}#${args[1]}`;
+            if (fn === "#available") {
+                return false;
+            } else {
+                throw new Error("Steamworks API is not available.");
+            }
+        });
     }
 
     // Create the browser window.
@@ -48,7 +73,8 @@ async function createWindow(app: Electron.App): Promise<void> {
             contextIsolation: true,
             enableWebSQL: false,
             disableDialogs: true,
-            spellcheck: false
+            spellcheck: false,
+            preload: path.join(__dirname, "..", "renderer", "preload.js")
         }
     });
 

@@ -4,7 +4,7 @@
 /** @type {import("webpack").Configuration} */
 const config = {
     mode: "production",
-    entry: "./lib/main.js",
+    entry: "./lib/electron-main.js",
     devtool: false,
     target: "electron-main",
     node: {
