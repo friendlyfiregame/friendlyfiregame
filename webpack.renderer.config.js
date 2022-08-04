@@ -17,6 +17,7 @@ const config = {
         mainFields: ["browser", "main", "module"]
     },
     target: "electron-renderer",
+    amd: false,
     plugins: [
         /** @type {import("webpack").WebpackPluginInstance} */
         (new GenerateJsonPlugin("appinfo.json", {

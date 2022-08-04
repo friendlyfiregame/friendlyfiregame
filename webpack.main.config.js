@@ -7,9 +7,6 @@ const config = {
     entry: "./lib/main.js",
     devtool: false,
     target: "electron-main",
-    stats: {
-        all: true
-    },
     node: {
       __dirname: false,
     },
@@ -23,7 +20,7 @@ const config = {
                 use: 'node-loader',
               },
               {
-                test: /\.(m?js|node)$/,
+                test: /\.(m?js|node|so|dll|dylib)$/,
                 parser: { amd: false },
                 use: {
                   loader: '@vercel/webpack-asset-relocator-loader',

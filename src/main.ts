@@ -3,8 +3,7 @@
 import * as electron from "electron";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "./constants";
 import * as path from "node:path";
-import * as os from "node:os";
-
+import * as process from "node:process";
 async function createWindow(app: Electron.App): Promise<void> {
 
     let fullscreen = true;
@@ -21,15 +20,12 @@ async function createWindow(app: Electron.App): Promise<void> {
         app.commandLine.appendSwitch("in-process-gpu");
         app.commandLine.appendSwitch("disable-direct-composition");
 
-        exportLdLibraryPath(app);
-
         try {
             const steamworks = await import("steamworks.js");
             const steamAppId = Number(app.commandLine.getSwitchValue("steam-app"));
             steamworks.init(steamAppId || STEAM_APP_ID);
         } catch (e) {
-            process.stderr.write("Initialization of Steamworks API failed.\n");
-            process.stderr.write(`\n${e}\n`);
+            process.stderr.write(`Initialization of Steamworks API failed.${path.sep}${path.sep}${e}${path.sep}`);
             app.exit(19);
         }
 
@@ -70,45 +66,6 @@ async function createWindow(app: Electron.App): Promise<void> {
 
     // Hide menu
     mainWindow.setMenu(null);
-}
-
-/**
- * Resolves the path where shared dynamic libraries should be picked up from.
- * @param app
- *   Electron app object.
- * @param platform
- *   Platform for the native modules directory to be resolved. Defaults to the platform
- *   of the currently running process.
- * @param arch
- *   Processor architecture for the native modules directory to be resolved. Defaults to the
- *   processor architecture of the currently running process.
- * @returns
- *   Absolute path that should contain the shared native libraries that come bundled with the
- *   Electron app.
- */
-function resolveNativeModulesDir(app: electron.App, platform?: string, arch?: string): string {
-    const nativeModulesDir = path.resolve(path.dirname(app.getAppPath()), "app.asar.unpacked", ".webpack", "main", "native_modules", "dist");
-    platform = platform ? platform : os.platform();
-    arch = arch ? arch: os.arch();
-    if (platform === "linux" && arch === "x64") {
-        return path.resolve(nativeModulesDir, "linux64");
-    }
-    return path.resolve(nativeModulesDir, `${platform}-${arch}`);
-}
-
-function exportLdLibraryPath(app: electron.App, nativeModulesDir?: string, platform?: string): void {
-    nativeModulesDir = nativeModulesDir ? nativeModulesDir : resolveNativeModulesDir(app);
-    platform = platform ? platform : os.platform();
-    let paths: string[] = [];
-    if (platform === "linux") {
-        if (process.env.LD_LIBRARY_PATH != null) {
-            paths = process.env.LD_LIBRARY_PATH.split(path.delimiter);
-        }
-        if (!paths.includes(nativeModulesDir)) {
-            paths.push(nativeModulesDir);
-        }
-        process.env.LD_LIBRARY_PATH = paths.join(path.delimiter);
-    }
 }
 
 ((app: electron.App): void => {
