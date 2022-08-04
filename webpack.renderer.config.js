@@ -16,6 +16,7 @@ const config = {
         symlinks: false,
         mainFields: ["browser", "main", "module"]
     },
+    target: "electron-renderer",
     plugins: [
         /** @type {import("webpack").WebpackPluginInstance} */
         (new GenerateJsonPlugin("appinfo.json", {
@@ -24,7 +25,6 @@ const config = {
         })),
         new CopyPlugin({
             patterns: [
-                //{ from: "src/demo/**/*.{html,css}" },
                 { from: "assets/", to: "assets/" },
                 {
                     from: "index.html", transform(content) {
@@ -32,7 +32,8 @@ const config = {
                             "src=\"index.js\"");
                     }
                 },
-                { from: "style.css" }
+                { from: "style.css" },
+                { from: "manifest.webmanifest" }
             ]
         })
     ]

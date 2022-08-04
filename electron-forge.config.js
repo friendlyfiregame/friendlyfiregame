@@ -54,7 +54,12 @@ const makerSquirrelConfig = {
 const config = {
     packagerConfig: {
         asar: { // cspell:disable-line
-            unpack: ["*.so", "*.dll", "*.dylib"]
+            unpack: [
+                "*.node",
+                "*.so",
+                "*.dll",
+                "*.dylib"
+            ]
         },
         name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html

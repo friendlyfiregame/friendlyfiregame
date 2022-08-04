@@ -7,6 +7,9 @@ const config = {
     entry: "./lib/main.js",
     devtool: false,
     target: "electron-main",
+    stats: {
+        all: true
+    },
     node: {
       __dirname: false,
     },
