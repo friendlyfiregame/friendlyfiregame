@@ -8,7 +8,7 @@ on:
     - 'v*.*.*'
   pull_request:
     branches:
-    - master
+    - main
     types:
     - opened
     - synchronize
@@ -20,10 +20,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: git checkout
-      uses: actions/checkout@v2
-      with:
-        # SonarCloud doesn't like shallow clones.
-        fetch-depth: 0
+      uses: actions/checkout@v3
     - uses: jwalton/gh-find-current-pr@v1
       id: pr
       with:
@@ -40,12 +37,12 @@ jobs:
       run: echo "GIT_BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "${GITHUB_ENV}"
       id: extract_branch
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         architecture: x64
         node-version: '14'
     - name: Cache node modules
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         cache-name: cache-node-modules
       with:
@@ -79,26 +76,9 @@ jobs:
       with:
         working-directory: ./
         run: npm run -s coverage
-      env:
-        SONAR_SCANNER_ENABLED: 'true'
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v1.5
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        GITHUB_PULL_REQUEST_ID: ${{ steps.pr.outputs.pr }}
-      with:
-        args: >
-          -Dsonar.projectVersion=${{steps.version.outputs.prop}}
-          -Dsonar.branch.name=${GIT_BRANCH_NAME}
-          -Dsonar.pullrequest.key=${GITHUB_PULL_REQUEST_ID}
-          -Dsonar.pullrequest.branch=${GITHUB_HEAD_REF}
-          -Dsonar.pullrequest.base=${GITHUB_BASE_REF}
-          -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
-          -Dsonar.eslint.reportPath=./out/eslint.out
     - run: npm run -s dist
     - name: Archive dist folder
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: webapp-dist
         path: dist
@@ -110,7 +90,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Download archived dist folder
-      uses: actions/download-artifact@master
+      uses: actions/download-artifact@v3
       with:
         name: webapp-dist
         path: dist
@@ -145,7 +125,7 @@ jobs:
         echo ::set-output name=os::${RUNNER_OS_LOWER}
         echo ::set-output name=arch::x64
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Read version from package.json
       id: version
       uses: notiz-dev/github-action-json-property@v0.1.0
@@ -153,11 +133,11 @@ jobs:
         path: 'package.json'
         prop_path: 'version'
     - name: Setup Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: '14.x'
     - name: Cache node modules
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         cache-name: cache-node-modules
       with:
@@ -171,7 +151,7 @@ jobs:
     - run: npm run -s compile
     - run: npm run -s package
     - name: Archive Electron game package
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: friendlyfiregame-v${{steps.version.outputs.prop}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
         path: out

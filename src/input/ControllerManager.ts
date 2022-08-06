@@ -20,7 +20,7 @@ export class ControllerManager {
 
     public selectedGamepadStyle = GamepadStyle.XBOX;
 
-    private [currentControllerFamilySymbol]: ControllerFamily;
+    private [currentControllerFamilySymbol]: ControllerFamily = ControllerFamily.KEYBOARD;
 
     private constructor(initialControllerFamily: ControllerFamily = ControllerFamily.KEYBOARD) {
         this.currentControllerFamily = initialControllerFamily;

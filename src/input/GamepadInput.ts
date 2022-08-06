@@ -223,7 +223,7 @@ export class GamepadInput {
     constructor() {
         this.gamepads = new Map();
 
-        window.addEventListener("gamepadconnected", (e: any) => {
+        window.addEventListener("gamepadconnected", (e: GamepadEvent) => {
             console.debug("Gamepad connected: ", e);
             const gamepad = (e as GamepadEventInit).gamepad;
 
@@ -234,7 +234,7 @@ export class GamepadInput {
 
         window.addEventListener("gamepaddisconnected", (e) => {
             console.debug("Gamepad disconnected: ", e);
-            const gamepad = (e as any as GamepadEventInit).gamepad;
+            const gamepad = e.gamepad;
 
             if (gamepad != null) {
                 this.gamepads.delete(gamepad.id);

@@ -123,7 +123,7 @@ export function isDev(): boolean {
     }
 
     if (!!window.location.search) {
-        return !!window.location.search.substr(1).split("&").find(key => {
+        return !!window.location.search.substring(1).split("&").find(key => {
             if (key.toLowerCase().startsWith("dev")) {
                 return key.length === 3 || key.endsWith("=true");
             }
@@ -176,7 +176,7 @@ export function degrees(radians: number): number {
 /**
  * Normalizes an angle in radians so it is between 0 (inclusive) and 2*PI (exclusive).
  *
- * @param degrees - The angle to normalize.
+ * @param angle - The angle to normalize.
  * @return The normalized angle.
  */
 export function normalizeRadians(angle: number): number {

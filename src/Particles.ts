@@ -21,7 +21,7 @@ export interface ParticleEmitterArguments {
     gravity?: Vector2Like | VectorGenerator;
     lifetime?: number | NumberGenerator;
     breakFactor?: number;
-    blendMode?: string;
+    blendMode?: GlobalCompositeOperation;
     alphaCurve?: ValueCurve;
     sizeCurve?: ValueCurve;
     angle?: number | NumberGenerator;
@@ -95,7 +95,7 @@ export class ParticleEmitter {
     private angleSpeedGenerator: NumberGenerator;
     public gravity: Vector2Like;
     public breakFactor: number;
-    private blendMode: string;
+    private blendMode: GlobalCompositeOperation;
     public alphaCurve: ValueCurve;
     public sizeCurve: ValueCurve;
     public renderingLayer: RenderingLayer;
@@ -264,7 +264,7 @@ export class Particle {
             ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
         } else {
             // Color
-            ctx.fillStyle = (this.imageOrColor as string);
+            ctx.fillStyle = this.imageOrColor;
             ctx.fillRect(-this.halfSize, -this.halfSize, this.size, this.size);
         }
 

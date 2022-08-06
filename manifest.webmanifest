@@ -1,5 +1,7 @@
 {
+    "$schema": "https://json.schemastore.org/web-manifest-combined.json#",
     "lang": "en-US",
+    "dir": "ltr",
     "name": "Friendly Fire",
     "short_name": "Friendly Fire",
     "start_url": "./?utm_source=web_app_manifest",
@@ -78,13 +80,13 @@
             "type": "image/png"
         }
     ],
-    "related_applications": [
+    "shortcuts": [
         {
-            "platform": "Web",
+            "name": "Play the Game in Your Browser",
             "url": "https://friendlyfiregame.com/"
         },
         {
-            "platform": "steam",
+            "name": "Steam Store Page",
             "url": "https://store.steampowered.com/app/1311660/Friendly_Fire/"
         }
     ],

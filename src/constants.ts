@@ -68,3 +68,9 @@ export const PETTING_ENDING_FADE_DURATION = 5;
 /** Total duration in seconds of ending d cutscene */
 export const WINDOW_ENDING_CUTSCENE_DURATION = 50;
 export const WINDOW_ENDING_FADE_DURATION = 3;
+
+/**
+ * Steam app ID under which the game has been registered.
+ * Usually only used, if launched from within Steam as standalone app.
+ */
+export const STEAM_APP_ID = 1311660;

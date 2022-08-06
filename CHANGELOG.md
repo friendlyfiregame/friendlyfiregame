@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Updated
+
+- The Desktop apps are now based on Electron v20.0.1.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
+## [2.5.0] - 2022-01-01
+
+### Added
+
+- A new command line flag has been added to the Desktop version of the game:
+  `--version` Prints the version name and the version of the app and immediately exits the process
+- The startup code of the Desktop apps has been overhauled. It should no longer be possible to
+  run more than one instance of the game if installed properly.
+
+### Updated
+
+- The Desktop apps are now based on Electron v16.0.5.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
 ## [2.4.0] - 2021-05-01
 
 ### Added
@@ -17,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Little ending icons that appear in the main menu after finishing the game once to
   visualize which endings have been achieved and how many there are.
 - A new credit song arrangement with female vocals. The ending song is picked depending
-  on the selected character asset. Ending E will play a unused synth version of the
+  on the selected character asset. Ending E will play an unused synth version of the
   ending song (with male vocals)
 
 ## [2.3.0] - 2020-11-30
@@ -26,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - It is now possible to pet the dog! You heard that right... you can pet the dog!!
 - Excessive petting of the dog might even lead to a surprising new ending.
-- The fire can now be gifted to the smaller fire in the west as well for another surprising
+- The wood can now be gifted to the smaller fire in the west as well for another surprising
   alternative ending.
 
 ### Updated

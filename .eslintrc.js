@@ -1,14 +1,20 @@
-{
-    "$schema": "https://json.schemastore.org/eslintrc#",
+// cSpell:disable
+// @ts-check
+
+/** @type {import("eslint").ESLint.ConfigData} */
+const config = {
     "root": true,
     "parserOptions": {
-        "tsconfigRootDir": ".",
-        "ecmaVersion": 11,
+        "tsconfigRootDir": __dirname,
+        "ecmaVersion": 2022,
         "sourceType": "module",
         "ecmaFeatures": {
-            "impliedStrict": true
+            "experimentalObjectRestSpread": false,
+            "globalReturn": false,
+            "impliedStrict": true,
+            "jsx": false
         },
-        "project": "./tsconfig.json"
+        //"project": path.resolve(__dirname, "tsconfig.json")
     },
     "parser": "@typescript-eslint/parser",
     "plugins": [
@@ -68,4 +74,5 @@
         "quotes": [ "error", "double" ],
         "semi": "off"
     }
-}
+};
+module.exports = config;

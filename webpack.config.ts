@@ -1,34 +1,40 @@
-const path = require("path");
-const webpack = require("webpack");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const GenerateJsonPlugin = require("generate-json-webpack-plugin");
-const GitRevisionPlugin = require("git-revision-webpack-plugin");
+// cSpell:disable
+import * as path from "node:path";
+import {Configuration, WebpackPluginInstance} from "webpack";
+import "webpack-dev-server";
+
+import {default as CopyPlugin} from "copy-webpack-plugin";
+import {default as GenerateJsonPlugin} from "generate-json-webpack-plugin";
+import {GitRevisionPlugin} from "git-revision-webpack-plugin";
 const gitRevisionPlugin = new GitRevisionPlugin();
 
-module.exports = {
-    entry: `./lib/FriendlyFire.js`,
+const configuration: Configuration = {
+    entry: "./lib/FriendlyFire.js",
     output: {
         path: path.join(__dirname, "dist"),
         filename: "FriendlyFire.js",
-        chunkFilename: "[name].js?m=[chunkhash]"
+        chunkFilename: "[name].js?m=[chunkhash]",
+        hashFunction: "sha256"
     },
     mode: "development",
     resolve: {
         symlinks: false,
         mainFields: ["browser", "main", "module"]
     },
-    node: {
-        fs: "empty"
-    },
     devServer: {
         host: "0.0.0.0",
         port: 8000,
-        disableHostCheck: true,
-        watchOptions: {
-            ignored: [
-                path.resolve(__dirname, "src/**/*.ts")
-            ]
-        },
+        compress: true,
+        allowedHosts: ["*"],
+        static: {
+            directory: path.join(__dirname, "dist"),
+            watch: {
+                ignored: [
+                    path.resolve(__dirname, "src/**/*.ts")
+                ],
+                usePolling: false
+            }
+        }
     },
     devtool: "source-map",
     stats: {
@@ -55,11 +61,11 @@ module.exports = {
         new GenerateJsonPlugin("appinfo.json", {
             version: process.env.npm_package_version,
             gitCommitHash: gitRevisionPlugin.commithash()
-        }),
-        new CopyWebpackPlugin({ patterns: [
+        }) as WebpackPluginInstance,
+        new CopyPlugin({ patterns: [
             //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
-            { from: "index.html", transform(content) {
+            { from: "index.html", transform(content: any) {
                 return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
                     "src=\"FriendlyFire.js\"");
             }},
@@ -68,3 +74,4 @@ module.exports = {
         ]})
     ]
 };
+export default configuration;

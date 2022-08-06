@@ -4,10 +4,8 @@
         "editorconfig.editorconfig",
         "geekidos.vdf",
         "github.vscode-pull-request-github",
-        "msjsdiag.debugger-for-chrome",
         "firefox-devtools.vscode-firefox-debug",
         "msjsdiag.debugger-for-edge",
-        "SonarSource.sonarlint-vscode",
         "streetsidesoftware.code-spell-checker"
     ]
 }

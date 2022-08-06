@@ -17,12 +17,25 @@ typemap.set(/^.*054c.*$/, GamepadStyle.PLAYSTATION);
 /**
  * Regular expression to extract vendor and product identifier.
  */
-const productAndVendorMatcher = /^.*?[Vv]endor:?\s*(?<vendorId>.{4}).*?[Pp]roduct:?\s*(?<productId>.{4}).*?$/;
+const productAndVendorMatcher = /^.*?[Vv]endor:?\s*(?<vendorId>.{4}).*?[Pp]roduct:?\s*(?<productId>.{4}).*$/;
 /* spell-checker: enable */
 
 export class GamepadModel {
 
+    #vendorId: number|undefined;
+    #productId: number|undefined;
+
     constructor(public style: GamepadStyle, vendorId?: number|undefined, productId?: number|undefined) {
+        this.#vendorId = vendorId;
+        this.#productId = productId;
+    }
+
+    public get vendorId(): number|undefined {
+        return this.#vendorId;
+    }
+
+    public get productId(): number|undefined {
+        return this.#productId;
     }
 
     /**

@@ -24,9 +24,10 @@
             "type": "node",
             "request": "launch",
             "name": "Launch webpack-dev-server",
-            "program": "${workspaceFolder}/node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+            "program": "${workspaceFolder}/node_modules/webpack-cli/bin/cli.js",
             "args": [
-                "-d",
+                "serve",
+                "--devtool=inline-source-map",
                 "--port=${input:webServerPort}"
             ],
             "skipFiles": [
@@ -48,7 +49,7 @@
             "webRoot": "${workspaceFolder}",
         },
         {
-            "type": "edge",
+            "type": "msedge",
             "request": "launch",
             "name": "Launch Microsoft Edge against localhost",
             "url": "http://localhost:${input:webServerPort}?dev=${input:devMode}",
