@@ -35,6 +35,20 @@ async function createWindow(app: Electron.App): Promise<void> {
                         return steamClient.localplayer.getName();
                     case "localplayer#getSteamId":
                         return steamClient.localplayer.getSteamId();
+                    case "achievement#isActivated":
+                        return steamClient.achievement.isActivated(args[2]);
+                    case "achievement#activate":
+                        return steamClient.achievement.activate(args[2]);
+                    case "cloud#isEnabledForApp":
+                        return steamClient.cloud.isEnabledForApp();
+                    case "cloud#isEnabledForAccount":
+                        return steamClient.cloud.isEnabledForAccount();
+                    case "cloud#readFile":
+                        return steamClient.cloud.readFile(args[2]);
+                    case "cloud#writeFile":
+                        return steamClient.cloud.writeFile(args[2], args[3]);
+                    case "cloud#deleteFile":
+                        return steamClient.cloud.deleteFile(args[2]);
                     default:
                         throw new Error(`Unknown function call: ${fn} received.`);
                 }
