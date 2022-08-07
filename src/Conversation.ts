@@ -293,7 +293,7 @@ export class ConversationLine {
         const conditionString = line.match(/\[[a-zA-Z0-9\_\<\>\!\=\$ ]+\]/g);
 
         if (conditionString && conditionString[0]) {
-            return conditionString[0].substring(1, conditionString[0].length - 2);
+            return conditionString[0].substring(1, conditionString[0].length - 1);
         }
 
         return null;
