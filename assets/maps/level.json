@@ -3008,6 +3008,52 @@
                  "width":912,
                  "x":3648,
                  "y":2328
+                }, 
+                {
+                 "height":0,
+                 "id":213,
+                 "name":"goose",
+                 "point":true,
+                 "rotation":0,
+                 "type":"entity",
+                 "visible":true,
+                 "width":0,
+                 "x":3048,
+                 "y":1136
+                }, 
+                {
+                 "height":24,
+                 "id":214,
+                 "name":"goose_action",
+                 "properties":[
+                        {
+                         "name":"velocity",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"trigger",
+                 "visible":true,
+                 "width":5,
+                 "x":2988,
+                 "y":1128
+                }, 
+                {
+                 "height":24,
+                 "id":215,
+                 "name":"goose_action",
+                 "properties":[
+                        {
+                         "name":"velocity",
+                         "type":"int",
+                         "value":-1
+                        }],
+                 "rotation":0,
+                 "type":"trigger",
+                 "visible":true,
+                 "width":5,
+                 "x":3091,
+                 "y":1128
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3016,7 +3062,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":213,
+ "nextobjectid":216,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",

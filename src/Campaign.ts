@@ -323,6 +323,9 @@ export class Campaign {
                 case "friendship":
                     this.gameScene.player.enableFriendship();
                     break;
+                case "choas":
+                    this.gameScene.player.enableChaos();
+                    break;
                 case "spawnseed":
                     this.gameScene.tree.spawnSeed();
                     break;

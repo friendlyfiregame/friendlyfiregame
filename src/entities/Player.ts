@@ -161,6 +161,7 @@ export class Player extends PhysicsEntity {
     private doubleJump = false;
     private multiJump = false;
     private hasFriendship = false;
+    private hasChaos = false;
     private usedJump = false;
     private usedDoubleJump = false;
     private autoMove: AutoMove | null = null;
@@ -341,6 +342,15 @@ export class Player extends PhysicsEntity {
             this.hasFriendship = true;
             Conversation.setGlobal("hasFriendship", "true");
             this.scene.removeGameObject(this.scene.powerShiba);
+        }
+    }
+
+    public enableChaos (): void {
+        if (!this.hasChaos) {
+            this.scene.scenes.pushScene(GotItemScene, Item.CHAOS);
+            this.hasChaos = true;
+            Conversation.setGlobal("hasChaos", "true");
+            console.log(Conversation.getGlobals());
         }
     }
 

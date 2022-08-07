@@ -1,0 +1,63 @@
+{ "frames": {
+   "0": {
+    "frame": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 2000
+   },
+   "1": {
+    "frame": { "x": 28, "y": 0, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 100
+   },
+   "2": {
+    "frame": { "x": 56, "y": 0, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 1500
+   },
+   "3": {
+    "frame": { "x": 0, "y": 35, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 175
+   },
+   "4": {
+    "frame": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 175
+   },
+   "5": {
+    "frame": { "x": 28, "y": 35, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 175
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
+  "image": "goose.png",
+  "format": "RGBA8888",
+  "size": { "w": 84, "h": 70 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 2, "direction": "pingpong" },
+   { "name": "walk", "from": 3, "to": 5, "direction": "pingpong" }
+  ]
+ }
+}

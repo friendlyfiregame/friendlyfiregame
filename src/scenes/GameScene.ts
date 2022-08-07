@@ -46,6 +46,7 @@ import { Wing } from "../entities/Wing";
 import { World } from "../World";
 import { ExitPortal } from "../entities/ExitPortal";
 import { Window } from "../entities/Window";
+import { Goose } from "../entities/Goose";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -241,6 +242,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public flameboy!: FlameBoy;
     public wing!: Wing;
     public bird!: Bird;
+    public goose!: Goose;
     public shiba!: Shiba;
     public powerShiba!: PowerShiba;
     public mimic!: Mimic;
@@ -338,6 +340,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.flameboy = this.getGameObject(FlameBoy);
         this.wing = this.getGameObject(Wing);
         this.bird = this.getGameObject(Bird);
+        this.goose = this.getGameObject(Goose);
         this.shiba = this.getGameObject(Shiba);
         this.powerShiba = this.getGameObject(PowerShiba);
         this.shadowPresence = this.getGameObject(ShadowPresence);

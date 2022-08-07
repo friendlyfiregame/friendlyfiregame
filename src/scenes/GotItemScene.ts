@@ -13,7 +13,7 @@ import { AsepriteNode } from "../scene/AsepriteNode";
 import { SceneNode } from "../scene/SceneNode";
 import { TextNode } from "../scene/TextNode";
 
-export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
+export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP, CHAOS }
 
 export class GotItemScene extends Scene<FriendlyFire, Item> {
     @asset(DIALOG_FONT)
@@ -30,6 +30,7 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         "sprites/powerup_doublejump.png",
         "sprites/powerup_multijump.png",
         "sprites/powerup_raindance.png",
+        "sprites/powerup_friendship.aseprite.json",
         "sprites/powerup_friendship.aseprite.json"
     ])
     private static itemImages: (HTMLImageElement | Aseprite)[];
@@ -42,7 +43,8 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         "Double-Jump Boots",
         "Flying Wings Knock-off",
         "Dancing Dave",
-        "Eternal Friendship"
+        "Eternal Friendship",
+        "The Way of Goose"
     ];
 
     private subtitles = [
@@ -72,6 +74,9 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
             "What might this be good for?",
             "Powered by unconditional love",
             "Nothing can stop us!"
+        ],
+        [
+            "Let's pick them up!",
         ]
     ];
 

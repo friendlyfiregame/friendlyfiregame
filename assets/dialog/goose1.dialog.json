@@ -1,0 +1,17 @@
+{
+    "entry": [
+        "Hello",
+        "►[not $hasChaos] Give me ability? @giveChaos",
+        "►[$hasChaos] has chaos? @tellAboutChaos",
+        "►Bye. @bye"
+    ],
+    "giveChaos": [
+        "Here you go! !choas !end @entry"
+    ],
+    "tellAboutChaos": [
+        "You already got it! !end @entry"
+    ],
+    "bye": [
+        "Bye @entry !end"
+    ]
+}
