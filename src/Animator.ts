@@ -22,6 +22,8 @@ export type CurrentAnimationState = {
 export class Animator {
     private entity: Entity;
     private sprite?: Aseprite;
+    private offsetX = 0;
+    private offsetY = 0;
 
     private currentAnimation: CurrentAnimationState = {
         tag: "",
@@ -111,9 +113,15 @@ export class Animator {
     private draw(animationTime: number): void {
         if (this.sprite) {
             this.entity.scene.renderer.addAseprite(
-                this.sprite, this.currentAnimation.tag, this.entity.x, this.entity.y,
+                this.sprite, this.currentAnimation.tag, this.entity.x - this.offsetX, this.entity.y - this.offsetY,
                 RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
             );
         }
+    }
+
+    public addOffset(x: number, y: number): Animator {
+        this.offsetX = x;
+        this.offsetY = y;
+        return this;
     }
 }

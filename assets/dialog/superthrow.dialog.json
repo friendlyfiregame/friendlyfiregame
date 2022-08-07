@@ -24,7 +24,12 @@
         "►[not talkedAboutSeed]I have this seed problem… @seed",
         "►[talkedAboutSeed]I still have this seed problem… @seed2",
         "►[$gotBoneQuest]I have this bone problem… @bone",
-        "►I'm off… @bye"
+        "►I'm off… @bye",
+        "►[$hasChaos](Collect item) @collect"
+    ],
+    "collect": [
+        "What... take your filthy hands off...",
+        "Wait... NO! !collectWeirdThrow !end"
     ],
     "bone": [
         "A bone problem…?",

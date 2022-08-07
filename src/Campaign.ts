@@ -326,6 +326,9 @@ export class Campaign {
                 case "choas":
                     this.gameScene.player.enableChaos();
                     break;
+                case "collectWeirdThrow":
+                    this.gameScene.superThrow.pickupAgainstWill();
+                    break;
                 case "spawnseed":
                     this.gameScene.tree.spawnSeed();
                     break;

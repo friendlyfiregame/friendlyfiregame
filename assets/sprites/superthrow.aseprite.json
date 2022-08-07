@@ -1,41 +1,78 @@
 { "frames": [
    {
     "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 18, "h": 22 },
+    "frame": { "x": 0, "y": 0, "w": 24, "h": 28 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 22 },
-    "sourceSize": { "w": 18, "h": 22 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
     "duration": 150
    },
    {
     "filename": "1",
-    "frame": { "x": 18, "y": 0, "w": 18, "h": 22 },
+    "frame": { "x": 24, "y": 0, "w": 24, "h": 28 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 22 },
-    "sourceSize": { "w": 18, "h": 22 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
     "duration": 150
    },
    {
     "filename": "2",
-    "frame": { "x": 36, "y": 0, "w": 18, "h": 22 },
+    "frame": { "x": 48, "y": 0, "w": 24, "h": 28 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 22 },
-    "sourceSize": { "w": 18, "h": 22 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
     "duration": 150
+   },
+   {
+    "filename": "3",
+    "frame": { "x": 72, "y": 0, "w": 24, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
+    "duration": 100
+   },
+   {
+    "filename": "4",
+    "frame": { "x": 96, "y": 0, "w": 24, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
+    "duration": 100
+   },
+   {
+    "filename": "5",
+    "frame": { "x": 120, "y": 0, "w": 24, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
+    "duration": 100
+   },
+   {
+    "filename": "6",
+    "frame": { "x": 144, "y": 0, "w": 24, "h": 28 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 28 },
+    "sourceSize": { "w": 24, "h": 28 },
+    "duration": 100
    }
  ],
  "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
   "image": "superthrow.png",
   "format": "RGBA8888",
-  "size": { "w": 54, "h": 22 },
+  "size": { "w": 168, "h": 28 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 2, "direction": "pingpong" }
+   { "name": "idle", "from": 0, "to": 2, "direction": "pingpong" },
+   { "name": "disintegrate", "from": 3, "to": 6, "direction": "forward" }
   ]
  }
 }

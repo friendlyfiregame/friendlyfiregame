@@ -245,6 +245,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public goose!: Goose;
     public shiba!: Shiba;
     public powerShiba!: PowerShiba;
+    public superThrow!: SuperThrow;
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
@@ -317,8 +318,6 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Skull(this, entity.x, entity.y);
                     case "chicken":
                         return new Chicken(this, entity.x, entity.y);
-                    case "superthrow":
-                        return new SuperThrow(this, entity.x, entity.y);
                     case "portal":
                         return new Portal(this, entity.x, entity.y);
                     case "window":
@@ -343,6 +342,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.goose = this.getGameObject(Goose);
         this.shiba = this.getGameObject(Shiba);
         this.powerShiba = this.getGameObject(PowerShiba);
+        this.superThrow = this.getGameObject(SuperThrow);
         this.shadowPresence = this.getGameObject(ShadowPresence);
         this.mimic = this.getGameObject(Mimic);
         this.caveman = this.getGameObject(Caveman);

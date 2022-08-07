@@ -164,6 +164,7 @@ export class Player extends PhysicsEntity {
     private hasChaos = false;
     private usedJump = false;
     private usedDoubleJump = false;
+    private hasWeirdThrow = false;
     private autoMove: AutoMove | null = null;
     public isControllable: boolean = true;
     private showHints = false;
@@ -350,8 +351,15 @@ export class Player extends PhysicsEntity {
             this.scene.scenes.pushScene(GotItemScene, Item.CHAOS);
             this.hasChaos = true;
             Conversation.setGlobal("hasChaos", "true");
-            console.log(Conversation.getGlobals());
         }
+    }
+
+    public enableWeirdThrow (): void {
+        if (!this.hasWeirdThrow) {
+            this.scene.scenes.pushScene(GotItemScene, Item.WEIRD_THROW);
+            this.hasWeirdThrow = true;
+            Conversation.setGlobal("hasWeirdThrow", "true");
+        } 
     }
 
     public removePowerUps(): void {
@@ -481,7 +489,14 @@ export class Player extends PhysicsEntity {
         if (this.carrying instanceof Stone) {
             this.carrying.setVelocity(10 * this.direction, 10);
         } else {
-            this.carrying.setVelocity(5 * this.direction, 5);
+            if (this.hasWeirdThrow) {
+                const direction = rndItem([1, -1]);
+                const velocityX = rnd(0, 10);
+                const velocityY = rnd(10, 35);
+                this.carrying.setVelocity(velocityX * direction, velocityY);
+            } else {
+                this.carrying.setVelocity(5 * this.direction, 5);
+            }
         }
 
         this.height = PLAYER_HEIGHT;

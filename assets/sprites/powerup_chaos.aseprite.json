@@ -1,0 +1,56 @@
+{ "frames": [
+   {
+    "filename": "0",
+    "frame": { "x": 0, "y": 0, "w": 18, "h": 24 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 18, "h": 24 },
+    "sourceSize": { "w": 24, "h": 24 },
+    "duration": 150
+   },
+   {
+    "filename": "1",
+    "frame": { "x": 18, "y": 0, "w": 18, "h": 24 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 18, "h": 24 },
+    "sourceSize": { "w": 24, "h": 24 },
+    "duration": 150
+   },
+   {
+    "filename": "2",
+    "frame": { "x": 0, "y": 24, "w": 18, "h": 24 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 18, "h": 24 },
+    "sourceSize": { "w": 24, "h": 24 },
+    "duration": 150
+   },
+   {
+    "filename": "3",
+    "frame": { "x": 18, "y": 24, "w": 18, "h": 24 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 18, "h": 24 },
+    "sourceSize": { "w": 24, "h": 24 },
+    "duration": 150
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
+  "image": "powerup_chaos.png",
+  "format": "RGBA8888",
+  "size": { "w": 36, "h": 48 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 3, "direction": "pingpong" }
+  ],
+  "layers": [
+   { "name": "Layer 2", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 3", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
