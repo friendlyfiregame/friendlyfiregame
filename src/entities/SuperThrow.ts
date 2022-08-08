@@ -5,7 +5,6 @@ import conversation from "../../assets/dialog/superthrow.dialog.json";
 import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "../Renderer";
 
 @entity("superthrow")
 export class SuperThrow extends NPC {
