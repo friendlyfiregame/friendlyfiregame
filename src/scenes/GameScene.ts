@@ -322,7 +322,7 @@ export class GameScene extends Scene<FriendlyFire> {
                     case "window":
                         return new Window(this, entity.x, entity.y);
                     case "player":
-                        const startingPos = this.getPlayerStartinPos();
+                        const startingPos = this.getPlayerStartingPos();
                         return new Player(this, startingPos.x, startingPos.y);
                     default:
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
@@ -374,11 +374,11 @@ export class GameScene extends Scene<FriendlyFire> {
         this.stone.dropInWater();
     }
 
-    private getPlayerStartinPos (): { x: number, y: number } {
+    private getPlayerStartingPos (): { x: number, y: number } {
         const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
         const defaultSpawn = spawns.find(s => !s.properties.newGamePlus);
         const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);
-        
+
         if (this.game.campaign.isNewGamePlus) {
             if (!newGamePlusSpawn) throw new Error("Missing new game plus spawn point for player");
             return { x: newGamePlusSpawn.x, y: newGamePlusSpawn.y };
@@ -768,7 +768,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.game.campaign.getQuest(QuestKey.D).finish();
             this.gameOver();
         }
-        
+
         this.petEndingTexts.forEach((t, index) => {
             if (this.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION > t.enter) {
                 const fadeTime = 0.5;

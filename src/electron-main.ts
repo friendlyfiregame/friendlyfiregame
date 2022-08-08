@@ -1,18 +1,33 @@
 // cSpell:disable
 
 import * as electron from "electron";
+import { default as ConfigStore} from "electron-store";
+
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "./constants";
 import * as path from "node:path";
 import * as process from "node:process";
 
-async function createWindow(app: Electron.App): Promise<void> {
+type PreferencesConfigStore = ConfigStore<{fullscreen: boolean}>;
 
-    let fullscreen = true;
+async function createWindow(app: Electron.App, preferences: PreferencesConfigStore): Promise<void> {
+
+    electron.ipcMain.handle("preferences", async (_event, args) => {
+        const fn = `${args[0]}#${args[1]}`;
+        switch (fn) {
+        case "fullscreen#isEnabled":
+            return preferences.get("fullscreen", true);
+        case "fullscreen#setEnabled":
+            return preferences.set("fullscreen", args[2]);
+        }
+    });
+
+    let fullscreen = preferences.get("fullscreen", true);
     if (app.commandLine.hasSwitch("no-fullscreen")) {
         fullscreen = false;
     } else if (app.commandLine.hasSwitch("fullscreen")) {
         fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
     }
+    preferences.set("fullscreen", fullscreen);
 
     if (app.commandLine.hasSwitch("steam-app")) {
 
@@ -26,11 +41,11 @@ async function createWindow(app: Electron.App): Promise<void> {
             const steamAppId = Number(app.commandLine.getSwitchValue("steam-app")) || STEAM_APP_ID;
             const steamClient = steamworks.init(steamAppId);
 
-            electron.ipcMain.handle("steamworks", async (event, args) => {
+            electron.ipcMain.handle("steamworks", async (_event, args) => {
                 const fn = `${args[0]}#${args[1]}`;
                 switch (fn) {
-                    case "#available":
-                        return true;
+                    case "#initialized":
+                        return steamClient != null;
                     case "localplayer#getName":
                         return steamClient.localplayer.getName();
                     case "localplayer#getSteamId":
@@ -60,7 +75,7 @@ async function createWindow(app: Electron.App): Promise<void> {
         }
 
     } else {
-        electron.ipcMain.handle("steamworks", async (event, args) => {
+        electron.ipcMain.handle("steamworks", async (_event, args) => {
             const fn = `${args[0]}#${args[1]}`;
             if (fn === "#available") {
                 return false;
@@ -92,6 +107,13 @@ async function createWindow(app: Electron.App): Promise<void> {
         }
     });
 
+    preferences.onDidChange("fullscreen", (newFullscreen) => {
+        if (typeof newFullscreen === "boolean" && mainWindow.isFullScreenable()) {
+            mainWindow.setFullScreen(newFullscreen);
+        }
+
+    });
+
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
 
@@ -109,6 +131,8 @@ async function createWindow(app: Electron.App): Promise<void> {
 }
 
 ((app: electron.App): void => {
+
+    const preferences: PreferencesConfigStore = new ConfigStore();
 
     // If the user wants to be informed about the version only, we'll print the version
     // and exit immediately.
@@ -132,7 +156,7 @@ async function createWindow(app: Electron.App): Promise<void> {
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    app.on("ready", () => createWindow(app));
+    app.on("ready", () => createWindow(app, preferences));
 
     // Quit when all windows are closed.
     app.on("window-all-closed", () => {
@@ -147,7 +171,7 @@ async function createWindow(app: Electron.App): Promise<void> {
         // On OS X it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (electron.BrowserWindow.getAllWindows().length === 0) {
-            createWindow(app);
+            createWindow(app, preferences);
         }
     });
 })(electron.app);
