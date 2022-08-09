@@ -14,10 +14,12 @@ import { Sound } from "../Sound";
 import { TitleScene } from "./TitleScene";
 import { TextNode } from "../scene/TextNode";
 import { Direction } from "../geom/Direction";
+import { OptionsScene } from "./OptionsScene";
 
 enum MenuItemKey {
     RESUME = "resume",
     CONTROLS = "controls",
+    OPTIONS = "options",
     EXIT = "exit"
 }
 
@@ -71,8 +73,9 @@ export class PauseScene extends Scene<FriendlyFire> {
 
         this.menu = new MenuList().appendTo(this.rootNode).setItems(
             new MenuItem(MenuItemKey.RESUME, "Resume", PauseScene.font, "white", 75, 130),
-            new MenuItem(MenuItemKey.CONTROLS, "Controls and Options", PauseScene.font, "white", 75, 145),
-            new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 160),
+            new MenuItem(MenuItemKey.CONTROLS, "Controls", PauseScene.font, "white", 75, 145),
+            new MenuItem(MenuItemKey.OPTIONS, "Options", PauseScene.font, "white", 75, 160),
+            new MenuItem(MenuItemKey.EXIT, "Back to title", PauseScene.font, "white", 75, 175),
         );
     }
 
@@ -94,6 +97,9 @@ export class PauseScene extends Scene<FriendlyFire> {
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);
+                break;
+            case MenuItemKey.OPTIONS:
+                this.game.scenes.pushScene(OptionsScene);
                 break;
             case MenuItemKey.EXIT:
                 PauseScene.music.stop();
