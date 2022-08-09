@@ -48,6 +48,7 @@ export class Scenes<T extends Game> {
     }
 
     public async popScene({ noTransition = false }: { noTransition?: boolean} = {}): Promise<Scene<T> | null> {
+        console.log(this);
         const activeScene = this.activeScene;
 
         if (activeScene != null) {

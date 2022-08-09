@@ -1,3 +1,5 @@
+let gameCanvas: HTMLCanvasElement;
+
 export async function loadImage(source: string | URL): Promise<HTMLImageElement> {
     const img = new Image();
     return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -12,12 +14,19 @@ export async function loadImage(source: string | URL): Promise<HTMLImageElement>
 }
 
 export function createCanvas(width: number, height: number): HTMLCanvasElement {
-    const canvas = document.createElement("canvas")!;
+    gameCanvas = document.createElement("canvas")!;
+    gameCanvas.id = "game";
+    gameCanvas.width = width;
+    gameCanvas.height = height;
 
-    canvas.width = width;
-    canvas.height = height;
+    return gameCanvas;
+}
 
-    return canvas;
+export function getCanvas(): HTMLCanvasElement {
+    if (gameCanvas == null) {
+        throw new Error("Canvas has not yet been created.");
+    }
+    return gameCanvas;
 }
 
 export function getRenderingContext(canvas: HTMLCanvasElement, contextId: "2d",

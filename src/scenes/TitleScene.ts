@@ -20,6 +20,7 @@ import { ImageNode } from "../scene/ImageNode";
 import { SceneNode } from "../scene/SceneNode";
 import { GlobalState } from "../GlobalState";
 import { QuestKey } from "../Quests";
+import { OptionsScene } from "./OptionsScene";
 
 type MainMenuParams = {
     label: string;
@@ -29,13 +30,15 @@ type MainMenuParams = {
 enum MenuItemKey {
     START = "start",
     CONTROLS = "controls",
+    OPTIONS = "options",
     CREDITS = "credits",
     EXIT = "exit"
 }
 
 const MenuLabels: Record<MenuItemKey, MainMenuParams> = {
     [MenuItemKey.START]: { label: "Start Game" },
-    [MenuItemKey.CONTROLS]: { label: "Controls and Options" },
+    [MenuItemKey.CONTROLS]: { label: "Controls" },
+    [MenuItemKey.OPTIONS]: { label: "Options" },
     [MenuItemKey.CREDITS]: { label: "Credits" },
     [MenuItemKey.EXIT]: { label: "Exit Game", electronOnly: true },
 };
@@ -89,7 +92,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     private menuBasePosition = {
         x: this.game.width / 2,
-        y: 190,
+        y: 180,
         gap: 15,
     };
 
@@ -299,6 +302,9 @@ export class TitleScene extends Scene<FriendlyFire> {
                 break;
             case MenuItemKey.CONTROLS:
                 this.game.scenes.pushScene(ControlsScene);
+                break;
+            case MenuItemKey.OPTIONS:
+                this.game.scenes.pushScene(OptionsScene);
                 break;
             case MenuItemKey.CREDITS:
                 this.stopMusicTrack();
