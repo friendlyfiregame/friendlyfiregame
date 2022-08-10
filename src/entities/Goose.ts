@@ -1,23 +1,26 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { rndItem } from "../util";
-import { Conversation } from "../Conversation";
-import conversation from "../../assets/dialog/bird.dialog.json";
 import { entity } from "../Entity";
 import { GameObjectInfo } from "../MapInfo";
 import { GameScene } from "../scenes/GameScene";
 import { RenderingLayer } from "../Renderer";
 import { ScriptableNPC } from "./ScriptableNPC";
-import goose1 from "../../assets/dialog/goose1.dialog.json";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
 const ACCELERATION = 15;
 
+enum GooseState {
+    IDLE = "idle",
+    DEAD = "dead"
+}
+
 @entity("goose")
 export class Goose extends ScriptableNPC {
     @asset("sprites/goose.aseprite.json")
     private static sprite: Aseprite;
+    private state = GooseState.IDLE;
 
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
@@ -25,15 +28,15 @@ export class Goose extends ScriptableNPC {
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 28, 24);
-
-        this.conversation = new Conversation(conversation, this);
-        this.setMaxVelocity(2);
-        this.conversation = new Conversation(goose1, this);
+        this.setMaxVelocity(1);
     }
 
 
     public getAnimationTag (): string {
-        return "idle";
+        switch (this.state) {
+            case GooseState.IDLE: return "idle";
+            case GooseState.DEAD: return "dead";
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
@@ -68,23 +71,25 @@ export class Goose extends ScriptableNPC {
     public update(dt: number): void {
         super.update(dt);
 
-        // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        if (this.state === GooseState.IDLE) {
+            // Triggers
+            const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
-        this.idleWalkingUpdateLogic(triggerCollisions, dt);
+            this.idleWalkingUpdateLogic(triggerCollisions, dt);
 
-        if (this.hasActiveConversation()) {
-            this.move = 0;
-        }
+            if (this.hasActiveConversation()) {
+                this.move = 0;
+            }
 
-        if (this.move !== 0) {
-            this.direction = this.move;
-            this.accelerateX(ACCELERATION * dt * this.move);
-        } else {
-            if (this.getVelocityX() > 0) {
-                this.decelerateX(ACCELERATION * dt);
+            if (this.move !== 0) {
+                this.direction = this.move;
+                this.accelerateX(ACCELERATION * dt * this.move);
             } else {
-                this.decelerateX(-ACCELERATION * dt);
+                if (this.getVelocityX() > 0) {
+                    this.decelerateX(ACCELERATION * dt);
+                } else {
+                    this.decelerateX(-ACCELERATION * dt);
+                }
             }
         }
 
@@ -125,5 +130,11 @@ export class Goose extends ScriptableNPC {
             this.walkTimer = null;
             this.move = 0;
         }
+    }
+
+    public turnDead (): void {
+        this.state = GooseState.DEAD;
+        this.lookAtPlayer = false;
+        this.scene.game.campaign.runAction("enable", null, ["goose", "gooseDead"]);
     }
 }

@@ -33,7 +33,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 24 },
     "sourceSize": { "w": 24, "h": 24 },
-    "duration": 100
+    "duration": 150
    },
    {
     "filename": "4",
@@ -42,7 +42,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 24 },
     "sourceSize": { "w": 24, "h": 24 },
-    "duration": 100
+    "duration": 150
    },
    {
     "filename": "5",
@@ -51,7 +51,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 24 },
     "sourceSize": { "w": 24, "h": 24 },
-    "duration": 100
+    "duration": 150
    },
    {
     "filename": "6",
@@ -60,7 +60,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 24 },
     "sourceSize": { "w": 24, "h": 24 },
-    "duration": 100
+    "duration": 150
    },
    {
     "filename": "7",
@@ -69,7 +69,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 24 },
     "sourceSize": { "w": 24, "h": 24 },
-    "duration": 100
+    "duration": 150
    }
  ],
  "meta": {

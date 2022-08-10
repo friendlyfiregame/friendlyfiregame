@@ -152,4 +152,9 @@ export abstract class Entity implements GameObject {
     public remove(): void {
         this.scene.removeGameObject(this);
     }
+
+    public setPosition (x: number, y: number): void {
+        this.x = x;
+        this.y = y;
+    }
 }

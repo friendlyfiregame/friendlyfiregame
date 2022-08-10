@@ -1,0 +1,11 @@
+{
+    "entry": [
+        "Hello",
+        "►Whatever. @entry !end",
+        "►(Collect item). @collect"
+    ],
+    "collect": [
+        "What... take your filthy hands off...",
+        "Wait... NO! !collectFlying !end"
+    ]
+}

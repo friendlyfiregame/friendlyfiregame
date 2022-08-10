@@ -232,6 +232,13 @@ export class World implements GameObject {
         return collidesWith;
     }
 
+    public deleteTrigger (name: string): void {
+        const index = this.scene.triggerObjects.findIndex(o => o.name === name);
+        if (index > -1) {
+            this.scene.triggerObjects.splice(index, 1);
+        }
+    }
+
     public entityIsAvailableInNewGameState (newGamePlusProp?: boolean): boolean {
         return (
             newGamePlusProp === undefined ||

@@ -162,6 +162,7 @@ export class Player extends PhysicsEntity {
     private multiJump = false;
     private hasFriendship = false;
     private hasChaos = false;
+    private hasFlying = false;
     private usedJump = false;
     private usedDoubleJump = false;
     private hasWeirdThrow = false;
@@ -346,10 +347,26 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    /**
+     * This initiates the chaos route.
+     * Unnecessary NPC's will be removed and other's will be moved to different positions.
+     * All of the dialog tress will also be switched out as needed.
+     */
     public enableChaos (): void {
         if (!this.hasChaos) {
             this.scene.scenes.pushScene(GotItemScene, Item.CHAOS);
             this.hasChaos = true;
+            this.scene.world.deleteTrigger("seed_progress_trigger");
+
+            // The wise stone is not needed anymore!
+            this.scene.stone.remove();
+
+            // This route does not need shiba in this state
+            this.scene.shiba.remove();
+
+            // The bird is unnecessary as well
+            this.scene.bird.remove();
+
             Conversation.setGlobal("hasChaos", "true");
         }
     }
@@ -359,6 +376,20 @@ export class Player extends PhysicsEntity {
             this.scene.scenes.pushScene(GotItemScene, Item.WEIRD_THROW);
             this.hasWeirdThrow = true;
             Conversation.setGlobal("hasWeirdThrow", "true");
+            
+            // After getting the super throw, next stop is the almighty flying powerup.
+            const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "flying_powerup_chaos_spawn");
+            if (!spawn) throw new Error("Spawn named 'flying_powerup_chaos_spawn' not found");
+            this.scene.wing.setPosition(spawn?.x, spawn?.y);
+            this.scene.game.campaign.runAction("enable", null, ["wing", "wingChaos1"]);
+        } 
+    }
+
+    public enableFlying (): void {
+        if (!this.hasFlying) {
+            this.scene.scenes.pushScene(GotItemScene, Item.FLYING);
+            this.hasFlying = true;
+            Conversation.setGlobal("hasFlying", "true");
         } 
     }
 

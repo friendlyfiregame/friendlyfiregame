@@ -12,6 +12,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { Sound } from "../Sound";
 import { Wood } from "./Wood";
+import { Campaign } from "../Campaign";
 
 export enum SeedState {
     FREE = 0,
@@ -106,6 +107,19 @@ export class Seed extends NPC {
 
     public update(dt: number): void {
         super.update(dt);
+
+        // Triggers
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+
+        // As soon as the seed reaches this point while the trigger is still active,
+        // the goose will die and this route will be locked off.
+        if (triggerCollisions.length > 0) {
+            const trigger = triggerCollisions.find(t => t.name === "seed_progress_trigger");
+            if (trigger) {
+                this.scene.world.deleteTrigger("seed_progress_trigger");
+                this.scene.goose.turnDead();
+            }
+        }
 
         if (this.state === SeedState.SWIMMING) {
             const diffX = this.floatingPosition.x - this.x;

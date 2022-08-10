@@ -16,7 +16,6 @@ const webPreferences: Preferences = {
         setEnabled: async (fullscreen: boolean) => {
             if (fullscreen && document.fullscreenElement == null) {
                 const gameCanvas = getCanvas();
-                console.log(gameCanvas);
                 gameCanvas.requestFullscreen();
             } else if (!fullscreen && document.fullscreenElement != null) {
                 document.exitFullscreen();

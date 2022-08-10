@@ -46,6 +46,14 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
     "sourceSize": { "w": 28, "h": 35 },
     "duration": 175
+   },
+   "6": {
+    "frame": { "x": 56, "y": 35, "w": 28, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 28, "h": 35 },
+    "sourceSize": { "w": 28, "h": 35 },
+    "duration": 175
    }
  },
  "meta": {
@@ -57,7 +65,8 @@
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 2, "direction": "pingpong" },
-   { "name": "walk", "from": 3, "to": 5, "direction": "pingpong" }
+   { "name": "walk", "from": 3, "to": 5, "direction": "pingpong" },
+   { "name": "dead", "from": 6, "to": 6, "direction": "forward" }
   ]
  }
 }

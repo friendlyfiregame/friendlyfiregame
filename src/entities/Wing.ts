@@ -1,10 +1,9 @@
-import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "../Quests";
-import { RenderingLayer } from "../Renderer";
+import { Aseprite } from "../Aseprite";
 
 @entity("wing")
 export class Wing extends NPC {
@@ -13,9 +12,12 @@ export class Wing extends NPC {
 
     private floatAmount = 4;
     private floatSpeed = 2;
+    private isBeingDisintegrated = false;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);
+        this.animator.assignSprite(Wing.sprite);
+        this.lookAtPlayer = false;
     }
 
     protected showDialoguePrompt(): boolean {
@@ -29,15 +31,25 @@ export class Wing extends NPC {
         );
     }
 
+    public pickupAgainstWill (): void {
+        this.isBeingDisintegrated = true;
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
-        this.scene.renderer.addAseprite(
-            Wing.sprite,
-            "idle",
-            this.x, this.y - floatOffsetY,
-            RenderingLayer.ENTITIES
-        );
+        if (this.isBeingDisintegrated) {
+            this.animator.play("disintegrate", this.direction, { loop: false, callback: this.grantFlying.bind(this) });
+        } else {
+            this.animator.addOffset(0, floatOffsetY).play("idle", this.direction);
+        }
+
+        // this.scene.renderer.addAseprite(
+        //     Wing.sprite,
+        //     "idle",
+        //     this.x, this.y - floatOffsetY,
+        //     RenderingLayer.ENTITIES
+        // );
 
         if (this.scene.showBounds) {
             this.drawBounds();
@@ -55,5 +67,10 @@ export class Wing extends NPC {
 
         this.dialoguePrompt.update(dt, this.x, this.y + 16);
         this.speechBubble.update(this.x, this.y);
+    }
+
+    private grantFlying (): void {
+        this.scene.player.enableFlying();
+        this.scene.removeGameObject(this);
     }
 }

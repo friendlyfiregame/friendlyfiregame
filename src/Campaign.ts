@@ -14,6 +14,8 @@ import flameboy3 from "../assets/dialog/flameboy3.dialog.json";
 import flameboy4 from "../assets/dialog/flameboy4.dialog.json";
 import { Game } from "./Game";
 import { GameScene } from "./scenes/GameScene";
+import goose1 from "../assets/dialog/goose1.dialog.json";
+import gooseDead from "../assets/dialog/gooseDead.dialog.json";
 import { NPC } from "./entities/NPC";
 import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
 import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE } from "./Quests";
@@ -35,6 +37,7 @@ import tree1 from "../assets/dialog/tree1.dialog.json";
 import tree2 from "../assets/dialog/tree2.dialog.json";
 import { valueCurves } from "./Particles";
 import wing1 from "../assets/dialog/wing1.dialog.json";
+import wingChaos1 from "../assets/dialog/wingChaos1.dialog.json";
 
 export type CampaignState = "start" | "finished";
 
@@ -62,11 +65,14 @@ const allDialogs: Record<string, DialogJSON> = {
     "powershiba2": powershiba2,
     "spider1": spider1,
     "flameboy1": flameboy1,
-    "flameboy2": flameboy2,
+    "flameboy2": flameboy2,         
     "flameboy3": flameboy3,
     "flameboy4": flameboy4,
     "wing1": wing1,
+    "wingChaos1": wingChaos1,
     "shadowpresence1": shadowpresence1,
+    "goose1": goose1,
+    "gooseDead": gooseDead
 };
 
 export enum CharacterAsset {
@@ -134,6 +140,7 @@ export class Campaign {
         this.runAction("enable", null, ["stone", "stone1"]);
         this.runAction("enable", null, ["stonedisciple", "stonedisciple1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
+        this.runAction("enable", null, ["goose", "goose1"]);
         this.runAction("enable", null, ["wing", "wing1"]);
         this.runAction("enable", null, ["spider", "spider1"]);
         this.runAction("enable", null, ["shadowpresence", "shadowpresence1"]);
@@ -329,6 +336,9 @@ export class Campaign {
                 case "collectWeirdThrow":
                     this.gameScene.superThrow.pickupAgainstWill();
                     break;
+                case "collectFlying":
+                    this.gameScene.wing.pickupAgainstWill();
+                    break;
                 case "spawnseed":
                     this.gameScene.tree.spawnSeed();
                     break;
@@ -377,6 +387,7 @@ export class Campaign {
                         "tree": this.gameScene.tree,
                         "seed": this.gameScene.seed,
                         "flameboy": this.gameScene.flameboy,
+                        "goose": this.gameScene.goose,
                         "wing": this.gameScene.wing,
                         "caveman": this.gameScene.caveman,
                         "shadowpresence": this.gameScene.shadowPresence,
