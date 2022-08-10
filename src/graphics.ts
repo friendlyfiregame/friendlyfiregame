@@ -1,3 +1,6 @@
+import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
+
+/** Canvas used by the game to render stuff. It's a singleton... */
 let gameCanvas: HTMLCanvasElement;
 
 export async function loadImage(source: string | URL): Promise<HTMLImageElement> {
@@ -14,17 +17,17 @@ export async function loadImage(source: string | URL): Promise<HTMLImageElement>
 }
 
 export function createCanvas(width: number, height: number): HTMLCanvasElement {
-    gameCanvas = document.createElement("canvas")!;
-    gameCanvas.id = "game";
-    gameCanvas.width = width;
-    gameCanvas.height = height;
+    const c = document.createElement("canvas")!;
+    c.width = width;
+    c.height = height;
 
-    return gameCanvas;
+    return c;
 }
 
-export function getCanvas(): HTMLCanvasElement {
+export function getGameCanvas(width: number = GAME_CANVAS_WIDTH, height: number = GAME_CANVAS_HEIGHT): HTMLCanvasElement {
     if (gameCanvas == null) {
-        throw new Error("Canvas has not yet been created.");
+        gameCanvas = createCanvas(width, height);
+        gameCanvas.id = "game";
     }
     return gameCanvas;
 }

@@ -2,7 +2,7 @@ import { Assets } from "./Assets";
 import { Campaign } from "./Campaign";
 import { clamp } from "./util";
 import { ControllerManager } from "./input/ControllerManager";
-import { createCanvas, getRenderingContext } from "./graphics";
+import { getGameCanvas, getRenderingContext } from "./graphics";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
@@ -35,7 +35,7 @@ export abstract class Game {
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
-        const canvas = this.canvas = createCanvas(width, height);
+        const canvas = this.canvas = getGameCanvas(width, height);
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics
         // on some systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So
         // it is deactivated here.

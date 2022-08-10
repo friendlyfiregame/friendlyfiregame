@@ -1,4 +1,4 @@
-import { getCanvas } from "../graphics";
+import { getGameCanvas } from "../graphics";
 
 export interface Preferences {
     readonly fullscreen: {
@@ -14,12 +14,12 @@ const webPreferences: Preferences = {
     fullscreen: {
         isEnabled: async () => Promise.resolve(document.fullscreenEnabled && document.fullscreenElement != null),
         setEnabled: async (fullscreen: boolean) => {
-            if (fullscreen && document.fullscreenElement == null) {
-                const gameCanvas = getCanvas();
-                console.log(gameCanvas);
-                gameCanvas.requestFullscreen();
-            } else if (!fullscreen && document.fullscreenElement != null) {
-                document.exitFullscreen();
+            const gameCanvas = getGameCanvas();
+            const currentFullscreenElement = document.fullscreenElement;
+            if (fullscreen && currentFullscreenElement !== gameCanvas) {
+                return gameCanvas.requestFullscreen({ navigationUI: "hide" });
+            } else if (!fullscreen && currentFullscreenElement != null) {
+                return document.exitFullscreen();
             }
 
         }
