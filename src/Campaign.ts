@@ -21,6 +21,7 @@ import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
 import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE } from "./Quests";
 import seed1 from "../assets/dialog/seed1.dialog.json";
 import shadowpresence1 from "../assets/dialog/shadowpresence1.dialog.json";
+import shadowpresenceChaos1 from "../assets/dialog/shadowpresenceChaos1.dialog.json";
 import shiba1 from "../assets/dialog/shiba1.dialog.json";
 import shiba2 from "../assets/dialog/shiba2.dialog.json";
 import shiba3 from "../assets/dialog/shiba3.dialog.json";
@@ -71,6 +72,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "wing1": wing1,
     "wingChaos1": wingChaos1,
     "shadowpresence1": shadowpresence1,
+    "shadowpresenceChaos1": shadowpresenceChaos1,
     "goose1": goose1,
     "gooseDead": gooseDead
 };

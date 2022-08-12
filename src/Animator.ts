@@ -14,6 +14,7 @@ export type CurrentAnimationState = {
     duration: number;
     config?: AnimationConfig;
     direction?: number;
+    flipVertically?: boolean;
 };
 
 /**
@@ -84,8 +85,9 @@ export class Animator {
      * @param ctx    - The canvas context to draw to.
      * @param config - Optional animation configuration.
      */
-    public play(tag: string, direction: number, config?: AnimationConfig): void {
+    public play(tag: string, direction: number, config?: AnimationConfig, flipVertically?: boolean): void {
         this.currentAnimation.direction = direction;
+        this.currentAnimation.flipVertically = flipVertically;
         this.updateAnimation(tag, config);
 
         let animationTime = (this.entity.scene.gameTime * 1000) - this.currentAnimation.start;
@@ -114,7 +116,7 @@ export class Animator {
         if (this.sprite) {
             this.entity.scene.renderer.addAseprite(
                 this.sprite, this.currentAnimation.tag, this.entity.x - this.offsetX, this.entity.y - this.offsetY,
-                RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime
+                RenderingLayer.ENTITIES, this.currentAnimation.direction, animationTime, undefined, this.currentAnimation.flipVertically
             );
         }
     }

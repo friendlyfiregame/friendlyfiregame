@@ -12,7 +12,6 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { Sound } from "../Sound";
 import { Wood } from "./Wood";
-import { Campaign } from "../Campaign";
 
 export enum SeedState {
     FREE = 0,

@@ -33,6 +33,7 @@ import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { RiddleStone } from "../entities/RiddleStone";
 import { Scene } from "../Scene";
 import { Seed } from "../entities/Seed";
+import { ShadowHand } from "../entities/ShadowHand";
 import { ShadowPresence } from "../entities/ShadowPresence";
 import { Shiba, ShibaState } from "../entities/Shiba";
 import { Skull } from "../entities/Skull";
@@ -47,6 +48,7 @@ import { World } from "../World";
 import { ExitPortal } from "../entities/ExitPortal";
 import { Window } from "../entities/Window";
 import { Goose } from "../entities/Goose";
+import { ShadowGate } from "../entities/ShadowGate";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -322,6 +324,10 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Portal(this, entity.x, entity.y);
                     case "window":
                         return new Window(this, entity.x, entity.y);
+                    case "shadowhand":
+                        return new ShadowHand(this, entity.x, entity.y, entity.properties);
+                    case "shadowgate":
+                        return new ShadowGate(this, entity.x, entity.y);
                     case "player":
                         const startingPos = this.getPlayerStartingPos();
                         return new Player(this, startingPos.x, startingPos.y);

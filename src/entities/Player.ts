@@ -367,6 +367,9 @@ export class Player extends PhysicsEntity {
             // The bird is unnecessary as well
             this.scene.bird.remove();
 
+            // Change state of shadowPresence
+            this.scene.shadowPresence.initChaosRoute();
+
             Conversation.setGlobal("hasChaos", "true");
         }
     }

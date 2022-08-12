@@ -211,9 +211,13 @@ export class Renderer {
 
     public addAseprite (
         sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer,
-        direction = 1, time?: number, alpha?: number
+        direction = 1, time?: number, alpha?: number, flipVertically?: boolean
     ): void {
-        const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
+        // const scale = direction < 0 ? { x: -1, y: 1 } : undefined;
+        const scale = {
+            x: direction < 0 ? -1 : 1,
+            y: flipVertically ? -1 : 1
+        };
 
         this.add({
             type: RenderingType.ASEPRITE,

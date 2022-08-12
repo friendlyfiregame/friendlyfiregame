@@ -68,6 +68,15 @@ export abstract class Entity implements GameObject {
         return this.distanceTo(this.scene.player);
     }
 
+    public get absoluteDistanceToPlayerY(): number {
+        return Math.abs(this.y - this.scene.player.y);
+    }
+
+    public get absoluteDistanceToPlayerX(): number {
+        return Math.abs(this.x - this.scene.player.x);
+    }
+
+
     protected getClosestEntityInRange(range: number): Entity | null {
         const sortedEntityDistances = this.getEntitiesInRange(range).sort(
             (a, b ) => { return a.distance - b.distance; }

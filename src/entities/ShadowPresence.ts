@@ -10,7 +10,8 @@ import { SoundEmitter } from "../SoundEmitter";
 
 enum AnimationTag {
     INVISIBLE = "invisible",
-    IDLE = "idle"
+    IDLE = "idle",
+    IDLE2 = "idle2"
 }
 
 @entity("shadowpresence")
@@ -23,6 +24,7 @@ export class ShadowPresence extends NPC {
     private soundEmitter: SoundEmitter;
 
     private isNearPlayer = false;
+    private isInShadowRealm = false;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 12, 46);
@@ -43,9 +45,26 @@ export class ShadowPresence extends NPC {
         );
     }
 
+    private getIdleAnimationTag (): AnimationTag {
+        return this.isInShadowRealm ? AnimationTag.IDLE2 : AnimationTag.IDLE;
+    }
+
+    /**
+     * This will move the shadow guy back into his lair and change his dialog etc for the
+     * chaos ending route.
+     */
+    public initChaosRoute (): void {
+        const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "shadowpresence_chaos_spawn");
+        if (!spawn) throw new Error("Spawn named 'shadowpresence_chaos_spawn' not found");
+        this.scene.shadowPresence.setPosition(spawn?.x, spawn?.y);
+        this.scene.game.campaign.runAction("enable", null, ["shadowpresence", "shadowpresenceChaos1"]);
+        this.scene.setGateDisabled("shadowgate_door_1", false);
+        this.isInShadowRealm = true;
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         const scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
-        const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
+        const animationTag = this.isNearPlayer ? this.getIdleAnimationTag() : AnimationTag.INVISIBLE;
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
