@@ -84,7 +84,7 @@ const allDialogs: Record<string, DialogJSON> = {
 };
 
 export enum CharacterAsset {
-    FEMALE, MALE, PATIENT
+    FEMALE, MALE, PATIENT, SHADOW
 }
 
 export enum VoiceAsset {
@@ -298,6 +298,9 @@ export class Campaign {
                     break;
                 case "shibaNextState":
                     this.gameScene.shiba.nextState();
+                    break;
+                case "touchDarkness":
+                    this.gameScene.player.enterAbyssBarrier();
                     break;
                 case "cavemanNextState":
                     this.gameScene.caveman.giveDoubleJump();

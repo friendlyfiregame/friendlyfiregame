@@ -85,7 +85,8 @@ export class Player extends PhysicsEntity {
     @asset([
         "sprites/pc/female.aseprite.json",
         "sprites/pc/male.aseprite.json",
-        "sprites/pc/patient.aseprite.json"
+        "sprites/pc/patient.aseprite.json",
+        "sprites/pc/shadow.aseprite.json"
     ])
     public static playerSprites: Aseprite[];
 
@@ -423,6 +424,9 @@ export class Player extends PhysicsEntity {
         Conversation.setGlobal("hasDoubleJump", "false");
     }
 
+    public hasDoubleJump (): boolean {
+        return this.doubleJump;
+    }
 
     public switchToReality(): void {
         this.canRun = false;
@@ -431,6 +435,18 @@ export class Player extends PhysicsEntity {
         this.walkingSpeed = 3;
         this.characterAsset = CharacterAsset.PATIENT;
         this.direction = -1;
+    }
+
+    public switchToContainer (): void {
+        this.setFloating(true);
+        this.characterAsset = CharacterAsset.SHADOW;
+    }
+
+    public enterAbyssBarrier (): void {
+        const abyssGate = this.scene.gateObjects.find(g => g.name === "darkcontainerdoor_1");
+        if (!abyssGate) throw new Error("Missing gate called 'darkcontainerdoor_1'");
+        // abyssGate.properties.disabled = false;
+        this.enterGate(abyssGate);
     }
 
     public enterShadowCave(): void {
@@ -592,10 +608,8 @@ export class Player extends PhysicsEntity {
                 this.enableRainDance(true);
                 this.think("I can do everything now.", 1500);
             } else if (event.key === "j") {
-                // this.enableDoubleJump();
                 // this.enableAbyssWalking();
-                // this.scene.stoneDisciple.putIntoRiver();
-                this.scene.caveman.leaveCave();
+                this.scene.shadowPresence.sendHome();
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
                 this.think("Toggling bounds.", 1500);
@@ -678,6 +692,18 @@ export class Player extends PhysicsEntity {
      * @param gate the source the player enters
      */
     private async enterGate(gate: GameObjectInfo): Promise<void> {
+        // Set Global Conversation Variables from map triggers
+        const globalConversationProps = {
+            key: gate.properties.setGlobalKey,
+            value: gate.properties.setGlobalVal
+        };
+        console.log(globalConversationProps);
+
+        if (globalConversationProps.key && globalConversationProps.value) {
+            Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
+            console.log(Conversation.getGlobals());
+        }
+
         if (gate.properties.locked) {
             this.think(gate.properties.lockedText ?? "It's locked", 2000);
         } else  if (gate.properties.target) {
@@ -727,6 +753,10 @@ export class Player extends PhysicsEntity {
 
                         if (targetGate.name === "exitportaldoor_2") {
                             this.switchToReality();
+                        }
+
+                        if (targetGate.name === "darkcontainerdoor_2") {
+                            this.switchToContainer();
                         }
 
                         if (targetGate.name === "shadowgate_door_2") {

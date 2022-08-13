@@ -1,5 +1,27 @@
 {
     "entry": [
-        "If it isn't saviour !end @entry"
+        "If it isn't my saviour.",
+        "Great to see you again!",
+        "►How are you doing? @feel",
+        "►Gotta go. !end @entry"
+    ],
+    "met": [
+        "Hello again.",
+        "Care for a spot at my campfire?",
+        "►Sorry, I can't sit. @sit",
+        "►Gotta go. !end @met"
+    ],
+    "sit": [
+        "Flimsy excuse, but suit yourself. !end @met"
+    ],
+    "feel": [
+        "I'm great!",
+        "Sitting next to a fire outside a cave is way more relaxing.",
+        "►Aren't you interested in exploring this world? @explore"
+    ],
+    "explore": [
+        "Nah, I talked a couple of the people on the way, but they seem to ignore me for the most part.",
+        "I decided to keep a low profile and just enjoy the night sky for a bit.",
+        "►Fair enough. !end @met"
     ]
 }

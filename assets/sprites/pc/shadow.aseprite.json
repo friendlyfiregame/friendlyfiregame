@@ -1,0 +1,50 @@
+{ "frames": [
+   {
+    "filename": "0",
+    "frame": { "x": 0, "y": 0, "w": 26, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 44 },
+    "sourceSize": { "w": 26, "h": 44 },
+    "duration": 750
+   },
+   {
+    "filename": "1",
+    "frame": { "x": 26, "y": 0, "w": 26, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 44 },
+    "sourceSize": { "w": 26, "h": 44 },
+    "duration": 200
+   },
+   {
+    "filename": "2",
+    "frame": { "x": 52, "y": 0, "w": 26, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 44 },
+    "sourceSize": { "w": 26, "h": 44 },
+    "duration": 750
+   },
+   {
+    "filename": "3",
+    "frame": { "x": 78, "y": 0, "w": 26, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 44 },
+    "sourceSize": { "w": 26, "h": 44 },
+    "duration": 200
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
+  "image": "shadow.png",
+  "format": "I8",
+  "size": { "w": 104, "h": 44 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 3, "direction": "forward" }
+  ]
+ }
+}

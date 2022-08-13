@@ -108,6 +108,7 @@ export class Caveman extends ScriptableNPC {
     public giveDoubleJump (): void {
         this.scene.player.removeDoubleJump();
         this.conversation = null;
+        this.leaveCave();
     }
 
     public initChaosRoute (): void {

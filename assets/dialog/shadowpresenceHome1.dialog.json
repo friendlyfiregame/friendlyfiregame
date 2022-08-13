@@ -1,5 +1,122 @@
 {
     "entry": [
-        "Greetings, human! !endgameF !end"
+        "Hey, great to see you!",
+        "Make yourself right at home.",
+        "►What is this place? @place"
+    ],
+    "place": [
+        "Come on, don't be rude. This is my appartment.",
+        "►You live here? @live"
+    ],
+    "live": [
+        "Well, yes. I even decorated this place a bit.",
+        "Most of my kind do not have this sick gaming setup ready to roll. @entry2"
+    ],
+    "entry2": [
+        "Anything I can do for you?",
+        "►[$triedToEscapeAbyss]Ehm… How can I leave this place? @leave",
+        "►[not knowAboutGame]What are you playing? @playing",
+        "►[knowAboutGame]Can I join your racing game? @joinGame",
+        "►[not knowAboutHands]Some hands tried to grab me on the way. @hands",
+        "►[not knowAboutGate]What's that behind you?. @gate",
+        "►[knowAboutGate]What happens if I pass the abysmal barrier? @passBarrier",
+        "►[not knowAboutGravity]Why can't I move properly?. @move",
+        "►I'll have look around your appartment.",
+        "Sure thing! !end @entry2"
+    ],
+    "leave": [
+        "[nowAboutNotAbleToLeave]Like I said, nothing I can do. @nothing",
+        "Why would you want to do that? !set nowAboutNotAbleToLeave true",
+        "But don't think too much about it. You can't.",
+        "Didn't I mention that when inviting you?",
+        "►You did not.",
+        "Sorry, my bad.",
+        "Entering this realm is irreversible for mortals.",
+        "But I got games down here, don't worry.",
+        "It's way better than up top in the light.",
+        "►Are you serious? @serious",
+        "►I need a minute to digest this… @minute"
+    ],
+    "nothing": [
+        "You're stuck here with me… and videgames! Yay! !end @entry2"
+    ],
+    "minute": [
+        "Take your time.",
+        "I'd offer you something to drink, but I do not have such things",
+        "►Great. !end @entry2"
+    ],
+    "serious": [
+        "I already said I'm sorry, jeez.",
+        "It's not like this is the worst that could have happened to you.",
+        "Think positive, you can watch me play this racing game!",
+        "►Great. !end @entry2"
+    ],
+    "passBarrier": [
+        "No idea. All mortals that have passed the barrier in the past have vanished.",
+        "You'd probably die. Or worse.",
+        "Just make sure to not fall into it. You're my guest after all!",
+        "►No promises.",
+        "Ehh? @entry2"
+    ],
+    "joinGame": [
+        "[knowAboutOneController] I'm still playing. Please wait your turn. @waitTurn",
+        "Yeah, of course! Great that you ask. !set knowAboutOneController true",
+        "…",
+        "Dammit… I only have one controller.",
+        "We can take turns though.",
+        "►…Seriously? @entry2"
+    ],
+    "waitTurn": [
+        "Shouldn't be too long. That rainbow course is tough after all.",
+        "►Alright. @entry2"
+    ],
+    "move": [
+        "Oh, You can't? !set knowAboutGravity true",
+        "Sorry, no idea about that. Probably some side effect of being in between worlds.",
+        "Don't worry about it too much. No need to jump or run here.",
+        "►If you say so… @entry2"
+    ],
+    "gate": [
+        "Oh right, that's the abysmal barrier. !set knowAboutGate true",
+        "This appartment is in between your world and the abyss. That's why you can walk around here with the power up. It won't help you past the barrier though.",
+        "►That sounds kinda dangerous. @dangerous"
+    ],
+    "dangerous": [
+        "Not for me it is.",
+        "I mean, I usually don't have humans or other mortals over, so I have no reason to really guard it.",
+        "It also looks very cool, don't you think?",
+        "►I'll try to not stumble into it.",
+        "You better not. @entry2"
+    ],
+    "hands": [
+        "I'm glad you noticed the decoration. !set knowAboutHands true",
+        "They are cheaper if you buy them in bulk. They're cool right?",
+        "►I almost fainted. @handsFainted",
+        "►Not my style. @handsStyle",
+        "►Love them. @handsLove"
+    ],
+    "handsFainted": [
+        "Oh right, humans are afraid of such things.",
+        "Sorry, didn't think about that. My bad.",
+        "►It's fine @entry2"
+    ],
+    "handsStyle": [
+        "Well, tastes differs. I probably don't like your appartment decoration either.",
+        "No offense, of course.",
+        "►None taken @entry2"
+    ],
+    "handsLove": [
+        "Right??? I wish I'd bought even more!",
+        "►Back to topic @entry2"
+    ],
+    "playing": [
+        "It's a cool retro racing game I bought on a yard sale. !set knowAboutGame true",
+        "You try to murder your opponents with the shells of aquatic reptiles and fruit.",
+        "I wasn't able to really get behind the lore yet…",
+        "But it's fun… AND it has a two player mode!",
+        "►I might come back to that offer. @entry2"
+    ],
+    "end": [
+        "end !endgameF !end"
     ]
 }
