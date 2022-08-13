@@ -108,7 +108,7 @@ export class Shiba extends ScriptableNPC {
 
         if (this.state === ShibaState.FLYING_AWAY) {
             this.lookAtPlayer = false;
-            this.scene.player.disableMultiJump();
+            this.scene.player.removeMultiJump();
             this.setMaxVelocity(3);
         } else if (this.state === ShibaState.ON_MOUNTAIN) {
             this.move = 0;

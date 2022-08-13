@@ -93,6 +93,7 @@ export class Stone extends NPC implements CollidableGameObject {
                 );
 
                 this.state = StoneState.SWIMMING;
+                this.dialogueAutomoveEnabled = false;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
                 this.y = this.floatingPosition.y;

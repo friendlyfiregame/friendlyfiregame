@@ -21,15 +21,22 @@
         "►[not taught]Any idea how to get over that bridge? @bridge",
         "►[not darkness]Why are you surrounded by darkness? @darkness",
         "►[darkness]Can I still come by later? @comebye",
+        "►[darkness]What about that powerup to enter the darkness? @powerup",
         "►[not pokemon]Are you playing on your phone? @pokemon",
         "►[taught]How does the running work again? @running",
         "►I'll get going. !set visited",
         "Sure, keep up the good work. @visited !end"
     ],
+    "powerup": [
+        "Oh yeah. Humans cannot enter the abyss by natural means. But there's a power up for every problem.",
+        "Last time I heard of it, it was buried in some cave.",
+        "►I'll keep that in mind. Thanks! @visited"
+    ],
     "darkness": [
         "Makes me feel at ease.",
         "I don't really like daylight, let alone fire.",
         "This also serves as a gateway home. You can totally come by later if you have nothing better to do. !set darkness",
+        "Humans cannot endure the depths of the abyss, but there is a power up for that. I think it was buried in some cave.",
         "►I'm kinda in the middle of something right now. @middleofsomething",
         "►Sure, maybe later. @maybelater"
     ],

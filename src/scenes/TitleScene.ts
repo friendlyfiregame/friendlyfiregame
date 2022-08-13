@@ -83,7 +83,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
     private titleBasePosition = {
         x: this.game.width / 2 - TitleScene.logoImage.width / 2,
-        y: 60
+        y: 50
     };
 
     private titleLayer1Position = { x: 0, y: 70 };
@@ -232,13 +232,14 @@ export class TitleScene extends Scene<FriendlyFire> {
             new SceneNode({
                 opacity: 0,
                 x: 118,
-                y: 108,
+                y: 96,
             })
             .appendChild(this.addEndingCard(0, QuestKey.A))
             .appendChild(this.addEndingCard(1, QuestKey.B))
             .appendChild(this.addEndingCard(2, QuestKey.C))
             .appendChild(this.addEndingCard(3, QuestKey.D))
             .appendChild(this.addEndingCard(4, QuestKey.E))
+            .appendChild(this.addEndingCard(5, QuestKey.F))
             .animate({
                 animator: (node, value) => node.setOpacity(value),
                 delay: 2.5,
@@ -278,18 +279,24 @@ export class TitleScene extends Scene<FriendlyFire> {
             case QuestKey.C: tag = "c_"; break;
             case QuestKey.D: tag = "d_"; break;
             case QuestKey.E: tag = "e_"; break;
+            case QuestKey.F: tag = "f_"; break;
         }
 
         const isAchieved = GlobalState.getAchievedEndings().includes(key);
         tag += isAchieved ? "on" : "off";
+        
+
+        const cardsPerRow = 5;
+        const width = 50;
+        const height = 36;
 
         return new AsepriteNode({
             id: `endingCard_${key}`,
             aseprite: TitleScene.endingCards,
             tag,
             anchor: Direction.TOP_LEFT,
-            x: index * 40 + (index * 10),
-            y: 0
+            x: (index % cardsPerRow) * width,
+            y: Math.floor(index / cardsPerRow) * height
         });
     }
 

@@ -38,6 +38,8 @@ export interface GameObjectProperties {
     col?: number;
     row?: number;
     newGamePlus?: boolean;
+    locked?: boolean;
+    lockedText?: string;
 }
 
 export interface GameObjectInfo {

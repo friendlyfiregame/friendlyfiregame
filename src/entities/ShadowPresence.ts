@@ -4,14 +4,20 @@ import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "../Quests";
-import { RenderingLayer, RenderingType } from "../Renderer";
 import { Sound } from "../Sound";
 import { SoundEmitter } from "../SoundEmitter";
 
 enum AnimationTag {
     INVISIBLE = "invisible",
     IDLE = "idle",
-    IDLE2 = "idle2"
+    IDLE2 = "idle2",
+    SITTING = "sitting"
+}
+
+enum State {
+    OUTSIDE = "outside",
+    INSIDE_PLAYING = "insidePlaying",
+    INSIDE_CHAOS = "insideAfraid"
 }
 
 @entity("shadowpresence")
@@ -24,13 +30,14 @@ export class ShadowPresence extends NPC {
     private soundEmitter: SoundEmitter;
 
     private isNearPlayer = false;
-    private isInShadowRealm = false;
+    private state = State.OUTSIDE;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 12, 46);
         this.direction = -1;
         this.lookAtPlayer = false;
         this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
+        this.animator.assignSprite(ShadowPresence.sprite);
     }
 
     protected showDialoguePrompt(): boolean {
@@ -46,7 +53,11 @@ export class ShadowPresence extends NPC {
     }
 
     private getIdleAnimationTag (): AnimationTag {
-        return this.isInShadowRealm ? AnimationTag.IDLE2 : AnimationTag.IDLE;
+        switch (this.state) {
+            case State.OUTSIDE: return AnimationTag.IDLE;
+            case State.INSIDE_CHAOS: return AnimationTag.IDLE2;
+            case State.INSIDE_PLAYING: return AnimationTag.SITTING;
+        }
     }
 
     /**
@@ -59,26 +70,34 @@ export class ShadowPresence extends NPC {
         this.scene.shadowPresence.setPosition(spawn?.x, spawn?.y);
         this.scene.game.campaign.runAction("enable", null, ["shadowpresence", "shadowpresenceChaos1"]);
         this.scene.setGateDisabled("shadowgate_door_1", false);
-        this.isInShadowRealm = true;
+        this.state = State.INSIDE_CHAOS;
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        const scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
-        const animationTag = this.isNearPlayer ? this.getIdleAnimationTag() : AnimationTag.INVISIBLE;
+    /**
+     * As soon as the fire is fed, this guy will head home and can be accessed for
+     * an optional ending
+     */
+    public sendHome (): void {
+        const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "shadowpresence_chaos_spawn");
+        if (!spawn) throw new Error("Spawn named 'shadowpresence_chaos_spawn' not found");
+        this.scene.shadowPresence.setPosition(spawn?.x, spawn?.y);
+        this.scene.game.campaign.runAction("enable", null, ["shadowpresence", "shadowpresenceHome1"]);
+        this.scene.setGateDisabled("shadowgate_door_1", false);
+        this.state = State.INSIDE_PLAYING;
+    }
 
-        this.scene.renderer.add({
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
-            position: {
-                x: -ShadowPresence.sprite.width >> 1,
-                y: -ShadowPresence.sprite.height
-            },
-            scale,
-            asset: ShadowPresence.sprite,
-            animationTag,
-            time: this.scene.gameTime * 1000
-        });
+    private getAnimationTag (): AnimationTag {
+        if (this.state === State.OUTSIDE) {
+            return this.isNearPlayer ? this.getIdleAnimationTag() : AnimationTag.INVISIBLE;
+        } else {
+            return this.getIdleAnimationTag();
+        }
+    }
+
+
+    public draw(ctx: CanvasRenderingContext2D): void {
+        const animationTag = this.getAnimationTag();
+        this.animator.play(animationTag, this.direction);
 
         if (this.scene.showBounds) {
             this.drawBounds();

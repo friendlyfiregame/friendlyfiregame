@@ -65,7 +65,41 @@
         "►How did you get here? @memories",
         "►Anything interesting about this cave? @cave",
         "►Why the open fire in the cave? @fire",
+        "►[$hasDoubleJump]I might be able to help you out. @help",
         "►Nevermind. @visitedEntry !end"
+    ],
+    "help": [
+        "Are you serious? That would be amazing!",
+        "►[$hasMultiJump]Since I can fly, I have my double jump power to spare. @spareDoubleJump",
+        "►[not $hasMultiJump]I could give my double jump ability. @missingFlying",
+        "►Just kidding, nothing I can do. @kidding"
+    ],
+    "kidding": [
+        "That's not a joking matter… @questions"
+    ],
+    "spareDoubleJump": [
+        "That's the best thing I've heard in a hundred years…",
+        "Literally.",
+        "I'm ready if you are.",
+        "►Here you go. @giveDoubleJump",
+        "►Just kidding mate. @kidding"
+    ],
+    "missingFlying": [
+        "Are you nuts? We would just be swapping places.",
+        "Without your so called flying ability, you wouldn't be able to get out yourself.",
+        "►That's kinda true.",
+        "It is very much. I'm already stuck here for quite some time and I'll be fine waiting for another century to get out…",
+        "You be on your way to do whatever you must…",
+        "►Got it, sorry mate @questions"
+    ],
+    "giveDoubleJump": [
+        "I can feel it. The power to jump twice! What a relief.",
+        "By the way, when I was saying that there was nothing of interest in this cave, I was kinda lying.",
+        "I found this strange ring here which I kept for myself, even though it didn't really help me in my struggles.",
+        "I'd be happy give it to you as a small token of gratitude. Not sure if it's cursed or whatever.",
+        "Maybe you can use it somehow?",
+        "►Thanks. Maybe I can.",
+        "Let's get going! !cavemanNextState !end "
     ],
     "fire": [
         "Good question! First of all, carbon monoxide poisoning is not something that happens here.",

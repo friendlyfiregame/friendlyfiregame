@@ -259,12 +259,8 @@ export class Fire extends NPC {
         // Disable remaining dialogs
         this.conversation = null;
 
-        // Remove any reachable NPCs
-        for (const npc of [this.scene.shadowPresence]) {
-            if (npc) {
-                this.scene.removeGameObject(npc);
-            }
-        }
+        // Init possible shadowpresence ending
+        this.scene.shadowPresence.sendHome();
 
         // Player thoughts
         [

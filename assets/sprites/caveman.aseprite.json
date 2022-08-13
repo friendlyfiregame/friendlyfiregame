@@ -1,41 +1,79 @@
 { "frames": [
    {
     "filename": "0",
-    "frame": { "x": 0, "y": 22, "w": 17, "h": 21 },
+    "frame": { "x": 0, "y": 0, "w": 18, "h": 38 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 5, "w": 17, "h": 21 },
-    "sourceSize": { "w": 18, "h": 26 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
     "duration": 850
    },
    {
     "filename": "1",
-    "frame": { "x": 0, "y": 0, "w": 17, "h": 22 },
+    "frame": { "x": 18, "y": 0, "w": 18, "h": 38 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 4, "w": 17, "h": 22 },
-    "sourceSize": { "w": 18, "h": 26 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
     "duration": 600
    },
    {
     "filename": "2",
-    "frame": { "x": 17, "y": 0, "w": 17, "h": 22 },
+    "frame": { "x": 36, "y": 0, "w": 18, "h": 38 },
     "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 4, "w": 17, "h": 22 },
-    "sourceSize": { "w": 18, "h": 26 },
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
     "duration": 100
+   },
+   {
+    "filename": "3",
+    "frame": { "x": 54, "y": 0, "w": 18, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
+    "duration": 100
+   },
+   {
+    "filename": "4",
+    "frame": { "x": 72, "y": 0, "w": 18, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
+    "duration": 200
+   },
+   {
+    "filename": "5",
+    "frame": { "x": 90, "y": 0, "w": 18, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
+    "duration": 200
+   },
+   {
+    "filename": "6",
+    "frame": { "x": 108, "y": 0, "w": 18, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 38 },
+    "sourceSize": { "w": 18, "h": 38 },
+    "duration": 200
    }
  ],
  "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.2.19.2",
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
   "image": "caveman.png",
   "format": "I8",
-  "size": { "w": 34, "h": 43 },
+  "size": { "w": 126, "h": 38 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 2, "direction": "forward" }
+   { "name": "sitting", "from": 0, "to": 2, "direction": "forward" },
+   { "name": "idle", "from": 3, "to": 3, "direction": "forward" },
+   { "name": "walking", "from": 4, "to": 6, "direction": "pingpong" }
   ]
  }
 }

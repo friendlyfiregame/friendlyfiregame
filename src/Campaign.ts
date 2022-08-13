@@ -1,5 +1,6 @@
 import caveman1 from "../assets/dialog/caveman1.dialog.json";
 import caveman2 from "../assets/dialog/caveman2.dialog.json";
+import cavemanOutside1 from "../assets/dialog/cavemanOutside1.dialog.json";
 import { Conversation } from "./Conversation";
 import type { DialogJSON } from "*.dialog.json";
 import { FaceModes } from "./Face";
@@ -18,10 +19,11 @@ import goose1 from "../assets/dialog/goose1.dialog.json";
 import gooseDead from "../assets/dialog/gooseDead.dialog.json";
 import { NPC } from "./entities/NPC";
 import powershiba2 from "../assets/dialog/powershiba2.dialog.json";
-import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE } from "./Quests";
+import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE, QuestF } from "./Quests";
 import seed1 from "../assets/dialog/seed1.dialog.json";
 import shadowpresence1 from "../assets/dialog/shadowpresence1.dialog.json";
 import shadowpresenceChaos1 from "../assets/dialog/shadowpresenceChaos1.dialog.json";
+import shadowpresenceHome1 from "../assets/dialog/shadowpresenceHome1.dialog.json";
 import shiba1 from "../assets/dialog/shiba1.dialog.json";
 import shiba2 from "../assets/dialog/shiba2.dialog.json";
 import shiba3 from "../assets/dialog/shiba3.dialog.json";
@@ -33,6 +35,7 @@ import stone1 from "../assets/dialog/stone1.dialog.json";
 import stone2 from "../assets/dialog/stone2.dialog.json";
 import stonedisciple1 from "../assets/dialog/stonedisciple1.dialog.json";
 import stonedisciple2 from "../assets/dialog/stonedisciple2.dialog.json";
+import stonedisciple3 from "../assets/dialog/stonedisciple3.dialog.json";
 import tree0 from "../assets/dialog/tree0.dialog.json";
 import tree1 from "../assets/dialog/tree1.dialog.json";
 import tree2 from "../assets/dialog/tree2.dialog.json";
@@ -45,6 +48,7 @@ export type CampaignState = "start" | "finished";
 const allDialogs: Record<string, DialogJSON> = {
     "caveman1": caveman1,
     "caveman2": caveman2,
+    "cavemanOutside1": cavemanOutside1,
     "fire0": fire0,
     "fire1": fire1,
     "fire2": fire2,
@@ -54,6 +58,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "stone2": stone2,
     "stonedisciple1": stonedisciple1,
     "stonedisciple2": stonedisciple2,
+    "stonedisciple3": stonedisciple3,
     "seed1": seed1,
     "tree0": tree0,
     "tree1": tree1,
@@ -73,6 +78,7 @@ const allDialogs: Record<string, DialogJSON> = {
     "wingChaos1": wingChaos1,
     "shadowpresence1": shadowpresence1,
     "shadowpresenceChaos1": shadowpresenceChaos1,
+    "shadowpresenceHome1": shadowpresenceHome1,
     "goose1": goose1,
     "gooseDead": gooseDead
 };
@@ -93,7 +99,8 @@ export class Campaign {
         new QuestB(this),
         new QuestC(this),
         new QuestD(this),
-        new QuestE(this)
+        new QuestE(this),
+        new QuestF(this)
     ];
     public gameScene?: GameScene | undefined;
 
@@ -292,6 +299,10 @@ export class Campaign {
                 case "shibaNextState":
                     this.gameScene.shiba.nextState();
                     break;
+                case "cavemanNextState":
+                    this.gameScene.caveman.giveDoubleJump();
+                    this.gameScene.player.enableAbyssWalking();
+                    break;
                 case "talkedtotree":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TALKED_TO_TREE);
                     break;
@@ -314,6 +325,10 @@ export class Campaign {
                 case "endgameC":
                     this.getQuest(QuestKey.C).finish();
                     this.gameScene.caveman.conversation = null;
+                    this.gameScene.gameOver();
+                    break;
+                case "endgameF":
+                    this.getQuest(QuestKey.F).finish();
                     this.gameScene.gameOver();
                     break;
                 case "game":

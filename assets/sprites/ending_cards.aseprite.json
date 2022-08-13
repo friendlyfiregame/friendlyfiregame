@@ -1,6 +1,6 @@
 { "frames": [
    {
-    "filename": "ending_cards 0.aseprite",
+    "filename": "0",
     "frame": { "x": 0, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -9,7 +9,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 1.aseprite",
+    "filename": "1",
     "frame": { "x": 44, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -18,7 +18,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 2.aseprite",
+    "filename": "2",
     "frame": { "x": 88, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -27,7 +27,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 3.aseprite",
+    "filename": "3",
     "frame": { "x": 132, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -36,7 +36,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 4.aseprite",
+    "filename": "4",
     "frame": { "x": 176, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -45,7 +45,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 5.aseprite",
+    "filename": "5",
     "frame": { "x": 220, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -54,7 +54,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 6.aseprite",
+    "filename": "6",
     "frame": { "x": 264, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -63,7 +63,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 7.aseprite",
+    "filename": "7",
     "frame": { "x": 308, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -72,7 +72,7 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 8.aseprite",
+    "filename": "8",
     "frame": { "x": 352, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
@@ -81,8 +81,26 @@
     "duration": 100
    },
    {
-    "filename": "ending_cards 9.aseprite",
+    "filename": "9",
     "frame": { "x": 396, "y": 0, "w": 44, "h": 30 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 30 },
+    "sourceSize": { "w": 44, "h": 30 },
+    "duration": 100
+   },
+   {
+    "filename": "10",
+    "frame": { "x": 440, "y": 0, "w": 44, "h": 30 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 30 },
+    "sourceSize": { "w": 44, "h": 30 },
+    "duration": 100
+   },
+   {
+    "filename": "11",
+    "frame": { "x": 484, "y": 0, "w": 44, "h": 30 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 30 },
@@ -91,11 +109,11 @@
    }
  ],
  "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.2.25-x64",
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
   "image": "ending_cards.png",
   "format": "RGBA8888",
-  "size": { "w": 440, "h": 30 },
+  "size": { "w": 528, "h": 30 },
   "scale": "1",
   "frameTags": [
    { "name": "a_on", "from": 0, "to": 0, "direction": "forward" },
@@ -107,7 +125,9 @@
    { "name": "d_on", "from": 6, "to": 6, "direction": "forward" },
    { "name": "d_off", "from": 7, "to": 7, "direction": "forward" },
    { "name": "e_on", "from": 8, "to": 8, "direction": "forward" },
-   { "name": "e_off", "from": 9, "to": 9, "direction": "forward" }
+   { "name": "e_off", "from": 9, "to": 9, "direction": "forward" },
+   { "name": "f_on", "from": 10, "to": 10, "direction": "forward" },
+   { "name": "f_off", "from": 11, "to": 11, "direction": "forward" }
   ]
  }
 }

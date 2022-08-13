@@ -49,6 +49,8 @@ import { ExitPortal } from "../entities/ExitPortal";
 import { Window } from "../entities/Window";
 import { Goose } from "../entities/Goose";
 import { ShadowGate } from "../entities/ShadowGate";
+import { Sign } from "../entities/Sign";
+import { Videogame } from "../entities/Videogame";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
@@ -314,6 +316,8 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Campfire(this, entity.x, entity.y);
                     case "radio":
                         return new Radio(this, entity.x, entity.y);
+                    case "sign":
+                        return new Sign(this, entity.x, entity.y, entity.properties);
                     case "movingplatform":
                         return new MovingPlatform(this, entity.x, entity.y, entity.properties);
                     case "skull":
@@ -322,6 +326,8 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Chicken(this, entity.x, entity.y);
                     case "portal":
                         return new Portal(this, entity.x, entity.y);
+                    case "videogame":
+                        return new Videogame(this, entity.x, entity.y);
                     case "window":
                         return new Window(this, entity.x, entity.y);
                     case "shadowhand":

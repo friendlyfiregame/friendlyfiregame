@@ -5,7 +5,8 @@ export enum QuestKey {
     B = "questB",
     C = "questC",
     D = "questD",
-    E = "questE"
+    E = "questE",
+    F = "questF"
 }
 
 export enum QuestATrigger {
@@ -45,6 +46,10 @@ export enum QuestDTrigger {
 }
 
 export enum QuestETrigger {
+    ENDING_TRIGGERED
+}
+
+export enum QuestFTrigger {
     ENDING_TRIGGERED
 }
 
@@ -180,6 +185,20 @@ export class QuestE extends Quest {
             campaign,
             "AWAK[E]",
             Object.values(QuestETrigger).filter((i): i is number => typeof i === "number")
+        );
+    }
+}
+
+/**
+ * Ending F. Fed the fire but fled to play videogames with the shadowpresence after helping the caveman
+ */
+ export class QuestF extends Quest {
+    public constructor (campaign: Campaign) {
+        super(
+            QuestKey.F,
+            campaign,
+            "NO [F]EAR OF THE DARK",
+            Object.values(QuestFTrigger).filter((i): i is number => typeof i === "number")
         );
     }
 }

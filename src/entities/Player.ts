@@ -28,7 +28,6 @@ import { PlayerConversation } from "../PlayerConversation";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { Seed, SeedState } from "./Seed";
-import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
 import { Sound } from "../Sound";
 import { SpeechBubble } from "../SpeechBubble";
@@ -163,6 +162,7 @@ export class Player extends PhysicsEntity {
     private hasFriendship = false;
     private hasChaos = false;
     private hasFlying = false;
+    private hasAbyssWalking = false;
     private usedJump = false;
     private usedDoubleJump = false;
     private hasWeirdThrow = false;
@@ -297,6 +297,17 @@ export class Player extends PhysicsEntity {
         this.isPettingDog = false;
     }
 
+    public enableAbyssWalking(silent = false): void {
+        if (!this.hasAbyssWalking) {
+            Conversation.setGlobal("hasAbyssWalking", "true");
+            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.ABYSS_WALKING);
+            this.hasAbyssWalking = true;
+
+            const shadowgate = this.scene.gateObjects.find(g => g.name === "shadowgate_door_1");
+            if (shadowgate) shadowgate.properties.locked = false;
+        }
+    }
+
     public enableRunning(silent = false): void {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
 
@@ -326,16 +337,13 @@ export class Player extends PhysicsEntity {
     }
 
     public enableMultiJump(silent = false): void {
+        Conversation.setGlobal("hasMultiJump", "true");
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
 
         if (!this.multiJump) {
             if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.MULTIJUMP);
             this.multiJump = true;
         }
-    }
-
-    public disableMultiJump(): void {
-        this.multiJump = false;
     }
 
     public enableFriendship(): void {
@@ -370,6 +378,9 @@ export class Player extends PhysicsEntity {
             // Change state of shadowPresence
             this.scene.shadowPresence.initChaosRoute();
 
+            // Change state of caveman
+            this.scene.caveman.initChaosRoute();
+
             Conversation.setGlobal("hasChaos", "true");
         }
     }
@@ -397,14 +408,21 @@ export class Player extends PhysicsEntity {
     }
 
     public removePowerUps(): void {
-        this.multiJump = false;
-        this.doubleJump = false;
+        this.removeMultiJump();
+        this.removeDoubleJump();
         this.canRun = false;
     }
 
     public removeMultiJump(): void {
         this.multiJump = false;
+        Conversation.setGlobal("hasMultiJump", "false");
     }
+
+    public removeDoubleJump(): void {
+        this.doubleJump = false;
+        Conversation.setGlobal("hasDoubleJump", "false");
+    }
+
 
     public switchToReality(): void {
         this.canRun = false;
@@ -479,15 +497,7 @@ export class Player extends PhysicsEntity {
                     && this.closestNPC.conversation
                 ) {
                     const conversation = this.closestNPC.conversation;
-
-                    // Disable auto movement to a safe talking distance for the stone in the river
-                    const autoMove = (
-                        this.closestNPC instanceof Sign
-                        || (
-                            this.closestNPC instanceof Stone
-                            && this.closestNPC.state !== StoneState.DEFAULT
-                        ) ? false : true
-                    );
+                    const autoMove = this.closestNPC.dialogueAutomoveEnabled;
 
                     this.playerConversation = new PlayerConversation(
                         this, this.closestNPC, conversation, autoMove
@@ -576,11 +586,16 @@ export class Player extends PhysicsEntity {
                 Player.throwingSound.stop();
                 Player.throwingSound.play();
             } else if (event.key === "k") {
-                this.multiJump = true;
-                this.doubleJump = true;
-                this.canRun = true;
-                this.canRainDance = true;
+                this.enableDoubleJump(true);
+                this.enableMultiJump(true);
+                this.enableRunning(true);
+                this.enableRainDance(true);
                 this.think("I can do everything now.", 1500);
+            } else if (event.key === "j") {
+                // this.enableDoubleJump();
+                // this.enableAbyssWalking();
+                // this.scene.stoneDisciple.putIntoRiver();
+                this.scene.caveman.leaveCave();
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
                 this.think("Toggling bounds.", 1500);
@@ -663,7 +678,9 @@ export class Player extends PhysicsEntity {
      * @param gate the source the player enters
      */
     private async enterGate(gate: GameObjectInfo): Promise<void> {
-        if (gate && gate.properties.target) {
+        if (gate.properties.locked) {
+            this.think(gate.properties.lockedText ?? "It's locked", 2000);
+        } else  if (gate.properties.target) {
             this.isControllable = false;
             this.moveRight = false;
             this.moveLeft = false;

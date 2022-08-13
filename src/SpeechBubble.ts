@@ -4,7 +4,7 @@ import { ConversationLine } from "./Conversation";
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "./constants";
 import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import { sleep } from "./util";
+import { isDev, sleep } from "./util";
 
 export function roundRect(
     ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
@@ -131,9 +131,14 @@ export class SpeechBubble {
         this.updateContent();
         this.isCurrentlyWriting = false;
 
-        setTimeout(() => {
+        // Remove preventUnwantedSelection for dev environment to make dialogues faster
+        if (isDev()) {
             this.preventUnwantedSelection = false;
-        }, 300);
+        } else {
+            setTimeout(() => {
+                this.preventUnwantedSelection = false;
+            }, 300);
+        }
     }
 
     public setOptions(options: string[], partnersBubble: SpeechBubble): void {

@@ -16,6 +16,7 @@ export class Sign extends NPC {
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
+        // this.dialogueAutomoveEnabled = false;
     }
 
     private prepareContent(content?: string ): string[] {

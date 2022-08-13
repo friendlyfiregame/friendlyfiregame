@@ -1,0 +1,68 @@
+{ "frames": [
+   {
+    "filename": "0",
+    "frame": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "sourceSize": { "w": 30, "h": 18 },
+    "duration": 150
+   },
+   {
+    "filename": "1",
+    "frame": { "x": 30, "y": 0, "w": 30, "h": 18 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "sourceSize": { "w": 30, "h": 18 },
+    "duration": 150
+   },
+   {
+    "filename": "2",
+    "frame": { "x": 60, "y": 0, "w": 30, "h": 18 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "sourceSize": { "w": 30, "h": 18 },
+    "duration": 150
+   },
+   {
+    "filename": "3",
+    "frame": { "x": 90, "y": 0, "w": 30, "h": 18 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "sourceSize": { "w": 30, "h": 18 },
+    "duration": 150
+   },
+   {
+    "filename": "4",
+    "frame": { "x": 120, "y": 0, "w": 30, "h": 18 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "sourceSize": { "w": 30, "h": 18 },
+    "duration": 150
+   },
+   {
+    "filename": "5",
+    "frame": { "x": 150, "y": 0, "w": 30, "h": 18 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 18 },
+    "sourceSize": { "w": 30, "h": 18 },
+    "duration": 150
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.39-x64",
+  "image": "videogame.png",
+  "format": "RGBA8888",
+  "size": { "w": 180, "h": 18 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 5, "direction": "forward" }
+  ]
+ }
+}
