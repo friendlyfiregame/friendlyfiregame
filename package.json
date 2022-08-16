@@ -53,7 +53,7 @@
     "@electron-forge/plugin-webpack": "^6.0.0-beta.65",
     "@kayahr/jest-electron-runner": "^5.1.1",
     "@types/generate-json-webpack-plugin": "^0.3.4",
-    "@types/jest": "^28.1.6",
+    "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
