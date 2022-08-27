@@ -34,6 +34,7 @@ import { SpeechBubble } from "../SpeechBubble";
 import { Stone, StoneState } from "./Stone";
 import { Wall } from "./Wall";
 import { Wood, WoodState } from "./Wood";
+import { CharacterSounds } from "../CharacterSounds";
 
 const groundColors = [
     "#806057",
@@ -103,14 +104,8 @@ export class Player extends PhysicsEntity {
         [ControllerSpriteMap.PLAYSTATION]: Player.buttons[2]
     };
 
-    @asset("sounds/drowning/drowning.mp3")
-    private static drowningSound: Sound;
-
     @asset("sounds/feet-walking/steps_single.mp3")
     private static walkingSound: Sound;
-
-    @asset("sounds/throwing/throwing.mp3")
-    private static throwingSound: Sound;
 
     @asset("sounds/gate/door_open.mp3")
     private static enterGateSound: Sound;
@@ -120,15 +115,6 @@ export class Player extends PhysicsEntity {
 
     @asset("sounds/gate/door_close.mp3")
     private static leaveGateSound: Sound;
-
-    @asset([
-        "sounds/jumping/jumping_female.mp3",
-        "sounds/jumping/jumping.mp3"
-    ])
-    private static jumpingSounds: Sound[];
-
-    @asset("sounds/jumping/landing.mp3")
-    private static landingSound: Sound;
 
     @asset("sounds/jumping/squish.mp3")
     private static bouncingSound: Sound;
@@ -562,8 +548,7 @@ export class Player extends PhysicsEntity {
         this.height = PLAYER_HEIGHT;
         this.carrying = null;
 
-        Player.throwingSound.stop();
-        Player.throwingSound.play();
+        CharacterSounds.playRandomCharacterSound("throw", this.voiceAsset);
     }
 
     // Used in dev mode to enable some special keys that can only be triggered by using a keyboard.
@@ -599,8 +584,7 @@ export class Player extends PhysicsEntity {
                     )
                 );
 
-                Player.throwingSound.stop();
-                Player.throwingSound.play();
+                CharacterSounds.playRandomCharacterSound("throw", this.voiceAsset);
             } else if (event.key === "k") {
                 this.enableDoubleJump(true);
                 this.enableMultiJump(true);
@@ -793,8 +777,10 @@ export class Player extends PhysicsEntity {
         if (this.drowning > 0) return;
 
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-        Player.jumpingSounds[this.voiceAsset].stop();
-        Player.jumpingSounds[this.voiceAsset].play();
+
+        console.log(CharacterSounds.getSoundData());
+
+        CharacterSounds.playRandomCharacterSound("jump", this.voiceAsset);
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
@@ -1093,14 +1079,14 @@ export class Player extends PhysicsEntity {
             }
 
             if (this.drowning === 0) {
-                Player.drowningSound.play();
+                CharacterSounds.playRandomCharacterSound("drown", this.voiceAsset);
             }
 
             this.setVelocityX(0);
             this.drowning += dt;
 
             if (this.drowning > 3) {
-                Player.drowningSound.stop();
+                CharacterSounds.stopCharacterSound("drown", this.voiceAsset);
                 this.respawn();
                 const thought = drownThoughts[rndInt(0, drownThoughts.length)];
                 this.think(thought.message, thought.duration);
@@ -1206,8 +1192,7 @@ export class Player extends PhysicsEntity {
         }
 
         if (wasFlying && !this.flying) {
-            Player.landingSound.stop();
-            Player.landingSound.play();
+            CharacterSounds.playRandomCharacterSound("land", this.voiceAsset);
         }
 
         // Reduce jump threshold timer when player did not jump yet when falling off an edge

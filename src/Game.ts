@@ -7,6 +7,7 @@ import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
+import { CharacterSounds } from "./CharacterSounds";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -22,6 +23,7 @@ export abstract class Game {
     public readonly keyboard = new Keyboard();
     public readonly gamepad = new GamepadInput();
     public readonly scenes = new Scenes(this);
+    public readonly characterSounds = new CharacterSounds();
     public readonly assets = new Assets();
     public readonly campaign = new Campaign(this);
 
