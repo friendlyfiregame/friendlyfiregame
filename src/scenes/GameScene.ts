@@ -76,7 +76,8 @@ export enum BgmId {
     WINGS = "wings",
     ECSTASY = "ecstasy",
     AWAKE = "awake",
-    SHADOWGATE = "shadowgate"
+    SHADOWGATE = "shadowgate",
+    ABYSMAL = "abysmal"
 }
 
 export enum AmbientSoundId {
@@ -102,6 +103,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
     @asset("music/inferno.ogg")
     public static bgm2: Sound;
+
+    @asset("music/abysmal.ogg")
+    public static bgmAbysmal: Sound;
 
     @asset("music/cave.ogg")
     public static bgmCave: Sound;
@@ -146,6 +150,12 @@ export class GameScene extends Scene<FriendlyFire> {
             active: false,
             id: BgmId.CAVE,
             sound: GameScene.bgmCave,
+            baseVolume: 1
+        },
+        {
+            active: false,
+            id: BgmId.ABYSMAL,
+            sound: GameScene.bgmAbysmal,
             baseVolume: 1
         },
         {

@@ -431,7 +431,6 @@ export class Player extends PhysicsEntity {
     public enterAbyssBarrier (): void {
         const abyssGate = this.scene.gateObjects.find(g => g.name === "darkcontainerdoor_1");
         if (!abyssGate) throw new Error("Missing gate called 'darkcontainerdoor_1'");
-        // abyssGate.properties.disabled = false;
         this.enterGate(abyssGate);
     }
 
