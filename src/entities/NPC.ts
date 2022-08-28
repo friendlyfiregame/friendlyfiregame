@@ -1,7 +1,6 @@
 import { Conversation } from "../Conversation";
 import { DialoguePrompt } from "../DialoguePrompt";
 import { Face, FaceModes } from "../Face";
-import { Greeting } from "../Greeting";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { sleep } from "../util";
 import { SpeechBubble } from "../SpeechBubble";
@@ -13,7 +12,6 @@ export abstract class NPC extends PhysicsEntity {
     public direction = 1;
     public face: Face | null = null;
     public defaultFaceMode = FaceModes.NEUTRAL;
-    public greeting: Greeting | null = null;
     public conversation: Conversation | null = null;
     public thinkBubble: SpeechBubble | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y);
@@ -79,14 +77,6 @@ export abstract class NPC extends PhysicsEntity {
         this.dialoguePrompt.draw();
     }
 
-    protected drawGreeting(ctx: CanvasRenderingContext2D): void {
-        this.greeting?.draw(ctx);
-    }
-
-    protected updateGreeting(): void {
-        this.greeting?.update();
-    }
-
     public registerEndedConversation(): void {
         this.lastEndedConversation = this.scene.gameTime;
     }
@@ -110,11 +100,10 @@ export abstract class NPC extends PhysicsEntity {
     }
 
     public update(dt: number): void {
+        super.update(dt);
         if (this.lookAtPlayer) {
             const dx = this.scene.player.x - this.x;
             this.toggleDirection((dx > 0) ? 1 : -1);
         }
-
-        super.update(dt);
     }
 }

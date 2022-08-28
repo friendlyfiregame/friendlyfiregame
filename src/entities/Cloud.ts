@@ -9,6 +9,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "../constants";
 import { RenderingLayer } from "../Renderer";
 import { rnd, rndInt, timedRnd } from "../util";
+import { LevelId } from "../Levels";
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
@@ -28,8 +29,8 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private raining = 0;
     private isRainCloud = false;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties, canRain = false) {
-        super(scene, x, y, 74, 5);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties, canRain = false) {
+        super(scene, x, y, 74, 5, levelId);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;

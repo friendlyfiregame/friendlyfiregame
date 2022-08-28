@@ -91,7 +91,7 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     private checkCollision(x: number, y: number, ignore?: Environment[]): Environment {
-        return this.scene.world.collidesWith(x, y, [ this ], ignore);
+        return this.getWorld().collidesWith(x, y, [ this ], ignore);
     }
 
     private checkCollisionBox(x: number, y: number, ignore?: Environment[]): Environment {
@@ -148,7 +148,7 @@ export abstract class PhysicsEntity extends Entity {
     public update(dt: number): void {
         super.update(dt);
 
-        const world = this.scene.world;
+        const world = this.getWorld();
         const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
 
         if (ground instanceof PhysicsEntity) {

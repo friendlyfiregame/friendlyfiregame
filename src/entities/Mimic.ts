@@ -6,6 +6,7 @@ import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { Sound } from "../Sound";
+import { LevelId } from "../Levels";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
 
@@ -19,8 +20,8 @@ export class Mimic extends NPC {
 
     private state = MimicState.SLEEPING;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 46, 24);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 46, 24, levelId);
         this.lookAtPlayer = false;
         this.direction = 1;
         this.conversation = new Conversation(conversation, this);

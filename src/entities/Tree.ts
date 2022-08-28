@@ -8,6 +8,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { Seed } from "./Seed";
 import { Wood } from "./Wood";
+import { LevelId } from "../Levels";
 
 @entity("tree")
 export class Tree extends NPC {
@@ -17,12 +18,12 @@ export class Tree extends NPC {
     public seed: Seed;
     private wood: Wood;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 78, 140);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 78, 140, levelId);
 
         this.face = new Face(scene, this, EyeType.TREE, 5, 94);
-        this.seed = new Seed(scene, x, y);
-        this.wood = new Wood(scene, x, y);
+        this.seed = new Seed(scene, x, y, levelId);
+        this.wood = new Wood(scene, x, y, levelId);
 
         this.startDialog();
     }

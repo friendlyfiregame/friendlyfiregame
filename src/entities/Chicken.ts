@@ -6,14 +6,15 @@ import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { RenderingLayer } from "../Renderer";
+import { LevelId } from "../Levels";
 
 @entity("chicken")
 export class Chicken extends NPC {
     @asset("sprites/chicken.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 24, 18);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 24, 18, levelId);
 
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);

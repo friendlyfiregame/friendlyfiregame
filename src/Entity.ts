@@ -2,6 +2,8 @@ import { Animator } from "./Animator";
 import { GameObject, GameScene } from "./scenes/GameScene";
 import { GameObjectProperties } from "./MapInfo";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import { LevelId } from "./Levels";
+import { World } from "./World";
 
 export interface EntityDistance {
     source: Entity;
@@ -16,7 +18,7 @@ export type Bounds = {
     height: number;
 };
 
-type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
+type EntityConstructor = new (scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
 
@@ -27,7 +29,7 @@ export function entity(name: string): (target: EntityConstructor) => void {
 }
 
 export function createEntity(
-    name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties
+    name: string, scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties
 ): Entity {
     const constructor = entities.get(name);
 
@@ -35,7 +37,7 @@ export function createEntity(
         throw new Error("Entity not found: " + name);
     }
 
-    return new constructor(scene, x, y, properties);
+    return new constructor(scene, x, y, levelId, properties);
 }
 
 export abstract class Entity implements GameObject {
@@ -48,13 +50,24 @@ export abstract class Entity implements GameObject {
         public y: number,
         public width = 0,
         public height = 0,
-        public isTrigger = true
+        public levelId: LevelId,
+        public isTrigger = true,
     ) {}
 
     abstract draw(ctx: CanvasRenderingContext2D): void;
 
     public update(dt: number): void {
         this.timeAlive += dt;
+    }
+
+    public entityIsInLevel (): boolean {
+        return this.scene.activeLevelId === this.levelId;
+    }
+
+    public getWorld(): World {
+        const world = this.scene.worlds.find(w => w.levelId === this.levelId);
+        if (!world) throw Error(`World with level id ${this.levelId} not found`);
+        return world;
     }
 
     public distanceTo(entity: Entity): number {
@@ -149,7 +162,7 @@ export abstract class Entity implements GameObject {
      * @param triggerName the trigger name to check against.
      */
     protected isCollidingWithTrigger(triggerName: string): boolean {
-        const collisions = this.scene.world.getTriggerCollisions(this);
+        const collisions = this.scene.getCurrentWorld().getTriggerCollisions(this);
 
         if (collisions.length === 0) {
             return false;

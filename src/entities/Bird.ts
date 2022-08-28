@@ -11,6 +11,7 @@ import { NPC } from "./NPC";
 import { ParticleEmitter, valueCurves } from "./../Particles";
 import { RenderingLayer } from "./../Renderer";
 import { Sound } from "./../Sound";
+import { LevelId } from "../Levels";
 
 enum BirdState {
     WAITING_LEFT,
@@ -37,8 +38,8 @@ export class Bird extends NPC {
     private state = BirdState.WAITING_LEFT;
     private jumpTimer = 0;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 28, 24);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 28, 24, levelId);
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
 
@@ -97,7 +98,7 @@ export class Bird extends NPC {
         let pulled = 0, col = 0;
 
         if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
+            const world = this.getWorld();
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
 
@@ -113,7 +114,7 @@ export class Bird extends NPC {
 
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.getWorld();
 
         while (
             this.y > 0
@@ -132,7 +133,7 @@ export class Bird extends NPC {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.getWorld();
 
         if (this.getVelocityX() > 0) {
             while (
@@ -192,7 +193,7 @@ export class Bird extends NPC {
         this.move = 0;
 
         // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
 
         if (this.jumpTimer > 0) {
             this.jumpTimer -= dt;

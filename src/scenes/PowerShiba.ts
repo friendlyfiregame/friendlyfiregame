@@ -7,6 +7,7 @@ import { NPC } from "../entities/NPC";
 import powershiba1 from "../../assets/dialog/powershiba1.dialog.json";
 import powershiba3 from "../../assets/dialog/powershiba3.dialog.json";
 import { RenderingLayer } from "../Renderer";
+import { LevelId } from "../Levels";
 
 export enum PowerShibaState {
     IN_CLOUDS,
@@ -23,8 +24,8 @@ export class PowerShiba extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 22, 22);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 22, 22, levelId);
         this.conversation = new Conversation(powershiba1, this);
     }
 

@@ -16,6 +16,7 @@ import { RenderingLayer } from "../Renderer";
 import { ScriptableNPC } from "./ScriptableNPC";
 import shiba1 from "../../assets/dialog/shiba1.dialog.json";
 import { Sound } from "../Sound";
+import { LevelId } from "../Levels";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -64,8 +65,8 @@ export class Shiba extends ScriptableNPC {
     public isBeingPetted = false;
     private nextHeartParticle = HEART_PARTICLE_DELAY;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 28, 24);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 28, 24, levelId);
 
         this.minAltitude = y;
         this.conversation = new Conversation(conversation, this);
@@ -260,7 +261,7 @@ export class Shiba extends ScriptableNPC {
         }
 
         // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
 
         if (this.hasActiveConversation() || this.isBeingPetted) {
             this.move = 0;
@@ -302,7 +303,7 @@ export class Shiba extends ScriptableNPC {
         this.move = -1;
 
         if (
-            this.scene.world.collidesWithVerticalLine(
+            this.getWorld().collidesWithVerticalLine(
                 this.x - (this.width / 2), this.y + this.height,
                 this.height,
                 [ this ],

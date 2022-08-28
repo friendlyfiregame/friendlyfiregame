@@ -3,6 +3,7 @@ import { calculateVolume } from "./util";
 import { Entity } from "./Entity";
 import { GameObjectInfo } from "./MapInfo";
 import { Sound } from "./Sound";
+import { LevelId } from "./Levels";
 
 /**
  * Sound emitters are invisible entities that emit a sound in relation to the player distance.
@@ -14,9 +15,9 @@ export class SoundEmitter extends Entity {
     private intensity: number;
 
     public constructor(
-        scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number
+        scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number, levelId: LevelId
     ) {
-        super(scene, x, y, 1, 1);
+        super(scene, x, y, 1, 1, levelId);
 
         this.sound = sound;
         this.maxVolume = maxVolume;
@@ -40,7 +41,7 @@ export class SoundEmitter extends Entity {
     }
 
     public static fromGameObjectInfo(
-        scene: GameScene, gameObjectInfo: GameObjectInfo
+        scene: GameScene, gameObjectInfo: GameObjectInfo, levelId: LevelId
     ): SoundEmitter {
         const soundId = gameObjectInfo.properties.sound;
         const volume = gameObjectInfo.properties.volume || 1;
@@ -51,7 +52,7 @@ export class SoundEmitter extends Entity {
 
             if (sound) {
                 return new SoundEmitter(
-                    scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity
+                    scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity, levelId
                 );
             } else {
                 throw new Error(

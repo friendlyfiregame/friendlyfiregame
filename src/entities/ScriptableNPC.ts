@@ -22,7 +22,7 @@ export abstract class ScriptableNPC extends NPC {
         let pulled = 0, col = 0;
 
         if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
+            const world = this.getWorld();
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
 
@@ -38,7 +38,7 @@ export abstract class ScriptableNPC extends NPC {
 
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.getWorld();
 
         while (
             this.y > 0
@@ -57,7 +57,7 @@ export abstract class ScriptableNPC extends NPC {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.getWorld();
 
         if (this.getVelocityX() > 0) {
             while (

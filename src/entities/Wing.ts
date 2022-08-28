@@ -4,6 +4,7 @@ import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Aseprite } from "../Aseprite";
+import { LevelId } from "../Levels";
 
 @entity("wing")
 export class Wing extends NPC {
@@ -14,8 +15,8 @@ export class Wing extends NPC {
     private floatSpeed = 2;
     private isBeingDisintegrated = false;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 24, 24);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 24, 24, levelId);
         this.animator.assignSprite(Wing.sprite);
         this.lookAtPlayer = false;
     }

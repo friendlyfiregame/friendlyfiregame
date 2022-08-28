@@ -4,14 +4,15 @@ import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { RenderingLayer } from "../Renderer";
+import { LevelId } from "../Levels";
 
 @entity("skull")
 export class Skull extends PhysicsEntity {
     @asset("sprites/skull.aseprite.json")
     private static sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 16, 16);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 16, 16, levelId);
     }
 
     public draw(): void {

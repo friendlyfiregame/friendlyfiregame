@@ -6,6 +6,7 @@ import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Sound } from "../Sound";
 import { SoundEmitter } from "../SoundEmitter";
+import { LevelId } from "../Levels";
 
 enum AnimationTag {
     INVISIBLE = "invisible",
@@ -32,11 +33,11 @@ export class ShadowPresence extends NPC {
     private isNearPlayer = false;
     private state = State.OUTSIDE;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 12, 46);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 12, 46, levelId);
         this.direction = -1;
         this.lookAtPlayer = false;
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
+        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1, levelId);
         this.animator.assignSprite(ShadowPresence.sprite);
     }
 

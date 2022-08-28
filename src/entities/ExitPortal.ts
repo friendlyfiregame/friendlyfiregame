@@ -1,6 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, Entity } from "../Entity";
+import { LevelId } from "../Levels";
 import { GameScene } from "../scenes/GameScene";
 import { Sound } from "../Sound";
 
@@ -16,8 +17,8 @@ export class ExitPortal extends Entity {
 
     private animationState = PortalAnimationState.OFF;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 32, 50, false);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 32, 50, levelId, false);
         this.animator.assignSprite(ExitPortal.sprite);
     }
 

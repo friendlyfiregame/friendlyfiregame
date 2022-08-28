@@ -5,6 +5,7 @@ import conversation from "../../assets/dialog/superthrow.dialog.json";
 import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
+import { LevelId } from "../Levels";
 
 @entity("superthrow")
 export class SuperThrow extends NPC {
@@ -14,8 +15,8 @@ export class SuperThrow extends NPC {
     private floatSpeed = 2;
     private isBeingDisintegrated = false;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 18, 22);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 18, 22, levelId);
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
         this.animator.assignSprite(SuperThrow.sprite);

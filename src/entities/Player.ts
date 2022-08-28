@@ -28,13 +28,13 @@ import { PlayerConversation } from "../PlayerConversation";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { Seed, SeedState } from "./Seed";
-import { Snowball } from "./Snowball";
 import { Sound } from "../Sound";
 import { SpeechBubble } from "../SpeechBubble";
 import { Stone, StoneState } from "./Stone";
 import { Wall } from "./Wall";
 import { Wood, WoodState } from "./Wood";
 import { CharacterSounds } from "../CharacterSounds";
+import { LevelId } from "../Levels";
 
 const groundColors = [
     "#806057",
@@ -182,8 +182,8 @@ export class Player extends PhysicsEntity {
     private doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT, levelId);
 
         this.isControllable = false;
         this.setFloating(true);
@@ -351,7 +351,7 @@ export class Player extends PhysicsEntity {
         if (!this.hasChaos) {
             this.scene.scenes.pushScene(GotItemScene, Item.CHAOS);
             this.hasChaos = true;
-            this.scene.world.deleteTrigger("seed_progress_trigger");
+            this.scene.worlds.forEach(w => w.deleteTrigger("seed_progress_trigger"));
 
             // The wise stone is not needed anymore!
             this.scene.stone.remove();
@@ -487,7 +487,7 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
         } else if (event.isPlayerEnterDoor) {
             if (!this.canEnterDoor()) return;
-            const gate = this.scene.world.getGateCollisions(this)[0];
+            const gate = this.getWorld().getGateCollisions(this)[0];
             this.enterGate(gate);
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
@@ -505,7 +505,7 @@ export class Player extends PhysicsEntity {
                     );
                 } else if (this.readableTrigger) {
                     const proxy = new ConversationProxy(
-                        this.scene, this.x, this.y, this.readableTrigger.properties
+                        this.scene, this.x, this.y, this.levelId, this.readableTrigger.properties
                     );
 
                     this.playerConversation = new PlayerConversation(
@@ -573,17 +573,6 @@ export class Player extends PhysicsEntity {
                 this.carry(this.scene.bone);
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
-            } else if (event.key === "t") {
-                this.scene.gameObjects.push(
-                    new Snowball(
-                        this.scene,
-                        this.x, this.y + this.height * 0.75,
-                        20 * this.direction,
-                        10
-                    )
-                );
-
-                CharacterSounds.playRandomCharacterSound("throw", this.voiceAsset);
             } else if (event.key === "k") {
                 this.enableDoubleJump(true);
                 this.enableMultiJump(true);
@@ -911,7 +900,7 @@ export class Player extends PhysicsEntity {
             this.carrying instanceof Stone
             && (
                 this.direction === -1
-                && this.scene.world.collidesWith(
+                && this.getWorld().collidesWith(
                     this.x - 30, this.y - 20
                 ) === Environment.WATER
             )
@@ -923,19 +912,19 @@ export class Player extends PhysicsEntity {
             this.carrying instanceof Seed
             && (
                 this.direction === -1
-                && this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL
+                && this.getWorld().collidesWith(this.x - 30, this.y + 2) === Environment.SOIL
             )
         );
     }
 
     public debugCollisions(): void {
-        console.log("Entities: ",this.scene.world.getEntityCollisions(this));
-        console.log("Triggers: ",this.scene.world.getTriggerCollisions(this));
-        console.log("Gates: ",this.scene.world.getGateCollisions(this));
+        console.log("Entities: ",this.getWorld().getEntityCollisions(this));
+        console.log("Triggers: ",this.getWorld().getTriggerCollisions(this));
+        console.log("Gates: ",this.getWorld().getGateCollisions(this));
     }
 
     private getReadableTrigger(): GameObjectInfo | undefined {
-        const triggers = this.scene.world.getTriggerCollisions(this);
+        const triggers = this.getWorld().getTriggerCollisions(this);
         if (triggers.length === 0) return undefined;
 
         return triggers.find(t => t.name === "readable");
@@ -949,7 +938,7 @@ export class Player extends PhysicsEntity {
         return (
             (
                 this.isCollidingWithTrigger("raincloud_sky")
-                && !this.scene.world.isRaining()
+                && !this.getWorld().isRaining()
                 && this.carrying === null
                 && !this.scene.apocalypse
             ) || (
@@ -962,14 +951,14 @@ export class Player extends PhysicsEntity {
     }
 
     private canEnterDoor(): boolean {
-        return !this.flying && !this.carrying && this.scene.world.getGateCollisions(this).length > 0;
+        return !this.flying && !this.carrying && this.getWorld().getGateCollisions(this).length > 0;
     }
 
     /**
      * Returns the bounds of the map area the player currently resides in
      */
     public getCurrentMapBounds(): Bounds | undefined {
-        const collisions = this.scene.world.getCameraBounds(this);
+        const collisions = this.getWorld().getCameraBounds(this);
         if (collisions.length === 0) return undefined;
         return boundsFromMapObject(collisions[0]);
     }
@@ -1002,7 +991,7 @@ export class Player extends PhysicsEntity {
         const mapBounds = this.scene.camera.getBounds();
         if (!mapBounds) return false;
 
-        return !this.scene.world.boundingBoxesCollide(this.getBounds(), {
+        return !this.getWorld().boundingBoxesCollide(this.getBounds(), {
             x: mapBounds.x + 4,
             y: mapBounds.y - 4,
             width: mapBounds.width - 8,
@@ -1012,7 +1001,7 @@ export class Player extends PhysicsEntity {
 
     public update(dt: number): void {
         super.update(dt);
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
 
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
@@ -1064,7 +1053,7 @@ export class Player extends PhysicsEntity {
             }
         }
 
-        const isDrowning = this.scene.world.collidesWith(this.x, this.y) === Environment.WATER;
+        const isDrowning = this.getWorld().collidesWith(this.x, this.y) === Environment.WATER;
 
         if (isDrowning) {
             if (!this.thinkBubble) {
@@ -1094,7 +1083,7 @@ export class Player extends PhysicsEntity {
             this.drowning = 0;
         }
 
-        const world = this.scene.world;
+        const world = this.getWorld();
         const wasFlying = this.flying;
         const prevVelocity = this.getVelocityY();
 
@@ -1203,7 +1192,7 @@ export class Player extends PhysicsEntity {
         // collide with the player with an added 5 px of margin. If there are multiple NPCs
         // colliding, the closest one will be chosen.
         this.closestNPC = null;
-        const entities = this.scene.world.getEntityCollisions(this, 5);
+        const entities = this.getWorld().getEntityCollisions(this, 5);
 
         if (entities.length > 0) {
             const closestEntity = entities.length > 1 ? this.getClosestEntity() : entities[0];
@@ -1234,7 +1223,7 @@ export class Player extends PhysicsEntity {
 
         // Bounce
         if (
-            this.scene.world.collidesWith(
+            this.getWorld().collidesWith(
                 this.x, this.y - 2,
                 [ this ]
             ) === Environment.BOUNCE
@@ -1306,7 +1295,7 @@ export class Player extends PhysicsEntity {
                     }
 
                     if (this.isCollidingWithTrigger("raincloud_sky")) {
-                        this.scene.world.startRain();
+                        this.getWorld().startRain();
                     }
                 }
                 this.dance = null;
@@ -1398,7 +1387,7 @@ export class Player extends PhysicsEntity {
         let pulled = 0, col = 0;
 
         if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
+            const world = this.getWorld();
             const height = world.getHeight();
 
             col = world.collidesWith(
@@ -1438,7 +1427,7 @@ export class Player extends PhysicsEntity {
      */
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.getWorld();
 
         while (
             this.y > 0
@@ -1457,7 +1446,7 @@ export class Player extends PhysicsEntity {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.scene.world;
+        const world = this.getWorld();
 
         if (this.getVelocityX() > 0) {
             while (

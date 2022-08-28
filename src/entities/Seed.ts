@@ -12,6 +12,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { Sound } from "../Sound";
 import { Wood } from "./Wood";
+import { LevelId } from "../Levels";
 
 export enum SeedState {
     FREE = 0,
@@ -32,9 +33,9 @@ export class Seed extends NPC {
     private wood: Wood;
     private floatingPosition: GameObjectInfo;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 24, 24);
-        this.wood = new Wood(scene, x, y);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 24, 24, levelId);
+        this.wood = new Wood(scene, x, y, levelId);
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
@@ -108,14 +109,14 @@ export class Seed extends NPC {
         super.update(dt);
 
         // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
 
         // As soon as the seed reaches this point while the trigger is still active,
         // the goose will die and this route will be locked off.
         if (triggerCollisions.length > 0) {
             const trigger = triggerCollisions.find(t => t.name === "seed_progress_trigger");
             if (trigger) {
-                this.scene.world.deleteTrigger("seed_progress_trigger");
+                this.getWorld().deleteTrigger("seed_progress_trigger");
                 this.scene.goose.turnDead();
             }
         }
@@ -135,7 +136,7 @@ export class Seed extends NPC {
             }
             if (
                 !this.isCarried()
-                && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
+                && this.getWorld().collidesWith(this.x, this.y - 8) === Environment.SOIL
             ) {
                 const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
 
@@ -154,7 +155,7 @@ export class Seed extends NPC {
             if (
                 !this.isCarried()
                 && this.state !== SeedState.SWIMMING
-                && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                && this.getWorld().collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
@@ -162,7 +163,7 @@ export class Seed extends NPC {
                 this.y = this.floatingPosition.y;
             }
         } else if (this.state === SeedState.PLANTED) {
-            if (this.scene.world.isRaining()) {
+            if (this.getWorld().isRaining()) {
                 this.grow();
             }
         } else if (this.state === SeedState.GROWN) {

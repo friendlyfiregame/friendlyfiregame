@@ -6,6 +6,7 @@ import { GameObjectProperties } from "../MapInfo";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { RenderingLayer, RenderingType } from "../Renderer";
+import { LevelId } from "../Levels";
 
 @entity("sign")
 export class Sign extends NPC {
@@ -13,8 +14,8 @@ export class Sign extends NPC {
     private static sprite: Aseprite;
     public conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties) {
+        super(scene, x, y, 16, 16, levelId);
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
         // this.dialogueAutomoveEnabled = false;
     }

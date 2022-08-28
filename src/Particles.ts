@@ -2,6 +2,7 @@ import { GameScene } from "./scenes/GameScene";
 import { GRAVITY } from "./constants";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { Vector2Like } from "./graphics/Vector2";
+import { LevelId } from "./Levels";
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
 
@@ -34,9 +35,11 @@ export interface ParticleEmitterArguments {
 export class Particles {
     private scene: GameScene;
     private emitters: ParticleEmitter[] = [];
+    public levelId: LevelId;
 
-    public constructor(scene: GameScene) {
+    public constructor(scene: GameScene, levelId: LevelId) {
         this.scene = scene;
+        this.levelId = levelId;
     }
 
     public update(dt: number): void {

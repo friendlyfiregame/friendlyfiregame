@@ -1,6 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity } from "../Entity";
+import { LevelId } from "../Levels";
 import { GameObjectProperties } from "../MapInfo";
 import { GameScene } from "../scenes/GameScene";
 import { rndInt, rndItem } from "../util";
@@ -19,8 +20,8 @@ export class ShadowHand extends NPC {
     private animationTag = rndItem(["idle1", "idle2"]);
     private faceUp = false;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 14, 26);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties) {
+        super(scene, x, y, 14, 26, levelId);
         this.direction = rndItem([1, -1]);
         this.animator.assignSprite(ShadowHand.sprite);
         this.lookAtPlayer = false;

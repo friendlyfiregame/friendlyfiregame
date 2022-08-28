@@ -2,6 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
+import { LevelId } from "../Levels";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
@@ -20,8 +21,8 @@ export class ShadowGate extends NPC {
     private static sprite: Aseprite;
     private animationTag = "idle";
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 64, 64);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 64, 64, levelId);
         this.direction = 1;
         this.animator.assignSprite(ShadowGate.sprite);
         this.lookAtPlayer = false;

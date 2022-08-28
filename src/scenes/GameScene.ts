@@ -18,7 +18,7 @@ import { Fire, FireState } from "../entities/Fire";
 import { FireGfx } from "../FireGfx";
 import { FlameBoy } from "../entities/FlameBoy";
 import { FriendlyFire } from "../FriendlyFire";
-import { GameObjectInfo, MapInfo } from "../MapInfo";
+import { GameObjectInfo } from "../MapInfo";
 import { MenuList } from "../Menu";
 import { Mimic } from "../entities/Mimic";
 import { MountainRiddle } from "../MountainRiddle";
@@ -51,10 +51,12 @@ import { Goose } from "../entities/Goose";
 import { ShadowGate } from "../entities/ShadowGate";
 import { Sign } from "../entities/Sign";
 import { Videogame } from "../entities/Videogame";
+import { LevelId, Levels } from "../Levels";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
 export interface GameObject {
+    levelId: LevelId;
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
     update(dt: number): void;
 }
@@ -65,6 +67,10 @@ export interface CollidableGameObject extends GameObject {
 
 export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
     return typeof (object as CollidableGameObject).collidesWith === "function";
+}
+
+export function flattenArray<T> (arr: T[][]): T[] {
+    return arr.reduce((acc, val) => acc.concat(val), []);
 }
 
 export enum BgmId {
@@ -244,8 +250,8 @@ export class GameScene extends Scene<FriendlyFire> {
     public triggerObjects: GameObjectInfo[] = [];
     public boundObjects: GameObjectInfo[] = [];
     public gateObjects: GameObjectInfo[] = [];
+    public worlds: World[] = [];
     public paused = false;
-    public world!: World;
     public camera!: Camera;
     public player!: Player;
     public stone!: Stone;
@@ -263,7 +269,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public mimic!: Mimic;
     public shadowPresence!: ShadowPresence;
     public caveman!: Caveman;
-    public particles = new Particles(this);
+    public particles = new Particles(this, "overworld");
     public fire!: Fire;
     public exitPortal!: ExitPortal;
     public fireFuryEndTime = 0;
@@ -282,7 +288,8 @@ export class GameScene extends Scene<FriendlyFire> {
     private framesPerSecond = 0;
     public showBounds = false;
     private scale = 1;
-    private mapInfo!: MapInfo;
+    public readonly levels = new Levels(this);
+    public activeLevelId: LevelId = "overworld";
     public dt: number = 0;
     private fpsInterval: any = null;
     private fadeToBlackEndTime = 0;
@@ -292,13 +299,51 @@ export class GameScene extends Scene<FriendlyFire> {
     public readonly renderer = new Renderer(this);
     public readonly mountainRiddle = new MountainRiddle();
 
+    public getCurrentWorld(): World {
+        return this.worlds[0];
+    }
+
     public setup(): void {
-        this.mapInfo = new MapInfo();
-        this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
-        this.pointsOfInterest = this.mapInfo.getPointers();
-        this.triggerObjects = this.mapInfo.getTriggerObjects();
-        this.boundObjects = this.mapInfo.getBoundObjects();
-        this.gateObjects = this.mapInfo.getGateObjects();
+        console.log(this.levels);
+        this.soundEmitters = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o, l.id))));
+        this.pointsOfInterest = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getPointers()));
+        this.triggerObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getTriggerObjects()));
+        this.boundObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getBoundObjects()));
+        this.gateObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getGateObjects()));
+        this.worlds = this.levels.getAllLevels().map(l => new World(this, l.mapInfo, l.id));
+        const entities = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getEntities().map(entity => {
+            switch (entity.name) {
+                case "riddlestone":
+                    return new RiddleStone(this, entity.x, entity.y, l.id, entity.properties);
+                case "campfire":
+                    return new Campfire(this, entity.x, entity.y, l.id);
+                case "radio":
+                    return new Radio(this, entity.x, entity.y, l.id);
+                case "sign":
+                    return new Sign(this, entity.x, entity.y, l.id, entity.properties);
+                case "movingplatform":
+                    return new MovingPlatform(this, entity.x, entity.y, l.id, entity.properties);
+                case "skull":
+                    return new Skull(this, entity.x, entity.y, l.id);
+                case "chicken":
+                    return new Chicken(this, entity.x, entity.y, l.id);
+                case "portal":
+                    return new Portal(this, entity.x, entity.y, l.id);
+                case "videogame":
+                    return new Videogame(this, entity.x, entity.y,l.id);
+                case "window":
+                    return new Window(this, entity.x, entity.y, l.id);
+                case "shadowhand":
+                    return new ShadowHand(this, entity.x, entity.y, l.id, entity.properties);
+                case "shadowgate":
+                    return new ShadowGate(this, entity.x, entity.y, l.id);
+                case "player":
+                    const startingPos = this.getPlayerStartingPos();
+                    return new Player(this, startingPos.x, startingPos.y, l.id);
+                default:
+                    return createEntity(entity.name, this, entity.x, entity.y, l.id, entity.properties);
+            }
+        })));
 
         this.gameTime = 0;
         this.fadeToBlackEndTime = 0;
@@ -315,42 +360,10 @@ export class GameScene extends Scene<FriendlyFire> {
         Conversation.resetGlobals();
 
         this.gameObjects = [
-            this.world = new World(this),
+            ...this.worlds,
             this.particles,
             ...this.soundEmitters,
-            ...this.mapInfo.getEntities().map(entity => {
-                switch (entity.name) {
-                    case "riddlestone":
-                        return new RiddleStone(this, entity.x, entity.y, entity.properties);
-                    case "campfire":
-                        return new Campfire(this, entity.x, entity.y);
-                    case "radio":
-                        return new Radio(this, entity.x, entity.y);
-                    case "sign":
-                        return new Sign(this, entity.x, entity.y, entity.properties);
-                    case "movingplatform":
-                        return new MovingPlatform(this, entity.x, entity.y, entity.properties);
-                    case "skull":
-                        return new Skull(this, entity.x, entity.y);
-                    case "chicken":
-                        return new Chicken(this, entity.x, entity.y);
-                    case "portal":
-                        return new Portal(this, entity.x, entity.y);
-                    case "videogame":
-                        return new Videogame(this, entity.x, entity.y);
-                    case "window":
-                        return new Window(this, entity.x, entity.y);
-                    case "shadowhand":
-                        return new ShadowHand(this, entity.x, entity.y, entity.properties);
-                    case "shadowgate":
-                        return new ShadowGate(this, entity.x, entity.y);
-                    case "player":
-                        const startingPos = this.getPlayerStartingPos();
-                        return new Player(this, startingPos.x, startingPos.y);
-                    default:
-                        return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
-                }
-            })
+            ...entities
         ];
 
         this.player = this.getGameObject(Player);
@@ -562,8 +575,12 @@ export class GameScene extends Scene<FriendlyFire> {
         this.dt = dt;
         this.gameTime += dt;
 
+
+        // Only update entities that are part of the current level
         for (const obj of this.gameObjects) {
-            obj.update(dt);
+            if (obj.levelId === this.activeLevelId) {
+                obj.update(dt);
+            }
         }
 
         this.camera.update(dt, this.gameTime);
@@ -603,8 +620,11 @@ export class GameScene extends Scene<FriendlyFire> {
         // Draw stuff
         this.camera.applyTransform(ctx);
 
+        // Draw all objects that are part of the current level
         for (const obj of this.gameObjects) {
-            obj.draw(ctx, width, height);
+            if (obj.levelId === this.activeLevelId) {
+                obj.draw(ctx, width, height);
+            }
         }
 
         // Add all particle emitters to rendering queue
@@ -857,7 +877,7 @@ export class GameScene extends Scene<FriendlyFire> {
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
                 if (
-                    this.world.collidesWith(particle.x, particle.y - particle.size / 4)
+                    this.getCurrentWorld().collidesWith(particle.x, particle.y - particle.size / 4)
                 ) {
                     particle.vx = 0;
                     particle.vy = 0;
@@ -922,7 +942,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public beginApocalypse(): void {
         this.apocalypse = true;
-        this.world.stopRain();
+        this.getCurrentWorld().stopRain();
 
         const bossPosition = this.pointsOfInterest.find(poi => poi.name === "boss_spawn");
         const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === "bosscloud");
@@ -932,6 +952,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 const cloud = new Cloud(
                     this,
                     pos.x, pos.y,
+                    "overworld",
                     {
                         velocity: 0,
                         distance: 1

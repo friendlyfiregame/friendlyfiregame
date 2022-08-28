@@ -7,6 +7,7 @@ import { GameObjectProperties } from "../MapInfo";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "../constants";
 import { RenderingLayer } from "../Renderer";
+import { LevelId } from "../Levels";
 
 @entity("movingplatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {
@@ -19,8 +20,8 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     private targetY: number;
     private velocity: number;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 68, 12);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties) {
+        super(scene, x, y, 68, 12, levelId);
         this.setFloating(true);
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;

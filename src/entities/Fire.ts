@@ -13,6 +13,7 @@ import { ShibaState } from "./Shiba";
 import { Sound } from "../Sound";
 import { SoundEmitter } from "../SoundEmitter";
 import { Wood } from "./Wood";
+import { LevelId } from "../Levels";
 
 export const SHRINK_SIZE = 2;
 
@@ -58,10 +59,10 @@ export class Fire extends NPC {
     private smokeEmitter: ParticleEmitter;
     private steamEmitter: ParticleEmitter;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER, levelId);
 
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
+        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2, levelId);
 
         this.smokeEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},

@@ -6,6 +6,7 @@ import { GameObjectInfo } from "../MapInfo";
 import { GameScene } from "../scenes/GameScene";
 import { RenderingLayer } from "../Renderer";
 import { ScriptableNPC } from "./ScriptableNPC";
+import { LevelId } from "../Levels";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -26,8 +27,8 @@ export class Goose extends ScriptableNPC {
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 28, 24);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 28, 24, levelId);
         this.setMaxVelocity(1);
     }
 
@@ -73,7 +74,7 @@ export class Goose extends ScriptableNPC {
 
         if (this.state === GooseState.IDLE) {
             // Triggers
-            const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+            const triggerCollisions = this.getWorld().getTriggerCollisions(this);
 
             this.idleWalkingUpdateLogic(triggerCollisions, dt);
 

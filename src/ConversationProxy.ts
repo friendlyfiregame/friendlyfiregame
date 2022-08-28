@@ -2,12 +2,13 @@ import { Conversation } from "./Conversation";
 import { GameObjectProperties } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./entities/NPC";
+import { LevelId } from "./Levels";
 
 export class ConversationProxy extends NPC {
     public conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties) {
+        super(scene, x, y, 16, 16, levelId);
 
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
         this.scene.addGameObject(this);

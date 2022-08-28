@@ -11,6 +11,7 @@ import { ScriptableNPC } from "./ScriptableNPC";
 import { rndItem } from "../util";
 import { GameObjectInfo } from "../MapInfo";
 import { Wood } from "./Wood";
+import { LevelId } from "../Levels";
 
 export enum FlameBoyState {
     VENDOR,
@@ -36,13 +37,13 @@ export class FlameBoy extends ScriptableNPC {
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 26, 54);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 26, 54, levelId);
         this.setMaxVelocity(3);
         this.face = new Face(scene, this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED;
         this.face.setMode(this.defaultFaceMode);
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, FlameBoy.fireAmbience, 0.7, 0.2);
+        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, FlameBoy.fireAmbience, 0.7, 0.2, levelId);
     }
 
     public setState(state: FlameBoyState): void {
@@ -153,7 +154,7 @@ export class FlameBoy extends ScriptableNPC {
         super.update(dt);
 
         // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
 
         if (this.hasActiveConversation()) {
             this.move = 0;

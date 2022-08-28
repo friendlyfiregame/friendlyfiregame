@@ -2,6 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { GRAVITY } from "../constants";
 import { entity } from "../Entity";
+import { LevelId } from "../Levels";
 import { GameScene } from "../scenes/GameScene";
 import { Environment } from "../World";
 import { Campfire } from "./Campfire";
@@ -22,8 +23,8 @@ export class Caveman extends ScriptableNPC {
     private jumpHeight = 0.75;
     private doorTimer = 1;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 18, 24);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 18, 24, levelId);
         this.animator.assignSprite(Caveman.sprite);
         this.setMaxVelocity(2);
     }
@@ -45,7 +46,7 @@ export class Caveman extends ScriptableNPC {
     public update(dt: number): void {
         super.update(dt);
         this.move = 0;
-        const triggers = this.scene.world.getTriggerCollisions(this);
+        const triggers = this.getWorld().getTriggerCollisions(this);
 
         if (this.state === State.GOING_AWAY) {
             this.move = -1;
@@ -53,7 +54,7 @@ export class Caveman extends ScriptableNPC {
             if (triggers.find(t => t.name === "caveman_stop_trigger")) this.state = State.ENTERING_DOOR;
 
             if (
-                this.scene.world.collidesWithVerticalLine(
+                this.getWorld().collidesWithVerticalLine(
                     this.x - (this.width / 2) - 2, this.y + this.height,
                     this.height,
                     [ this ],
@@ -100,7 +101,7 @@ export class Caveman extends ScriptableNPC {
 
         const campfireSpawn = this.scene.pointsOfInterest.find(poi => poi.name === "campfire_spawn");
         if (campfireSpawn) {
-            const campfire = new Campfire(this.scene, campfireSpawn.x, campfireSpawn.y);
+            const campfire = new Campfire(this.scene, campfireSpawn.x, campfireSpawn.y, this.levelId);
             this.scene.gameObjects.push(campfire);
         }
     }

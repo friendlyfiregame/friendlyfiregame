@@ -9,6 +9,7 @@ import { RenderingLayer } from "../Renderer";
 import { GameObjectInfo } from "../MapInfo";
 import { now } from "../util";
 import { Environment } from "../World";
+import { LevelId } from "../Levels";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -23,8 +24,8 @@ export class StoneDisciple extends NPC {
     private state: StoneState = StoneState.DEFAULT;
     private floatingPosition: GameObjectInfo;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 32, 26);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 32, 26, levelId);
         this.direction = -1;
         this.lookAtPlayer = true;
         this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);

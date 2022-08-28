@@ -1,6 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity } from "../Entity";
+import { LevelId } from "../Levels";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
@@ -10,8 +11,8 @@ export class Videogame extends NPC {
     private static sprite: Aseprite;
     private animationTag = "idle";
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 30, 18);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 30, 18, levelId);
         this.direction = 1;
         this.animator.assignSprite(Videogame.sprite);
         this.lookAtPlayer = false;

@@ -5,6 +5,7 @@ import { entity, Entity } from "../Entity";
 import { Environment } from "../World";
 import { GameObjectProperties } from "../MapInfo";
 import { RenderingLayer } from "../Renderer";
+import { LevelId } from "../Levels";
 
 enum WallState { SOLID, CRUMBLED }
 
@@ -15,8 +16,8 @@ export class Wall extends Entity implements CollidableGameObject {
     public readonly identifier: string;
     private state = WallState.SOLID;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 24, 72, false);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId, properties: GameObjectProperties) {
+        super(scene, x, y, 24, 72, levelId, false);
 
         if (!properties.identifier) {
             throw new Error ("Cannot create Wall entity with no identifier property");

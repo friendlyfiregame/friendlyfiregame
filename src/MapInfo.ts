@@ -1,5 +1,7 @@
-import json, { MapLayerJSONType, MapObjectJSON } from "../assets/maps/level.json";
+import MapInfoJSON, { MapObjectJSON, MapLayerJSONType } from "*/level.json";
 import { Vector2Like } from "./graphics/Vector2";
+import { LevelId } from "./Levels";
+import { GameScene } from "./scenes/GameScene";
 
 export enum MapObjectType {
     ENTITY = "entity",
@@ -53,8 +55,32 @@ export interface GameObjectInfo {
 }
 
 export class MapInfo {
+    private mapObjectJSON: typeof MapInfoJSON;
+
+    public readonly levelId: LevelId;
+    public readonly foreground: HTMLImageElement;
+    public readonly collisionMap: Uint32Array;
+    public readonly background: HTMLImageElement[];
+
+    public constructor(
+        mapObjectJSON: typeof MapInfoJSON,
+        gameScene: GameScene,
+        levelId: LevelId,
+        foreground: HTMLImageElement,
+        collisionMap: Uint32Array,
+        background: HTMLImageElement[]
+    ) {
+
+        this.levelId = levelId;
+        this.foreground = foreground;
+        this.collisionMap = collisionMap;
+        this.background = background;
+
+        this.mapObjectJSON = mapObjectJSON;
+    }
+
     private getLayer<T extends string>(type: T, name: string): MapLayerJSONType<T> | null {
-        return <MapLayerJSONType<T>>json.layers.find(layer => layer.type === type && layer.name === name) ?? null;
+        return <MapLayerJSONType<T>>this.mapObjectJSON.layers.find(layer => layer.type === type && layer.name === name) ?? null;
     }
 
     private getObject(name: string): MapObjectJSON | null {
@@ -66,7 +92,7 @@ export class MapInfo {
     }
 
     public getPlayerStart(): Vector2Like {
-        const mapHeight = MapInfo.getMapSize().height;
+        const mapHeight = this.getMapSize().height;
         const object = this.getObject("player");
 
         if (object) {
@@ -77,7 +103,7 @@ export class MapInfo {
     }
 
     public getGameObjectInfos(type: MapObjectType): GameObjectInfo[] {
-        const mapHeight = MapInfo.getMapSize().height;
+        const mapHeight = this.getMapSize().height;
 
         return this.getObjects(type).map(object => ({
             name: object.name,
@@ -117,17 +143,17 @@ export class MapInfo {
         return this.getGameObjectInfos(MapObjectType.GATE);
     }
 
-    public static normalizeCoordinates(objects: MapObjectJSON[]): MapObjectJSON[] {
-        const mapHeight = MapInfo.getMapSize().height;
+    public normalizeCoordinates(objects: MapObjectJSON[]): MapObjectJSON[] {
+        const mapHeight = this.getMapSize().height;
         objects.forEach(o => { o.y = mapHeight - o.y; });
 
         return objects;
     }
 
-    public static getMapSize(): { width: number, height: number } {
+    public getMapSize(): { width: number, height: number } {
         return {
-            width: json.width * json.tilewidth,
-            height: json.height * json.tileheight
+            width: this.mapObjectJSON.width * this.mapObjectJSON.tilewidth,
+            height: this.mapObjectJSON.height * this.mapObjectJSON.tileheight
         };
     }
 }

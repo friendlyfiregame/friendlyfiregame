@@ -1,10 +1,11 @@
 import { GameScene } from "../scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "../constants";
+import { LevelId } from "../Levels";
 
 export class Snowball extends PhysicsEntity {
-    public constructor(scene: GameScene, x: number, y: number, velocityX: number, velocityY: number) {
-        super(scene, x, y, 0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER);
+    public constructor(scene: GameScene, x: number, y: number, velocityX: number, velocityY: number, levelId: LevelId) {
+        super(scene, x, y, 0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER, levelId);
 
         this.setVelocity(velocityX, velocityY);
     }

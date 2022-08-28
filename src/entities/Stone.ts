@@ -10,6 +10,7 @@ import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { Sound } from "../Sound";
+import { LevelId } from "../Levels";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -29,8 +30,8 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public state: StoneState = StoneState.DEFAULT;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 26, 50);
+    public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
+        super(scene, x, y, 26, 50, levelId);
 
         this.direction = -1;
         this.face = new Face(scene, this, EyeType.STONE, 0, 21);
@@ -86,7 +87,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (
-                this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                this.getWorld().collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(
                     QuestATrigger.THROWN_STONE_INTO_WATER

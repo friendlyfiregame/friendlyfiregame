@@ -2,11 +2,11 @@ import { asset } from "./Assets";
 import { Bounds, Entity } from "./Entity";
 import { boundsFromMapObject, rnd, rndInt } from "./util";
 import { GameObject, GameScene, isCollidableGameObject } from "./scenes/GameScene";
-import { GameObjectInfo } from "./MapInfo";
-import { getImageData } from "./graphics";
+import { GameObjectInfo, MapInfo } from "./MapInfo";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "./constants";
+import { LevelId } from "./Levels";
 
 export enum Environment {
     AIR = 0,
@@ -21,30 +21,19 @@ export enum Environment {
 export const validEnvironments = Object.values(Environment);
 
 export class World implements GameObject {
-    @asset("maps/level.png")
-    private static foreground: HTMLImageElement;
-
-    @asset("maps/level_collision.png", {
-        map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer)
-    })
-    private static collisionMap: Uint32Array;
-
-    @asset([
-        "maps/bg.png",
-        "maps/bg2.png",
-        "maps/bg3.png"
-    ])
-    private static backgrounds: HTMLImageElement[];
-
     private scene: GameScene;
+    private mapInfo: MapInfo;
+    public levelId: LevelId;
 
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = false;
 
-    public constructor(scene: GameScene) {
+    public constructor(scene: GameScene, mapInfo: MapInfo, levelId: LevelId) {
         this.scene = scene;
+        this.mapInfo = mapInfo;
+        this.levelId= levelId;
 
         const rainSpawnPosition = this.scene.pointsOfInterest.find(
             o => o.name === "rain_spawn_position"
@@ -68,11 +57,11 @@ export class World implements GameObject {
     }
 
     public getWidth(): number {
-        return World.foreground.width;
+        return this.mapInfo.foreground.width;
     }
 
     public getHeight(): number {
-        return World.foreground.height;
+        return this.mapInfo.foreground.height;
     }
 
     public update(): void {
@@ -99,11 +88,11 @@ export class World implements GameObject {
             layer: RenderingLayer.TILEMAP_MAP,
             translation: { x: camX, y: -camY },
             position: { x: -camX, y: -this.getHeight() + camY },
-            asset: World.foreground,
+            asset: this.mapInfo.foreground,
             alpha: alpha
         });
 
-        for (const background of World.backgrounds) {
+        for (const background of this.mapInfo.background) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
 
@@ -124,11 +113,11 @@ export class World implements GameObject {
     public getEnvironment(x: number, y: number): Environment {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
 
-        if (index < 0 || index >= World.collisionMap.length) {
+        if (index < 0 || index >= this.mapInfo.collisionMap.length) {
             return Environment.AIR;
         }
 
-        return World.collisionMap[index];
+        return this.mapInfo.collisionMap[index];
     }
 
     /**
@@ -158,7 +147,7 @@ export class World implements GameObject {
 
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
 
-        if (index < 0 || index >= World.collisionMap.length) {
+        if (index < 0 || index >= this.mapInfo.collisionMap.length) {
             return 0;
         }
 
@@ -171,7 +160,7 @@ export class World implements GameObject {
             return Environment.AIR;
         }
 
-        return World.collisionMap[index];
+        return this.mapInfo.collisionMap[index];
     }
 
     /**
