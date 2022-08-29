@@ -1124,30 +1124,19 @@ export class Player extends PhysicsEntity {
                 // this.setMaxVelocity(this.characterAsset === CharacterAsset.PATIENT ? 3 : MAX_PLAYER_SPEED);
             }
 
-            if (this.moveRight) {
-                this.direction = 1;
+            if (this.moveRight || this.moveLeft) {
+                this.direction = this.moveRight ? 1 : -1;
+                if (!this.flying) Player.walkingSound.play();
 
-                if (!this.flying) {
-                    Player.walkingSound.play();
+                this.accelerateX(acceleration * this.direction * dt);
+
+                // Player is running faster than allowed. Let's deaccelerate.
+                if (Math.abs(this.getVelocityX()) > this.getMaxVelocityX()) {
+                    this.decelerateX(acceleration * this.direction * dt);
                 }
-
-                this.accelerateX(acceleration * dt);
-            } else if (this.moveLeft) {
-                this.direction = -1;
-
-                if (!this.flying) {
-                    Player.walkingSound.play();
-                }
-
-                this.accelerateX(-acceleration * dt);
             } else {
                 Player.walkingSound.stop();
-
-                if (this.getVelocityX() > 0) {
-                    this.decelerateX(acceleration * dt);
-                } else {
-                    this.decelerateX(-acceleration * dt);
-                }
+                this.decelerateX(acceleration * ((this.getVelocityX() > 0) ? 1 : -1) * dt);
             }
         }
 
