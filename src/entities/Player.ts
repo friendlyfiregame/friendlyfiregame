@@ -669,11 +669,9 @@ export class Player extends PhysicsEntity {
             key: gate.properties.setGlobalKey,
             value: gate.properties.setGlobalVal
         };
-        console.log(globalConversationProps);
 
         if (globalConversationProps.key && globalConversationProps.value) {
             Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
-            console.log(Conversation.getGlobals());
         }
 
         if (gate.properties.locked) {
@@ -765,9 +763,6 @@ export class Player extends PhysicsEntity {
         if (this.drowning > 0) return;
 
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-
-        console.log(CharacterSounds.getSoundData());
-
         CharacterSounds.playRandomCharacterSound("jump", this.voiceAsset);
 
         if (this.flying && this.usedJump) {
