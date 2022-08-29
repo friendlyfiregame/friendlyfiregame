@@ -58,6 +58,7 @@ export enum FadeDirection { FADE_IN, FADE_OUT }
 export interface GameObject {
     levelId: LevelId;
     draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
+    isInCamera(): boolean;
     update(dt: number): void;
 }
 
@@ -622,7 +623,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Draw all objects that are part of the current level
         for (const obj of this.gameObjects) {
-            if (obj.levelId === this.activeLevelId) {
+            if (obj.levelId === this.activeLevelId && obj.isInCamera()) {
                 obj.draw(ctx, width, height);
             }
         }
@@ -661,12 +662,18 @@ export class GameScene extends Scene<FriendlyFire> {
 
         ctx.restore();
 
-        // Display FPS counter
+        // Display debug info
         if (isDev()) {
             GameScene.font.drawText(
                 ctx,
                 `${this.framesPerSecond} FPS`,
                 2 * this.scale, 2 * this.scale - 3,
+                "white"
+            );
+            GameScene.font.drawText(
+                ctx,
+                `Draw calls: ${this.renderer.getAmountOfDrawCalls()}`,
+                2 * this.scale, 2 * this.scale + 6,
                 "white"
             );
         }

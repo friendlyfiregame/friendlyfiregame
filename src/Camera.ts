@@ -130,6 +130,17 @@ export class Camera {
         };
     }
 
+    public isBoundVisible (bounds: Bounds): boolean {
+        const visibleRect = this.getVisibleRect();
+
+        return (
+            bounds.x + bounds.width >= visibleRect.x
+            && bounds.y + bounds.height >= visibleRect.y
+            && bounds.x <= visibleRect.x + visibleRect.width
+            && bounds.y - bounds.height <= visibleRect.y + visibleRect.height
+        );
+    }
+
     public isPointVisible(x: number, y: number, radius = 0): boolean {
         const visibleRect = this.getVisibleRect();
 

@@ -138,12 +138,18 @@ export class Renderer {
     private scene: GameScene;
     private layers = LAYER_ORDER;
     private queue: RenderingItem[] = [];
+    private lastQueueLength = 0;
 
     public constructor(scene: GameScene) {
         this.scene = scene;
     }
 
+    public getAmountOfDrawCalls (): number {
+        return this.lastQueueLength;
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
+        this.lastQueueLength = this.queue.length;
         [...this.layers].reverse().forEach(layer => {
             const itemsInLayer = this.queue.filter(item => item.layer === layer);
 

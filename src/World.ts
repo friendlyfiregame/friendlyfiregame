@@ -56,6 +56,10 @@ export class World implements GameObject {
         });
     }
 
+    public isInCamera(): boolean {
+        return true;
+    }
+
     public getWidth(): number {
         return this.mapInfo.foreground.width;
     }

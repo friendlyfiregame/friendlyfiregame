@@ -60,6 +60,11 @@ export abstract class Entity implements GameObject {
         this.timeAlive += dt;
     }
 
+    public isInCamera(): boolean {
+        
+        return this.scene.camera.isBoundVisible(this.getBounds());
+    }
+
     public entityIsInLevel (): boolean {
         return this.scene.activeLevelId === this.levelId;
     }

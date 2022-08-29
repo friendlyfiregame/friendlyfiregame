@@ -1,4 +1,4 @@
-import { GameScene } from "./scenes/GameScene";
+import { GameObject, GameScene } from "./scenes/GameScene";
 import { GRAVITY } from "./constants";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { Vector2Like } from "./graphics/Vector2";
@@ -32,7 +32,7 @@ export interface ParticleEmitterArguments {
     update?: (p: Particle) => void;
 }
 
-export class Particles {
+export class Particles implements GameObject {
     private scene: GameScene;
     private emitters: ParticleEmitter[] = [];
     public levelId: LevelId;
@@ -40,6 +40,10 @@ export class Particles {
     public constructor(scene: GameScene, levelId: LevelId) {
         this.scene = scene;
         this.levelId = levelId;
+    }
+
+    public isInCamera (): boolean {
+        return true;
     }
 
     public update(dt: number): void {
