@@ -130,6 +130,10 @@ export class Camera {
         };
     }
 
+    /**
+     * This method checks whether or not a provided bounds object
+     * is visible in the current camera view. Can be used for culling.
+     */
     public isBoundVisible (bounds: Bounds): boolean {
         const visibleRect = this.getVisibleRect();
 
