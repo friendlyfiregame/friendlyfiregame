@@ -41,11 +41,8 @@ export abstract class PhysicsEntity extends Entity {
     }
 
     public accelerateX(x: number): void {
-        if (x > 0) {
-            this.velocityX = Math.min(this.maxVelocityX, this.velocityX + x);
-        } else {
-            this.velocityX = Math.max(-this.maxVelocityX, this.velocityX + x);
-        }
+        const newSpeed = (this.velocityX + x);
+        if (Math.abs(newSpeed) <= this.maxVelocityX) this.velocityX = newSpeed;
     }
 
     public accelerateY(y: number): void {
@@ -67,6 +64,14 @@ export abstract class PhysicsEntity extends Entity {
 
     public decelerateY(y: number): void {
         this.velocityY = Math.max(0, this.velocityY - y);
+    }
+
+    public getMaxVelocityX(): number {
+        return this.maxVelocityX;
+    }
+
+    public getMaxVelocityY(): number {
+        return this.maxVelocityY;
     }
 
     public setVelocity(x: number, y: number): void {

@@ -36,7 +36,7 @@ export const MAX_PLAYER_RUNNING_SPEED = 7;
 export const PLAYER_ACCELERATION = 30;
 
 /** Player movement acceleration in air in m/s² */
-export const PLAYER_ACCELERATION_AIR = 12;
+export const PLAYER_ACCELERATION_AIR = 10;
 
 /** Player jump height in meters. */
 export const PLAYER_JUMP_HEIGHT = 3.75;
