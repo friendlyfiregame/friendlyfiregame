@@ -1,10 +1,11 @@
 import { asset } from "./Assets";
 import { getImageData } from "./graphics";
-import overworldJSON from "../assets/maps/level.json";
+import overworldJSON from "../assets/maps/overworld/level.json";
+import testmapJSON from "../assets/maps/testmap/level.json";
 import { MapInfo } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
 
-export type LevelId = "overworld";
+export type LevelId = "overworld" | "testmap";
 
 export type LevelData = {
   id: LevelId;
@@ -13,16 +14,25 @@ export type LevelData = {
 
 export class Levels {
   /** OVERWORLD MAP */
-  @asset("maps/level.png")
+  @asset("maps/overworld/level.png")
   private static overworldForeground: HTMLImageElement;
 
-  @asset("maps/level_collision.png", {
+  @asset("maps/overworld/collision.png", {
     map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer)
   })
   private static overworldCollisionMap: Uint32Array;
 
-  @asset(["maps/bg.png", "maps/bg2.png", "maps/bg3.png"])
+  @asset(["maps/overworld/bg.png", "maps/overworld/bg2.png", "maps/overworld/bg3.png"])
   private static overworldBackgrounds: HTMLImageElement[];
+
+  /** TEST MAP */
+  @asset("maps/testmap/level.png")
+  private static testmapForeground: HTMLImageElement;
+
+  @asset("maps/testmap/collision.png", {
+    map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer)
+  })
+  private static testmapCollisionMap: Uint32Array;
 
   private gameScene: GameScene;
   private levelData: LevelData[];
@@ -34,6 +44,10 @@ export class Levels {
       {
         id: "overworld",
         mapInfo: new MapInfo(overworldJSON, this.gameScene, "overworld", Levels.overworldForeground, Levels.overworldCollisionMap, Levels.overworldBackgrounds)
+      },
+      {
+        id: "testmap",
+        mapInfo: new MapInfo(testmapJSON, this.gameScene, "testmap", Levels.testmapForeground, Levels.testmapCollisionMap, Levels.overworldBackgrounds)
       }
     ];
   }

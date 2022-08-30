@@ -30,7 +30,7 @@ export class Wood extends PhysicsEntity {
     public constructor(scene: GameScene, x: number, y: number, levelId: LevelId) {
         super(scene, x, y, 26, 16, levelId);
 
-        const floatingPosition = this.scene.pointsOfInterest.find(
+        const floatingPosition = this.scene.pointsOfInterest.get("overworld")?.find(
             poi => poi.name === "recover_floating_position"
         );
 
@@ -76,7 +76,7 @@ export class Wood extends PhysicsEntity {
             if (
                 !this.isCarried()
                 && this.state !== WoodState.SWIMMING
-                && this.getWorld().collidesWith(this.x, this.y - 5) === Environment.WATER
+                && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);

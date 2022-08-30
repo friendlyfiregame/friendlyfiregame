@@ -3,7 +3,6 @@ import { GameObject, GameScene } from "./scenes/GameScene";
 import { GameObjectProperties } from "./MapInfo";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { LevelId } from "./Levels";
-import { World } from "./World";
 
 export interface EntityDistance {
     source: Entity;
@@ -69,11 +68,11 @@ export abstract class Entity implements GameObject {
         return this.scene.activeLevelId === this.levelId;
     }
 
-    public getWorld(): World {
-        const world = this.scene.worlds.find(w => w.levelId === this.levelId);
-        if (!world) throw Error(`World with level id ${this.levelId} not found`);
-        return world;
-    }
+    // public getWorld(): World {
+    //     const world = this.scene.worlds.find(w => w.levelId === this.levelId);
+    //     if (!world) throw Error(`World with level id ${this.levelId} not found`);
+    //     return world;
+    // }
 
     public distanceTo(entity: Entity): number {
         const a = this.x - entity.x;
@@ -167,7 +166,7 @@ export abstract class Entity implements GameObject {
      * @param triggerName the trigger name to check against.
      */
     protected isCollidingWithTrigger(triggerName: string): boolean {
-        const collisions = this.scene.getCurrentWorld().getTriggerCollisions(this);
+        const collisions = this.scene.world.getTriggerCollisions(this);
 
         if (collisions.length === 0) {
             return false;

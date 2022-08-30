@@ -38,7 +38,7 @@ export class Seed extends NPC {
         this.wood = new Wood(scene, x, y, levelId);
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
 
-        const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
+        const floatingPosition = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "recover_floating_position");
 
         if (!floatingPosition) {
             throw new Error ("Could not find “recover_floating_position” point of interest in game scene.");
@@ -53,7 +53,7 @@ export class Seed extends NPC {
     }
 
     public bury (): void {
-        const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
+        const seedPosition = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "seedposition");
         if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 
         this.x = seedPosition.x;
@@ -109,14 +109,14 @@ export class Seed extends NPC {
         super.update(dt);
 
         // Triggers
-        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
+        const triggerCollisions =  this.scene.world.getTriggerCollisions(this);
 
         // As soon as the seed reaches this point while the trigger is still active,
         // the goose will die and this route will be locked off.
         if (triggerCollisions.length > 0) {
             const trigger = triggerCollisions.find(t => t.name === "seed_progress_trigger");
             if (trigger) {
-                this.getWorld().deleteTrigger("seed_progress_trigger");
+                this.scene.world.deleteTrigger("seed_progress_trigger");
                 this.scene.goose.turnDead();
             }
         }
@@ -136,9 +136,9 @@ export class Seed extends NPC {
             }
             if (
                 !this.isCarried()
-                && this.getWorld().collidesWith(this.x, this.y - 8) === Environment.SOIL
+                && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
             ) {
-                const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
+                const seedPosition = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "seedposition");
 
                 if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 
@@ -155,7 +155,7 @@ export class Seed extends NPC {
             if (
                 !this.isCarried()
                 && this.state !== SeedState.SWIMMING
-                && this.getWorld().collidesWith(this.x, this.y - 5) === Environment.WATER
+                && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
@@ -163,7 +163,7 @@ export class Seed extends NPC {
                 this.y = this.floatingPosition.y;
             }
         } else if (this.state === SeedState.PLANTED) {
-            if (this.getWorld().isRaining()) {
+            if (this.scene.world.isRaining()) {
                 this.grow();
             }
         } else if (this.state === SeedState.GROWN) {

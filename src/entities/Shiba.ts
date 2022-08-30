@@ -119,7 +119,7 @@ export class Shiba extends ScriptableNPC {
         } else if (this.state === ShibaState.ON_MOUNTAIN) {
             this.move = 0;
 
-            const spawn = this.scene.pointsOfInterest.find(
+            const spawn = this.scene.pointsOfInterest.get("overworld")?.find(
                 poi => poi.name === "shiba_mountain_spawn"
             );
 
@@ -131,7 +131,7 @@ export class Shiba extends ScriptableNPC {
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
             this.scene.camera.setCinematicBar(1);
 
-            const shibaSpawnPos = this.scene.pointsOfInterest.find(
+            const shibaSpawnPos = this.scene.pointsOfInterest.get("overworld")?.find(
                 poi => poi.name === "friendship_shiba_spawn"
             );
 
@@ -261,7 +261,7 @@ export class Shiba extends ScriptableNPC {
         }
 
         // Triggers
-        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         if (this.hasActiveConversation() || this.isBeingPetted) {
             this.move = 0;
@@ -303,7 +303,7 @@ export class Shiba extends ScriptableNPC {
         this.move = -1;
 
         if (
-            this.getWorld().collidesWithVerticalLine(
+            this.scene.world.collidesWithVerticalLine(
                 this.x - (this.width / 2), this.y + this.height,
                 this.height,
                 [ this ],

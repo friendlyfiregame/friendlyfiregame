@@ -18,7 +18,7 @@ import { Fire, FireState } from "../entities/Fire";
 import { FireGfx } from "../FireGfx";
 import { FlameBoy } from "../entities/FlameBoy";
 import { FriendlyFire } from "../FriendlyFire";
-import { GameObjectInfo } from "../MapInfo";
+import { GameObjectInfo, MapInfo } from "../MapInfo";
 import { MenuList } from "../Menu";
 import { Mimic } from "../entities/Mimic";
 import { MountainRiddle } from "../MountainRiddle";
@@ -247,11 +247,14 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public gameObjects: GameObject[] = [];
     public soundEmitters: SoundEmitter[] = [];
-    public pointsOfInterest: GameObjectInfo[] = [];
-    public triggerObjects: GameObjectInfo[] = [];
-    public boundObjects: GameObjectInfo[] = [];
-    public gateObjects: GameObjectInfo[] = [];
-    public worlds: World[] = [];
+    public pointsOfInterest = new Map<LevelId, GameObjectInfo[]>();
+    public triggerObjects = new Map<LevelId, GameObjectInfo[]>();
+    public boundObjects = new Map<LevelId, GameObjectInfo[]>();
+    public gateObjects = new Map<LevelId, GameObjectInfo[]>();
+    // public worlds: World[] = [];
+    public mapInfos: MapInfo[] = [];
+    public world!: World;
+
     public paused = false;
     public camera!: Camera;
     public player!: Player;
@@ -299,19 +302,31 @@ export class GameScene extends Scene<FriendlyFire> {
     private fadeToBlackDirection: FadeDirection = FadeDirection.FADE_OUT;
     public readonly renderer = new Renderer(this);
     public readonly mountainRiddle = new MountainRiddle();
+    public lastGameObjectUpdateLength = 0;
 
-    public getCurrentWorld(): World {
-        return this.worlds[0];
+    public getCurrentMapInfo(): MapInfo {
+      return this.mapInfos.find(m => m.levelId === this.activeLevelId) ?? this.mapInfos[0]; 
     }
 
     public setup(): void {
-        console.log(this.levels);
         this.soundEmitters = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o, l.id))));
-        this.pointsOfInterest = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getPointers()));
-        this.triggerObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getTriggerObjects()));
-        this.boundObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getBoundObjects()));
-        this.gateObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getGateObjects()));
-        this.worlds = this.levels.getAllLevels().map(l => new World(this, l.mapInfo, l.id));
+        
+        // this.pointsOfInterest = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getPointers()));
+        // this.triggerObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getTriggerObjects()));
+        // this.boundObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getBoundObjects()));
+        // this.gateObjects = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getGateObjects()));
+        
+        this.levels.getAllLevels().forEach(l => {
+            this.pointsOfInterest.set(l.id, l.mapInfo.getPointers());
+            this.triggerObjects.set(l.id, l.mapInfo.getTriggerObjects());
+            this.boundObjects.set(l.id, l.mapInfo.getBoundObjects());
+            this.gateObjects.set(l.id, l.mapInfo.getGateObjects());
+        });
+
+        // this.worlds = this.levels.getAllLevels().map(l => new World(this, l.mapInfo, l.id));
+        this.world = new World(this);
+        this.mapInfos = this.levels.getAllLevels().map(l => l.mapInfo);
+
         const entities = flattenArray(this.levels.getAllLevels().map(l => l.mapInfo.getEntities().map(entity => {
             switch (entity.name) {
                 case "riddlestone":
@@ -361,7 +376,6 @@ export class GameScene extends Scene<FriendlyFire> {
         Conversation.resetGlobals();
 
         this.gameObjects = [
-            ...this.worlds,
             this.particles,
             ...this.soundEmitters,
             ...entities
@@ -414,7 +428,14 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private getPlayerStartingPos (): { x: number, y: number } {
-        const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
+
+        const spawns: GameObjectInfo[] = [];
+        this.pointsOfInterest.forEach(l => {
+            const points = l.filter(i => i.name === "player_spawn");
+            spawns.push(...points);
+        });
+
+        // const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
         const defaultSpawn = spawns.find(s => !s.properties.newGamePlus);
         const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);
 
@@ -447,8 +468,9 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
 
-    public setGateDisabled(gateId: string, disabled: boolean): void {
-        const gate = this.gateObjects.find(o => o.name === gateId);
+    public setGateDisabled(gateId: string, disabled: boolean, levelId?: LevelId): void {
+        const targetLevelId = levelId ?? this.activeLevelId;
+        const gate = this.gateObjects.get(targetLevelId)?.find(o => o.name === gateId);
         if (!gate) {
             console.error(`cannot set disabled status of gate '${gateId}' because it does not exist`);
             return;
@@ -576,13 +598,18 @@ export class GameScene extends Scene<FriendlyFire> {
         this.dt = dt;
         this.gameTime += dt;
 
+        // Update world
+        this.world.update();
 
         // Only update entities that are part of the current level
+        let gameObjectUpdateLength = 0;
         for (const obj of this.gameObjects) {
             if (obj.levelId === this.activeLevelId) {
                 obj.update(dt);
+                gameObjectUpdateLength++;
             }
         }
+        this.lastGameObjectUpdateLength = gameObjectUpdateLength;
 
         this.camera.update(dt, this.gameTime);
 
@@ -620,6 +647,9 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Draw stuff
         this.camera.applyTransform(ctx);
+
+        // Draw world
+        this.world.draw(ctx, width, height);
 
         // Draw all objects that are part of the current level
         for (const obj of this.gameObjects) {
@@ -664,16 +694,23 @@ export class GameScene extends Scene<FriendlyFire> {
 
         // Display debug info
         if (isDev()) {
+            const pos = 2 * this.scale;
             GameScene.font.drawText(
                 ctx,
                 `${this.framesPerSecond} FPS`,
-                2 * this.scale, 2 * this.scale - 3,
+                pos, pos - 3,
                 "white"
             );
             GameScene.font.drawText(
                 ctx,
                 `Draw calls: ${this.renderer.getAmountOfDrawCalls()}`,
-                2 * this.scale, 2 * this.scale + 6,
+                pos, pos + 6,
+                "white"
+            );
+            GameScene.font.drawText(
+                ctx,
+                `Update calls: ${this.lastGameObjectUpdateLength}`,
+                pos, pos + 15,
                 "white"
             );
         }
@@ -700,17 +737,17 @@ export class GameScene extends Scene<FriendlyFire> {
     private addAllDebugBoundsToRenderingQueue(): void {
         if (this.showBounds) {
             // Draw trigger bounds for collisions
-            for (const obj of this.triggerObjects) {
+            for (const obj of this.triggerObjects.get(this.activeLevelId) ?? []) {
                 const bounds = boundsFromMapObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "blue");
             }
 
-            for (const obj of this.boundObjects) {
+            for (const obj of this.boundObjects.get(this.activeLevelId) ?? []) {
                 const bounds = boundsFromMapObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "yellow");
             }
 
-            for (const obj of this.gateObjects) {
+            for (const obj of this.gateObjects.get(this.activeLevelId) ?? []) {
                 const bounds = boundsFromMapObject(obj);
                 this.addSingleDebugBoundsToRenderingQueue(bounds, "green");
             }
@@ -884,7 +921,7 @@ export class GameScene extends Scene<FriendlyFire> {
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
                 if (
-                    this.getCurrentWorld().collidesWith(particle.x, particle.y - particle.size / 4)
+                    this.world.collidesWith(particle.x, particle.y - particle.size / 4)
                 ) {
                     particle.vx = 0;
                     particle.vy = 0;
@@ -899,7 +936,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackDirection = FadeDirection.FADE_OUT;
         this.fadeToBlackStartTime = this.gameTime + WINDOW_ENDING_CUTSCENE_DURATION;
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (WINDOW_ENDING_FADE_DURATION);
-        const target = this.pointsOfInterest.find(poi => poi.name === "windowzoomtarget");
+        const target = this.pointsOfInterest.get(this.activeLevelId)?.find(poi => poi.name === "windowzoomtarget");
         if (target) {
             this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
         }
@@ -937,7 +974,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position");
+        const playerTargetPos = this.pointsOfInterest.get(this.activeLevelId)?.find(poi => poi.name === "friendship_player_position");
 
         if (!playerTargetPos) {
             throw new Error ("cannot initiate friendship ending because some points of interest are missing");
@@ -949,12 +986,12 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public beginApocalypse(): void {
         this.apocalypse = true;
-        this.getCurrentWorld().stopRain();
+        this.world.stopRain();
 
-        const bossPosition = this.pointsOfInterest.find(poi => poi.name === "boss_spawn");
-        const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === "bosscloud");
+        const bossPosition = this.pointsOfInterest.get(this.activeLevelId)?.find(poi => poi.name === "boss_spawn");
+        const cloudPositions = this.pointsOfInterest.get(this.activeLevelId)?.filter(poi => poi.name === "bosscloud");
 
-        if (bossPosition && cloudPositions.length > 0) {
+        if (bossPosition && cloudPositions && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {
                 const cloud = new Cloud(
                     this,

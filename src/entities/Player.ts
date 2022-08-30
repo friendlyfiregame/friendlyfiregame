@@ -290,7 +290,7 @@ export class Player extends PhysicsEntity {
             if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.ABYSS_WALKING);
             this.hasAbyssWalking = true;
 
-            const shadowgate = this.scene.gateObjects.find(g => g.name === "shadowgate_door_1");
+            const shadowgate = this.scene.gateObjects.get("overworld")?.find(g => g.name === "shadowgate_door_1");
             if (shadowgate) shadowgate.properties.locked = false;
         }
     }
@@ -351,7 +351,8 @@ export class Player extends PhysicsEntity {
         if (!this.hasChaos) {
             this.scene.scenes.pushScene(GotItemScene, Item.CHAOS);
             this.hasChaos = true;
-            this.scene.worlds.forEach(w => w.deleteTrigger("seed_progress_trigger"));
+
+            this.scene.world.deleteTrigger("seed_progress_trigger", "overworld");
 
             // The wise stone is not needed anymore!
             this.scene.stone.remove();
@@ -379,7 +380,7 @@ export class Player extends PhysicsEntity {
             Conversation.setGlobal("hasWeirdThrow", "true");
             
             // After getting the super throw, next stop is the almighty flying powerup.
-            const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "flying_powerup_chaos_spawn");
+            const spawn = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "flying_powerup_chaos_spawn");
             if (!spawn) throw new Error("Spawn named 'flying_powerup_chaos_spawn' not found");
             this.scene.wing.setPosition(spawn?.x, spawn?.y);
             this.scene.game.campaign.runAction("enable", null, ["wing", "wingChaos1"]);
@@ -429,7 +430,7 @@ export class Player extends PhysicsEntity {
     }
 
     public enterAbyssBarrier (): void {
-        const abyssGate = this.scene.gateObjects.find(g => g.name === "darkcontainerdoor_1");
+        const abyssGate = this.scene.gateObjects.get("overworld")?.find(g => g.name === "darkcontainerdoor_1");
         if (!abyssGate) throw new Error("Missing gate called 'darkcontainerdoor_1'");
         this.enterGate(abyssGate);
     }
@@ -487,7 +488,7 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
         } else if (event.isPlayerEnterDoor) {
             if (!this.canEnterDoor()) return;
-            const gate = this.getWorld().getGateCollisions(this)[0];
+            const gate = this.scene.world.getGateCollisions(this)[0];
             this.enterGate(gate);
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
@@ -657,6 +658,12 @@ export class Player extends PhysicsEntity {
         }
     }
 
+    private switchToLevel(levelId: LevelId): void {
+        this.scene.activeLevelId = levelId;
+        this.levelId = levelId;
+        if (this.carrying) this.carrying.levelId = levelId;
+    }
+
     /**
      * Teleport the player from the source gate to it's corresponding target gate.
      * The teleport is not instant but accompanied by a fade to black to obscure the teleportation.
@@ -681,8 +688,15 @@ export class Player extends PhysicsEntity {
             this.moveRight = false;
             this.moveLeft = false;
 
-            const targetGate = this.scene.gateObjects.find(
-                target => target.name === gate.properties.target
+            if (gate.properties.targetLevelId) {
+                // Travel to a gate in a different level
+            } else {
+                // Travel to a gate within this same level
+            }
+
+            const targetLevelId = (gate.properties.targetLevelId as LevelId) ?? this.levelId;
+            const targetGate = this.scene.gateObjects.get(targetLevelId)?.find(
+                target => target.name === gate.properties.target 
             );
 
             const targetBgmId = gate.properties.bgm;
@@ -701,6 +715,8 @@ export class Player extends PhysicsEntity {
 
                 this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
                     .then(async () => {
+                        this.switchToLevel(targetLevelId);
+
                         if (targetBgmId) {
                             this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                         }
@@ -895,7 +911,7 @@ export class Player extends PhysicsEntity {
             this.carrying instanceof Stone
             && (
                 this.direction === -1
-                && this.getWorld().collidesWith(
+                && this.scene.world.collidesWith(
                     this.x - 30, this.y - 20
                 ) === Environment.WATER
             )
@@ -907,19 +923,19 @@ export class Player extends PhysicsEntity {
             this.carrying instanceof Seed
             && (
                 this.direction === -1
-                && this.getWorld().collidesWith(this.x - 30, this.y + 2) === Environment.SOIL
+                && this.scene.world.collidesWith(this.x - 30, this.y + 2) === Environment.SOIL
             )
         );
     }
 
     public debugCollisions(): void {
-        console.log("Entities: ",this.getWorld().getEntityCollisions(this));
-        console.log("Triggers: ",this.getWorld().getTriggerCollisions(this));
-        console.log("Gates: ",this.getWorld().getGateCollisions(this));
+        console.log("Entities: ",this.scene.world.getEntityCollisions(this));
+        console.log("Triggers: ",this.scene.world.getTriggerCollisions(this));
+        console.log("Gates: ",this.scene.world.getGateCollisions(this));
     }
 
     private getReadableTrigger(): GameObjectInfo | undefined {
-        const triggers = this.getWorld().getTriggerCollisions(this);
+        const triggers = this.scene.world.getTriggerCollisions(this);
         if (triggers.length === 0) return undefined;
 
         return triggers.find(t => t.name === "readable");
@@ -933,7 +949,7 @@ export class Player extends PhysicsEntity {
         return (
             (
                 this.isCollidingWithTrigger("raincloud_sky")
-                && !this.getWorld().isRaining()
+                && !this.scene.world.isRaining()
                 && this.carrying === null
                 && !this.scene.apocalypse
             ) || (
@@ -946,14 +962,14 @@ export class Player extends PhysicsEntity {
     }
 
     private canEnterDoor(): boolean {
-        return !this.flying && !this.carrying && this.getWorld().getGateCollisions(this).length > 0;
+        return !this.flying && !this.carrying && this.scene.world.getGateCollisions(this).length > 0;
     }
 
     /**
      * Returns the bounds of the map area the player currently resides in
      */
     public getCurrentMapBounds(): Bounds | undefined {
-        const collisions = this.getWorld().getCameraBounds(this);
+        const collisions = this.scene.world.getCameraBounds(this);
         if (collisions.length === 0) return undefined;
         return boundsFromMapObject(collisions[0]);
     }
@@ -986,7 +1002,7 @@ export class Player extends PhysicsEntity {
         const mapBounds = this.scene.camera.getBounds();
         if (!mapBounds) return false;
 
-        return !this.getWorld().boundingBoxesCollide(this.getBounds(), {
+        return !this.scene.world.boundingBoxesCollide(this.getBounds(), {
             x: mapBounds.x + 4,
             y: mapBounds.y - 4,
             width: mapBounds.width - 8,
@@ -996,13 +1012,13 @@ export class Player extends PhysicsEntity {
 
     public update(dt: number): void {
         super.update(dt);
-        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
             const pos = this.scene.apocalypse ?
-                this.scene.pointsOfInterest.find(poi => poi.name === "boss_spawn") :
-                this.scene.pointsOfInterest.find(poi => poi.name === "player_reset_position");
+                this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "boss_spawn") :
+                this.scene.pointsOfInterest.get(this.levelId)?.find(poi => poi.name === "player_reset_position");
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
@@ -1048,7 +1064,7 @@ export class Player extends PhysicsEntity {
             }
         }
 
-        const isDrowning = this.getWorld().collidesWith(this.x, this.y) === Environment.WATER;
+        const isDrowning = this.scene.world.collidesWith(this.x, this.y) === Environment.WATER;
 
         if (isDrowning) {
             if (!this.thinkBubble) {
@@ -1078,7 +1094,7 @@ export class Player extends PhysicsEntity {
             this.drowning = 0;
         }
 
-        const world = this.getWorld();
+        const world = this.scene.world;
         const wasFlying = this.flying;
         const prevVelocity = this.getVelocityY();
 
@@ -1176,7 +1192,7 @@ export class Player extends PhysicsEntity {
         // collide with the player with an added 5 px of margin. If there are multiple NPCs
         // colliding, the closest one will be chosen.
         this.closestNPC = null;
-        const entities = this.getWorld().getEntityCollisions(this, 5);
+        const entities = this.scene.world.getEntityCollisions(this, 5);
 
         if (entities.length > 0) {
             const closestEntity = entities.length > 1 ? this.getClosestEntity() : entities[0];
@@ -1207,7 +1223,7 @@ export class Player extends PhysicsEntity {
 
         // Bounce
         if (
-            this.getWorld().collidesWith(
+            this.scene.world.collidesWith(
                 this.x, this.y - 2,
                 [ this ]
             ) === Environment.BOUNCE
@@ -1248,7 +1264,7 @@ export class Player extends PhysicsEntity {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
 
                         // Camera focus to boss for each triggered rain cloud
-                        const bossPointer = this.scene.pointsOfInterest.find(
+                        const bossPointer = this.scene.pointsOfInterest.get("overworld")?.find(
                             poi => poi.name === "boss_spawn"
                         );
 
@@ -1279,7 +1295,7 @@ export class Player extends PhysicsEntity {
                     }
 
                     if (this.isCollidingWithTrigger("raincloud_sky")) {
-                        this.getWorld().startRain();
+                        this.scene.world.startRain();
                     }
                 }
                 this.dance = null;
@@ -1371,7 +1387,7 @@ export class Player extends PhysicsEntity {
         let pulled = 0, col = 0;
 
         if (this.getVelocityY() <= 0) {
-            const world = this.getWorld();
+            const world = this.scene.world;
             const height = world.getHeight();
 
             col = world.collidesWith(
@@ -1411,7 +1427,7 @@ export class Player extends PhysicsEntity {
      */
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.getWorld();
+        const world = this.scene.world;
 
         while (
             this.y > 0
@@ -1430,7 +1446,7 @@ export class Player extends PhysicsEntity {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.getWorld();
+        const world = this.scene.world;
 
         if (this.getVelocityX() > 0) {
             while (

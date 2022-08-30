@@ -42,7 +42,7 @@ export class Bone extends PhysicsEntity {
             player.carry(this);
         }
 
-        if (!this.isCarried() && this.getWorld().collidesWith(this.x, this.y - 5) === Environment.WATER) {
+        if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
             const vx = this.getVelocityX();
             this.setVelocity(vx, 10);
         }

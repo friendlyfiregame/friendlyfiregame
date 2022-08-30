@@ -74,7 +74,7 @@ export class Goose extends ScriptableNPC {
 
         if (this.state === GooseState.IDLE) {
             // Triggers
-            const triggerCollisions = this.getWorld().getTriggerCollisions(this);
+            const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
             this.idleWalkingUpdateLogic(triggerCollisions, dt);
 

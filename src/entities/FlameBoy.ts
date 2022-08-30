@@ -154,7 +154,7 @@ export class FlameBoy extends ScriptableNPC {
         super.update(dt);
 
         // Triggers
-        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         if (this.hasActiveConversation()) {
             this.move = 0;

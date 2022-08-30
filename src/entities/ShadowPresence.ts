@@ -66,7 +66,7 @@ export class ShadowPresence extends NPC {
      * chaos ending route.
      */
     public initChaosRoute (): void {
-        const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "shadowpresence_chaos_spawn");
+        const spawn = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "shadowpresence_chaos_spawn");
         if (!spawn) throw new Error("Spawn named 'shadowpresence_chaos_spawn' not found");
         this.scene.shadowPresence.setPosition(spawn?.x, spawn?.y);
         this.scene.game.campaign.runAction("enable", null, ["shadowpresence", "shadowpresenceChaos1"]);
@@ -79,7 +79,7 @@ export class ShadowPresence extends NPC {
      * an optional ending
      */
     public sendHome (): void {
-        const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "shadowpresence_chaos_spawn");
+        const spawn = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "shadowpresence_chaos_spawn");
         if (!spawn) throw new Error("Spawn named 'shadowpresence_chaos_spawn' not found");
         this.scene.shadowPresence.setPosition(spawn?.x, spawn?.y);
         this.scene.game.campaign.runAction("enable", null, ["shadowpresence", "shadowpresenceHome1"]);

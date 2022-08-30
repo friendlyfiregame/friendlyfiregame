@@ -39,9 +39,14 @@ export interface GameObjectProperties {
     sound?: string;
     col?: number;
     row?: number;
+    /** Makes gate only available in new game plus */
     newGamePlus?: boolean;
+    /** Will set a gate to a locked state */
     locked?: boolean;
+    /** Special text that will come up when player tries to enter locked door */
     lockedText?: string;
+    /** Used for gates that travel to a new level */
+    targetLevelId?: string;
 }
 
 export interface GameObjectInfo {

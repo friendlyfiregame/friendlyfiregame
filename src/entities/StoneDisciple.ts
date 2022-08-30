@@ -30,7 +30,7 @@ export class StoneDisciple extends NPC {
         this.lookAtPlayer = true;
         this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);
 
-        const pos = this.scene.pointsOfInterest.find(poi => poi.name === "stone_disciple_floating_position");
+        const pos = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "stone_disciple_floating_position");
         if (!pos) throw new Error("Could not find \"stone_disciple_floating_position\" point of interest in game scene");
         this.floatingPosition = pos;
     }

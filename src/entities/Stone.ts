@@ -38,7 +38,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 
-        const floatingPosition = this.scene.pointsOfInterest.find(
+        const floatingPosition = this.scene.pointsOfInterest.get("overworld")?.find(
             poi => poi.name === "stone_floating_position"
         );
 
@@ -87,7 +87,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (
-                this.getWorld().collidesWith(this.x, this.y - 5) === Environment.WATER
+                this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
             ) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(
                     QuestATrigger.THROWN_STONE_INTO_WATER

@@ -98,7 +98,7 @@ export class Bird extends NPC {
         let pulled = 0, col = 0;
 
         if (this.getVelocityY() <= 0) {
-            const world = this.getWorld();
+            const world = this.scene.world;
             const height = world.getHeight();
             col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
 
@@ -114,7 +114,7 @@ export class Bird extends NPC {
 
     private pullOutOfCeiling(): number {
         let pulled = 0;
-        const world = this.getWorld();
+        const world = this.scene.world;
 
         while (
             this.y > 0
@@ -133,7 +133,7 @@ export class Bird extends NPC {
 
     private pullOutOfWall(): number {
         let pulled = 0;
-        const world = this.getWorld();
+        const world = this.scene.world;
 
         if (this.getVelocityX() > 0) {
             while (
@@ -193,7 +193,7 @@ export class Bird extends NPC {
         this.move = 0;
 
         // Triggers
-        const triggerCollisions = this.getWorld().getTriggerCollisions(this);
+        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         if (this.jumpTimer > 0) {
             this.jumpTimer -= dt;

@@ -46,7 +46,7 @@ export class Caveman extends ScriptableNPC {
     public update(dt: number): void {
         super.update(dt);
         this.move = 0;
-        const triggers = this.getWorld().getTriggerCollisions(this);
+        const triggers = this.scene.world.getTriggerCollisions(this);
 
         if (this.state === State.GOING_AWAY) {
             this.move = -1;
@@ -54,7 +54,7 @@ export class Caveman extends ScriptableNPC {
             if (triggers.find(t => t.name === "caveman_stop_trigger")) this.state = State.ENTERING_DOOR;
 
             if (
-                this.getWorld().collidesWithVerticalLine(
+                this.scene.world.collidesWithVerticalLine(
                     this.x - (this.width / 2) - 2, this.y + this.height,
                     this.height,
                     [ this ],
@@ -92,14 +92,14 @@ export class Caveman extends ScriptableNPC {
 
     public teleportOutside (): void {
         console.log("Teleport");
-        const cavemanSpawn = this.scene.pointsOfInterest.find(poi => poi.name === "caveman_outside_position");
+        const cavemanSpawn = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "caveman_outside_position");
         if (!cavemanSpawn) throw new Error("Cavemen outside spawn missing");
         this.x = cavemanSpawn.x;
         this.y = cavemanSpawn.y;
         this.scene.game.campaign.runAction("enable", null, ["caveman", "cavemanOutside1"]);
         this.state = State.SITTING;
 
-        const campfireSpawn = this.scene.pointsOfInterest.find(poi => poi.name === "campfire_spawn");
+        const campfireSpawn = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "campfire_spawn");
         if (campfireSpawn) {
             const campfire = new Campfire(this.scene, campfireSpawn.x, campfireSpawn.y, this.levelId);
             this.scene.gameObjects.push(campfire);

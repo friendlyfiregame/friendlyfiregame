@@ -33,8 +33,7 @@ export class PowerShiba extends NPC {
         this.state++;
 
         if (this.state === PowerShibaState.ON_MOUNTAIN) {
-            const spawn = this.scene.pointsOfInterest.find(poi => poi.name === "powershiba_mountain_spawn");
-
+            const spawn = this.scene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "powershiba_mountain_spawn");
             if (!spawn) throw new Error("PowerShiba mountain spawn missing");
 
             this.floatSpeed = 2;

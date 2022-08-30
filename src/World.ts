@@ -2,7 +2,7 @@ import { asset } from "./Assets";
 import { Bounds, Entity } from "./Entity";
 import { boundsFromMapObject, rnd, rndInt } from "./util";
 import { GameObject, GameScene, isCollidableGameObject } from "./scenes/GameScene";
-import { GameObjectInfo, MapInfo } from "./MapInfo";
+import { GameObjectInfo } from "./MapInfo";
 import { ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "./constants";
@@ -22,20 +22,22 @@ export const validEnvironments = Object.values(Environment);
 
 export class World implements GameObject {
     private scene: GameScene;
-    private mapInfo: MapInfo;
-    public levelId: LevelId;
+    // private mapInfo: MapInfo;
+
+    // Has to be set to something since World is a GameObject (which doesn't really make much sense)
+    public levelId: LevelId = "overworld";
 
     @asset("sprites/raindrop.png")
     private static raindrop: HTMLImageElement;
     private rainEmitter: ParticleEmitter;
     private raining = false;
 
-    public constructor(scene: GameScene, mapInfo: MapInfo, levelId: LevelId) {
+    public constructor(scene: GameScene) {
         this.scene = scene;
-        this.mapInfo = mapInfo;
-        this.levelId= levelId;
+        // this.mapInfo = mapInfo;
+        // this.levelId= levelId;
 
-        const rainSpawnPosition = this.scene.pointsOfInterest.find(
+        const rainSpawnPosition = this.scene.pointsOfInterest.get("overworld")?.find(
             o => o.name === "rain_spawn_position"
         );
 
@@ -61,11 +63,11 @@ export class World implements GameObject {
     }
 
     public getWidth(): number {
-        return this.mapInfo.foreground.width;
+        return this.scene.getCurrentMapInfo().foreground.width;
     }
 
     public getHeight(): number {
-        return this.mapInfo.foreground.height;
+        return this.scene.getCurrentMapInfo().foreground.height;
     }
 
     public update(): void {
@@ -87,16 +89,18 @@ export class World implements GameObject {
             alpha = Math.max(0, 1 - (this.scene.windowCutsceneTime / (WINDOW_ENDING_CUTSCENE_DURATION / 1.5 )));
         }
 
+        console.log("camx", camX);
+
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
             layer: RenderingLayer.TILEMAP_MAP,
             translation: { x: camX, y: -camY },
             position: { x: -camX, y: -this.getHeight() + camY },
-            asset: this.mapInfo.foreground,
+            asset: this.scene.getCurrentMapInfo().foreground,
             alpha: alpha
         });
 
-        for (const background of this.mapInfo.background) {
+        for (const background of this.scene.getCurrentMapInfo().background) {
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
 
@@ -117,11 +121,11 @@ export class World implements GameObject {
     public getEnvironment(x: number, y: number): Environment {
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
 
-        if (index < 0 || index >= this.mapInfo.collisionMap.length) {
+        if (index < 0 || index >= this.scene.getCurrentMapInfo().collisionMap.length) {
             return Environment.AIR;
         }
 
-        return this.mapInfo.collisionMap[index];
+        return this.scene.getCurrentMapInfo().collisionMap[index];
     }
 
     /**
@@ -135,7 +139,7 @@ export class World implements GameObject {
     public collidesWith(
         x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
     ): number {
-        for (const gameObject of this.scene.gameObjects) {
+        for (const gameObject of this.scene.gameObjects.filter(o => o.levelId === this.scene.activeLevelId)) {
             if (
                 gameObject !== this
                 && !ignoreObjects.includes(gameObject)
@@ -151,7 +155,7 @@ export class World implements GameObject {
 
         const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
 
-        if (index < 0 || index >= this.mapInfo.collisionMap.length) {
+        if (index < 0 || index >= this.scene.getCurrentMapInfo().collisionMap.length) {
             return 0;
         }
 
@@ -164,7 +168,7 @@ export class World implements GameObject {
             return Environment.AIR;
         }
 
-        return this.mapInfo.collisionMap[index];
+        return this.scene.getCurrentMapInfo().collisionMap[index];
     }
 
     /**
@@ -212,7 +216,7 @@ export class World implements GameObject {
     public getTriggerCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
 
-        for (const triggerObject of this.scene.triggerObjects) {
+        for (const triggerObject of this.scene.triggerObjects.get(this.scene.activeLevelId) ?? []) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
             );
@@ -225,10 +229,11 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    public deleteTrigger (name: string): void {
-        const index = this.scene.triggerObjects.findIndex(o => o.name === name);
-        if (index > -1) {
-            this.scene.triggerObjects.splice(index, 1);
+    public deleteTrigger (name: string, levelId?: LevelId): void {
+        const triggerObjects = this.scene.triggerObjects.get(levelId ?? this.scene.activeLevelId);
+        const index = triggerObjects?.findIndex(o => o.name === name);
+        if (triggerObjects && index !== undefined && index > -1) {
+            triggerObjects.splice(index, 1);
         }
     }
 
@@ -245,8 +250,7 @@ export class World implements GameObject {
     public getGateCollisions(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
 
-
-        for (const gateObject of this.scene.gateObjects) {
+        for (const gateObject of this.scene.gateObjects.get(this.scene.activeLevelId) ?? []) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
             );
@@ -262,7 +266,7 @@ export class World implements GameObject {
     public getCameraBounds(sourceEntity: Entity): GameObjectInfo[] {
         const collidesWith: GameObjectInfo[] = [];
 
-        for (const triggerObject of this.scene.boundObjects) {
+        for (const triggerObject of this.scene.boundObjects.get(this.scene.activeLevelId) ?? []) {
             const colliding = this.boundingBoxesCollide(
                 sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
             );

@@ -209,7 +209,7 @@ export class Campaign {
                     this.gameScene.camera.zoom -= 1;
                     break;
                 case "treezoom":
-                    const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");
+                    const forestPointer = this.gameScene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "forest");
 
                     if (forestPointer) {
                         this.gameScene.camera.focusOn(
@@ -223,7 +223,7 @@ export class Campaign {
 
                     break;
                 case "mountainzoom":
-                    const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "mountain");
+                    const mountainPointer = this.gameScene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "mountain");
 
                     if (mountainPointer) {
                         this.gameScene.camera.focusOn(
@@ -237,7 +237,7 @@ export class Campaign {
 
                     break;
                 case "riverzoom":
-                    const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "river");
+                    const riverPointer = this.gameScene.pointsOfInterest.get("overworld")?.find(poi => poi.name === "river");
 
                     if (riverPointer) {
                         this.gameScene.camera.focusOn(

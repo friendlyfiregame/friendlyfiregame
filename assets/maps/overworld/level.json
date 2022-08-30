@@ -3273,8 +3273,8 @@
                  "type":"pointer",
                  "visible":true,
                  "width":0,
-                 "x":4336,
-                 "y":2474
+                 "x":3023,
+                 "y":566
                 }, 
                 {
                  "height":0,
@@ -3615,6 +3615,33 @@
                  "width":24,
                  "x":4485,
                  "y":2450
+                }, 
+                {
+                 "height":42,
+                 "id":261,
+                 "name":"testdoor_1",
+                 "properties":[
+                        {
+                         "name":"bgm",
+                         "type":"string",
+                         "value":"overworld"
+                        }, 
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"testdoor_1"
+                        }, 
+                        {
+                         "name":"targetLevelId",
+                         "type":"string",
+                         "value":"testmap"
+                        }],
+                 "rotation":0,
+                 "type":"gate",
+                 "visible":true,
+                 "width":22,
+                 "x":3073,
+                 "y":534
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3623,7 +3650,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":261,
+ "nextobjectid":262,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.4.1",
@@ -3632,7 +3659,7 @@
         {
          "columns":25,
          "firstgid":1,
-         "image":"tilemap.png",
+         "image":"..\/tilemap.png",
          "imageheight":816,
          "imagewidth":600,
          "margin":0,
