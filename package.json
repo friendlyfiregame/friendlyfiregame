@@ -54,7 +54,7 @@
     "@kayahr/jest-electron-runner": "^5.1.1",
     "@types/generate-json-webpack-plugin": "^0.3.4",
     "@types/jest": "^28.1.7",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.33.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^11.0.0",
