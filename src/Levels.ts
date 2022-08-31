@@ -1,11 +1,11 @@
 import { asset } from "./Assets";
 import { getImageData } from "./graphics";
 import overworldJSON from "../assets/maps/overworld/level.json";
-import testmapJSON from "../assets/maps/testmap/level.json";
+import spaceshipJSON from "../assets/maps/spaceship/level.json";
 import { MapInfo } from "./MapInfo";
 import { GameScene } from "./scenes/GameScene";
 
-export type LevelId = "overworld" | "testmap";
+export type LevelId = "overworld" | "spaceship";
 
 export type LevelData = {
   id: LevelId;
@@ -25,14 +25,14 @@ export class Levels {
   @asset(["maps/overworld/bg.png", "maps/overworld/bg2.png", "maps/overworld/bg3.png"])
   private static overworldBackgrounds: HTMLImageElement[];
 
-  /** TEST MAP */
-  @asset("maps/testmap/level.png")
-  private static testmapForeground: HTMLImageElement;
+  /** SPACESHIP MAP */
+  @asset("maps/spaceship/level.png")
+  private static spaceshipForeground: HTMLImageElement;
 
-  @asset("maps/testmap/collision.png", {
+  @asset("maps/spaceship/collision.png", {
     map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer)
   })
-  private static testmapCollisionMap: Uint32Array;
+  private static spaceshipCollisionMap: Uint32Array;
 
   private gameScene: GameScene;
   private levelData: LevelData[];
@@ -46,8 +46,8 @@ export class Levels {
         mapInfo: new MapInfo(overworldJSON, this.gameScene, "overworld", Levels.overworldForeground, Levels.overworldCollisionMap, Levels.overworldBackgrounds)
       },
       {
-        id: "testmap",
-        mapInfo: new MapInfo(testmapJSON, this.gameScene, "testmap", Levels.testmapForeground, Levels.testmapCollisionMap, Levels.overworldBackgrounds)
+        id: "spaceship",
+        mapInfo: new MapInfo(spaceshipJSON, this.gameScene, "spaceship", Levels.spaceshipForeground, Levels.spaceshipCollisionMap, [])
       }
     ];
   }

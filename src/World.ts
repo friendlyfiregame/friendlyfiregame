@@ -89,8 +89,6 @@ export class World implements GameObject {
             alpha = Math.max(0, 1 - (this.scene.windowCutsceneTime / (WINDOW_ENDING_CUTSCENE_DURATION / 1.5 )));
         }
 
-        console.log("camx", camX);
-
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
             layer: RenderingLayer.TILEMAP_MAP,
