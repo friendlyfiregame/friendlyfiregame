@@ -15,3 +15,5 @@ export enum GamepadStyle {
     STADIA = "stadia"
 
 }
+
+export const DEFAULT_GAMEPAD_STYLE: GamepadStyle = GamepadStyle.XBOX;

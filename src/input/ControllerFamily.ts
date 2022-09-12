@@ -12,7 +12,8 @@ export enum ControllerFamily {
 export enum ControllerSpriteMap {
     KEYBOARD = "keyboard",
     XBOX = "xbox",
-    PLAYSTATION = "playstation"
+    PLAYSTATION = "playstation",
+    STADIA = "stadia"
 }
 
 /**

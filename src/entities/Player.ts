@@ -94,14 +94,16 @@ export class Player extends PhysicsEntity {
     @asset([
         "sprites/buttons_keyboard.aseprite.json",
         "sprites/buttons_xbox.aseprite.json",
-        "sprites/buttons_playstation.aseprite.json"
+        "sprites/buttons_playstation.aseprite.json",
+        "sprites/buttons_stadia.aseprite.json"
     ])
     public static buttons: Aseprite[];
 
     public controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
         [ControllerSpriteMap.KEYBOARD]: Player.buttons[0],
         [ControllerSpriteMap.XBOX]: Player.buttons[1],
-        [ControllerSpriteMap.PLAYSTATION]: Player.buttons[2]
+        [ControllerSpriteMap.PLAYSTATION]: Player.buttons[2],
+        [ControllerSpriteMap.STADIA]: Player.buttons[3]
     };
 
     @asset("sounds/feet-walking/steps_single.mp3")
@@ -644,7 +646,7 @@ export class Player extends PhysicsEntity {
                         if (targetGate.properties.exitSleepTime) {
                             await sleep(targetGate.properties.exitSleepTime * 1000);
                         }
-                        
+
                         const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
                         this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN).then(() => {
                             this.isControllable = true;

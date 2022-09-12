@@ -241,7 +241,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 menuItemX, startMenuItemY
             ));
         }
-        
+
         this.menu.appendTo(panel);
 
         this.updateSelection();
