@@ -5,7 +5,19 @@ import { ControllerManager } from "./input/ControllerManager";
 const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext as AudioContext;
 
 let audioContext: AudioContext | null = null;
-let globalGainNode: GainNode | null = null;
+let musicGainNode: GainNode | null = null;
+let sfxGainNode: GainNode | null = null;
+
+/**
+ * Enumeration of the different sound channels.
+ * Volumes of channels can be set independently.
+ */
+export enum SoundChannel {
+    /** Used to identify the channel to output music. */
+    MUSIC = "music",
+    /** Used to identity the channel to output sound effects. */
+    SFX = "sfx"
+}
 
 export function getAudioContext(): AudioContext {
     const controllerManager = ControllerManager.getInstance();
@@ -34,14 +46,24 @@ export function getAudioContext(): AudioContext {
     return audioContext;
 }
 
-export function getGlobalGainNode(): GainNode {
-    if (globalGainNode == null) {
+export function getMusicGainNode(): GainNode {
+    if (musicGainNode == null) {
         const audioContext = getAudioContext();
-        globalGainNode = audioContext.createGain();
-        globalGainNode.connect(audioContext.destination);
+        musicGainNode = audioContext.createGain();
+        musicGainNode.connect(audioContext.destination);
     }
 
-    return globalGainNode;
+    return musicGainNode;
+}
+
+export function getSfxGainNode(): GainNode {
+    if (sfxGainNode == null) {
+        const audioContext = getAudioContext();
+        sfxGainNode = audioContext.createGain();
+        sfxGainNode.connect(audioContext.destination);
+    }
+
+    return sfxGainNode;
 }
 
 export class Sound {
@@ -49,17 +71,17 @@ export class Sound {
     private source: AudioBufferSourceNode | null = null;
     private loop: boolean = false;
 
-    private constructor(private readonly buffer: AudioBuffer) {
+    private constructor(private readonly buffer: AudioBuffer, private readonly channel: SoundChannel) {
         this.gainNode = getAudioContext().createGain();
-        this.gainNode.connect(getGlobalGainNode());
+        this.gainNode.connect(this.channel === SoundChannel.MUSIC ? getMusicGainNode() : getSfxGainNode());
     }
 
-    public static async load(url: string): Promise<Sound> {
+    public static async load(url: string, channel:  SoundChannel = SoundChannel.SFX): Promise<Sound> {
         const arrayBuffer = await (await fetch(url)).arrayBuffer();
 
         return new Promise((resolve, reject) => {
             getAudioContext().decodeAudioData(arrayBuffer,
-                buffer => resolve(new Sound(buffer)),
+                buffer => resolve(new Sound(buffer, channel)),
                 error => reject(error)
             );
         });

@@ -26,7 +26,13 @@ const steamworks: SteamworksApi = {
 const preferences: Preferences = {
     fullscreen: {
         isEnabled: async () => ipcRenderer.invoke("preferences", ["fullscreen", "isEnabled"]),
-        setEnabled: async (fullscreen: boolean) => ipcRenderer.invoke("preferences", ["fullscreen", "setEnabled", fullscreen]),
+        setEnabled: async (fullscreen: boolean) => ipcRenderer.invoke("preferences", ["fullscreen", "setEnabled", fullscreen])
+    },
+    audio: {
+        getMusicGain: async () => ipcRenderer.invoke("preferences", ["audio", "getMusicGain"]),
+        setMusicGain: async(value: number) => ipcRenderer.invoke("preferences", ["audio", "setMusicGain", value]),
+        getSfxGain: async () => ipcRenderer.invoke("preferences", ["audio", "getSfxGain"]),
+        setSfxGain: async(value: number) => ipcRenderer.invoke("preferences", ["audio", "setSfxGain", value])
     }
 };
 
