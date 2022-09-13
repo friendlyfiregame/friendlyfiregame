@@ -3,7 +3,7 @@ import { calculateVolume } from "../util";
 import { Entity } from "../Entity";
 import { GameObjectInfo } from "../MapInfo";
 import { Sound } from "./Sound";
-import { LevelId } from "./Levels";
+import { LevelId } from "./../Levels";
 
 /**
  * Sound emitters are invisible entities that emit a sound in relation to the player distance.
