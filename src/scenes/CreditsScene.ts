@@ -9,7 +9,7 @@ import { FadeTransition } from "../transitions/FadeTransition";
 import { FriendlyFire } from "../FriendlyFire";
 import { isDev } from "../util";
 import { Scene } from "../Scene";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { TitleScene } from "./TitleScene";
 import { Direction } from "../geom/Direction";
 import { TextNode } from "../scene/TextNode";

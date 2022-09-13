@@ -10,7 +10,7 @@ import { isDev } from "../util";
 import { MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { TitleScene } from "./TitleScene";
 import { TextNode } from "../scene/TextNode";
 import { Direction } from "../geom/Direction";

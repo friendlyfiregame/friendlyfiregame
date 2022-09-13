@@ -1,6 +1,6 @@
 import { Conversation } from "./Conversation";
 import { GameScene } from "./scenes/GameScene";
-import { Sound } from "./Sound";
+import { Sound } from "./audio/Sound";
 import { asset } from "./Assets";
 
 const AMOUNT_GATE_COLS = 3;

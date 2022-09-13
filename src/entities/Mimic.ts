@@ -5,7 +5,7 @@ import conversation from "../../assets/dialog/mimic.dialog.json";
 import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
 

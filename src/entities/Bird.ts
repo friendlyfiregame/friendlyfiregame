@@ -10,7 +10,7 @@ import { GameScene } from "./../scenes/GameScene";
 import { NPC } from "./NPC";
 import { ParticleEmitter, valueCurves } from "./../Particles";
 import { RenderingLayer } from "./../Renderer";
-import { Sound } from "./../Sound";
+import { Sound } from "./../audio/Sound";
 
 enum BirdState {
     WAITING_LEFT,

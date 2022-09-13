@@ -30,7 +30,7 @@ import { RenderingLayer, RenderingType } from "../Renderer";
 import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { SpeechBubble } from "../SpeechBubble";
 import { Stone, StoneState } from "./Stone";
 import { Wall } from "./Wall";

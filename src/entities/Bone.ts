@@ -6,7 +6,7 @@ import { Environment } from "../World";
 import { GameScene } from "../scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { RenderingLayer } from "../Renderer";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 
 @entity("bone")
 export class Bone extends PhysicsEntity {

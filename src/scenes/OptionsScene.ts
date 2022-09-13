@@ -10,7 +10,6 @@ import { ControllerEvent } from "../input/ControllerEvent";
 import { TextNode } from "../scene/TextNode";
 import { BitmapFont } from "../BitmapFont";
 import { MenuItem, MenuList } from "../Menu";
-import { preferences } from "../preferences/Preferences";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { ControllerAnimationTags } from "../input/ControllerFamily";
 
@@ -85,9 +84,10 @@ export class OptionsScene extends Scene<FriendlyFire> {
         }
     }
 
-    private async toggleFullscreen (): Promise<void> {
-        const isFullscreenEnabled = await preferences.fullscreen.isEnabled();
-        await preferences.fullscreen.setEnabled(!isFullscreenEnabled);
+    private async toggleFullscreen (): Promise<boolean> {
+        const enabled = !(await this.game.displayManager.isFullscreenEnabled());
+        await this.game.displayManager.setFullscreenEnabled(enabled);
+        return enabled;
     }
 
     public cleanup(): void {

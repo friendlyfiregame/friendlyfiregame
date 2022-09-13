@@ -6,7 +6,7 @@ import { easeInExpo, easeOutExpo } from "../easings";
 import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { ImageNode } from "../scene/ImageNode";
 import { Direction } from "../geom/Direction";
 import { AsepriteNode } from "../scene/AsepriteNode";

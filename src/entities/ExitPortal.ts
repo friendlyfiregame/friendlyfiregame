@@ -2,7 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, Entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 
 enum PortalAnimationState { OFF, FADEIN, IDLE }
 

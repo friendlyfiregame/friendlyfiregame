@@ -12,7 +12,7 @@ import { FriendlyFire } from "../FriendlyFire";
 import { isElectron } from "../util";
 import { MenuAlignment, MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { CharacterSelectionScene } from "./CharacterSelectionScene";
 import { AsepriteNode } from "../scene/AsepriteNode";
 import { Direction } from "../geom/Direction";

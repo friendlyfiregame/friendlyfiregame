@@ -15,7 +15,7 @@ import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { ScriptableNPC } from "./ScriptableNPC";
 import shiba1 from "../../assets/dialog/shiba1.dialog.json";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];

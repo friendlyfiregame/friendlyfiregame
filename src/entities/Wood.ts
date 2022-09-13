@@ -8,7 +8,7 @@ import { now } from "../util";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 
 export enum WoodState {
     FREE = 0,
