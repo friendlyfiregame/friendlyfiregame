@@ -1,10 +1,17 @@
 import { getGameCanvas } from "../graphics";
+import { AudioPreferencesStore } from "../audio/AudioManager";
+import { clamp } from "../util";
 
 export interface Preferences {
     readonly fullscreen: {
         setEnabled(enabled: boolean): Promise<void>;
         isEnabled(): Promise<boolean>;
     };
+    readonly audio: AudioPreferencesStore;
+}
+
+export namespace Preferences {
+    export const getInstance = () => preferences;
 }
 
 /**
@@ -23,14 +30,17 @@ const webPreferences: Preferences = {
             }
 
         }
+    },
+    audio: {
+        getMusicGain: async () => Promise.resolve(clamp((Number(window.localStorage.getItem("audio.music.gain")) || 1), 0, 1)),
+        setMusicGain: async(value: number) => { window.localStorage.setItem("audio.music.gain", String(clamp(value, 1, 0))); },
+        getSfxGain: async () => Promise.resolve(clamp((Number(window.localStorage.getItem("audio.sfx.gain") || 1)), 0, 1)),
+        setSfxGain: async(value: number) => { window.localStorage.setItem("audio.sfx.gain", String(clamp(value, 1, 0))); },
     }
 };
 
-export const preferences: Preferences = (window as any)["preferences"] || webPreferences;
+const preferences: Preferences = (window as any)["preferences"] || webPreferences;
 
-// After the electron preload script has been executed, a new global field "steamworks" will be available.
-// If the script has not been run, the available() function will have been initialized anyways to return
-// false.
 declare global {
     interface Window {
       preferences: Preferences;

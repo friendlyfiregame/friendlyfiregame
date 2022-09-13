@@ -80,15 +80,5 @@
             "type": "image/png"
         }
     ],
-    "shortcuts": [
-        {
-            "name": "Play the Game in Your Browser",
-            "url": "https://friendlyfiregame.com/"
-        },
-        {
-            "name": "Steam Store Page",
-            "url": "https://store.steampowered.com/app/1311660/Friendly_Fire/"
-        }
-    ],
     "prefer_related_applications": false
 }

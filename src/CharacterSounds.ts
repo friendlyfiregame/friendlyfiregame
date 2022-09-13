@@ -1,6 +1,6 @@
 import { asset } from "./Assets";
 import { VoiceAsset } from "./Campaign";
-import { Sound } from "./Sound";
+import { Sound } from "./audio/Sound";
 import { rndItem } from "./util";
 
 export type CharacterSoundType = "jump" | "drown" | "land" | "throw";

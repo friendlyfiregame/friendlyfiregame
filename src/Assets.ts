@@ -2,7 +2,8 @@ import { AppInfoJSON } from "appinfo.json";
 import { Aseprite } from "./Aseprite";
 import { BitmapFont } from "./BitmapFont";
 import { loadImage } from "./graphics";
-import { Sound } from "./Sound";
+import { Sound } from "./audio/Sound";
+import { SoundChannel } from "./audio/SoundChannel";
 
 const assets = new Map<string, unknown>();
 
@@ -39,19 +40,18 @@ export class Assets {
 
         if (asset == null) {
             if (src.endsWith(".aseprite.json")) {
-                asset = await Aseprite.load("assets/" + src);
+                asset = await Aseprite.load(`assets/${src}`);
             } else if (src.endsWith(".font.json")) {
-                asset = await BitmapFont.load("assets/" + src);
+                asset = await BitmapFont.load(`assets/${src}`);
             } else if (src.endsWith(".png")) {
                 asset = await loadImage(src);
-            } else if (src.endsWith(".mp3")) {
-                asset = await Sound.load("assets/" + src);
-            } else if (src.endsWith(".ogg")) {
-                asset = await Sound.load("assets/" + src);
+            } else if (src.endsWith(".mp3") || src.endsWith(".ogg")) {
+                const soundChannel = src.startsWith("music") ? SoundChannel.MUSIC : SoundChannel.SFX;
+                asset = await Sound.load(`assets/${src}`, soundChannel);
             } else if (src === "appinfo.json") {
                 asset = await (await fetch("appinfo.json")).json() as AppInfoJSON;
             } else {
-                throw new Error("Unknown asset format: " + src);
+                throw new Error(`Unknown asset format: ${src}`);
             }
 
             assets.set(src, asset);

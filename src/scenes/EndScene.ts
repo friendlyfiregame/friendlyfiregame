@@ -5,7 +5,7 @@ import { CreditsScene } from "./CreditsScene";
 import { DIALOG_FONT } from "../constants";
 import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { ImageNode } from "../scene/ImageNode";
 import { TextNode } from "../scene/TextNode";
 import { easeOutQuad } from "../easings";

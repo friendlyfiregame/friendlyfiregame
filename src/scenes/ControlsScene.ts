@@ -51,7 +51,23 @@ export class ControlsScene extends Scene<FriendlyFire> {
         this.outTransition = new SlideTransition({ duration: 0.25 });
 
         const controllerManager = ControllerManager.getInstance();
-        const gamepadStyle = controllerManager.selectedGamepadStyle;
+        const gamepadStyle = controllerManager.currentGamepadStyle;
+
+        this.gamepadSelection = new AsepriteNode({
+            aseprite: ControlsScene.gamepadSelection,
+            tag: controllerManager.autoDetectGamepadStyle ? "autodetect" : controllerManager.currentGamepadStyle,
+            anchor: Direction.TOP_LEFT,
+            x: 204,
+            y: 2
+        });
+
+        this.gamepadControls = new AsepriteNode({
+            aseprite: ControlsScene.gamepadControls,
+            tag: gamepadStyle,
+            anchor: Direction.TOP_LEFT,
+            x: 206,
+            y: 35
+        });
 
         const panel = new ImageNode({
             image: ControlsScene.panelImage,
@@ -59,13 +75,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
             y: this.game.height / 2 - 16,
             childAnchor: Direction.TOP_LEFT
         }).appendChild(
-            this.gamepadSelection = new AsepriteNode({
-                aseprite: ControlsScene.gamepadSelection,
-                tag: gamepadStyle,
-                anchor: Direction.TOP_LEFT,
-                x: 204,
-                y: 2
-            })
+            this.gamepadSelection
         ).appendChild(
             new ImageNode({
                 image: ControlsScene.keyboardKeys,
@@ -74,13 +84,7 @@ export class ControlsScene extends Scene<FriendlyFire> {
                 y: 35
             })
         ).appendChild(
-            this.gamepadControls = new AsepriteNode({
-                aseprite: ControlsScene.gamepadControls,
-                tag: gamepadStyle,
-                anchor: Direction.TOP_LEFT,
-                x: 206,
-                y: 35
-            })
+            this.gamepadControls
         ).appendChild(
             new ControlTooltipNode({
                 label: "Toggle Gamepad Button Prompts",
@@ -124,12 +128,11 @@ export class ControlsScene extends Scene<FriendlyFire> {
     private handleButtonDown(event: ControllerEvent): void {
         if (event.isAbort || event.isPause) {
             this.scenes.popScene();
-        }
-        if (event.isPlayerAction) {
+        } else if (event.isPlayerAction) {
             const controllerManager = ControllerManager.getInstance();
             controllerManager.toggleSelectedGamepadStyle();
-            this.gamepadControls.setTag(controllerManager.selectedGamepadStyle);
-            this.gamepadSelection.setTag(controllerManager.selectedGamepadStyle);
+            this.gamepadControls.setTag(controllerManager.currentGamepadStyle);
+            this.gamepadSelection.setTag(controllerManager.autoDetectGamepadStyle ? "autodetect" : controllerManager.currentGamepadStyle);
         }
     }
 }

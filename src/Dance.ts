@@ -5,7 +5,7 @@ import { ControllerManager } from "./input/ControllerManager";
 import { ControllerSpriteMap } from "./input/ControllerFamily";
 import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import { Sound } from "./Sound";
+import { Sound } from "./audio/Sound";
 import { ValueCurve, valueCurves } from "./Particles";
 
 export class Dance {

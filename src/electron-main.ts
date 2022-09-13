@@ -7,7 +7,13 @@ import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "./constants
 import * as path from "node:path";
 import * as process from "node:process";
 
-type PreferencesConfigStore = ConfigStore<{fullscreen: boolean}>;
+type PreferencesConfigStore = ConfigStore<{
+    fullscreen: boolean,
+    audio: {
+        musicGain: number,
+        "sfxGain": number
+    }
+}>;
 
 async function createWindow(app: Electron.App, preferences: PreferencesConfigStore): Promise<void> {
 
@@ -18,6 +24,16 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             return preferences.get("fullscreen", true);
         case "fullscreen#setEnabled":
             return preferences.set("fullscreen", args[2]);
+        case "audio#getMusicGain":
+            return preferences.get("audio.musicGain", 1);
+        case "audio#setMusicGain":
+            return preferences.set("audio.musicGain", args[2]);
+        case "audio#getSfxGain":
+            return preferences.get("audio.sfxGain", 1);
+        case "audio#setSfxGain":
+            return preferences.set("audio.sfxGain", args[2]);
+        default:
+            throw new Error(`Unable to handle preferences function: ${fn}`);
         }
     });
 

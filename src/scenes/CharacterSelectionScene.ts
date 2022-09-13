@@ -17,7 +17,7 @@ import { Direction } from "../geom/Direction";
 import { TextNode } from "../scene/TextNode";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
-import { Sound } from "../Sound";
+import { Sound } from "../audio/Sound";
 import { GlobalState } from "../GlobalState";
 
 enum MenuItemKey {
@@ -241,7 +241,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 menuItemX, startMenuItemY
             ));
         }
-        
+
         this.menu.appendTo(panel);
 
         this.updateSelection();

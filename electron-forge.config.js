@@ -112,11 +112,11 @@ const config = {
         /** @type {import("@electron-forge/plugin-webpack").WebpackPluginConfig} */
         ({
           mainConfig: "./webpack.main.config.js",
-          jsonStats: true,
+          jsonStats: false,
           packageSourceMaps: true,
           renderer: {
             nodeIntegration: false,
-            jsonStats: true,
+            jsonStats: false,
             config: "./webpack.renderer.config.js",
             entryPoints: [
               {

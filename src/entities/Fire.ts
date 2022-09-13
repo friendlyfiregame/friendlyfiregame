@@ -10,8 +10,8 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { rnd, rndInt, shiftValue } from "../util";
 import { ShibaState } from "./Shiba";
-import { Sound } from "../Sound";
-import { SoundEmitter } from "../SoundEmitter";
+import { Sound } from "../audio/Sound";
+import { SoundEmitter } from "../audio/SoundEmitter";
 import { Wood } from "./Wood";
 import { LevelId } from "../Levels";
 

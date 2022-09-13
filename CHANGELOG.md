@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Gamepad types can be automatically detected. It is still possible to overwrite the
+  gamepad button styles to be shown in help tooltips in the "controls" screen, though.
+
+- Full support for Google Stadia game pads has been added.
+  All overlays have been adjusted to show tooltips that match the button layout of Stadia
+  game pads, if a Stadia game pad has been detected or manually selected.
+
 ### Updated
 
-- The Desktop apps are now based on Electron v20.0.1.
+- The Desktop apps are now based on Electron v20.1.3.
   As always, a new Electron runtime should offer improved performance, security and
   bug fixes, that may or may not be visible or even useful to end users.
 

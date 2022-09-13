@@ -1,7 +1,7 @@
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { Signal } from "./Signal";
-import { Sound } from "./Sound";
+import { Sound } from "./audio/Sound";
 import { SceneNode, SceneNodeArgs } from "./scene/SceneNode";
 import { FriendlyFire } from "./FriendlyFire";
 

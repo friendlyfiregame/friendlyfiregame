@@ -1,0 +1,82 @@
+{ "frames": {
+   "buttons_stadia 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons_stadia 1.aseprite": {
+    "frame": { "x": 14, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons_stadia 2.aseprite": {
+    "frame": { "x": 28, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons_stadia 3.aseprite": {
+    "frame": { "x": 42, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons_stadia 4.aseprite": {
+    "frame": { "x": 56, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons_stadia 5.aseprite": {
+    "frame": { "x": 70, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   "buttons_stadia 6.aseprite": {
+    "frame": { "x": 84, "y": 0, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.40-x64",
+  "image": "buttons_stadia.png",
+  "format": "RGBA8888",
+  "size": { "w": 98, "h": 14 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "jump", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "confirm", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "back", "from": 1, "to": 1, "direction": "forward" },
+   { "name": "interact", "from": 3, "to": 3, "direction": "forward" },
+   { "name": "up", "from": 4, "to": 4, "direction": "forward" },
+   { "name": "action", "from": 5, "to": 5, "direction": "forward" },
+   { "name": "pause", "from": 6, "to": 6, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Button base", "opacity": 255, "blendMode": "normal" },
+   { "name": "Label", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

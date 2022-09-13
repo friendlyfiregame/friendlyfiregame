@@ -4,8 +4,8 @@ import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { QuestATrigger, QuestKey } from "../Quests";
-import { Sound } from "../Sound";
-import { SoundEmitter } from "../SoundEmitter";
+import { Sound } from "../audio/Sound";
+import { SoundEmitter } from "../audio/SoundEmitter";
 import { LevelId } from "../Levels";
 
 enum AnimationTag {

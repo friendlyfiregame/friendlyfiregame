@@ -8,6 +8,9 @@ import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
 import { CharacterSounds } from "./CharacterSounds";
+import { steamworks, SteamworksApi } from "./steamworks/SteamworksApi";
+import { AudioManager } from "./audio/AudioManager";
+import { DisplayManager } from "./DisplayManager";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -23,9 +26,9 @@ export abstract class Game {
     public readonly keyboard = new Keyboard();
     public readonly gamepad = new GamepadInput();
     public readonly scenes = new Scenes(this);
-    public readonly characterSounds = new CharacterSounds();
     public readonly assets = new Assets();
     public readonly campaign = new Campaign(this);
+    public readonly characterSounds = new CharacterSounds();
 
     public backgroundColor: string = "black";
 
@@ -36,8 +39,15 @@ export abstract class Game {
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
+    #displayManager: DisplayManager;
+    #steamworksApi: SteamworksApi;
+    #audioManager: AudioManager;
+
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = getGameCanvas(width, height);
+        this.#displayManager = DisplayManager.getInstance();
+        this.#steamworksApi = steamworks;
+        this.#audioManager = AudioManager.getInstance();
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics
         // on some systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So
         // it is deactivated here.
@@ -72,6 +82,18 @@ export abstract class Game {
             }
         });
 
+    }
+
+    public get displayManager(): DisplayManager {
+        return this.#displayManager;
+    }
+
+    public get steamworks(): SteamworksApi {
+        return this.#steamworksApi;
+    }
+
+    public get audioManager(): AudioManager {
+        return this.#audioManager;
     }
 
     private mouseMoved(): void {

@@ -22,13 +22,15 @@ export class ControlTooltipNode extends SceneNode<FriendlyFire> {
     @asset([
         "sprites/buttons_keyboard.aseprite.json",
         "sprites/buttons_xbox.aseprite.json",
-        "sprites/buttons_playstation.aseprite.json"
+        "sprites/buttons_playstation.aseprite.json",
+        "sprites/buttons_stadia.aseprite.json"
     ])
     private static buttons: Aseprite[];
     private controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
         [ControllerSpriteMap.KEYBOARD]: ControlTooltipNode.buttons[0],
         [ControllerSpriteMap.XBOX]: ControlTooltipNode.buttons[1],
-        [ControllerSpriteMap.PLAYSTATION]: ControlTooltipNode.buttons[2]
+        [ControllerSpriteMap.PLAYSTATION]: ControlTooltipNode.buttons[2],
+        [ControllerSpriteMap.STADIA]: ControlTooltipNode.buttons[3]
     };
 
     private readonly controllerManager = ControllerManager.getInstance();
@@ -59,15 +61,17 @@ export class ControlTooltipNode extends SceneNode<FriendlyFire> {
 
     /** @inheritDoc */
     protected activate(): void {
-        this.controllerManager.onControllerFamilyChange.connect(this.updateControllerFamily, this);
+        this.controllerManager.onControllerFamilyChange.connect(this.updateControllerData, this);
+        this.controllerManager.onGamepadStyleChange.connect(this.updateControllerData, this);
     }
 
     /** @inheritDoc */
     protected deactivate(): void {
-        this.controllerManager.onControllerFamilyChange.disconnect(this.updateControllerFamily, this);
+        this.controllerManager.onGamepadStyleChange.disconnect(this.updateControllerData, this);
+        this.controllerManager.onControllerFamilyChange.disconnect(this.updateControllerData, this);
     }
 
-    private updateControllerFamily(): void {
+    private updateControllerData(): void {
         this.icon.setAseprite(this.controllerSpriteMapRecords[this.controllerManager.controllerSprite]);
         this.updateLayout();
     }

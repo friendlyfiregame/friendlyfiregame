@@ -1,7 +1,7 @@
-import { AmbientSoundId, GameScene } from "./scenes/GameScene";
-import { calculateVolume } from "./util";
-import { Entity } from "./Entity";
-import { GameObjectInfo } from "./MapInfo";
+import { AmbientSoundId, GameScene } from "../scenes/GameScene";
+import { calculateVolume } from "../util";
+import { Entity } from "../Entity";
+import { GameObjectInfo } from "../MapInfo";
 import { Sound } from "./Sound";
 import { LevelId } from "./Levels";
 
