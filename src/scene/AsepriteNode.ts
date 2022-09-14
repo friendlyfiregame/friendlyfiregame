@@ -3,7 +3,7 @@ import { SceneNode, SceneNodeArgs } from "./SceneNode";
 import { Aseprite } from "../Aseprite";
 
 /**
- * Constructor arguments for [[AsepriteNode]].
+ * Constructor arguments for {@linkcode AsepriteNode.
  */
 export interface AsepriteNodeArgs extends SceneNodeArgs {
     /** The Aseprite to display. */
@@ -14,7 +14,7 @@ export interface AsepriteNodeArgs extends SceneNodeArgs {
 }
 
 /**
- * Scene node for displaying an [[Aseprite]].
+ * Scene node for displaying an {@linkcode Aseprite}}.
  *
  * @param T - Optional owner game class.
  */

@@ -109,29 +109,37 @@ export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 
     return { x, y, width, height };
 }
 
-export function isElectron(): boolean {
-    return !!navigator.userAgent.match(/\belectron\b/i);
+/**
+ * Checks if the app is currently running inside of an Electron shell instance.
+ *
+ * @returns `true` if running inside an Electron shell, `false` otherwise.
+ */
+// TODO Migrate to userAgentData once the typings are in place.
+export function isElectron(userAgent: string = navigator.userAgent): boolean {
+    return !!userAgent.match(/\belectron\b/i);
 }
 
 /**
  * Figures out if development mode is enabled or not.
  */
 export function isDev(): boolean {
+
+    let devMode = false;
+
     // Legacy behavior.
     if (window.location.port === "8000") {
-        return true;
+        devMode = true;
     }
 
     if (!!window.location.search) {
         return !!window.location.search.substring(1).split("&").find(key => {
             if (key.toLowerCase().startsWith("dev")) {
-                return key.length === 3 || key.endsWith("=true");
+                devMode = key.length === 3 || key.toLowerCase().endsWith("=true");
             }
-            return false;
         });
     }
 
-    return false;
+    return devMode;
 }
 
 /**

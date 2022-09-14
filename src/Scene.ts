@@ -137,22 +137,30 @@ export abstract class Scene<T extends Game, A = void> {
      *
      * @param args - The scene arguments (if any).
      */
-    public setup(args: A): Promise<void> | void {}
+    public setup(args: A): Promise<void> | void {
+        // Intentionally left empty.
+    }
 
     /**
      * Called when the scene becomes the top scene on the stack and after the on-stage transition is complete.
      */
-    public activate(): Promise<void> | void {}
+    public activate(): Promise<void> | void {
+        // Intentionally left empty.
+    }
 
     /**
      * Called when the scene is no longer the top scene on the stack and before the off-stage transition begins.
      */
-    public deactivate(): Promise<void> | void {}
+    public deactivate(): Promise<void> | void {
+        // Intentionally left empty.
+    }
 
     /**
      * Called when the scene is popped from the scene stack, after any transitions are complete.
      */
-    public cleanup(): Promise<void> | void {}
+    public cleanup(): Promise<void> | void {
+        // Intentionally left empty.
+    }
 
     /**
      * Updates the scene. Scenes can overwrite this method to do its own drawing but when you are going to use the

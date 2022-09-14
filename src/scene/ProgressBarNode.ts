@@ -9,7 +9,7 @@ const DEFAULT_WIDTH = 200;
 const DEFAULT_HEIGHT = 8;
 
 /**
- * Constructor arguments for [[ProgressBarNode]].
+ * Constructor arguments for {@linkcode ProgressBarNode}.
  */
 export interface ProgressBarNodeArgs extends SceneNodeArgs {
     backgroundStyle?: string;

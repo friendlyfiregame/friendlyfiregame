@@ -1,16 +1,9 @@
 import { getAudioContext } from "./AudioContext";
+import { AudioPreferencesStore } from "./AudioPreferencesStore";
 
 import { Preferences } from "../preferences/Preferences";
 
-
 import { clamp } from "../util";
-
-export interface AudioPreferencesStore {
-    getMusicGain(): Promise<number>;
-    setMusicGain(volume: number): Promise<void>;
-    getSfxGain(): Promise<number>;
-    setSfxGain(volume: number): Promise<void>;
-}
 
 export class AudioManager {
 
