@@ -13,9 +13,9 @@ export class AudioManager {
     }
 
     #audioPreferencesStore: AudioPreferencesStore;
-
     #musicGainNode: GainNode;
     #sfxGainNode: GainNode;
+
     constructor(audioPreferencesStore: AudioPreferencesStore) {
         this.#audioPreferencesStore = audioPreferencesStore;
         const audioContext = getAudioContext();
@@ -23,6 +23,14 @@ export class AudioManager {
         this.#musicGainNode.connect(audioContext.destination);
         this.#sfxGainNode = audioContext.createGain();
         this.#sfxGainNode.connect(audioContext.destination);
+
+        // Initially set gain levels to what has been stored in the preferences.
+        (async () => {
+            const initialMusicGain = await audioPreferencesStore.getMusicGain();
+            const initialSfxGain = await audioPreferencesStore.getSfxGain();
+            this.musicGainNode.gain.value = initialMusicGain;
+            this.sfxGainNode.gain.value = initialSfxGain;
+        })();
     }
 
     public get musicGainNode(): GainNode {

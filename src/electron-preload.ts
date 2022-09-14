@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { SteamworksApi } from "./steamworks/SteamworksApi";
-import { Preferences } from "./preferences/Preferences";
+import { FullscreenManager } from "./display/FullscreenManager";
 
 // cSpell:disable
 const steamworks: SteamworksApi = {
@@ -23,22 +23,14 @@ const steamworks: SteamworksApi = {
     }
 };
 
-const preferences: Preferences = {
-    fullscreen: {
-        isEnabled: async () => ipcRenderer.invoke("preferences", ["fullscreen", "isEnabled"]),
-        setEnabled: async (fullscreen: boolean) => ipcRenderer.invoke("preferences", ["fullscreen", "setEnabled", fullscreen])
-    },
-    audio: {
-        getMusicGain: async () => ipcRenderer.invoke("preferences", ["audio", "getMusicGain"]),
-        setMusicGain: async(value: number) => ipcRenderer.invoke("preferences", ["audio", "setMusicGain", value]),
-        getSfxGain: async () => ipcRenderer.invoke("preferences", ["audio", "getSfxGain"]),
-        setSfxGain: async(value: number) => ipcRenderer.invoke("preferences", ["audio", "setSfxGain", value])
-    }
+const fullscreenPreferencesStore: FullscreenManager = {
+    isEnabled: async () => ipcRenderer.invoke("preferences", ["fullscreen", "isEnabled"]),
+    setEnabled: async (enabled) => ipcRenderer.invoke("preferences", ["fullscreen", "setEnabled", enabled])
 };
 
 function init(): void {
     contextBridge.exposeInMainWorld("steamworks", steamworks);
-    contextBridge.exposeInMainWorld("preferences", preferences);
+    contextBridge.exposeInMainWorld("fullscreen", fullscreenPreferencesStore);
 }
 
 process.once("loaded", init);
