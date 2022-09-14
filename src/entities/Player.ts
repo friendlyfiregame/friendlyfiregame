@@ -673,9 +673,6 @@ export class Player extends PhysicsEntity {
         if (this.drowning > 0) return;
 
         this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
-
-        console.log(CharacterSounds.getSoundData());
-
         CharacterSounds.playRandomCharacterSound("jump", this.voiceAsset);
 
         if (this.flying && this.usedJump) {

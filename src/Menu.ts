@@ -13,22 +13,23 @@ export enum MenuAlignment { LEFT, CENTER, RIGHT }
  * additional `►` character as prefix. The item instances don't need to be manually drawn, since the
  * MenuList class' draw method will take care of it.
  */
-export class MenuItem {
+export class MenuItem<T = null> {
     public id: string;
     public label: string;
-    private font: BitmapFont;
-    private color: "black" | "white";
+    protected font: BitmapFont;
+    protected color: "black" | "white";
     public x: number;
     public y: number;
-    public enabled: boolean;
+    public enabled: boolean = true;
     public focused: boolean;
+    public data: T;
 
     @asset("sprites/menu_selector.png")
-    private static selectorImage: HTMLImageElement;
+    protected static selectorImage: HTMLImageElement;
 
     public constructor(
         id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number,
-        enabled = true
+        data?: T
     ) {
         this.id = id;
         this.label = label;
@@ -36,8 +37,8 @@ export class MenuItem {
         this.color = color;
         this.x = x;
         this.y = y;
-        this.enabled = enabled;
         this.focused = false;
+        this.data = data!;
     }
 
     /**
@@ -71,6 +72,83 @@ export class MenuItem {
     }
 }
 
+export type MenuItemParams<T = null> = {
+    id: string;
+    label: string;
+    font: BitmapFont;
+    color: "black" | "white";
+    x: number;
+    y: number;
+    enabled: boolean;
+    data: T;
+};
+
+export type SliderMenuItemParams<T> = MenuItemParams<T> & {
+    initialValue: number;
+    minValue: number;
+    maxValue: number;
+    increment: number;
+    rightActionCallback: (newValue: number, data: T) => void;
+    leftActionCallback: (newValue: number, data: T) => void;
+};
+
+export class SliderMenuItem<T = null> extends MenuItem<T> {
+    private value: number;
+    private minValue: number;
+    private maxValue: number;
+    private increment: number;
+    private rightActionCallback: (newValue: number, data: T) => void;
+    private leftActionCallback: (newValue: number, data: T) => void;
+
+    public constructor(params: SliderMenuItemParams<T>) {
+        super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
+        this.value = params.initialValue;
+        this.minValue = params.minValue;
+        this.maxValue = params.maxValue;
+        this.increment = params.increment;
+        this.rightActionCallback = params.rightActionCallback;
+        this.leftActionCallback = params.leftActionCallback;
+    }
+
+    public getValue (): number {
+        return this.value;
+    }
+
+    public setValue (value: number): void {
+        this.value = Math.min(this.maxValue, Math.max(this.minValue, value));
+    }
+
+    public increaseValue (): void {
+        this.setValue(this.value + this.increment);
+        this.rightActionCallback(this.value, this.data);
+    }
+
+    public decreaseValue (): void {
+        this.setValue(this.value - this.increment);
+        this.leftActionCallback(this.value, this.data);
+    }
+
+    public draw(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        const alpha = this.enabled ? 1 : 0.35;
+        const x = this.x;
+        const y = this.y;
+
+        const text = this.label;
+        this.font.drawText(ctx, text, x, y, this.color, 0, alpha);
+
+        const valueText = `${this.getValue()} %`;
+        const valueWidth = this.font.measureText(valueText).width;
+        this.font.drawText(ctx, valueText, x + 250 - valueWidth, y, this.color, 0, alpha);
+
+        if (this.focused) {
+            ctx.drawImage(MenuItem.selectorImage, x - 13, y + 2);
+        }
+
+        ctx.restore();
+    }
+}
+
 export interface MenuListArgs extends SceneNodeArgs {
     align?: MenuAlignment;
 }
@@ -95,6 +173,8 @@ export class MenuList extends SceneNode<FriendlyFire> {
     private align: MenuAlignment;
     private items: MenuItem[] = [];
     public onActivated = new Signal<string>();
+    public onRightAction = new Signal<string>();
+    public onLeftAction = new Signal<string>();
 
     public constructor({ align = MenuAlignment.LEFT, ...args }: MenuListArgs = {}) {
         super(args);
@@ -122,7 +202,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
      * Sets an arbitrary number of menu items to the menu list and overrides any previously added
      * items. The first available menu item will be focused automatically.
      */
-    public setItems(...items: MenuItem[]): this {
+    public setItems(...items: MenuItem<any>[]): this {
         this.items = [...items];
         this.focusFirstItem();
         return this;
@@ -141,7 +221,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
         }
     }
 
-    private getFocusedItem(): MenuItem | undefined {
+    private getFocusedItem(): MenuItem<any> | undefined {
         return this.items.find(item => item.focused);
     }
 
@@ -204,6 +284,33 @@ export class MenuList extends SceneNode<FriendlyFire> {
             this.onActivated.emit(focusedButton.id);
         }
     }
+
+    public executeRightAction(sound: Sound = MenuList.click): void {
+        const focusedButton = this.getFocusedItem();
+
+        if (focusedButton && focusedButton.enabled) {
+            sound.stop();
+            sound.play();
+            this.onRightAction.emit(focusedButton.id);
+            if (focusedButton instanceof SliderMenuItem) {
+                focusedButton.increaseValue();
+            }
+        }
+    }
+
+    public executeLeftAction(sound: Sound = MenuList.click): void {
+        const focusedButton = this.getFocusedItem();
+
+        if (focusedButton && focusedButton.enabled) {
+            sound.stop();
+            sound.play();
+            this.onLeftAction.emit(focusedButton.id);
+            if (focusedButton instanceof SliderMenuItem) {
+                focusedButton.decreaseValue();
+            }
+        }
+    }
+
 
     public draw(ctx: CanvasRenderingContext2D): void {
         this.items.forEach(item => {

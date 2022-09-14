@@ -1,23 +1,24 @@
-import { Preferences } from "./preferences/Preferences";
-
-interface FullscreenPreferencesStore {
-    setEnabled(enabled: boolean): Promise<void>;
-    isEnabled(): Promise<boolean>;
-}
+import { FullscreenManager } from "./display/FullscreenManager";
 
 export class DisplayManager {
-    static #INSTANCE: DisplayManager = new DisplayManager(Preferences.getInstance().fullscreen);
+
+    static #INSTANCE: DisplayManager = new DisplayManager(FullscreenManager.getInstance());
     public static getInstance(): DisplayManager {
         return DisplayManager.#INSTANCE;
     }
-    #fullscreenPreferencesStore: FullscreenPreferencesStore;
-    constructor(fullscreenPreferencesStore: FullscreenPreferencesStore) {
-        this.#fullscreenPreferencesStore = fullscreenPreferencesStore;
+
+    #fullscreenManager: FullscreenManager;
+
+    constructor(fullscreenPreferencesStore: FullscreenManager) {
+        this.#fullscreenManager = fullscreenPreferencesStore;
     }
+
     async setFullscreenEnabled(fullscreenEnabled: boolean): Promise<void> {
-        return this.#fullscreenPreferencesStore.setEnabled(fullscreenEnabled);
+        return this.#fullscreenManager.setEnabled(fullscreenEnabled);
     }
+
     async isFullscreenEnabled(): Promise<boolean> {
-        return this.#fullscreenPreferencesStore.isEnabled();
+        return this.#fullscreenManager.isEnabled();
     }
+
 }
