@@ -9,12 +9,15 @@ import { Direction } from "../geom/Direction";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { TextNode } from "../scene/TextNode";
 import { BitmapFont } from "../BitmapFont";
-import { MenuItem, MenuList } from "../Menu";
+import { MenuItem, MenuList, SliderMenuItem } from "../Menu";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { ControllerAnimationTags } from "../input/ControllerFamily";
+import { AudioManager } from "../audio/AudioManager";
 
 enum MenuItemKey {
     FULLSCREEN = "fullscreen",
+    SFX_SLIDER = "sfxSlider",
+    MUSIC_SLIDER = "musicSlider",
 }
 
 
@@ -30,9 +33,11 @@ export class OptionsScene extends Scene<FriendlyFire> {
 
     private menu!: MenuList;
 
-    public setup(): void {
+    public async setup(): Promise<void> {
         const menuItemX = 12;
         const menuItemY = 20;
+        const initialSfxGain = await AudioManager.getInstance().getSfxGain();
+        const initialMusicGain = await AudioManager.getInstance().getMusicGain();
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
         this.zIndex = 2;
         this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
@@ -70,10 +75,51 @@ export class OptionsScene extends Scene<FriendlyFire> {
         this.menu = new MenuList().setItems(
             new MenuItem(
                 MenuItemKey.FULLSCREEN, "Toggle Fullscreen", OptionsScene.font, "black", menuItemX, menuItemY
+            ),
+            new SliderMenuItem(
+                {
+                    id: MenuItemKey.SFX_SLIDER,
+                    label: "SFX Volume",
+                    font: OptionsScene.font,
+                    color: "black",
+                    x: menuItemX,
+                    y: menuItemY + 20,
+                    enabled: true,
+                    initialValue: (initialSfxGain * 100),
+                    minValue: 0,
+                    maxValue: 100,
+                    increment: 10,
+                    leftActionCallback: this.handleAudioSliderChange,
+                    rightActionCallback: this.handleAudioSliderChange
+                }
+            ),
+            new SliderMenuItem(
+                {
+                    id: MenuItemKey.MUSIC_SLIDER,
+                    label: "Music Volume",
+                    font: OptionsScene.font,
+                    color: "black",
+                    x: menuItemX,
+                    y: menuItemY + 40,
+                    enabled: true,
+                    initialValue: (initialMusicGain * 100),
+                    minValue: 0,
+                    maxValue: 100,
+                    increment: 10,
+                    leftActionCallback: this.handleAudioSliderChange,
+                    rightActionCallback: this.handleAudioSliderChange
+                }
             )
         );
-
         this.menu.appendTo(panel);
+    }
+
+    private async handleAudioSliderChange (newValue: number, menuItemId: string): Promise<void> {
+        if (menuItemId as MenuItemKey === MenuItemKey.SFX_SLIDER) {
+            await AudioManager.getInstance().setSfxGain(newValue / 100);
+        } else if (menuItemId as MenuItemKey === MenuItemKey.MUSIC_SLIDER) {
+            await AudioManager.getInstance().setMusicGain(newValue / 100);
+        }
     }
 
     public async handleMenuAction(buttonId: string): Promise<void> {
@@ -97,11 +143,15 @@ export class OptionsScene extends Scene<FriendlyFire> {
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this);
+        // this.menu.onLeftAction.connect(this.handleMenuLeftAction, this);
+        // this.menu.onRightAction.connect(this.handleMenuRightAction, this);
     }
 
     public deactivate(): void {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
+        // this.menu.onLeftAction.disconnect(this.handleMenuLeftAction, this);
+        // this.menu.onRightAction.disconnect(this.handleMenuRightAction, this);
     }
 
     private async handleButtonDown(event: ControllerEvent): Promise<void> {
@@ -113,6 +163,10 @@ export class OptionsScene extends Scene<FriendlyFire> {
             this.menu.prev();
         } else if (event.isMenuDown) {
             this.menu.next();
+        } else if (event.isMenuRight) {
+            this.menu.executeRightAction();
+        } else if (event.isMenuLeft) {
+            this.menu.executeLeftAction();
         }
     }
 }
