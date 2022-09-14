@@ -13,6 +13,7 @@ import { MenuItem, MenuList, SliderMenuItem } from "../Menu";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { ControllerAnimationTags } from "../input/ControllerFamily";
 import { AudioManager } from "../audio/AudioManager";
+import { SoundChannel } from "../audio/SoundChannel";
 
 enum MenuItemKey {
     FULLSCREEN = "fullscreen",
@@ -33,15 +34,20 @@ export class OptionsScene extends Scene<FriendlyFire> {
 
     private menu!: MenuList;
 
+    #audioManager!: AudioManager;
+    public get audioManager() {
+        return this.#audioManager;
+    }
+
     public async setup(): Promise<void> {
         const menuItemX = 12;
         const menuItemY = 20;
-        const initialSfxGain = await AudioManager.getInstance().getSfxGain();
-        const initialMusicGain = await AudioManager.getInstance().getMusicGain();
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
         this.zIndex = 2;
         this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
         this.outTransition = new SlideTransition({ duration: 0.25 });
+
+        this.#audioManager = AudioManager.getInstance();
 
         const panel = new ImageNode({
             image: OptionsScene.panelImage,
@@ -85,12 +91,13 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     x: menuItemX,
                     y: menuItemY + 20,
                     enabled: true,
-                    initialValue: (initialSfxGain * 100),
+                    initialValue: (this.audioManager.sfxGain * 100),
                     minValue: 0,
                     maxValue: 100,
                     increment: 10,
                     leftActionCallback: this.handleAudioSliderChange,
-                    rightActionCallback: this.handleAudioSliderChange
+                    rightActionCallback: this.handleAudioSliderChange,
+                    data: { channel: SoundChannel.SFX, audioManager: this.#audioManager }
                 }
             ),
             new SliderMenuItem(
@@ -102,23 +109,24 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     x: menuItemX,
                     y: menuItemY + 40,
                     enabled: true,
-                    initialValue: (initialMusicGain * 100),
+                    initialValue: (this.audioManager.musicGain * 100),
                     minValue: 0,
                     maxValue: 100,
                     increment: 10,
                     leftActionCallback: this.handleAudioSliderChange,
-                    rightActionCallback: this.handleAudioSliderChange
+                    rightActionCallback: this.handleAudioSliderChange,
+                    data: { channel: SoundChannel.MUSIC, audioManager: this.#audioManager }
                 }
             )
         );
         this.menu.appendTo(panel);
     }
 
-    private async handleAudioSliderChange (newValue: number, menuItemId: string): Promise<void> {
-        if (menuItemId as MenuItemKey === MenuItemKey.SFX_SLIDER) {
-            await AudioManager.getInstance().setSfxGain(newValue / 100);
-        } else if (menuItemId as MenuItemKey === MenuItemKey.MUSIC_SLIDER) {
-            await AudioManager.getInstance().setMusicGain(newValue / 100);
+    private handleAudioSliderChange (newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
+        if (data.channel === SoundChannel.MUSIC) {
+            data.audioManager.musicGain = newValue / 100;
+        } else if (data.channel === SoundChannel.SFX) {
+            data.audioManager.sfxGain = newValue / 100;
         }
     }
 

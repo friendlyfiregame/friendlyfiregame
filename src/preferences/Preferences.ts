@@ -13,10 +13,22 @@ export class Preferences {
 
     constructor() {
         this.#audio = {
-            getMusicGain: async () => Promise.resolve(clamp((Number(window.localStorage.getItem("audio.music.gain")) || 1), 0, 1)),
-            setMusicGain: async(value: number) => { window.localStorage.setItem("audio.music.gain", String(clamp(value, 1, 0))); },
-            getSfxGain: async () => Promise.resolve(clamp((Number(window.localStorage.getItem("audio.sfx.gain") || 1)), 0, 1)),
-            setSfxGain: async(value: number) => { window.localStorage.setItem("audio.sfx.gain", String(clamp(value, 1, 0))); },
+            music: {
+                get gain(): number {
+                    return clamp((Number(window.localStorage.getItem("audio.music.gain")) || 1), 0, 1);
+                },
+                set gain(value: number) {
+                    window.localStorage.setItem("audio.music.gain", String(clamp(value, 1, 0)));
+                }
+            },
+            sfx: {
+                get gain(): number {
+                    return clamp((Number(window.localStorage.getItem("audio.sfx.gain")) || 1), 0, 1);
+                },
+                set gain(value: number) {
+                    window.localStorage.setItem("audio.sfx.gain", String(clamp(value, 1, 0)));
+                }
+            }
         };
     }
 

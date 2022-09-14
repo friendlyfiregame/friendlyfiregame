@@ -20,17 +20,11 @@ export class AudioManager {
         this.#audioPreferencesStore = audioPreferencesStore;
         const audioContext = getAudioContext();
         this.#musicGainNode = audioContext.createGain();
+        this.#musicGainNode.gain.value = audioPreferencesStore.music.gain;
         this.#musicGainNode.connect(audioContext.destination);
         this.#sfxGainNode = audioContext.createGain();
+        this.#sfxGainNode.gain.value = audioPreferencesStore.sfx.gain;
         this.#sfxGainNode.connect(audioContext.destination);
-
-        // Initially set gain levels to what has been stored in the preferences.
-        (async () => {
-            const initialMusicGain = await audioPreferencesStore.getMusicGain();
-            const initialSfxGain = await audioPreferencesStore.getSfxGain();
-            this.musicGainNode.gain.value = initialMusicGain;
-            this.sfxGainNode.gain.value = initialSfxGain;
-        })();
     }
 
     public get musicGainNode(): GainNode {
@@ -41,21 +35,28 @@ export class AudioManager {
         return this.#sfxGainNode;
     }
 
-    async getMusicGain(): Promise<number> {
-        return Promise.resolve(this.#musicGainNode.gain.value);
+    public get musicGain(): number {
+        return this.#musicGainNode.gain.value;
     }
 
-    async setMusicGain(value: number): Promise<void> {
-        this.#audioPreferencesStore.setMusicGain(clamp(value, 0, 1));
-        AudioManager.getInstance().musicGainNode.gain.value = value;
+    public set musicGain(value: number) {
+        value = clamp(value, 0, 1);
+        if (this.#musicGainNode.gain.value !== value) {
+            this.#audioPreferencesStore.music.gain = value;
+            this.#musicGainNode.gain.value = value;
+        }
     }
 
-    async getSfxGain(): Promise<number> {
-        return Promise.resolve(AudioManager.getInstance().sfxGainNode.gain.value);
+    public get sfxGain(): number {
+        return this.#sfxGainNode.gain.value;
     }
 
-    async setSfxGain(value: number) {
-        this.#audioPreferencesStore.setSfxGain(clamp(value, 0, 1));
-        AudioManager.getInstance().sfxGainNode.gain.value = value;
+    public set sfxGain(value: number) {
+        value = clamp(value, 0, 1);
+        if (this.#sfxGainNode.gain.value !== value) {
+            this.#audioPreferencesStore.sfx.gain = value;
+            this.#sfxGainNode.gain.value = value;
+        }
     }
+
 }

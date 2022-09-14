@@ -13,22 +13,23 @@ export enum MenuAlignment { LEFT, CENTER, RIGHT }
  * additional `►` character as prefix. The item instances don't need to be manually drawn, since the
  * MenuList class' draw method will take care of it.
  */
-export class MenuItem {
+export class MenuItem<T = null> {
     public id: string;
     public label: string;
     protected font: BitmapFont;
     protected color: "black" | "white";
     public x: number;
     public y: number;
-    public enabled: boolean;
+    public enabled: boolean = true;
     public focused: boolean;
+    public data: T;
 
     @asset("sprites/menu_selector.png")
     protected static selectorImage: HTMLImageElement;
 
     public constructor(
         id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number,
-        enabled = true
+        data?: T
     ) {
         this.id = id;
         this.label = label;
@@ -36,8 +37,8 @@ export class MenuItem {
         this.color = color;
         this.x = x;
         this.y = y;
-        this.enabled = enabled;
         this.focused = false;
+        this.data = data!;
     }
 
     /**
@@ -71,35 +72,36 @@ export class MenuItem {
     }
 }
 
-export type MenuItemParams = {
-    id: string,
-    label: string,
-    font: BitmapFont,
-    color: "black" | "white",
-    x: number,
-    y: number,
+export type MenuItemParams<T = null> = {
+    id: string;
+    label: string;
+    font: BitmapFont;
+    color: "black" | "white";
+    x: number;
+    y: number;
     enabled: boolean;
+    data: T;
 };
 
-export type SliderMenuItemParams = MenuItemParams & {
+export type SliderMenuItemParams<T> = MenuItemParams<T> & {
     initialValue: number;
     minValue: number;
     maxValue: number;
     increment: number;
-    rightActionCallback: (newValue: number, menuItemId: string) => void;
-    leftActionCallback: (newValue: number, menuItemId: string) => void;
+    rightActionCallback: (newValue: number, data: T) => void;
+    leftActionCallback: (newValue: number, data: T) => void;
 };
 
-export class SliderMenuItem extends MenuItem {
+export class SliderMenuItem<T = null> extends MenuItem<T> {
     private value: number;
     private minValue: number;
     private maxValue: number;
     private increment: number;
-    private rightActionCallback: (newValue: number, menuItemId: string) => void;
-    private leftActionCallback: (newValue: number, menuItemId: string) => void;
+    private rightActionCallback: (newValue: number, data: T) => void;
+    private leftActionCallback: (newValue: number, data: T) => void;
 
-    public constructor(params: SliderMenuItemParams) {
-        super(params.id, params.label, params.font, params.color, params.x, params.y, params.enabled);
+    public constructor(params: SliderMenuItemParams<T>) {
+        super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
         this.value = params.initialValue;
         this.minValue = params.minValue;
         this.maxValue = params.maxValue;
@@ -118,12 +120,12 @@ export class SliderMenuItem extends MenuItem {
 
     public increaseValue (): void {
         this.setValue(this.value + this.increment);
-        this.rightActionCallback(this.value, this.id);
+        this.rightActionCallback(this.value, this.data);
     }
 
     public decreaseValue (): void {
         this.setValue(this.value - this.increment);
-        this.leftActionCallback(this.value, this.id);
+        this.leftActionCallback(this.value, this.data);
     }
 
     public draw(ctx: CanvasRenderingContext2D) {
@@ -200,7 +202,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
      * Sets an arbitrary number of menu items to the menu list and overrides any previously added
      * items. The first available menu item will be focused automatically.
      */
-    public setItems(...items: MenuItem[]): this {
+    public setItems(...items: MenuItem<any>[]): this {
         this.items = [...items];
         this.focusFirstItem();
         return this;
@@ -219,7 +221,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
         }
     }
 
-    private getFocusedItem(): MenuItem | undefined {
+    private getFocusedItem(): MenuItem<any> | undefined {
         return this.items.find(item => item.focused);
     }
 
