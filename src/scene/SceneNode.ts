@@ -22,7 +22,7 @@ export enum PostDrawHints {
 }
 
 /**
- * Constructor arguments for [[SceneNode]].
+ * Constructor arguments for {@linkcode SceneNode}.
  *
  * @param T - Optional owner game class.
  */
@@ -122,7 +122,7 @@ export class SceneNode<T extends Game = Game> {
 
     /**
      * The bounds polygon. This is updated on demand and automatically invalidated when node size changes. Node
-     * has to call [[invalidateBounds]] manually when something else influences the bounds.
+     * has to call {@linkcode invalidateBounds()} manually when something else influences the bounds.
      */
     private boundsPolygon: Polygon2 = new Polygon2();
 
@@ -416,7 +416,7 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Returns the custom transformation of this node which can be manipulated by the [[transform]] method. This
+     * Returns the custom transformation of this node which can be manipulated by the {@ link transform()} method. This
      * transformation is applied to the node before it is rendered at its intended position. Transformation and
      * node position can complement each other or you can only use one of them, that's up to you.
      *
@@ -1074,13 +1074,16 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Optional post-update function which is called after updating the child nodes.
      */
-    protected update(dt: number): void | (() => void) {}
+    protected update(dt: number): void | (() => void) {
+        // Intentionally left empty.
+    }
 
     /**
-     * Recursively draws the bounds for this node and alls its child nodes as long as the [[showBounds]] for the node
-     * is set to true.
+     * Recursively draws the bounds for this node and alls its child nodes as long as the {@linkcode showBounds()} for the node
+     * is set to `true`.
      *
      * @param ctx - The rendering context.
+     * @return this
      */
     protected drawBounds(ctx: CanvasRenderingContext2D): this {
         if (this.showBounds) {

@@ -10,7 +10,7 @@ export type SceneNodeAnimator<T extends Game = Game> = (sceneNode: SceneNode<T>,
     elapsed: number) => void;
 
 /**
- * Constructor arguments for [[SceneNodeAnimation]]
+ * Constructor arguments for {@linkcode SceneNodeAnimation}}.
  */
 export interface AnimationArgs<T extends Game = Game> {
     /** The animator function. */
@@ -27,7 +27,7 @@ export interface AnimationArgs<T extends Game = Game> {
 }
 
 /**
- * Scene node animation. Instance is created internally within [[SceneNode]] when you call [[SceneNode.animate]].
+ * Scene node animation. Instance is created internally within {@linkcode SceneNode}} when you call {@linkcode SceneNode#animate()}.
  *
  * @param T - Optional owner game class.
  */
@@ -55,7 +55,7 @@ export class SceneNodeAnimation<T extends Game = Game> {
 
     /**
      * Creates scene node animation for the given scene node and with the given animation arguments. You usually
-     * don't create an instance of this class yourself. Instead you have to use the [[SceneNode.animate]] method.
+     * don't create an instance of this class yourself. Instead you have to use the {@linkcode SceneNode#animate()} method.
      */
     public constructor(sceneNode: SceneNode<T>, { animator, delay = 0, duration = 1, easing = linear }:
             AnimationArgs<T>) {

@@ -1,5 +1,5 @@
 import { getGameCanvas } from "../graphics";
-import { AudioPreferencesStore } from "../audio/AudioManager";
+import { AudioPreferencesStore } from "../audio/AudioPreferencesStore";
 import { clamp } from "../util";
 
 export interface Preferences {

@@ -5,8 +5,15 @@ const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext a
 
 let audioContext: AudioContext | null = null;
 
-export function getAudioContext(): AudioContext {
-    const controllerManager = ControllerManager.getInstance();
+/**
+ * Returns the (one and only) audio context in use.
+ * If no audio context exists, e.g. when this function is called for the first time, it will be created.
+ *
+ * @param controllerManager Used to initially resume (start?) the audio context, on the first user interaction.
+ * @returns
+ *   The one (and only) audio context.
+ */
+export function getAudioContext(controllerManager: ControllerManager = ControllerManager.getInstance()): AudioContext {
 
     if (audioContext == null) {
         audioContext = new AudioContext();
