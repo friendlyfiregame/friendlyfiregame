@@ -1,5 +1,4 @@
 import { AudioPreferencesStore } from "../audio/AudioPreferencesStore";
-import { clamp } from "../util";
 //import { Signal } from "../Signal";
 
 export class Preferences {
@@ -12,24 +11,7 @@ export class Preferences {
     #audio: AudioPreferencesStore;
 
     constructor() {
-        this.#audio = {
-            music: {
-                get gain(): number {
-                    return clamp((Number(window.localStorage.getItem("audio.music.gain")) || 1), 0, 1);
-                },
-                set gain(value: number) {
-                    window.localStorage.setItem("audio.music.gain", String(clamp(value, 1, 0)));
-                }
-            },
-            sfx: {
-                get gain(): number {
-                    return clamp((Number(window.localStorage.getItem("audio.sfx.gain")) || 1), 0, 1);
-                },
-                set gain(value: number) {
-                    window.localStorage.setItem("audio.sfx.gain", String(clamp(value, 1, 0)));
-                }
-            }
-        };
+        this.#audio = new AudioPreferencesStore();
     }
 
     public get audio(): AudioPreferencesStore {

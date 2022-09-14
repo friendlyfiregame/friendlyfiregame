@@ -1,3 +1,4 @@
+import { MIN_GAIN_VALUE, MAX_GAIN_VALUE } from "./constants";
 import { getAudioContext } from "./AudioContext";
 import { AudioPreferencesStore } from "./AudioPreferencesStore";
 
@@ -20,11 +21,11 @@ export class AudioManager {
         this.#audioPreferencesStore = audioPreferencesStore;
         const audioContext = getAudioContext();
         this.#musicGainNode = audioContext.createGain();
-        this.#musicGainNode.gain.value = audioPreferencesStore.music.gain;
         this.#musicGainNode.connect(audioContext.destination);
+        this.#musicGainNode.gain.value = audioPreferencesStore.music.gain;
         this.#sfxGainNode = audioContext.createGain();
-        this.#sfxGainNode.gain.value = audioPreferencesStore.sfx.gain;
         this.#sfxGainNode.connect(audioContext.destination);
+        this.#sfxGainNode.gain.value = audioPreferencesStore.sfx.gain;
     }
 
     public get musicGainNode(): GainNode {
@@ -40,9 +41,9 @@ export class AudioManager {
     }
 
     public set musicGain(value: number) {
-        value = clamp(value, 0, 1);
+        value = clamp(value, MIN_GAIN_VALUE, MAX_GAIN_VALUE);
+        this.#audioPreferencesStore.music.gain = value;
         if (this.#musicGainNode.gain.value !== value) {
-            this.#audioPreferencesStore.music.gain = value;
             this.#musicGainNode.gain.value = value;
         }
     }
@@ -52,9 +53,9 @@ export class AudioManager {
     }
 
     public set sfxGain(value: number) {
-        value = clamp(value, 0, 1);
+        value = clamp(value, MIN_GAIN_VALUE, MAX_GAIN_VALUE);
+        this.#audioPreferencesStore.sfx.gain = value;
         if (this.#sfxGainNode.gain.value !== value) {
-            this.#audioPreferencesStore.sfx.gain = value;
             this.#sfxGainNode.gain.value = value;
         }
     }

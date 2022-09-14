@@ -91,7 +91,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     x: menuItemX,
                     y: menuItemY + 20,
                     enabled: true,
-                    initialValue: (this.audioManager.sfxGain * 100),
+                    initialValue: Math.round(this.audioManager.sfxGain * 100),
                     minValue: 0,
                     maxValue: 100,
                     increment: 10,
@@ -109,7 +109,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     x: menuItemX,
                     y: menuItemY + 40,
                     enabled: true,
-                    initialValue: (this.audioManager.musicGain * 100),
+                    initialValue: Math.round(this.audioManager.musicGain * 100),
                     minValue: 0,
                     maxValue: 100,
                     increment: 10,
@@ -123,10 +123,13 @@ export class OptionsScene extends Scene<FriendlyFire> {
     }
 
     private handleAudioSliderChange (newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
+        newValue = newValue / 100;
         if (data.channel === SoundChannel.MUSIC) {
-            data.audioManager.musicGain = newValue / 100;
+            data.audioManager.musicGain = newValue;
         } else if (data.channel === SoundChannel.SFX) {
-            data.audioManager.sfxGain = newValue / 100;
+            data.audioManager.sfxGain = newValue;
+        } else {
+            throw new Error(`Unknown sound channel: ${data.channel}.`)
         }
     }
 
