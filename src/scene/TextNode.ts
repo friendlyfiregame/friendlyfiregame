@@ -3,7 +3,7 @@ import { SceneNode, SceneNodeArgs } from "./SceneNode";
 import { BitmapFont } from "../BitmapFont";
 
 /**
- * Constructor arguments for [[TextNode]].
+ * Constructor arguments for {@linkcode TextNode}.
  */
 export interface TextNodeArgs extends SceneNodeArgs {
     /** The initial font used to draw the text. */

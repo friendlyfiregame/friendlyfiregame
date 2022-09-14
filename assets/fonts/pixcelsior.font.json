@@ -630,6 +630,11 @@
             "compactablePrecursors": [",", ".", "L", "_", "l", "{", "…"]
         },
         {
+            "char": "%",
+            "width": 5,
+            "compactablePrecursors": []
+        },
+        {
             "char": "�",
             "width": 5,
             "compactablePrecursors": []

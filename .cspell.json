@@ -10,6 +10,7 @@
         "jsonc",
         "plaintext"
     ],
+    "useGitignore": true,
     "ignorePaths": [
         "/.vscode/**",
         "/node_modules/**",
@@ -104,6 +105,7 @@
         "learnraindance",
         "lerping",
         "lifeform",
+        "linkcode",
         "lovethat",
         "lscher",
         "ludum",

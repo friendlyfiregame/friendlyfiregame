@@ -5,8 +5,8 @@ import { loadImage } from "./graphics";
 import { now } from "./util";
 
 /**
- * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous [[load]] method to load the
- * sprite and then use [[draw]] or [[drawTag]] to draw the sprite animation.
+ * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous {@linkcode load()} method to load the
+ * sprite and then use {@linkcode draw()} or {@linkcode drawTag()} to draw the sprite animation.
  */
 export class Aseprite {
     private readonly frames: AsepriteFrameJSON[];

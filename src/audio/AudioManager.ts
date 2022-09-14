@@ -1,16 +1,10 @@
+import { MIN_GAIN_VALUE, MAX_GAIN_VALUE } from "./constants";
 import { getAudioContext } from "./AudioContext";
+import { AudioPreferencesStore } from "./AudioPreferencesStore";
 
 import { Preferences } from "../preferences/Preferences";
 
-
 import { clamp } from "../util";
-
-export interface AudioPreferencesStore {
-    getMusicGain(): Promise<number>;
-    setMusicGain(volume: number): Promise<void>;
-    getSfxGain(): Promise<number>;
-    setSfxGain(volume: number): Promise<void>;
-}
 
 export class AudioManager {
 
@@ -20,16 +14,18 @@ export class AudioManager {
     }
 
     #audioPreferencesStore: AudioPreferencesStore;
-
     #musicGainNode: GainNode;
     #sfxGainNode: GainNode;
+
     constructor(audioPreferencesStore: AudioPreferencesStore) {
         this.#audioPreferencesStore = audioPreferencesStore;
         const audioContext = getAudioContext();
         this.#musicGainNode = audioContext.createGain();
         this.#musicGainNode.connect(audioContext.destination);
+        this.#musicGainNode.gain.value = audioPreferencesStore.music.gain;
         this.#sfxGainNode = audioContext.createGain();
         this.#sfxGainNode.connect(audioContext.destination);
+        this.#sfxGainNode.gain.value = audioPreferencesStore.sfx.gain;
     }
 
     public get musicGainNode(): GainNode {
@@ -40,21 +36,28 @@ export class AudioManager {
         return this.#sfxGainNode;
     }
 
-    async getMusicGain(): Promise<number> {
-        return Promise.resolve(this.#musicGainNode.gain.value);
+    public get musicGain(): number {
+        return this.#musicGainNode.gain.value;
     }
 
-    async setMusicGain(value: number): Promise<void> {
-        this.#audioPreferencesStore.setMusicGain(clamp(value, 0, 1));
-        AudioManager.getInstance().musicGainNode.gain.value = value;
+    public set musicGain(value: number) {
+        value = clamp(value, MIN_GAIN_VALUE, MAX_GAIN_VALUE);
+        this.#audioPreferencesStore.music.gain = value;
+        if (this.#musicGainNode.gain.value !== value) {
+            this.#musicGainNode.gain.value = value;
+        }
     }
 
-    async getSfxGain(): Promise<number> {
-        return Promise.resolve(AudioManager.getInstance().sfxGainNode.gain.value);
+    public get sfxGain(): number {
+        return this.#sfxGainNode.gain.value;
     }
 
-    async setSfxGain(value: number) {
-        this.#audioPreferencesStore.setSfxGain(clamp(value, 0, 1));
-        AudioManager.getInstance().sfxGainNode.gain.value = value;
+    public set sfxGain(value: number) {
+        value = clamp(value, MIN_GAIN_VALUE, MAX_GAIN_VALUE);
+        this.#audioPreferencesStore.sfx.gain = value;
+        if (this.#sfxGainNode.gain.value !== value) {
+            this.#sfxGainNode.gain.value = value;
+        }
     }
+
 }

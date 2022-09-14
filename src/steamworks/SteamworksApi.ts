@@ -18,14 +18,10 @@ export interface SteamworksApi {
     };
 }
 
-export const steamworks: SteamworksApi = (window as any)["steamworks"] || {
+export namespace SteamworksApi {
+    export const getInstance = (): SteamworksApi => steamworks;
+}
+
+const steamworks: SteamworksApi = (window as any)["steamworks"] || {
     available: false
 };
-
-// After the electron preload script has been executed, a new global field "steamworks" will be available.
-// If the script has not been run, the available() function will have been initialized to always return false.
-declare global {
-    interface Window {
-      steamworks: SteamworksApi;
-    }
-}

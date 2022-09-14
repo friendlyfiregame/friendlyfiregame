@@ -8,13 +8,13 @@ export interface Interaction {
 }
 
 // Actions that shall be executed before an NPC talks, not after
-const earlyActions = [
+const earlyActions = new Set([
     "angry",
     "sad",
     "amused",
     "neutral",
     "bored"
-];
+]);
 
 export class Conversation {
     private static globalVariables: Record<string, string> = {};
@@ -40,7 +40,7 @@ export class Conversation {
 
     public setState(name = "entry"): void {
         if (!this.states.includes(name)) {
-            throw new Error("State name " + name + " does not exist in conversation");
+            throw new Error(`State name ${name} does not exist in conversation`);
         }
 
         this.state = name;
@@ -256,7 +256,7 @@ export class ConversationLine {
     }
 
     public isEarlyAction(s: string): boolean {
-        return earlyActions.includes(s);
+        return earlyActions.has(s);
     }
 
     public wasVisited(): boolean {

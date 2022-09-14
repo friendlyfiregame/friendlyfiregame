@@ -33,6 +33,7 @@ export class GlobalState {
   public static getHasBeatenGame (): boolean {
     return GlobalState.getParsedValueByKey<boolean>(GlobalStateKey.BEAT_GAME_ONCE, false);
   }
+
   public static setHasBeatenGame (): void {
     GlobalState.setKeyValuePair<boolean>(GlobalStateKey.BEAT_GAME_ONCE, true);
   }
@@ -48,4 +49,5 @@ export class GlobalState {
       GlobalState.setKeyValuePair<QuestKey[]>(GlobalStateKey.ACHIEVED_ENDINGS, achievedEndings);
     }
   }
+
 }

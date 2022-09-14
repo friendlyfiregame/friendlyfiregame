@@ -2,7 +2,7 @@ import { Game } from "../Game";
 import { SceneNode, SceneNodeArgs } from "./SceneNode";
 
 /**
- * Constructor arguments for [[ImageNode]].
+ * Constructor arguments for {@linkcode ImageNode}.
  */
 export interface ImageNodeArgs extends SceneNodeArgs {
     /** The image to be displayed by the image node. */

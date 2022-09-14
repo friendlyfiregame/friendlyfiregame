@@ -6,14 +6,27 @@ import { AudioManager } from "./AudioManager";
 
 export class Sound {
     #audioManager: AudioManager;
+    #channel: SoundChannel;
     private readonly gainNode: GainNode;
     private source: AudioBufferSourceNode | null = null;
     private loop: boolean = false;
 
-    private constructor(private readonly buffer: AudioBuffer, private readonly channel: SoundChannel) {
+    private constructor(private readonly buffer: AudioBuffer, channel: SoundChannel) {
         this.#audioManager = AudioManager.getInstance();
+        this.#channel = channel;
         this.gainNode = getAudioContext().createGain();
-        this.gainNode.connect(this.channel === SoundChannel.MUSIC ? this.audioManager.musicGainNode : this.audioManager.sfxGainNode);
+        let gainNode: GainNode;
+        switch (this.#channel) {
+            case SoundChannel.MUSIC:
+                gainNode = this.audioManager.musicGainNode;
+                break;
+            case SoundChannel.SFX:
+                gainNode = this.audioManager.sfxGainNode;
+                break;
+            default:
+                throw new Error(`Unknown sound channel: ${channel}.`);
+        }
+        this.gainNode.connect(gainNode);
     }
 
     public get audioManager(): AudioManager {
