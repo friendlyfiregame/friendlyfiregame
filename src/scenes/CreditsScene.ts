@@ -96,6 +96,10 @@ export class CreditsScene extends Scene<FriendlyFire> {
         return CreditsScene.music[2];
     }
 
+    public get urlFragment(): string {
+        return "#credits";
+    }
+
     public async setup(): Promise<void> {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
         this.zIndex = 2;

@@ -44,6 +44,10 @@ export class ControlsScene extends Scene<FriendlyFire> {
     private gamepadSelection!: AsepriteNode;
     private gamepadControls!: AsepriteNode;
 
+    public get urlFragment(): string {
+        return "#controls";
+    }
+
     public setup(): void {
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
         this.zIndex = 2;

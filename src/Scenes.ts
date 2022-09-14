@@ -2,7 +2,14 @@ import { Game } from "./Game";
 import { Scene, SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {
-    public activeScene: Scene<T, unknown> | null = null;
+    #activeScene: Scene<T, unknown> | null = null;
+    public set activeScene(scene: Scene<T, unknown> | null) {
+        this.#activeScene = scene;
+        window.history.replaceState(null, "", scene?.urlFragment || "#");
+    }
+    public get activeScene(): Scene<T, unknown> | null {
+        return this.#activeScene;
+    }
     private sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
     private scenes: Scene<T, unknown>[] = [];
     private sortedScenes: Scene<T, unknown>[] = [];

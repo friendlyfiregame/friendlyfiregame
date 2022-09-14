@@ -54,6 +54,10 @@ export abstract class Scene<T extends Game, A = void> {
         return this.game.scenes;
     }
 
+    public get urlFragment(): string {
+        return "#";
+    }
+
     /**
      * Shows the given layer when it was previously hidden.
      *

@@ -130,6 +130,10 @@ export class GameScene extends Scene<FriendlyFire> {
         [AmbientSoundId.WIND]: GameScene.ambientWind
     };
 
+    public get urlFragment(): string {
+        return "#game";
+    }
+
     private readonly backgroundTracks: BackgroundTrack[] = [
         {
             active: false,

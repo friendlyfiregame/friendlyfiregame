@@ -96,6 +96,10 @@ export class TitleScene extends Scene<FriendlyFire> {
         gap: 15,
     };
 
+    public get urlFragment(): string {
+        return "#title";
+    }
+
     public cleanup(): void {
         this.rootNode.clear();
     }

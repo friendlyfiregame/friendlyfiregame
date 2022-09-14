@@ -39,7 +39,12 @@ export class OptionsScene extends Scene<FriendlyFire> {
         return this.#audioManager;
     }
 
+    public get urlFragment(): string {
+        return "#options";
+    }
+
     public async setup(): Promise<void> {
+
         const menuItemX = 12;
         const menuItemY = 20;
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");

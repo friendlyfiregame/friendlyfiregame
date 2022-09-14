@@ -42,6 +42,10 @@ export class PauseScene extends Scene<FriendlyFire> {
         this.rootNode.clear();
     }
 
+    public get urlFragment(): string {
+        return "#pause";
+    }
+
     public setup(): void {
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
 
