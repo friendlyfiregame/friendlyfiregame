@@ -112,7 +112,7 @@ export class Shiba extends ScriptableNPC {
             this.scene.player.removeMultiJump();
             if (!this.scene.player.hasDoubleJump()) {
                 // If the player already gave away his double jump to the cave man,
-                // the stone desciple is put into the river to make crossing possible.
+                // the stone disciple is put into the river to make crossing possible.
                 this.scene.stoneDisciple.putIntoRiver();
             }
             this.setMaxVelocity(3);
