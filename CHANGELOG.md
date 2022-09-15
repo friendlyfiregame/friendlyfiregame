@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- New in-game configuration options have been added to allow the individual adjustment of
+  music and sound volumes.
+
+- The possibility to toggle the game from windows to fullscreen (and vice versa) has been
+  added as a menu option. The Desktop version of the game will persist the desired display
+  mode and start windowed or in fullscreen mode according to the settings you made.
+
+- The Desktop app of the game has gained support for Steam overlays. Prior to this release,
+  it was not possible to use Steam's key combination to toggle the Steam overlay. This should
+  now be possible.
+
 - Gamepad types can be automatically detected. It is still possible to overwrite the
   gamepad button styles to be shown in help tooltips in the "controls" screen, though.
 
