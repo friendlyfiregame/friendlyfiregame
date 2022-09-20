@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "^5.37.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^11.0.0",
-    "cspell": "^6.8.2",
+    "cspell": "^6.10.0",
     "electron": "^20.1.4",
     "eslint": "^8.23.1",
     "generate-json-webpack-plugin": "^2.0.0",
