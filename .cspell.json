@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/v6.8.2/cspell.schema.json#",
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/v6.10.1/cspell.schema.json#",
     "language": "en",
     "enabledLanguageIds": [
         "markdown",
