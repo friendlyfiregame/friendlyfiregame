@@ -58,7 +58,6 @@ launched in a browser. Once all dependencies have been installed, you can use
 If you want to continuously watch for changes in the game's sources and trigger a
 re-build whenever something gets updated just call `npm run-script watch`.
 
-
 ### Running the game in a browser
 
 There are four alternatives to run the game in the browser:
