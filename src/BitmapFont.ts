@@ -1,5 +1,5 @@
 import { FontJSON } from "*.font.json";
-import { loadImage } from "./graphics.js";
+import { loadImage } from "./graphics";
 
 const CHAR_SPACING = 1;
 
