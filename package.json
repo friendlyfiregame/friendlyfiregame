@@ -33,12 +33,14 @@
     "jest": "jest",
     "test": "npm run -s cspell && npm run -s lint && npm run -s check",
     "compile": "tsc",
-    "watch": "tsc -w",
+    "watch": "webpack watch",
     "prepare": "npm run -s clean && npm run -s compile",
     "dist": "webpack",
     "start": "webpack serve --devtool=inline-source-map",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "prepublish": "npm run -s dist"
+
   },
   "config": {
     "forge": "electron-forge.config.js"
@@ -74,6 +76,7 @@
     "rimraf": "^3.0.2",
     "source-map-loader": "^4.0.0",
     "steal": "^2.3.0",
+    "ts-loader": "^9.4.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.3",
     "webpack": "^5.74.0",

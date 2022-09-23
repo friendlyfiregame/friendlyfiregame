@@ -51,12 +51,13 @@ Instead of feeding the wood to the main fire, feed it to the flame boy. This wil
 
 ### Building the game
 
-In Visual Studio Code press *Ctrl-Shift-B* to start the compiler in watch mode. This compiles the
-TypeScript sources in the `src` folder to JavaScript in the `lib` folder. It also watches the `src`
-folder for changes so changed files are compiled on-save.
+Just run `npm install` on the CLI to create a distribution of the game suitable to be
+launched in a browser. Once all dependencies have been installed, you can use
+`npm run-script dist` to toggle a full re-build.
 
-Alternatively you can run `npm i` on the CLI to compile the project once or
-`npm run watch` to continuously compile the project in watch mode.
+If you want to continuously watch for changes in the game's sources and trigger a
+re-build whenever something gets updated just call `npm run-script watch`.
+
 
 ### Running the game in a browser
 

@@ -9,7 +9,8 @@ import {GitRevisionPlugin} from "git-revision-webpack-plugin";
 const gitRevisionPlugin = new GitRevisionPlugin();
 
 const configuration: Configuration = {
-    entry: "./lib/FriendlyFire.js",
+    target: "web",
+    entry: "./src/FriendlyFire.ts",
     output: {
         path: path.join(__dirname, "dist"),
         filename: "FriendlyFire.js",
@@ -18,8 +19,13 @@ const configuration: Configuration = {
     },
     mode: "development",
     resolve: {
-        symlinks: false,
-        mainFields: ["browser", "main", "module"]
+        extensions: [".ts", ".js"],
+        mainFields: ["browser", "main", "module"],
+        modules: [
+            "./src",
+            "node_modules"
+        ],
+        symlinks: false
     },
     devServer: {
         host: "0.0.0.0",
@@ -47,11 +53,12 @@ const configuration: Configuration = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.ts$/,
                 include: [
-                    path.resolve(__dirname, "lib")
+                    path.resolve(__dirname, "src")
                 ],
-                use: ["source-map-loader"],
+                use: ["ts-loader"],
+                exclude: /node_modules/,
                 enforce: "pre"
             }
         ]
@@ -74,4 +81,4 @@ const configuration: Configuration = {
         ]})
     ]
 };
-export default configuration;
+export default [configuration];
