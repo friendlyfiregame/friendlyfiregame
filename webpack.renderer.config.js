@@ -13,11 +13,28 @@ const config = {
     mode: "production",
     devtool: false,
     resolve: {
-        symlinks: false,
-        mainFields: ["browser", "main", "module"]
+        extensions: [".ts", ".js"],
+        modules: [
+            "./src",
+            "node_modules"
+        ],
+        symlinks: false
     },
     target: "electron-renderer",
     amd: false,
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                include: [
+                    path.resolve(__dirname, "src")
+                ],
+                use: ["ts-loader"],
+                exclude: /node_modules/,
+                enforce: "pre"
+            }
+        ]
+    },
     plugins: [
         /** @type {import("webpack").WebpackPluginInstance} */
         (new GenerateJsonPlugin("appinfo.json", {
@@ -29,7 +46,8 @@ const config = {
                 { from: "assets/", to: "assets/" },
                 {
                     from: "index.html", transform(content) {
-                        return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
+                        return content.toString().replace(
+                            "src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
                             "src=\"index.js\"");
                     }
                 },

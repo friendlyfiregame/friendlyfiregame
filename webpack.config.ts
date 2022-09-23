@@ -73,8 +73,10 @@ const configuration: Configuration = {
             //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
             { from: "index.html", transform(content: any) {
-                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
-                    "src=\"FriendlyFire.js\"");
+                return content.toString().replace(
+                    "src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
+                    "src=\"FriendlyFire.js\""
+                );
             }},
             { from: "style.css" },
             { from: "manifest.webmanifest" }
