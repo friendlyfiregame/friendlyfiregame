@@ -9,10 +9,14 @@ export const GAME_CANVAS_WIDTH = 480;
 export const GAME_CANVAS_HEIGHT = 270;
 
 /**
- * Number if pixels per meter on the world map. Used to convert from pixel coordinates to meters (for size and
+ * Amount of pixels per meter on the world map. Used to convert from pixel coordinates to meters (for size and
  * physics calculations).
  */
 export const PIXEL_PER_METER = 18;
+
+/**
+ * Amount of meters that are represented by a single pixel on the screen.
+ */
 export const METER_PER_PIXEL = 1 / PIXEL_PER_METER;
 
 export const SOUND_INTENSITY_MULTIPLIER = 50;
