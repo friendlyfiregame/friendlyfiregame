@@ -62,7 +62,7 @@
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^11.0.0",
     "cspell": "^6.10.1",
-    "electron": "^20.2.0",
+    "electron": "^21.0.0",
     "eslint": "^8.23.1",
     "generate-json-webpack-plugin": "^2.0.0",
     "git-revision-webpack-plugin": "^5.0.0",
