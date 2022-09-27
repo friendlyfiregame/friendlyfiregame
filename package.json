@@ -57,7 +57,7 @@
     "@tsconfig/recommended": "^1.0.1",
     "@types/generate-json-webpack-plugin": "^0.3.4",
     "@types/jest": "^29.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^11.0.0",
