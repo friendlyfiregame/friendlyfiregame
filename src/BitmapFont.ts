@@ -17,12 +17,13 @@ export class BitmapFont {
 
     private constructor(
         sourceImage: HTMLImageElement, colors: Record<string, string>, charMap: string,
-        charWidths: number[], compactablePrecursors: string[][], charMargin = 1
+        charHeight: number, charWidths: number[], compactablePrecursors: string[][], charMargin = 1
     ) {
         this.sourceImage = sourceImage;
         this.canvas = document.createElement("canvas");
-        this.colorMap = this.prepareColors(colors);
         this.charMap = charMap;
+        this.charHeight = charHeight;
+        this.colorMap = this.prepareColors(colors);
         this.charWidths = charWidths;
         this.compactablePrecursors = compactablePrecursors;
         this.charStartPoints = [];
@@ -50,7 +51,7 @@ export class BitmapFont {
         const widths = json.characterMapping.map(charDef => charDef.width);
         const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || []);
 
-        return new BitmapFont(image, json.colors, characters, widths, compactablePrecursors, json.margin);
+        return new BitmapFont(image, json.colors, characters, json.characterHeight, widths, compactablePrecursors, json.margin);
     }
 
     private prepareColors(colorMap: { [x: string]: string; }): { [x: string]: number } {
@@ -58,9 +59,8 @@ export class BitmapFont {
         const colors = Object.keys(colorMap);
         const count = colors.length;
         const w = this.canvas.width = this.sourceImage.width;
-        const h = this.sourceImage.height;
+        const h = this.charHeight;
         this.canvas.height = h * count;
-        this.charHeight = h;
         const ctx = this.canvas.getContext("2d")!;
 
         // Fill with font
@@ -113,6 +113,11 @@ export class BitmapFont {
         ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
         alpha = 1
     ): void {
+        // Do nothing when no text or alpha is 0
+        if (text === "" || alpha === 0) {
+            return;
+        }
+
         ctx.save();
         ctx.translate(x, y);
 
@@ -126,7 +131,6 @@ export class BitmapFont {
             );
         }
 
-        text = "" + text;
         ctx.globalAlpha *= alpha;
 
         const { width } = this.measureText(text);

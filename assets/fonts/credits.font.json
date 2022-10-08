@@ -1,5 +1,6 @@
 {
     "image": "credits.png",
+    "characterHeight": 9,
     "characterMapping": [
         {
             "char": "A",

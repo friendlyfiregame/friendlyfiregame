@@ -1,6 +1,7 @@
 declare module "*.font.json" {
     export interface FontJSON {
         image: string;
+        characterHeight: number;
         characterMapping: {
             char: string;
             width: number;
