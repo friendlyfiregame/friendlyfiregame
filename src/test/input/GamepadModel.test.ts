@@ -28,6 +28,10 @@ const stadiaModels = [
     "Google Inc. Stadia Controller (STANDARD GAMEPAD Vendor: 18d1 Product: 9400)"
 ];
 
+const snesModels = [
+    "usb gamepad            (Vendor: 0810 Product: e501)"
+];
+
 const unknownModels = [
     "Hockus Pockus Wibbly Wobbly JoySt1ck",
     "Flibber Flubber Thingy",
@@ -57,6 +61,14 @@ describe("Gamepad model detection", () => {
             it(`given the string "${str}"`, () => {
                 const model = GamepadModel.fromString(str);
                 expect(model.style).toBe(GamepadStyle.STADIA);
+            });
+        });
+    });
+    describe("detects SNES-like controllers", () => {
+        snesModels.forEach((str) => {
+            it(`given the string "${str}"`, () => {
+                const model = GamepadModel.fromString(str);
+                expect(model.style).toBe(GamepadStyle.SNES);
             });
         });
     });

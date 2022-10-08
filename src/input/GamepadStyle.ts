@@ -12,7 +12,8 @@ export enum GamepadStyle {
 
     XBOX = "xbox",
     PLAYSTATION = "playstation",
-    STADIA = "stadia"
+    STADIA = "stadia",
+    SNES = "snes"
 
 }
 

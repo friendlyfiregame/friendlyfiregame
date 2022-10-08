@@ -5,19 +5,24 @@ import { GamepadStyle } from "./GamepadStyle";
 const typemap: Map<RegExp,GamepadStyle> = new Map();
 
 /* spell-checker: disable */
-typemap.set(/^.*?[Xx][Ii][Nn][Pp][Uu][Tt].*$/, GamepadStyle.XBOX);
+typemap.set(/^.*?xinput.*$/i, GamepadStyle.XBOX);
 // Vendor ID of Microsoft Corp.
 typemap.set(/^.*045e.*$/, GamepadStyle.XBOX);
-typemap.set(/^.*?[Ss]tadia\ [Cc]ontroller.*$/, GamepadStyle.STADIA);
+typemap.set(/^.*?stadia\ controller.*$/i, GamepadStyle.STADIA);
 // Anything with playstation in its name
-typemap.set(/^.*?[Pp][Ll][Aa][Yy][Ss][Tt][Aa][Ii][Oo][Nn].*$/, GamepadStyle.XBOX);
+typemap.set(/^.*?playstation.*$/i, GamepadStyle.XBOX);
 // Vendor ID of Sony Inc.
 typemap.set(/^.*054c.*$/, GamepadStyle.PLAYSTATION);
+
+// Anything with "snes" in it's name.
+typemap.set(/snes/i, GamepadStyle.SNES);
+// A certain no-name gamepad that I happen to own.
+typemap.set(/^.Vendor:\s*?0810 Product:\s*?e501/i, GamepadStyle.SNES);
 
 /**
  * Regular expression to extract vendor and product identifier.
  */
-const productAndVendorMatcher = /^.*?[Vv]endor:?\s*(?<vendorId>.{4}).*?[Pp]roduct:?\s*(?<productId>.{4}).*$/;
+const productAndVendorMatcher = /^.*?vendor:?\s*(?<vendorId>.{4}).*?product:?\s*(?<productId>.{4}).*$/i;
 /* spell-checker: enable */
 
 export class GamepadModel {
@@ -48,7 +53,7 @@ export class GamepadModel {
             if (key.exec(str)) {
                 const productAndVendorMatch = productAndVendorMatcher.exec(str);
                 let vendorId: string | undefined;
-                let productId;
+                let productId: string | undefined;
                 if (productAndVendorMatch !== null) {
                     vendorId = productAndVendorMatch.groups?.vendorId;
                     productId = productAndVendorMatch.groups?.productId;
