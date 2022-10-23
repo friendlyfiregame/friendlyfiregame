@@ -28,7 +28,7 @@
     "eslint": "eslint --ext .ts ./src/",
     "lint": "npm run -s markdownlint && npm run -s htmlhint && npm run -s eslint",
     "check": "jest",
-    "cspell": "cspell '**/*'",
+    "cspell": "cspell \"**/*\"",
     "coverage": "jest --coverage",
     "jest": "jest",
     "test": "npm run -s cspell && npm run -s lint && npm run -s check",

@@ -2,7 +2,7 @@ import { GamepadModel, DEFAULT_GAMEPAD_MODEL } from "../../input/GamepadModel";
 import { GamepadStyle } from "../../input/GamepadStyle";
 
 /* spell-checker: disable */
-const xboxModels = [
+const xboxModels: string[] = [
     "Xbox 360 Controller (XInput STANDARD GAMEPAD)",
     "xinput",
     "Xbox One Controller (STANDARD GAMEPAD Vendor: 045e Product: 02ea)",
@@ -12,7 +12,7 @@ const xboxModels = [
     "Microsoft Controller (STANDARD GAMEPAD Vendor: 045e Product: 02ea)"
 ];
 
-const psModels = [
+const psModels: string[] = [
     "Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 09cc)",
     "Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 05c4)",
     "054c-09cc-Wireless Controller",
@@ -23,16 +23,16 @@ const psModels = [
     "PLAYSTATION(R)3 Controller (STANDARD GAMEPAD Vendor: 054c Product: 0268)"
 ];
 
-const stadiaModels = [
+const stadiaModels: string[] = [
     "Stadia Controller (STANDARD GAMEPAD Vendor: 18d1 Product: 9400)",
     "Google Inc. Stadia Controller (STANDARD GAMEPAD Vendor: 18d1 Product: 9400)"
 ];
 
-const snesModels = [
+const snesModels: string[] = [
     "usb gamepad            (Vendor: 0810 Product: e501)"
 ];
 
-const unknownModels = [
+const unknownModels: string[] = [
     "Hockus Pockus Wibbly Wobbly JoySt1ck",
     "Flibber Flubber Thingy",
     "Microz0ft YBox Controlla"

@@ -134,7 +134,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
         } else if (data.channel === SoundChannel.SFX) {
             data.audioManager.sfxGain = newValue;
         } else {
-            throw new Error(`Unknown sound channel: ${data.channel}.`)
+            throw new Error(`Unknown sound channel: ${data.channel}.`);
         }
     }
 

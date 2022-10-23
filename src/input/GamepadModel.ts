@@ -5,19 +5,20 @@ import { GamepadStyle } from "./GamepadStyle";
 const typemap: Map<RegExp,GamepadStyle> = new Map();
 
 /* spell-checker: disable */
-typemap.set(/^.*?xinput.*$/i, GamepadStyle.XBOX);
+typemap.set(/^.*?(xinput).*?$/i, GamepadStyle.XBOX);
 // Vendor ID of Microsoft Corp.
-typemap.set(/^.*045e.*$/, GamepadStyle.XBOX);
-typemap.set(/^.*?stadia\ controller.*$/i, GamepadStyle.STADIA);
+typemap.set(/^.*(?<vendorId>045e).*$/i, GamepadStyle.XBOX);
+// Anything with "stadia controller" in its name
+typemap.set(/^.*?(stadia\ controller).*?$/i, GamepadStyle.STADIA);
 // Anything with playstation in its name
-typemap.set(/^.*?playstation.*$/i, GamepadStyle.XBOX);
+typemap.set(/^.*?(playstation).*$/i, GamepadStyle.PLAYSTATION);
 // Vendor ID of Sony Inc.
-typemap.set(/^.*054c.*$/, GamepadStyle.PLAYSTATION);
+typemap.set(/^.*(?<vendorId>054c).*$/i, GamepadStyle.PLAYSTATION);
 
 // Anything with "snes" in it's name.
 typemap.set(/snes/i, GamepadStyle.SNES);
 // A certain no-name gamepad that I happen to own.
-typemap.set(/^.Vendor:\s*?0810 Product:\s*?e501/i, GamepadStyle.SNES);
+typemap.set(/^.*vendor:\s*?(?<vendorId>0810)\s*product:\s*?(?<groupId>e501)/i, GamepadStyle.SNES);
 
 /**
  * Regular expression to extract vendor and product identifier.
