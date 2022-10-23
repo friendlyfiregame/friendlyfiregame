@@ -10,6 +10,7 @@ const productName = "Friendly Fire";
 const win32Metadata = {
     FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
     ProductName: "Friendly Fire",
+    "requested-execution-level": "asInvoker"
 };
 
 const appVersion = require(path.resolve(__dirname, "package.json")).version;
@@ -79,7 +80,7 @@ const config = {
             "linux",
             "win32",
             "darwin"
-        ]
+        ],
       },
       {
         name: "@electron-forge/maker-zip",
