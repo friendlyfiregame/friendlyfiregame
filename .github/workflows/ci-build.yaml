@@ -18,6 +18,8 @@ jobs:
   build_webapp:
     name: Build Webapp
     runs-on: ubuntu-22.04
+    env:
+      DISPLAY: ':99.0'
     steps:
     - name: git checkout
       uses: actions/checkout@v3
@@ -25,12 +27,6 @@ jobs:
       id: pr
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Read version from package.json
-      id: version
-      uses: notiz-dev/github-action-json-property@v0.1.0
-      with:
-        path: 'package.json'
-        prop_path: 'version'
     - name: Extract branch name
       if: github.event_name != 'pull_request'
       shell: bash
@@ -71,11 +67,12 @@ jobs:
         echo "::endgroup::"
     - name: Compile sources
       run: npm run -s compile
+    - name: Install XFFB (required for headless tests)
+      run:
+        # See: https://codito.in/xvfb-in-github-action/
+        sudo apt install -y xvfb x11-utils libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 xdotool
     - name: Run headless tests
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        working-directory: ./
-        run: npm run -s coverage
+      run: xvfb-run --auto-servernum npm run -s coverage
     - run: npm run -s dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
@@ -128,10 +125,10 @@ jobs:
       uses: actions/checkout@v3
     - name: Read version from package.json
       id: version
-      uses: notiz-dev/github-action-json-property@v0.1.0
+      uses: actions/github-script@v6
       with:
-        path: 'package.json'
-        prop_path: 'version'
+        script: return require("package.json").version
+        result-encoding: string
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
@@ -154,5 +151,5 @@ jobs:
     - name: Archive Electron game package
       uses: actions/upload-artifact@v3
       with:
-        name: friendlyfiregame-v${{steps.version.outputs.prop}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
+        name: friendlyfiregame-v${{steps.version.outputs.result}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
         path: out
