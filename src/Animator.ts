@@ -23,7 +23,7 @@ export class Animator {
     private entity: Entity;
     private sprite?: Aseprite;
 
-    private currentAnimation: CurrentAnimationState = {
+    private readonly currentAnimation: CurrentAnimationState = {
         tag: "",
         start: 0,
         duration: 0,
@@ -79,7 +79,7 @@ export class Animator {
      * Method to call from draw method of the entity to draw a specific animation by tag.
      *
      * @param tag    - The animation tag to draw.
-     * @param ctx    - The canvas context to draw to.
+     * @param direction Animation direction
      * @param config - Optional animation configuration.
      */
     public play(tag: string, direction: number, config?: AnimationConfig): void {
