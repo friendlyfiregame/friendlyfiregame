@@ -127,7 +127,7 @@ jobs:
       id: version
       uses: actions/github-script@v6
       with:
-        script: return require("package.json").version
+        script: return require("./package.json").version
         result-encoding: string
     - name: Setup Node.js
       uses: actions/setup-node@v3

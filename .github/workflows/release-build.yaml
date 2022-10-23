@@ -16,7 +16,7 @@ jobs:
       id: version
       uses: actions/github-script@v6
       with:
-        script: return require("package.json").version
+        script: return require("./package.json").version
         result-encoding: string
     - name: Assert version in package.json matches Git tag
       shell: bash
