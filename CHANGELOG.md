@@ -17,8 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   mode and start windowed or in fullscreen mode according to the settings you made.
 
 - The Desktop app of the game has gained support for Steam overlays. Prior to this release,
-  it was not possible to use Steam's key combination to toggle the Steam overlay. This should
-  now be possible.
+  it was not possible to use Steam's key combination (usually Shift+Tab)to toggle the Steam
+  overlay. This should now be possible.
 
 - Gamepad types can be automatically detected. It is still possible to overwrite the
   gamepad button styles to be shown in help tooltips in the "controls" screen, though.
@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- The Desktop apps are now based on Electron v21.1.0.
+- The Desktop apps are now based on Electron v21.2.0.
   As always, a new Electron runtime should offer improved performance, security and
   bug fixes, that may or may not be visible or even useful to end users.
 
