@@ -132,7 +132,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        architecture: '${steps.build_info.output.arch}'
+        architecture: '${{steps.build_info.output.arch}}'
         node-version: '18'
     - name: Cache node modules
       uses: actions/cache@v3
