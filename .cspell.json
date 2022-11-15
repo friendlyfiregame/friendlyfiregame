@@ -23,6 +23,7 @@
         ".htmlhintrc",
         ".mailmap",
         "/branding/soundtrack/steam_album_metadata.csv",
+        "/scripts/**",
         "/out/**",
         "/lib/**",
         "/dist/**",
