@@ -22,6 +22,7 @@
         "/.github/**",
         ".htmlhintrc",
         ".mailmap",
+        "/branding/soundtrack/steam_album_metadata.csv",
         "/out/**",
         "/lib/**",
         "/dist/**",
