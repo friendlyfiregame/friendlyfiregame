@@ -1,7 +1,10 @@
 // @ts-check
-const { platform } = require("node:os");
 const os = require("node:os");
+const fs = require("node:fs");
 const path = require("node:path");
+
+const semver = require("semver");
+const git = require("git-rev-sync");
 
 // Plugins
 const WebPackPlugin = require("@electron-forge/plugin-webpack").WebpackPlugin;
@@ -13,6 +16,9 @@ const MakerZIP = require("@electron-forge/maker-zip").MakerZIP
 const MakerDeb = require("@electron-forge/maker-deb").MakerDeb;
 const MakerRpm = require("@electron-forge/maker-rpm").MakerRpm;
 
+// Publishers
+const PublisherGithub = require("@electron-forge//publisher-github").PublisherGithub;
+
 // Package name for macOS should be different.
 const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
 const productName = "Friendly Fire";
@@ -21,10 +27,12 @@ const productName = "Friendly Fire";
 const win32Metadata = {
     FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
     ProductName: "Friendly Fire",
-    "requested-execution-level": "asInvoker"
+    "requested-execution-level": "asInvoker",
 };
 
-const appVersion = require(path.resolve(__dirname, "package.json")).version;
+/** @type {string} */
+const appVersion = `${require(path.resolve(__dirname, "package.json")).version}${git.isDirty() ? "-dirty" : ""}`;
+/** @type {string} */
 const appHomepage = require(path.resolve(__dirname, "package.json")).homepage;
 
 /** @type {import("@electron-forge/shared-types").ForgeConfig} */
@@ -45,7 +53,10 @@ const config = {
         icon: path.resolve(__dirname, "assets", "appicon.iconset"),
         appCopyright: "Copyright (C) 2020–2022 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
         "Klaus Reimer and Jennifer van Veen",
-        appVersion: appVersion
+        appVersion: appVersion,
+        appBundleId: "com.friendlyfiregame",
+        appCategoryType: "public.app-category.games",
+        buildVersion: `${appVersion}+build-${git.short()}`
     },
     makers: [
       new MakerSquirrel({
@@ -104,6 +115,16 @@ const config = {
       }),
       new AutoUnpackNativesPlugin({}),
     ],
-    publishers: []
+    publishers: [
+        new PublisherGithub({
+            repository: {
+                owner: "friendlyfiregame",
+                name: "friendlyfiregame"
+            },
+            tagPrefix: "v",
+            prerelease: (semver.parse(appVersion)?.prerelease.length || []) > 0,
+            draft: true
+        })
+    ]
 };
 module.exports = config;
