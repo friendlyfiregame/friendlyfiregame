@@ -44,6 +44,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             const steamworks = await import("steamworks.js");
             const steamAppId = Number(app.commandLine.getSwitchValue("steam-app")) || STEAM_APP_ID;
             const steamClient = steamworks.init(steamAppId);
+            steamworks.electronEnableSteamOverlay();
 
             electron.ipcMain.handle("steamworks", async (_event, args) => {
                 const fn = `${args[0]}#${args[1]}`;
