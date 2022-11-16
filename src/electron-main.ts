@@ -162,7 +162,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    app.on("ready", () => createWindow(app, preferences));
+    app.on("ready", async () => createWindow(app, preferences));
 
     // Quit when all windows are closed.
     app.on("window-all-closed", () => {
@@ -173,11 +173,11 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
         app.quit();
     });
 
-    app.on("activate", () => {
+    app.on("activate", async () => {
         // On OS X it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (electron.BrowserWindow.getAllWindows().length === 0) {
-            createWindow(app, preferences);
+            return createWindow(app, preferences);
         }
     });
 })(electron.app);
