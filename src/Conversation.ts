@@ -311,19 +311,11 @@ export class ConversationLine {
     }
 
     private static extractActions(line: string): string[][] {
-        let actions = line.match(/(\![a-zA-Z][a-zA-Z0-9\_\$ ]*)+/g);
-        const result = [];
-
-        if (actions) {
-            actions = actions.join(" ").split("!").map(action => action.trim()).filter(s => s.length > 0);
-
-            for (const action of actions) {
-                const segments = action.split(" ");
-                result.push(segments);
-            }
-        }
-
-        return result;
+        return line.match(/(\![a-zA-Z][a-zA-Z0-9\_\$ ]*)+/g)
+                        ?.join(" ")
+                        .split("!")
+                        .map(action => action.trim()).filter(s => s.length > 0)
+                        .map(action => action.split(" ")) || [] as string[][];
     }
 
     public static wrapString(s: string, charsPerLine: number): string {

@@ -1,6 +1,17 @@
 // @ts-check
+const { platform } = require("node:os");
 const os = require("node:os");
 const path = require("node:path");
+
+// Plugins
+const WebPackPlugin = require("@electron-forge/plugin-webpack").WebpackPlugin;
+const AutoUnpackNativesPlugin = require("@electron-forge/plugin-auto-unpack-natives").AutoUnpackNativesPlugin;
+
+// Makers
+const MakerSquirrel = require("@electron-forge/maker-squirrel").MakerSquirrel;
+const MakerZIP = require("@electron-forge/maker-zip").MakerZIP
+const MakerDeb = require("@electron-forge/maker-deb").MakerDeb;
+const MakerRpm = require("@electron-forge/maker-rpm").MakerRpm;
 
 // Package name for macOS should be different.
 const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
@@ -16,52 +27,18 @@ const win32Metadata = {
 const appVersion = require(path.resolve(__dirname, "package.json")).version;
 const appHomepage = require(path.resolve(__dirname, "package.json")).homepage;
 
-// cSpell:disable
-
-/** @type {import("@electron-forge/maker-deb").MakerDebConfig} */
-const makerDebConfig = {
-    options: {
-        icon: "./assets/appicon.iconset/icon_256x256.png",
-        productName: productName,
-        genericName: productName,
-        categories: [
-            "Game"
-        ],
-        homepage: appHomepage,
-        version: appVersion
-    }
-};
-
-/** @type {import("@electron-forge/maker-rpm").MakerRpmConfig} */
-const makerRpmConfig = {
-    options: {
-        icon: "./assets/appicon.iconset/icon_256x256.png",
-        productName: productName,
-        genericName: productName,
-        categories: [
-            "Game"
-        ],
-        homepage: appHomepage,
-        version: appVersion
-    }
-};
-
-/** @type {import("@electron-forge/maker-squirrel").MakerSquirrelConfig} */
-const makerSquirrelConfig = {
-    name: "friendlyfire",
-    version: appVersion
-};
-
+/** @type {import("@electron-forge/shared-types").ForgeConfig} */
 const config = {
     packagerConfig: {
-        asar: { // cspell:disable-line
-            unpack: [
-                "*.node",
+        // cspell:disable
+        asar: {
+            unpack: /** @type {any} */ ([
                 "*.so",
                 "*.dll",
                 "*.dylib"
-            ]
+            ])
         },
+        // cspell:enable
         name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
         win32metadata: win32Metadata,
@@ -70,73 +47,62 @@ const config = {
         "Klaus Reimer and Jennifer van Veen",
         appVersion: appVersion
     },
-    /** @type {import("@electron-forge/shared-types").IForgeResolvableMaker[]} */
     makers: [
-      {
-        name: "@electron-forge/maker-squirrel",
-        config: makerSquirrelConfig,
-        enabled: true,
-        platforms: [
-            "linux",
-            "win32",
-            "darwin"
-        ],
-      },
-      {
-        name: "@electron-forge/maker-zip",
-        config: /** @type {import("@electron-forge/maker-zip").MakerZIPConfig} */ ({}),
-        enabled: true,
-        platforms: [
-          "darwin"
-        ]
-      },
-      {
-        name: "@electron-forge/maker-deb",
-        config: makerDebConfig,
-        enabled: true,
-        platforms: [
-          "linux"
-        ]
-      },
-      {
-        name: "@electron-forge/maker-rpm",
-        enabled: true,
-        config: makerRpmConfig,
-        platforms: [
-          "linux"
-        ]
-      }
+      new MakerSquirrel({
+        name: "friendlyfire",
+        version: appVersion,
+        usePackageJson: true,
+      }),
+      new MakerZIP(),
+      new MakerDeb({
+        options: {
+            icon: "./assets/appicon.iconset/icon_256x256.png",
+            name: "friendlyfiregame",
+            productName: productName,
+            genericName: productName,
+            categories: [
+                "Game"
+            ],
+            homepage: appHomepage,
+            version: appVersion
+        },
+      }),
+      new MakerRpm({
+        options: {
+            icon: "./assets/appicon.iconset/icon_256x256.png",
+            name: "friendlyfiregame",
+            productName: productName,
+            genericName: productName,
+            categories: [
+                "Game"
+            ],
+            homepage: appHomepage,
+            version: appVersion
+        }
+      }),
     ],
     plugins: [
-      [
-        "@electron-forge/plugin-webpack",
-        /** @type {import("@electron-forge/plugin-webpack").WebpackPluginConfig} */
-        ({
-          mainConfig: "./webpack.main.config.js",
+      new WebPackPlugin({
+        mainConfig: "./webpack.main.config.js",
+        jsonStats: false,
+        packageSourceMaps: true,
+        renderer: {
+          nodeIntegration: false,
           jsonStats: false,
-          packageSourceMaps: true,
-          renderer: {
-            nodeIntegration: false,
-            jsonStats: false,
-            config: "./webpack.renderer.config.js",
-            entryPoints: [
-              {
-                //html: "index.html",
-                js: "./lib/FriendlyFire.js",
-                name: "./",
-                preload: {
-                    js: "./lib/electron-preload.js"
-                }
+          config: "./webpack.renderer.config.js",
+          entryPoints: [
+            {
+              //html: "index.html",
+              js: "./lib/FriendlyFire.js",
+              name: "./",
+              preload: {
+                  js: "./lib/electron-preload.js"
               }
-            ]
-          }
-        }),
-      ],
-      [
-        "@electron-forge/plugin-auto-unpack-natives",
-        /** @type {import("@electron-forge/plugin-auto-unpack-natives").AutoUnpackNativesConfig} */
-        ({})
-      ]
+            }
+          ]
+        }
+      }),
+      new AutoUnpackNativesPlugin({}),
     ],
     publishers: []
 };
