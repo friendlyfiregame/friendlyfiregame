@@ -4,6 +4,7 @@ import * as electron from "electron";
 import { default as ConfigStore} from "electron-store";
 
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "./constants";
+import * as os from "node:os";
 import * as path from "node:path";
 import * as process from "node:process";
 
@@ -75,7 +76,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             });
 
         } catch (e) {
-            process.stderr.write(`Initialization of Steamworks API failed.${path.sep}${path.sep}${e}${path.sep}`);
+            process.stderr.write(`Initialization of Steamworks API failed.${os.EOL}${os.EOL}${e}${os.EOL}`);
             app.exit(19);
         }
 
