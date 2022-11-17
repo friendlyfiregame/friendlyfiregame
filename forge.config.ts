@@ -1,62 +1,64 @@
-// @ts-check
-const os = require("node:os");
-const fs = require("node:fs");
-const path = require("node:path");
+import * as fs from "node:fs";
+import * as path from "node:path";
 
-const semver = require("semver");
-const git = require("git-rev-sync");
+import * as semver from "semver";
+import * as git from "git-rev-sync";
+
+import {ForgeConfig, ForgePlatform, ForgeArch} from "@electron-forge/shared-types";
 
 // Plugins
-const WebPackPlugin = require("@electron-forge/plugin-webpack").WebpackPlugin;
-const AutoUnpackNativesPlugin = require("@electron-forge/plugin-auto-unpack-natives").AutoUnpackNativesPlugin;
+import {WebpackPlugin} from "@electron-forge/plugin-webpack";
+import {AutoUnpackNativesPlugin} from "@electron-forge/plugin-auto-unpack-natives";
 
 // Makers
-const MakerSquirrel = require("@electron-forge/maker-squirrel").MakerSquirrel;
-const MakerZIP = require("@electron-forge/maker-zip").MakerZIP
-const MakerDeb = require("@electron-forge/maker-deb").MakerDeb;
-const MakerRpm = require("@electron-forge/maker-rpm").MakerRpm;
+import {MakerSquirrel} from "@electron-forge/maker-squirrel";
+import {MakerZIP} from "@electron-forge/maker-zip";
+import {MakerDeb} from "@electron-forge/maker-deb";
+import {MakerRpm} from "@electron-forge/maker-rpm";
 
 // Publishers
-const PublisherGithub = require("@electron-forge//publisher-github").PublisherGithub;
+import {PublisherGithub} from "@electron-forge//publisher-github";
 
-// Package name for macOS should be different.
-const packageName = os.platform() === "darwin" ? "Friendly Fire" : "friendlyfire";
+// Webpack configurations
+import webpackMainConfig from "./webpack.main.config";
+import webpackRendererConfig from "./webpack.renderer.config";
+
 const productName = "Friendly Fire";
+const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json")).toString());
+const appVersion = packageJson.version;
+const appHomepage = packageJson.homepage;
 
-/** @type {import("electron-packager").Win32MetadataOptions} */
-const win32Metadata = {
-    FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
-    ProductName: "Friendly Fire",
-    "requested-execution-level": "asInvoker",
-};
-
-/** @type {string} */
-const appVersion = `${require(path.resolve(__dirname, "package.json")).version}${git.isDirty() ? "-dirty" : ""}`;
-/** @type {string} */
-const appHomepage = require(path.resolve(__dirname, "package.json")).homepage;
-
-/** @type {import("@electron-forge/shared-types").ForgeConfig} */
-const config = {
+const config: ForgeConfig = {
+    hooks: {
+        prePackage: async (config: ForgeConfig, platform: ForgePlatform, arch: ForgeArch): Promise<void> => {
+            // Package name for macOS and Windows should be different.
+            if (["darwin", "win32"].includes(platform)) {
+                config.packagerConfig!.name = "Friendly Fire";
+            }
+        }
+    },
     packagerConfig: {
         // cspell:disable
         asar: {
-            unpack: /** @type {any} */ ([
-                "*.so",
-                "*.dll",
-                "*.dylib"
-            ])
+            unpack: "*.{dll,dylib,node,so}"
         },
         // cspell:enable
-        name: packageName,
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
-        win32metadata: win32Metadata,
+        win32metadata: {
+            FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",
+            ProductName: "Friendly Fire",
+            "requested-execution-level": "asInvoker",
+        },
         icon: path.resolve(__dirname, "assets", "appicon.iconset"),
         appCopyright: "Copyright (C) 2020–2022 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
         "Klaus Reimer and Jennifer van Veen",
         appVersion: appVersion,
         appBundleId: "com.friendlyfiregame",
         appCategoryType: "public.app-category.games",
-        buildVersion: `${appVersion}+build-${git.short()}`
+        buildVersion: `${appVersion}+build-${git.short()}`,
+        darwinDarkModeSupport: true,
+        name: "friendlyfiregame",
+        executableName: "friendlyfiregame"
     },
     makers: [
       new MakerSquirrel({
@@ -93,27 +95,27 @@ const config = {
       }),
     ],
     plugins: [
-      new WebPackPlugin({
-        mainConfig: "./webpack.main.config.js",
+      new AutoUnpackNativesPlugin({}),
+      new WebpackPlugin({
+        mainConfig: webpackMainConfig,
         jsonStats: false,
         packageSourceMaps: true,
         renderer: {
           nodeIntegration: false,
           jsonStats: false,
-          config: "./webpack.renderer.config.js",
+          config: webpackRendererConfig,
           entryPoints: [
             {
               //html: "index.html",
-              js: "./lib/FriendlyFire.js",
+              js: "./src/FriendlyFire.ts",
               name: "./",
               preload: {
-                  js: "./lib/electron-preload.js"
+                  js: "./src/electron-preload.ts"
               }
             }
           ]
         }
-      }),
-      new AutoUnpackNativesPlugin({}),
+      })
     ],
     publishers: [
         new PublisherGithub({
@@ -127,4 +129,4 @@ const config = {
         })
     ]
 };
-module.exports = config;
+export default config;

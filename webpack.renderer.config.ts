@@ -1,15 +1,13 @@
 // cSpell:disable
-// @ts-check
 
-const path = require("node:path");
-const webpack = require("webpack");
-const CopyPlugin = require("copy-webpack-plugin");
-const GenerateJsonPlugin = require("generate-json-webpack-plugin");
-const { GitRevisionPlugin } = require("git-revision-webpack-plugin");
+import * as path from "node:path";
+import {Configuration} from "webpack";
+import CopyPlugin from "copy-webpack-plugin";
+import GenerateJsonPlugin from "generate-json-webpack-plugin";
+import {GitRevisionPlugin} from "git-revision-webpack-plugin";
 const gitRevisionPlugin = new GitRevisionPlugin();
 
-/** @type {import("webpack").Configuration} */
-const config = {
+const config: Configuration = {
     mode: "production",
     devtool: false,
     resolve: {
@@ -36,11 +34,10 @@ const config = {
         ]
     },
     plugins: [
-        /** @type {import("webpack").WebpackPluginInstance} */
         (new GenerateJsonPlugin("appinfo.json", {
             version: process.env.npm_package_version,
             gitCommitHash: gitRevisionPlugin.commithash()
-        })),
+        }) as any),
         new CopyPlugin({
             patterns: [
                 { from: "assets/", to: "assets/" },
@@ -57,4 +54,4 @@ const config = {
         })
     ]
 };
-module.exports = config;
+export default config;
