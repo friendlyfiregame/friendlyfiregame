@@ -14,26 +14,7 @@ type PreferencesConfigStore = ConfigStore<{
 
 async function createWindow(app: Electron.App, preferences: PreferencesConfigStore): Promise<void> {
 
-    electron.ipcMain.handle("preferences", async (_event, args) => {
-        const fn = `${args[0]}#${args[1]}`;
-        switch (fn) {
-        case "fullscreen#isEnabled":
-            return preferences.get("fullscreen", true);
-        case "fullscreen#setEnabled":
-            return preferences.set("fullscreen", args[2]);
-        default:
-            throw new Error(`Unable to handle preferences function: ${fn}`);
-        }
-    });
-
-    let fullscreen = preferences.get("fullscreen", true);
-    if (app.commandLine.hasSwitch("no-fullscreen")) {
-        fullscreen = false;
-    } else if (app.commandLine.hasSwitch("fullscreen")) {
-        fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
-    }
-    preferences.set("fullscreen", fullscreen);
-
+    //#region Steamworks API integration
     if (app.commandLine.hasSwitch("steam-app")) {
 
         // Necessary for Steam Overlays to work.
@@ -90,6 +71,28 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             }
         });
     }
+    //#endregion
+
+    //#region Fullscreen preferences API
+    electron.ipcMain.handle("preferences", async (_event, args) => {
+        const fn = `${args[0]}#${args[1]}`;
+        switch (fn) {
+        case "fullscreen#isEnabled":
+            return preferences.get("fullscreen", true);
+        case "fullscreen#setEnabled":
+            return preferences.set("fullscreen", args[2]);
+        default:
+            throw new Error(`Unable to handle preferences function: ${fn}`);
+        }
+    });
+    let fullscreen = preferences.get("fullscreen", true);
+    if (app.commandLine.hasSwitch("no-fullscreen")) {
+        fullscreen = false;
+    } else if (app.commandLine.hasSwitch("fullscreen")) {
+        fullscreen = ["", "true"].includes(app.commandLine.getSwitchValue("fullscreen").toLowerCase());
+    }
+    preferences.set("fullscreen", fullscreen);
+    //#endregion
 
     // Create the browser window.
     const mainWindow = new electron.BrowserWindow({
@@ -131,9 +134,9 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
         }
     }
 
-
     // Hide menu
     mainWindow.setMenu(null);
+
 }
 
 ((app: electron.App): void => {

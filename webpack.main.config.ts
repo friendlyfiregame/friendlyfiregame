@@ -1,10 +1,9 @@
 // cSpell:disable
-// @ts-check
 
-const path = require("node:path");
+import * as path from "node:path";
+import {Configuration} from "webpack";
 
-/** @type {import("webpack").Configuration} */
-const config = {
+const config: Configuration = {
     mode: "production",
     entry: "./src/electron-main.ts",
     devtool: false,
@@ -36,19 +35,19 @@ const config = {
                 // relocator loader generates a "fake" .node file which is really
                 // a cjs file.
                 test: /native_modules\/.+\.node$/,
-                use: 'node-loader',
+                use: "node-loader",
             },
             {
                 test: /\.(m?js|node|so|dll|dylib)$/,
                 parser: { amd: false },
                 use: {
-                    loader: '@vercel/webpack-asset-relocator-loader',
+                    loader: "@vercel/webpack-asset-relocator-loader",
                     options: {
-                        outputAssetBase: 'native_modules',
-                    },
-                },
-            },
-        ],
+                        outputAssetBase: "native_modules",
+                    }
+                }
+            }
+        ]
     }
 };
-module.exports = config;
+export default config;
