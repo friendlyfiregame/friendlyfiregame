@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   was broken and did not work as supposed to. The initialization procedure of the game
   has been reworked to address this issue and the overlay now works flawlessly.
 
+- Switching from and to fullscreen mode in the Desktop app was broken and did not work
+  as supposed to. The initialization procedure of the game has been reworked to address
+  this issue and switching should work again.
+
 ## [2.6.0] - 2022-11-17
 
 ### Added

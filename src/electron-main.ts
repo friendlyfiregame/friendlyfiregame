@@ -35,7 +35,8 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             enableWebSQL: false,
             disableDialogs: true,
             spellcheck: false,
-            preload: path.join(__dirname, "..", "renderer", "preload.js")
+            preload: path.join(__dirname, "..", "renderer", "electron-preload.js"),
+            enablePreferredSizeMode: true
         }
     });
     mainWindow.setAspectRatio(GAME_CANVAS_WIDTH / GAME_CANVAS_HEIGHT);
