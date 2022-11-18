@@ -34,7 +34,6 @@
     "test": "npm run -s cspell && npm run -s lint && npm run -s check",
     "compile": "npx tsc",
     "watch": "npx webpack watch",
-    "prepare": "npm run -s clean",
     "dist": "npx webpack",
     "start": "npx webpack serve --devtool=inline-source-map",
     "package": "npx electron-forge package",
