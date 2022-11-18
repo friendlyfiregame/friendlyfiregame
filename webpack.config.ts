@@ -3,6 +3,7 @@ import * as path from "node:path";
 import {Configuration, WebpackPluginInstance} from "webpack";
 import "webpack-dev-server";
 
+import {default as HtmlWebpackPlugin} from "html-webpack-plugin";
 import {default as CopyPlugin} from "copy-webpack-plugin";
 import {default as GenerateJsonPlugin} from "generate-json-webpack-plugin";
 import {GitRevisionPlugin} from "git-revision-webpack-plugin";
@@ -13,7 +14,7 @@ const configuration: Configuration = {
     entry: "./src/FriendlyFire.ts",
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "FriendlyFire.js",
+        filename: "index.js",
         chunkFilename: "[name].js?m=[chunkhash]",
         hashFunction: "sha256"
     },
@@ -35,12 +36,9 @@ const configuration: Configuration = {
         static: {
             directory: path.join(__dirname, "dist"),
             watch: {
-                ignored: [
-                    path.resolve(__dirname, "src/**/*.ts")
-                ],
                 usePolling: false
             }
-        }
+        },
     },
     devtool: "source-map",
     stats: {
@@ -57,7 +55,7 @@ const configuration: Configuration = {
                 include: [
                     path.resolve(__dirname, "src")
                 ],
-                use: ["ts-loader"],
+                use: "ts-loader",
                 exclude: /node_modules/,
                 enforce: "pre"
             }
@@ -65,19 +63,17 @@ const configuration: Configuration = {
     },
     plugins: [
         gitRevisionPlugin,
+        new HtmlWebpackPlugin({
+            template: "./src/index.html.ejs",
+            inject: "body",
+            scriptLoading: "defer"
+        }),
         new GenerateJsonPlugin("appinfo.json", {
             version: process.env.npm_package_version,
             gitCommitHash: gitRevisionPlugin.commithash()
         }) as WebpackPluginInstance,
         new CopyPlugin({ patterns: [
-            //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
-            { from: "index.html", transform(content: any) {
-                return content.toString().replace(
-                    "src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
-                    "src=\"FriendlyFire.js\""
-                );
-            }},
             { from: "style.css" },
             { from: "manifest.webmanifest" }
         ]})

@@ -106,9 +106,9 @@ const config: ForgeConfig = {
           config: webpackRendererConfig,
           entryPoints: [
             {
-              //html: "index.html",
               js: "./src/FriendlyFire.ts",
               name: "./",
+              nodeIntegration: false,
               preload: {
                   js: "./src/electron-preload.ts"
               }

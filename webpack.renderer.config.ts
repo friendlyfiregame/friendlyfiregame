@@ -2,7 +2,8 @@
 
 import * as path from "node:path";
 import {Configuration} from "webpack";
-import CopyPlugin from "copy-webpack-plugin";
+import {default as HtmlWebpackPlugin} from "html-webpack-plugin";
+import {default as CopyPlugin} from "copy-webpack-plugin";
 import GenerateJsonPlugin from "generate-json-webpack-plugin";
 import {GitRevisionPlugin} from "git-revision-webpack-plugin";
 const gitRevisionPlugin = new GitRevisionPlugin();
@@ -27,7 +28,7 @@ const config: Configuration = {
                 include: [
                     path.resolve(__dirname, "src")
                 ],
-                use: ["ts-loader"],
+                use: "ts-loader",
                 exclude: /node_modules/,
                 enforce: "pre"
             }
@@ -38,16 +39,14 @@ const config: Configuration = {
             version: process.env.npm_package_version,
             gitCommitHash: gitRevisionPlugin.commithash()
         }) as any),
+        new HtmlWebpackPlugin({
+            template: "./src/index.html.ejs",
+            inject: "body",
+            scriptLoading: "defer"
+        }),
         new CopyPlugin({
             patterns: [
                 { from: "assets/", to: "assets/" },
-                {
-                    from: "index.html", transform(content) {
-                        return content.toString().replace(
-                            "src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
-                            "src=\"index.js\"");
-                    }
-                },
                 { from: "style.css" },
                 { from: "manifest.webmanifest" }
             ]

@@ -26,7 +26,7 @@ const config: Configuration = {
                 include: [
                     path.resolve(__dirname, "src")
                 ],
-                use: ["ts-loader"],
+                use: "ts-loader",
                 exclude: /node_modules/,
                 enforce: "pre"
             },
@@ -38,7 +38,7 @@ const config: Configuration = {
                 use: "node-loader",
             },
             {
-                test: /\.(m?js|node|so|dll|dylib)$/,
+                test: /\.(mjs|cjs|js|node|so|dll|dylib)$/,
                 parser: { amd: false },
                 use: {
                     loader: "@vercel/webpack-asset-relocator-loader",
