@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Support for Steam overlays in the Desktop app (introduced in the previous version)
+  was broken and did not work as supposed to. The initialization procedure of the game
+  has been reworked to address this issue and the overlay now works flawlessly.
+
 ## [2.6.0] - 2022-11-17
 
 ### Added

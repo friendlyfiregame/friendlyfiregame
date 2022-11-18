@@ -1,4 +1,9 @@
 /**
+ * Name of the app/game to be displayed basically everywhere.
+ */
+export const APP_NAME = "Friendly Fire";
+
+/**
  * Width of the game canvas in pixels.
  */
 export const GAME_CANVAS_WIDTH = 480;

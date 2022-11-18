@@ -3,7 +3,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
 import { ControllerEvent } from "../input/ControllerEvent";
-import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "../constants";
+import { APP_NAME, DIALOG_FONT, GAME_CANVAS_WIDTH } from "../constants";
 import { easeOutCubic } from "../easings";
 import { FadeTransition } from "../transitions/FadeTransition";
 import { FriendlyFire } from "../FriendlyFire";
@@ -314,7 +314,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
     private addTitle(credits: SceneNode, y: number, x: number): number {
         const gap = 5;
-        const titleText = "Friendly Fire";
+        const titleText = APP_NAME;
         const versionText = isDev() ? "DEVELOPMENT VERSION" : `Version ${CreditsScene.appInfo.version}`;
 
         y += new TextNode({
