@@ -13,6 +13,10 @@ on:
     - opened
     - synchronize
     - reopened
+
+env:
+  NODE_ENV: development
+
 jobs:
 
   build_webapp:
@@ -55,16 +59,7 @@ jobs:
     - name: Run linters
       id: run_linters
       shell: bash
-      run: |
-        echo "::group::markdownlint"
-        npm run -s markdownlint
-        echo "::endgroup::"
-        echo "::group::htmlhint"
-        npm run -s htmlhint
-        echo "::endgroup::"
-        echo "::group::eslint"
-        npm run -s eslint -- -o out/eslint.out --no-color || true
-        echo "::endgroup::"
+      run: npm run -s lint
     - name: Compile sources
       run: npm run -s compile
     - name: Install XFFB (required for headless tests)
@@ -118,8 +113,8 @@ jobs:
       env:
         RUNNER_OS: ${{runner.os}}
       run: |
-        RUNNER_OS_LOWER=`echo "${RUNNER_OS}" | tr '[:upper:]' '[:lower:]'`
-        echo "os=${RUNNER_OS_LOWER}" >> $GITHUB_OUTPUT
+        runner_os_lower=`echo "${RUNNER_OS}" | tr '[:upper:]' '[:lower:]'`
+        echo "os=${runner_os_lower}" >> $GITHUB_OUTPUT
         echo "arch=x64" >> $GITHUB_OUTPUT
     - name: Checkout code
       uses: actions/checkout@v3
@@ -146,8 +141,10 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
     - run: npm install
-    - run: npm run -s compile
-    - run: npm run -s package
+    - name: Create Electron game package
+      env:
+        NODE_ENV: production
+      run: npm run -s package
     - name: Archive Electron game package
       uses: actions/upload-artifact@v3
       with:

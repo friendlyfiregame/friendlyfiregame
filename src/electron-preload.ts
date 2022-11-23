@@ -11,14 +11,14 @@ const steamworks: SteamworksApi = {
         getSteamId: async () => ipcRenderer.invoke("steamworks", ["localplayer", "getSteamId"])
     },
     achievement: {
-        isActivated: async (achievementId: string) => ipcRenderer.invoke("steamworks", ["achievement", "isActivated", achievementId]),
-        activate: async (achievementId: string) => ipcRenderer.invoke("steamworks", ["achievement", "activate", achievementId])
+        isActivated: async (achievementId) => ipcRenderer.invoke("steamworks", ["achievement", "isActivated", achievementId]),
+        activate: async (achievementId) => ipcRenderer.invoke("steamworks", ["achievement", "activate", achievementId])
     },
     cloud: {
         isEnabledForApp: async () => ipcRenderer.invoke("steamworks", ["cloud", "isEnabledForApp"]),
         isEnabledForAccount: async () => ipcRenderer.invoke("steamworks", ["cloud", "isEnabledForAccount"]),
-        readFile: async (name: string) => ipcRenderer.invoke("steamworks", ["cloud", "readFile", name]),
-        writeFile: async (name: string, content: string) => ipcRenderer.invoke("steamworks", ["cloud", "writeFile", name, content]),
+        readFile: async (name) => ipcRenderer.invoke("steamworks", ["cloud", "readFile", name]),
+        writeFile: async (name, content) => ipcRenderer.invoke("steamworks", ["cloud", "writeFile", name, content]),
         deleteFile: async (name) => ipcRenderer.invoke("steamworks", ["cloud", "deleteFile", name])
     }
 };

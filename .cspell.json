@@ -28,7 +28,8 @@
         "/lib/**",
         "/dist/**",
         "*.log",
-        "*.tgz"
+        "*.tgz",
+        "*.xcf"
     ],
     "words": [
         "abcdefghijklmnopqrstuvwxyz",
@@ -183,6 +184,7 @@
         "steamworks",
         "stonedisciple",
         "stoneplatform",
+        "stylesheet",
         "subconditions",
         "superthrow",
         "tagname",

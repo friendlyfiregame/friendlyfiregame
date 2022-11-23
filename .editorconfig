@@ -1,5 +1,3 @@
-# http://editorconfig.org
-
 root = true
 
 [*]
@@ -11,11 +9,5 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 quote_type = double
 
-[*.html]
+[*.{ejs,html,json,xml,yaml,yml}]
 indent_size = 2
-
-[*.xml]
-indent_size = 2
-
-[*.properties]
-charset = latin1

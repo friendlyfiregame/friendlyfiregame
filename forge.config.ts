@@ -1,27 +1,27 @@
-import * as fs from "node:fs";
-import * as path from "node:path";
+import { default as fs } from "node:fs";
+import { default  as path } from "node:path";
 
-import * as semver from "semver";
-import * as git from "git-rev-sync";
+import { default as semver } from "semver";
+import { default as git } from "git-rev-sync";
 
-import {ForgeConfig, ForgePlatform, ForgeArch} from "@electron-forge/shared-types";
+import { ForgeConfig, ForgePlatform, ForgeArch } from "@electron-forge/shared-types";
 
 // Plugins
-import {WebpackPlugin} from "@electron-forge/plugin-webpack";
-import {AutoUnpackNativesPlugin} from "@electron-forge/plugin-auto-unpack-natives";
+import { WebpackPlugin } from "@electron-forge/plugin-webpack";
+import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-natives";
 
 // Makers
-import {MakerSquirrel} from "@electron-forge/maker-squirrel";
-import {MakerZIP} from "@electron-forge/maker-zip";
-import {MakerDeb} from "@electron-forge/maker-deb";
-import {MakerRpm} from "@electron-forge/maker-rpm";
+import { MakerSquirrel } from "@electron-forge/maker-squirrel";
+import { MakerZIP } from "@electron-forge/maker-zip";
+import { MakerDeb } from "@electron-forge/maker-deb";
+import { MakerRpm } from "@electron-forge/maker-rpm";
 
 // Publishers
-import {PublisherGithub} from "@electron-forge//publisher-github";
+import { PublisherGithub } from "@electron-forge//publisher-github";
 
 // Webpack configurations
-import webpackMainConfig from "./webpack.main.config";
-import webpackRendererConfig from "./webpack.renderer.config";
+import { default as webpackMainConfig } from "./webpack.electron-main.config";
+import { default as webpackRendererConfig } from "./webpack.electron-renderer.config";
 
 const productName = "Friendly Fire";
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json")).toString());
@@ -49,7 +49,7 @@ const config: ForgeConfig = {
             ProductName: "Friendly Fire",
             "requested-execution-level": "asInvoker",
         },
-        icon: path.resolve(__dirname, "assets", "appicon.iconset"),
+        icon: "./assets/appicon.iconset",
         appCopyright: "Copyright (C) 2020–2022 Eduard But, Nico Huelscher, Benjamin Jung, Nils Kreutzer, Bastian Lang, Ranjit Mevius, Markus Over, " +
         "Klaus Reimer and Jennifer van Veen",
         appVersion: appVersion,
@@ -62,7 +62,7 @@ const config: ForgeConfig = {
     },
     makers: [
       new MakerSquirrel({
-        name: "friendlyfire",
+        name: "friendlyfiregame",
         version: appVersion,
         usePackageJson: true,
       }),
@@ -95,27 +95,26 @@ const config: ForgeConfig = {
       }),
     ],
     plugins: [
-      new AutoUnpackNativesPlugin({}),
       new WebpackPlugin({
         mainConfig: webpackMainConfig,
         jsonStats: false,
         packageSourceMaps: true,
         renderer: {
-          nodeIntegration: false,
           jsonStats: false,
           config: webpackRendererConfig,
           entryPoints: [
             {
+              html: "./index.html",
               js: "./src/FriendlyFire.ts",
-              name: "./",
-              nodeIntegration: false,
+              name: ".",
               preload: {
                   js: "./src/electron-preload.ts"
               }
             }
           ]
         }
-      })
+      }),
+      new AutoUnpackNativesPlugin({}),
     ],
     publishers: [
         new PublisherGithub({

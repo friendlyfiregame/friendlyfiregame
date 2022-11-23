@@ -7,6 +7,8 @@
     },
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "baseUrl": ".",
         "declaration": true,
         "downlevelIteration": true,
         "emitDecoratorMetadata": true,
@@ -27,6 +29,9 @@
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "outDir": "lib",
+        "paths": {
+          "*": ["node_modules/*"]
+        },
         "preserveSymlinks": true,
         "resolveJsonModule": false,
         "rootDir": "src",
@@ -37,8 +42,5 @@
     },
     "include": [
         "src/**/*.ts"
-    ],
-    "exclude": [
-        "webpack.config.ts"
     ]
 }

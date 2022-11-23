@@ -1,13 +1,18 @@
 // cSpell:disable
-import * as path from "node:path";
-import {Configuration, WebpackPluginInstance} from "webpack";
+import { default  as path } from "node:path";
+import { Configuration } from "webpack";
 import "webpack-dev-server";
 
-import {default as HtmlWebpackPlugin} from "html-webpack-plugin";
-import {default as CopyPlugin} from "copy-webpack-plugin";
-import {default as GenerateJsonPlugin} from "generate-json-webpack-plugin";
-import {GitRevisionPlugin} from "git-revision-webpack-plugin";
-const gitRevisionPlugin = new GitRevisionPlugin();
+import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
+
+import { typeScriptRules as rules } from "./webpack.rules";
+import { default as plugins } from "./webpack.plugins";
+
+plugins.push(new HtmlWebpackPlugin({
+    template: "./index.html",
+    inject: "body",
+    scriptLoading: "defer"
+}));
 
 const configuration: Configuration = {
     target: "web",
@@ -18,15 +23,8 @@ const configuration: Configuration = {
         chunkFilename: "[name].js?m=[chunkhash]",
         hashFunction: "sha256"
     },
-    mode: "development",
     resolve: {
-        extensions: [".ts", ".js"],
-        mainFields: ["browser", "main", "module"],
-        modules: [
-            "./src",
-            "node_modules"
-        ],
-        symlinks: false
+        extensions: [".ts", ".js"]
     },
     devServer: {
         host: "0.0.0.0",
@@ -34,7 +32,7 @@ const configuration: Configuration = {
         compress: true,
         allowedHosts: ["*"],
         static: {
-            directory: path.join(__dirname, "dist"),
+            directory: "./dist",
             watch: {
                 usePolling: false
             }
@@ -49,34 +47,8 @@ const configuration: Configuration = {
         maxEntrypointSize: 16777216
     },
     module: {
-        rules: [
-            {
-                test: /\.ts$/,
-                include: [
-                    path.resolve(__dirname, "src")
-                ],
-                use: "ts-loader",
-                exclude: /node_modules/,
-                enforce: "pre"
-            }
-        ]
+        rules: rules
     },
-    plugins: [
-        gitRevisionPlugin,
-        new HtmlWebpackPlugin({
-            template: "./src/index.html.ejs",
-            inject: "body",
-            scriptLoading: "defer"
-        }),
-        new GenerateJsonPlugin("appinfo.json", {
-            version: process.env.npm_package_version,
-            gitCommitHash: gitRevisionPlugin.commithash()
-        }) as WebpackPluginInstance,
-        new CopyPlugin({ patterns: [
-            { from: "assets/", to: "assets/" },
-            { from: "style.css" },
-            { from: "manifest.webmanifest" }
-        ]})
-    ]
+    plugins: plugins
 };
 export default [configuration];
