@@ -177,7 +177,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         // Shortened Git commit hash to provide support
         new TextNode({
             font: CreditsScene.standardFont,
-            text: CreditsScene.appInfo.gitCommitHash.substring(0, 16),
+            text: CreditsScene.appInfo.gitCommitHash.substring(0, 7),
             anchor: Direction.BOTTOM_RIGHT,
             x: this.game.width - 7,
             y: this.game.height - 4,

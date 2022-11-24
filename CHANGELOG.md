@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.2] - 2022-11-24
+
+### Added
+
+- ARM64 Builds for macOS and Linux have been added to the continuous integration pipeline.
+
+### Changed
+
+- The credits page now only shows the first seven characters of the Git SHA-1 sum
+  to allow for easier bug reports.
 
 ### Updated
 
