@@ -66,7 +66,7 @@
     "@typescript-eslint/parser": "^5.44.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^11.0.0",
-    "cspell": "^6.14.3",
+    "cspell": "^6.15.0",
     "electron": "^21.3.1",
     "eslint": "^8.28.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
