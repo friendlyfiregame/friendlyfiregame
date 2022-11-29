@@ -57,7 +57,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^6.0.3",
     "@electron-forge/plugin-webpack": "^6.0.3",
     "@electron-forge/publisher-github": "6.0.3",
-    "@kayahr/jest-electron-runner": "^29.1.0",
+    "@kayahr/jest-electron-runner": "^29.2.0",
     "@tsconfig/recommended": "^1.0.1",
     "@types/generate-json-webpack-plugin": "^0.3.4",
     "@types/git-rev-sync": "^2.0.0",
