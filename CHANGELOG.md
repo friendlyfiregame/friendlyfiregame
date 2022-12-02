@@ -7,10 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-
 ### Updated
 
 - The Desktop apps are now based on Electron v22.0.0.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
+## [2.6.2] - 2022-11-24
+
+### Added
+
+- ARM64 Builds for macOS and Linux have been added to the continuous integration pipeline.
+
+### Changed
+
+- The credits page now only shows the first seven characters of the Git SHA-1 sum
+  to allow for easier bug reports.
+
+### Updated
+
+- The Desktop apps are now based on Electron v21.3.1.
   As always, a new Electron runtime should offer improved performance, security and
   bug fixes, that may or may not be visible or even useful to end users.
 
