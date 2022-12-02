@@ -8,6 +8,7 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
         "baseUrl": ".",
         "declaration": true,
         "downlevelIteration": true,
@@ -26,7 +27,10 @@
         "newLine": "lf",
         "noEmitOnError": false,
         "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": false,
         "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noUnusedLocals": true,
         "outDir": "lib",
         "paths": {
@@ -38,6 +42,8 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
+        "strictPropertyInitialization": true,
+        "strictNullChecks": true,
         "target": "ES2015"
     },
     "include": [

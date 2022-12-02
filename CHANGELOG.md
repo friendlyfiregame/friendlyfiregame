@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+
+### Updated
+
+- The Desktop apps are now based on Electron v22.0.0.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
+## [2.6.1] - 2022-11-18
+
+### Fixed
+
+- Support for Steam overlays in the Desktop app (introduced in the previous version)
+  was broken and did not work as supposed to. The initialization procedure of the game
+  has been reworked to address this issue and the overlay now works flawlessly.
+
+- Switching from and to fullscreen mode in the Desktop app was broken and did not work
+  as supposed to. The initialization procedure of the game has been reworked to address
+  this issue and switching should work again.
+
+## [2.6.0] - 2022-11-17
+
+### Added
+
+- New in-game configuration options have been added to allow the individual adjustment of
+  music and sound volumes.
+
+
+
 ## [2.6.2] - 2022-11-24
 
 ### Added
