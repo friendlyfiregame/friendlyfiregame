@@ -49,8 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New in-game configuration options have been added to allow the individual adjustment of
   music and sound volumes.
 
-
-
 ## [2.6.2] - 2022-11-24
 
 ### Added
