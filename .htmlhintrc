@@ -1,5 +1,4 @@
 {
-
     "$schema": "https://json.schemastore.org/htmlhint#",
 
     "doctype-first": true,
@@ -33,5 +32,4 @@
 
     "space-tab-mixed-disabled": "space",
     "spec-char-escape": true
-
 }
