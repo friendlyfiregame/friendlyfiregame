@@ -23,9 +23,11 @@ export class SoundEmitter extends Entity {
         this.intensity = intensity;
     }
 
-    public draw(): void {}
+    public override draw(): void {
+        // Intentionally left empty.
+    }
 
-    public update(): void {
+    public override update(): void {
         const vol = this.scene.paused ? 0 : calculateVolume(
             this.distanceToPlayer, this.maxVolume, this.intensity
         );
