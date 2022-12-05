@@ -68,7 +68,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "cspell": "^6.15.1",
     "electron": "^22.0.0",
-    "eslint": "^8.28.0",
+    "eslint": "^8.29.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "generate-json-webpack-plugin": "^2.0.0",
     "git-rev-sync": "^3.0.2",
