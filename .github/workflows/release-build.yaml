@@ -8,20 +8,20 @@ on:
 jobs:
   create_github_release:
     name: Create Github Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Read version from package.json
       id: version
-      uses: notiz-dev/github-action-json-property@v0.1.0
+      uses: actions/github-script@v6
       with:
-        path: 'package.json'
-        prop_path: 'version'
+        script: return require("./package.json").version
+        result-encoding: string
     - name: Assert version in package.json matches Git tag
       shell: bash
       env:
-        VERSION: ${{steps.version.outputs.prop}}
+        VERSION: ${{steps.version.outputs.result}}
       run: |
         GIT_TAG_VERSION="${GITHUB_REF#refs/tags/v}"
         if [[ "${GIT_TAG_VERSION}" != "${VERSION}" ]]; then

@@ -1,7 +1,9 @@
 {
-    "$schema": "https://json.schemastore.org/npmpackagejsonlintrc#",
-    "rules": {
-        "private-type": "warning",
-        "version-format": "error"
-    }
+  "$schema": "https://json.schemastore.org/npmpackagejsonlintrc#",
+  "rules": {
+    "name-format": "error",
+    "private-type": "warning",
+    "version-format": "error",
+    "version-type": "error"
+  }
 }

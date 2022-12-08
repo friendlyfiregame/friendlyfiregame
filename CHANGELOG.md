@@ -9,6 +9,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- An initial and almost empty Service Worker has been added to the web-based version
+  of the game. This will allow for a future offline-first experience.
+
+### Updated
+
+- The Desktop apps are now based on Electron v22.0.0.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
+## [2.6.2] - 2022-11-24
+
+### Added
+
+- ARM64 Builds for macOS and Linux have been added to the continuous integration pipeline.
+
+### Changed
+
+- The credits page now only shows the first seven characters of the Git SHA-1 sum
+  to allow for easier bug reports.
+
+### Updated
+
+- The Desktop apps are now based on Electron v21.3.1.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
+## [2.6.1] - 2022-11-18
+
+### Fixed
+
+- Support for Steam overlays in the Desktop app (introduced in the previous version)
+  was broken and did not work as supposed to. The initialization procedure of the game
+  has been reworked to address this issue and the overlay now works flawlessly.
+
+- Switching from and to fullscreen mode in the Desktop app was broken and did not work
+  as supposed to. The initialization procedure of the game has been reworked to address
+  this issue and switching should work again.
+
+## [2.6.0] - 2022-11-17
+
+### Added
+
+- New in-game configuration options have been added to allow the individual adjustment of
+  music and sound volumes.
+
+## [2.6.2] - 2022-11-24
+
+### Added
+
+- ARM64 Builds for macOS and Linux have been added to the continuous integration pipeline.
+
+### Changed
+
+- The credits page now only shows the first seven characters of the Git SHA-1 sum
+  to allow for easier bug reports.
+
+### Updated
+
+- The Desktop apps are now based on Electron v21.3.1.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
+
+## [2.6.1] - 2022-11-18
+
+### Fixed
+
+- Support for Steam overlays in the Desktop app (introduced in the previous version)
+  was broken and did not work as supposed to. The initialization procedure of the game
+  has been reworked to address this issue and the overlay now works flawlessly.
+
+- Switching from and to fullscreen mode in the Desktop app was broken and did not work
+  as supposed to. The initialization procedure of the game has been reworked to address
+  this issue and switching should work again.
+
+## [2.6.0] - 2022-11-17
+
+### Added
+
 - New in-game configuration options have been added to allow the individual adjustment of
   music and sound volumes.
 
@@ -17,8 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   mode and start windowed or in fullscreen mode according to the settings you made.
 
 - The Desktop app of the game has gained support for Steam overlays. Prior to this release,
-  it was not possible to use Steam's key combination to toggle the Steam overlay. This should
-  now be possible.
+  it was not possible to use Steam's key combination (usually Shift+Tab)to toggle the Steam
+  overlay. This should now be possible.
 
 - Gamepad types can be automatically detected. It is still possible to overwrite the
   gamepad button styles to be shown in help tooltips in the "controls" screen, though.
@@ -29,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- The Desktop apps are now based on Electron v20.1.4.
+- The Desktop apps are now based on Electron v21.3.0.
   As always, a new Electron runtime should offer improved performance, security and
   bug fixes, that may or may not be visible or even useful to end users.
 

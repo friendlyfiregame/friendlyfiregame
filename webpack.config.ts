@@ -1,25 +1,39 @@
 // cSpell:disable
-import * as path from "node:path";
-import {Configuration, WebpackPluginInstance} from "webpack";
+import { default as process } from "node:process";
+import { default  as path } from "node:path";
+import { Configuration } from "webpack";
 import "webpack-dev-server";
 
-import {default as CopyPlugin} from "copy-webpack-plugin";
-import {default as GenerateJsonPlugin} from "generate-json-webpack-plugin";
-import {GitRevisionPlugin} from "git-revision-webpack-plugin";
-const gitRevisionPlugin = new GitRevisionPlugin();
+import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
 
-const configuration: Configuration = {
-    entry: "./lib/FriendlyFire.js",
+import { typeScriptRules as rules } from "./webpack.rules";
+import { default as plugins } from "./webpack.plugins";
+
+type NodeEnv = Configuration["mode"];
+
+plugins.push(new HtmlWebpackPlugin({
+    template: "./index.html",
+    inject: "body",
+    scriptLoading: "defer"
+}));
+
+const mode = ((nodeEnv: string|undefined, defaultEnv: NodeEnv): NodeEnv => (
+    nodeEnv !== undefined && ["production", "development", "none" ].includes(nodeEnv)) ?
+        nodeEnv as Configuration["mode"] :
+        defaultEnv)(process.env.NODE_ENV, "production");
+
+export const webConfiguration: Configuration = {
+    mode: mode,
+    target: "web",
+    entry: "./src/web/FriendlyFire.ts",
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "FriendlyFire.js",
+        filename: "index.js",
         chunkFilename: "[name].js?m=[chunkhash]",
         hashFunction: "sha256"
     },
-    mode: "development",
     resolve: {
-        symlinks: false,
-        mainFields: ["browser", "main", "module"]
+        extensions: [".ts", ".js"]
     },
     devServer: {
         host: "0.0.0.0",
@@ -27,51 +41,42 @@ const configuration: Configuration = {
         compress: true,
         allowedHosts: ["*"],
         static: {
-            directory: path.join(__dirname, "dist"),
+            directory: "./dist",
             watch: {
-                ignored: [
-                    path.resolve(__dirname, "src/**/*.ts")
-                ],
                 usePolling: false
             }
-        }
+        },
     },
     devtool: "source-map",
-    stats: {
-        warningsFilter: /System.import/
-    },
     performance: {
         maxAssetSize: 16777216,
         maxEntrypointSize: 16777216
     },
     module: {
-        rules: [
-            {
-                test: /\.js$/,
-                include: [
-                    path.resolve(__dirname, "lib")
-                ],
-                use: ["source-map-loader"],
-                enforce: "pre"
-            }
-        ]
+        rules: rules(path.resolve(__dirname, "src", "web", "tsconfig.json"))
     },
-    plugins: [
-        gitRevisionPlugin,
-        new GenerateJsonPlugin("appinfo.json", {
-            version: process.env.npm_package_version,
-            gitCommitHash: gitRevisionPlugin.commithash()
-        }) as WebpackPluginInstance,
-        new CopyPlugin({ patterns: [
-            //{ from: "src/demo/**/*.{html,css}" },
-            { from: "assets/", to: "assets/" },
-            { from: "index.html", transform(content: any) {
-                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/FriendlyFire\"",
-                    "src=\"FriendlyFire.js\"");
-            }},
-            { from: "style.css" },
-            { from: "manifest.webmanifest" }
-        ]})
-    ]
+    plugins: plugins
 };
-export default configuration;
+
+export const serviceWorkerConfiguration: Configuration = {
+    mode: mode,
+    target: "webworker",
+    entry: "./src/service-worker/index.ts",
+    output: {
+        path: path.join(__dirname, "dist"),
+        filename: "service-worker.js",
+        chunkFilename: "[name].js?m=[chunkhash]",
+        hashFunction: "sha256"
+    },
+    resolve: {
+        extensions: [".ts", ".js"]
+    },
+    module: {
+        rules: rules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
+    }
+};
+
+export default [
+    webConfiguration,
+    serviceWorkerConfiguration
+];

@@ -1,5 +1,6 @@
 {
     "image": "pixcelsior.png",
+    "characterHeight": 12,
     "characterMapping": [
         {
             "char": " ",

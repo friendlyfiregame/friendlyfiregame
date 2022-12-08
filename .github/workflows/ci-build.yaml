@@ -13,11 +13,18 @@ on:
     - opened
     - synchronize
     - reopened
+
+env:
+  NODE_ENV: development
+  ARTIFACT_NAME: friendlyfiregame
+
 jobs:
 
   build_webapp:
     name: Build Webapp
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
+    env:
+      DISPLAY: ':99.0'
     steps:
     - name: git checkout
       uses: actions/checkout@v3
@@ -25,14 +32,8 @@ jobs:
       id: pr
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Read version from package.json
-      id: version
-      uses: notiz-dev/github-action-json-property@v0.1.0
-      with:
-        path: 'package.json'
-        prop_path: 'version'
     - name: Extract branch name
-      if: github.event_name != 'pull_request'
+      if: ${{ github.event_name != 'pull_request' }}
       shell: bash
       run: echo "GIT_BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "${GITHUB_ENV}"
       id: extract_branch
@@ -40,18 +41,18 @@ jobs:
       uses: actions/setup-node@v3
       with:
         architecture: x64
-        node-version: '14'
+        node-version: '18'
     - name: Cache node modules
       uses: actions/cache@v3
       env:
         cache-name: cache-node-modules
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+          ${{ runner.os }}-${{ runner.arch }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-${{ runner.arch }}-build-
+          ${{ runner.os }}-${{ runner.arch }}-
     - name: Install NPM dependencies
       run: npm install
     - name: Check spelling
@@ -59,35 +60,28 @@ jobs:
     - name: Run linters
       id: run_linters
       shell: bash
-      run: |
-        echo "::group::markdownlint"
-        npm run -s markdownlint
-        echo "::endgroup::"
-        echo "::group::htmlhint"
-        npm run -s htmlhint
-        echo "::endgroup::"
-        echo "::group::eslint"
-        npm run -s eslint -- -o out/eslint.out --no-color || true
-        echo "::endgroup::"
+      run: npm run -s lint
     - name: Compile sources
       run: npm run -s compile
+    - name: Install XFFB (required for headless tests)
+      run:
+        # See: https://codito.in/xvfb-in-github-action/
+        sudo apt install -y xvfb x11-utils libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 xdotool
     - name: Run headless tests
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        working-directory: ./
-        run: npm run -s coverage
+      run: xvfb-run --auto-servernum npm run -s coverage
     - run: npm run -s dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
       with:
         name: webapp-dist
         path: dist
+        if-no-files-found: error
 
   deploy_webapp:
     name: Deploy Webapp
     needs: build_webapp
     if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Download archived dist folder
       uses: actions/download-artifact@v3
@@ -107,51 +101,103 @@ jobs:
   build_electron_app:
     needs: build_webapp
     name: Build Electron Apps
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        os:
-        - ubuntu-20.04
-        - macos-10.15
-        - windows-2019
+        include:
+        - runner: windows-2022
+          target_os: win32
+          target_arch: x64
+          experimental: false
+        - runner: ubuntu-22.04
+          target_os: linux
+          target_arch: x64
+          experimental: false
+        - runner: ubuntu-22.04
+          target_os: linux
+          target_arch: arm64
+          experimental: true
+        - runner: macos-12
+          target_os: darwin
+          target_arch: x64
+          experimental: false
+        - runner: macos-12
+          target_os: darwin
+          target_arch: arm64
+          experimental: true
     steps:
     - name: Retrieve Operating System Information from Builder
       id: build_info
       shell: bash
       env:
         RUNNER_OS: ${{runner.os}}
+        RUNNER_ARCH: ${{ runner.arch }}
+        TARGET_OS: ${{ matrix.target_os }}
+        TARGET_ARCH: ${{ matrix.target_arch }}
       run: |
-        RUNNER_OS_LOWER=`echo "${RUNNER_OS}" | tr '[:upper:]' '[:lower:]'`
-        echo ::set-output name=os::${RUNNER_OS_LOWER}
-        echo ::set-output name=arch::x64
+        echo "runner_os=$(echo "${RUNNER_OS}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+        echo "runner_arch=$(echo "${RUNNER_ARCH}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+        echo "target_os=${TARGET_OS}" >> $GITHUB_OUTPUT
+        echo "target_arch=${TARGET_ARCH}" >> $GITHUB_OUTPUT
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Read version from package.json
       id: version
-      uses: notiz-dev/github-action-json-property@v0.1.0
+      uses: actions/github-script@v6
       with:
-        path: 'package.json'
-        prop_path: 'version'
+        script: return require("./package.json").version
+        result-encoding: string
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '14.x'
+        architecture: '${{steps.build_info.outputs.runner_arch}}'
+        node-version: '18'
     - name: Cache node modules
       uses: actions/cache@v3
       env:
         cache-name: cache-node-modules
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+          ${{ runner.os }}-${{ runner.arch }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-${{ runner.arch }}-build-
+          ${{ runner.os }}-${{ runner.arch }}-
     - run: npm install
-    - run: npm run -s compile
-    - run: npm run -s package
+    - name: Create Electron game package
+      env:
+        NODE_ENV: production
+      run: npm run -s package:${{steps.build_info.outputs.target_os}}-${{steps.build_info.outputs.target_arch}}
+    - name: Fixup target folder name
+      shell: bash
+      env:
+        TARGET_OS: ${{steps.build_info.outputs.target_os}}
+        TARGET_ARCH: ${{steps.build_info.outputs.target_arch}}
+      run: |
+        if [ "${TARGET_OS}" == "darwin" ] || [ "${TARGET_OS}" == "win32" ]; then
+          mv "./out/Friendly Fire-${TARGET_OS}-${TARGET_ARCH}" "./out/${ARTIFACT_NAME}-${TARGET_OS}-${TARGET_ARCH}"
+        fi
     - name: Archive Electron game package
+      id: create_archive
+      shell: bash
+      env:
+        VERSION: ${{steps.version.outputs.result}}
+        TARGET_OS: ${{steps.build_info.outputs.target_os}}
+        TARGET_ARCH: ${{steps.build_info.outputs.target_arch}}
+      run: |
+        tar -C ./out/${ARTIFACT_NAME}-${TARGET_OS}-${TARGET_ARCH} \
+        -cvf ./out/${ARTIFACT_NAME}-v${VERSION}-${TARGET_OS}-${TARGET_ARCH}.tar \
+        .
+        echo "package_name=${ARTIFACT_NAME}-v${VERSION}-${TARGET_OS}-${TARGET_ARCH}" >> $GITHUB_OUTPUT
+        echo "artifact_path=out/${ARTIFACT_NAME}-v${VERSION}-${TARGET_OS}-${TARGET_ARCH}.tar" >> $GITHUB_OUTPUT
+    - name: Upload archived Electron game package
+      env:
+        VERSION: ${{steps.version.outputs.result}}
+        TARGET_OS: ${{steps.build_info.outputs.target_os}}
+        TARGET_ARCH: ${{steps.build_info.outputs.target_arch}}
       uses: actions/upload-artifact@v3
       with:
-        name: friendlyfiregame-v${{steps.version.outputs.prop}}-${{steps.build_info.outputs.os}}-${{steps.build_info.outputs.arch}}.zip
-        path: out
+        name: ${{steps.create_archive.outputs.package_name}}
+        path: ${{steps.create_archive.outputs.artifact_path}}
+        if-no-files-found: error

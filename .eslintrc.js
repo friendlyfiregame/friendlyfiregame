@@ -13,8 +13,7 @@ const config = {
             "globalReturn": false,
             "impliedStrict": true,
             "jsx": false
-        },
-        //"project": path.resolve(__dirname, "tsconfig.json")
+        }
     },
     "parser": "@typescript-eslint/parser",
     "plugins": [

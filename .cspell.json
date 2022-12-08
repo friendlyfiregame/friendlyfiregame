@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/v6.8.2/cspell.schema.json#",
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/packages/cspell-types/cspell.schema.json#",
     "language": "en",
     "enabledLanguageIds": [
         "markdown",
@@ -22,11 +22,14 @@
         "/.github/**",
         ".htmlhintrc",
         ".mailmap",
+        "/branding/soundtrack/steam_album_metadata.csv",
+        "/scripts/**",
         "/out/**",
         "/lib/**",
         "/dist/**",
         "*.log",
-        "*.tgz"
+        "*.tgz",
+        "*.xcf"
     ],
     "words": [
         "abcdefghijklmnopqrstuvwxyz",
@@ -171,11 +174,13 @@
         "seedgrown",
         "seedplanted",
         "seedposition",
+        "serviceworker",
         "setlive",
         "shadowgate",
 	"shadowhand",
         "shadowpresence",
         "shiba",
+        "snes",
         "sobadly",
         "socio",
         "Soooo",
@@ -186,6 +191,7 @@
         "steamworks",
         "stonedisciple",
         "stoneplatform",
+        "stylesheet",
         "subconditions",
         "superthrow",
         "tagname",
