@@ -1,18 +1,24 @@
+import { default as path } from "node:path";
 import { RuleSetRule } from "webpack";
+import { Options } from "ts-loader";
 
-export const typeScriptRules: RuleSetRule[] = [
-    {
-        test: /\.tsx?$/,
-        exclude: /(node_modules|\.webpack)/,
-        enforce: "pre",
-        use: {
-          loader: "ts-loader",
-          options: {
-            transpileOnly: false,
-          },
-        },
-      },
-];
+export function typeScriptRules(configFile: string = path.resolve(".", "tsconfig.json")): RuleSetRule[] {
+    return [
+        {
+            test: /\.(tsx?)$/,
+            exclude: /(node_modules|\.webpack)/,
+            enforce: "pre",
+            use: {
+              loader: "ts-loader",
+              options: {
+                projectReferences: true,
+                transpileOnly: false,
+                configFile: configFile
+              } as Options
+            }
+          }
+    ];
+}
 
 export const nativeModuleRules: RuleSetRule[] = [
     // Add support for native node modules

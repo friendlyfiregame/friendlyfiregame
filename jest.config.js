@@ -9,13 +9,13 @@ const config = {
       runner: '@kayahr/jest-electron-runner',
       testEnvironment: '@kayahr/jest-electron-runner/environment',
       testMatch: [
-        "<rootDir>/lib/test/**/*.test.js"
+        "<rootDir>/lib/web/test/**/*.test.js"
       ]
     }
   ],
   collectCoverageFrom: [
-    "<rootDir>/lib/**/*.js",
-    "!<rootDir>/lib/test/**"
+    "<rootDir>/lib/web/**/*.js",
+    "!<rootDir>/lib/web/test/**"
   ],
   setupFilesAfterEnv: [
     "jest-extended/all"

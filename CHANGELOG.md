@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- An initial and almost empty Service Worker has been added to the web-based version
+  of the game. This will allow for a future offline-first experience.
+
 ### Updated
 
 - The Desktop apps are now based on Electron v22.0.0.

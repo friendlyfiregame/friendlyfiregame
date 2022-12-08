@@ -1,0 +1,60 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig#",
+    "extends": "@tsconfig/recommended/tsconfig.json",
+    "compileOnSave": true,
+    "typeAcquisition": {
+        "enable": true
+    },
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "baseUrl": ".",
+        "composite": true,
+        "declaration": true,
+        "downlevelIteration": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "lib": [
+            "ES2017",
+            "WebWorker",
+            "Webworker.Iterable"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "Node16",
+        "newLine": "lf",
+        "noEmitOnError": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "outDir": "../../lib/service-worker",
+        "paths": {
+          "*": ["../../node_modules/*"]
+        },
+        "preserveSymlinks": true,
+        "resolveJsonModule": false,
+        "rootDirs": [
+          "."
+        ],
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "strictPropertyInitialization": true,
+        "strictNullChecks": true,
+        "target": "ES2015"
+    },
+    "include": [
+        "**/*.ts"
+    ],
+    "references": [
+      {
+        "path": "../shared"
+      }
+    ]
+}

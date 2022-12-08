@@ -17,13 +17,15 @@ plugins.push(new HtmlWebpackPlugin({
     scriptLoading: "defer"
 }));
 
-const configuration: Configuration = {
-    mode: ((nodeEnv: string|undefined, defaultEnv: NodeEnv): NodeEnv => (
-        nodeEnv !== undefined && ["production", "development", "none" ].includes(nodeEnv)) ?
-            nodeEnv as Configuration["mode"] :
-            defaultEnv)(process.env.NODE_ENV, "production"),
+const mode = ((nodeEnv: string|undefined, defaultEnv: NodeEnv): NodeEnv => (
+    nodeEnv !== undefined && ["production", "development", "none" ].includes(nodeEnv)) ?
+        nodeEnv as Configuration["mode"] :
+        defaultEnv)(process.env.NODE_ENV, "production");
+
+export const webConfiguration: Configuration = {
+    mode: mode,
     target: "web",
-    entry: "./src/FriendlyFire.ts",
+    entry: "./src/web/FriendlyFire.ts",
     output: {
         path: path.join(__dirname, "dist"),
         filename: "index.js",
@@ -51,8 +53,30 @@ const configuration: Configuration = {
         maxEntrypointSize: 16777216
     },
     module: {
-        rules: rules
+        rules: rules(path.resolve(__dirname, "src", "web", "tsconfig.json"))
     },
     plugins: plugins
 };
-export default [configuration];
+
+export const serviceWorkerConfiguration: Configuration = {
+    mode: mode,
+    target: "webworker",
+    entry: "./src/service-worker/index.ts",
+    output: {
+        path: path.join(__dirname, "dist"),
+        filename: "service-worker.js",
+        chunkFilename: "[name].js?m=[chunkhash]",
+        hashFunction: "sha256"
+    },
+    resolve: {
+        extensions: [".ts", ".js"]
+    },
+    module: {
+        rules: rules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
+    }
+};
+
+export default [
+    webConfiguration,
+    serviceWorkerConfiguration
+];

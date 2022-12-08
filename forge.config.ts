@@ -22,6 +22,7 @@ import { PublisherGithub } from "@electron-forge//publisher-github";
 // Webpack configurations
 import { default as webpackMainConfig } from "./webpack.electron-main.config";
 import { default as webpackRendererConfig } from "./webpack.electron-renderer.config";
+import { default as webpackPreloadConfig } from "./webpack.electron-preload.config";
 
 const productName = "Friendly Fire";
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json")).toString());
@@ -105,10 +106,11 @@ const config: ForgeConfig = {
           entryPoints: [
             {
               html: "./index.html",
-              js: "./src/FriendlyFire.ts",
+              js: "./src/web/FriendlyFire.ts",
               name: ".",
               preload: {
-                  js: "./src/electron-preload.ts"
+                  config: webpackPreloadConfig,
+                  js: "./src/electron-preload/index.ts"
               }
             }
           ]
