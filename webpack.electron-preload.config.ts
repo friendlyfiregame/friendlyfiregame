@@ -7,7 +7,7 @@ import { typeScriptRules as rules } from "./webpack.rules";
 const config: Configuration = {
     target: "electron-preload",
     resolve: {
-        extensions: [".ts", ".js"],
+        extensions: [".ts", "..."],
     },
     module: {
         rules: rules(path.resolve("src", "electron-preload", "tsconfig.json"))

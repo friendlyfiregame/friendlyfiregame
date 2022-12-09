@@ -7,7 +7,7 @@ const config: Configuration = {
     entry: "./src/electron-main/index.ts",
     target: "electron-main",
     resolve: {
-        extensions: [".ts", ".js"]
+        extensions: [".ts", "..."]
     },
     module: {
         rules: typeScriptRules(path.resolve("src", "electron-main", "tsconfig.json")).concat(nativeModuleRules)

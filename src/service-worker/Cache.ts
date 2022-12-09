@@ -14,19 +14,39 @@ export class Cache extends Object {
         this.#name = name;
     }
 
-    public async open(): Promise<void> {
-        this.#cache = await caches.open(this.#name);
+    public async open(): Promise<this> {
+        if (this.#cache === undefined) {
+            this.#cache = await caches.open(this.#name);
+        }
+        return this;
     }
 
-    public async add(...resources: string[]): Promise<void> {
-        return this.addAll(resources);
+    public async put(request: Request, response: Response): Promise<void> {
+        if (this.#cache === undefined) {
+            await this.open();
+        }
+        return this.#cache!.put(request, response);
     }
 
-    public async addAll(resources: string[]): Promise<void> {
+    public async putAll(resources: string[]): Promise<void> {
         if (this.#cache === undefined) {
             await this.open();
         }
         return this.#cache!.addAll(resources);
+    }
+
+    public async deleteAll(): Promise<void> {
+        if (this.#cache === undefined) {
+            await this.open();
+        }
+        await (await this.#cache!.keys()).reduce(async (previousValue, currentValue, currentIndex, array): Promise<boolean> => {
+            await previousValue;
+            return this.#cache!.delete(currentValue.url);
+        }, Promise.resolve(true));
+    }
+
+    public override toString(): string {
+        return `Cache{name=${name}}`;
     }
 
 }

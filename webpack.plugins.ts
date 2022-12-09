@@ -19,7 +19,11 @@ const plugins: WebpackPluginInstance[] = [
         patterns: [
             { from: "assets/", to: "assets/" },
             { from: "style.css" },
-            { from: "manifest.webmanifest" }
+            { from: "manifest.webmanifest", transform: (content) => {
+                const json = JSON.parse(content.toString());
+                json.id = `?version=${process.env.npm_package_version}+build-${gitRevisionPlugin.commithash()?.substring(0, 7) || "unknown"}`;
+                return Buffer.from(JSON.stringify(json));
+            }}
         ]
     }),
     gitRevisionPlugin

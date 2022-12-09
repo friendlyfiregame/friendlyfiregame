@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- An initial and almost empty Service Worker has been added to the web-based version
-  of the game. This will allow for a future offline-first experience.
+- The browser version of the game is now offline-capable by utilizing a service worker.
+  The game can now be considered a modern progressive web app (PWA).
 
 ### Updated
 

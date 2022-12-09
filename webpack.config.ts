@@ -33,9 +33,10 @@ export const webConfiguration: Configuration = {
         hashFunction: "sha256"
     },
     resolve: {
-        extensions: [".ts", ".js"]
+        extensions: [".ts", "..."]
     },
     devServer: {
+        liveReload: true,
         host: "0.0.0.0",
         port: 8000,
         compress: true,
@@ -69,8 +70,9 @@ export const serviceWorkerConfiguration: Configuration = {
         hashFunction: "sha256"
     },
     resolve: {
-        extensions: [".ts", ".js"]
+        extensions: [".ts", "..."]
     },
+    devtool: "source-map",
     module: {
         rules: rules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
     }

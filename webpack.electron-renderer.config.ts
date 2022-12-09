@@ -8,7 +8,7 @@ import { default as plugins } from "./webpack.plugins";
 const config: Configuration = {
     target: "electron-renderer",
     resolve: {
-        extensions: [".ts", ".js"],
+        extensions: [".ts", "..."],
     },
     module: {
         rules: rules(path.resolve("src", "web", "tsconfig.json"))

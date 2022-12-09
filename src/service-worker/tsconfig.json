@@ -47,7 +47,7 @@
         "strict": true,
         "strictPropertyInitialization": true,
         "strictNullChecks": true,
-        "target": "ES2015"
+        "target": "ES2017"
     },
     "include": [
         "**/*.ts"

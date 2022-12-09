@@ -1,5 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/web-manifest-combined.json#",
+    "id": "?version=unknown",
     "lang": "en-US",
     "dir": "ltr",
     "name": "Friendly Fire",
