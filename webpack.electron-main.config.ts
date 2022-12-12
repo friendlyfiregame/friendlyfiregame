@@ -9,6 +9,7 @@ const config: Configuration = {
     resolve: {
         extensions: [".ts", "..."]
     },
+    devtool: "source-map",
     module: {
         rules: typeScriptRules(path.resolve("src", "electron-main", "tsconfig.json")).concat(nativeModuleRules)
     }

@@ -56,7 +56,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
     });
 
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
+    mainWindow.loadURL(`file://${path.join(__dirname, "..", "renderer", "index.html")}`);
 
     // Open the DevTools.
     if (app.commandLine.hasSwitch("dev")) {

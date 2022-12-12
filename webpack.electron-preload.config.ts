@@ -9,6 +9,7 @@ const config: Configuration = {
     resolve: {
         extensions: [".ts", "..."],
     },
+    devtool: "source-map",
     module: {
         rules: rules(path.resolve("src", "electron-preload", "tsconfig.json"))
     }
