@@ -66,10 +66,10 @@ async function fetchAndCache(request: Request): Promise<Response> {
 
     let response = await caches.match(request);
     if (response === undefined) {
-        response = (await fetch(request)).clone();
+        response = await fetch(request);
         // Skip cross-origin requests and URLs that should never be cached.
-        if (request.url.startsWith(self.location.origin) && request.url.match(IGNORE_URL_PATTERN) == null) {
-            await cache.put(request, response);
+        if (response.ok && request.url.startsWith(self.location.origin) && request.url.match(IGNORE_URL_PATTERN) == null) {
+            await cache.put(request, response.clone());
         }
     }
     return response;

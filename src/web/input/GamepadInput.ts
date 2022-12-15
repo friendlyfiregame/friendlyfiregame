@@ -16,18 +16,25 @@ enum GamePadButtonId {
     BUTTON_3 = 2,
     /** Button Y / Triangle */
     BUTTON_4 = 3,
+    /** LB / L1 */
     SHOULDER_TOP_LEFT = 4,
+    // RB / R1 */
     SHOULDER_TOP_RIGHT = 5,
+    // LT / L2
     SHOULDER_BOTTOM_LEFT = 6,
+    // RT / R2
     SHOULDER_BOTTOM_RIGHT = 7,
     SELECT = 8,
     START = 9,
+    /** L3 */
     STICK_BUTTON_LEFT = 10,
+    /** R3 */
     STICK_BUTTON_RIGHT = 11,
     D_PAD_UP = 12,
     D_PAD_DOWN = 13,
     D_PAD_LEFT = 14,
     D_PAD_RIGHT = 15,
+    /** X-Box logo, Playstation logo, Stadia logo, picture of an angry koala,... */
     VENDOR = 16
 }
 
@@ -218,32 +225,46 @@ class GamepadWrapper {
 }
 
 export class GamepadInput {
-    private gamepads: Map<string, GamepadWrapper>;
+    #gamepads: Map<string, GamepadWrapper>;
 
     constructor() {
-        this.gamepads = new Map();
+        this.#gamepads = new Map();
 
-        window.addEventListener("gamepadconnected", (e: GamepadEvent) => {
-            console.debug("Gamepad connected: ", e);
-            const gamepad = (e as GamepadEventInit).gamepad;
+        // Attach listeners
+        window.addEventListener("gamepadconnected", (e: GamepadEvent) => this.#addGamepad(e.gamepad));
+        window.addEventListener("gamepaddisconnected", (e) => this.#removeGamepad(e.gamepad));
 
-            if (gamepad != null) {
-                this.gamepads.set(gamepad.id, new GamepadWrapper(gamepad));
-            }
-        });
-
-        window.addEventListener("gamepaddisconnected", (e) => {
-            console.debug("Gamepad disconnected: ", e);
-            const gamepad = e.gamepad;
-
-            if (gamepad != null) {
-                this.gamepads.delete(gamepad.id);
-            }
-        });
+        // Workaround for virtual / touch gamepads that have already been connected and won't be
+        // able to fire their 'gamepadconnected' event again. Find all gamepads returned by
+        // navigator.getGamepads() that are not yet properly registered and make sure they can be
+        // utilized!
+        navigator.getGamepads()
+            .filter((gamepad) => gamepad !== null && !this.#gamepads.has(gamepad.id))
+            .forEach((gamepad) => this.#addGamepad(gamepad));
     }
 
     public update(): void {
-        this.gamepads.forEach(gamepad => gamepad.update());
+        this.#gamepads.forEach(gamepad => gamepad.update());
+    }
+
+    /**
+     * Used to register a new gamepad.
+     * @param gamepad Gamepad that has just been connected.
+     */
+    #addGamepad(gamepad: Gamepad|null) {
+        if (gamepad !== null) {
+            this.#gamepads.set(gamepad.id, new GamepadWrapper(gamepad));
+        }
+    }
+
+    /**
+     * Used to de-register an existing gamepad.
+     * @param gamepad Gamepad that has just been disconnected.
+     */
+    #removeGamepad(gamepad: Gamepad|null) {
+        if (gamepad !== null) {
+            this.#gamepads.delete(gamepad.id);
+        }
     }
 
 }

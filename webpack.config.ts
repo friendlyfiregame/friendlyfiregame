@@ -6,16 +6,10 @@ import "webpack-dev-server";
 
 import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
 
-import { typeScriptRules as rules } from "./webpack.rules";
+import { typeScriptRules, svgRules } from "./webpack.rules";
 import { default as plugins } from "./webpack.plugins";
 
 type NodeEnv = Configuration["mode"];
-
-plugins.push(new HtmlWebpackPlugin({
-    template: "./index.html",
-    inject: "body",
-    scriptLoading: "defer"
-}));
 
 const mode = ((nodeEnv: string|undefined, defaultEnv: NodeEnv): NodeEnv => (
     nodeEnv !== undefined && ["production", "development", "none" ].includes(nodeEnv)) ?
@@ -29,7 +23,7 @@ export const webConfiguration: Configuration = {
     output: {
         path: path.join(__dirname, "dist"),
         filename: "index.js",
-        chunkFilename: "[name].js?m=[chunkhash]",
+        chunkFormat: "array-push",
         hashFunction: "sha256"
     },
     resolve: {
@@ -54,9 +48,48 @@ export const webConfiguration: Configuration = {
         maxEntrypointSize: 16777216
     },
     module: {
-        rules: rules(path.resolve(__dirname, "src", "web", "tsconfig.json"))
+        rules: typeScriptRules(path.resolve(__dirname, "src", "web", "tsconfig.json"))
     },
-    plugins: plugins
+    plugins: plugins.concat([new HtmlWebpackPlugin({
+        template: "./index.html",
+        inject: "body",
+        scriptLoading: "defer",
+    })])
+};
+
+export const touchControlsConfiguration: Configuration = {
+    mode: mode,
+    watchOptions: {
+        aggregateTimeout: 150,
+        poll: false,
+        ignored: [
+            "**/*.spec.ts",
+            "**/*.test.ts",
+        ]
+    },
+    target: "web",
+    entry: "./src/touch-controls/index.ts",
+    output: {
+        path: path.join(__dirname, "dist"),
+        filename: "touch-controls.js",
+        chunkFilename: "[name].js?m=[chunkhash]",
+        hashFunction: "sha256"
+    },
+    resolve: {
+        extensions: [".ts", "..."]
+    },
+    devtool: "source-map",
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: "./touch-controls-test.html",
+            filename: "touch-controls-test.html",
+            inject: "body",
+            scriptLoading: "defer",
+        })
+    ],
+    module: {
+        rules: svgRules().concat(typeScriptRules(path.resolve(__dirname, "src", "touch-controls", "tsconfig.json")))
+    }
 };
 
 export const serviceWorkerConfiguration: Configuration = {
@@ -74,11 +107,12 @@ export const serviceWorkerConfiguration: Configuration = {
     },
     devtool: "source-map",
     module: {
-        rules: rules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
+        rules: typeScriptRules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
     }
 };
 
 export default [
     webConfiguration,
-    serviceWorkerConfiguration
+    serviceWorkerConfiguration,
+    touchControlsConfiguration
 ];

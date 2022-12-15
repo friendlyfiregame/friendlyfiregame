@@ -39,6 +39,7 @@ html, body {
     right: 0;
     color: #FFFFFF;
     background: #2A263C;
+    z-index: 1000;
 }
 
 #update-banner .content {

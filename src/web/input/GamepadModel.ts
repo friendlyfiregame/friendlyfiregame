@@ -5,11 +5,15 @@ import { GamepadStyle } from "./GamepadStyle";
 const typemap: Map<RegExp,GamepadStyle> = new Map();
 
 /* spell-checker: disable */
-typemap.set(/^.*?(xinput).*?$/i, GamepadStyle.XBOX);
+
+// Virtual touch gamepad which was inspired by and resembles the Stadia overlay (more or less).
+typemap.set(/^Cat Hive Virtual Touch Controller$/i, GamepadStyle.STADIA);
+
+typemap.set(/^.*?(xinput).*$/i, GamepadStyle.XBOX);
 // Vendor ID of Microsoft Corp.
 typemap.set(/^.*(?<vendorId>045e).*$/i, GamepadStyle.XBOX);
 // Anything with "stadia controller" in its name
-typemap.set(/^.*?(stadia\ controller).*?$/i, GamepadStyle.STADIA);
+typemap.set(/^.*?(stadia\ controller).*$/i, GamepadStyle.STADIA);
 // Anything with playstation in its name
 typemap.set(/^.*?(playstation).*$/i, GamepadStyle.PLAYSTATION);
 // Vendor ID of Sony Inc.

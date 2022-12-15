@@ -1,6 +1,6 @@
 import { default as path } from "node:path";
 import { RuleSetRule } from "webpack";
-import { Options } from "ts-loader";
+import { Options as TypeScriptLoaderOptions } from "ts-loader";
 
 export function typeScriptRules(configFile: string = path.resolve(".", "tsconfig.json")): RuleSetRule[] {
     return [
@@ -14,10 +14,23 @@ export function typeScriptRules(configFile: string = path.resolve(".", "tsconfig
                 projectReferences: true,
                 transpileOnly: false,
                 configFile: configFile
-              } as Options
+              } as TypeScriptLoaderOptions
             }
           }
     ];
+}
+
+
+export function svgRules(): RuleSetRule[] {
+  return [
+      {
+          test: /\.(svg)$/,
+          enforce: "pre",
+          use: {
+            loader: "raw-loader"
+          }
+        }
+  ];
 }
 
 export const nativeModuleRules: RuleSetRule[] = [

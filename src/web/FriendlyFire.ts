@@ -23,52 +23,65 @@ function presentUpdateAvailable(serviceWorker: ServiceWorker): void {
 let prelaunchTask: Promise<unknown> = Promise.resolve();
 
 //#region Service Worker Initialization (cspell:disable)
-if (!isElectron() && "serviceWorker" in navigator) {
-    prelaunchTask = navigator.serviceWorker.ready;
-    let isReloading = false;
-    window.addEventListener("load", async () => {
-        try {
-            const registration = await navigator.serviceWorker.register("./service-worker.js");
-            if (registration.waiting !== null) {
-                presentUpdateAvailable(registration.waiting);
-            }
+if (!isElectron()) {
 
-            // We wait for an UpdateFoundEvent, which is fired anytime a new service worker is acquired
-            registration.addEventListener("updatefound", function (updateFoundEvent) {
-                // Ignore the event if this is our first service worker and thus not an update
-                if (registration.active === null) {
-                    return;
+    const body = document.getElementsByTagName("body")[0];
+    const touchGamepadScript = document.createElement("script");
+    touchGamepadScript.setAttribute("defer", "true");
+    touchGamepadScript.setAttribute("src", "./touch-controls.js");
+    body.appendChild(touchGamepadScript);
+
+    if ("registerProtocolHandler" in navigator) {
+        navigator.registerProtocolHandler("web+friendlyfiregame", "https://play.friendlyfiregame.com/?s=%s")
+    }
+
+    if ("serviceWorker" in navigator) {
+        prelaunchTask = navigator.serviceWorker.ready;
+        let isReloading = false;
+        window.addEventListener("load", async () => {
+            try {
+                const registration = await navigator.serviceWorker.register("./service-worker.js");
+                if (registration.waiting !== null) {
+                    presentUpdateAvailable(registration.waiting);
                 }
 
-                // Listen for any state changes on the new service worker
-                registration.installing!.addEventListener("statechange", function (stateChangeEvent) {
-                    // Wait for the service worker to enter the installed state (aka waiting)
-                    if (this.state !== "installed") {
+                // We wait for an UpdateFoundEvent, which is fired anytime a new service worker is acquired
+                registration.addEventListener("updatefound", function (updateFoundEvent) {
+                    // Ignore the event if this is our first service worker and thus not an update
+                    if (registration.active === null) {
                         return;
                     }
 
-                    // Present the update available UI
-                    presentUpdateAvailable(registration.waiting!);
+                    // Listen for any state changes on the new service worker
+                    registration.installing!.addEventListener("statechange", function (stateChangeEvent) {
+                        // Wait for the service worker to enter the installed state (aka waiting)
+                        if (this.state !== "installed") {
+                            return;
+                        }
+
+                        // Present the update available UI
+                        presentUpdateAvailable(registration.waiting!);
+                    });
                 });
-            });
 
-            // We wait for a ControllerEvent, which is fired when the document acquires a new service worker
-            navigator.serviceWorker.addEventListener("controllerchange", async function(controllerChangeEvent) {
+                // We wait for a ControllerEvent, which is fired when the document acquires a new service worker
+                navigator.serviceWorker.addEventListener("controllerchange", async function(controllerChangeEvent) {
 
-                // We delay our code until the new service worker is activated
-                await this.ready;
+                    // We delay our code until the new service worker is activated
+                    await this.ready;
 
-                // Reload the window
-                if (!isReloading) {
-                    isReloading = true;
-                    window.location.reload();
-                }
-            });
+                    // Reload the window
+                    if (!isReloading) {
+                        isReloading = true;
+                        window.location.reload();
+                    }
+                });
 
-        } catch (e) {
-            console.error("Registration of service worker failed.", e);
-        }
-    });
+            } catch (e) {
+                console.error("Registration of service worker failed.", e);
+            }
+        });
+    }
 }
 //#endregion (cspell:enable)
 
