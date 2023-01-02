@@ -31,7 +31,7 @@ if (!isElectron()) {
     touchGamepadScript.setAttribute("src", "./touch-controls.js");
     body.appendChild(touchGamepadScript);
 
-    if ("registerProtocolHandler" in navigator) {
+    if ("registerProtocolHandler" in navigator && window.location.hostname === "play.friendlyfiregame.com") {
         navigator.registerProtocolHandler("web+friendlyfiregame", "https://play.friendlyfiregame.com/?s=%s")
     }
 
