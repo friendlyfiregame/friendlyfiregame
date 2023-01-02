@@ -76,7 +76,7 @@
     "cspell": "^6.17.0",
     "electron": "^22.0.0",
     "eslint": "^8.30.0",
-    "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "fork-ts-checker-webpack-plugin": "^7.2.14",
     "generate-json-webpack-plugin": "^2.0.0",
     "git-rev-sync": "^3.0.2",
     "git-revision-webpack-plugin": "^5.0.0",
