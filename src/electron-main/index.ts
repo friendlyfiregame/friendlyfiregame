@@ -34,7 +34,12 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
         fullscreen: fullscreen || undefined,
         fullscreenable: true,
         title: APP_NAME,
-        icon: path.join(__dirname, "..", "renderer", "assets", "appicon.iconset", "icon_256x256.png"),
+        icon: ((platform: NodeJS.Platform) => {
+            if (platform === "win32") {
+                return path.join(__dirname, "..", "renderer", "assets", "appicon.ico");
+            }
+            return path.join(__dirname, "..", "renderer", "assets", "appicon.iconset", "icon_256x256.png");
+        })(process.platform),
         webPreferences: {
             allowRunningInsecureContent: false,
             contextIsolation: true,

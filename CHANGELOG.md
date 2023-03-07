@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The windows version of the app now uses a scalable icon in .ICO format to ensure
+  that the look and feel of the launcher icon is as crisp as possible.
+
 ### Updated
 
 - The Desktop apps are now based on Electron v23.1.2.
