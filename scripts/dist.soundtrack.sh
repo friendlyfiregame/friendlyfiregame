@@ -41,7 +41,7 @@ function create_zip_bundle() {
     target_file_abs="${target_dir_abs}/$(basename "${target_file}")"
 
     if [ ! -d "${source_dir}" ]; then
-        echo "Not a directory: \"${source}\"" >&2
+        echo "Not a directory: \"${source_dir}\"" >&2
         return 1
     fi
     if [ ! -d "${target_dir_abs}" ]; then
