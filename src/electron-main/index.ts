@@ -11,6 +11,7 @@ import { default as ConfigStore} from "electron-store";
 
 import { APP_NAME, GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "../shared/constants";
 
+import { default as process } from "node:process";
 import { default as os } from "node:os";
 import { default as path } from "node:path";
 
