@@ -68,7 +68,7 @@
     "@tsconfig/recommended": "^1.0.1",
     "@types/generate-json-webpack-plugin": "^0.3.4",
     "@types/git-rev-sync": "^2.0.0",
-    "@types/jest": "^29.2.4",
+    "@types/jest": "^29.5.0",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
