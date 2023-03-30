@@ -125,7 +125,7 @@ const config: ForgeConfig = {
                 name: "friendlyfiregame"
             },
             tagPrefix: "v",
-            prerelease: (semver.parse(appVersion)?.prerelease.length || []) > 0,
+            prerelease: (semver.parse(appVersion)?.prerelease ?? []).length > 0,
             draft: true
         })
     ]

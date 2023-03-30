@@ -32,7 +32,7 @@ if (!isElectron()) {
     body.appendChild(touchGamepadScript);
 
     if ("registerProtocolHandler" in navigator && window.location.hostname === "play.friendlyfiregame.com") {
-        navigator.registerProtocolHandler("web+friendlyfiregame", "https://play.friendlyfiregame.com/?s=%s")
+        navigator.registerProtocolHandler("web+friendlyfiregame", "https://play.friendlyfiregame.com/?s=%s");
     }
 
     if ("serviceWorker" in navigator) {

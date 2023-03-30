@@ -30,6 +30,7 @@
         "noImplicitOverride": false,
         "noImplicitReturns": true,
         "noImplicitThis": true,
+        "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
         "outDir": "../../lib/electron-main",
         "paths": {
