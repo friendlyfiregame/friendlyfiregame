@@ -92,7 +92,7 @@
     "npm-package-json-lint": "^6.4.0",
     "raw-loader": "^4.0.2",
     "rimraf": "^5.0.1",
-    "semver": "^7.3.8",
+    "semver": "^7.5.4",
     "source-map-loader": "^4.0.1",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
