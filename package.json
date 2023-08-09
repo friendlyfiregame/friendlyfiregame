@@ -62,7 +62,7 @@
     "@electron-forge/maker-squirrel": "^6.1.0",
     "@electron-forge/maker-zip": "^6.1.0",
     "@electron-forge/plugin-auto-unpack-natives": "^6.1.0",
-    "@electron-forge/plugin-webpack": "^6.1.0",
+    "@electron-forge/plugin-webpack": "^6.3.0",
     "@electron-forge/publisher-github": "^6.1.0",
     "@kayahr/jest-electron-runner": "^29.3.0",
     "@tsconfig/recommended": "^1.0.1",
