@@ -27,7 +27,7 @@ jobs:
       DISPLAY: ':99.0'
     steps:
     - name: git checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: jwalton/gh-find-current-pr@v1
       id: pr
       with:
@@ -141,7 +141,7 @@ jobs:
         echo "target_os=${TARGET_OS}" >> $GITHUB_OUTPUT
         echo "target_arch=${TARGET_ARCH}" >> $GITHUB_OUTPUT
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Read version from package.json
       id: version
       uses: actions/github-script@v6
