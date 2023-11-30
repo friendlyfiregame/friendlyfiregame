@@ -3,8 +3,10 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "composite": false,
+    "esModuleInterop": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
