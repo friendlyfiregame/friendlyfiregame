@@ -1,3 +1,4 @@
+import { describe, it, expect } from "@jest/globals";
 import "jest-extended";
 import { AffineTransform } from "../../graphics/AffineTransform";
 import { radians, degrees, normalizeDegrees } from "../../util";

@@ -1,13 +1,14 @@
 // cSpell:disable
-// @ts-check
 
-/** @type {import("jest").Config} */
-const config = {
+import { Config } from "jest";
+
+const config: Config = {
   projects: [
     {
       displayName: "electron",
-      runner: '@kayahr/jest-electron-runner',
-      testEnvironment: '@kayahr/jest-electron-runner/environment',
+      preset: "ts-jest/presets/js-with-ts",
+      runner: "@kayahr/jest-electron-runner",
+      testEnvironment: "@kayahr/jest-electron-runner/environment",
       testMatch: [
         "<rootDir>/lib/web/test/**/*.test.js"
       ]
@@ -21,4 +22,5 @@ const config = {
     "jest-extended/all"
   ]
 };
-module.exports = config;
+
+export default config;

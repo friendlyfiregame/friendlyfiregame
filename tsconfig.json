@@ -1,8 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig#",
-  "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "composite": false,
     "noImplicitAny": true,
     "noUnusedLocals": true,

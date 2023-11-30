@@ -1,3 +1,4 @@
+import { describe, it, expect } from "@jest/globals";
 import { Vector2 } from "../../graphics/Vector2";
 import { AffineTransform } from "../../graphics/AffineTransform";
 

@@ -1,3 +1,5 @@
+import { describe, it, expect } from "@jest/globals";
+
 import { ControllerEvent } from "../../input/ControllerEvent";
 import { ControllerFamily } from "../../input/ControllerFamily";
 import { ControllerEventType } from "../../input/ControllerEventType";
