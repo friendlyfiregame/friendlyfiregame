@@ -72,4 +72,8 @@ export class VirtualGamepad extends Object implements Gamepad {
         return this.#timestamp;
     }
 
+    public get vibrationActuator(): null {
+        return null;
+    }
+
 }

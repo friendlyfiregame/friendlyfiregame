@@ -2,7 +2,7 @@ export {};
 
 
 interface Keyboard {
-    async lock(keyCodes?: Iterable<DOMString>): Promise<void>;
+    lock(keyCodes?: Iterable<DOMString>): Promise<void>;
     unlock(): void;
 }
 

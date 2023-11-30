@@ -2,7 +2,7 @@
 import { default as process } from "node:process";
 import { default  as path } from "node:path";
 import { Configuration } from "webpack";
-import "webpack-dev-server";
+import { Configuration as DevServerConfiguration } from "webpack-dev-server";
 
 import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
 
@@ -15,6 +15,20 @@ const mode = ((nodeEnv: string|undefined, defaultEnv: NodeEnv): NodeEnv => (
     nodeEnv !== undefined && ["production", "development", "none" ].includes(nodeEnv)) ?
         nodeEnv as Configuration["mode"] :
         defaultEnv)(process.env.NODE_ENV, "production");
+
+const devServerConfiguration: DevServerConfiguration = {
+    liveReload: true,
+    host: "0.0.0.0",
+    port: 8000,
+    compress: true,
+    allowedHosts: ["*"],
+    static: {
+        directory: "./dist",
+        watch: {
+            usePolling: false
+        }
+    },
+};
 
 export const webConfiguration: Configuration = {
     mode: mode,
@@ -29,19 +43,7 @@ export const webConfiguration: Configuration = {
     resolve: {
         extensions: [".ts", "..."]
     },
-    devServer: {
-        liveReload: true,
-        host: "0.0.0.0",
-        port: 8000,
-        compress: true,
-        allowedHosts: ["*"],
-        static: {
-            directory: "./dist",
-            watch: {
-                usePolling: false
-            }
-        },
-    },
+    devServer: devServerConfiguration,
     devtool: "source-map",
     performance: {
         maxAssetSize: 16777216,
