@@ -8,9 +8,10 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
+    "outDir": "lib/__root",
     "rootDirs": [
     ],
-    "outDir": "lib/__root"
+    "target": "ES2015"
   },
   "include": [
     ".*.js",
