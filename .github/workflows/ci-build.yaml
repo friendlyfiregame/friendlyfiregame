@@ -38,7 +38,7 @@ jobs:
       run: echo "GIT_BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "${GITHUB_ENV}"
       id: extract_branch
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         architecture: x64
         node-version: '20'
