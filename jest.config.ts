@@ -6,7 +6,6 @@ const config: Config = {
   projects: [
     {
       displayName: "electron",
-      preset: "ts-jest/presets/js-with-ts",
       runner: "@kayahr/jest-electron-runner",
       testEnvironment: "@kayahr/jest-electron-runner/environment",
       testMatch: [
