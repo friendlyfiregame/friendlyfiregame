@@ -31,6 +31,7 @@ const devServerConfiguration: DevServerConfiguration = {
 };
 
 export const webConfiguration: Configuration = {
+    name: "web",
     mode: mode,
     target: "web",
     entry: "./src/web/FriendlyFire.ts",
@@ -56,10 +57,12 @@ export const webConfiguration: Configuration = {
         template: "./index.html",
         inject: "body",
         scriptLoading: "defer",
-    })])
+    })]),
+    dependencies: [ "service-worker" ]
 };
 
 export const touchControlsConfiguration: Configuration = {
+    name: "touch-controls",
     mode: mode,
     watchOptions: {
         aggregateTimeout: 150,
@@ -77,6 +80,7 @@ export const touchControlsConfiguration: Configuration = {
         chunkFilename: "[name].js?m=[chunkhash]",
         hashFunction: "sha256"
     },
+    devServer: devServerConfiguration,
     resolve: {
         extensions: [".ts", "..."]
     },
@@ -95,6 +99,7 @@ export const touchControlsConfiguration: Configuration = {
 };
 
 export const serviceWorkerConfiguration: Configuration = {
+    name: "service-worker",
     mode: mode,
     target: "webworker",
     entry: "./src/service-worker/index.ts",
