@@ -5,7 +5,7 @@
 const config = {
     "root": true,
     "parserOptions": {
-        "tsconfigRootDir": __dirname,
+        "tsconfigRootDir": ".",
         "project": "tsconfig.json",
         "ecmaVersion": 2022,
         "sourceType": "module",
@@ -16,6 +16,10 @@ const config = {
             "jsx": false
         }
     },
+    "ignorePatterns": [
+        "webpack.*.ts",
+        "forge.*.ts"
+    ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint"
