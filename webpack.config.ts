@@ -26,7 +26,7 @@ const devServerConfiguration: DevServerConfiguration = {
 
 export default (
     env: { WEBPACK_SERVE?: boolean },
-    { mode, devtool = (mode === "development" ? "inline-source-map" : "source-map") }: { mode: Mode, devtool: string }
+    { mode = "production", devtool = (mode === "development" ? "inline-source-map" : "source-map") }: { mode: Mode, devtool: string }
 ): Configuration[] => [
     {
         name: "web",
