@@ -23,7 +23,7 @@
   "main": ".webpack/main",
   "scripts": {
     "clean": "rimraf lib dist out",
-    "lint": "npm run -s lint:package.json && npm run -s lint:markdown && npm run -s lint:html && npm run -s lint:typescript",
+    "lint": "npm run lint:package.json && npm run lint:markdown && npm run lint:html && npm run lint:typescript",
     "lint:html": "htmlhint ./index.html",
     "lint:markdown": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ .",
     "lint:typescript": "eslint --ext .ts ./src/",
@@ -32,8 +32,8 @@
     "cspell": "cspell \"**/*\"",
     "coverage": "jest --coverage",
     "jest": "jest",
-    "test": "npm run -s cspell && npm run -s lint && npm run -s check",
-    "compile": "npm run -s compile:shared && npm run -s compile:web && npm run -s compile:service-worker && npm run -s compile:electron-main && npm run -s compile:electron-preload",
+    "test": "npm run cspell && npm run lint && npm run check",
+    "compile": "npm run compile:shared && npm run compile:web && npm run compile:service-worker && npm run compile:electron-main && npm run compile:electron-preload",
     "compile:shared": "tsc --build ./src/shared",
     "compile:web": "tsc --build ./src/web",
     "compile:service-worker": "tsc --build ./src/service-worker",
@@ -41,7 +41,7 @@
     "compile:electron-preload": "tsc --build ./src/electron-preload",
     "watch": "webpack watch",
     "dist": "webpack",
-    "start": "npm run -s start:dev",
+    "start": "npm run start:dev",
     "start:dev": "webpack serve --mode=development --devtool=inline-source-map",
     "start:prod": "http-server ./dist -b -p 8001",
     "package": "electron-forge package",
@@ -53,7 +53,7 @@
     "package:win32-x64": "electron-forge package --platform=win32 --arch=x64",
     "package:win32-arm64": "electron-forge package --platform=win32 --arch=arm64",
     "make": "electron-forge make",
-    "prepare": "npm run -s dist"
+    "prepare": "npm run dist"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
