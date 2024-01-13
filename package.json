@@ -53,7 +53,7 @@
     "package:win32-x64": "electron-forge package --platform=win32 --arch=x64",
     "package:win32-arm64": "electron-forge package --platform=win32 --arch=arm64",
     "make": "electron-forge make",
-    "prepublish": "npm run -s dist"
+    "prepare": "npm run -s dist"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
