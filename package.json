@@ -37,7 +37,7 @@
     "watch": "webpack watch",
     "dist": "webpack --mode=production",
     "start": "npm run start:dev",
-    "start:dev": "webpack serve --mode=development --devtool=inline-source-map --config-name=web --config-name=service-worker",
+    "start:dev": "webpack serve --mode=development --config-name=web --config-name=service-worker",
     "start:prod": "http-server ./dist -b -p 8001",
     "package": "electron-forge package",
     "package:darwin-x64": "electron-forge package --platform=darwin --arch=x64",

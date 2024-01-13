@@ -24,7 +24,10 @@ const devServerConfiguration: DevServerConfiguration = {
     },
 };
 
-export default (env: { WEBPACK_SERVE?: boolean }, { mode }: { mode: Mode }): Configuration[] => [
+export default (
+    env: { WEBPACK_SERVE?: boolean },
+    { mode, devtool = (mode === "development" ? "inline-source-map" : "source-map") }: { mode: Mode, devtool: string }
+): Configuration[] => [
     {
         name: "web",
         mode,
@@ -43,7 +46,7 @@ export default (env: { WEBPACK_SERVE?: boolean }, { mode }: { mode: Mode }): Con
             }
         },
         devServer: devServerConfiguration,
-        devtool: "source-map",
+        devtool,
         performance: {
             maxAssetSize: 16777216,
             maxEntrypointSize: 16777216
@@ -89,7 +92,7 @@ export default (env: { WEBPACK_SERVE?: boolean }, { mode }: { mode: Mode }): Con
         resolve: {
             extensions: [".ts", "..."]
         },
-        devtool: "source-map",
+        devtool,
         plugins: [
             new HtmlWebpackPlugin({
                 template: "./touch-controls-test.html",
@@ -116,7 +119,7 @@ export default (env: { WEBPACK_SERVE?: boolean }, { mode }: { mode: Mode }): Con
         resolve: {
             extensions: [".ts", "..."]
         },
-        devtool: "source-map",
+        devtool,
         module: {
             rules: typeScriptRules()
         }
