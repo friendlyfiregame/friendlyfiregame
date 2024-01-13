@@ -87,12 +87,12 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public update(dt: number) {
+    public override update(dt: number) {
         this.time += dt;
     }
 
     /** @inheritDoc */
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         if (this.tag != null) {
             this.aseprite.drawTag(ctx, this.tag, 0, 0, this.time * 1000);
         } else {

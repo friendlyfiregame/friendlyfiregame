@@ -38,15 +38,15 @@ export class PauseScene extends Scene<FriendlyFire> {
 
     private menu!: MenuList;
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
-    public get urlFragment(): string {
+    public override get urlFragment(): string {
         return "#pause";
     }
 
-    public setup(): void {
+    public override setup(): void {
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
 
         this.inTransition = new SlideTransition({ duration: 1, direction: "top", easing: easeOutBounce });
@@ -83,12 +83,12 @@ export class PauseScene extends Scene<FriendlyFire> {
         );
     }
 
-    public activate(): void {
+    public override activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this);
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }

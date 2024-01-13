@@ -148,7 +148,7 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         if (this.outlineColor != null) {
             this.font.drawTextWithOutline(ctx, this.text, 0, 0, this.color, this.outlineColor);
         } else {

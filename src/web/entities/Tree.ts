@@ -27,7 +27,7 @@ export class Tree extends NPC {
         this.startDialog();
     }
 
-    public showDialoguePrompt(): boolean {
+    public override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -57,7 +57,7 @@ export class Tree extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         if (this.showDialoguePrompt()) {

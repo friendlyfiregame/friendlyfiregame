@@ -4,7 +4,7 @@ import { NPC } from "./NPC";
 export abstract class ScriptableNPC extends NPC {
     protected move: 0 | 1 | -1  = 0;
 
-    protected updatePosition(newX: number, newY: number): void {
+    protected override updatePosition(newX: number, newY: number): void {
         this.x = newX;
         this.y = newY;
 
@@ -88,7 +88,7 @@ export abstract class ScriptableNPC extends NPC {
         return pulled;
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
     }
 }

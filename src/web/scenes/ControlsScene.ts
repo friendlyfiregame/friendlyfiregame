@@ -44,11 +44,11 @@ export class ControlsScene extends Scene<FriendlyFire> {
     private gamepadSelection!: AsepriteNode;
     private gamepadControls!: AsepriteNode;
 
-    public get urlFragment(): string {
+    public override get urlFragment(): string {
         return "#controls";
     }
 
-    public setup(): void {
+    public override setup(): void {
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
         this.zIndex = 2;
         this.inTransition = new SlideTransition({ duration: 0.5, direction: "top", easing: easeOutCubic });
@@ -117,15 +117,15 @@ export class ControlsScene extends Scene<FriendlyFire> {
         });
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
-    public activate(): void {
+    public override activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 

@@ -30,7 +30,7 @@ export class Caveman extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
     }

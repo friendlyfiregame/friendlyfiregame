@@ -20,7 +20,7 @@ export class SuperThrow extends NPC {
         this.conversation = new Conversation(conversation, this);
     }
 
-    public getInteractionText(): string {
+    public override getInteractionText(): string {
         if (!this.met) {
             return "Touch";
         } else {
@@ -46,7 +46,7 @@ export class SuperThrow extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         this.speechBubble.update(this.x, this.y);

@@ -50,7 +50,7 @@ export class ExitPortal extends Entity {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
     }
 }

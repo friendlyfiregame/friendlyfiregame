@@ -128,7 +128,7 @@ export class SliderMenuItem<T = null> extends MenuItem<T> {
         this.leftActionCallback(this.value, this.data);
     }
 
-    public draw(ctx: CanvasRenderingContext2D) {
+    public override draw(ctx: CanvasRenderingContext2D) {
         ctx.save();
         const alpha = this.enabled ? 1 : 0.35;
         const x = this.x;
@@ -312,7 +312,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
     }
 
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.items.forEach(item => {
             item.draw(ctx, this.align);
         });

@@ -28,5 +28,5 @@ export class RiddleStone extends Entity {
         }
     }
 
-    public update(): void {}
+    public override update(): void {}
 }

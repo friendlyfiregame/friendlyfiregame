@@ -96,11 +96,11 @@ export class CreditsScene extends Scene<FriendlyFire> {
         return CreditsScene.music[2];
     }
 
-    public get urlFragment(): string {
+    public override get urlFragment(): string {
         return "#credits";
     }
 
-    public async setup(): Promise<void> {
+    public override async setup(): Promise<void> {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
@@ -185,7 +185,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         }).appendTo(this.rootNode);
     }
 
-    public cleanup() {
+    public override cleanup() {
         this.rootNode.clear();
     }
 
@@ -287,7 +287,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         return credits;
     }
 
-    public activate(): void {
+    public override activate(): void {
         if (this.targetMusic) {
             this.targetMusic.setLoop(true);
             this.targetMusic.setVolume(1);
@@ -296,7 +296,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         if (this.targetMusic) {
             this.targetMusic.stop();
         }

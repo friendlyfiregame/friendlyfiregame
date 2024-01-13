@@ -35,7 +35,7 @@ export class Mimic extends NPC {
         }
     }
 
-    public getInteractionText(): string {
+    public override getInteractionText(): string {
         if (!this.met) {
             return "Open";
         } else {
@@ -63,7 +63,7 @@ export class Mimic extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
         this.speechBubble.update(this.x, this.y);
     }

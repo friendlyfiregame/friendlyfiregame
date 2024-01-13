@@ -104,7 +104,7 @@ export class Seed extends NPC {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         if (this.state === SeedState.SWIMMING) {

@@ -25,7 +25,7 @@ export class EndScene extends Scene<FriendlyFire> {
     private subtitleDelay = 2;
     private inputDelay = 4;
 
-    public setup(): void {
+    public override setup(): void {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
 
         if (ending) {
@@ -74,7 +74,7 @@ export class EndScene extends Scene<FriendlyFire> {
         }).appendTo(this.rootNode);
     }
 
-    public activate(): void {
+    public override activate(): void {
         setTimeout(() => {
             EndScene.boom.setLoop(false);
             EndScene.boom.play();
@@ -85,7 +85,7 @@ export class EndScene extends Scene<FriendlyFire> {
         }, this.inputDelay * 1000);
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.input.onButtonDown.disconnect(this.gotoCreditsScene, this);
     }
 
@@ -93,7 +93,7 @@ export class EndScene extends Scene<FriendlyFire> {
         this.game.scenes.setScene(CreditsScene);
     }
 
-    public cleanup() {
+    public override cleanup() {
         this.rootNode.clear();
     }
 }

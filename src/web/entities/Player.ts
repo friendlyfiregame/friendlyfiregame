@@ -904,7 +904,7 @@ export class Player extends PhysicsEntity {
         });
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
         const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
@@ -1382,7 +1382,7 @@ export class Player extends PhysicsEntity {
         return pulled;
     }
 
-    protected updatePosition(newX: number, newY: number): void {
+    protected override updatePosition(newX: number, newY: number): void {
         this.x = newX;
         this.y = newY;
 
@@ -1396,7 +1396,7 @@ export class Player extends PhysicsEntity {
         }
     }
 
-    protected getGravity(): number {
+    protected override getGravity(): number {
         if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
             return SHORT_JUMP_GRAVITY;
         } else {

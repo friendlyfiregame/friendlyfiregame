@@ -79,7 +79,7 @@ export class Bird extends NPC {
         return this.jumpTimer === 0;
     }
 
-    protected updatePosition(newX: number, newY: number): void {
+    protected override updatePosition(newX: number, newY: number): void {
         this.x = newX;
         this.y = newY;
 
@@ -171,7 +171,7 @@ export class Bird extends NPC {
         }
     }
 
-    public isReadyForConversation(): boolean | null {
+    public override isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
         return (superResult && this.isWaiting());
     }
@@ -187,7 +187,7 @@ export class Bird extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
         this.move = 0;
 

@@ -50,7 +50,7 @@ export const webConfiguration: Configuration = {
         maxEntrypointSize: 16777216
     },
     module: {
-        rules: typeScriptRules(path.resolve(__dirname, "src", "web", "tsconfig.json"))
+        rules: typeScriptRules()
     },
     plugins: plugins.concat([new HtmlWebpackPlugin({
         template: "./index.html",
@@ -90,7 +90,7 @@ export const touchControlsConfiguration: Configuration = {
         })
     ],
     module: {
-        rules: svgRules().concat(typeScriptRules(path.resolve(__dirname, "src", "touch-controls", "tsconfig.json")))
+        rules: svgRules().concat(typeScriptRules())
     }
 };
 
@@ -109,7 +109,7 @@ export const serviceWorkerConfiguration: Configuration = {
     },
     devtool: "source-map",
     module: {
-        rules: typeScriptRules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
+        rules: typeScriptRules()
     }
 };
 

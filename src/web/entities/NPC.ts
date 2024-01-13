@@ -108,7 +108,7 @@ export abstract class NPC extends PhysicsEntity {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         if (this.lookAtPlayer) {
             const dx = this.scene.player.x - this.x;
             this.toggleDirection((dx > 0) ? 1 : -1);

@@ -4,7 +4,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NPC } from "./entities/NPC";
 
 export class ConversationProxy extends NPC {
-    public conversation: Conversation;
+    public override conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
@@ -40,7 +40,7 @@ export class ConversationProxy extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(): void {
+    public override update(): void {
         if (!this.hasActiveConversation()) {
             this.scene.removeGameObject(this);
         }

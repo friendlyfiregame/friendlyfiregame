@@ -57,7 +57,7 @@ export class ProgressBarNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
 
         const width = this.getWidth();

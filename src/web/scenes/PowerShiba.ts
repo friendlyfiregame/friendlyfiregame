@@ -44,7 +44,7 @@ export class PowerShiba extends NPC {
         }
     }
 
-    protected showDialoguePrompt(): boolean {
+    protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && !Conversation.getGlobals()["$seedgrown"]) return true;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && Conversation.getGlobals()["$seedgrown"] && !Conversation.getGlobals()["$gotPowerShibaQuest"]) return true;
@@ -81,7 +81,7 @@ export class PowerShiba extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
         this.dialoguePrompt.update(dt, this.x, this.y + 16);
         this.speechBubble.update(this.x, this.y);

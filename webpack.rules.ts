@@ -1,8 +1,7 @@
-import { default as path } from "node:path";
 import { RuleSetRule } from "webpack";
 import { Options as TypeScriptLoaderOptions } from "ts-loader";
 
-export function typeScriptRules(configFile: string = path.resolve(".", "tsconfig.json")): RuleSetRule[] {
+export function typeScriptRules(): RuleSetRule[] {
     return [
         {
             test: /\.(tsx?)$/,
@@ -13,7 +12,7 @@ export function typeScriptRules(configFile: string = path.resolve(".", "tsconfig
               options: {
                 projectReferences: true,
                 transpileOnly: false,
-                configFile: configFile
+                configFile: "tsconfig.json"
               } as TypeScriptLoaderOptions
             }
           }

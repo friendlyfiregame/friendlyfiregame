@@ -40,7 +40,7 @@ export class ImageNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         ctx.drawImage(this.image, 0, 0);
     }
 }

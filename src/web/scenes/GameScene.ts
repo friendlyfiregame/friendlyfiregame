@@ -130,7 +130,7 @@ export class GameScene extends Scene<FriendlyFire> {
         [AmbientSoundId.WIND]: GameScene.ambientWind
     };
 
-    public get urlFragment(): string {
+    public override get urlFragment(): string {
         return "#game";
     }
 
@@ -279,7 +279,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public readonly renderer = new Renderer(this);
     public readonly mountainRiddle = new MountainRiddle();
 
-    public setup(): void {
+    public override setup(): void {
         this.mapInfo = new MapInfo();
         this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
         this.pointsOfInterest = this.mapInfo.getPointers();
@@ -392,7 +392,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         if (this.fpsInterval != null) {
             clearInterval(this.fpsInterval);
         }
@@ -491,14 +491,14 @@ export class GameScene extends Scene<FriendlyFire> {
         throw new Error(`Game object of type ${type.name} not found.`);
     }
 
-    public activate(): void {
+    public override activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.input.onButtonDown.connect(this.player.handleButtonDown, this.player);
         this.input.onButtonUp.connect(this.player.handleButtonUp, this.player);
         this.resume();
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.pause();
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.input.onButtonDown.disconnect(this.player.handleButtonDown, this.player);
@@ -529,11 +529,11 @@ export class GameScene extends Scene<FriendlyFire> {
         }, 2000);
     }
 
-    public isActive(): boolean {
+    public override isActive(): boolean {
         return !this.paused;
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         if (this.paused) {
             dt = 0;
         }
@@ -570,7 +570,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+    public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
 
         // Center coordinate system
