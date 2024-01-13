@@ -19,7 +19,7 @@ export class LoadingScene extends Scene<FriendlyFire> {
 
     public override async activate(): Promise<void> {
         await this.game.assets.load(this.updateProgress.bind(this));
-        this.game.scenes.setScene(TitleScene);
+        void this.game.scenes.setScene(TitleScene);
     }
 
     private updateProgress(total: number, loaded: number): void {

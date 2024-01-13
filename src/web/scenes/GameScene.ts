@@ -4,7 +4,7 @@ import { Bird } from "../entities/Bird";
 import { BitmapFont } from "../BitmapFont";
 import { Bone } from "../entities/Bone";
 import { Bounds, createEntity } from "../Entity";
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from "../util";
+import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { Camera } from "../Camera";
 import { Campfire } from "../entities/Campfire";
 import { Caveman } from "../entities/Caveman";
@@ -505,7 +505,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.input.onButtonUp.disconnect(this.player.handleButtonUp, this.player);
     }
 
-    private handleButtonDown(event: ControllerEvent): void {
+    private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (event.isAbort || event.isPause) {
             if (this.player.getDance()) {
                 this.player.getDance()?.resetMusic();
@@ -514,19 +514,17 @@ export class GameScene extends Scene<FriendlyFire> {
         }
 
         if (event.isPause) {
-            this.scenes.pushScene(PauseScene);
+            await this.scenes.pushScene(PauseScene);
         }
     }
 
-    public gameOver(): void {
+    public async gameOver(): Promise<void> {
         GameScene.bgm1.stop();
         GameScene.bgm2.stop();
         GameScene.swell.setVolume(0.5);
         GameScene.swell.play();
-
-        setTimeout(() => {
-            this.game.scenes.setScene(EndScene);
-        }, 2000);
+        await sleep(2000);
+        await this.game.scenes.setScene(EndScene);
     }
 
     public override isActive(): boolean {
@@ -745,7 +743,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (!this.windowEndingTriggered && this.windowCutsceneTime > WINDOW_ENDING_CUTSCENE_DURATION + WINDOW_ENDING_FADE_DURATION) {
             this.windowEndingTriggered = true;
             this.game.campaign.getQuest(QuestKey.E).finish();
-            this.gameOver();
+            void this.gameOver();
         }
 
         this.windowEndingTexts.forEach((t, index) => {
@@ -770,7 +768,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (!this.pettingEndingTriggered && this.pettingCutsceneTime > PETTING_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION) {
             this.pettingEndingTriggered = true;
             this.game.campaign.getQuest(QuestKey.D).finish();
-            this.gameOver();
+            void this.gameOver();
         }
 
         this.petEndingTexts.forEach((t, index) => {
@@ -853,7 +851,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (WINDOW_ENDING_FADE_DURATION);
         const target = this.pointsOfInterest.find(poi => poi.name === "windowzoomtarget");
         if (target) {
-            this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
+            void this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
         }
     }
 

@@ -35,13 +35,8 @@ export class Sound {
 
     public static async load(url: string, channel:  SoundChannel = SoundChannel.SFX): Promise<Sound> {
         const arrayBuffer = await (await fetch(url)).arrayBuffer();
-
-        return new Promise((resolve, reject) => {
-            getAudioContext().decodeAudioData(arrayBuffer,
-                buffer => resolve(new Sound(buffer, channel)),
-                error => reject(error)
-            );
-        });
+        const buffer = await getAudioContext().decodeAudioData(arrayBuffer);
+        return new Sound(buffer, channel);
     }
 
     public isPlaying(): boolean {

@@ -88,19 +88,19 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
                 this.game.campaign.setNewGamePlus(false);
                 await this.game.scenes.popScene({ noTransition: false });
                 TitleScene.music.stop();
-                this.game.scenes.setScene(GameScene);
+                await this.game.scenes.setScene(GameScene);
                 break;
             case MenuItemKey.START_PLUS:
                 this.game.campaign.setNewGamePlus(true);
                 await this.game.scenes.popScene({ noTransition: false });
                 TitleScene.music.stop();
-                this.game.scenes.setScene(GameScene);
+                await this.game.scenes.setScene(GameScene);
         }
     }
 
     private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (event.isAbort) {
-            this.scenes.popScene();
+            await this.scenes.popScene();
         } else if (event.isConfirm) {
             this.menu.executeAction();
         } else if (event.isMenuUp) {

@@ -85,9 +85,10 @@ if (!isElectron()) {
 }
 //#endregion (cspell:enable)
 
-prelaunchTask.then(() => {
+(async () => {
+    await prelaunchTask;
     const game = new FriendlyFire();
-    game.scenes.setScene(LoadingScene);
     (window as any).game = game;
+    void game.scenes.setScene(LoadingScene);
     game.start();
-});
+})().catch(console.error);

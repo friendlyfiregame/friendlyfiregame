@@ -60,7 +60,7 @@ export class Greeting implements GameObject {
 
     private setRandomGreeting(): void {
         const message = this.currentMatchingGreetings.length > 0 ? rndItem(this.currentMatchingGreetings) : "";
-        this.speechBubble.setMessage(message);
+        void this.speechBubble.setMessage(message);
     }
 
     private updateMatchingData(states: CampaignState[]): void {

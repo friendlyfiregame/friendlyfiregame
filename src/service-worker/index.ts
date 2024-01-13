@@ -9,9 +9,9 @@ export default null;
 
 const cache: Cache = new Cache();
 
-self.addEventListener("message", (event) => {
+self.addEventListener("message", async (event) => {
     if (event.data === "SKIP_WAITING") {
-        self.skipWaiting();
+        await self.skipWaiting();
     }
 });
 

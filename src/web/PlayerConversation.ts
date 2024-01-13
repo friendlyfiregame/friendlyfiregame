@@ -56,7 +56,7 @@ export class PlayerConversation {
             const optionsTexts = this.interaction.options.map(options => options.line);
 
             if (this.interaction.npcLine) {
-                this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
+                void this.npc.speechBubble.setMessage(this.interaction.npcLine.line);
                 this.npc.speechBubble.show();
             }
 

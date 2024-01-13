@@ -57,7 +57,7 @@ export class PowerShiba extends NPC {
         this.floatSpeed = 3;
         this.floatAmount = 5;
         this.scene.game.campaign.runAction("giveBone");
-        this.think("Oh… I remember…", 3000);
+        void this.think("Oh… I remember…", 3000);
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

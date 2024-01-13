@@ -196,7 +196,7 @@ export class Campaign {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");
 
                     if (forestPointer) {
-                        this.gameScene.camera.focusOn(
+                        void this.gameScene.camera.focusOn(
                             8,
                             forestPointer.x, forestPointer.y,
                             1,
@@ -210,7 +210,7 @@ export class Campaign {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "mountain");
 
                     if (mountainPointer) {
-                        this.gameScene.camera.focusOn(
+                        void this.gameScene.camera.focusOn(
                             8,
                             mountainPointer.x, mountainPointer.y,
                             1,
@@ -224,7 +224,7 @@ export class Campaign {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "river");
 
                     if (riverPointer) {
-                        this.gameScene.camera.focusOn(
+                        void this.gameScene.camera.focusOn(
                             8,
                             riverPointer.x, riverPointer.y,
                             1,
@@ -238,7 +238,7 @@ export class Campaign {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
 
-                    this.gameScene.camera.focusOn(
+                    void this.gameScene.camera.focusOn(
                         duration,
                         this.gameScene.fire.x, this.gameScene.fire.y + 15,
                         8,
@@ -295,17 +295,17 @@ export class Campaign {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.BEAT_GAME);
                     this.getQuest(QuestKey.A).finish();
                     this.gameScene.fire.conversation = null;
-                    this.gameScene.gameOver();
+                    void this.gameScene.gameOver();
                     break;
                 case "endgameB":
                     this.getQuest(QuestKey.B).finish();
                     this.gameScene.fire.conversation = null;
-                    this.gameScene.gameOver();
+                    void this.gameScene.gameOver();
                     break;
                 case "endgameC":
                     this.getQuest(QuestKey.C).finish();
                     this.gameScene.caveman.conversation = null;
-                    this.gameScene.gameOver();
+                    void this.gameScene.gameOver();
                     break;
                 case "game":
                     this.addState(params[0] as any);

@@ -43,7 +43,7 @@ export abstract class NPC extends PhysicsEntity {
         }
 
         const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y);
-        thinkBubble.setMessage(message);
+        void thinkBubble.setMessage(message);
         thinkBubble.show();
 
         await sleep(time);

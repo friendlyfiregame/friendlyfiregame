@@ -272,7 +272,7 @@ export class Fire extends NPC {
             ["What have I done?", 6, 3],
             ["I trusted you! I helped you!", 10, 3]
         ].forEach(line => setTimeout(() => {
-            this.scene.player.think(line[0] as string, line[2] as number * 1000);
+            void this.scene.player.think(line[0] as string, line[2] as number * 1000);
         }, (line[1] as number) * 1000));
 
         // Give fire new dialog
