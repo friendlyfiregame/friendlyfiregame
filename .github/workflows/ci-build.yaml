@@ -54,22 +54,11 @@ jobs:
           ${{ runner.os }}-${{ runner.arch }}-build-
           ${{ runner.os }}-${{ runner.arch }}-
     - name: Install NPM dependencies
-      run: npm install
-    - name: Check spelling
-      run: npm run -s cspell
-    - name: Run linters
-      id: run_linters
-      shell: bash
-      run: npm run -s lint
-    - name: Compile sources
-      run: npm run -s compile
-    - name: Install XFFB (required for headless tests)
-      run:
-        # See: https://codito.in/xvfb-in-github-action/
-        sudo apt install -y xvfb x11-utils libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 xdotool
-    - name: Run headless tests
-      run: xvfb-run --auto-servernum npm run -s coverage
-    - run: npm run -s dist
+      run: npm ci
+    - name: Test
+      run: xvfb-run --auto-servernum npm test
+    - name: Create distribition files
+      run: npm run dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
       with:
@@ -168,7 +157,7 @@ jobs:
     - name: Create Electron game package
       env:
         NODE_ENV: production
-      run: npm run -s package:${{steps.build_info.outputs.target_os}}-${{steps.build_info.outputs.target_arch}}
+      run: npm run package:${{steps.build_info.outputs.target_os}}-${{steps.build_info.outputs.target_arch}}
     - name: Fixup target folder name
       shell: bash
       env:
