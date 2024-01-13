@@ -3,17 +3,28 @@
     "tasks": [
         {
             "label": "Build (and watch) project",
-            "type": "npm",
-            "script": "watch",
-            "isBackground": true,
-            "presentation": {
-                "reveal": "never"
-            },
+            "type": "typescript",
+
+            "tsconfig": "tsconfig.json",
+            "option": "watch",
             "problemMatcher": [
                 "$tsc-watch"
             ],
             "group": {
                 "kind": "build",
+                "isDefault": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Run unit tests",
+            "type": "npm",
+            "script": "check",
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
                 "isDefault": true
             }
         }

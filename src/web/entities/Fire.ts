@@ -110,7 +110,7 @@ export class Fire extends NPC {
         this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
     }
 
-    public showDialoguePrompt(): boolean {
+    public override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -181,7 +181,7 @@ export class Fire extends NPC {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         if (this.state === FireState.ANGRY && !this.beingPutOut) {
             this.face?.setMode(FaceModes.ANGRY);
         } else if (this.state === FireState.BEING_PUT_OUT) {

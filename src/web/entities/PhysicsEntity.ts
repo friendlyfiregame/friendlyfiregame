@@ -145,7 +145,7 @@ export abstract class PhysicsEntity extends Entity {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         const world = this.scene.world;

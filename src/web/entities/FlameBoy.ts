@@ -68,7 +68,7 @@ export class FlameBoy extends ScriptableNPC {
         }
     }
 
-    protected showDialoguePrompt(): boolean {
+    protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -149,7 +149,7 @@ export class FlameBoy extends ScriptableNPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         // Triggers

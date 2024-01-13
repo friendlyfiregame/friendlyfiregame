@@ -234,13 +234,13 @@ export class Shiba extends ScriptableNPC {
         this.speechBubble.draw(ctx);
     }
 
-    public showDialoguePrompt(): boolean {
+    public override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
 
         return false;
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         // Heart Emitter
@@ -288,7 +288,7 @@ export class Shiba extends ScriptableNPC {
         }
     }
 
-    public isReadyForConversation(): boolean | null {
+    public override isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
         return (superResult && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
     }

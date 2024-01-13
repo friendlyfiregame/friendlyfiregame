@@ -87,7 +87,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         );
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         if (this.getVelocityY() > 0) {

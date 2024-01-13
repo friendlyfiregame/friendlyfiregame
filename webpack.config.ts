@@ -1,7 +1,6 @@
 // cSpell:disable
-import { default as process } from "node:process";
 import { default  as path } from "node:path";
-import { Configuration } from "webpack";
+import { Configuration, DefinePlugin } from "webpack";
 import { Configuration as DevServerConfiguration } from "webpack-dev-server";
 
 import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
@@ -9,12 +8,7 @@ import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
 import { typeScriptRules, svgRules } from "./webpack.rules";
 import { default as plugins } from "./webpack.plugins";
 
-type NodeEnv = Configuration["mode"];
-
-const mode = ((nodeEnv: string|undefined, defaultEnv: NodeEnv): NodeEnv => (
-    nodeEnv !== undefined && ["production", "development", "none" ].includes(nodeEnv)) ?
-        nodeEnv as Configuration["mode"] :
-        defaultEnv)(process.env.NODE_ENV, "production");
+type Mode = Configuration["mode"];
 
 const devServerConfiguration: DevServerConfiguration = {
     liveReload: true,
@@ -30,91 +24,104 @@ const devServerConfiguration: DevServerConfiguration = {
     },
 };
 
-export const webConfiguration: Configuration = {
-    mode: mode,
-    target: "web",
-    entry: "./src/web/FriendlyFire.ts",
-    output: {
-        path: path.join(__dirname, "dist"),
-        filename: "index.js",
-        chunkFormat: "array-push",
-        hashFunction: "sha256"
+export default (
+    env: { WEBPACK_SERVE?: boolean },
+    { mode = "production", devtool = (mode === "development" ? "inline-source-map" : "source-map") }: { mode: Mode, devtool: string }
+): Configuration[] => [
+    {
+        name: "web",
+        mode,
+        target: "web",
+        entry: "./src/web/FriendlyFire.ts",
+        output: {
+            path: path.join(__dirname, "dist"),
+            filename: "index.js",
+            chunkFormat: "array-push",
+            hashFunction: "sha256"
+        },
+        resolve: {
+            extensions: [".ts", "..."],
+            fallback: {
+                processs: false
+            }
+        },
+        devServer: devServerConfiguration,
+        devtool,
+        performance: {
+            maxAssetSize: 16777216,
+            maxEntrypointSize: 16777216
+        },
+        module: {
+            rules: typeScriptRules()
+        },
+        plugins: [
+            ...plugins,
+            new HtmlWebpackPlugin({
+                template: "./index.html",
+                inject: "body",
+                scriptLoading: "defer",
+            }),
+            new DefinePlugin({
+                "process.env": {
+                    "MODE": JSON.stringify(mode)
+                }
+            })
+        ],
+        dependencies: [ "service-worker" ]
     },
-    resolve: {
-        extensions: [".ts", "..."]
+    {
+        name: "touch-controls",
+        mode,
+        watchOptions: {
+            aggregateTimeout: 150,
+            poll: false,
+            ignored: [
+                "**/*.spec.ts",
+                "**/*.test.ts",
+            ]
+        },
+        target: "web",
+        entry: "./src/touch-controls/index.ts",
+        output: {
+            path: path.join(__dirname, "dist"),
+            filename: "touch-controls.js",
+            chunkFilename: "[name].js?m=[chunkhash]",
+            hashFunction: "sha256"
+        },
+        devServer: devServerConfiguration,
+        resolve: {
+            extensions: [".ts", "..."]
+        },
+        devtool,
+        plugins: [
+            new HtmlWebpackPlugin({
+                template: "./touch-controls-test.html",
+                filename: "touch-controls-test.html",
+                inject: "body",
+                scriptLoading: "defer",
+            })
+        ],
+        module: {
+            rules: svgRules().concat(typeScriptRules())
+        }
     },
-    devServer: devServerConfiguration,
-    devtool: "source-map",
-    performance: {
-        maxAssetSize: 16777216,
-        maxEntrypointSize: 16777216
-    },
-    module: {
-        rules: typeScriptRules(path.resolve(__dirname, "src", "web", "tsconfig.json"))
-    },
-    plugins: plugins.concat([new HtmlWebpackPlugin({
-        template: "./index.html",
-        inject: "body",
-        scriptLoading: "defer",
-    })])
-};
-
-export const touchControlsConfiguration: Configuration = {
-    mode: mode,
-    watchOptions: {
-        aggregateTimeout: 150,
-        poll: false,
-        ignored: [
-            "**/*.spec.ts",
-            "**/*.test.ts",
-        ]
-    },
-    target: "web",
-    entry: "./src/touch-controls/index.ts",
-    output: {
-        path: path.join(__dirname, "dist"),
-        filename: "touch-controls.js",
-        chunkFilename: "[name].js?m=[chunkhash]",
-        hashFunction: "sha256"
-    },
-    resolve: {
-        extensions: [".ts", "..."]
-    },
-    devtool: "source-map",
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: "./touch-controls-test.html",
-            filename: "touch-controls-test.html",
-            inject: "body",
-            scriptLoading: "defer",
-        })
-    ],
-    module: {
-        rules: svgRules().concat(typeScriptRules(path.resolve(__dirname, "src", "touch-controls", "tsconfig.json")))
+    {
+        name: "service-worker",
+        mode,
+        target: "webworker",
+        entry: "./src/service-worker/index.ts",
+        output: {
+            path: path.join(__dirname, "dist"),
+            filename: "service-worker.js",
+            chunkFilename: "[name].js?m=[chunkhash]",
+            hashFunction: "sha256"
+        },
+        resolve: {
+            extensions: [".ts", "..."]
+        },
+        devtool,
+        module: {
+            rules: typeScriptRules()
+        }
     }
-};
-
-export const serviceWorkerConfiguration: Configuration = {
-    mode: mode,
-    target: "webworker",
-    entry: "./src/service-worker/index.ts",
-    output: {
-        path: path.join(__dirname, "dist"),
-        filename: "service-worker.js",
-        chunkFilename: "[name].js?m=[chunkhash]",
-        hashFunction: "sha256"
-    },
-    resolve: {
-        extensions: [".ts", "..."]
-    },
-    devtool: "source-map",
-    module: {
-        rules: typeScriptRules(path.resolve(__dirname, "src", "service-worker", "tsconfig.json"))
-    }
-};
-
-export default [
-    webConfiguration,
-    serviceWorkerConfiguration,
-    touchControlsConfiguration
 ];

@@ -6,18 +6,18 @@ import { ProgressBarNode } from "../scene/ProgressBarNode";
 export class LoadingScene extends Scene<FriendlyFire> {
     private progressBar!: ProgressBarNode;
 
-    public setup(): void {
+    public override setup(): void {
         this.progressBar = new ProgressBarNode({
             x: this.game.width >> 1,
             y: this.game.height >> 1
         }).appendTo(this.rootNode);
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
-    public async activate(): Promise<void> {
+    public override async activate(): Promise<void> {
         await this.game.assets.load(this.updateProgress.bind(this));
         this.game.scenes.setScene(TitleScene);
     }

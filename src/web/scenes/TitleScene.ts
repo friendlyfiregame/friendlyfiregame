@@ -96,15 +96,15 @@ export class TitleScene extends Scene<FriendlyFire> {
         gap: 15,
     };
 
-    public get urlFragment(): string {
+    public override get urlFragment(): string {
         return "#title";
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
-    public setup(): void {
+    public override setup(): void {
         this.zIndex = 1;
         this.inTransition = new FadeTransition();
         this.outTransition = new CurtainTransition({ easing: easeInSine });
@@ -320,13 +320,13 @@ export class TitleScene extends Scene<FriendlyFire> {
         }
     }
 
-    public activate(): void {
+    public override activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this);
         this.playMusicTrack();
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }

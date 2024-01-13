@@ -35,7 +35,7 @@ if (!isElectron()) {
         navigator.registerProtocolHandler("web+friendlyfiregame", "https://play.friendlyfiregame.com/?s=%s");
     }
 
-    if ("serviceWorker" in navigator) {
+    if (process.env["MODE"] === "production" && "serviceWorker" in navigator) {
         prelaunchTask = navigator.serviceWorker.ready;
         let isReloading = false;
         window.addEventListener("load", async () => {

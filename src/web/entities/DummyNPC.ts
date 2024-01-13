@@ -40,7 +40,7 @@ export class DummyNPC extends NPC {
         this.drawGreeting(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         this.updateGreeting();
     }
 }

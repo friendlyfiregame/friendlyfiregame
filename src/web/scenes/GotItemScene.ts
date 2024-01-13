@@ -75,7 +75,7 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         ]
     ];
 
-    public setup(item: Item): void {
+    public override setup(item: Item): void {
         GotItemScene.sound.setVolume(0.7);
         GotItemScene.sound.play();
 
@@ -117,16 +117,16 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         ).appendTo(this.rootNode);
     }
 
-    public activate(): void {
+    public override activate(): void {
         // Close this scene after 4 seconds
         setTimeout(() => this.scenes.popScene(), 4000);
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+    public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
         ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
         ctx.fillRect(0, (height >> 1) - 1, width, 50);

@@ -6,7 +6,7 @@ export class VirtualGamepadEvent extends CustomEvent<VirtualGamepad> {
         super(type, { detail: gamepad });
         this.#gamepad = gamepad;
     }
-    public get detail(): any {
+    public override get detail(): any {
         return {};
     }
     public get gamepad(): Gamepad {

@@ -55,7 +55,7 @@ export class Wood extends PhysicsEntity {
         return this.scene.player.isCarrying(this);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         if (this.state === WoodState.SWIMMING) {

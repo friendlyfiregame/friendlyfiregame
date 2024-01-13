@@ -63,12 +63,12 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
     private voice2!: TextNode;
     private character!: AsepriteNode;
 
-    public activate(): void {
+    public override activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this);
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
     }
@@ -130,7 +130,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         this.character.setAseprite(CharacterSelectionScene.playerSprites[this.game.campaign.selectedCharacter]);
     }
 
-    public setup(): void {
+    public override setup(): void {
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
 
         this.zIndex = 2;
@@ -247,7 +247,7 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         this.updateSelection();
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 }

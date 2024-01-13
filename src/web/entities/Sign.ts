@@ -11,7 +11,7 @@ import { RenderingLayer, RenderingType } from "../Renderer";
 export class Sign extends NPC {
     @asset("sprites/sign.aseprite.json")
     private static sprite: Aseprite;
-    public conversation: Conversation;
+    public override conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16);
@@ -26,7 +26,7 @@ export class Sign extends NPC {
         return content.split(":::");
     }
 
-    public getInteractionText(): string {
+    public override getInteractionText(): string {
         return "Read sign";
     }
 
@@ -64,5 +64,5 @@ export class Sign extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(): void {}
+    public override update(): void {}
 }

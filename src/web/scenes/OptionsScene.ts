@@ -39,11 +39,11 @@ export class OptionsScene extends Scene<FriendlyFire> {
         return this.#audioManager;
     }
 
-    public get urlFragment(): string {
+    public override get urlFragment(): string {
         return "#options";
     }
 
-    public async setup(): Promise<void> {
+    public override async setup(): Promise<void> {
 
         const menuItemX = 12;
         const menuItemY = 20;
@@ -152,18 +152,18 @@ export class OptionsScene extends Scene<FriendlyFire> {
         return enabled;
     }
 
-    public cleanup(): void {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
-    public activate(): void {
+    public override activate(): void {
         this.input.onButtonDown.connect(this.handleButtonDown, this);
         this.menu.onActivated.connect(this.handleMenuAction, this);
         // this.menu.onLeftAction.connect(this.handleMenuLeftAction, this);
         // this.menu.onRightAction.connect(this.handleMenuRightAction, this);
     }
 
-    public deactivate(): void {
+    public override deactivate(): void {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
         this.menu.onActivated.disconnect(this.handleMenuAction, this);
         // this.menu.onLeftAction.disconnect(this.handleMenuLeftAction, this);

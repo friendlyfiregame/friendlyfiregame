@@ -6,14 +6,14 @@ import conversation from "./../../../assets/dialog/window.dialog.json";
 
 @entity("window")
 export class Window extends NPC {
-    public conversation: Conversation;
+    public override conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 16, 16);
         this.conversation = new Conversation(conversation, this);
     }
 
-    public getInteractionText(): string {
+    public override getInteractionText(): string {
         return "Check window";
     }
 
@@ -24,5 +24,5 @@ export class Window extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(): void {}
+    public override update(): void {}
 }

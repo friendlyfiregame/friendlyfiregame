@@ -60,13 +60,13 @@ export class ControlTooltipNode extends SceneNode<FriendlyFire> {
     }
 
     /** @inheritDoc */
-    protected activate(): void {
+    protected override activate(): void {
         this.controllerManager.onControllerFamilyChange.connect(this.updateControllerData, this);
         this.controllerManager.onGamepadStyleChange.connect(this.updateControllerData, this);
     }
 
     /** @inheritDoc */
-    protected deactivate(): void {
+    protected override deactivate(): void {
         this.controllerManager.onGamepadStyleChange.disconnect(this.updateControllerData, this);
         this.controllerManager.onControllerFamilyChange.disconnect(this.updateControllerData, this);
     }

@@ -18,7 +18,7 @@ export class Wing extends NPC {
         super(scene, x, y, 24, 24);
     }
 
-    protected showDialoguePrompt(): boolean {
+    protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -50,7 +50,7 @@ export class Wing extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         this.dialoguePrompt.update(dt, this.x, this.y + 16);

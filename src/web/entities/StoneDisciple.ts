@@ -19,7 +19,7 @@ export class StoneDisciple extends NPC {
         this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);
     }
 
-    protected showDialoguePrompt(): boolean {
+    protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -52,7 +52,7 @@ export class StoneDisciple extends NPC {
         this.speechBubble.draw(ctx);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         this.dialoguePrompt.update(dt, this.x, this.y + this.height);

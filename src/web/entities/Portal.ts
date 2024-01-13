@@ -49,7 +49,7 @@ export class Portal extends Entity {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         if (this.animationState === PortalAnimationState.WAITING) {

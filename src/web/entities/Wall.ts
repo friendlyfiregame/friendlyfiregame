@@ -34,7 +34,7 @@ export class Wall extends Entity implements CollidableGameObject {
         }
     }
 
-    public update(): void {}
+    public override update(): void {}
 
     public crumble(): void {
         this.state = WallState.CRUMBLED;

@@ -31,7 +31,7 @@ export class ShadowPresence extends NPC {
         this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
     }
 
-    protected showDialoguePrompt(): boolean {
+    protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
             return false;
         }
@@ -79,7 +79,7 @@ export class ShadowPresence extends NPC {
         }
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         this.checkPlayerDistance();

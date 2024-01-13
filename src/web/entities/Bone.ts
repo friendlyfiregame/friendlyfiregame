@@ -32,7 +32,7 @@ export class Bone extends PhysicsEntity {
         return this.scene.player.isCarrying(this);
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         super.update(dt);
 
         const player = this.scene.player;
