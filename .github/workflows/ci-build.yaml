@@ -57,7 +57,7 @@ jobs:
       run: npm ci
     - name: Test
       run: xvfb-run --auto-servernum npm test
-    - name: Create distribition files
+    - name: Create distribution files
       run: npm run dist
     - name: Archive dist folder
       uses: actions/upload-artifact@v3
