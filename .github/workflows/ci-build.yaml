@@ -53,7 +53,7 @@ jobs:
           ${{ runner.os }}-${{ runner.arch }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-${{ runner.arch }}-build-
           ${{ runner.os }}-${{ runner.arch }}-
-    - name: Install NPM dependencies
+    - name: Build
       run: npm ci
     - name: Test
       run: xvfb-run --auto-servernum npm test
