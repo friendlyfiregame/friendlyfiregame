@@ -95,6 +95,7 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
+        "key-spacing": "warn",
         "linebreak-style": [ "warn", "unix" ],
         "max-len": [
             "warn",

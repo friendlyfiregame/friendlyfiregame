@@ -223,7 +223,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
         this.menu = new MenuList({
             id: "menu",
-            opacity:0,
+            opacity: 0,
             align: MenuAlignment.CENTER
         }).animate({
             animator: (node, value) => node.setOpacity(value),
