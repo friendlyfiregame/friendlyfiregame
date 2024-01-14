@@ -88,7 +88,7 @@ if (!isElectron()) {
 (async () => {
     await prelaunchTask;
     const game = new FriendlyFire();
-    (window as any).game = game;
+    window.game = game;
     void game.scenes.setScene(LoadingScene);
     game.start();
 })().catch(console.error);

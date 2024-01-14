@@ -259,7 +259,8 @@ export class Particle {
         if (this.imageOrColor instanceof Object) {
             // Image
             const img = this.imageOrColor;
-            const w = ((<any>img).naturalWidth || img.width), h = ((<any>img).naturalHeight || img.height);
+            const w = img instanceof HTMLImageElement ? img.naturalWidth : img.width;
+            const h = img instanceof HTMLImageElement ? img.naturalHeight : img.height;
             const sz = Math.max(w, h);
             ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
         } else {

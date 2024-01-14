@@ -13,7 +13,7 @@ export enum MenuAlignment { LEFT, CENTER, RIGHT }
  * additional `►` character as prefix. The item instances don't need to be manually drawn, since the
  * MenuList class' draw method will take care of it.
  */
-export class MenuItem<T = null> {
+export class MenuItem<T = unknown> {
     public id: string;
     public label: string;
     protected font: BitmapFont;
@@ -171,7 +171,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
     public static pause: Sound;
 
     private readonly align: MenuAlignment;
-    private items: MenuItem[] = [];
+    private items: MenuItem<unknown>[] = [];
     public onActivated = new Signal<string>();
     public onRightAction = new Signal<string>();
     public onLeftAction = new Signal<string>();
@@ -202,7 +202,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
      * Sets an arbitrary number of menu items to the menu list and overrides any previously added
      * items. The first available menu item will be focused automatically.
      */
-    public setItems(...items: MenuItem<any>[]): this {
+    public setItems(...items: MenuItem<unknown>[]): this {
         this.items = [...items];
         this.focusFirstItem();
         return this;
@@ -221,7 +221,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
         }
     }
 
-    private getFocusedItem(): MenuItem<any> | undefined {
+    private getFocusedItem(): MenuItem<unknown> | undefined {
         return this.items.find(item => item.focused);
     }
 
@@ -233,7 +233,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
         this.items.forEach(item => { item.focused = false; });
     }
 
-    private focusItem(item: MenuItem): void {
+    private focusItem(item: MenuItem<unknown>): void {
         this.unfocusAllItems();
         item.focused = true;
     }

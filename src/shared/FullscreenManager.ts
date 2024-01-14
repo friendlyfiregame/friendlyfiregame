@@ -10,5 +10,5 @@ export interface FullscreenManager {
      * @param enabled
      *   Whether to enable or disable fullscreen mode.
      */
-    setEnabled(enabled: boolean): Promise<any>;
+    setEnabled(enabled: boolean): Promise<void>;
 }

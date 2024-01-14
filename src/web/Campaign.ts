@@ -308,7 +308,7 @@ export class Campaign {
                     void this.gameScene.gameOver();
                     break;
                 case "game":
-                    this.addState(params[0] as any);
+                    this.addState(params[0] as CampaignState);
                     break;
                 case "enableRunning":
                     this.gameScene.player.enableRunning();

@@ -481,7 +481,7 @@ export class GameScene extends Scene<FriendlyFire> {
         track.sound.play();
     }
 
-    private getGameObject<T>(type: new (...args: any[]) => T): T {
+    private getGameObject<Args extends unknown[], GameObject>(type: new (...args: Args) => GameObject): GameObject {
         for (const gameObject of this.gameObjects) {
             if (gameObject instanceof type) {
                 return gameObject;

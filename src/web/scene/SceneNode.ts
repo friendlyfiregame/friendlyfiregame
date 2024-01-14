@@ -741,7 +741,7 @@ export class SceneNode<T extends Game = Game> {
      * @param callback - The callback to call for each child node.
      * @param thisArg  - Optional value to use as `this` when executing `callback`.
      */
-    public forEachChild(callback: (node: SceneNode<T>, index: number) => void, thisArg: any = this): this {
+    public forEachChild(callback: (node: SceneNode<T>, index: number) => void, thisArg: unknown = this): this {
         let index = 0;
         let node = this.firstChild;
         while (node) {
@@ -758,7 +758,7 @@ export class SceneNode<T extends Game = Game> {
      * @param callback - The callback to call for each descendant node.
      * @param thisArg  - Optional value to use as `this` when executing `callback`.
      */
-    public forEachDescendant(callback: (node: SceneNode<T>) => void, thisArg: any = this): this {
+    public forEachDescendant(callback: (node: SceneNode<T>) => void, thisArg: unknown = this): this {
         let node = this.firstChild;
         while (node != null && node !== this) {
             let next = node.firstChild;
@@ -826,7 +826,7 @@ export class SceneNode<T extends Game = Game> {
      * @param thisArg  - Optional value to use as `this` when executing `callback`.
      * @return True if at least one child node returned true in the given callback, false if none did.
      */
-    public someChildren(callback: (node: SceneNode<T>, index: number) => boolean, thisArg: any = this): boolean {
+    public someChildren(callback: (node: SceneNode<T>, index: number) => boolean, thisArg: unknown = this): boolean {
         let index = 0;
         let node = this.firstChild;
         while (node) {

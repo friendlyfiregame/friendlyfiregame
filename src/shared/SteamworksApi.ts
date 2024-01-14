@@ -11,7 +11,7 @@ export interface SteamworksApi {
     initialized(): Promise<boolean>;
     readonly localplayer: {
         getName(): Promise<string>;
-        getSteamId(): Promise<any>;
+        getSteamId(): Promise<unknown>;
     };
     readonly achievement: {
         isActivated(achievementId: string): Promise<boolean>;

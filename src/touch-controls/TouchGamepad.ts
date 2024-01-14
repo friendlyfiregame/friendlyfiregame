@@ -69,7 +69,7 @@ type DPadAttributeValue = "visible" | "hidden";
 
 export class TouchGamepad extends HTMLElement {
 
-    static readonly #ATTRIBUTES: Map<string, Attribute<any>> = new Map();
+    static readonly #ATTRIBUTES: Map<string, Attribute<string>> = new Map();
     static {
         TouchGamepad.#ATTRIBUTES.set("enabled", new StringAttribute(["true", "false"], "true"));
         TouchGamepad.#ATTRIBUTES.set("dpad", new StringAttribute(["visible", "hidden"], "visible"));

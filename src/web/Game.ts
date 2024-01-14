@@ -41,7 +41,7 @@ export abstract class Game {
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
     readonly #displayManager: DisplayManager;
-    readonly #steamworksApi: SteamworksApi;
+    readonly #steamworksApi: SteamworksApi | null;
     readonly #audioManager: AudioManager;
     readonly #fullscreenManager: FullscreenManager;
 
@@ -91,7 +91,7 @@ export abstract class Game {
         return this.#displayManager;
     }
 
-    public get steamworks(): SteamworksApi {
+    public get steamworks(): SteamworksApi | null {
         return this.#steamworksApi;
     }
 

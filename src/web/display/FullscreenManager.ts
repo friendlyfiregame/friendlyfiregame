@@ -6,4 +6,4 @@ export namespace FullscreenManager {
     export const getInstance = (): IFullscreenManager => fullscreenManager;
 }
 
-const fullscreenManager: IFullscreenManager = (window as any)["fullscreen"] || new WebFullscreenManager();
+const fullscreenManager: IFullscreenManager = new WebFullscreenManager();

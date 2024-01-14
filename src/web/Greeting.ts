@@ -97,6 +97,6 @@ export class Greeting implements GameObject {
 }
 
 /* returns true when arr2 is contained in arr1 */
-function containsArray(arr1: any[], arr2: any[]): boolean {
+function containsArray(arr1: unknown[], arr2: unknown[]): boolean {
     return arr2.every(value => arr1.indexOf(value) !== -1);
 }
