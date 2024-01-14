@@ -55,7 +55,13 @@ const config = {
         "@typescript-eslint/no-floating-promises": [
             "warn", { "ignoreVoid": true }
         ],
-        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-inferrable-types": [
+            "warn",
+            {
+                "ignoreParameters": true,
+                "ignoreProperties": true
+            }
+        ],
         "@typescript-eslint/no-this-alias": "off",
         "@typescript-eslint/no-misused-promises": [
             "warn",
