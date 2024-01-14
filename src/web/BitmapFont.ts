@@ -49,7 +49,7 @@ export class BitmapFont {
         const image = await loadImage(new URL(json.image, baseURL));
         const characters = json.characterMapping.map(charDef => charDef.char).join("");
         const widths = json.characterMapping.map(charDef => charDef.width);
-        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || []);
+        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors ?? []);
 
         return new BitmapFont(image, json.colors, characters, json.characterHeight, widths, compactablePrecursors, json.margin);
     }
@@ -123,7 +123,7 @@ export class BitmapFont {
 
         // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
         // when exactly between two pixels (Firefox doesn't have this problem).
-        if (ctx.getTransform) {
+        if (ctx.getTransform != null) {
             const transform = ctx.getTransform();
             ctx.translate(
                 Math.round(transform.e) - transform.e,

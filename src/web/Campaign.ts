@@ -385,7 +385,7 @@ export class Campaign {
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
 
-                    if (targetNpc && dialog) {
+                    if (targetNpc != null && dialog != null) {
                         targetNpc.conversation = new Conversation(dialog, targetNpc);
                     }
 
@@ -410,7 +410,7 @@ export class Campaign {
 
                     const targetNpc1 = npcMap1[char1];
 
-                    if (targetNpc1) {
+                    if (targetNpc1 != null) {
                         targetNpc1.conversation = null;
                     }
 

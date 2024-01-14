@@ -73,7 +73,7 @@ export abstract class Entity implements GameObject {
             (a, b ) => { return a.distance - b.distance; }
         );
 
-        if (sortedEntityDistances[0]) {
+        if (sortedEntityDistances[0] != null) {
             return sortedEntityDistances[0].target;
         } else {
             return null;

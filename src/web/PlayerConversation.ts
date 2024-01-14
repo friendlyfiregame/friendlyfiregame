@@ -69,7 +69,7 @@ export class PlayerConversation {
     }
 
     private setSelectedOption(num = 0): number {
-        if (this.interaction && this.interaction.options && this.interaction.options.length > 0) {
+        if (this.interaction != null && this.interaction.options != null && this.interaction.options.length > 0) {
             let sel = num % this.interaction.options.length;
 
             if (sel < 0) {
@@ -114,12 +114,12 @@ export class PlayerConversation {
 
             const options = this.interaction.options;
 
-            if (options && options.length > 0) {
+            if (options != null && options.length > 0) {
                 // Player could choose between options, confirmed with Enter
                 const index = (options.length === 1) ? 0 : this.selectedOption;
                 const option = options[index];
 
-                if (option) {
+                if (option != null) {
                     MenuList.select.play();
                     option.execute();
                 } else {

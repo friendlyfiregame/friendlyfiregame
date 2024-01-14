@@ -589,7 +589,7 @@ export class Player extends PhysicsEntity {
      * @param gate the source the player enters
      */
     private async enterGate(gate: GameObjectInfo): Promise<void> {
-        if (gate && gate.properties.target) {
+        if (gate != null && gate.properties.target) {
             this.isControllable = false;
             this.moveRight = false;
             this.moveLeft = false;

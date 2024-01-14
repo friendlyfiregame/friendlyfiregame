@@ -161,7 +161,7 @@ export class Dance {
     }
 
     private keyMissed(key: string): void {
-        if (this.performance[this.currentIndex]) {
+        if (this.performance[this.currentIndex] != null) {
             for (const char of key) {
                 this.performance[this.currentIndex][char] = false;
             }
@@ -205,7 +205,7 @@ export class Dance {
             this.currentKey = this.keys[this.currentIndex] || "";
 
             for (const char of this.currentKey) {
-                if (this.performance[this.currentIndex] && this.performance[this.currentIndex][char]) {
+                if (this.performance[this.currentIndex] != null && this.performance[this.currentIndex][char]) {
                     this.currentKey = this.currentKey.replace(char, "");
                 }
             }
