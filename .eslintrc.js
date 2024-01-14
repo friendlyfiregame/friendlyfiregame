@@ -116,6 +116,7 @@ const config = {
                 "asyncArrow": "always"
             }
         ],
+        "@typescript-eslint/switch-exhaustiveness-check": "warn",
         "@typescript-eslint/triple-slash-reference": "warn",
         "dot-location": [ "warn", "property" ],
         "eol-last": "warn",
