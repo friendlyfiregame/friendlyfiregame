@@ -26,7 +26,7 @@
     "lint": "npm run lint:package.json && npm run lint:markdown && npm run lint:html && npm run lint:typescript",
     "lint:html": "htmlhint ./index.html",
     "lint:markdown": "markdownlint -c ./.markdownlint.json -i node_modules/ -i dist/ -i out/ .",
-    "lint:typescript": "eslint --ext .ts ./src/",
+    "lint:typescript": "eslint --max-warnings 0 --ext .ts src",
     "lint:package.json": "npmPkgJsonLint .",
     "check": "jest",
     "cspell": "cspell --no-progress",
