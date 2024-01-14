@@ -51,7 +51,7 @@ export class SoundEmitter extends Entity {
         if (soundId) {
             const sound = scene.ambientSounds[soundId as AmbientSoundId];
 
-            if (sound) {
+            if (sound != null) {
                 return new SoundEmitter(
                     scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity
                 );

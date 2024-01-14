@@ -77,13 +77,13 @@ export abstract class Quest {
     }
 
     public trigger(index: number): void {
-        if (this.triggers[index]) {
+        if (this.triggers[index] != null) {
             this.triggers[index].isTriggered = true;
         }
     }
 
     public untrigger(index: number): void {
-        if (this.triggers[index]) {
+        if (this.triggers[index] != null) {
             this.triggers[index].isTriggered = false;
         }
     }
@@ -183,4 +183,3 @@ export class QuestE extends Quest {
         );
     }
 }
-

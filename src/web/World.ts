@@ -166,7 +166,7 @@ export class World implements GameObject {
 
         if (
             !validEnvironments.includes(environment)
-            || (ignore && ignore.includes(environment))
+            || (ignore != null && ignore.includes(environment))
         ) {
             return Environment.AIR;
         }
