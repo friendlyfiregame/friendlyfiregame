@@ -831,9 +831,9 @@ export class Player extends PhysicsEntity {
     }
 
     public debugCollisions(): void {
-        console.log("Entities: ",this.scene.world.getEntityCollisions(this));
-        console.log("Triggers: ",this.scene.world.getTriggerCollisions(this));
-        console.log("Gates: ",this.scene.world.getGateCollisions(this));
+        console.log("Entities: ", this.scene.world.getEntityCollisions(this));
+        console.log("Triggers: ", this.scene.world.getTriggerCollisions(this));
+        console.log("Gates: ", this.scene.world.getGateCollisions(this));
     }
 
     private getReadableTrigger(): GameObjectInfo | undefined {

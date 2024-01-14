@@ -2,7 +2,7 @@
 
 import { GamepadStyle } from "./GamepadStyle";
 
-const typemap: Map<RegExp,GamepadStyle> = new Map();
+const typemap: Map<RegExp, GamepadStyle> = new Map();
 
 /* spell-checker: disable */
 
