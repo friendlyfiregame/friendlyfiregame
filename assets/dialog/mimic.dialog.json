@@ -23,7 +23,7 @@
     "questions": [
         "►What are you? @what",
         "►[not asked_about_items]Do you have any items? @items",
-        "►[not asked_aboud_sleeping]I thought someone was sleeping in there. @sleeping",
+        "►[not asked_about_sleeping]I thought someone was sleeping in there. @sleeping",
         "►I'm off.",
         "Bye! @main !end"
     ],
@@ -36,13 +36,13 @@
     ],
     "items": [
         "No, we mimics usually don't carry items. !set asked_about_items true",
-        "Some do, but that only incentivizes unnecessary violence.",
+        "Some do, but that only creates incentives for unnecessary violence.",
         "There's no need to attack a mimic who doesn't hold items, no?",
         "►True",
         "Yes, yes. @questions"
     ],
     "sleeping": [
-        "Oh, a common mistake! !set asked_aboud_sleeping true",
+        "Oh, a common mistake! !set asked_about_sleeping true",
         "The people I eat usually don't have the capacity to make sleep noises anymore.",
         "But that was a long time ago. I'm living the vegan lifestyle now.",
         "I moved here when I heard how peaceful it was. @sleeping_questions"

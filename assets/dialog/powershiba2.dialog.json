@@ -10,9 +10,9 @@
         "This is unacceptable.",
         "►Maybe you can make it up to him.",
         "Yes… I must do that.",
-        "I must meet him. @sacriface"
+        "I must meet him. @sacrifice"
     ],
-    "sacriface": [
+    "sacrifice": [
         "I know that it's a lot to ask from you after you already did so much…",
         "…but would you be so kind and give away your power of multi-jumping to my brother?",
         "This is the only way for him to actually come to me. @sacrificeOptions"
@@ -21,7 +21,7 @@
         "►Can't you just leave the clouds yourself? @yourself",
         "►Can't I carry you down? @carry",
         "►Of course I will! @yes",
-        "►Eh, no thanks. @sacriface !end"
+        "►Eh, no thanks. @sacrifice !end"
     ],
     "yourself": [
         "As a power-up, I lost all means to move by myself.",
@@ -44,7 +44,7 @@
         "Make sure you have done everything you need to do here up in the clouds.",
         "If you give away your multi-jump prematurely it could lead to a disaster.",
         "I can tell that you still have business here.",
-        "►Thanks for heads up! !end @sacriface"
+        "►Thanks for the heads up! !end @sacrifice"
     ],
     "go": [
         "Thank you human! !set $gotPowerShibaQuest true !end @end"

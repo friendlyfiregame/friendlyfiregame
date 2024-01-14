@@ -39,7 +39,7 @@
         "►Not so far according to your reaction.",
         "Yes, very true.",
         "Just say a word if you need help.",
-        "►I'm in a hurry, give me something to work with. @explaination",
+        "►I'm in a hurry, give me something to work with. @explanation",
         "►Riddles are my strong suit. I'll do it myself!",
         "Respectable. Good luck then! @onmyown !end"
     ],
@@ -47,9 +47,9 @@
         "How goes the riddling?",
         "►Progress is imminent! I can do this. @onmyown !end",
         "►I could use some help after all.",
-        "I thought so! @explaination"
+        "I thought so! @explanation"
     ],
-    "explaination": [
+    "explanation": [
         "This is a magical climbing chamber with unlimited height. !set $mountainRiddleExplained true",
         "We adopted the concept from a fire spitting turtle.",
         "He used it to keep some plumbers out. You can't make this stuff up.",
@@ -68,7 +68,7 @@
         "►That is very specific and not cryptic at all.",
         "…whoops.",
         "I got the wrong tip sheet here.",
-        "Well, good luck nontheless.",
+        "Well, good luck nonetheless.",
         "►I'll try my best. @end !end"
     ],
     "end": [

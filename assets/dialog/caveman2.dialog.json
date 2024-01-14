@@ -4,7 +4,7 @@
         "[$ismale] I thought I'd never see another dude anytime soon.",
         "[not $ismale] I thought I'd never see a woman ever again.",
         "Did you stone-skip-jump your way across the river as well?",
-        "►[$hasDoubleJump]No, I come here regulary. @regulary",
+        "►[$hasDoubleJump]No, I come here regularly. @regularly",
         "►[$hasDoubleJump]What's a stone-skip-jump? @skipjump",
         "►[not $hasDoubleJump]Yes! @stuck"
     ],
@@ -23,7 +23,7 @@
         "►Can I ask you some questions? @questions",
         "►I'm on my way. @visitedEntry !end"
     ],
-    "regulary": [
+    "regularly": [
         "So there is a regular way to cross the river? !set visited",
         "►Yeah, it's a long story.",
         "I couldn't cross the broken bridge after falling down from the sky.",
@@ -55,7 +55,7 @@
         "But that's not all.",
         "There is something very strange going on here.",
         "►What do you mean?",
-        "Don't you see it? The strange shrine in the clouds and the very supspicious fire people?",
+        "Don't you see it? The strange shrine in the clouds and the very suspicious fire people?",
         "How did we get here in the first place?",
         "It's like a feverish nightmare from which you can't wake up.",
         "I conducted some experiments down here and the results are alarming. @questions"
