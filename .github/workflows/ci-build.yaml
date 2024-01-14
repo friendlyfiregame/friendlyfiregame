@@ -58,7 +58,7 @@ jobs:
     - name: Test
       run: xvfb-run --auto-servernum npm test
     - name: Archive dist folder
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: webapp-dist
         path: dist
@@ -183,7 +183,7 @@ jobs:
         VERSION: ${{steps.version.outputs.result}}
         TARGET_OS: ${{steps.build_info.outputs.target_os}}
         TARGET_ARCH: ${{steps.build_info.outputs.target_arch}}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{steps.create_archive.outputs.package_name}}
         path: ${{steps.create_archive.outputs.artifact_path}}
