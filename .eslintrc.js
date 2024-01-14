@@ -41,7 +41,13 @@ const config = {
                 }
             }
         ],
-        "@typescript-eslint/brace-style": [ "error", "1tbs", { "allowSingleLine": true } ],
+         "@typescript-eslint/brace-style": [
+            "warn",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
         "@typescript-eslint/comma-spacing": "warn",
         "@typescript-eslint/default-param-last": "warn",
         "@typescript-eslint/explicit-function-return-type": [
