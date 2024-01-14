@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed Controls menu on Steam Deck. The Steam Deck controller is now properly
+  detected as Xbox Controller.
+
 ### Changed
 
 - The windows version of the app now uses a scalable icon in .ICO format to ensure

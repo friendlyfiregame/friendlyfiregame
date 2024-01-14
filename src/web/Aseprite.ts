@@ -15,7 +15,7 @@ export class Aseprite {
     private readonly duration: number;
     private readonly fallbackTag = "idle";
 
-    private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
+    private constructor(private readonly source: string, private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
         this.duration = this.frames.reduce((duration, frame) => duration + frame.duration, 0);
 
@@ -42,7 +42,7 @@ export class Aseprite {
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.meta.image, baseURL));
 
-        return new Aseprite(json, image);
+        return new Aseprite(source, json, image);
     }
 
     /**
@@ -137,7 +137,7 @@ export class Aseprite {
     public getTaggedFrameIndex(tag: string, time: number = now()): number {
         const frameTag = this.frameTags[tag] || this.frameTags[this.fallbackTag];
         if (frameTag == null) {
-            throw new Error(`Frame tag not found and fallback is not available as well. Tag: '${tag}' | FallbackTag: '${this.fallbackTag}'`);
+            throw new Error(`Frame tag not found in sprite '${this.source}' and fallback is not available as well. Tag: '${tag}' | FallbackTag: '${this.fallbackTag}'`);
         }
         return this.calculateFrameIndex(
             time, this.frameTagDurations[tag], frameTag.from, frameTag.to, frameTag.direction

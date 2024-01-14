@@ -12,6 +12,8 @@ typemap.set(/^Cat Hive Virtual Touch Controller$/i, GamepadStyle.STADIA);
 typemap.set(/^.*?(xinput).*$/i, GamepadStyle.XBOX);
 // Vendor ID of Microsoft Corp.
 typemap.set(/^.*(?<vendorId>045e).*$/i, GamepadStyle.XBOX);
+// Vendor ID of Valve
+typemap.set(/^.*(?<vendorId>28de).*$/i, GamepadStyle.XBOX);
 // Anything with "stadia controller" in its name
 typemap.set(/^.*?(stadia\ controller).*$/i, GamepadStyle.STADIA);
 // Anything with playstation in its name
