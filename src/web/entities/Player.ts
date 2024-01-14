@@ -2,7 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BgmId, FadeDirection, GameScene } from "../scenes/GameScene";
 import { BitmapFont } from "../BitmapFont";
-import { Bounds, entity } from "../Entity";
+import { Bounds, Entity, entity } from "../Entity";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
 import { CharacterAsset, VoiceAsset } from "../Campaign";
 import { Cloud } from "./Cloud";
@@ -500,7 +500,7 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.scene.gameObjects.push(
+                this.scene.addGameObject(
                     new Snowball(
                         this.scene,
                         this.x, this.y + this.height * 0.75,
@@ -657,6 +657,20 @@ export class Player extends PhysicsEntity {
                 this.isControllable = true;
             }
         }
+    }
+
+    /**
+     * For debugging purposes. Teleports the player to the given entity.
+     *
+     * Example usage: `game.campaign.gameScene.player.teleportTo(game.campaign.gameScene.powerShiba)`
+     *
+     * @param entity - The game entity to teleport to.
+     */
+    public teleportTo(entity: Entity): void {
+        this.x = entity.x;
+        this.y = entity.y;
+
+        this.scene.camera.setBounds(this.getCurrentMapBounds());
     }
 
     private canJump(): boolean {

@@ -15,7 +15,8 @@ export enum RenderingType {
     ASEPRITE,
     RECT,
     SPEECH_BUBBLE,
-    TEXT
+    TEXT,
+    RAW
 }
 
 export enum RenderingLayer {
@@ -131,8 +132,15 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
     time?: number;
 };
 
+export type RawRenderingItem = {
+    type: RenderingType.RAW;
+    layer: RenderingLayer;
+    draw: (ctx: CanvasRenderingContext2D) => void;
+};
+
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
-                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | FireRenderingItem | DanceRenderingItem;
+                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | FireRenderingItem | DanceRenderingItem |
+                            RawRenderingItem;
 
 export class Renderer {
     private scene: GameScene;
@@ -156,6 +164,8 @@ export class Renderer {
                     item.entity.drawToCanvas(ctx);
                 } else if (item.type === RenderingType.DANCE) {
                     item.dance.draw(ctx);
+                } else if (item.type === RenderingType.RAW) {
+                    item.draw(ctx);
                 } else {
                     ctx.save();
                     if (item.translation) ctx.translate(item.translation.x, item.translation.y);
