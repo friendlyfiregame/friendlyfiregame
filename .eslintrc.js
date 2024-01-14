@@ -118,7 +118,7 @@ const config = {
         "prefer-promise-reject-errors": "warn",
         "prefer-regex-literals": "warn",
         "quotes": [ "error", "double" ],
-        "semi": "off"
+        "semi": "warn"
     }
 };
 module.exports = config;
