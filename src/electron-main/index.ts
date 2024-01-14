@@ -91,7 +91,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
     }
 
     // Only one instance should ever be launched
-    if (!app.requestSingleInstanceLock) {
+    if (!app.requestSingleInstanceLock()) {
         return app.quit();
     }
 
