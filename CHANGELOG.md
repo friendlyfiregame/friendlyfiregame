@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   detected as Xbox Controller.
 - Fixed carrying metadata in female player sprite.
 - Re-export all sprites with extrude option to fix many sprite rendering glitches.
+- Fixed lots of typos in dialogs.
 
 ### Changed
 

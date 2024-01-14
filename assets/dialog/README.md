@@ -10,7 +10,7 @@ One NPC can thus be part of multiple Dialogs over time as the game progresses.
 Dialogs are self enclosed, that means the NPC cannot access the contents of another dialog in any way.
 Cross references are possible within a single dialog, where player reactions can cause the NPC to jump
 to any of a number of possible states in the conversation. These references are often one-way, but
-it's also possible to backtrac or even add cycles to the conversation.
+it's also possible to backtrack or even add cycles to the conversation.
 
 ## Syntax
 
