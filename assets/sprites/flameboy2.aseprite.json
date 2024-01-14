@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 46, "y": 0, "w": 23, "h": 44 },
+    "filename": "flameboy2 0.aseprite",
+    "frame": { "x": 51, "y": 1, "w": 23, "h": 44 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 1, "w": 23, "h": 44 },
@@ -9,8 +9,8 @@
     "duration": 100
    },
    {
-    "filename": "1",
-    "frame": { "x": 0, "y": 0, "w": 23, "h": 45 },
+    "filename": "flameboy2 1.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 23, "h": 45 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 23, "h": 45 },
@@ -18,8 +18,8 @@
     "duration": 100
    },
    {
-    "filename": "2",
-    "frame": { "x": 23, "y": 45, "w": 23, "h": 40 },
+    "filename": "flameboy2 2.aseprite",
+    "frame": { "x": 26, "y": 48, "w": 23, "h": 40 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 5, "w": 23, "h": 40 },
@@ -27,8 +27,8 @@
     "duration": 100
    },
    {
-    "filename": "3",
-    "frame": { "x": 0, "y": 45, "w": 23, "h": 42 },
+    "filename": "flameboy2 3.aseprite",
+    "frame": { "x": 1, "y": 48, "w": 23, "h": 42 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 3, "w": 23, "h": 42 },
@@ -36,8 +36,8 @@
     "duration": 100
    },
    {
-    "filename": "4",
-    "frame": { "x": 46, "y": 44, "w": 23, "h": 44 },
+    "filename": "flameboy2 4.aseprite",
+    "frame": { "x": 51, "y": 47, "w": 23, "h": 44 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 1, "w": 23, "h": 44 },
@@ -45,8 +45,8 @@
     "duration": 100
    },
    {
-    "filename": "5",
-    "frame": { "x": 23, "y": 0, "w": 23, "h": 45 },
+    "filename": "flameboy2 5.aseprite",
+    "frame": { "x": 26, "y": 1, "w": 23, "h": 45 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 23, "h": 45 },
@@ -56,13 +56,16 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18-x64",
+  "version": "1.3.2-x64",
   "image": "flameboy2.png",
   "format": "I8",
-  "size": { "w": 69, "h": 88 },
+  "size": { "w": 75, "h": 92 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 5, "direction": "forward" }
+   { "name": "idle", "from": 0, "to": 5, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

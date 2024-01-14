@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 31, "h": 25 },
+    "filename": "stonedisciple.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 31, "h": 25 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 1, "w": 31, "h": 25 },
@@ -11,13 +11,16 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "stonedisciple.png",
   "format": "I8",
-  "size": { "w": 31, "h": 25 },
+  "size": { "w": 33, "h": 27 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 0, "direction": "pingpong" }
+   { "name": "idle", "from": 0, "to": 0, "direction": "pingpong", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 5", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 70, "w": 38, "h": 19 },
+    "filename": "mimic 0.aseprite",
+    "frame": { "x": 1, "y": 77, "w": 38, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 4, "y": 5, "w": 38, "h": 19 },
@@ -9,8 +9,8 @@
     "duration": 400
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 0, "w": 42, "h": 24 },
+    "filename": "mimic 1.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -18,8 +18,8 @@
     "duration": 1000
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 126, "y": 24, "w": 40, "h": 23 },
+    "filename": "mimic 2.aseprite",
+    "frame": { "x": 133, "y": 27, "w": 40, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 40, "h": 23 },
@@ -27,8 +27,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 48, "w": 39, "h": 22 },
+    "filename": "mimic 3.aseprite",
+    "frame": { "x": 1, "y": 53, "w": 39, "h": 22 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 3, "y": 2, "w": 39, "h": 22 },
@@ -36,8 +36,8 @@
     "duration": 1000
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 70, "w": 38, "h": 19 },
+    "filename": "mimic 4.aseprite",
+    "frame": { "x": 1, "y": 77, "w": 38, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 4, "y": 5, "w": 38, "h": 19 },
@@ -45,8 +45,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 78, "y": 48, "w": 39, "h": 19 },
+    "filename": "mimic 5.aseprite",
+    "frame": { "x": 83, "y": 53, "w": 39, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 3, "y": 5, "w": 39, "h": 19 },
@@ -54,8 +54,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 70, "w": 38, "h": 19 },
+    "filename": "mimic 6.aseprite",
+    "frame": { "x": 1, "y": 77, "w": 38, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 4, "y": 5, "w": 38, "h": 19 },
@@ -63,8 +63,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 78, "y": 67, "w": 39, "h": 19 },
+    "filename": "mimic 7.aseprite",
+    "frame": { "x": 83, "y": 74, "w": 39, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 4, "y": 5, "w": 39, "h": 19 },
@@ -72,8 +72,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 70, "w": 38, "h": 19 },
+    "filename": "mimic 8.aseprite",
+    "frame": { "x": 1, "y": 77, "w": 38, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 4, "y": 5, "w": 38, "h": 19 },
@@ -81,8 +81,8 @@
     "duration": 450
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 39, "y": 48, "w": 39, "h": 22 },
+    "filename": "mimic 9.aseprite",
+    "frame": { "x": 42, "y": 53, "w": 39, "h": 22 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 3, "y": 2, "w": 39, "h": 22 },
@@ -90,8 +90,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 126, "y": 47, "w": 40, "h": 23 },
+    "filename": "mimic 10.aseprite",
+    "frame": { "x": 133, "y": 52, "w": 40, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 40, "h": 23 },
@@ -99,8 +99,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 42, "y": 0, "w": 42, "h": 24 },
+    "filename": "mimic 11.aseprite",
+    "frame": { "x": 45, "y": 1, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -108,8 +108,8 @@
     "duration": 500
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 84, "y": 0, "w": 42, "h": 24 },
+    "filename": "mimic 12.aseprite",
+    "frame": { "x": 89, "y": 1, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -117,8 +117,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 126, "y": 0, "w": 42, "h": 24 },
+    "filename": "mimic 13.aseprite",
+    "frame": { "x": 133, "y": 1, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -126,8 +126,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 0, "y": 24, "w": 42, "h": 24 },
+    "filename": "mimic 14.aseprite",
+    "frame": { "x": 1, "y": 27, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -135,8 +135,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 42, "y": 24, "w": 42, "h": 24 },
+    "filename": "mimic 15.aseprite",
+    "frame": { "x": 45, "y": 27, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -144,8 +144,8 @@
     "duration": 150
    },
    {
-    "filename": "frame}",
-    "frame": { "x": 84, "y": 24, "w": 42, "h": 24 },
+    "filename": "mimic 16.aseprite",
+    "frame": { "x": 89, "y": 27, "w": 42, "h": 24 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 24 },
@@ -155,15 +155,21 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "mimic.png",
   "format": "I8",
-  "size": { "w": 168, "h": 89 },
+  "size": { "w": 176, "h": 97 },
   "scale": "1",
   "frameTags": [
-   { "name": "sleeping", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "idle", "from": 1, "to": 3, "direction": "pingpong" },
-   { "name": "open", "from": 4, "to": 16, "direction": "forward" }
+   { "name": "sleeping", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "idle", "from": 1, "to": 3, "direction": "pingpong", "color": "#000000ff" },
+   { "name": "open", "from": 4, "to": 16, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "chest", "opacity": 255, "blendMode": "normal" },
+   { "name": "lid", "opacity": 255, "blendMode": "normal" },
+   { "name": "teeth", "opacity": 255, "blendMode": "normal" },
+   { "name": "tongue", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }
