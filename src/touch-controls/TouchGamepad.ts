@@ -50,7 +50,7 @@ class StringAttribute<T extends string> implements Attribute<T> {
     readonly #values: T[];
     readonly #default: T;
 
-    constructor(values: T[], defaultValue: T) {
+    public constructor(values: T[], defaultValue: T) {
         this.#values = values;
         this.#default = defaultValue;
     }
@@ -79,7 +79,7 @@ export class TouchGamepad extends HTMLElement {
 
     readonly #virtualGamepad: VirtualGamepad;
 
-    static get observedAttributes(): string[] {
+    public static get observedAttributes(): string[] {
 		return Array.from(TouchGamepad.#ATTRIBUTES.keys());
 	}
 

@@ -14,7 +14,7 @@ export interface AssetOptions<A> {
 class AssetRequest<
         S extends string | string[] = string | string[],
         A extends (S extends string ? unknown : unknown[]) = (S extends string ? unknown : unknown[])> {
-    constructor(
+    public constructor(
         private readonly target: Record<string | symbol, unknown>,
         private readonly propertyKey: string | symbol,
         public readonly src: S,

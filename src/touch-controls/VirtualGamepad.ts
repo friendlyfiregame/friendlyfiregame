@@ -6,7 +6,7 @@ export class VirtualGamepad extends Object implements Gamepad {
     readonly #axes: number[];
     readonly #buttons: { pressed: boolean, touched: boolean, value: number }[];
 
-    constructor(initArgs: { index: number }) {
+    public constructor(initArgs: { index: number }) {
         super();
         this.#index = initArgs.index;
         this.#connected = true;
@@ -26,14 +26,14 @@ export class VirtualGamepad extends Object implements Gamepad {
         }
     }
 
-    pressButton(index: number): void {
+    public pressButton(index: number): void {
         this.#timestamp = Date.now();
         this.#buttons[index].pressed = true;
         this.#buttons[index].touched = false;
         this.#buttons[index].value = 1;
     }
 
-    releaseButton(index: number): void {
+    public releaseButton(index: number): void {
         this.#timestamp = Date.now();
         this.#buttons[index].pressed = false;
         this.#buttons[index].touched = false;

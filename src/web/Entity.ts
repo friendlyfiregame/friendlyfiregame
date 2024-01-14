@@ -42,7 +42,7 @@ export abstract class Entity implements GameObject {
     protected timeAlive = 0;
     protected animator = new Animator(this);
 
-    constructor(
+    public constructor(
         public scene: GameScene,
         public x: number,
         public y: number,
@@ -51,7 +51,7 @@ export abstract class Entity implements GameObject {
         public isTrigger = true
     ) {}
 
-    abstract draw(ctx: CanvasRenderingContext2D): void;
+    public abstract draw(ctx: CanvasRenderingContext2D): void;
 
     public update(dt: number): void {
         this.timeAlive += dt;

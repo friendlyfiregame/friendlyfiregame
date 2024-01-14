@@ -48,7 +48,7 @@ export class Camera {
     private currentBarHeight = 0;
     private bounds?: Bounds;
 
-    constructor(
+    public constructor(
         protected scene: GameScene, private readonly target: Vector2Like, interpolationTime = 0.5,
         private readonly barHeight = 0.1
     ) {

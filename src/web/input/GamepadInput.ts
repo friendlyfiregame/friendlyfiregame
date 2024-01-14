@@ -71,7 +71,7 @@ class GamepadButtonWrapper {
     private pressed: boolean;
     private readonly gamepad: GamepadWrapper;
 
-    constructor(index: number, wrapped: GamepadButton, gamepad: GamepadWrapper) {
+    public constructor(index: number, wrapped: GamepadButton, gamepad: GamepadWrapper) {
         this.index = index;
         this.pressed = wrapped.pressed;
         this.gamepad = gamepad;
@@ -118,7 +118,7 @@ class GamepadAxisWrapper {
     private value: number = 0.0;
     private readonly gamepad: GamepadWrapper;
 
-    constructor(index: number, gamepad: GamepadWrapper) {
+    public constructor(index: number, gamepad: GamepadWrapper) {
         this.index = index;
         this.gamepad = gamepad;
     }
@@ -193,7 +193,8 @@ class GamepadWrapper {
     private readonly buttons: GamepadButtonWrapper[];
     private readonly axes: GamepadAxisWrapper[];
     public gamepadModel: GamepadModel;
-    constructor(gamepad: Gamepad) {
+
+    public constructor(gamepad: Gamepad) {
         this.index = gamepad.index;
         this.id = gamepad.id;
         this.gamepadModel = GamepadModel.fromString(this.id);
@@ -227,7 +228,7 @@ class GamepadWrapper {
 export class GamepadInput {
     readonly #gamepads: Map<string, GamepadWrapper>;
 
-    constructor() {
+    public constructor() {
         this.#gamepads = new Map();
 
         // Attach listeners

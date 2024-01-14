@@ -14,7 +14,7 @@ export class ControllerEvent extends Object {
     private [eventTypeSymbol]: ControllerEventType;
     private [repeatSymbol]: boolean;
 
-    constructor(
+    public constructor(
         controllerFamily: ControllerFamily, eventType: ControllerEventType,
         intents: ControllerIntent[], repeat: boolean = false
     ) {
@@ -26,83 +26,83 @@ export class ControllerEvent extends Object {
         this[repeatSymbol] = repeat;
     }
 
-    get controllerFamily(): ControllerFamily {
+    public get controllerFamily(): ControllerFamily {
         return this[controllerFamilySymbol];
     }
 
-    get eventType(): ControllerEventType {
+    public get eventType(): ControllerEventType {
         return this[eventTypeSymbol];
     }
 
-    get repeat(): boolean {
+    public get repeat(): boolean {
         return this[repeatSymbol];
     }
 
-    get isMenuLeft(): boolean {
+    public get isMenuLeft(): boolean {
         return (this[intentsSymbol] & ControllerIntent.MENU_LEFT) === ControllerIntent.MENU_LEFT;
     }
 
-    get isMenuRight(): boolean {
+    public get isMenuRight(): boolean {
         return (this[intentsSymbol] & ControllerIntent.MENU_RIGHT) === ControllerIntent.MENU_RIGHT;
     }
 
-    get isMenuUp(): boolean {
+    public get isMenuUp(): boolean {
         return (this[intentsSymbol] & ControllerIntent.MENU_UP) === ControllerIntent.MENU_UP;
     }
 
-    get isMenuDown(): boolean {
+    public get isMenuDown(): boolean {
         return (this[intentsSymbol] & ControllerIntent.MENU_DOWN) === ControllerIntent.MENU_DOWN;
     }
 
-    get isPlayerMoveLeft(): boolean {
+    public get isPlayerMoveLeft(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_MOVE_LEFT) === ControllerIntent.PLAYER_MOVE_LEFT;
     }
 
-    get isPlayerMoveRight(): boolean {
+    public get isPlayerMoveRight(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_MOVE_RIGHT) === ControllerIntent.PLAYER_MOVE_RIGHT;
     }
 
-    get isPlayerJump(): boolean {
+    public get isPlayerJump(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_JUMP) === ControllerIntent.PLAYER_JUMP;
     }
 
-    get isPlayerDrop(): boolean {
+    public get isPlayerDrop(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_DROP) === ControllerIntent.PLAYER_DROP;
     }
 
-    get isPlayerEnterDoor(): boolean {
+    public get isPlayerEnterDoor(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_ENTER_DOOR) === ControllerIntent.PLAYER_ENTER_DOOR;
     }
 
-    get isPlayerInteract(): boolean {
+    public get isPlayerInteract(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_INTERACT) === ControllerIntent.PLAYER_INTERACT;
     }
 
-    get isPlayerAction(): boolean {
+    public get isPlayerAction(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_ACTION) === ControllerIntent.PLAYER_ACTION;
     }
 
-    get isPlayerRun(): boolean {
+    public get isPlayerRun(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
     }
 
-    get isPlayerDance1(): boolean {
+    public get isPlayerDance1(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_DANCE_1) === ControllerIntent.PLAYER_DANCE_1;
     }
 
-    get isPlayerDance2(): boolean {
+    public get isPlayerDance2(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_DANCE_2) === ControllerIntent.PLAYER_DANCE_2;
     }
 
-    get isPause(): boolean {
+    public get isPause(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PAUSE) === ControllerIntent.PAUSE;
     }
 
-    get isConfirm(): boolean {
+    public get isConfirm(): boolean {
         return (this[intentsSymbol] & ControllerIntent.CONFIRM) === ControllerIntent.CONFIRM;
     }
 
-    get isAbort(): boolean {
+    public get isAbort(): boolean {
         return (this[intentsSymbol] & ControllerIntent.ABORT) === ControllerIntent.ABORT;
     }
 }
@@ -111,11 +111,13 @@ const gamepadModelSymbol = Symbol("gamepadModel");
 
 export class GamepadControllerEvent extends ControllerEvent {
     private [gamepadModelSymbol]: GamepadModel;
-    constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
+
+    public constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
         super(ControllerFamily.GAMEPAD, eventType, intents, repeat);
         this[gamepadModelSymbol] = gamepadModel;
     }
-    get gamepadModel(): GamepadModel {
+
+    public get gamepadModel(): GamepadModel {
         return this[gamepadModelSymbol];
     }
 }

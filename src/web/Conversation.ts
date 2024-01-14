@@ -26,7 +26,7 @@ export class Conversation {
     private localVariables: Record<string, string> = {};
     private skippedLines = 0; // help variable to make goBack() work with skipped dialog lines due to conditions
 
-    constructor(json: DialogJSON, private readonly npc: NPC) {
+    public constructor(json: DialogJSON, private readonly npc: NPC) {
         this.states = Object.keys(json);
         this.data = {};
 
@@ -217,7 +217,7 @@ export class ConversationLine {
     public readonly isNpc: boolean;
     private visited = false;
 
-    constructor(
+    public constructor(
         public readonly full: string,
         public readonly conversation: Conversation
     ) {

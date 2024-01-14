@@ -93,7 +93,7 @@ export class Campaign {
     public selectedVoice = VoiceAsset.FEMALE;
     public isNewGamePlus = false;
 
-    constructor(public game: Game) {}
+    public constructor(public game: Game) {}
 
     public getQuest(key: QuestKey): Quest {
         const ending = this.quests.find(ending => ending.key === key);

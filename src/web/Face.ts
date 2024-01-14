@@ -37,7 +37,7 @@ export class Face {
     private mode = FaceModes.NEUTRAL;
     private direction = 1; // 1 = right, -1 = left
 
-    constructor(
+    public constructor(
         private readonly scene: GameScene,
         private readonly owner: NPC,
         private readonly eyeType: EyeType,

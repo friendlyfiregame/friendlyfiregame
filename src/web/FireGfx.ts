@@ -17,7 +17,7 @@ export class FireGfx {
     private age = 0;
     private startTime = 0;
 
-    constructor(
+    public constructor(
         private readonly w = 48,
         private readonly h = 64,
         private readonly coneShaped = true,

@@ -102,7 +102,7 @@ export class ParticleEmitter {
     public zIndex: number;
     private readonly updateMethod: ((p: Particle) => void) | undefined;
 
-    constructor(args: ParticleEmitterArguments) {
+    public constructor(args: ParticleEmitterArguments) {
         this.particles = [];
         this.x = args.position.x;
         this.y = args.position.y;
@@ -200,7 +200,7 @@ export class Particle {
     private readonly originalLifetime: number;
     private progress: number = 0;
 
-    constructor(
+    public constructor(
         private readonly emitter: ParticleEmitter,
         public x: number,
         public y: number,
@@ -276,7 +276,7 @@ export class Particle {
 export class ValueCurve {
     private readonly mapping: number[] = [];
 
-    constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
+    public constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
         for (let i = 0; i <= steps; i++) {
             this.mapping[i] = func(i / steps);
         }

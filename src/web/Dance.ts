@@ -49,7 +49,7 @@ export class Dance {
     private currentIndex = 0;
     private success = false;
 
-    constructor(
+    public constructor(
         private readonly scene: GameScene,
         private x: number,
         private y: number,

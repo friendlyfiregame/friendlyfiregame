@@ -49,6 +49,11 @@ const config = {
                 "allowTypedFunctionExpressions": true
             }
         ],
+        "@typescript-eslint/explicit-member-accessibility": [
+            "warn", {
+                "accessibility": "explicit"
+            }
+        ],
         "@typescript-eslint/explicit-module-boundary-types": "warn",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-explicit-any": "warn",

@@ -10,7 +10,7 @@ export class Preferences {
 
     readonly #audio: AudioPreferencesStore;
 
-    constructor() {
+    public constructor() {
         this.#audio = new AudioPreferencesStore();
     }
 

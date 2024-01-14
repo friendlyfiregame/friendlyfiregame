@@ -8,7 +8,7 @@ export class PlayerConversation {
     private interaction: Interaction | null = null;
     private selectedOption = -1;
 
-    constructor(
+    public constructor(
         private readonly player: Player,
         public readonly npc: NPC,
         private readonly conversation: Conversation,

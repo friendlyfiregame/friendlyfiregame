@@ -78,7 +78,7 @@ export class SpeechBubble {
     private readonly paddingRight = 7;
     private readonly color = "white";
 
-    constructor(
+    public constructor(
         private readonly scene: GameScene,
         public anchorX: number,
         public anchorY: number,

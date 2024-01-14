@@ -15,7 +15,7 @@ export class Greeting implements GameObject {
 
     private readonly speechBubble = new SpeechBubble(this.scene, this.npc.x, this.npc.y);
 
-    constructor(private readonly scene: GameScene, public npc: NPC, private readonly dialogData: ScriptedDialogJSON) {
+    public constructor(private readonly scene: GameScene, public npc: NPC, private readonly dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
         this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }

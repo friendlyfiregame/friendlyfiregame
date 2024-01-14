@@ -17,7 +17,7 @@ export class AudioManager {
     readonly #musicGainNode: GainNode;
     readonly #sfxGainNode: GainNode;
 
-    constructor(audioPreferencesStore: AudioPreferencesStore) {
+    public constructor(audioPreferencesStore: AudioPreferencesStore) {
         this.#audioPreferencesStore = audioPreferencesStore;
         const audioContext = getAudioContext();
         this.#musicGainNode = audioContext.createGain();

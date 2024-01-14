@@ -3,13 +3,12 @@ import type { FullscreenManager as FullscreenManager } from "../../shared/Fullsc
 /**
  * Fullscreen management suitable for modern browsers.
  */
- export class WebFullscreenManager implements FullscreenManager {
-
-    async isEnabled(): Promise<boolean> {
+export class WebFullscreenManager implements FullscreenManager {
+    public async isEnabled(): Promise<boolean> {
         return Promise.resolve(document.fullscreenEnabled && document.fullscreenElement != null);
     }
 
-    async setEnabled(fullscreen: boolean): Promise<void> {
+    public async setEnabled(fullscreen: boolean): Promise<void> {
         const currentFullscreenElement = document.fullscreenElement;
         if (!document.fullscreenEnabled) {
             return Promise.resolve();
@@ -19,5 +18,4 @@ import type { FullscreenManager as FullscreenManager } from "../../shared/Fullsc
             return document.exitFullscreen();
         }
     }
-
 }
