@@ -173,7 +173,7 @@ export class Bird extends NPC {
 
     public override isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
-        return (superResult && this.isWaiting());
+        return (superResult === true && this.isWaiting());
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

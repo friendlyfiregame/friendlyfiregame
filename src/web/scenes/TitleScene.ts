@@ -252,7 +252,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         }
 
         Object.values(MenuItemKey).forEach((key, index) => {
-            if (!MenuLabels[key].electronOnly || (isElectron() || window.opener != null)) {
+            if (MenuLabels[key].electronOnly !== true || (isElectron() || window.opener != null)) {
                 this.menu.addItems(
                     new MenuItem(
                         key,

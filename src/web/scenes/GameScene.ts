@@ -384,7 +384,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private getPlayerStartingPos(): { x: number, y: number } {
         const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
-        const defaultSpawn = spawns.find(s => !s.properties.newGamePlus);
+        const defaultSpawn = spawns.find(s => s.properties.newGamePlus !== true);
         const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);
 
         if (this.game.campaign.isNewGamePlus) {

@@ -251,7 +251,7 @@ export class World implements GameObject {
                 sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
             );
 
-            if (colliding && !gateObject.properties.disabled && this.entityIsAvailableInNewGameState(gateObject.properties.newGamePlus)) {
+            if (colliding && gateObject.properties.disabled !== true && this.entityIsAvailableInNewGameState(gateObject.properties.newGamePlus)) {
                 collidesWith.push(gateObject);
             }
         }

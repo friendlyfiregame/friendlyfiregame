@@ -116,12 +116,7 @@ const config = {
                 "asyncArrow": "always"
             }
         ],
-        "@typescript-eslint/strict-boolean-expressions": [
-            "warn", {
-                // TODO Find all problems and remove these exceptions step by step
-                "allowNullableBoolean": true
-            }
-        ],
+        "@typescript-eslint/strict-boolean-expressions": "warn",
         "@typescript-eslint/switch-exhaustiveness-check": "warn",
         "@typescript-eslint/triple-slash-reference": "warn",
         "dot-location": [ "warn", "property" ],

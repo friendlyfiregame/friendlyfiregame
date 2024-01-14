@@ -257,7 +257,7 @@ export class Player extends PhysicsEntity {
     }
 
     public stopAutoMove(): void {
-        if (this.autoMove?.turnAround) {
+        if (this.autoMove?.turnAround === true) {
             this.direction = this.direction * -1;
         }
 
@@ -412,7 +412,7 @@ export class Player extends PhysicsEntity {
             if (!this.flying) {
                 if (
                     this.closestNPC
-                    && this.closestNPC.isReadyForConversation()
+                    && this.closestNPC.isReadyForConversation() === true
                     && this.closestNPC.conversation
                 ) {
                     const conversation = this.closestNPC.conversation;
@@ -782,7 +782,7 @@ export class Player extends PhysicsEntity {
             this.closestNPC
             && !this.dance
             && !this.playerConversation
-            && this.closestNPC.isReadyForConversation()
+            && this.closestNPC.isReadyForConversation() === true
         ) {
             this.drawTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
         } else if (this.readableTrigger) {
@@ -1258,7 +1258,7 @@ export class Player extends PhysicsEntity {
                 // Disable particle effects while in trigger
                 const disableParticles = trigger.properties.disableParticles;
 
-                if (disableParticles) {
+                if (disableParticles === true) {
                     this.disableParticles = true;
                 }
 

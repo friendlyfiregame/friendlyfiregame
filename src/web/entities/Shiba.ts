@@ -290,7 +290,7 @@ export class Shiba extends ScriptableNPC {
 
     public override isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
-        return (superResult && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
+        return (superResult === true && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
     }
 
     private walkToFireLogic(triggerCollisions: GameObjectInfo[]): void {

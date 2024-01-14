@@ -171,7 +171,7 @@ export class Renderer {
                     ctx.save();
                     if (item.translation) ctx.translate(item.translation.x, item.translation.y);
                     if (item.scale) ctx.scale(item.scale.x, item.scale.y);
-                    if (item.relativeToScreen) ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    if (item.relativeToScreen === true) ctx.setTransform(1, 0, 0, 1, 0, 0);
                     if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
                     if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
