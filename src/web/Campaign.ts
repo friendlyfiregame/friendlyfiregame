@@ -101,7 +101,7 @@ export class Campaign {
         return ending;
     }
 
-    public setNewGamePlus (isNewGamePlus: boolean): void {
+    public setNewGamePlus(isNewGamePlus: boolean): void {
         this.isNewGamePlus = isNewGamePlus;
     }
 

@@ -147,7 +147,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy4"]);
     }
 
-    public dropInWater (): void {
+    public dropInWater(): void {
         this.x = this.floatingPosition.x;
         this.y = this.floatingPosition.y;
     }

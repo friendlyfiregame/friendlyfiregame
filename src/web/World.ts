@@ -232,7 +232,7 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    public entityIsAvailableInNewGameState (newGamePlusProp?: boolean): boolean {
+    public entityIsAvailableInNewGameState(newGamePlusProp?: boolean): boolean {
         return (
             newGamePlusProp === undefined ||
             (

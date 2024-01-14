@@ -374,7 +374,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.loadApocalypse();
     }
 
-    private initNewGamePlusState (): void {
+    private initNewGamePlusState(): void {
         this.player.enableRunning(true);
         this.player.enableDoubleJump(true);
         this.player.enableMultiJump(true);
@@ -382,7 +382,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.stone.dropInWater();
     }
 
-    private getPlayerStartingPos (): { x: number, y: number } {
+    private getPlayerStartingPos(): { x: number, y: number } {
         const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
         const defaultSpawn = spawns.find(s => !s.properties.newGamePlus);
         const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);

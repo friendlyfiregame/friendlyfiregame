@@ -87,6 +87,14 @@ const config = {
         "@typescript-eslint/require-await": "warn",
         "@typescript-eslint/return-await": "warn",
         "@typescript-eslint/semi": ["warn", "always"],
+        "@typescript-eslint/space-before-function-paren": [
+            "warn",
+            {
+                "named": "never",
+                "anonymous": "never",
+                "asyncArrow": "always"
+            }
+        ],
         "dot-location": [ "warn", "property" ],
         "eol-last": "warn",
         "eqeqeq": [

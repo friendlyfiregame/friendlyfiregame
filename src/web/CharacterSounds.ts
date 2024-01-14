@@ -35,7 +35,7 @@ export class CharacterSounds  {
   @asset(["sounds/throwing/throwing.mp3"])
   private static readonly highPitchThrow: Sound[];
 
-  public static getSoundData (): SoundDataStructure {
+  public static getSoundData(): SoundDataStructure {
     return {
       [VoiceAsset.MALE]: {
         "jump": CharacterSounds.lowPitchJump,
@@ -57,7 +57,7 @@ export class CharacterSounds  {
     return rndItem(CharacterSounds.getSoundData()[voice][type]);
   }
 
-  public static playRandomCharacterSound (type: CharacterSoundType, voice: VoiceAsset): void {
+  public static playRandomCharacterSound(type: CharacterSoundType, voice: VoiceAsset): void {
     CharacterSounds.stopCharacterSound(type, voice);
     const randomSound = CharacterSounds.getRandomCharacterSound(type, voice);
     if (randomSound) {
@@ -65,7 +65,7 @@ export class CharacterSounds  {
     }
   }
 
-  public static stopCharacterSound (type: CharacterSoundType, voice: VoiceAsset): void {
+  public static stopCharacterSound(type: CharacterSoundType, voice: VoiceAsset): void {
     const sounds = CharacterSounds.getSoundData()[voice][type];
     sounds.forEach(s => s.stop());
   }

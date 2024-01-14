@@ -30,7 +30,7 @@ export class Animator {
         finished: false,
     };
 
-    public constructor (entity: Entity) {
+    public constructor(entity: Entity) {
         this.entity = entity;
     }
 

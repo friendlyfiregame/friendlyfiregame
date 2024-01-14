@@ -899,7 +899,7 @@ export class Player extends PhysicsEntity {
         this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
     }
 
-    private isOutOfBounds (): boolean {
+    private isOutOfBounds(): boolean {
         if (!this.isControllable) return false;
         const mapBounds = this.scene.camera.getBounds();
         if (!mapBounds) return false;

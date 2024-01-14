@@ -107,20 +107,20 @@ export class SliderMenuItem<T = null> extends MenuItem<T> {
         this.leftActionCallback = params.leftActionCallback;
     }
 
-    public getValue (): number {
+    public getValue(): number {
         return this.value;
     }
 
-    public setValue (value: number): void {
+    public setValue(value: number): void {
         this.value = Math.min(this.maxValue, Math.max(this.minValue, value));
     }
 
-    public increaseValue (): void {
+    public increaseValue(): void {
         this.setValue(this.value + this.increment);
         this.rightActionCallback(this.value, this.data);
     }
 
-    public decreaseValue (): void {
+    public decreaseValue(): void {
         this.setValue(this.value - this.increment);
         this.leftActionCallback(this.value, this.data);
     }

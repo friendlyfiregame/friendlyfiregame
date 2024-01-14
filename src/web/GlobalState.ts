@@ -6,7 +6,7 @@ enum GlobalStateKey {
 }
 
 export class GlobalState {
-  private static getParsedValueByKey<T> (key: GlobalStateKey, fallback: T): T {
+  private static getParsedValueByKey<T>(key: GlobalStateKey, fallback: T): T {
     const serialized = localStorage.getItem(key);
     if (serialized) {
       try {
@@ -21,7 +21,7 @@ export class GlobalState {
     }
   }
 
-  private static setKeyValuePair<T> (key: GlobalStateKey, value: T): void {
+  private static setKeyValuePair<T>(key: GlobalStateKey, value: T): void {
     try {
       const serialized = JSON.stringify(value);
       localStorage.setItem(key, serialized);
@@ -30,19 +30,19 @@ export class GlobalState {
     }
   }
 
-  public static getHasBeatenGame (): boolean {
+  public static getHasBeatenGame(): boolean {
     return GlobalState.getParsedValueByKey<boolean>(GlobalStateKey.BEAT_GAME_ONCE, false);
   }
 
-  public static setHasBeatenGame (): void {
+  public static setHasBeatenGame(): void {
     GlobalState.setKeyValuePair<boolean>(GlobalStateKey.BEAT_GAME_ONCE, true);
   }
 
-  public static getAchievedEndings (): QuestKey[] {
+  public static getAchievedEndings(): QuestKey[] {
     return GlobalState.getParsedValueByKey<QuestKey[]>(GlobalStateKey.ACHIEVED_ENDINGS, []);
   }
 
-  public static setAchievedEnding (questKey: QuestKey): void {
+  public static setAchievedEnding(questKey: QuestKey): void {
     const achievedEndings = GlobalState.getParsedValueByKey<QuestKey[]>(GlobalStateKey.ACHIEVED_ENDINGS, []);
     if (!achievedEndings.includes(questKey)) {
       achievedEndings.push(questKey);

@@ -82,7 +82,7 @@ export class FlameBoy extends ScriptableNPC {
         return thrownStoneIntoWater || waitingForWoodDialog;
     }
 
-    private getAnimationTag (): string {
+    private getAnimationTag(): string {
         switch (this.state) {
             case FlameBoyState.VENDOR: return "idle";
             default: return "idle2";

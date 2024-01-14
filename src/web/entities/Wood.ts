@@ -40,7 +40,7 @@ export class Wood extends PhysicsEntity {
         this.floatingPosition = floatingPosition;
     }
 
-    public resetState (): void {
+    public resetState(): void {
         this.setFloating(false);
         this.state = WoodState.FREE;
     }

@@ -274,7 +274,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.rootNode.finishAnimations();
     }
 
-    public addEndingCard (index: number, key: QuestKey): AsepriteNode {
+    public addEndingCard(index: number, key: QuestKey): AsepriteNode {
         let tag = "";
         switch (key) {
             case QuestKey.A: tag = "a_"; break;

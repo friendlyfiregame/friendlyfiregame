@@ -46,14 +46,14 @@ if (!isElectron()) {
                 }
 
                 // We wait for an UpdateFoundEvent, which is fired anytime a new service worker is acquired
-                registration.addEventListener("updatefound", function (updateFoundEvent) {
+                registration.addEventListener("updatefound", function(updateFoundEvent) {
                     // Ignore the event if this is our first service worker and thus not an update
                     if (registration.active === null) {
                         return;
                     }
 
                     // Listen for any state changes on the new service worker
-                    registration.installing?.addEventListener("statechange", function (stateChangeEvent) {
+                    registration.installing?.addEventListener("statechange", function(stateChangeEvent) {
                         // Wait for the service worker to enter the installed state (aka waiting)
                         if (this.state !== "installed") {
                             return;

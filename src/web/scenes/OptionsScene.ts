@@ -126,7 +126,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
         this.menu.appendTo(panel);
     }
 
-    private handleAudioSliderChange (newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
+    private handleAudioSliderChange(newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
         newValue = newValue / 100;
         if (data.channel === SoundChannel.MUSIC) {
             data.audioManager.musicGain = newValue;
@@ -145,7 +145,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
         }
     }
 
-    private async toggleFullscreen (): Promise<boolean> {
+    private async toggleFullscreen(): Promise<boolean> {
         const enabled = !(await this.game.displayManager.isFullscreenEnabled());
         await this.game.displayManager.setFullscreenEnabled(enabled);
         return enabled;

@@ -49,7 +49,7 @@ export class Face {
         this.mode = mode;
     }
 
-    public setOffY (offY: number): void {
+    public setOffY(offY: number): void {
         this.offY = offY;
     }
 

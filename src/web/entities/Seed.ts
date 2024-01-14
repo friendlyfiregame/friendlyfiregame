@@ -46,12 +46,12 @@ export class Seed extends NPC {
         this.floatingPosition = floatingPosition;
     }
 
-    public resetState (): void {
+    public resetState(): void {
         this.setFloating(false);
         this.state = SeedState.FREE;
     }
 
-    public bury (): void {
+    public bury(): void {
         const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
         if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 

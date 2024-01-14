@@ -194,17 +194,17 @@ export class Shiba extends ScriptableNPC {
         return this.jumpTimer === 0;
     }
 
-    public startBeingPetted (): void {
+    public startBeingPetted(): void {
         this.isBeingPetted = true;
         const x = this.direction > 0 ? this.x + 5 : this.x - 5;
         this.heartEmitter.setPosition(x, this.y);
     }
 
-    public stopBeingPetted (): void {
+    public stopBeingPetted(): void {
         this.isBeingPetted = false;
     }
 
-    public getAnimationTag (): string {
+    public getAnimationTag(): string {
         if (this.peeing) return "peeing";
         if (this.isBeingPetted) return "petted";
         return "idle";

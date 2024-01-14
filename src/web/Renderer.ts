@@ -221,7 +221,7 @@ export class Renderer {
         this.queue.push(item);
     }
 
-    public addAseprite (
+    public addAseprite(
         sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer,
         direction = 1, time?: number, alpha?: number
     ): void {
