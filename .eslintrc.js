@@ -104,7 +104,7 @@ const config = {
                 "checkLoops": false
             }
         ],
-        "no-extra-boolean-cast": "off",
+        "no-extra-boolean-cast": "warn",
         "no-new-wrappers": "warn",
         "no-proto": "warn",
         "no-return-assign": "warn",
