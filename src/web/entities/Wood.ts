@@ -34,7 +34,7 @@ export class Wood extends PhysicsEntity {
         );
 
         if (!floatingPosition) {
-            throw new Error ("Could not find \"recover_floating_position\" point of interest in game scene.");
+            throw new Error("Could not find \"recover_floating_position\" point of interest in game scene.");
         }
 
         this.floatingPosition = floatingPosition;

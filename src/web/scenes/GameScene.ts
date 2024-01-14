@@ -888,7 +888,7 @@ export class GameScene extends Scene<FriendlyFire> {
         const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position");
 
         if (!playerTargetPos) {
-            throw new Error ("cannot initiate friendship ending because some points of interest are missing");
+            throw new Error("cannot initiate friendship ending because some points of interest are missing");
         }
 
         this.player.startAutoMove(playerTargetPos.x, true);

@@ -51,7 +51,7 @@ export class World implements GameObject {
         );
 
         if (!rainSpawnPosition) {
-            throw new Error ("Missing 'rain_spawn_position' point in map data to place rain emitter");
+            throw new Error("Missing 'rain_spawn_position' point in map data to place rain emitter");
         }
 
         this.rainEmitter = this.scene.particles.createEmitter({

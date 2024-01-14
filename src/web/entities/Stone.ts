@@ -42,7 +42,7 @@ export class Stone extends NPC implements CollidableGameObject {
         );
 
         if (!floatingPosition) {
-            throw new Error ("Could not find \"stone_floating_position\" point of interest in game scene");
+            throw new Error("Could not find \"stone_floating_position\" point of interest in game scene");
         }
 
         this.floatingPosition = floatingPosition;

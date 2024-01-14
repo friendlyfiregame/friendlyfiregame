@@ -19,7 +19,7 @@ export class Wall extends Entity implements CollidableGameObject {
         super(scene, x, y, 24, 72, false);
 
         if (!properties.identifier) {
-            throw new Error ("Cannot create Wall entity with no identifier property");
+            throw new Error("Cannot create Wall entity with no identifier property");
         }
 
         this.identifier = properties.identifier;
