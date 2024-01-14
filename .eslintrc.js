@@ -57,6 +57,7 @@ const config = {
         "@typescript-eslint/explicit-module-boundary-types": "warn",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-extra-semi": "warn",
         "@typescript-eslint/no-floating-promises": [
             "warn", { "ignoreVoid": true }
         ],
