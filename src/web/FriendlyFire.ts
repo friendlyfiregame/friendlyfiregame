@@ -22,7 +22,7 @@ function presentUpdateAvailable(serviceWorker: ServiceWorker): void {
  */
 let prelaunchTask: Promise<unknown> = Promise.resolve();
 
-//#region Service Worker Initialization (cspell:disable)
+//#region Service Worker Initialization
 if (!isElectron()) {
 
     const body = document.getElementsByTagName("body")[0];
@@ -83,11 +83,12 @@ if (!isElectron()) {
         });
     }
 }
-//#endregion (cspell:enable)
+//#endregion
 
-prelaunchTask.then(() => {
+(async () => {
+    await prelaunchTask;
     const game = new FriendlyFire();
-    game.scenes.setScene(LoadingScene);
     (window as any).game = game;
+    void game.scenes.setScene(LoadingScene);
     game.start();
-});
+})().catch(console.error);

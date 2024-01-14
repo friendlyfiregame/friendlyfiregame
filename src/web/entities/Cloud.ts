@@ -66,7 +66,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
         });
     }
 
-    public startRain(time: number = Infinity) {
+    public startRain(time: number = Infinity): void {
         this.raining = time;
     }
 

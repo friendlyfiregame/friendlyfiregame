@@ -129,9 +129,9 @@ export class ControlsScene extends Scene<FriendlyFire> {
         this.input.onButtonDown.disconnect(this.handleButtonDown, this);
     }
 
-    private handleButtonDown(event: ControllerEvent): void {
+    private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (event.isAbort || event.isPause) {
-            this.scenes.popScene();
+            await this.scenes.popScene();
         } else if (event.isPlayerAction) {
             const controllerManager = ControllerManager.getInstance();
             controllerManager.toggleSelectedGamepadStyle();

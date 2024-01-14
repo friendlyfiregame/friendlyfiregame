@@ -144,7 +144,7 @@ export class Shiba extends ScriptableNPC {
             setTimeout(() => (this.direction = 1), 1000);
 
             setTimeout(() => {
-                this.think("Bad fire!", 2000);
+                void this.think("Bad fire!", 2000);
                 this.scene.fire.setState(FireState.BEING_PUT_OUT);
                 this.scene.fire.growthTarget = SHRINK_SIZE;
                 this.peeing = true;
@@ -163,7 +163,7 @@ export class Shiba extends ScriptableNPC {
             setTimeout(() => this.think("I help friend!", 1500), 1500);
 
             setTimeout(() => {
-                this.scene.fire.think("Yeah, great.", 2000);
+                void this.scene.fire.think("Yeah, great.", 2000);
                 this.scene.fire.face?.setMode(FaceModes.BORED);
                 this.scene.player.isControllable = true;
                 this.scene.friendshipCutscene = false;
@@ -353,7 +353,7 @@ export class Shiba extends ScriptableNPC {
             && this.distanceTo(this.scene.bone) < 100
         ) {
             Conversation.setGlobal("broughtBone", "true");
-            this.think("Wow! Bone!!!", 2000);
+            void this.think("Wow! Bone!!!", 2000);
             this.scene.game.campaign.runAction("enable", null, ["shiba", "shiba2"]);
         }
     }
@@ -377,7 +377,7 @@ export class Shiba extends ScriptableNPC {
 
         if (!this.saidFarewell && this.flyingTime > 2) {
             this.saidFarewell = true;
-            this.think("See you on the mountain!", 3000);
+            void this.think("See you on the mountain!", 3000);
         }
 
         if (this.flyingTime >= FLYING_DURATION) {

@@ -14,7 +14,7 @@ export class SlideTransition extends Transition {
         this.direction = direction;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number): void {
         const value = this.valueOf();
         if (this.direction === "top") {
             ctx.translate(0, -height * value);

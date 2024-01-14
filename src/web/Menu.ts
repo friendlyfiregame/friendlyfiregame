@@ -47,7 +47,7 @@ export class MenuItem<T = null> {
      *
      * @param ctx CanvasRenderingContext2D
      */
-    public draw(ctx: CanvasRenderingContext2D, align: MenuAlignment) {
+    public draw(ctx: CanvasRenderingContext2D, align: MenuAlignment): void {
         ctx.save();
         const alpha = this.enabled ? 1 : 0.35;
 
@@ -128,7 +128,7 @@ export class SliderMenuItem<T = null> extends MenuItem<T> {
         this.leftActionCallback(this.value, this.data);
     }
 
-    public override draw(ctx: CanvasRenderingContext2D) {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         const alpha = this.enabled ? 1 : 0.35;
         const x = this.x;
@@ -209,7 +209,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
     }
 
     /**
-     * Finds and focuses the first available item if no item was focused before.
+     * Finds and focuses the first available item if no item was focused before.: void
      */
     private focusFirstItem(): void {
         if (!this.getFocusedItem()) {

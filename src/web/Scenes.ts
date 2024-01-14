@@ -118,7 +118,7 @@ export class Scenes<T extends Game> {
 
         this.scenes.splice(currentSceneIndex, 1);
         this.updateSortedScenes();
-        currentScene.cleanup();
+        await currentScene.cleanup();
     }
 
     private updateSortedScenes(): void {

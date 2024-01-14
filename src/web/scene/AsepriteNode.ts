@@ -87,7 +87,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public override update(dt: number) {
+    public override update(dt: number): void {
         this.time += dt;
     }
 

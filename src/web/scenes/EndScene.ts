@@ -89,11 +89,11 @@ export class EndScene extends Scene<FriendlyFire> {
         this.input.onButtonDown.disconnect(this.gotoCreditsScene, this);
     }
 
-    private gotoCreditsScene(): void {
-        this.game.scenes.setScene(CreditsScene);
+    private async gotoCreditsScene(): Promise<void> {
+        await this.game.scenes.setScene(CreditsScene);
     }
 
-    public override cleanup() {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 }

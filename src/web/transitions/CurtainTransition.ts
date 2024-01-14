@@ -15,7 +15,7 @@ export class CurtainTransition extends Transition {
         this.direction = direction;
     }
 
-    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number) {
+    public draw(ctx: CanvasRenderingContext2D, draw: () => void, width: number, height: number): void {
         const value = this.valueOf();
         if (this.direction === "horizontal") {
             // Draw left half

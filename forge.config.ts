@@ -39,11 +39,9 @@ const config: ForgeConfig = {
         }
     },
     packagerConfig: {
-        // cspell:disable
         asar: {
             unpack: "*.{dll,dylib,node,so}"
         },
-        // cspell:enable
         // https://electron.github.io/electron-packager/master/interfaces/electronpackager.win32metadataoptions.html
         win32metadata: {
             FileDescription: "A small 2d platform adventure game with handcrafted pixel art, an original soundtrack and lots of love put into the creation of the characters and dialogs.",

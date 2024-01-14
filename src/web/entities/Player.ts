@@ -248,7 +248,7 @@ export class Player extends PhysicsEntity {
         this.isControllable = isControllable;
     }
 
-    public startAutoMove(x: number, turnAround: boolean) {
+    public startAutoMove(x: number, turnAround: boolean): void {
         if (!this.autoMove) {
             this.autoMove = {
                 destinationX: x,
@@ -286,7 +286,9 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_RUNNING_ABILITY);
 
         if (!this.canRun) {
-            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.RUNNING);
+            if (!silent) {
+                void this.scene.scenes.pushScene(GotItemScene, Item.RUNNING);
+            }
             this.canRun = true;
         }
     }
@@ -295,7 +297,9 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.LEARNED_RAIN_DANCE);
 
         if (!this.canRainDance) {
-            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.RAINDANCE);
+            if (!silent) {
+                void this.scene.scenes.pushScene(GotItemScene, Item.RAINDANCE);
+            }
             this.canRainDance = true;
         }
     }
@@ -305,7 +309,9 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_QUEST_FROM_TREE);
 
         if (!this.doubleJump) {
-            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.DOUBLEJUMP);
+            if (!silent) {
+                void this.scene.scenes.pushScene(GotItemScene, Item.DOUBLEJUMP);
+            }
             this.doubleJump = true;
         }
     }
@@ -314,7 +320,9 @@ export class Player extends PhysicsEntity {
         this.scene.game.campaign.getQuest(QuestKey.A).trigger(QuestATrigger.GOT_MULTIJUMP);
 
         if (!this.multiJump) {
-            if (!silent) this.scene.scenes.pushScene(GotItemScene, Item.MULTIJUMP);
+            if (!silent) {
+                void this.scene.scenes.pushScene(GotItemScene, Item.MULTIJUMP);
+            }
             this.multiJump = true;
         }
     }
@@ -325,7 +333,7 @@ export class Player extends PhysicsEntity {
 
     public enableFriendship(): void {
         if (!this.hasFriendship) {
-            this.scene.scenes.pushScene(GotItemScene, Item.FRIENDSHIP);
+            void this.scene.scenes.pushScene(GotItemScene, Item.FRIENDSHIP);
             this.hasFriendship = true;
             Conversation.setGlobal("hasFriendship", "true");
             this.scene.removeGameObject(this.scene.powerShiba);
@@ -405,7 +413,7 @@ export class Player extends PhysicsEntity {
         } else if (event.isPlayerEnterDoor) {
             if (!this.canEnterDoor()) return;
             const gate = this.scene.world.getGateCollisions(this)[0];
-            this.enterGate(gate);
+            await this.enterGate(gate);
         } else if (event.isPlayerInteract) {
             // Check for gates / doors
             if (!this.flying) {
@@ -507,10 +515,10 @@ export class Player extends PhysicsEntity {
                 this.doubleJump = true;
                 this.canRun = true;
                 this.canRainDance = true;
-                this.think("I can do everything now.", 1500);
+                void this.think("I can do everything now.", 1500);
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
-                this.think("Toggling bounds.", 1500);
+                void this.think("Toggling bounds.", 1500);
             }
         }
     }
@@ -525,7 +533,7 @@ export class Player extends PhysicsEntity {
             this.scene, this.x, this.y
         );
 
-        thinkBubble.setMessage(message);
+        void thinkBubble.setMessage(message);
         thinkBubble.show();
 
         await sleep(time);
@@ -612,46 +620,41 @@ export class Player extends PhysicsEntity {
                     Player.enterGateSound.play();
                 }
 
+                await this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT);
+                if (targetBgmId) {
+                    this.scene.setActiveBgmTrack(targetBgmId as BgmId);
+                }
 
-                this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT)
-                    .then(async () => {
-                        if (targetBgmId) {
-                            this.scene.setActiveBgmTrack(targetBgmId as BgmId);
-                        }
+                if (targetGate.properties.exitSound) {
+                    if (targetGate.properties.exitSound === "portal") {
+                        Player.enterPortalSound.stop();
+                        Player.enterPortalSound.play();
+                    }
+                } else {
+                    Player.leaveGateSound.stop();
+                    Player.leaveGateSound.play();
+                }
 
-                        if (targetGate.properties.exitSound) {
-                            if (targetGate.properties.exitSound === "portal") {
-                                Player.enterPortalSound.stop();
-                                Player.enterPortalSound.play();
-                            }
-                        } else {
-                            Player.leaveGateSound.stop();
-                            Player.leaveGateSound.play();
-                        }
+                this.x = targetGate.x + (targetGate.width / 2);
+                this.y = targetGate.y - targetGate.height;
 
+                this.scene.camera.setBounds(this.getCurrentMapBounds());
 
-                        this.x = targetGate.x + (targetGate.width / 2);
-                        this.y = targetGate.y - targetGate.height;
+                if (targetGate.name === "exitportaldoor_2") {
+                    this.switchToReality();
+                }
 
-                        this.scene.camera.setBounds(this.getCurrentMapBounds());
+                if (targetGate.name === "shadowgate_door_2") {
+                    this.enterShadowCave();
+                }
 
-                        if (targetGate.name === "exitportaldoor_2") {
-                            this.switchToReality();
-                        }
+                if (targetGate.properties.exitSleepTime) {
+                    await sleep(targetGate.properties.exitSleepTime * 1000);
+                }
 
-                        if (targetGate.name === "shadowgate_door_2") {
-                            this.enterShadowCave();
-                        }
-
-                        if (targetGate.properties.exitSleepTime) {
-                            await sleep(targetGate.properties.exitSleepTime * 1000);
-                        }
-
-                        const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
-                        this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN).then(() => {
-                            this.isControllable = true;
-                        });
-                    });
+                const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
+                await this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN);
+                this.isControllable = true;
             }
         }
     }
@@ -963,7 +966,7 @@ export class Player extends PhysicsEntity {
         if (isDrowning) {
             if (!this.thinkBubble) {
                 const thought = drowningThoughts[rndInt(0, drowningThoughts.length)];
-                this.think(thought.message, thought.duration);
+                void this.think(thought.message, thought.duration);
             }
 
             if (this.carrying instanceof Stone) {
@@ -982,7 +985,7 @@ export class Player extends PhysicsEntity {
                 CharacterSounds.stopCharacterSound("drown", this.voiceAsset);
                 this.respawn();
                 const thought = drownThoughts[rndInt(0, drownThoughts.length)];
-                this.think(thought.message, thought.duration);
+                void this.think(thought.message, thought.duration);
             }
         } else {
             this.drowning = 0;
@@ -1174,7 +1177,7 @@ export class Player extends PhysicsEntity {
                         );
 
                         if (bossPointer) {
-                            this.scene.camera.focusOn(
+                            void this.scene.camera.focusOn(
                                 3,
                                 bossPointer.x, bossPointer.y + 60,
                                 1,
@@ -1462,43 +1465,43 @@ export class Player extends PhysicsEntity {
         if (this.playerConversation === null) {
             switch (this.scene.game.campaign.getQuest(QuestKey.A).getHighestTriggerIndex()) {
                 case QuestATrigger.JUST_ARRIVED:
-                    this.think("I should talk to someone.", 3000);
+                    void this.think("I should talk to someone.", 3000);
                     break;
                 case QuestATrigger.TALKED_TO_FIRE:
-                    this.think("I think the fire needs my help.", 3000);
+                    void this.think("I think the fire needs my help.", 3000);
                     break;
                 case QuestATrigger.GOT_QUEST_FROM_FIRE:
-                    this.think("The fire told me to visit the tree in the east.", 3000);
+                    void this.think("The fire told me to visit the tree in the east.", 3000);
                     break;
                 case QuestATrigger.TALKED_TO_TREE:
-                    this.think("Maybe I should talk to the tree again.", 3000);
+                    void this.think("Maybe I should talk to the tree again.", 3000);
                     break;
                 case QuestATrigger.GOT_QUEST_FROM_TREE:
-                    this.think("I need to pick up the seed by the tree.", 3000);
+                    void this.think("I need to pick up the seed by the tree.", 3000);
                     break;
                 case QuestATrigger.GOT_SEED:
-                    this.think("I should check the mountains for a good place for the seed.", 3000);
+                    void this.think("I should check the mountains for a good place for the seed.", 3000);
                     break;
                 case QuestATrigger.PLANTED_SEED:
-                    this.think("The seed needs something to grow, I think.", 3000);
+                    void this.think("The seed needs something to grow, I think.", 3000);
                     break;
                 case QuestATrigger.TALKED_TO_STONE:
-                    this.think("I should talk to that crazy stone again.", 3000);
+                    void this.think("I should talk to that crazy stone again.", 3000);
                     break;
                 case QuestATrigger.GOT_STONE:
-                    this.think("My arms get heavy. I really should throw that thing in the river.", 3000);
+                    void this.think("My arms get heavy. I really should throw that thing in the river.", 3000);
                     break;
                 case QuestATrigger.THROWN_STONE_INTO_WATER:
-                    this.think("There must be something interesting west of the river.", 3000);
+                    void this.think("There must be something interesting west of the river.", 3000);
                     break;
                 case QuestATrigger.GOT_MULTIJUMP:
-                    this.think("I should check the clouds. The seed still needs something to grow.", 3000);
+                    void this.think("I should check the clouds. The seed still needs something to grow.", 3000);
                     break;
                 case QuestATrigger.MADE_RAIN:
-                    this.think("I should talk to that singing tree again.", 3000);
+                    void this.think("I should talk to that singing tree again.", 3000);
                     break;
                 case QuestATrigger.GOT_WOOD:
-                    this.think("Quick! The fire needs wood!", 3000);
+                    void this.think("Quick! The fire needs wood!", 3000);
                     break;
             }
         }

@@ -97,26 +97,26 @@ export class PauseScene extends Scene<FriendlyFire> {
         switch (buttonId) {
             case MenuItemKey.RESUME:
                 PauseScene.music.stop();
-                this.scenes.popScene();
+                await this.scenes.popScene();
                 break;
             case MenuItemKey.CONTROLS:
-                this.game.scenes.pushScene(ControlsScene);
+                await this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.OPTIONS:
-                this.game.scenes.pushScene(OptionsScene);
+                await this.game.scenes.pushScene(OptionsScene);
                 break;
             case MenuItemKey.EXIT:
                 PauseScene.music.stop();
                 await this.game.scenes.popScene({ noTransition: true });
-                this.game.scenes.setScene(TitleScene);
+                await this.game.scenes.setScene(TitleScene);
                 break;
         }
     }
 
-    private handleButtonDown(event: ControllerEvent): void {
+    private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (event.isAbort || event.isPause) {
             PauseScene.music.stop();
-            this.scenes.popScene();
+            await this.scenes.popScene();
         } else if (event.isConfirm) {
             this.menu.executeAction();
         } else if (event.isMenuUp) {

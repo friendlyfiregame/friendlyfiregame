@@ -1,4 +1,3 @@
-// cSpell:disable
 import { default  as path } from "node:path";
 import { Configuration, DefinePlugin } from "webpack";
 import { Configuration as DevServerConfiguration } from "webpack-dev-server";
@@ -40,10 +39,7 @@ export default (
             hashFunction: "sha256"
         },
         resolve: {
-            extensions: [".ts", "..."],
-            fallback: {
-                processs: false
-            }
+            extensions: [".ts", "..."]
         },
         devServer: devServerConfiguration,
         devtool,

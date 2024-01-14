@@ -100,7 +100,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         return "#credits";
     }
 
-    public override async setup(): Promise<void> {
+    public override setup(): void {
         const ending = this.game.campaign.quests.find(q => q.isFinished());
         this.zIndex = 2;
         this.inTransition = new FadeTransition({ duration: 0.5, easing: easeOutCubic });
@@ -185,7 +185,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         }).appendTo(this.rootNode);
     }
 
-    public override cleanup() {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 
@@ -305,10 +305,10 @@ export class CreditsScene extends Scene<FriendlyFire> {
 
     private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (this.game.scenes.getPreviousScene() instanceof TitleScene) {
-            this.game.scenes.popScene();
+            await this.game.scenes.popScene();
         } else {
             await this.game.scenes.popScene({ noTransition: true });
-            this.game.scenes.setScene(TitleScene);
+            await this.game.scenes.setScene(TitleScene);
         }
     }
 

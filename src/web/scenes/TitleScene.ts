@@ -297,22 +297,22 @@ export class TitleScene extends Scene<FriendlyFire> {
         });
     }
 
-    public handleMenuAction(buttonId: string): void {
+    public async handleMenuAction(buttonId: string): Promise<void> {
         switch (buttonId) {
             case MenuItemKey.START:
                 // this.stopMusicTrack();
-                this.game.scenes.pushScene(CharacterSelectionScene);
+                await this.game.scenes.pushScene(CharacterSelectionScene);
                 // this.game.scenes.setScene(GameScene);
                 break;
             case MenuItemKey.CONTROLS:
-                this.game.scenes.pushScene(ControlsScene);
+                await this.game.scenes.pushScene(ControlsScene);
                 break;
             case MenuItemKey.OPTIONS:
-                this.game.scenes.pushScene(OptionsScene);
+                await this.game.scenes.pushScene(OptionsScene);
                 break;
             case MenuItemKey.CREDITS:
                 this.stopMusicTrack();
-                this.game.scenes.pushScene(CreditsScene);
+                await this.game.scenes.pushScene(CreditsScene);
                 break;
             case MenuItemKey.EXIT:
                 window.close();

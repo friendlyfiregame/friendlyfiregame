@@ -72,7 +72,7 @@ export class Particles {
         return false;
     }
 
-    public createEmitter(args: ParticleEmitterArguments) {
+    public createEmitter(args: ParticleEmitterArguments): ParticleEmitter {
         const emitter = new ParticleEmitter(args);
         this.addEmitter(emitter);
 

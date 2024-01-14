@@ -56,7 +56,7 @@ export class FlameBoy extends ScriptableNPC {
     public feed(wood: Wood): void {
         wood.remove();
         this.scene.game.campaign.runAction("giveWoodToFlameboy");
-        this.think("Well, that was unexpected…", 2000);
+        void this.think("Well, that was unexpected…", 2000);
         this.nextState();
     }
 

@@ -8,7 +8,7 @@ import { ParticleEmitter, valueCurves } from "../Particles";
 import { PIXEL_PER_METER } from "../../shared/constants";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import { rnd, rndInt, shiftValue } from "../util";
+import { rnd, rndInt, shiftValue, sleep } from "../util";
 import { ShibaState } from "./Shiba";
 import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
@@ -245,7 +245,7 @@ export class Fire extends NPC {
         this.speechBubble.update(this.x, this.y);
     }
 
-    public feed(wood: Wood): void {
+    public async feed(wood: Wood): Promise<void> {
         wood.remove();
 
         this.scene.setGateDisabled("shadowgate_door_1", false);
@@ -266,18 +266,17 @@ export class Fire extends NPC {
             }
         }
 
-        // Player thoughts
-        [
-            ["What…", 2, 2],
-            ["What have I done?", 6, 3],
-            ["I trusted you! I helped you!", 10, 3]
-        ].forEach(line => setTimeout(() => {
-            this.scene.player.think(line[0] as string, line[2] as number * 1000);
-        }, (line[1] as number) * 1000));
-
-        // Give fire new dialog
-        setTimeout(() => {
-            this.scene.game.campaign.runAction("enable", null, ["fire", "fire2"]);
-        }, 13500);
+        // Player thoughts (Though message, Delay in milliseconds, duration in milliseconds)
+        const thoughts = [
+            ["What…", 2000, 2000],
+            ["What have I done?", 2000, 3000],
+            ["I trusted you! I helped you!", 2000, 3000]
+        ] as const;
+        for (const [ thought, delay, duration ] of thoughts) {
+            await sleep(delay);
+            await this.scene.player.think(thought, duration);
+        }
+        await sleep(500);
+        this.scene.game.campaign.runAction("enable", null, ["fire", "fire2"]);
     }
 }

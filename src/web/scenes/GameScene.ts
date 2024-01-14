@@ -4,7 +4,7 @@ import { Bird } from "../entities/Bird";
 import { BitmapFont } from "../BitmapFont";
 import { Bone } from "../entities/Bone";
 import { Bounds, createEntity } from "../Entity";
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, timedRnd } from "../util";
+import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { Camera } from "../Camera";
 import { Campfire } from "../entities/Campfire";
 import { Caveman } from "../entities/Caveman";
@@ -271,7 +271,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
-    private fpsInterval: any = null;
+    private fpsInterval: number | null = null;
     private fadeToBlackEndTime = 0;
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
@@ -353,7 +353,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera = new Camera(this, this.player);
         this.camera.setBounds(this.player.getCurrentMapBounds());
 
-        this.fpsInterval = setInterval(() => {
+        this.fpsInterval = window.setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
@@ -394,7 +394,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public override cleanup(): void {
         if (this.fpsInterval != null) {
-            clearInterval(this.fpsInterval);
+            window.clearInterval(this.fpsInterval);
         }
     }
 
@@ -505,7 +505,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.input.onButtonUp.disconnect(this.player.handleButtonUp, this.player);
     }
 
-    private handleButtonDown(event: ControllerEvent): void {
+    private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (event.isAbort || event.isPause) {
             if (this.player.getDance()) {
                 this.player.getDance()?.resetMusic();
@@ -514,19 +514,17 @@ export class GameScene extends Scene<FriendlyFire> {
         }
 
         if (event.isPause) {
-            this.scenes.pushScene(PauseScene);
+            await this.scenes.pushScene(PauseScene);
         }
     }
 
-    public gameOver(): void {
+    public async gameOver(): Promise<void> {
         GameScene.bgm1.stop();
         GameScene.bgm2.stop();
         GameScene.swell.setVolume(0.5);
         GameScene.swell.play();
-
-        setTimeout(() => {
-            this.game.scenes.setScene(EndScene);
-        }, 2000);
+        await sleep(2000);
+        await this.game.scenes.setScene(EndScene);
     }
 
     public override isActive(): boolean {
@@ -688,21 +686,15 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public async fadeToBlack(duration: number, direction: FadeDirection): Promise<void> {
-        return new Promise((resolve) => {
-            this.fadeToBlackStartTime = this.gameTime;
-            this.fadeToBlackEndTime = this.gameTime + duration;
-            this.fadeToBlackDirection = direction;
-
-            setTimeout(() => {
-                if (direction === FadeDirection.FADE_OUT) {
-                    this.fadeToBlackFactor = 1;
-                } else {
-                    this.fadeToBlackFactor = 0;
-                }
-
-                resolve();
-            }, duration * 1000);
-        });
+        this.fadeToBlackStartTime = this.gameTime;
+        this.fadeToBlackEndTime = this.gameTime + duration;
+        this.fadeToBlackDirection = direction;
+        await sleep(duration * 1000);
+        if (direction === FadeDirection.FADE_OUT) {
+            this.fadeToBlackFactor = 1;
+        } else {
+            this.fadeToBlackFactor = 0;
+        }
     }
 
     private updateApocalypse(): void {
@@ -745,7 +737,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (!this.windowEndingTriggered && this.windowCutsceneTime > WINDOW_ENDING_CUTSCENE_DURATION + WINDOW_ENDING_FADE_DURATION) {
             this.windowEndingTriggered = true;
             this.game.campaign.getQuest(QuestKey.E).finish();
-            this.gameOver();
+            void this.gameOver();
         }
 
         this.windowEndingTexts.forEach((t, index) => {
@@ -770,7 +762,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (!this.pettingEndingTriggered && this.pettingCutsceneTime > PETTING_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION) {
             this.pettingEndingTriggered = true;
             this.game.campaign.getQuest(QuestKey.D).finish();
-            this.gameOver();
+            void this.gameOver();
         }
 
         this.petEndingTexts.forEach((t, index) => {
@@ -853,7 +845,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (WINDOW_ENDING_FADE_DURATION);
         const target = this.pointsOfInterest.find(poi => poi.name === "windowzoomtarget");
         if (target) {
-            this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
+            void this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
         }
     }
 
@@ -899,7 +891,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.player.setControllable(false);
     }
 
-    public beginApocalypse(): void {
+    public async beginApocalypse(): Promise<void> {
         this.apocalypse = true;
         this.world.stopRain();
 
@@ -933,8 +925,10 @@ export class GameScene extends Scene<FriendlyFire> {
             this.camera.setBounds(this.player.getCurrentMapBounds());
 
             // Some helpful thoughts
-            setTimeout(() => this.player.think("This is not over…", 2000), 9000);
-            setTimeout(() => this.player.think("There's still something I can do.", 4000), 12000);
+            await sleep(9000);
+            await this.player.think("This is not over…", 2000);
+            await sleep(1000);
+            await this.player.think("There's still something I can do.", 4000);
         } else {
             throw new Error("Cannot begin apocalypse because boss_spawn or bosscloud trigger is missing in map.");
         }

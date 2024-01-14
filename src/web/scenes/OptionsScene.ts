@@ -35,7 +35,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
     private menu!: MenuList;
 
     #audioManager!: AudioManager;
-    public get audioManager() {
+    public get audioManager(): AudioManager {
         return this.#audioManager;
     }
 
@@ -43,8 +43,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
         return "#options";
     }
 
-    public override async setup(): Promise<void> {
-
+    public override setup(): void {
         const menuItemX = 12;
         const menuItemY = 20;
         this.setBackgroundStyle("rgba(0, 0, 0, 0.8)");
@@ -141,7 +140,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
     public async handleMenuAction(buttonId: string): Promise<void> {
         switch (buttonId) {
             case MenuItemKey.FULLSCREEN:
-                this.toggleFullscreen();
+                await this.toggleFullscreen();
                 break;
         }
     }
@@ -172,7 +171,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
 
     private async handleButtonDown(event: ControllerEvent): Promise<void> {
         if (event.isAbort) {
-            this.scenes.popScene();
+            await this.scenes.popScene();
         } else if (event.isConfirm) {
             this.menu.executeAction();
         } else if (event.isMenuUp) {
