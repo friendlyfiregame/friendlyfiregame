@@ -12,7 +12,7 @@ class MusicPreferencesStore {
     }
 
     public get gain(): number {
-        return clamp((Number(window.localStorage.getItem(PREFERENCES_MUSIC_GAIN_KEY) || DEFAULT_GAIN_VALUE)), MIN_GAIN_VALUE, MAX_GAIN_VALUE);
+        return clamp((Number(window.localStorage.getItem(PREFERENCES_MUSIC_GAIN_KEY) ?? DEFAULT_GAIN_VALUE)), MIN_GAIN_VALUE, MAX_GAIN_VALUE);
     }
 
     public set gain(value: number) {
@@ -28,7 +28,7 @@ class SfxPreferencesStore {
     }
 
     public get gain(): number {
-        return clamp((Number(window.localStorage.getItem(PREFERENCES_SFX_GAIN_KEY) || DEFAULT_GAIN_VALUE)), MIN_GAIN_VALUE, MAX_GAIN_VALUE);
+        return clamp((Number(window.localStorage.getItem(PREFERENCES_SFX_GAIN_KEY) ?? DEFAULT_GAIN_VALUE)), MIN_GAIN_VALUE, MAX_GAIN_VALUE);
     }
 
     public set gain(value: number) {

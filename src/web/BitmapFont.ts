@@ -140,7 +140,7 @@ export class BitmapFont {
 
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
-            const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
+            const spaceReduction = precursorChar != null && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
             ctx.translate(-spaceReduction, 0);
             this.drawCharacter(ctx, index, color);
             ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
@@ -155,7 +155,7 @@ export class BitmapFont {
         let precursorChar = null;
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
-            const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
+            const spaceReduction = precursorChar != null && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
             width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
             precursorChar = currentChar;
         }

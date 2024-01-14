@@ -65,7 +65,7 @@ export class GamepadModel {
                     vendorId = productAndVendorMatch.groups?.vendorId;
                     productId = productAndVendorMatch.groups?.productId;
                 }
-                return new GamepadModel(value, parseInt(vendorId || "-1", 16), parseInt(productId || "-1"));
+                return new GamepadModel(value, parseInt(vendorId ?? "-1", 16), parseInt(productId ?? "-1"));
             }
         }
         // Nothing matches? Well,... that's bad luck...

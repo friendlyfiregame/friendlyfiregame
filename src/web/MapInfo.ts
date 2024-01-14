@@ -60,7 +60,7 @@ export class MapInfo {
     }
 
     private getObjects(type?: string): MapObjectJSON[] {
-        return this.getLayer("objectgroup", "objects")?.objects.filter(object => !type || object.type === type) ?? [];
+        return this.getLayer("objectgroup", "objects")?.objects.filter(object => type == null || object.type === type) ?? [];
     }
 
     public getPlayerStart(): Vector2Like {

@@ -18,8 +18,8 @@ export class Sign extends NPC {
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
     }
 
-    private prepareContent(content?: string ): string[] {
-        if (!content) {
+    private prepareContent(content?: string): string[] {
+        if (content == null) {
             return ["The sign is empty."];
         }
 

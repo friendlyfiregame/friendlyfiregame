@@ -5,7 +5,7 @@ export class Scenes<T extends Game> {
     #activeScene: Scene<T, unknown> | null = null;
     public set activeScene(scene: Scene<T, unknown> | null) {
         this.#activeScene = scene;
-        window.history.replaceState(null, "", scene?.urlFragment || "#");
+        window.history.replaceState(null, "", scene?.urlFragment ?? "#");
     }
     public get activeScene(): Scene<T, unknown> | null {
         return this.#activeScene;

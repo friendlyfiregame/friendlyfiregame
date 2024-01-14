@@ -62,7 +62,7 @@ export class Greeting implements GameObject {
     private updateMatchingData(states: CampaignState[]): void {
         const matchingGreetingSelector = this.findMatchingSelectorByStates(this.dialogData.greetings, states);
 
-        if (matchingGreetingSelector) {
+        if (matchingGreetingSelector != null) {
             this.currentMatchingGreetings = this.dialogData.greetings[matchingGreetingSelector];
             this.setRandomGreeting();
         } else {

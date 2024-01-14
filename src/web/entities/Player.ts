@@ -589,7 +589,7 @@ export class Player extends PhysicsEntity {
      * @param gate the source the player enters
      */
     private async enterGate(gate: GameObjectInfo): Promise<void> {
-        if (gate != null && gate.properties.target) {
+        if (gate != null && gate.properties.target != null) {
             this.isControllable = false;
             this.moveRight = false;
             this.moveLeft = false;
@@ -601,7 +601,7 @@ export class Player extends PhysicsEntity {
             const targetBgmId = gate.properties.bgm;
 
             if (targetGate) {
-                if (gate.properties.enterSound) {
+                if (gate.properties.enterSound != null) {
                     if (gate.properties.enterSound === "portal") {
                         Player.enterPortalSound.stop();
                         Player.enterPortalSound.play();
@@ -612,11 +612,11 @@ export class Player extends PhysicsEntity {
                 }
 
                 await this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT);
-                if (targetBgmId) {
+                if (targetBgmId != null) {
                     this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                 }
 
-                if (targetGate.properties.exitSound) {
+                if (targetGate.properties.exitSound != null) {
                     if (targetGate.properties.exitSound === "portal") {
                         Player.enterPortalSound.stop();
                         Player.enterPortalSound.play();
@@ -886,7 +886,7 @@ export class Player extends PhysicsEntity {
         if (this.playerSpriteMetadata == null) {
             this.playerSpriteMetadata = Player.playerSprites.map(sprite => {
                 const metaDataJSON = sprite.getLayer("Meta")?.data;
-                return metaDataJSON ? JSON.parse(metaDataJSON) : {};
+                return metaDataJSON != null && metaDataJSON !== "" ? JSON.parse(metaDataJSON) : {};
             });
         }
 
@@ -1268,7 +1268,7 @@ export class Player extends PhysicsEntity {
                     value: trigger.properties.setGlobalVal
                 };
 
-                if (globalConversationProps.key && globalConversationProps.value) {
+                if (globalConversationProps.key != null && globalConversationProps.value != null) {
                     Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
                 }
 
@@ -1278,7 +1278,7 @@ export class Player extends PhysicsEntity {
                     value: trigger.properties.setDialogValue
                 };
 
-                if (enableConversationProps.key && enableConversationProps.value) {
+                if (enableConversationProps.key != null && enableConversationProps.value != null) {
                     this.scene.game.campaign.runAction(
                         "enable", null, [enableConversationProps.key, enableConversationProps.value]
                     );

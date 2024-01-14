@@ -120,7 +120,6 @@ const config = {
             "warn", {
                 // TODO Find all problems and remove these exceptions step by step
                 "allowNullableBoolean": true,
-                "allowNullableString": true,
                 "allowNullableNumber": true
             }
         ],

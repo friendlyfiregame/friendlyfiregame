@@ -272,23 +272,23 @@ export class TouchGamepad extends HTMLElement {
         const container = document.createElement("div");
         container.style.width = element.width;
         container.style.height = element.height;
-        container.style.borderRadius = element.borderRadius || "";
-        container.style.position = element.position || "";
-        container.style.top = element.top || "";
-        container.style.right = element.right || "";
-        container.style.bottom = element.bottom || "";
-        container.style.left = element.left || "";
+        container.style.borderRadius = element.borderRadius ?? "";
+        container.style.position = element.position ?? "";
+        container.style.top = element.top ?? "";
+        container.style.right = element.right ?? "";
+        container.style.bottom = element.bottom ?? "";
+        container.style.left = element.left ?? "";
 
         const img = button.svg;
         img.style.width = button.width;
         img.style.height = button.height;
-        img.style.marginLeft = button.marginLeft || "";
-        img.style.marginTop = button.marginTop || "";
-        img.style.position = button.position || "";
-        img.style.top = button.top || "";
-        img.style.right = button.right || "";
-        img.style.bottom = button.bottom || "";
-        img.style.left = button.left || "";
+        img.style.marginLeft = button.marginLeft ?? "";
+        img.style.marginTop = button.marginTop ?? "";
+        img.style.position = button.position ?? "";
+        img.style.top = button.top ?? "";
+        img.style.right = button.right ?? "";
+        img.style.bottom = button.bottom ?? "";
+        img.style.left = button.left ?? "";
         container.appendChild(img);
 
         container.addEventListener("touchstart", (event) => {

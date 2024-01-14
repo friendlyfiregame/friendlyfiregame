@@ -183,11 +183,11 @@ export class Renderer {
                             item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
                             break;
                         case RenderingType.RECT:
-                            if (item.lineColor) {
+                            if (item.lineColor != null) {
                                 ctx.strokeStyle = item.lineColor;
                                 ctx.lineWidth = item.lineWidth || 1;
                                 ctx.strokeRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                            } else if (item.fillColor) {
+                            } else if (item.fillColor != null) {
                                 ctx.fillStyle = item.fillColor;
                                 ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
                             }
@@ -201,7 +201,7 @@ export class Renderer {
                             ctx.closePath();
                             break;
                         case RenderingType.TEXT:
-                            if (item.outlineColor) {
+                            if (item.outlineColor != null) {
                                 item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
                             } else {
                                 item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
