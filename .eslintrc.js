@@ -82,6 +82,7 @@ const config = {
                 "args": "none"
             }
         ],
+        "@typescript-eslint/no-useless-constructor": "warn",
         "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/promise-function-async": "off",
         "@typescript-eslint/quotes": [
