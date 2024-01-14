@@ -101,10 +101,14 @@ export class TouchGamepad extends HTMLElement {
         centerRows.style.display = "flex";
         centerRows.style.alignItems = "flex-start";
         centerRows.style.justifyContent = "center";
-        this.addButton(8, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonSelect), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20x"}, centerRows);
-        this.addButton(16, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonVendor), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20x"}, centerRows);
-        this.addButton(16, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonScreenshot), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20x"}, centerRows);
-        this.addButton(9, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonStart), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20x"}, centerRows);
+        this.addButton(8, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonSelect), width: "26px", height: "26px",
+            marginLeft: "20px", marginTop: "20x"}, centerRows);
+        this.addButton(16, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonVendor), width: "26px", height: "26px",
+            marginLeft: "20px", marginTop: "20x"}, centerRows);
+        this.addButton(16, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonScreenshot), width: "26px", height: "26px",
+            marginLeft: "20px", marginTop: "20x"}, centerRows);
+        this.addButton(9, {width: "66px", height: "66px", borderRadius: "50%"}, {svg: svgElementFromString(svgButtonStart), width: "26px", height: "26px",
+            marginLeft: "20px", marginTop: "20x"}, centerRows);
         this.#shadow.appendChild(centerRows);
         // #endregion
 
@@ -150,21 +154,32 @@ export class TouchGamepad extends HTMLElement {
         this.#shadow.appendChild(lowerRightControls);
         //#endregion
 
-        this.addButton(0, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "50px", bottom: "40px"}, {svg: svgElementFromString(svgButtonA), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
-        this.addButton(1, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "10px", bottom: "80px"}, {svg: svgElementFromString(svgButtonB), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
-        this.addButton(2, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "90px", bottom: "80px"}, {svg: svgElementFromString(svgButtonX), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
-        this.addButton(3, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "50px", bottom: "120px"}, {svg: svgElementFromString(svgButtonY), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(0, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "50px", bottom: "40px"},
+            {svg: svgElementFromString(svgButtonA), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(1, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "10px", bottom: "80px"},
+            {svg: svgElementFromString(svgButtonB), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(2, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "90px", bottom: "80px"},
+            {svg: svgElementFromString(svgButtonX), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(3, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "50px", bottom: "120px"},
+            {svg: svgElementFromString(svgButtonY), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
 
-        this.addButton(4, {width: "100px", height: "100px", position: "absolute", left: "110px", bottom: "208px"}, {svg: svgElementFromString(svgButtonL1), width: "26px", height: "26px", position: "absolute", left: "44px", top: "72px"});
-        this.addButton(6, {width: "110px", height: "100px", position: "absolute", left: "0px", bottom: "185px"}, {svg: svgElementFromString(svgButtonL2), width: "26px", height: "26px", position: "absolute", left: "74px", top: "30px"});
-        this.addButton(10, {width: "66px", height: "66px", position: "absolute", left: "270px", bottom: "15px"}, {svg: svgElementFromString(svgButtonL3), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(4, {width: "100px", height: "100px", position: "absolute", left: "110px", bottom: "208px"},
+            {svg: svgElementFromString(svgButtonL1), width: "26px", height: "26px", position: "absolute", left: "44px", top: "72px"});
+        this.addButton(6, {width: "110px", height: "100px", position: "absolute", left: "0px", bottom: "185px"},
+            {svg: svgElementFromString(svgButtonL2), width: "26px", height: "26px", position: "absolute", left: "74px", top: "30px"});
+        this.addButton(10, {width: "66px", height: "66px", position: "absolute", left: "270px", bottom: "15px"},
+            {svg: svgElementFromString(svgButtonL3), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
 
-        this.addButton(5, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "140px", bottom: "190px"}, {svg: svgElementFromString(svgButtonR1), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
-        this.addButton(7, {width: "96px", height: "96px", borderRadius: "50%", position: "absolute", right: "40px", bottom: "194px"}, {svg: svgElementFromString(svgButtonR2), width: "26px", height: "26px", marginLeft: "35px", marginTop: "35px"});
-        this.addButton(11, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "270px", bottom: "15px"}, {svg: svgElementFromString(svgButtonR3), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(5, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "140px", bottom: "190px"},
+            {svg: svgElementFromString(svgButtonR1), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
+        this.addButton(7, {width: "96px", height: "96px", borderRadius: "50%", position: "absolute", right: "40px", bottom: "194px"},
+            {svg: svgElementFromString(svgButtonR2), width: "26px", height: "26px", marginLeft: "35px", marginTop: "35px"});
+        this.addButton(11, {width: "66px", height: "66px", borderRadius: "50%", position: "absolute", right: "270px", bottom: "15px"},
+            {svg: svgElementFromString(svgButtonR3), width: "26px", height: "26px", marginLeft: "20px", marginTop: "20px"});
 
         // DPad - TODO make more than one touchable surface / button
-        this.addButton(8, {width: "98px", height: "98px", position: "absolute", left: "150px", bottom: "0px"}, {svg: svgElementFromString(svgDPad), width: "74px", height: "74px", marginLeft: "12px", marginTop: "12px"});
+        this.addButton(8, {width: "98px", height: "98px", position: "absolute", left: "150px", bottom: "0px"},
+            {svg: svgElementFromString(svgDPad), width: "74px", height: "74px", marginLeft: "12px", marginTop: "12px"});
 
     }
 

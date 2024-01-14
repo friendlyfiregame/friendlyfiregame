@@ -95,13 +95,6 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
-        "max-len": [
-            "off",
-            {
-                "code": 120,
-                "ignoreRegExpLiterals": true
-            }
-        ],
         "no-case-declarations": "warn",
         "no-constant-condition": [
             "warn",
@@ -120,6 +113,13 @@ const config = {
         "no-throw-literal": "warn",
         "no-unmodified-loop-condition": "warn",
         "no-useless-escape": "off",
+        "max-len": [
+            "warn",
+            {
+                "code": 160,
+                "ignoreRegExpLiterals": true
+            }
+        ],
         "prefer-promise-reject-errors": "warn",
         "prefer-regex-literals": "warn",
         "quotes": [ "error", "double" ],

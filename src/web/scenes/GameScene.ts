@@ -12,7 +12,10 @@ import { Chicken } from "../entities/Chicken";
 import { Cloud } from "../entities/Cloud";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Conversation } from "../Conversation";
-import { DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_FADE_DURATION } from "../../shared/constants";
+import {
+    DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION,
+    WINDOW_ENDING_FADE_DURATION
+} from "../../shared/constants";
 import { EndScene } from "./EndScene";
 import { Fire, FireState } from "../entities/Fire";
 import { FireGfx } from "../FireGfx";

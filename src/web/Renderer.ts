@@ -194,7 +194,8 @@ export class Renderer {
                             break;
                         case RenderingType.SPEECH_BUBBLE:
                             ctx.beginPath();
-                            ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width), Math.round(item.dimension.height), item.radius, item.up, Math.round(item.offsetX));
+                            ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width),
+                                Math.round(item.dimension.height), item.radius, item.up, Math.round(item.offsetX));
                             ctx.fillStyle = item.fillColor;
                             ctx.fill();
                             ctx.closePath();
