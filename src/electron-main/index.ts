@@ -86,7 +86,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
     }
 
     // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-    if (require("electron-squirrel-startup") != null) {
+    if (require("electron-squirrel-startup") !== false) {
         return app.quit();
     }
 
