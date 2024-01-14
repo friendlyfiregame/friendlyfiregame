@@ -107,13 +107,13 @@ export class FlameBoy extends ScriptableNPC {
             this.walkTimer -= dt;
         }
 
-        if (this.idleTimer && this.idleTimer <= 0 && this.walkTimer === null) {
+        if (this.idleTimer != null && this.idleTimer <= 0 && this.walkTimer === null) {
             this.walkTimer = rndItem(WALK_DURATION);
             this.idleTimer = null;
             this.move = this.autoMoveDirection;
         }
 
-        if (this.walkTimer && this.walkTimer <= 0 && this.idleTimer === null) {
+        if (this.walkTimer != null && this.walkTimer <= 0 && this.idleTimer === null) {
             this.idleTimer = rndItem(IDLE_DURATION);
             this.walkTimer = null;
             this.move = 0;

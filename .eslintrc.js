@@ -119,8 +119,7 @@ const config = {
         "@typescript-eslint/strict-boolean-expressions": [
             "warn", {
                 // TODO Find all problems and remove these exceptions step by step
-                "allowNullableBoolean": true,
-                "allowNullableNumber": true
+                "allowNullableBoolean": true
             }
         ],
         "@typescript-eslint/switch-exhaustiveness-check": "warn",

@@ -14,8 +14,8 @@ export class RiddleStone extends Entity {
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16, false);
 
-        this.col = properties.col || 0;
-        this.row = properties.row || 0;
+        this.col = properties.col ?? 0;
+        this.row = properties.row ?? 0;
     }
 
     public draw(): void {

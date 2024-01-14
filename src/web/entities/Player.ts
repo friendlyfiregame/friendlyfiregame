@@ -639,11 +639,11 @@ export class Player extends PhysicsEntity {
                     this.enterShadowCave();
                 }
 
-                if (targetGate.properties.exitSleepTime) {
+                if (targetGate.properties.exitSleepTime != null) {
                     await sleep(targetGate.properties.exitSleepTime * 1000);
                 }
 
-                const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
+                const fadeInTime = targetGate.properties.exitFadeTime != null ? targetGate.properties.exitFadeTime : 0.8;
                 await this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN);
                 this.isControllable = true;
             }
@@ -1246,7 +1246,7 @@ export class Player extends PhysicsEntity {
                 ) {
                     const teleportY = trigger.properties.teleportY;
 
-                    if (teleportY) {
+                    if (teleportY != null) {
                         this.y -= teleportY;
                     }
                 }

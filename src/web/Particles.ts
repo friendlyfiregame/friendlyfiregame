@@ -116,7 +116,7 @@ export class ParticleEmitter {
         this.angleGenerator = toGenerator(args.angle ?? 0);
         this.angleSpeedGenerator = toGenerator(args.angleSpeed ?? 0);
         this.gravity = this.gravityGenerator();
-        this.breakFactor = args.breakFactor || 1;
+        this.breakFactor = args.breakFactor ?? 1;
         this.blendMode = args.blendMode || "source-over";
         this.alphaCurve = args.alphaCurve || valueCurves.constant;
         this.sizeCurve = args.sizeCurve || valueCurves.constant;

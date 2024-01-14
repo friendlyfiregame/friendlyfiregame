@@ -185,7 +185,7 @@ export class Renderer {
                         case RenderingType.RECT:
                             if (item.lineColor != null) {
                                 ctx.strokeStyle = item.lineColor;
-                                ctx.lineWidth = item.lineWidth || 1;
+                                ctx.lineWidth = item.lineWidth ?? 1;
                                 ctx.strokeRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
                             } else if (item.fillColor != null) {
                                 ctx.fillStyle = item.fillColor;
@@ -242,7 +242,7 @@ export class Renderer {
             alpha,
             asset: sprite,
             animationTag,
-            time: time || this.scene.gameTime * 1000
+            time: time ?? this.scene.gameTime * 1000
         });
     }
 }
