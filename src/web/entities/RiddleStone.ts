@@ -7,9 +7,9 @@ import { RenderingLayer } from "../Renderer";
 
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")
-    private static sprite: Aseprite;
-    private col: number;
-    private row: number;
+    private static readonly sprite: Aseprite;
+    private readonly col: number;
+    private readonly row: number;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 16, 16, false);

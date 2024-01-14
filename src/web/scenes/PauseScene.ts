@@ -25,16 +25,16 @@ enum MenuItemKey {
 
 export class PauseScene extends Scene<FriendlyFire> {
     @asset("music/pause.ogg")
-    private static music: Sound;
+    private static readonly music: Sound;
 
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("fonts/headline.font.json")
-    private static headlineFont: BitmapFont;
+    private static readonly headlineFont: BitmapFont;
 
     @asset("appinfo.json")
-    private static appInfo: AppInfoJSON;
+    private static readonly appInfo: AppInfoJSON;
 
     private menu!: MenuList;
 

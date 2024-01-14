@@ -192,15 +192,15 @@ export class GameScene extends Scene<FriendlyFire> {
     ];
 
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("sounds/ending/swell.mp3")
-    private static swell: Sound;
+    private static readonly swell: Sound;
 
     @asset("sounds/gate/wrong.ogg")
     public static wrong: Sound;
 
-    private petEndingTexts: PetEndingText[] = [
+    private readonly petEndingTexts: PetEndingText[] = [
         { label: "The sensation lacks any kind of comparison.", enter: 0.1 },
         { label: "All worldly matters seem so insignificant now.", enter: 0.2 },
         { label: "Reality around me begins to fade.", enter: 0.3 },
@@ -212,7 +212,7 @@ export class GameScene extends Scene<FriendlyFire> {
         { label: "Farewell, cruel world…", enter: 1 }
     ];
 
-    private windowEndingTexts: PetEndingText[] = [
+    private readonly windowEndingTexts: PetEndingText[] = [
         { label: "I wiped off the heavy dust layer on the glass.", enter: 0.1 },
         { label: "The surface was as cold as the corpses around me.", enter: 0.2 },
         { label: "It was hard to make out anything in the darkness on the other side…", enter: 0.3 },
@@ -268,7 +268,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private frameCounter = 0;
     private framesPerSecond = 0;
     public showBounds = false;
-    private scale = 1;
+    private readonly scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
     private fpsInterval: number | null = null;

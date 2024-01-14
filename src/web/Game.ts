@@ -40,10 +40,10 @@ export abstract class Game {
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
 
-    #displayManager: DisplayManager;
-    #steamworksApi: SteamworksApi;
-    #audioManager: AudioManager;
-    #fullscreenManager: FullscreenManager;
+    readonly #displayManager: DisplayManager;
+    readonly #steamworksApi: SteamworksApi;
+    readonly #audioManager: AudioManager;
+    readonly #fullscreenManager: FullscreenManager;
 
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = getGameCanvas(width, height);

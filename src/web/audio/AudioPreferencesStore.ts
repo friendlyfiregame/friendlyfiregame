@@ -34,8 +34,8 @@ class SfxPreferencesStore {
 
 export class AudioPreferencesStore {
 
-    #music: MusicPreferencesStore;
-    #sfx: SfxPreferencesStore;
+    readonly #music: MusicPreferencesStore;
+    readonly #sfx: SfxPreferencesStore;
     public get music(): MusicPreferencesStore {
         return this.#music;
     }

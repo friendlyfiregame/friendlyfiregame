@@ -32,8 +32,8 @@ export interface ParticleEmitterArguments {
 }
 
 export class Particles {
-    private scene: GameScene;
-    private emitters: ParticleEmitter[] = [];
+    private readonly scene: GameScene;
+    private readonly emitters: ParticleEmitter[] = [];
 
     public constructor(scene: GameScene) {
         this.scene = scene;
@@ -84,23 +84,23 @@ export class ParticleEmitter {
     private particles: Particle[];
     private x: number;
     private y: number;
-    private offsetGenerator: VectorGenerator;
-    private velocityGenerator: VectorGenerator;
-    private colorGenerator: ParticleAppearanceGenerator;
-    private sizeGenerator: NumberGenerator;
-    private gravityGenerator: VectorGenerator;
-    private lifetimeGenerator: NumberGenerator;
-    private alphaGenerator: NumberGenerator;
-    private angleGenerator: NumberGenerator;
-    private angleSpeedGenerator: NumberGenerator;
+    private readonly offsetGenerator: VectorGenerator;
+    private readonly velocityGenerator: VectorGenerator;
+    private readonly colorGenerator: ParticleAppearanceGenerator;
+    private readonly sizeGenerator: NumberGenerator;
+    private readonly gravityGenerator: VectorGenerator;
+    private readonly lifetimeGenerator: NumberGenerator;
+    private readonly alphaGenerator: NumberGenerator;
+    private readonly angleGenerator: NumberGenerator;
+    private readonly angleSpeedGenerator: NumberGenerator;
     public gravity: Vector2Like;
     public breakFactor: number;
-    private blendMode: GlobalCompositeOperation;
+    private readonly blendMode: GlobalCompositeOperation;
     public alphaCurve: ValueCurve;
     public sizeCurve: ValueCurve;
     public renderingLayer: RenderingLayer;
     public zIndex: number;
-    private updateMethod: ((p: Particle) => void) | undefined;
+    private readonly updateMethod: ((p: Particle) => void) | undefined;
 
     constructor(args: ParticleEmitterArguments) {
         this.particles = [];
@@ -196,22 +196,22 @@ export class ParticleEmitter {
 }
 
 export class Particle {
-    private halfSize: number;
-    private originalLifetime: number;
+    private readonly halfSize: number;
+    private readonly originalLifetime: number;
     private progress: number = 0;
 
     constructor(
-        private emitter: ParticleEmitter,
+        private readonly emitter: ParticleEmitter,
         public x: number,
         public y: number,
         public vx = 0,
         public vy = 0,
         private angle = 0,
-        private angleSpeed = 0,
-        private imageOrColor: ParticleAppearance = "white",
+        private readonly angleSpeed = 0,
+        private readonly imageOrColor: ParticleAppearance = "white",
         public readonly size = 4,
         private lifetime = 1,
-        private alpha = 1
+        private readonly alpha = 1
     ) {
         this.halfSize = this.size / 2;
         this.originalLifetime = this.lifetime;
@@ -273,7 +273,7 @@ export class Particle {
 }
 
 export class ValueCurve {
-    private mapping: number[] = [];
+    private readonly mapping: number[] = [];
 
     constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
         for (let i = 0; i <= steps; i++) {

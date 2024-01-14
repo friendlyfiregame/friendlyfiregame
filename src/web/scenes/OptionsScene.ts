@@ -24,13 +24,13 @@ enum MenuItemKey {
 
 export class OptionsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("fonts/credits.font.json")
-    private static headlineFont: BitmapFont;
+    private static readonly headlineFont: BitmapFont;
 
     @asset("images/credits.png")
-    private static panelImage: HTMLImageElement;
+    private static readonly panelImage: HTMLImageElement;
 
     private menu!: MenuList;
 

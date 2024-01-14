@@ -11,7 +11,7 @@ enum WallState { SOLID, CRUMBLED }
 @entity("wall")
 export class Wall extends Entity implements CollidableGameObject {
     @asset("sprites/wall.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
     public readonly identifier: string;
     private state = WallState.SOLID;
 

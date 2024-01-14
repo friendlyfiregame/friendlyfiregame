@@ -13,10 +13,10 @@ interface SpiderSpriteMetadata {
 @entity("spider")
 export class Spider extends NPC {
     @asset("sprites/magicspider.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sprites/eyes/spider.aseprite.json")
-    private static eyes: Aseprite;
+    private static readonly eyes: Aseprite;
 
     private spriteMetadata: SpiderSpriteMetadata | null = null;
     private eyeOffsetY = 0;

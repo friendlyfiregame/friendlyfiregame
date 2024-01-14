@@ -23,14 +23,14 @@ export enum SeedState {
 @entity("seed")
 export class Seed extends NPC {
     @asset("sprites/seed.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
+    private static readonly successSound: Sound;
 
     public state = SeedState.FREE;
-    private wood: Wood;
-    private floatingPosition: GameObjectInfo;
+    private readonly wood: Wood;
+    private readonly floatingPosition: GameObjectInfo;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);

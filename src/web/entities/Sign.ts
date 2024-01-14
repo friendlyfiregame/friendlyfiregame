@@ -10,7 +10,7 @@ import { RenderingLayer, RenderingType } from "../Renderer";
 @entity("sign")
 export class Sign extends NPC {
     @asset("sprites/sign.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
     public override conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {

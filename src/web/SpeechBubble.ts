@@ -46,22 +46,22 @@ export function roundRect(
 
 export class SpeechBubble {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
-    private static OPTION_BUBBLE_INDENTATION = 11;
+    private static readonly font: BitmapFont;
+    private static readonly OPTION_BUBBLE_INDENTATION = 11;
 
     private messageLines: string[] = [];
     private options: string[] = [];
     public selectedOptionIndex = -1;
-    private fontSize = SpeechBubble.font.charHeight;
-    private lineHeight = this.fontSize;
+    private readonly fontSize = SpeechBubble.font.charHeight;
+    private readonly lineHeight = this.fontSize;
     private height = 0;
-    private offset = { x: 0, y: 40 };
-    private messageVelocity = 20;
+    private readonly offset = { x: 0, y: 40 };
+    private readonly messageVelocity = 20;
 
     private x: number;
     private y: number;
-    private paddingHorizontal: number;
-    private paddingVertical: number;
+    private readonly paddingHorizontal: number;
+    private readonly paddingVertical: number;
     public isCurrentlyWriting = false;
     public preventUnwantedSelection = false;
 
@@ -71,18 +71,18 @@ export class SpeechBubble {
     private longestLine: number = 0;
 
     private partnersBubble: SpeechBubble | null = null;
-    private lineHeightFactor = 1;
-    private paddingTop = 3;
-    private paddingBottom = 4;
-    private paddingLeft = 7;
-    private paddingRight = 7;
-    private color = "white";
+    private readonly lineHeightFactor = 1;
+    private readonly paddingTop = 3;
+    private readonly paddingBottom = 4;
+    private readonly paddingLeft = 7;
+    private readonly paddingRight = 7;
+    private readonly color = "white";
 
     constructor(
-        private scene: GameScene,
+        private readonly scene: GameScene,
         public anchorX: number,
         public anchorY: number,
-        private up = false
+        private readonly up = false
     ) {
         this.x = Math.round(anchorX + this.offset.x);
         this.y = Math.round(anchorY + this.offset.y);

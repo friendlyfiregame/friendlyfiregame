@@ -18,8 +18,8 @@ const earlyActions = new Set([
 
 export class Conversation {
     private static globalVariables: Record<string, string> = {};
-    private states: string[];
-    private data: {[key: string]: ConversationLine[]};
+    private readonly states: string[];
+    private readonly data: {[key: string]: ConversationLine[]};
     private state!: string;
     private stateIndex = 0;
     private endConversation = false;

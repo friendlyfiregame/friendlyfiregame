@@ -11,10 +11,10 @@ import { Sound } from "../audio/Sound";
 @entity("bone")
 export class Bone extends PhysicsEntity {
     @asset("sprites/bone.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
+    private static readonly successSound: Sound;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 20, 10);

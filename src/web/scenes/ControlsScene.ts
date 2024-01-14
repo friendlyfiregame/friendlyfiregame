@@ -17,21 +17,21 @@ import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 
 export class ControlsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("images/controls.png")
-    private static panelImage: HTMLImageElement;
+    private static readonly panelImage: HTMLImageElement;
 
     @asset("images/controls_keyboard.png")
-    private static keyboardKeys: HTMLImageElement;
+    private static readonly keyboardKeys: HTMLImageElement;
 
     @asset("images/gamepad_selection.aseprite.json")
-    private static gamepadSelection: Aseprite;
+    private static readonly gamepadSelection: Aseprite;
 
     @asset("images/controls_gamepad.aseprite.json")
-    private static gamepadControls: Aseprite;
+    private static readonly gamepadControls: Aseprite;
 
-    private controls: string[] = [
+    private readonly controls: string[] = [
         "Walk",
         "Jump",
         "Interact",

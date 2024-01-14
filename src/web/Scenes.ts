@@ -10,8 +10,8 @@ export class Scenes<T extends Game> {
     public get activeScene(): Scene<T, unknown> | null {
         return this.#activeScene;
     }
-    private sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
-    private scenes: Scene<T, unknown>[] = [];
+    private readonly sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
+    private readonly scenes: Scene<T, unknown>[] = [];
     private sortedScenes: Scene<T, unknown>[] = [];
 
     public constructor(public readonly game: T) {}

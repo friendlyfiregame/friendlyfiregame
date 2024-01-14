@@ -26,14 +26,14 @@ export enum FireState {
 @entity("fire")
 export class Fire extends NPC {
     @asset("sprites/smoke.png")
-    private static smokeImage: HTMLImageElement;
+    private static readonly smokeImage: HTMLImageElement;
 
     @asset("sprites/steam.png")
-    private static steamImage: HTMLImageElement;
+    private static readonly steamImage: HTMLImageElement;
 
     @asset("sounds/fire/fire.ogg")
-    private static fireAmbience: Sound;
-    private soundEmitter: SoundEmitter;
+    private static readonly fireAmbience: Sound;
+    private readonly soundEmitter: SoundEmitter;
 
     public intensity = 5;
 
@@ -47,16 +47,16 @@ export class Fire extends NPC {
 
     public growth = 1;
 
-    private averageParticleDelay = 0.1;
-    private averageSteamDelay = 0.05;
+    private readonly averageParticleDelay = 0.1;
+    private readonly averageSteamDelay = 0.05;
 
     private isVisible = true;
 
-    private fireGfx = new FireGfx();
+    private readonly fireGfx = new FireGfx();
 
-    private sparkEmitter: ParticleEmitter;
-    private smokeEmitter: ParticleEmitter;
-    private steamEmitter: ParticleEmitter;
+    private readonly sparkEmitter: ParticleEmitter;
+    private readonly smokeEmitter: ParticleEmitter;
+    private readonly steamEmitter: ParticleEmitter;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);

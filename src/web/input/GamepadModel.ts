@@ -34,8 +34,8 @@ const productAndVendorMatcher = /^.*?vendor:?\s*(?<vendorId>.{4}).*?product:?\s*
 
 export class GamepadModel {
 
-    #vendorId: number|undefined;
-    #productId: number|undefined;
+    readonly #vendorId: number|undefined;
+    readonly #productId: number|undefined;
 
     constructor(public style: GamepadStyle, vendorId?: number|undefined, productId?: number|undefined) {
         this.#vendorId = vendorId;

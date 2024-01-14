@@ -12,28 +12,28 @@ export class CharacterSounds  {
   public static lowPitchJump: Sound[];
 
   @asset(["sounds/drowning/drowning.mp3"])
-  private static lowPitchDrown: Sound[];
+  private static readonly lowPitchDrown: Sound[];
 
   @asset(["sounds/jumping/landing.mp3"])
-  private static lowPitchLand: Sound[];
+  private static readonly lowPitchLand: Sound[];
 
   @asset(["sounds/throwing/throwing.mp3"])
-  private static lowPitchThrow: Sound[];
+  private static readonly lowPitchThrow: Sound[];
 
   /** High Pitch */
   @asset([
     "sounds/jumping/jump_female_01.ogg"
   ])
-  private static highPitchJump: Sound[];
+  private static readonly highPitchJump: Sound[];
 
   @asset(["sounds/drowning/drowning.mp3"])
-  private static highPitchDrown: Sound[];
+  private static readonly highPitchDrown: Sound[];
 
   @asset(["sounds/jumping/landing.mp3"])
-  private static highPitchLand: Sound[];
+  private static readonly highPitchLand: Sound[];
 
   @asset(["sounds/throwing/throwing.mp3"])
-  private static highPitchThrow: Sound[];
+  private static readonly highPitchThrow: Sound[];
 
   public static getSoundData (): SoundDataStructure {
     return {

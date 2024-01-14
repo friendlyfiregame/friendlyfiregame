@@ -9,10 +9,10 @@ enum PortalAnimationState { WAITING, FADEIN, IDLE, FADEOUT, GONE }
 @entity("portal")
 export class Portal extends Entity {
     @asset("sprites/portal.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/portal/portal.ogg")
-    private static sound: Sound;
+    private static readonly sound: Sound;
 
     private animationState = PortalAnimationState.WAITING;
 

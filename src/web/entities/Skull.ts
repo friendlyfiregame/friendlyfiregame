@@ -8,7 +8,7 @@ import { RenderingLayer } from "../Renderer";
 @entity("skull")
 export class Skull extends PhysicsEntity {
     @asset("sprites/skull.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 16, 16);

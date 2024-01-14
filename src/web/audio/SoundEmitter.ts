@@ -9,9 +9,9 @@ import { Sound } from "./Sound";
  * Might be better to set the volume according to the camera center in the future.
  */
 export class SoundEmitter extends Entity {
-    private sound: Sound;
-    private maxVolume: number;
-    private intensity: number;
+    private readonly sound: Sound;
+    private readonly maxVolume: number;
+    private readonly intensity: number;
 
     public constructor(
         scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number

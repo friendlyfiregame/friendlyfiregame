@@ -1,7 +1,7 @@
 import type { VirtualGamepad } from "./VirtualGamepad";
 
 export class VirtualGamepadEvent extends CustomEvent<VirtualGamepad> {
-    #gamepad: VirtualGamepad;
+    readonly #gamepad: VirtualGamepad;
     public constructor(type: "gamepadconnected" | "gamepaddisconnected", gamepad: VirtualGamepad) {
         super(type, { detail: gamepad });
         this.#gamepad = gamepad;

@@ -12,10 +12,10 @@ enum MimicState { SLEEPING, OPEN_UP, IDLE }
 @entity("mimic")
 export class Mimic extends NPC {
     @asset("sprites/mimic.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/item/chest.ogg")
-    private static openingSound: Sound;
+    private static readonly openingSound: Sound;
 
     private state = MimicState.SLEEPING;
 

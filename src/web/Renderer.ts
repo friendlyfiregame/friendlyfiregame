@@ -144,8 +144,8 @@ export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | As
                             RawRenderingItem;
 
 export class Renderer {
-    private scene: GameScene;
-    private layers = LAYER_ORDER;
+    private readonly scene: GameScene;
+    private readonly layers = LAYER_ORDER;
     private queue: RenderingItem[] = [];
 
     public constructor(scene: GameScene) {

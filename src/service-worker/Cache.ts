@@ -2,7 +2,7 @@ import { CACHE_NAME } from "../shared/constants";
 
 export class Cache extends Object {
 
-    #name: string;
+    readonly #name: string;
     #cache?: globalThis.Cache;
 
     public get name(): string {

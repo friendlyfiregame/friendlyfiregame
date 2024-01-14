@@ -14,16 +14,16 @@ import { GlobalState } from "../GlobalState";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("images/ending/ff.png")
-    private static logo: HTMLImageElement;
+    private static readonly logo: HTMLImageElement;
 
     @asset("sounds/ending/boom.mp3")
-    private static boom: Sound;
+    private static readonly boom: Sound;
 
-    private subtitleDelay = 2;
-    private inputDelay = 4;
+    private readonly subtitleDelay = 2;
+    private readonly inputDelay = 4;
 
     public override setup(): void {
         const ending = this.game.campaign.quests.find(q => q.isFinished());

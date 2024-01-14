@@ -20,12 +20,12 @@ export enum StoneState {
 @entity("stone")
 export class Stone extends NPC implements CollidableGameObject {
     @asset("sprites/stone.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
+    private static readonly successSound: Sound;
 
-    private floatingPosition: GameObjectInfo;
+    private readonly floatingPosition: GameObjectInfo;
 
     public state: StoneState = StoneState.DEFAULT;
 

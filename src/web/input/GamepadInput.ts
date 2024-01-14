@@ -69,7 +69,7 @@ intentMappings.set(GamePadButtonId.START, [ControllerIntent.PAUSE]);
 class GamepadButtonWrapper {
     public readonly index: number;
     private pressed: boolean;
-    private gamepad: GamepadWrapper;
+    private readonly gamepad: GamepadWrapper;
 
     constructor(index: number, wrapped: GamepadButton, gamepad: GamepadWrapper) {
         this.index = index;
@@ -112,11 +112,11 @@ class GamepadAxisWrapper {
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
      * might lead to button flibber flubber...
      */
-    private threshold = 0.5;
+    private readonly threshold = 0.5;
 
     public readonly index: number;
     private value: number = 0.0;
-    private gamepad: GamepadWrapper;
+    private readonly gamepad: GamepadWrapper;
 
     constructor(index: number, gamepad: GamepadWrapper) {
         this.index = index;
@@ -188,10 +188,10 @@ class GamepadAxisWrapper {
  * events.
  */
 class GamepadWrapper {
-    private index: number;
-    private id: string;
-    private buttons: GamepadButtonWrapper[];
-    private axes: GamepadAxisWrapper[];
+    private readonly index: number;
+    private readonly id: string;
+    private readonly buttons: GamepadButtonWrapper[];
+    private readonly axes: GamepadAxisWrapper[];
     public gamepadModel: GamepadModel;
     constructor(gamepad: Gamepad) {
         this.index = gamepad.index;
@@ -225,7 +225,7 @@ class GamepadWrapper {
 }
 
 export class GamepadInput {
-    #gamepads: Map<string, GamepadWrapper>;
+    readonly #gamepads: Map<string, GamepadWrapper>;
 
     constructor() {
         this.#gamepads = new Map();

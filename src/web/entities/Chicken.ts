@@ -10,7 +10,7 @@ import { RenderingLayer } from "../Renderer";
 @entity("chicken")
 export class Chicken extends NPC {
     @asset("sprites/chicken.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 18);

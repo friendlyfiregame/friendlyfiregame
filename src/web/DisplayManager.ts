@@ -2,12 +2,12 @@ import { FullscreenManager } from "./display/FullscreenManager";
 
 export class DisplayManager {
 
-    static #INSTANCE: DisplayManager = new DisplayManager(FullscreenManager.getInstance());
+    static readonly #INSTANCE: DisplayManager = new DisplayManager(FullscreenManager.getInstance());
     public static getInstance(): DisplayManager {
         return DisplayManager.#INSTANCE;
     }
 
-    #fullscreenManager: FullscreenManager;
+    readonly #fullscreenManager: FullscreenManager;
 
     constructor(fullscreenPreferencesStore: FullscreenManager) {
         this.#fullscreenManager = fullscreenPreferencesStore;

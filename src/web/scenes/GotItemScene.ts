@@ -17,13 +17,13 @@ export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 
 export class GotItemScene extends Scene<FriendlyFire, Item> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("fonts/headline.font.json")
-    private static headlineFont: BitmapFont;
+    private static readonly headlineFont: BitmapFont;
 
     @asset("sounds/item/fanfare.mp3")
-    private static sound: Sound;
+    private static readonly sound: Sound;
 
     @asset([
         "sprites/powerup_running.png",
@@ -32,12 +32,12 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         "sprites/powerup_raindance.png",
         "sprites/powerup_friendship.aseprite.json"
     ])
-    private static itemImages: (HTMLImageElement | Aseprite)[];
+    private static readonly itemImages: (HTMLImageElement | Aseprite)[];
 
-    private floatAmount = 3;
-    private floatSpeed = 4;
+    private readonly floatAmount = 3;
+    private readonly floatSpeed = 4;
 
-    private titles = [
+    private readonly titles = [
         "Fear of the Dark",
         "Double-Jump Boots",
         "Flying Wings Knock-off",
@@ -45,7 +45,7 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
         "Eternal Friendship"
     ];
 
-    private subtitles = [
+    private readonly subtitles = [
         [
             "Run and never look back",
             "An exceptional ally",

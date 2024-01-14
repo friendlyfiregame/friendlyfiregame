@@ -124,7 +124,7 @@ export class SceneNode<T extends Game = Game> {
      * The bounds polygon. This is updated on demand and automatically invalidated when node size changes. Node
      * has to call {@linkcode invalidateBounds()} manually when something else influences the bounds.
      */
-    private boundsPolygon: Polygon2 = new Polygon2();
+    private readonly boundsPolygon: Polygon2 = new Polygon2();
 
     /**
      * The transformation matrix of this node. This transformation is applied to the node before moving the node to

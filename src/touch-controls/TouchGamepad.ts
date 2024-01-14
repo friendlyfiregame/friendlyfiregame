@@ -47,8 +47,8 @@ interface Attribute<T> {
 
 class StringAttribute<T extends string> implements Attribute<T> {
 
-    #values: T[];
-    #default: T;
+    readonly #values: T[];
+    readonly #default: T;
 
     constructor(values: T[], defaultValue: T) {
         this.#values = values;
@@ -69,15 +69,15 @@ type DPadAttributeValue = "visible" | "hidden";
 
 export class TouchGamepad extends HTMLElement {
 
-    static #ATTRIBUTES: Map<string, Attribute<any>> = new Map();
+    static readonly #ATTRIBUTES: Map<string, Attribute<any>> = new Map();
     static {
         TouchGamepad.#ATTRIBUTES.set("enabled", new StringAttribute(["true", "false"], "true"));
         TouchGamepad.#ATTRIBUTES.set("dpad", new StringAttribute(["visible", "hidden"], "visible"));
     }
 
-    #shadow: ShadowRoot;
+    readonly #shadow: ShadowRoot;
 
-    #virtualGamepad: VirtualGamepad;
+    readonly #virtualGamepad: VirtualGamepad;
 
     static get observedAttributes(): string[] {
 		return Array.from(TouchGamepad.#ATTRIBUTES.keys());

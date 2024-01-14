@@ -2,7 +2,7 @@ import { clamp, rndItem } from "./util";
 import { getImageData } from "./graphics";
 
 export class ColorGradient {
-    constructor(private mapping: (p: number) => number[]) {}
+    constructor(private readonly mapping: (p: number) => number[]) {}
 
     public get(p: number): number[] {
         return this.mapping(clamp(p, 0, 0.9999999999));

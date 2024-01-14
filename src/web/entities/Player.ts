@@ -107,22 +107,22 @@ export class Player extends PhysicsEntity {
     };
 
     @asset("sounds/feet-walking/steps_single.mp3")
-    private static walkingSound: Sound;
+    private static readonly walkingSound: Sound;
 
     @asset("sounds/gate/door_open.mp3")
-    private static enterGateSound: Sound;
+    private static readonly enterGateSound: Sound;
 
     @asset("sounds/portal/enter-portal.ogg")
-    private static enterPortalSound: Sound;
+    private static readonly enterPortalSound: Sound;
 
     @asset("sounds/gate/door_close.mp3")
-    private static leaveGateSound: Sound;
+    private static readonly leaveGateSound: Sound;
 
     @asset("sounds/jumping/squish.mp3")
-    private static bouncingSound: Sound;
+    private static readonly bouncingSound: Sound;
 
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     private lastHint = Date.now();
     private flying = false;
@@ -153,12 +153,12 @@ export class Player extends PhysicsEntity {
     private usedDoubleJump = false;
     private autoMove: AutoMove | null = null;
     public isControllable: boolean = true;
-    private showHints = false;
+    private readonly showHints = false;
     private isPettingDog = false;
     private walkingSpeed = MAX_PLAYER_SPEED;
 
     private characterAsset: CharacterAsset;
-    private voiceAsset: VoiceAsset;
+    private readonly voiceAsset: VoiceAsset;
 
     public playerConversation: PlayerConversation | null = null;
 
@@ -168,9 +168,9 @@ export class Player extends PhysicsEntity {
 
     private closestNPC: NPC | null = null;
     private readableTrigger?: GameObjectInfo;
-    private dustEmitter: ParticleEmitter;
-    private bounceEmitter: ParticleEmitter;
-    private doubleJumpEmitter: ParticleEmitter;
+    private readonly dustEmitter: ParticleEmitter;
+    private readonly bounceEmitter: ParticleEmitter;
+    private readonly doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
 
     public constructor(scene: GameScene, x: number, y: number) {

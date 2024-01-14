@@ -13,9 +13,9 @@ export class Greeting implements GameObject {
     // Used to prevent multiple greetings, e.g. after a dialog has ended.
     private greetingAlreadyShown = false;
 
-    private speechBubble = new SpeechBubble(this.scene, this.npc.x, this.npc.y);
+    private readonly speechBubble = new SpeechBubble(this.scene, this.npc.x, this.npc.y);
 
-    constructor(private scene: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {
+    constructor(private readonly scene: GameScene, public npc: NPC, private readonly dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
         this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }

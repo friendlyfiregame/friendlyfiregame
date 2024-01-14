@@ -6,11 +6,11 @@ export class FireGfx {
     @asset("gradients/fire.png", { map: (image: HTMLImageElement) => ColorGradient.fromImage(image) })
     public static gradient: ColorGradient;
 
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
-    private data: number[][];
-    private decayData: number[][];
-    private imageData: ImageData;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly context: CanvasRenderingContext2D;
+    private readonly data: number[][];
+    private readonly decayData: number[][];
+    private readonly imageData: ImageData;
     private returnColor: number[] = [0, 0, 0, 255];
     private bottomLine: number[] = [];
     private nextUpdate = -Infinity;
@@ -18,10 +18,10 @@ export class FireGfx {
     private startTime = 0;
 
     constructor(
-        private w = 48,
-        private h = 64,
-        private coneShaped = true,
-        private updateMs = 33
+        private readonly w = 48,
+        private readonly h = 64,
+        private readonly coneShaped = true,
+        private readonly updateMs = 33
     ) {
         this.canvas = document.createElement("canvas");
         this.canvas.width = this.w;

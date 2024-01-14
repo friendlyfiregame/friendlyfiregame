@@ -18,11 +18,11 @@ export enum WoodState {
 @entity("wood")
 export class Wood extends PhysicsEntity {
     @asset("sprites/wood.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
-    private floatingPosition: GameObjectInfo;
+    private static readonly successSound: Sound;
+    private readonly floatingPosition: GameObjectInfo;
 
     public state = WoodState.FREE;
 

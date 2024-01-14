@@ -1,10 +1,10 @@
 export class VirtualGamepad extends Object implements Gamepad {
 
-    #index: number;
-    #connected: boolean;
+    readonly #index: number;
+    readonly #connected: boolean;
     #timestamp: number;
-    #axes: number[];
-    #buttons: { pressed: boolean, touched: boolean, value: number }[];
+    readonly #axes: number[];
+    readonly #buttons: { pressed: boolean, touched: boolean, value: number }[];
 
     constructor(initArgs: { index: number }) {
         super();

@@ -16,11 +16,11 @@ enum AnimationTag {
 @entity("shadowpresence")
 export class ShadowPresence extends NPC {
     @asset("sprites/shadowpresence.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/ambient/cave.ogg")
-    private static caveAmbience: Sound;
-    private soundEmitter: SoundEmitter;
+    private static readonly caveAmbience: Sound;
+    private readonly soundEmitter: SoundEmitter;
 
     private isNearPlayer = false;
 

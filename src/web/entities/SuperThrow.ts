@@ -10,9 +10,9 @@ import { RenderingLayer } from "../Renderer";
 @entity("superthrow")
 export class SuperThrow extends NPC {
     @asset("sprites/superthrow.aseprite.json")
-    private static sprite: Aseprite;
-    private floatAmount = 4;
-    private floatSpeed = 2;
+    private static readonly sprite: Aseprite;
+    private readonly floatAmount = 4;
+    private readonly floatSpeed = 2;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 18, 22);

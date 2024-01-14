@@ -4,15 +4,15 @@ import { loadImage } from "./graphics";
 const CHAR_SPACING = 1;
 
 export class BitmapFont {
-    private sourceImage: HTMLImageElement;
-    private canvas: HTMLCanvasElement;
-    private colorMap: Record<string, number>;
-    private charMap: string;
-    private charWidths: number[];
-    private compactablePrecursors: string[][];
-    private charStartPoints: number[];
-    private charCount: number;
-    private charReverseMap: Record<string, number>;
+    private readonly sourceImage: HTMLImageElement;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly colorMap: Record<string, number>;
+    private readonly charMap: string;
+    private readonly charWidths: number[];
+    private readonly compactablePrecursors: string[][];
+    private readonly charStartPoints: number[];
+    private readonly charCount: number;
+    private readonly charReverseMap: Record<string, number>;
     public charHeight!: number;
 
     private constructor(

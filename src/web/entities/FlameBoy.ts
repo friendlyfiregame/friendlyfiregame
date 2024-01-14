@@ -25,11 +25,11 @@ const ACCELERATION = 15;
 @entity("flameboy")
 export class FlameBoy extends ScriptableNPC {
     @asset("sprites/flameboy.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/fire/fire2.ogg")
-    private static fireAmbience: Sound;
-    private soundEmitter: SoundEmitter;
+    private static readonly fireAmbience: Sound;
+    private readonly soundEmitter: SoundEmitter;
 
     private state = FlameBoyState.VENDOR;
     private idleTimer: number | null = rndItem(IDLE_DURATION);

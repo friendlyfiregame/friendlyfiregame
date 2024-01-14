@@ -13,20 +13,20 @@ import { rnd, rndInt, timedRnd } from "../util";
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
     @asset("sprites/cloud3.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sprites/raindrop.png")
-    private static raindrop: HTMLImageElement;
+    private static readonly raindrop: HTMLImageElement;
 
-    private startX: number;
-    private startY: number;
-    private targetX: number;
-    private targetY: number;
-    private velocity: number;
+    private readonly startX: number;
+    private readonly startY: number;
+    private readonly targetX: number;
+    private readonly targetY: number;
+    private readonly velocity: number;
 
-    private rainEmitter: ParticleEmitter;
+    private readonly rainEmitter: ParticleEmitter;
     private raining = 0;
-    private isRainCloud = false;
+    private readonly isRainCloud;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties, canRain = false) {
         super(scene, x, y, 74, 5);

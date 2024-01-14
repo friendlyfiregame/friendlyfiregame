@@ -20,7 +20,7 @@ export type CurrentAnimationState = {
  * The Animator class can be used to orchestrate and draw aseprite animations of an entity
  */
 export class Animator {
-    private entity: Entity;
+    private readonly entity: Entity;
     private sprite?: Aseprite;
 
     private readonly currentAnimation: CurrentAnimationState = {

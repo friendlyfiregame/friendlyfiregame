@@ -94,11 +94,11 @@ export type SliderMenuItemParams<T> = MenuItemParams<T> & {
 
 export class SliderMenuItem<T = null> extends MenuItem<T> {
     private value: number;
-    private minValue: number;
-    private maxValue: number;
-    private increment: number;
-    private rightActionCallback: (newValue: number, data: T) => void;
-    private leftActionCallback: (newValue: number, data: T) => void;
+    private readonly minValue: number;
+    private readonly maxValue: number;
+    private readonly increment: number;
+    private readonly rightActionCallback: (newValue: number, data: T) => void;
+    private readonly leftActionCallback: (newValue: number, data: T) => void;
 
     public constructor(params: SliderMenuItemParams<T>) {
         super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
@@ -170,7 +170,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
     @asset("sounds/interface/bass.mp3")
     public static pause: Sound;
 
-    private align: MenuAlignment;
+    private readonly align: MenuAlignment;
     private items: MenuItem[] = [];
     public onActivated = new Signal<string>();
     public onRightAction = new Signal<string>();

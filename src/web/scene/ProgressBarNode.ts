@@ -23,9 +23,9 @@ export interface ProgressBarNodeArgs extends SceneNodeArgs {
  * @param T - Optional owner game class.
  */
 export class ProgressBarNode<T extends Game = Game> extends SceneNode<T> {
-    private backgroundStyle: string;
-    private borderStyle: string;
-    private progressStyle: string;
+    private readonly backgroundStyle: string;
+    private readonly borderStyle: string;
+    private readonly progressStyle: string;
     private progress: number = 0;
 
     /**
