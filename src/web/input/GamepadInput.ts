@@ -198,13 +198,13 @@ class GamepadWrapper {
         this.index = gamepad.index;
         this.id = gamepad.id;
         this.gamepadModel = GamepadModel.fromString(this.id);
-        this.buttons = new Array(gamepad.buttons.length);
+        this.buttons = new Array(gamepad.buttons.length) as GamepadButtonWrapper[];
 
         for (let i = 0; i < this.buttons.length; i++) {
             this.buttons[i] = new GamepadButtonWrapper(i, gamepad.buttons[i], this);
         }
 
-        this.axes = new Array(gamepad.axes.length);
+        this.axes = new Array(gamepad.axes.length) as GamepadAxisWrapper[];
 
         for (let i = 0; i < this.axes.length; i++) {
             this.axes[i] = new GamepadAxisWrapper(i, this);

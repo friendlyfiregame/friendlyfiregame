@@ -133,15 +133,13 @@ export class OptionsScene extends Scene<FriendlyFire> {
         } else if (data.channel === SoundChannel.SFX) {
             data.audioManager.sfxGain = newValue;
         } else {
-            throw new Error(`Unknown sound channel: ${data.channel}.`);
+            throw new Error(`Unknown sound channel: ${data.channel as string}.`);
         }
     }
 
     public async handleMenuAction(buttonId: string): Promise<void> {
-        switch (buttonId) {
-            case MenuItemKey.FULLSCREEN:
-                await this.toggleFullscreen();
-                break;
+        if (buttonId === MenuItemKey.FULLSCREEN) {
+            await this.toggleFullscreen();
         }
     }
 

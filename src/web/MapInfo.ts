@@ -76,7 +76,6 @@ export class MapInfo {
 
     public getGameObjectInfos(type: MapObjectType): GameObjectInfo[] {
         const mapHeight = MapInfo.getMapSize().height;
-
         return this.getObjects(type).map(object => ({
             name: object.name,
             x: object.x,
@@ -87,7 +86,7 @@ export class MapInfo {
             properties: (object.properties ?? []).reduce((props, property) => {
                 props[property.name] = property.value;
                 return props;
-            }, {})
+            }, {} as Record<string, unknown>) as unknown as GameObjectProperties
         }));
     }
 

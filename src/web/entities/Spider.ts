@@ -37,7 +37,7 @@ export class Spider extends NPC {
     private getSpriteMetadata(): SpiderSpriteMetadata {
         if (this.spriteMetadata == null) {
             const metadata = Spider.sprite.getLayer("Meta")?.data;
-            this.spriteMetadata = metadata != null && metadata !== "" ? JSON.parse(metadata) : {};
+            this.spriteMetadata = metadata != null && metadata !== "" ? JSON.parse(metadata) as SpiderSpriteMetadata : {};
         }
 
         return this.spriteMetadata ?? {};

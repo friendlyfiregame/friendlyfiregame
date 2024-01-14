@@ -40,7 +40,7 @@ export class Cache extends Object {
     }
 
     public override toString(): string {
-        return `Cache{name=${name}}`;
+        return `Cache{name=${this.#name}}`;
     }
 
 }

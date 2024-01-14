@@ -4,7 +4,7 @@ declare module "*/level.json" {
         T extends "int" ? number :
         unknown;
 
-    export interface MapObjectPropertyJSON<T extends string> {
+    export interface MapObjectPropertyJSON<T extends string = string> {
         name: string;
         type: T;
         value: PropertyType<T>;

@@ -124,8 +124,7 @@ export class PlayerConversation {
                     option.execute();
                 } else {
                     console.error(
-                        "Tried to execute invalid option at index " + index
-                        + " in interaction around line: " + this.interaction.npcLine
+                        `Tried to execute invalid option at index ${index} in interaction around line: ${this.interaction?.npcLine?.toString()}`
                     );
                 }
             }

@@ -27,7 +27,8 @@ const config = {
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "rules": {
         "@typescript-eslint/ban-types": [
@@ -94,6 +95,7 @@ const config = {
                 "args": "none"
             }
         ],
+        "@typescript-eslint/no-unsafe-enum-comparison": "off",
         "@typescript-eslint/no-useless-constructor": "warn",
         "@typescript-eslint/prefer-nullish-coalescing": "warn",
         "@typescript-eslint/prefer-readonly": "warn",
@@ -120,6 +122,7 @@ const config = {
         "@typescript-eslint/strict-boolean-expressions": "warn",
         "@typescript-eslint/switch-exhaustiveness-check": "warn",
         "@typescript-eslint/triple-slash-reference": "warn",
+        "@typescript-eslint/unbound-method": "off",
         "dot-location": [ "warn", "property" ],
         "eol-last": "warn",
         "eqeqeq": [

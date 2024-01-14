@@ -886,7 +886,7 @@ export class Player extends PhysicsEntity {
         if (this.playerSpriteMetadata == null) {
             this.playerSpriteMetadata = Player.playerSprites.map(sprite => {
                 const metaDataJSON = sprite.getLayer("Meta")?.data;
-                return metaDataJSON != null && metaDataJSON !== "" ? JSON.parse(metaDataJSON) : {};
+                return metaDataJSON != null && metaDataJSON !== "" ? JSON.parse(metaDataJSON) as PlayerSpriteMetadata : {};
             });
         }
 
