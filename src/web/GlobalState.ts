@@ -11,7 +11,7 @@ export class GlobalState {
     if (serialized) {
       try {
         const parsed = JSON.parse(serialized) as T;
-        return parsed || fallback;
+        return parsed ?? fallback;
       } catch (e) {
         console.error(e);
         return fallback;
