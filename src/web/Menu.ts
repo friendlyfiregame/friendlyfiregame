@@ -13,7 +13,7 @@ export enum MenuAlignment { LEFT, CENTER, RIGHT }
  * additional `►` character as prefix. The item instances don't need to be manually drawn, since the
  * MenuList class' draw method will take care of it.
  */
-export class MenuItem<T = unknown> {
+export class MenuItem<T = null> {
     public id: string;
     public label: string;
     protected font: BitmapFont;
@@ -27,10 +27,7 @@ export class MenuItem<T = unknown> {
     @asset("sprites/menu_selector.png")
     protected static selectorImage: HTMLImageElement;
 
-    public constructor(
-        id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number,
-        data?: T
-    ) {
+    public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, data: T | null = null ) {
         this.id = id;
         this.label = label;
         this.font = font;
@@ -38,7 +35,7 @@ export class MenuItem<T = unknown> {
         this.x = x;
         this.y = y;
         this.focused = false;
-        this.data = data!;
+        this.data = data as T;
     }
 
     /**

@@ -9,10 +9,10 @@ export class FriendlyFire extends Game {
 }
 
 function presentUpdateAvailable(serviceWorker: ServiceWorker): void {
-    document.getElementById("update-banner")!.dataset.state = "update-available";
-    document.querySelector("#update-banner .headline")!.innerHTML = "Update available";
-    document.querySelector("#update-banner .subhead")!.innerHTML = "Click here to update the app to the latest version";
-    document.getElementById("update-banner")!.addEventListener("click", (event) => {
+    (document.getElementById("update-banner") as HTMLDivElement).dataset.state = "update-available";
+    (document.querySelector("#update-banner .headline") as HTMLDivElement).innerHTML = "Update available";
+    (document.querySelector("#update-banner .subhead") as HTMLDivElement).innerHTML = "Click here to update the app to the latest version";
+    (document.getElementById("update-banner") as HTMLDivElement).addEventListener("click", (event) => {
         serviceWorker.postMessage("SKIP_WAITING");
     });
 }
@@ -53,14 +53,16 @@ if (!isElectron()) {
                     }
 
                     // Listen for any state changes on the new service worker
-                    registration.installing!.addEventListener("statechange", function (stateChangeEvent) {
+                    registration.installing?.addEventListener("statechange", function (stateChangeEvent) {
                         // Wait for the service worker to enter the installed state (aka waiting)
                         if (this.state !== "installed") {
                             return;
                         }
 
                         // Present the update available UI
-                        presentUpdateAvailable(registration.waiting!);
+                        if (registration.waiting != null) {
+                            presentUpdateAvailable(registration.waiting);
+                        }
                     });
                 });
 

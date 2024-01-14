@@ -243,7 +243,7 @@ export class Campaign {
                         this.gameScene.fire.x, this.gameScene.fire.y + 15,
                         8,
                         -2 * Math.PI, valueCurves.cubic
-                    ).then(() => this.gameScene!.beginApocalypse());
+                    ).then(() => this.gameScene?.beginApocalypse());
 
                     this.gameScene.fire.conversation = null;
                     this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
@@ -348,7 +348,7 @@ export class Campaign {
                     break;
                 case "dance":
                     setTimeout(() => {
-                        this.gameScene!.player.startDance(+params[0] || 1);
+                        this.gameScene?.player.startDance(+params[0] || 1);
                     }, 500);
 
                     break;

@@ -1,5 +1,5 @@
 import { FontJSON } from "*.font.json";
-import { loadImage } from "./graphics";
+import { getRenderingContext, loadImage } from "./graphics";
 
 const CHAR_SPACING = 1;
 
@@ -61,7 +61,7 @@ export class BitmapFont {
         const w = this.canvas.width = this.sourceImage.width;
         const h = this.charHeight;
         this.canvas.height = h * count;
-        const ctx = this.canvas.getContext("2d")!;
+        const ctx = getRenderingContext(this.canvas, "2d");
 
         // Fill with font
         for (let i = 0; i < count; i++) {

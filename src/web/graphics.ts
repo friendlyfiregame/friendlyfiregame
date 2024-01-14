@@ -17,7 +17,10 @@ export async function loadImage(source: string | URL): Promise<HTMLImageElement>
 }
 
 export function createCanvas(width: number, height: number): HTMLCanvasElement {
-    const c = document.createElement("canvas")!;
+    const c = document.createElement("canvas");
+    if (c == null) {
+        throw new Error("No canvas support");
+    }
     c.width = width;
     c.height = height;
 

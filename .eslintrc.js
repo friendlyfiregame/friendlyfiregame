@@ -70,7 +70,7 @@ const config = {
             }
         ],
         "@typescript-eslint/no-namespace": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-non-null-assertion": "warn",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/promise-function-async": "off",
