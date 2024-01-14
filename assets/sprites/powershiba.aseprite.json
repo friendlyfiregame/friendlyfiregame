@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 19, "h": 21 },
+    "filename": "powershiba 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 19, "h": 21 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 19, "h": 21 },
@@ -9,8 +9,8 @@
     "duration": 150
    },
    {
-    "filename": "1",
-    "frame": { "x": 19, "y": 0, "w": 19, "h": 21 },
+    "filename": "powershiba 1.aseprite",
+    "frame": { "x": 22, "y": 1, "w": 19, "h": 21 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 19, "h": 21 },
@@ -18,8 +18,8 @@
     "duration": 150
    },
    {
-    "filename": "2",
-    "frame": { "x": 0, "y": 21, "w": 19, "h": 21 },
+    "filename": "powershiba 2.aseprite",
+    "frame": { "x": 1, "y": 24, "w": 19, "h": 21 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 19, "h": 21 },
@@ -27,8 +27,8 @@
     "duration": 150
    },
    {
-    "filename": "3",
-    "frame": { "x": 19, "y": 21, "w": 19, "h": 21 },
+    "filename": "powershiba 3.aseprite",
+    "frame": { "x": 22, "y": 24, "w": 19, "h": 21 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 2, "y": 1, "w": 19, "h": 21 },
@@ -38,13 +38,18 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "powershiba.png",
   "format": "RGBA8888",
-  "size": { "w": 38, "h": 42 },
+  "size": { "w": 42, "h": 46 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 3, "direction": "pingpong" }
+   { "name": "idle", "from": 0, "to": 3, "direction": "pingpong", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 2", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 3", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 85, "h": 10 },
+    "filename": "spaceshipsmall 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 85, "h": 10 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 1, "y": 1, "w": 85, "h": 10 },
@@ -9,8 +9,8 @@
     "duration": 1000
    },
    {
-    "filename": "1",
-    "frame": { "x": 85, "y": 0, "w": 1, "h": 1 },
+    "filename": "spaceshipsmall 1.aseprite",
+    "frame": { "x": 88, "y": 1, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
@@ -20,13 +20,16 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.25-x64",
+  "version": "1.3.2-x64",
   "image": "spaceshipsmall.png",
   "format": "RGBA8888",
-  "size": { "w": 86, "h": 10 },
+  "size": { "w": 90, "h": 12 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 0, "direction": "forward" }
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

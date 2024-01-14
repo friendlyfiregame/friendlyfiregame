@@ -1,50 +1,54 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 48, "h": 37 },
+    "filename": "table 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 23, "h": 17 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 11, "w": 48, "h": 37 },
-    "sourceSize": { "w": 48, "h": 48 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
     "duration": 175
    },
    {
-    "filename": "1",
-    "frame": { "x": 48, "y": 0, "w": 48, "h": 37 },
+    "filename": "table 1.aseprite",
+    "frame": { "x": 26, "y": 1, "w": 23, "h": 17 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 11, "w": 48, "h": 37 },
-    "sourceSize": { "w": 48, "h": 48 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
     "duration": 175
    },
    {
-    "filename": "2",
-    "frame": { "x": 0, "y": 37, "w": 48, "h": 37 },
+    "filename": "table 2.aseprite",
+    "frame": { "x": 1, "y": 20, "w": 23, "h": 17 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 11, "w": 48, "h": 37 },
-    "sourceSize": { "w": 48, "h": 48 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
     "duration": 175
    },
    {
-    "filename": "3",
-    "frame": { "x": 48, "y": 37, "w": 48, "h": 37 },
+    "filename": "table 3.aseprite",
+    "frame": { "x": 26, "y": 20, "w": 23, "h": 17 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 11, "w": 48, "h": 37 },
-    "sourceSize": { "w": 48, "h": 48 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
     "duration": 175
    }
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "table.png",
   "format": "RGBA8888",
-  "size": { "w": 96, "h": 74 },
+  "size": { "w": 50, "h": 38 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 3, "direction": "pingpong" }
+   { "name": "idle", "from": 0, "to": 3, "direction": "pingpong", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 3", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 2", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

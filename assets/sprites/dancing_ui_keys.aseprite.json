@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 9, "h": 9 },
+    "filename": "dancing_ui_keys 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 9, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
@@ -9,8 +9,8 @@
     "duration": 100
    },
    {
-    "filename": "1",
-    "frame": { "x": 9, "y": 0, "w": 9, "h": 9 },
+    "filename": "dancing_ui_keys 1.aseprite",
+    "frame": { "x": 12, "y": 1, "w": 9, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
@@ -18,8 +18,8 @@
     "duration": 100
    },
    {
-    "filename": "2",
-    "frame": { "x": 18, "y": 0, "w": 9, "h": 9 },
+    "filename": "dancing_ui_keys 2.aseprite",
+    "frame": { "x": 23, "y": 1, "w": 9, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
@@ -27,8 +27,8 @@
     "duration": 100
    },
    {
-    "filename": "3",
-    "frame": { "x": 0, "y": 9, "w": 9, "h": 9 },
+    "filename": "dancing_ui_keys 3.aseprite",
+    "frame": { "x": 1, "y": 12, "w": 9, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
@@ -36,8 +36,8 @@
     "duration": 100
    },
    {
-    "filename": "4",
-    "frame": { "x": 9, "y": 9, "w": 9, "h": 9 },
+    "filename": "dancing_ui_keys 4.aseprite",
+    "frame": { "x": 12, "y": 12, "w": 9, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
@@ -45,8 +45,8 @@
     "duration": 100
    },
    {
-    "filename": "5",
-    "frame": { "x": 18, "y": 9, "w": 9, "h": 9 },
+    "filename": "dancing_ui_keys 5.aseprite",
+    "frame": { "x": 23, "y": 12, "w": 9, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 9, "h": 9 },
@@ -56,18 +56,21 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "dancing_ui_keys.png",
   "format": "RGBA8888",
-  "size": { "w": 27, "h": 18 },
+  "size": { "w": 33, "h": 22 },
   "scale": "1",
   "frameTags": [
-   { "name": "keyboard-dance1", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "keyboard-dance2", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "xbox-dance1", "from": 2, "to": 2, "direction": "forward" },
-   { "name": "xbox-dance2", "from": 3, "to": 3, "direction": "forward" },
-   { "name": "playstation-dance1", "from": 4, "to": 4, "direction": "forward" },
-   { "name": "playstation-dance2", "from": 5, "to": 5, "direction": "forward" }
+   { "name": "keyboard-dance1", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "keyboard-dance2", "from": 1, "to": 1, "direction": "forward", "color": "#000000ff" },
+   { "name": "xbox-dance1", "from": 2, "to": 2, "direction": "forward", "color": "#000000ff" },
+   { "name": "xbox-dance2", "from": 3, "to": 3, "direction": "forward", "color": "#000000ff" },
+   { "name": "playstation-dance1", "from": 4, "to": 4, "direction": "forward", "color": "#000000ff" },
+   { "name": "playstation-dance2", "from": 5, "to": 5, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

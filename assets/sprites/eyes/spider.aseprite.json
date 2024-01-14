@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 0, "y": 0, "w": 16, "h": 8 },
+    "filename": "spider 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -9,8 +9,17 @@
     "duration": 3000
    },
    {
-    "filename": "1",
-    "frame": { "x": 16, "y": 0, "w": 16, "h": 8 },
+    "filename": "spider 1.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 16, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
+    "sourceSize": { "w": 16, "h": 8 },
+    "duration": 3000
+   },
+   {
+    "filename": "spider 2.aseprite",
+    "frame": { "x": 19, "y": 1, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -18,8 +27,8 @@
     "duration": 100
    },
    {
-    "filename": "2",
-    "frame": { "x": 32, "y": 0, "w": 16, "h": 8 },
+    "filename": "spider 3.aseprite",
+    "frame": { "x": 37, "y": 1, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -27,8 +36,8 @@
     "duration": 100
    },
    {
-    "filename": "3",
-    "frame": { "x": 0, "y": 8, "w": 16, "h": 8 },
+    "filename": "spider 4.aseprite",
+    "frame": { "x": 1, "y": 11, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -36,8 +45,8 @@
     "duration": 100
    },
    {
-    "filename": "4",
-    "frame": { "x": 16, "y": 8, "w": 16, "h": 8 },
+    "filename": "spider 5.aseprite",
+    "frame": { "x": 19, "y": 11, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -45,8 +54,8 @@
     "duration": 100
    },
    {
-    "filename": "5",
-    "frame": { "x": 32, "y": 8, "w": 16, "h": 8 },
+    "filename": "spider 6.aseprite",
+    "frame": { "x": 37, "y": 11, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -54,8 +63,8 @@
     "duration": 100
    },
    {
-    "filename": "6",
-    "frame": { "x": 0, "y": 16, "w": 16, "h": 8 },
+    "filename": "spider 7.aseprite",
+    "frame": { "x": 1, "y": 21, "w": 16, "h": 8 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 8 },
@@ -65,13 +74,17 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.18",
+  "version": "1.3.2-x64",
   "image": "spider.png",
   "format": "RGBA8888",
-  "size": { "w": 48, "h": 24 },
+  "size": { "w": 54, "h": 30 },
   "scale": "1",
   "frameTags": [
-   { "name": "blink", "from": 0, "to": 6, "direction": "forward" }
+   { "name": "blink", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Head", "opacity": 255, "blendMode": "normal" },
+   { "name": "makeup", "opacity": 101, "blendMode": "normal" }
   ]
  }
 }

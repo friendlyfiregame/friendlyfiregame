@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 36, "y": 0, "w": 18, "h": 9 },
+    "filename": "stonedisciple 0.aseprite",
+    "frame": { "x": 41, "y": 1, "w": 18, "h": 9 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 13, "w": 18, "h": 9 },
@@ -9,8 +9,8 @@
     "duration": 2000
    },
    {
-    "filename": "1",
-    "frame": { "x": 36, "y": 9, "w": 18, "h": 8 },
+    "filename": "stonedisciple 1.aseprite",
+    "frame": { "x": 41, "y": 12, "w": 18, "h": 8 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 14, "w": 18, "h": 8 },
@@ -18,8 +18,8 @@
     "duration": 80
    },
    {
-    "filename": "2",
-    "frame": { "x": 18, "y": 11, "w": 18, "h": 7 },
+    "filename": "stonedisciple 2.aseprite",
+    "frame": { "x": 21, "y": 14, "w": 18, "h": 7 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 15, "w": 18, "h": 7 },
@@ -27,8 +27,8 @@
     "duration": 80
    },
    {
-    "filename": "3",
-    "frame": { "x": 18, "y": 0, "w": 18, "h": 11 },
+    "filename": "stonedisciple 3.aseprite",
+    "frame": { "x": 21, "y": 1, "w": 18, "h": 11 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 13, "w": 18, "h": 11 },
@@ -36,8 +36,8 @@
     "duration": 150
    },
    {
-    "filename": "4",
-    "frame": { "x": 0, "y": 0, "w": 18, "h": 12 },
+    "filename": "stonedisciple 4.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 18, "h": 12 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 12, "w": 18, "h": 12 },
@@ -47,14 +47,17 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "stonedisciple.png",
   "format": "I8",
-  "size": { "w": 54, "h": 18 },
+  "size": { "w": 60, "h": 22 },
   "scale": "1",
   "frameTags": [
-   { "name": "neutral", "from": 0, "to": 2, "direction": "pingpong" },
-   { "name": "amused", "from": 3, "to": 4, "direction": "forward" }
+   { "name": "neutral", "from": 0, "to": 2, "direction": "pingpong", "color": "#000000ff" },
+   { "name": "amused", "from": 3, "to": 4, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 5", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

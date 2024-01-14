@@ -1,23 +1,27 @@
 { "frames": [
    {
     "filename": "stoneplatform.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 68, "h": 14 },
+    "frame": { "x": 1, "y": 1, "w": 68, "h": 13 },
     "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 68, "h": 14 },
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 68, "h": 13 },
     "sourceSize": { "w": 68, "h": 14 },
     "duration": 200
    }
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "stoneplatform.png",
   "format": "I8",
-  "size": { "w": 68, "h": 14 },
+  "size": { "w": 70, "h": 15 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 0, "direction": "forward" }
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" },
+   { "name": "Snow", "opacity": 255, "blendMode": "normal" }
   ]
  }
 }

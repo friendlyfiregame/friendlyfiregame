@@ -1,7 +1,7 @@
 { "frames": [
    {
-    "filename": "0",
-    "frame": { "x": 32, "y": 18, "w": 20, "h": 2 },
+    "filename": "standard 0.aseprite",
+    "frame": { "x": 38, "y": 24, "w": 20, "h": 2 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 9, "y": 11, "w": 20, "h": 2 },
@@ -9,8 +9,8 @@
     "duration": 100
    },
    {
-    "filename": "1",
-    "frame": { "x": 41, "y": 0, "w": 17, "h": 8 },
+    "filename": "standard 1.aseprite",
+    "frame": { "x": 23, "y": 10, "w": 17, "h": 8 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 5, "w": 17, "h": 8 },
@@ -18,8 +18,8 @@
     "duration": 2500
    },
    {
-    "filename": "2",
-    "frame": { "x": 58, "y": 0, "w": 1, "h": 1 },
+    "filename": "standard 2.aseprite",
+    "frame": { "x": 70, "y": 1, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
@@ -27,8 +27,8 @@
     "duration": 80
    },
    {
-    "filename": "3",
-    "frame": { "x": 32, "y": 14, "w": 17, "h": 4 },
+    "filename": "standard 3.aseprite",
+    "frame": { "x": 19, "y": 20, "w": 17, "h": 4 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 8, "w": 17, "h": 4 },
@@ -36,8 +36,8 @@
     "duration": 80
    },
    {
-    "filename": "4",
-    "frame": { "x": 20, "y": 8, "w": 22, "h": 6 },
+    "filename": "standard 4.aseprite",
+    "frame": { "x": 46, "y": 1, "w": 22, "h": 6 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 9, "y": 8, "w": 22, "h": 6 },
@@ -45,8 +45,8 @@
     "duration": 100
    },
    {
-    "filename": "5",
-    "frame": { "x": 42, "y": 8, "w": 22, "h": 6 },
+    "filename": "standard 5.aseprite",
+    "frame": { "x": 46, "y": 9, "w": 22, "h": 6 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 9, "y": 7, "w": 22, "h": 6 },
@@ -54,8 +54,8 @@
     "duration": 100
    },
    {
-    "filename": "6",
-    "frame": { "x": 20, "y": 0, "w": 21, "h": 7 },
+    "filename": "standard 6.aseprite",
+    "frame": { "x": 23, "y": 1, "w": 21, "h": 7 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 9, "y": 7, "w": 21, "h": 7 },
@@ -63,8 +63,8 @@
     "duration": 100
    },
    {
-    "filename": "7",
-    "frame": { "x": 0, "y": 0, "w": 20, "h": 11 },
+    "filename": "standard 7.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 20, "h": 11 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 9, "y": 4, "w": 20, "h": 11 },
@@ -72,8 +72,8 @@
     "duration": 100
    },
    {
-    "filename": "8",
-    "frame": { "x": 0, "y": 11, "w": 16, "h": 7 },
+    "filename": "standard 8.aseprite",
+    "frame": { "x": 1, "y": 14, "w": 16, "h": 7 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 6, "w": 16, "h": 7 },
@@ -81,8 +81,8 @@
     "duration": 200
    },
    {
-    "filename": "9",
-    "frame": { "x": 16, "y": 14, "w": 16, "h": 5 },
+    "filename": "standard 9.aseprite",
+    "frame": { "x": 42, "y": 17, "w": 16, "h": 5 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 11, "y": 7, "w": 16, "h": 5 },
@@ -92,24 +92,22 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.21-x64",
+  "version": "1.3.2-x64",
   "image": "standard.png",
   "format": "RGBA8888",
-  "size": { "w": 64, "h": 20 },
+  "size": { "w": 72, "h": 27 },
   "scale": "1",
   "frameTags": [
-   { "name": "blink", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "neutral", "from": 1, "to": 3, "direction": "pingpong" },
-   { "name": "angry", "from": 4, "to": 4, "direction": "forward" },
-   { "name": "bored", "from": 5, "to": 5, "direction": "forward" },
-   { "name": "amused", "from": 6, "to": 6, "direction": "forward" },
-   { "name": "sad", "from": 7, "to": 7, "direction": "forward" },
-   { "name": "disgusted", "from": 8, "to": 9, "direction": "forward" }
+   { "name": "blink", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "neutral", "from": 1, "to": 3, "direction": "pingpong", "color": "#000000ff" },
+   { "name": "angry", "from": 4, "to": 4, "direction": "forward", "color": "#000000ff" },
+   { "name": "bored", "from": 5, "to": 5, "direction": "forward", "color": "#000000ff" },
+   { "name": "amused", "from": 6, "to": 6, "direction": "forward", "color": "#000000ff" },
+   { "name": "sad", "from": 7, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "disgusted", "from": 8, "to": 9, "direction": "forward", "color": "#000000ff" }
   ],
   "layers": [
    { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
-  ],
-  "slices": [
   ]
  }
 }
