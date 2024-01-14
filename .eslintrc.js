@@ -119,7 +119,6 @@ const config = {
         "@typescript-eslint/strict-boolean-expressions": [
             "warn", {
                 // TODO Find all problems and remove these exceptions step by step
-                "allowString": true,
                 "allowNumber": true,
                 "allowNullableBoolean": true,
                 "allowNullableString": true,
