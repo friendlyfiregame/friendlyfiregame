@@ -9,14 +9,17 @@ import { Direction } from "../geom/Direction";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { TextNode } from "../scene/TextNode";
 import { BitmapFont } from "../BitmapFont";
-import { MenuItem, MenuList, SliderMenuItem } from "../Menu";
+import { CheckboxMenuItem, MenuItem, MenuList, SliderMenuItem } from "../Menu";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { ControllerAnimationTags } from "../input/ControllerFamily";
 import { AudioManager } from "../audio/AudioManager";
 import { SoundChannel } from "../audio/SoundChannel";
+import { DisplayManager } from "../DisplayManager";
 
 enum MenuItemKey {
     FULLSCREEN = "fullscreen",
+    PIXEL_PERFECT = "pixel-perfect",
+    IMAGE_SMOOTHING = "image-smoothing",
     SFX_SLIDER = "sfxSlider",
     MUSIC_SLIDER = "musicSlider",
 }
@@ -86,6 +89,34 @@ export class OptionsScene extends Scene<FriendlyFire> {
             new MenuItem(
                 MenuItemKey.FULLSCREEN, "Toggle Fullscreen", OptionsScene.font, "black", menuItemX, menuItemY
             ),
+            new CheckboxMenuItem(
+                {
+                    id: MenuItemKey.PIXEL_PERFECT,
+                    label: "Pixel-Perfect Scaling",
+                    font: OptionsScene.font,
+                    color: "black",
+                    x: menuItemX,
+                    y: menuItemY + 20,
+                    enabled: true,
+                    initialValue: this.game.displayManager.isPixelPerfectEnabled(),
+                    actionCallback: this.handlePixelPerfectChange,
+                    data: { displayManager: this.game.displayManager }
+                }
+            ),
+            new CheckboxMenuItem(
+                {
+                    id: MenuItemKey.IMAGE_SMOOTHING,
+                    label: "Image Smoothing",
+                    font: OptionsScene.font,
+                    color: "black",
+                    x: menuItemX,
+                    y: menuItemY + 40,
+                    enabled: true,
+                    initialValue: this.game.displayManager.isImageSmoothingEnabled(),
+                    actionCallback: this.handleImageSmoothingChange,
+                    data: { displayManager: this.game.displayManager }
+                }
+            ),
             new SliderMenuItem(
                 {
                     id: MenuItemKey.SFX_SLIDER,
@@ -93,7 +124,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     font: OptionsScene.font,
                     color: "black",
                     x: menuItemX,
-                    y: menuItemY + 20,
+                    y: menuItemY + 60,
                     enabled: true,
                     initialValue: Math.round(this.audioManager.sfxGain * 100),
                     minValue: 0,
@@ -111,7 +142,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     font: OptionsScene.font,
                     color: "black",
                     x: menuItemX,
-                    y: menuItemY + 40,
+                    y: menuItemY + 80,
                     enabled: true,
                     initialValue: Math.round(this.audioManager.musicGain * 100),
                     minValue: 0,
@@ -124,6 +155,14 @@ export class OptionsScene extends Scene<FriendlyFire> {
             )
         );
         this.menu.appendTo(panel);
+    }
+
+    private handlePixelPerfectChange(newValue: boolean, data: { displayManager: DisplayManager }): void {
+        data.displayManager.setPixelPerfectEnabled(newValue);
+    }
+
+    private handleImageSmoothingChange(newValue: boolean, data: { displayManager: DisplayManager }): void {
+        data.displayManager.setImageSmoothingEnabled(newValue);
     }
 
     private handleAudioSliderChange (newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {

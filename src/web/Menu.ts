@@ -149,6 +149,55 @@ export class SliderMenuItem<T = null> extends MenuItem<T> {
     }
 }
 
+export type CheckboxMenuItemParams<T> = MenuItemParams<T> & {
+    initialValue: boolean;
+    actionCallback: (newValue: boolean, data: T) => void;
+};
+
+export class CheckboxMenuItem<T = null> extends MenuItem<T> {
+    private value: boolean;
+    private actionCallback: (newValue: boolean, data: T) => void;
+
+    public constructor(params: CheckboxMenuItemParams<T>) {
+        super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
+        this.value = params.initialValue;
+        this.actionCallback = params.actionCallback;
+    }
+
+    public getValue(): boolean {
+        return this.value;
+    }
+
+    public setValue(value: boolean): void {
+        this.value = value;
+        this.actionCallback(this.value, this.data);
+    }
+
+    public toggleValue(): void {
+        this.setValue(!this.getValue());
+    }
+
+    public override draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
+        const alpha = this.enabled ? 1 : 0.35;
+        const x = this.x;
+        const y = this.y;
+
+        const text = this.label;
+        this.font.drawText(ctx, text, x, y, this.color, 0, alpha);
+
+        const valueText = this.value ? "On" : "Off";
+        const valueWidth = this.font.measureText(valueText).width;
+        this.font.drawText(ctx, valueText, x + 250 - valueWidth, y, this.color, 0, alpha);
+
+        if (this.focused) {
+            ctx.drawImage(MenuItem.selectorImage, x - 13, y + 2);
+        }
+
+        ctx.restore();
+    }
+}
+
 export interface MenuListArgs extends SceneNodeArgs {
     align?: MenuAlignment;
 }
@@ -282,6 +331,9 @@ export class MenuList extends SceneNode<FriendlyFire> {
             sound.stop();
             sound.play();
             this.onActivated.emit(focusedButton.id);
+            if (focusedButton instanceof CheckboxMenuItem) {
+                focusedButton.toggleValue();
+            }
         }
     }
 

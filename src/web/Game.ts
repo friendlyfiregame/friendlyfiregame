@@ -48,6 +48,7 @@ export abstract class Game {
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = getGameCanvas(width, height);
         this.#displayManager = DisplayManager.getInstance();
+        this.#displayManager.onChange.connect(this.updateCanvas, this);
         this.#steamworksApi = SteamworksApi.getInstance();
         this.#audioManager = AudioManager.getInstance();
         this.#fullscreenManager = FullscreenManager.getInstance();
@@ -59,11 +60,9 @@ export abstract class Game {
         style.position = "absolute";
         style.margin = "auto";
         style.left = style.top = style.right = style.bottom = "0";
-        style.imageRendering = "pixelated";
-        style.imageRendering = "crisp-edges";
         document.body.appendChild(this.canvas);
-        this.updateCanvasSize();
-        window.addEventListener("resize", () => this.updateCanvasSize());
+        this.updateCanvas();
+        window.addEventListener("resize", () => this.updateCanvas());
         window.addEventListener("pointermove", () => this.mouseMoved());
 
         // Use Alt+Enter to toggle fullscreen mode.
@@ -118,17 +117,22 @@ export abstract class Game {
         }
     }
 
-    private updateCanvasSize(): void {
+    private updateCanvas(): void {
         const { width, height } = this;
 
-        const scale = Math.max(
-            1,
-            Math.floor(Math.min(window.innerWidth / width, window.innerHeight / height))
-        );
-
+        let scale = Math.min(window.innerWidth / width, window.innerHeight / height);
+        if (this.displayManager.isPixelPerfectEnabled()) {
+            scale = Math.max(1, Math.floor(scale));
+        }
         const style = this.canvas.style;
         style.width = width * scale + "px";
         style.height = height * scale + "px";
+        if (this.displayManager.isImageSmoothingEnabled()) {
+            style.imageRendering = "auto";
+        } else {
+            style.imageRendering = "pixelated";
+            style.imageRendering = "crisp-edges";
+        }
     }
 
     private gameLoop(): void {
@@ -139,7 +143,8 @@ export abstract class Game {
 
         const { ctx, width, height } = this;
         ctx.save();
-        ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = this.displayManager.isImageSmoothingEnabled();
+        ctx.imageSmoothingQuality = "high";
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, 0, width, height);
         this.draw(ctx, width, height);
