@@ -130,10 +130,8 @@ export class SpeechBubble {
         this.preventUnwantedSelection = true;
         this.updateContent();
         this.isCurrentlyWriting = false;
-
-        setTimeout(() => {
-            this.preventUnwantedSelection = false;
-        }, 300);
+        await sleep(300);
+        this.preventUnwantedSelection = false;
     }
 
     public setOptions(options: string[], partnersBubble: SpeechBubble): void {
