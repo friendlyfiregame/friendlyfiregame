@@ -192,7 +192,7 @@ export class Campaign {
                 case "zoomout":
                     this.gameScene.camera.zoom -= 1;
                     break;
-                case "treezoom":
+                case "treezoom": {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");
 
                     if (forestPointer) {
@@ -206,7 +206,8 @@ export class Campaign {
                     }
 
                     break;
-                case "mountainzoom":
+                }
+                case "mountainzoom": {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "mountain");
 
                     if (mountainPointer) {
@@ -220,7 +221,8 @@ export class Campaign {
                     }
 
                     break;
-                case "riverzoom":
+                }
+                case "riverzoom": {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "river");
 
                     if (riverPointer) {
@@ -234,7 +236,8 @@ export class Campaign {
                     }
 
                     break;
-                case "crazyzoom":
+                }
+                case "crazyzoom": {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
 
@@ -248,6 +251,7 @@ export class Campaign {
                     this.gameScene.fire.conversation = null;
                     this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
                     break;
+                }
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();
                     break;
@@ -361,7 +365,7 @@ export class Campaign {
                 case "lookThroughWindow":
                     this.gameScene.beginWindowEnding();
                     break;
-                case "enable":
+                case "enable": {
                     const char = params[0], dialogName = params[1];
 
                     const npcMap: Record<string, NPC> = {
@@ -386,7 +390,8 @@ export class Campaign {
                     }
 
                     break;
-                case "disable":
+                }
+                case "disable": {
                     const char1 = params[0];
 
                     const npcMap1: Record<string, NPC> = {
@@ -410,6 +415,7 @@ export class Campaign {
                     }
 
                     break;
+                }
             }
         }
     }

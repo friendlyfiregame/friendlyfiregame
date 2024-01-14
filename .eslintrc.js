@@ -97,7 +97,7 @@ const config = {
                 "ignoreRegExpLiterals": true
             }
         ],
-        "no-case-declarations": "off",
+        "no-case-declarations": "warn",
         "no-constant-condition": [
             "warn",
             {

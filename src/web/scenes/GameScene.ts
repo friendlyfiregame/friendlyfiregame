@@ -325,9 +325,10 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Portal(this, entity.x, entity.y);
                     case "window":
                         return new Window(this, entity.x, entity.y);
-                    case "player":
+                    case "player": {
                         const startingPos = this.getPlayerStartingPos();
                         return new Player(this, startingPos.x, startingPos.y);
+                    }
                     default:
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
                 }
