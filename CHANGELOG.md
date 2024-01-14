@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed carrying metadata in female player sprite.
 - Re-export all sprites with extrude option to fix many sprite rendering glitches.
 - Fixed lots of typos in dialogs.
+- Fixed positioning of conversation speech bubble. It is now always located below
+  the player, even when the player is not in the screen center.
 
 ### Changed
 

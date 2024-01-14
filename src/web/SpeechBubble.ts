@@ -23,9 +23,9 @@ export function roundRect(
     ctx.moveTo(x + r, y);
 
     if (up) {
-        ctx.lineTo(middlePos - 4, y);
-        ctx.lineTo(middlePos, y - 4);
-        ctx.lineTo(middlePos + 4, y);
+        ctx.lineTo(middlePos - 4 + tipOffset, y);
+        ctx.lineTo(middlePos + tipOffset, y - 4);
+        ctx.lineTo(middlePos + 4 + tipOffset, y);
     }
 
     ctx.arcTo(rightPos, y, rightPos, bottomPos, r);
@@ -71,18 +71,18 @@ export class SpeechBubble {
     private longestLine: number = 0;
 
     private partnersBubble: SpeechBubble | null = null;
+    private lineHeightFactor = 1;
+    private paddingTop = 3;
+    private paddingBottom = 4;
+    private paddingLeft = 7;
+    private paddingRight = 7;
+    private color = "white";
 
     constructor(
         private scene: GameScene,
         public anchorX: number,
         public anchorY: number,
-        private lineHeightFactor = 1,
-        private paddingTop = 3,
-        private paddingBottom = 4,
-        private paddingLeft = 7,
-        private paddingRight = 7,
-        private color = "white",
-        private relativeToScreen = false
+        private up = false
     ) {
         this.x = Math.round(anchorX + this.offset.x);
         this.y = Math.round(anchorY + this.offset.y);
@@ -158,32 +158,27 @@ export class SpeechBubble {
         }
 
         let posX = this.x;
-        let posY = this.y;
+        const posY = this.y;
         let offsetX = 0;
 
-        if (this.relativeToScreen) {
-            posX = Math.round(ctx.canvas.width / 2);
-            posY = Math.round(-ctx.canvas.height * 0.63 - this.height);
-        } else {
-            // Check if Speech Bubble clips the viewport and correct position
-            const visibleRect = this.scene.camera.getVisibleRect();
-            const relativeX = posX - visibleRect.x;
+        // Check if Speech Bubble clips the viewport and correct position
+        const visibleRect = this.scene.camera.getVisibleRect();
+        const relativeX = posX - visibleRect.x;
 
-            const clipAmount = Math.max(
-                (this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0)
-                || Math.min(relativeX - (this.longestLine / 2),
-                0
-            );
+        const clipAmount = Math.max(
+            (this.longestLine / 2) + relativeX - GAME_CANVAS_WIDTH, 0)
+            || Math.min(relativeX - (this.longestLine / 2),
+            0
+        );
 
-            if (clipAmount !== 0) {
-                offsetX = clipAmount + (10 * Math.sign(clipAmount));
-            }
+        if (clipAmount !== 0) {
+            offsetX = clipAmount + (10 * Math.sign(clipAmount));
         }
 
         posX -= offsetX;
 
         const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.paddingLeft;
-        const bubbleYPos = -posY - this.height;
+        const bubbleYPos = this.up ? -posY + 45 : (-posY - this.height);
 
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,
@@ -198,7 +193,7 @@ export class SpeechBubble {
                 height: this.height
             },
             radius: 5,
-            relativeToScreen: this.relativeToScreen,
+            up: this.up,
             offsetX
         });
 
@@ -213,7 +208,6 @@ export class SpeechBubble {
                 layer: RenderingLayer.UI,
                 text: this.messageLines[i],
                 textColor: textColor,
-                relativeToScreen: this.relativeToScreen,
                 position: {
                     x: textXPos,
                     y: textYPos
@@ -232,7 +226,6 @@ export class SpeechBubble {
                     layer: RenderingLayer.UI,
                     text: ConversationLine.OPTION_MARKER,
                     textColor: textColor,
-                    relativeToScreen: this.relativeToScreen,
                     position: {
                         x: textXPos,
                         y: textYPos
@@ -246,7 +239,6 @@ export class SpeechBubble {
                 layer: RenderingLayer.UI,
                 text: this.options[i],
                 textColor: textColor,
-                relativeToScreen: this.relativeToScreen,
                 position: {
                     x: textXPos + SpeechBubble.OPTION_BUBBLE_INDENTATION,
                     y: textYPos

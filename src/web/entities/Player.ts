@@ -162,14 +162,7 @@ export class Player extends PhysicsEntity {
 
     public playerConversation: PlayerConversation | null = null;
 
-    public speechBubble = new SpeechBubble(
-        this.scene,
-        this.x, this.y,
-        undefined,
-        undefined, undefined, undefined, undefined,
-        undefined,
-        true
-    );
+    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, true);
 
     public thinkBubble: SpeechBubble | null = null;
 
@@ -529,9 +522,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(
-            this.scene, this.x, this.y
-        );
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y);
 
         void thinkBubble.setMessage(message);
         thinkBubble.show();
