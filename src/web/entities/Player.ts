@@ -643,7 +643,7 @@ export class Player extends PhysicsEntity {
                     await sleep(targetGate.properties.exitSleepTime * 1000);
                 }
 
-                const fadeInTime = targetGate.properties.exitFadeTime != null ? targetGate.properties.exitFadeTime : 0.8;
+                const fadeInTime = targetGate.properties.exitFadeTime ?? 0.8;
                 await this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN);
                 this.isControllable = true;
             }

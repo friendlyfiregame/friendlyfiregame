@@ -315,7 +315,7 @@ export class ConversationLine {
                         ?.join(" ")
                         .split("!")
                         .map(action => action.trim()).filter(s => s.length > 0)
-                        .map(action => action.split(" ")) || [] as string[][];
+                        .map(action => action.split(" ")) ?? [] as string[][];
     }
 
     public static wrapString(s: string, charsPerLine: number): string {

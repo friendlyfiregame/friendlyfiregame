@@ -87,14 +87,14 @@ class GamepadButtonWrapper {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.DOWN,
-                        intentMappings.get(this.index) || [ControllerIntent.NONE]
+                        intentMappings.get(this.index) ?? [ControllerIntent.NONE]
                     )
                 );
             } else {
                 controllerManager.onButtonUp.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.UP,
-                        intentMappings.get(this.index) || [ControllerIntent.NONE]
+                        intentMappings.get(this.index) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -137,7 +137,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonUp.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.UP,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -149,7 +149,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.DOWN,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -163,7 +163,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonUp.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.UP,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -175,7 +175,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.DOWN,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }

@@ -40,7 +40,7 @@ export class Spider extends NPC {
             this.spriteMetadata = metadata != null && metadata !== "" ? JSON.parse(metadata) : {};
         }
 
-        return this.spriteMetadata || {};
+        return this.spriteMetadata ?? {};
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
