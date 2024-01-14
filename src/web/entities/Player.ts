@@ -248,7 +248,7 @@ export class Player extends PhysicsEntity {
         this.isControllable = isControllable;
     }
 
-    public startAutoMove(x: number, turnAround: boolean) {
+    public startAutoMove(x: number, turnAround: boolean): void {
         if (!this.autoMove) {
             this.autoMove = {
                 destinationX: x,

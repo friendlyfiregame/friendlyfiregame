@@ -20,7 +20,7 @@ export function getAudioContext(controllerManager: ControllerManager = Controlle
 
         // When audio context is suspended then try to wake it up on next key or pointer press
         if (audioContext.state === "suspended") {
-            const resume = () => audioContext?.resume();
+            const resume = (): void => void audioContext?.resume();
 
             controllerManager.onButtonDown.connect(resume);
             document.addEventListener("pointerdown", resume);

@@ -93,7 +93,7 @@ export class EndScene extends Scene<FriendlyFire> {
         await this.game.scenes.setScene(CreditsScene);
     }
 
-    public override cleanup() {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 }

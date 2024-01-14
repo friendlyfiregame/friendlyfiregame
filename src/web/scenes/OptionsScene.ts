@@ -35,7 +35,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
     private menu!: MenuList;
 
     #audioManager!: AudioManager;
-    public get audioManager() {
+    public get audioManager(): AudioManager {
         return this.#audioManager;
     }
 

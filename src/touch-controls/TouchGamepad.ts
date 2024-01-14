@@ -168,19 +168,19 @@ export class TouchGamepad extends HTMLElement {
 
     }
 
-    public connectedCallback() {
+    public connectedCallback(): void {
 		if (!this.hasAttribute("enabled")) {
             this.setAttribute("enabled", "true");
         }
 	}
 
     // Element has been removed.
-	public disconnectedCallback () {
+	public disconnectedCallback(): void {
         // TODO Disconnect gamepad.
 	}
 
     // Element has been moved into another document.
-	public adoptedCallback() {
+	public adoptedCallback(): void {
 
 	}
 
@@ -293,6 +293,6 @@ export class TouchGamepad extends HTMLElement {
 
 }
 
-export function initialize() {
+export function initialize(): void {
     customElements.define("touch-gamepad", TouchGamepad);
 }

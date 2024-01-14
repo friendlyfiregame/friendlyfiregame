@@ -19,7 +19,7 @@ export function rndInt(minOrMax: number, max?: number): number {
     }
 }
 
-export function rndItem(array: any[] | string) {
+export function rndItem<T>(array: T[]): T {
     const index = Math.floor(Math.random() * array.length);
 
     return array[index];

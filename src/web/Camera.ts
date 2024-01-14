@@ -145,7 +145,7 @@ export class Camera {
         this.currentBarTarget = target;
     }
 
-    private getBaseCameraTarget() {
+    private getBaseCameraTarget(): { x: number, y: number } {
         // Base position always on target (player)
         let xTarget = this.target.x;
         let yTarget = this.target.y + 30;

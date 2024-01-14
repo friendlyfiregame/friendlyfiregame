@@ -26,14 +26,14 @@ export class VirtualGamepad extends Object implements Gamepad {
         }
     }
 
-    pressButton(index: number) {
+    pressButton(index: number): void {
         this.#timestamp = Date.now();
         this.#buttons[index].pressed = true;
         this.#buttons[index].touched = false;
         this.#buttons[index].value = 1;
     }
 
-    releaseButton(index: number) {
+    releaseButton(index: number): void {
         this.#timestamp = Date.now();
         this.#buttons[index].pressed = false;
         this.#buttons[index].touched = false;

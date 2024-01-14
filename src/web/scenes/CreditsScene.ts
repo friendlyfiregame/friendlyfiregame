@@ -185,7 +185,7 @@ export class CreditsScene extends Scene<FriendlyFire> {
         }).appendTo(this.rootNode);
     }
 
-    public override cleanup() {
+    public override cleanup(): void {
         this.rootNode.clear();
     }
 

@@ -251,7 +251,7 @@ export class GamepadInput {
      * Used to register a new gamepad.
      * @param gamepad Gamepad that has just been connected.
      */
-    #addGamepad(gamepad: Gamepad|null) {
+    #addGamepad(gamepad: Gamepad|null): void {
         if (gamepad !== null) {
             this.#gamepads.set(gamepad.id, new GamepadWrapper(gamepad));
         }
@@ -261,7 +261,7 @@ export class GamepadInput {
      * Used to de-register an existing gamepad.
      * @param gamepad Gamepad that has just been disconnected.
      */
-    #removeGamepad(gamepad: Gamepad|null) {
+    #removeGamepad(gamepad: Gamepad|null): void {
         if (gamepad !== null) {
             this.#gamepads.delete(gamepad.id);
         }

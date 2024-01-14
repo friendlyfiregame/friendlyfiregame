@@ -101,7 +101,7 @@ export class Campaign {
         return ending;
     }
 
-    public setNewGamePlus (isNewGamePlus: boolean) {
+    public setNewGamePlus (isNewGamePlus: boolean): void {
         this.isNewGamePlus = isNewGamePlus;
     }
 
@@ -117,7 +117,7 @@ export class Campaign {
      * Init campaign. Assign Game Scene and enable all initial dialog trees
      * @param gameScene Game Scene
      */
-    public begin(gameScene: GameScene) {
+    public begin(gameScene: GameScene): void {
         this.gameScene = gameScene;
 
         // Rest quest progress
@@ -139,23 +139,23 @@ export class Campaign {
         this.runAction("enable", null, ["shadowpresence", "shadowpresence1"]);
     }
 
-    public hasState(state: CampaignState) {
+    public hasState(state: CampaignState): boolean {
         return this.states.includes(state);
     }
 
-    public setStates(states: CampaignState[]) {
+    public setStates(states: CampaignState[]): void {
         this.states = states;
         this.onStatesChanged.emit(this.states);
     }
 
-    public removeState(state: CampaignState) {
+    public removeState(state: CampaignState): void {
         if (this.hasState(state)) {
             this.states.splice(this.states.indexOf(state), 1);
             this.onStatesChanged.emit(this.states);
         }
     }
 
-    public addState(state: CampaignState) {
+    public addState(state: CampaignState): void {
         if (!this.hasState(state)) {
             this.states.push(state);
             this.onStatesChanged.emit(this.states);
