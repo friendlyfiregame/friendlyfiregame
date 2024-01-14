@@ -38,7 +38,7 @@ jobs:
       run: echo "GIT_BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "${GITHUB_ENV}"
       id: extract_branch
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         architecture: x64
         node-version: '20'
@@ -58,7 +58,7 @@ jobs:
     - name: Test
       run: xvfb-run --auto-servernum npm test
     - name: Archive dist folder
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: webapp-dist
         path: dist
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Download archived dist folder
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: webapp-dist
         path: dist
@@ -183,7 +183,7 @@ jobs:
         VERSION: ${{steps.version.outputs.result}}
         TARGET_OS: ${{steps.build_info.outputs.target_os}}
         TARGET_ARCH: ${{steps.build_info.outputs.target_arch}}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{steps.create_archive.outputs.package_name}}
         path: ${{steps.create_archive.outputs.artifact_path}}
