@@ -120,7 +120,7 @@ export class ParticleEmitter {
         this.blendMode = args.blendMode || "source-over";
         this.alphaCurve = args.alphaCurve || valueCurves.constant;
         this.sizeCurve = args.sizeCurve || valueCurves.constant;
-        this.renderingLayer = args.renderingLayer || RenderingLayer.PARTICLES;
+        this.renderingLayer = args.renderingLayer ?? RenderingLayer.PARTICLES;
         this.zIndex = args.zIndex !== undefined ? args.zIndex : 0;
         this.updateMethod = args.update;
 

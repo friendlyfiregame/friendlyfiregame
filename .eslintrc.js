@@ -123,8 +123,7 @@ const config = {
                 "allowNumber": true,
                 "allowNullableBoolean": true,
                 "allowNullableString": true,
-                "allowNullableNumber": true,
-                "allowNullableEnum": true
+                "allowNullableNumber": true
             }
         ],
         "@typescript-eslint/switch-exhaustiveness-check": "warn",
