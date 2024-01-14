@@ -30,7 +30,17 @@ const config = {
       "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "extendDefaults": true,
+                "types": {
+                    "Function": false,
+                    "object": false,
+                    "Object": false
+                }
+            }
+        ],
         "@typescript-eslint/brace-style": [ "error", "1tbs", { "allowSingleLine": true } ],
         "@typescript-eslint/explicit-function-return-type": [
             "warn",
