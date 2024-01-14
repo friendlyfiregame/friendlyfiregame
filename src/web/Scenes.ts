@@ -27,7 +27,7 @@ export class Scenes<T extends Game> {
         return scene;
     }
 
-    public async pushScene<A>(sceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
+    public async pushScene(sceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
     public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
     public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
         if (this.activeScene != null) {
@@ -79,7 +79,7 @@ export class Scenes<T extends Game> {
         return activeScene;
     }
 
-    public async setScene<A>(newSceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
+    public async setScene(newSceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
     public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
     public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
         const currentScene = this.activeScene;

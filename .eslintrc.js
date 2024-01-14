@@ -71,7 +71,12 @@ const config = {
         ],
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-assertion": "warn",
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "args": "none"
+            }
+        ],
         "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/promise-function-async": "off",
         "@typescript-eslint/require-await": "warn",
