@@ -84,6 +84,14 @@ const config = {
         ],
         "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/promise-function-async": "off",
+        "@typescript-eslint/quotes": [
+            "warn",
+            "double",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
+        ],
         "@typescript-eslint/require-await": "warn",
         "@typescript-eslint/return-await": "warn",
         "@typescript-eslint/semi": ["warn", "always"],
