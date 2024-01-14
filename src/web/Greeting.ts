@@ -76,7 +76,7 @@ export class Greeting implements GameObject {
     }
 
     private findMatchingSelectorByStates(
-        data: {[key: string]: any}, currentCampaignStates: CampaignState[]
+        data: {[key: string]: unknown}, currentCampaignStates: CampaignState[]
     ): string | null {
         const stateSelectors: string[][] = [];
 

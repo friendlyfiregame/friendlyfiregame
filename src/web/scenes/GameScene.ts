@@ -271,7 +271,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
-    private fpsInterval: any = null;
+    private fpsInterval: number | null = null;
     private fadeToBlackEndTime = 0;
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
@@ -353,7 +353,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera = new Camera(this, this.player);
         this.camera.setBounds(this.player.getCurrentMapBounds());
 
-        this.fpsInterval = setInterval(() => {
+        this.fpsInterval = window.setInterval(() => {
             this.framesPerSecond = this.frameCounter;
             this.frameCounter = 0;
         }, 1000);
@@ -394,7 +394,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public override cleanup(): void {
         if (this.fpsInterval != null) {
-            clearInterval(this.fpsInterval);
+            window.clearInterval(this.fpsInterval);
         }
     }
 
