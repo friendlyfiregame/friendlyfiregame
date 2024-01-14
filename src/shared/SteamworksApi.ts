@@ -9,7 +9,7 @@ export interface SteamworksApi {
     readonly available: boolean;
 
     initialized(): Promise<boolean>;
-    readonly localplayer: { // cSpell:disable-line Yeah... it's already wrong upstreams...
+    readonly localplayer: {
         getName(): Promise<string>;
         getSteamId(): Promise<any>;
     };

@@ -1,4 +1,3 @@
-// cSpell:disable
 // @ts-check
 
 /** @type {import("eslint").ESLint.ConfigData} */
@@ -18,7 +17,8 @@ const config = {
     },
     "ignorePatterns": [
         "webpack.*.ts",
-        "forge.*.ts"
+        "forge.*.ts",
+        "jest.config.ts"
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [

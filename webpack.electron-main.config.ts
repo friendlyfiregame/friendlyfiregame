@@ -1,4 +1,3 @@
-// cSpell:disable
 import { Configuration } from "webpack";
 import { typeScriptRules, nativeModuleRules } from "./webpack.rules";
 

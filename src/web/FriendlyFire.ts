@@ -22,7 +22,7 @@ function presentUpdateAvailable(serviceWorker: ServiceWorker): void {
  */
 let prelaunchTask: Promise<unknown> = Promise.resolve();
 
-//#region Service Worker Initialization (cspell:disable)
+//#region Service Worker Initialization
 if (!isElectron()) {
 
     const body = document.getElementsByTagName("body")[0];
@@ -83,7 +83,7 @@ if (!isElectron()) {
         });
     }
 }
-//#endregion (cspell:enable)
+//#endregion
 
 (async () => {
     await prelaunchTask;
