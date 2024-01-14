@@ -76,6 +76,7 @@ const config = {
         ],
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-assertion": "warn",
+        "@typescript-eslint/no-unused-expressions": "warn",
         "@typescript-eslint/no-unused-vars": [
             "warn",
             {
