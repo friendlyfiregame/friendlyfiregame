@@ -88,6 +88,7 @@ const config = {
         "@typescript-eslint/return-await": "warn",
         "@typescript-eslint/semi": ["warn", "always"],
         "dot-location": [ "warn", "property" ],
+        "eol-last": "warn",
         "eqeqeq": [
             "warn",
             "always", {
