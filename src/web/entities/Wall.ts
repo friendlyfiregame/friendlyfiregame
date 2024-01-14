@@ -11,15 +11,15 @@ enum WallState { SOLID, CRUMBLED }
 @entity("wall")
 export class Wall extends Entity implements CollidableGameObject {
     @asset("sprites/wall.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
     public readonly identifier: string;
     private state = WallState.SOLID;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 24, 72, false);
 
-        if (!properties.identifier) {
-            throw new Error ("Cannot create Wall entity with no identifier property");
+        if (properties.identifier == null) {
+            throw new Error("Cannot create Wall entity with no identifier property");
         }
 
         this.identifier = properties.identifier;
@@ -40,7 +40,7 @@ export class Wall extends Entity implements CollidableGameObject {
         this.state = WallState.CRUMBLED;
     }
 
-    collidesWith(x: number, y: number): number {
+    public collidesWith(x: number, y: number): number {
         if (
             this.state === WallState.SOLID
             && x >= this.x - this.width / 2

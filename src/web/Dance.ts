@@ -10,25 +10,25 @@ import { ValueCurve, valueCurves } from "./Particles";
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
-    private static successSound: Sound;
+    private static readonly successSound: Sound;
 
     @asset("sounds/dancing/fail.mp3")
-    private static failSound: Sound;
+    private static readonly failSound: Sound;
 
     @asset("music/raindance.ogg")
-    private static raindance_music: Sound;
+    private static readonly raindance_music: Sound;
 
     @asset("music/dancing_queen.ogg")
-    private static treedance_music: Sound;
+    private static readonly treedance_music: Sound;
 
     @asset("sprites/dancing_ui_bar.png")
-    private static bar: HTMLImageElement;
+    private static readonly bar: HTMLImageElement;
 
     @asset("sprites/dancing_ui_indicator.png")
-    private static indicator: HTMLImageElement;
+    private static readonly indicator: HTMLImageElement;
 
     @asset("sprites/dancing_ui_keys.aseprite.json")
-    private static keys: Aseprite;
+    private static readonly keys: Aseprite;
 
     /** When the dance was created and visible to the player for the first time */
     private openTime!: number;
@@ -36,12 +36,12 @@ export class Dance {
     private startTime!: number;
     /** Progress time relative to startTime. So starts out negative during warmup. */
     private progress = 0;
-    private duration: number;
+    private readonly duration: number;
     private currentKey = "";
     private currentDistanceToIdealTime = 0;
-    private allKeys = ["1", "2"];
-    private keys: string[];
-    private alphaCurve: ValueCurve;
+    private readonly allKeys = ["1", "2"];
+    private readonly keys: string[];
+    private readonly alphaCurve: ValueCurve;
     private mistakes = 0;
     private lastMistake = 0;
     private lastSuccess = 0;
@@ -49,15 +49,15 @@ export class Dance {
     private currentIndex = 0;
     private success = false;
 
-    constructor(
-        private scene: GameScene,
+    public constructor(
+        private readonly scene: GameScene,
         private x: number,
         private y: number,
-        private bpm = 128,
+        private readonly bpm = 128,
         keys = "", // can contain "1" or "2" for single keys, or "3" for both at once
-        private warmupBeats = 8,
-        private allowedMistakes = 3,
-        private timeTolerance = 0.75,
+        private readonly warmupBeats = 8,
+        private readonly allowedMistakes = 3,
+        private readonly timeTolerance = 0.75,
         private readonly withMusic = true,
         private readonly musicIndex = 1 // 0 tree-dance, 1 for raindance
     ){
@@ -161,7 +161,7 @@ export class Dance {
     }
 
     private keyMissed(key: string): void {
-        if (this.performance[this.currentIndex]) {
+        if (this.performance[this.currentIndex] != null) {
             for (const char of key) {
                 this.performance[this.currentIndex][char] = false;
             }
@@ -205,7 +205,7 @@ export class Dance {
             this.currentKey = this.keys[this.currentIndex] || "";
 
             for (const char of this.currentKey) {
-                if (this.performance[this.currentIndex] && this.performance[this.currentIndex][char]) {
+                if (this.performance[this.currentIndex] != null && this.performance[this.currentIndex][char]) {
                     this.currentKey = this.currentKey.replace(char, "");
                 }
             }

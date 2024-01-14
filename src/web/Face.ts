@@ -32,16 +32,16 @@ export class Face {
         "sprites/eyes/stonedisciple.aseprite.json",
         "sprites/eyes/flameboy2.aseprite.json",
     ])
-    private static sprites: Aseprite[];
+    private static readonly sprites: Aseprite[];
 
     private mode = FaceModes.NEUTRAL;
     private direction = 1; // 1 = right, -1 = left
 
-    constructor(
-        private scene: GameScene,
-        private owner: NPC,
-        private eyeType: EyeType,
-        private offX = 0,
+    public constructor(
+        private readonly scene: GameScene,
+        private readonly owner: NPC,
+        private readonly eyeType: EyeType,
+        private readonly offX = 0,
         private offY = 20
     ) {}
 
@@ -49,7 +49,7 @@ export class Face {
         this.mode = mode;
     }
 
-    public setOffY (offY: number): void {
+    public setOffY(offY: number): void {
         this.offY = offY;
     }
 

@@ -8,7 +8,7 @@ import { RenderingLayer } from "../Renderer";
 @entity("caveman")
 export class Caveman extends NPC {
     @asset("sprites/caveman.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 18, 24);

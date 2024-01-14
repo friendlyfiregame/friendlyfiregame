@@ -27,13 +27,13 @@ enum MenuItemKey {
 
 export class OptionsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("fonts/credits.font.json")
-    private static headlineFont: BitmapFont;
+    private static readonly headlineFont: BitmapFont;
 
     @asset("images/credits.png")
-    private static panelImage: HTMLImageElement;
+    private static readonly panelImage: HTMLImageElement;
 
     private menu!: MenuList;
 
@@ -165,14 +165,14 @@ export class OptionsScene extends Scene<FriendlyFire> {
         data.displayManager.setImageSmoothingEnabled(newValue);
     }
 
-    private handleAudioSliderChange (newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
+    private handleAudioSliderChange(newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
         newValue = newValue / 100;
         if (data.channel === SoundChannel.MUSIC) {
             data.audioManager.musicGain = newValue;
         } else if (data.channel === SoundChannel.SFX) {
             data.audioManager.sfxGain = newValue;
         } else {
-            throw new Error(`Unknown sound channel: ${data.channel}.`);
+            throw new Error(`Unknown sound channel: ${data.channel as string}.`);
         }
     }
 
@@ -184,7 +184,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
         }
     }
 
-    private async toggleFullscreen (): Promise<boolean> {
+    private async toggleFullscreen(): Promise<boolean> {
         const enabled = !(await this.game.displayManager.isFullscreenEnabled());
         await this.game.displayManager.setFullscreenEnabled(enabled);
         return enabled;

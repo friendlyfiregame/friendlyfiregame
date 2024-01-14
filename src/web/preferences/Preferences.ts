@@ -3,14 +3,14 @@ import { AudioPreferencesStore } from "../audio/AudioPreferencesStore";
 
 export class Preferences {
 
-    static #INSTANCE: Preferences = new Preferences();
+    static readonly #INSTANCE: Preferences = new Preferences();
     public static getInstance(): Preferences {
         return Preferences.#INSTANCE;
     }
 
-    #audio: AudioPreferencesStore;
+    readonly #audio: AudioPreferencesStore;
 
-    constructor() {
+    public constructor() {
         this.#audio = new AudioPreferencesStore();
     }
 

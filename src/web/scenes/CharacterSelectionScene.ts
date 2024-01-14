@@ -36,10 +36,10 @@ const selectionItemsXDistance = 12;
 
 export class CharacterSelectionScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("fonts/credits.font.json")
-    private static headlineFont: BitmapFont;
+    private static readonly headlineFont: BitmapFont;
 
     @asset([
         "sprites/pc/female.aseprite.json",
@@ -51,10 +51,10 @@ export class CharacterSelectionScene extends Scene<FriendlyFire> {
         "sounds/jumping/jumping_female.mp3",
         "sounds/jumping/jumping.mp3"
     ])
-    private static voices: Sound[];
+    private static readonly voices: Sound[];
 
     @asset("images/panel.png")
-    private static panelImage: HTMLImageElement;
+    private static readonly panelImage: HTMLImageElement;
 
     private menu!: MenuList;
     private variant1!: TextNode;

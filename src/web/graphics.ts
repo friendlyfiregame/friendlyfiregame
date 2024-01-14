@@ -10,14 +10,17 @@ export async function loadImage(source: string | URL): Promise<HTMLImageElement>
             resolve(img);
         };
         img.onerror = () => {
-            reject(new Error(`Unable to load image '${source}'`));
+            reject(new Error(`Unable to load image '${source.toString()}'`));
         };
         img.src = source instanceof URL ? source.href : `assets/${source}`;
     });
 }
 
 export function createCanvas(width: number, height: number): HTMLCanvasElement {
-    const c = document.createElement("canvas")!;
+    const c = document.createElement("canvas");
+    if (c == null) {
+        throw new Error("No canvas support");
+    }
     c.width = width;
     c.height = height;
 

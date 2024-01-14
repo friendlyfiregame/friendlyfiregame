@@ -10,7 +10,7 @@ import { RenderingLayer } from "../Renderer";
 @entity("stonedisciple")
 export class StoneDisciple extends NPC {
     @asset("sprites/stonedisciple.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 32, 26);

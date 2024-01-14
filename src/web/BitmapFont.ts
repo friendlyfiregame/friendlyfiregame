@@ -1,18 +1,18 @@
 import { FontJSON } from "*.font.json";
-import { loadImage } from "./graphics";
+import { getRenderingContext, loadImage } from "./graphics";
 
 const CHAR_SPACING = 1;
 
 export class BitmapFont {
-    private sourceImage: HTMLImageElement;
-    private canvas: HTMLCanvasElement;
-    private colorMap: Record<string, number>;
-    private charMap: string;
-    private charWidths: number[];
-    private compactablePrecursors: string[][];
-    private charStartPoints: number[];
-    private charCount: number;
-    private charReverseMap: Record<string, number>;
+    private readonly sourceImage: HTMLImageElement;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly colorMap: Record<string, number>;
+    private readonly charMap: string;
+    private readonly charWidths: number[];
+    private readonly compactablePrecursors: string[][];
+    private readonly charStartPoints: number[];
+    private readonly charCount: number;
+    private readonly charReverseMap: Record<string, number>;
     public charHeight!: number;
 
     private constructor(
@@ -49,7 +49,7 @@ export class BitmapFont {
         const image = await loadImage(new URL(json.image, baseURL));
         const characters = json.characterMapping.map(charDef => charDef.char).join("");
         const widths = json.characterMapping.map(charDef => charDef.width);
-        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors || []);
+        const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors ?? []);
 
         return new BitmapFont(image, json.colors, characters, json.characterHeight, widths, compactablePrecursors, json.margin);
     }
@@ -61,7 +61,7 @@ export class BitmapFont {
         const w = this.canvas.width = this.sourceImage.width;
         const h = this.charHeight;
         this.canvas.height = h * count;
-        const ctx = this.canvas.getContext("2d")!;
+        const ctx = getRenderingContext(this.canvas, "2d");
 
         // Fill with font
         for (let i = 0; i < count; i++) {
@@ -123,7 +123,7 @@ export class BitmapFont {
 
         // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
         // when exactly between two pixels (Firefox doesn't have this problem).
-        if (ctx.getTransform) {
+        if (ctx.getTransform != null) {
             const transform = ctx.getTransform();
             ctx.translate(
                 Math.round(transform.e) - transform.e,
@@ -140,7 +140,7 @@ export class BitmapFont {
 
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
-            const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
+            const spaceReduction = precursorChar != null && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
             ctx.translate(-spaceReduction, 0);
             this.drawCharacter(ctx, index, color);
             ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
@@ -155,7 +155,7 @@ export class BitmapFont {
         let precursorChar = null;
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
-            const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
+            const spaceReduction = precursorChar != null && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
             width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
             precursorChar = currentChar;
         }

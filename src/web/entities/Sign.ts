@@ -10,7 +10,7 @@ import { RenderingLayer, RenderingType } from "../Renderer";
 @entity("sign")
 export class Sign extends NPC {
     @asset("sprites/sign.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
     public override conversation: Conversation;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
@@ -18,8 +18,8 @@ export class Sign extends NPC {
         this.conversation = this.generateConversation(this.prepareContent(properties.content));
     }
 
-    private prepareContent(content?: string ): string[] {
-        if (!content) {
+    private prepareContent(content?: string): string[] {
+        if (content == null) {
             return ["The sign is empty."];
         }
 

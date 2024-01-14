@@ -9,10 +9,10 @@ import { RenderingLayer } from "../Renderer";
 @entity("wing")
 export class Wing extends NPC {
     @asset("sprites/wing.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
-    private floatAmount = 4;
-    private floatSpeed = 2;
+    private readonly floatAmount = 4;
+    private readonly floatSpeed = 2;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);

@@ -13,11 +13,11 @@ export class AudioManager {
         return AudioManager.#INSTANCE;
     }
 
-    #audioPreferencesStore: AudioPreferencesStore;
-    #musicGainNode: GainNode;
-    #sfxGainNode: GainNode;
+    readonly #audioPreferencesStore: AudioPreferencesStore;
+    readonly #musicGainNode: GainNode;
+    readonly #sfxGainNode: GainNode;
 
-    constructor(audioPreferencesStore: AudioPreferencesStore) {
+    public constructor(audioPreferencesStore: AudioPreferencesStore) {
         this.#audioPreferencesStore = audioPreferencesStore;
         const audioContext = getAudioContext();
         this.#musicGainNode = audioContext.createGain();

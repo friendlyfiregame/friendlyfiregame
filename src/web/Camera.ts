@@ -42,15 +42,15 @@ export class Camera {
     public rotation = 0;
     private focuses: CamFocus[] = [];
     private time = 0;
-    private interpolationTime!: number;
+    private readonly interpolationTime!: number;
     private zoomingOut = false;
     private currentBarTarget = 0;
     private currentBarHeight = 0;
     private bounds?: Bounds;
 
-    constructor(
-        protected scene: GameScene, private target: Vector2Like, interpolationTime = 0.5,
-        private barHeight = 0.1
+    public constructor(
+        protected scene: GameScene, private readonly target: Vector2Like, interpolationTime = 0.5,
+        private readonly barHeight = 0.1
     ) {
         if (interpolationTime > 1) {
             throw new Error("Camera interpolation time may not exceed 1");

@@ -13,7 +13,7 @@ export class MountainRiddle {
     private solution: number[];
 
     @asset("sounds/item/fanfare.mp3")
-    private static sound: Sound;
+    private static readonly sound: Sound;
 
     public constructor() {
         this.solution = this.getRandomizedSolution();

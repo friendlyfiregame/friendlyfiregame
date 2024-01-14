@@ -12,30 +12,30 @@ export class CharacterSounds  {
   public static lowPitchJump: Sound[];
 
   @asset(["sounds/drowning/drowning.mp3"])
-  private static lowPitchDrown: Sound[];
+  private static readonly lowPitchDrown: Sound[];
 
   @asset(["sounds/jumping/landing.mp3"])
-  private static lowPitchLand: Sound[];
+  private static readonly lowPitchLand: Sound[];
 
   @asset(["sounds/throwing/throwing.mp3"])
-  private static lowPitchThrow: Sound[];
+  private static readonly lowPitchThrow: Sound[];
 
   /** High Pitch */
   @asset([
     "sounds/jumping/jump_female_01.ogg"
   ])
-  private static highPitchJump: Sound[];
+  private static readonly highPitchJump: Sound[];
 
   @asset(["sounds/drowning/drowning.mp3"])
-  private static highPitchDrown: Sound[];
+  private static readonly highPitchDrown: Sound[];
 
   @asset(["sounds/jumping/landing.mp3"])
-  private static highPitchLand: Sound[];
+  private static readonly highPitchLand: Sound[];
 
   @asset(["sounds/throwing/throwing.mp3"])
-  private static highPitchThrow: Sound[];
+  private static readonly highPitchThrow: Sound[];
 
-  public static getSoundData (): SoundDataStructure {
+  public static getSoundData(): SoundDataStructure {
     return {
       [VoiceAsset.MALE]: {
         "jump": CharacterSounds.lowPitchJump,
@@ -57,7 +57,7 @@ export class CharacterSounds  {
     return rndItem(CharacterSounds.getSoundData()[voice][type]);
   }
 
-  public static playRandomCharacterSound (type: CharacterSoundType, voice: VoiceAsset): void {
+  public static playRandomCharacterSound(type: CharacterSoundType, voice: VoiceAsset): void {
     CharacterSounds.stopCharacterSound(type, voice);
     const randomSound = CharacterSounds.getRandomCharacterSound(type, voice);
     if (randomSound) {
@@ -65,7 +65,7 @@ export class CharacterSounds  {
     }
   }
 
-  public static stopCharacterSound (type: CharacterSoundType, voice: VoiceAsset): void {
+  public static stopCharacterSound(type: CharacterSoundType, voice: VoiceAsset): void {
     const sounds = CharacterSounds.getSoundData()[voice][type];
     sounds.forEach(s => s.stop());
   }

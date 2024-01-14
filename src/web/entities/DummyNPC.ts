@@ -10,7 +10,7 @@ import { NPC } from "./NPC";
 @entity("tree")
 export class DummyNPC extends NPC {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 20, 30);

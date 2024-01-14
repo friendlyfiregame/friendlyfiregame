@@ -1,22 +1,27 @@
+interface Button {
+    pressed: boolean;
+    touched: boolean;
+    value: number;
+}
 export class VirtualGamepad extends Object implements Gamepad {
 
-    #index: number;
-    #connected: boolean;
+    readonly #index: number;
+    readonly #connected: boolean;
     #timestamp: number;
-    #axes: number[];
-    #buttons: { pressed: boolean, touched: boolean, value: number }[];
+    readonly #axes: number[];
+    readonly #buttons: Button[];
 
-    constructor(initArgs: { index: number }) {
+    public constructor(initArgs: { index: number }) {
         super();
         this.#index = initArgs.index;
         this.#connected = true;
         this.#timestamp = Date.now();
-        this.#axes = Array(4);
+        this.#axes = Array(4) as number[];
         for (let i = 0; i < this.#axes.length; i++) {
             this.#axes[i] = 0.0;
         }
 
-        this.#buttons = Array(17);
+        this.#buttons = Array(17) as Button[];
         for (let i = 0; i < this.#buttons.length; i++) {
             this.#buttons[i] = {
                 pressed: false,
@@ -26,14 +31,14 @@ export class VirtualGamepad extends Object implements Gamepad {
         }
     }
 
-    pressButton(index: number): void {
+    public pressButton(index: number): void {
         this.#timestamp = Date.now();
         this.#buttons[index].pressed = true;
         this.#buttons[index].touched = false;
         this.#buttons[index].value = 1;
     }
 
-    releaseButton(index: number): void {
+    public releaseButton(index: number): void {
         this.#timestamp = Date.now();
         this.#buttons[index].pressed = false;
         this.#buttons[index].touched = false;

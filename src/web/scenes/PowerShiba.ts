@@ -17,7 +17,7 @@ export enum PowerShibaState {
 @entity("powershiba")
 export class PowerShiba extends NPC {
     @asset("sprites/powershiba.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
     private state = PowerShibaState.IN_CLOUDS;
 
     private floatAmount = 4;
@@ -47,7 +47,8 @@ export class PowerShiba extends NPC {
     protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) return false;
         else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && !Conversation.getGlobals()["$seedgrown"]) return true;
-        else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && Conversation.getGlobals()["$seedgrown"] && !Conversation.getGlobals()["$gotPowerShibaQuest"]) return true;
+        else if (Conversation.getGlobals()["$gaveBoneToPowerShiba"] && Conversation.getGlobals()["$seedgrown"]
+            && !Conversation.getGlobals()["$gotPowerShibaQuest"]) return true;
         else if (this.state === PowerShibaState.ON_MOUNTAIN) return true;
         return false;
     }

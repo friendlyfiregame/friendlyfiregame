@@ -7,18 +7,18 @@ import { SoundChannel } from "./audio/SoundChannel";
 
 const assets = new Map<string, unknown>();
 
-export interface AssetOptions {
-    map?: (asset: any) => unknown;
+export interface AssetOptions<A> {
+    map?: (asset: A) => unknown;
 }
 
 class AssetRequest<
         S extends string | string[] = string | string[],
         A extends (S extends string ? unknown : unknown[]) = (S extends string ? unknown : unknown[])> {
-    constructor(
-        private readonly target: any,
+    public constructor(
+        private readonly target: Record<string | symbol, unknown>,
         private readonly propertyKey: string | symbol,
         public readonly src: S,
-        private readonly options: AssetOptions
+        private readonly options: AssetOptions<A>
     ) {}
 
     public resolve(asset: A): void {
@@ -28,9 +28,9 @@ class AssetRequest<
 
 const assetRequests: AssetRequest[] = [];
 
-export function asset(src: string | string[], options: AssetOptions = {}): PropertyDecorator {
-    return (target: Object, propertyKey: string | symbol): void => {
-        assetRequests.push(new AssetRequest(target, propertyKey, src, options));
+export function asset<A>(src: string | string[], options: AssetOptions<A> = {}): PropertyDecorator {
+    return (target: object, propertyKey: string | symbol): void => {
+        assetRequests.push(new AssetRequest(target as Record<string, unknown>, propertyKey, src, options) as AssetRequest);
     };
 }
 

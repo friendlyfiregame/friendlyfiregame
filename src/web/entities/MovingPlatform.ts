@@ -11,13 +11,13 @@ import { RenderingLayer } from "../Renderer";
 @entity("movingplatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {
     @asset("sprites/stoneplatform.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
-    private startX: number;
-    private startY: number;
-    private targetX: number;
-    private targetY: number;
-    private velocity: number;
+    private readonly startX: number;
+    private readonly startY: number;
+    private readonly targetX: number;
+    private readonly targetY: number;
+    private readonly velocity: number;
 
     public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
         super(scene, x, y, 68, 12);

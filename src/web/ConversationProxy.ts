@@ -14,7 +14,7 @@ export class ConversationProxy extends NPC {
     }
 
     private prepareContent(content?: string ): string[] {
-        if (!content) {
+        if (content == null) {
             return ["Nothing…"];
         }
 

@@ -86,12 +86,12 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
     }
 
     // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-    if (require("electron-squirrel-startup")) { // eslint-disable-line global-require
+    if (require("electron-squirrel-startup") !== false) {
         return app.quit();
     }
 
     // Only one instance should ever be launched
-    if (!app.requestSingleInstanceLock) {
+    if (!app.requestSingleInstanceLock()) {
         return app.quit();
     }
 
@@ -112,7 +112,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             const steamAppId = Number(app.commandLine.getSwitchValue("steam-app")) || STEAM_APP_ID;
             const steamClient = steamworks.init(steamAppId);
             steamworks.electronEnableSteamOverlay();
-            electron.ipcMain.handle("steamworks", (_event, args) => {
+            electron.ipcMain.handle("steamworks", (_event, args: string[]) => {
                 const fn = `${args[0]}#${args[1]}`;
                 switch (fn) {
                     case "#initialized":
@@ -141,12 +141,12 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
             });
 
         } catch (e) {
-            process.stderr.write(`Initialization of Steamworks API failed.${os.EOL}${os.EOL}${e}${os.EOL}`);
+            process.stderr.write(`Initialization of Steamworks API failed.${os.EOL}${os.EOL}${e as string}${os.EOL}`);
             app.exit(19);
         }
 
     } else {
-        electron.ipcMain.handle("steamworks", (_event, args) => {
+        electron.ipcMain.handle("steamworks", (_event, args: string[]) => {
             const fn = `${args[0]}#${args[1]}`;
             if (fn === "#available") {
                 return false;
@@ -158,7 +158,7 @@ async function createWindow(app: Electron.App, preferences: PreferencesConfigSto
     //#endregion
 
     //#region Fullscreen preferences API
-    electron.ipcMain.handle("preferences", (_event, args) => {
+    electron.ipcMain.handle("preferences", (_event, args: string[]) => {
         const fn = `${args[0]}#${args[1]}`;
         switch (fn) {
         case "fullscreen#isEnabled":

@@ -77,13 +77,13 @@ export abstract class Quest {
     }
 
     public trigger(index: number): void {
-        if (this.triggers[index]) {
+        if (this.triggers[index] != null) {
             this.triggers[index].isTriggered = true;
         }
     }
 
     public untrigger(index: number): void {
-        if (this.triggers[index]) {
+        if (this.triggers[index] != null) {
             this.triggers[index].isTriggered = false;
         }
     }
@@ -117,7 +117,7 @@ export abstract class Quest {
  * Standard Ending A. Follow the questline and beat the fire at the end
  */
 export class QuestA extends Quest {
-    public constructor (campaign: Campaign) {
+    public constructor(campaign: Campaign) {
         super(
             QuestKey.A,
             campaign,
@@ -131,7 +131,7 @@ export class QuestA extends Quest {
  * Ending B. Helped Dog and Beat fire
  */
 export class QuestB extends Quest {
-    public constructor (campaign: Campaign) {
+    public constructor(campaign: Campaign) {
         super(
             QuestKey.B,
             campaign,
@@ -145,7 +145,7 @@ export class QuestB extends Quest {
  * Ending C. Sequence broken and soft locked in cave
  */
 export class QuestC extends Quest {
-    public constructor (campaign: Campaign) {
+    public constructor(campaign: Campaign) {
         super(
             QuestKey.C,
             campaign,
@@ -160,7 +160,7 @@ export class QuestC extends Quest {
  * Ending D. Petted the dog for quite some time and transcended
  */
 export class QuestD extends Quest {
-    public constructor (campaign: Campaign) {
+    public constructor(campaign: Campaign) {
         super(
             QuestKey.D,
             campaign,
@@ -174,7 +174,7 @@ export class QuestD extends Quest {
  * Ending E. Awoke in outer space and realized the awful truth
  */
 export class QuestE extends Quest {
-    public constructor (campaign: Campaign) {
+    public constructor(campaign: Campaign) {
         super(
             QuestKey.E,
             campaign,
@@ -183,4 +183,3 @@ export class QuestE extends Quest {
         );
     }
 }
-

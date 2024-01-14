@@ -18,15 +18,15 @@ const earlyActions = new Set([
 
 export class Conversation {
     private static globalVariables: Record<string, string> = {};
-    private states: string[];
-    private data: {[key: string]: ConversationLine[]};
+    private readonly states: string[];
+    private readonly data: {[key: string]: ConversationLine[]};
     private state!: string;
     private stateIndex = 0;
     private endConversation = false;
     private localVariables: Record<string, string> = {};
     private skippedLines = 0; // help variable to make goBack() work with skipped dialog lines due to conditions
 
-    constructor(json: DialogJSON, private readonly npc: NPC) {
+    public constructor(json: DialogJSON, private readonly npc: NPC) {
         this.states = Object.keys(json);
         this.data = {};
 
@@ -161,7 +161,7 @@ export class Conversation {
 
         const line = this.data[this.state][this.stateIndex++];
 
-        if (line.condition && (!ignoreDisabled && !this.testCondition(line.condition))) {
+        if (line.condition != null && (!ignoreDisabled && !this.testCondition(line.condition))) {
             this.skippedLines++;
             return this.getNextLine(ignoreDisabled);
         }
@@ -217,7 +217,7 @@ export class ConversationLine {
     public readonly isNpc: boolean;
     private visited = false;
 
-    constructor(
+    public constructor(
         public readonly full: string,
         public readonly conversation: Conversation
     ) {
@@ -315,7 +315,7 @@ export class ConversationLine {
                         ?.join(" ")
                         .split("!")
                         .map(action => action.trim()).filter(s => s.length > 0)
-                        .map(action => action.split(" ")) || [] as string[][];
+                        .map(action => action.split(" ")) ?? [] as string[][];
     }
 
     public static wrapString(s: string, charsPerLine: number): string {

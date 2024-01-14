@@ -60,7 +60,7 @@ export class MapInfo {
     }
 
     private getObjects(type?: string): MapObjectJSON[] {
-        return this.getLayer("objectgroup", "objects")?.objects.filter(object => !type || object.type === type) ?? [];
+        return this.getLayer("objectgroup", "objects")?.objects.filter(object => type == null || object.type === type) ?? [];
     }
 
     public getPlayerStart(): Vector2Like {
@@ -76,7 +76,6 @@ export class MapInfo {
 
     public getGameObjectInfos(type: MapObjectType): GameObjectInfo[] {
         const mapHeight = MapInfo.getMapSize().height;
-
         return this.getObjects(type).map(object => ({
             name: object.name,
             x: object.x,
@@ -87,7 +86,7 @@ export class MapInfo {
             properties: (object.properties ?? []).reduce((props, property) => {
                 props[property.name] = property.value;
                 return props;
-            }, {})
+            }, {} as Record<string, unknown>) as unknown as GameObjectProperties
         }));
     }
 

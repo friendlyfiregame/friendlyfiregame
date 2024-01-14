@@ -7,7 +7,7 @@ const PREFERENCES_DISPLAY_IMAGE_SMOOTHING = "display.imageSmoothing";
 const DEFAULT_IMAGE_SMOOTHING_VALUE = false;
 
 class DisplayPreferencesStore {
-    constructor() {
+    public constructor() {
         if (window.localStorage.getItem(PREFERENCES_DISPLAY_PIXEL_PERFECT) == null) {
             this.pixelPerfect = DEFAULT_PIXEL_PERFECT_VALUE;
         }
@@ -16,27 +16,27 @@ class DisplayPreferencesStore {
         }
     }
 
-    get pixelPerfect(): boolean {
+    public get pixelPerfect(): boolean {
         return (window.localStorage.getItem(PREFERENCES_DISPLAY_PIXEL_PERFECT) ?? JSON.stringify(DEFAULT_PIXEL_PERFECT_VALUE)) === "true";
     }
 
-    set pixelPerfect(value: boolean) {
+    public set pixelPerfect(value: boolean) {
         window.localStorage.setItem(PREFERENCES_DISPLAY_PIXEL_PERFECT, JSON.stringify(value));
     }
 
-    set imageSmoothing(value: boolean) {
+    public set imageSmoothing(value: boolean) {
         window.localStorage.setItem(PREFERENCES_DISPLAY_IMAGE_SMOOTHING, JSON.stringify(value));
     }
 
-    get imageSmoothing(): boolean {
+    public get imageSmoothing(): boolean {
         return (window.localStorage.getItem(PREFERENCES_DISPLAY_IMAGE_SMOOTHING) ?? JSON.stringify(DEFAULT_IMAGE_SMOOTHING_VALUE)) === "true";
     }
 }
 
 export class DisplayManager {
-    static #INSTANCE: DisplayManager = new DisplayManager(FullscreenManager.getInstance());
-    #fullscreenManager: FullscreenManager;
-    #displayPreferencesStore = new DisplayPreferencesStore();
+    static readonly #INSTANCE: DisplayManager = new DisplayManager(FullscreenManager.getInstance());
+    readonly #fullscreenManager: FullscreenManager;
+    readonly #displayPreferencesStore = new DisplayPreferencesStore();
 
     public readonly onChange = new Signal();
 
@@ -44,15 +44,15 @@ export class DisplayManager {
         return DisplayManager.#INSTANCE;
     }
 
-    constructor(fullscreenPreferencesStore: FullscreenManager) {
+    public constructor(fullscreenPreferencesStore: FullscreenManager) {
         this.#fullscreenManager = fullscreenPreferencesStore;
     }
 
-    async setFullscreenEnabled(fullscreenEnabled: boolean): Promise<void> {
+    public async setFullscreenEnabled(fullscreenEnabled: boolean): Promise<void> {
         return this.#fullscreenManager.setEnabled(fullscreenEnabled);
     }
 
-    async isFullscreenEnabled(): Promise<boolean> {
+    public async isFullscreenEnabled(): Promise<boolean> {
         return this.#fullscreenManager.isEnabled();
     }
 

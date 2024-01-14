@@ -20,12 +20,12 @@ export enum StoneState {
 @entity("stone")
 export class Stone extends NPC implements CollidableGameObject {
     @asset("sprites/stone.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
+    private static readonly successSound: Sound;
 
-    private floatingPosition: GameObjectInfo;
+    private readonly floatingPosition: GameObjectInfo;
 
     public state: StoneState = StoneState.DEFAULT;
 
@@ -42,7 +42,7 @@ export class Stone extends NPC implements CollidableGameObject {
         );
 
         if (!floatingPosition) {
-            throw new Error ("Could not find \"stone_floating_position\" point of interest in game scene");
+            throw new Error("Could not find \"stone_floating_position\" point of interest in game scene");
         }
 
         this.floatingPosition = floatingPosition;
@@ -147,7 +147,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.scene.game.campaign.runAction("enable", null, ["flameboy", "flameboy4"]);
     }
 
-    public dropInWater (): void {
+    public dropInWater(): void {
         this.x = this.floatingPosition.x;
         this.y = this.floatingPosition.y;
     }

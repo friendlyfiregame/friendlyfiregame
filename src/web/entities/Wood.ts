@@ -18,11 +18,11 @@ export enum WoodState {
 @entity("wood")
 export class Wood extends PhysicsEntity {
     @asset("sprites/wood.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
-    private floatingPosition: GameObjectInfo;
+    private static readonly successSound: Sound;
+    private readonly floatingPosition: GameObjectInfo;
 
     public state = WoodState.FREE;
 
@@ -34,13 +34,13 @@ export class Wood extends PhysicsEntity {
         );
 
         if (!floatingPosition) {
-            throw new Error ("Could not find \"recover_floating_position\" point of interest in game scene.");
+            throw new Error("Could not find \"recover_floating_position\" point of interest in game scene.");
         }
 
         this.floatingPosition = floatingPosition;
     }
 
-    public resetState (): void {
+    public resetState(): void {
         this.setFloating(false);
         this.state = WoodState.FREE;
     }

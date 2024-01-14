@@ -23,14 +23,14 @@ export enum SeedState {
 @entity("seed")
 export class Seed extends NPC {
     @asset("sprites/seed.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/throwing/success.mp3")
-    private static successSound: Sound;
+    private static readonly successSound: Sound;
 
     public state = SeedState.FREE;
-    private wood: Wood;
-    private floatingPosition: GameObjectInfo;
+    private readonly wood: Wood;
+    private readonly floatingPosition: GameObjectInfo;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 24, 24);
@@ -40,18 +40,18 @@ export class Seed extends NPC {
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
 
         if (!floatingPosition) {
-            throw new Error ("Could not find “recover_floating_position” point of interest in game scene.");
+            throw new Error("Could not find “recover_floating_position” point of interest in game scene.");
         }
 
         this.floatingPosition = floatingPosition;
     }
 
-    public resetState (): void {
+    public resetState(): void {
         this.setFloating(false);
         this.state = SeedState.FREE;
     }
 
-    public bury (): void {
+    public bury(): void {
         const seedPosition = this.scene.pointsOfInterest.find(poi => poi.name === "seedposition");
         if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 

@@ -101,6 +101,8 @@ export class ControllerManager {
                     this.currentGamepadStyleOverride = GamepadStyle.XBOX;
                     this.autoDetectGamepadStyle = true;
                     break;
+                default:
+                    // Nothing to do
             }
         }
     }
@@ -114,6 +116,8 @@ export class ControllerManager {
                     return ControllerSpriteMap.XBOX;
                 case GamepadStyle.STADIA:
                     return ControllerSpriteMap.STADIA;
+                default:
+                    // Nothing to do
             }
         }
 

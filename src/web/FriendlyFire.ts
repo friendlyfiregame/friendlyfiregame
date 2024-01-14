@@ -9,10 +9,10 @@ export class FriendlyFire extends Game {
 }
 
 function presentUpdateAvailable(serviceWorker: ServiceWorker): void {
-    document.getElementById("update-banner")!.dataset.state = "update-available";
-    document.querySelector("#update-banner .headline")!.innerHTML = "Update available";
-    document.querySelector("#update-banner .subhead")!.innerHTML = "Click here to update the app to the latest version";
-    document.getElementById("update-banner")!.addEventListener("click", (event) => {
+    (document.getElementById("update-banner") as HTMLDivElement).dataset.state = "update-available";
+    (document.querySelector("#update-banner .headline") as HTMLDivElement).innerHTML = "Update available";
+    (document.querySelector("#update-banner .subhead") as HTMLDivElement).innerHTML = "Click here to update the app to the latest version";
+    (document.getElementById("update-banner") as HTMLDivElement).addEventListener("click", (event) => {
         serviceWorker.postMessage("SKIP_WAITING");
     });
 }
@@ -46,21 +46,23 @@ if (!isElectron()) {
                 }
 
                 // We wait for an UpdateFoundEvent, which is fired anytime a new service worker is acquired
-                registration.addEventListener("updatefound", function (updateFoundEvent) {
+                registration.addEventListener("updatefound", function(updateFoundEvent) {
                     // Ignore the event if this is our first service worker and thus not an update
                     if (registration.active === null) {
                         return;
                     }
 
                     // Listen for any state changes on the new service worker
-                    registration.installing!.addEventListener("statechange", function (stateChangeEvent) {
+                    registration.installing?.addEventListener("statechange", function(stateChangeEvent) {
                         // Wait for the service worker to enter the installed state (aka waiting)
                         if (this.state !== "installed") {
                             return;
                         }
 
                         // Present the update available UI
-                        presentUpdateAvailable(registration.waiting!);
+                        if (registration.waiting != null) {
+                            presentUpdateAvailable(registration.waiting);
+                        }
                     });
                 });
 
@@ -88,7 +90,7 @@ if (!isElectron()) {
 (async () => {
     await prelaunchTask;
     const game = new FriendlyFire();
-    (window as any).game = game;
+    window.game = game;
     void game.scenes.setScene(LoadingScene);
     game.start();
 })().catch(console.error);

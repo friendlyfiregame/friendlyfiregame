@@ -32,8 +32,8 @@ export interface ParticleEmitterArguments {
 }
 
 export class Particles {
-    private scene: GameScene;
-    private emitters: ParticleEmitter[] = [];
+    private readonly scene: GameScene;
+    private readonly emitters: ParticleEmitter[] = [];
 
     public constructor(scene: GameScene) {
         this.scene = scene;
@@ -84,25 +84,25 @@ export class ParticleEmitter {
     private particles: Particle[];
     private x: number;
     private y: number;
-    private offsetGenerator: VectorGenerator;
-    private velocityGenerator: VectorGenerator;
-    private colorGenerator: ParticleAppearanceGenerator;
-    private sizeGenerator: NumberGenerator;
-    private gravityGenerator: VectorGenerator;
-    private lifetimeGenerator: NumberGenerator;
-    private alphaGenerator: NumberGenerator;
-    private angleGenerator: NumberGenerator;
-    private angleSpeedGenerator: NumberGenerator;
+    private readonly offsetGenerator: VectorGenerator;
+    private readonly velocityGenerator: VectorGenerator;
+    private readonly colorGenerator: ParticleAppearanceGenerator;
+    private readonly sizeGenerator: NumberGenerator;
+    private readonly gravityGenerator: VectorGenerator;
+    private readonly lifetimeGenerator: NumberGenerator;
+    private readonly alphaGenerator: NumberGenerator;
+    private readonly angleGenerator: NumberGenerator;
+    private readonly angleSpeedGenerator: NumberGenerator;
     public gravity: Vector2Like;
     public breakFactor: number;
-    private blendMode: GlobalCompositeOperation;
+    private readonly blendMode: GlobalCompositeOperation;
     public alphaCurve: ValueCurve;
     public sizeCurve: ValueCurve;
     public renderingLayer: RenderingLayer;
     public zIndex: number;
-    private updateMethod: ((p: Particle) => void) | undefined;
+    private readonly updateMethod: ((p: Particle) => void) | undefined;
 
-    constructor(args: ParticleEmitterArguments) {
+    public constructor(args: ParticleEmitterArguments) {
         this.particles = [];
         this.x = args.position.x;
         this.y = args.position.y;
@@ -116,12 +116,12 @@ export class ParticleEmitter {
         this.angleGenerator = toGenerator(args.angle ?? 0);
         this.angleSpeedGenerator = toGenerator(args.angleSpeed ?? 0);
         this.gravity = this.gravityGenerator();
-        this.breakFactor = args.breakFactor || 1;
-        this.blendMode = args.blendMode || "source-over";
-        this.alphaCurve = args.alphaCurve || valueCurves.constant;
-        this.sizeCurve = args.sizeCurve || valueCurves.constant;
-        this.renderingLayer = args.renderingLayer || RenderingLayer.PARTICLES;
-        this.zIndex = args.zIndex !== undefined ? args.zIndex : 0;
+        this.breakFactor = args.breakFactor ?? 1;
+        this.blendMode = args.blendMode ?? "source-over";
+        this.alphaCurve = args.alphaCurve ?? valueCurves.constant;
+        this.sizeCurve = args.sizeCurve ?? valueCurves.constant;
+        this.renderingLayer = args.renderingLayer ?? RenderingLayer.PARTICLES;
+        this.zIndex = args.zIndex ?? 0;
         this.updateMethod = args.update;
 
         function toGenerator<tp>(obj: tp | (() => tp)): (() => tp) {
@@ -196,22 +196,22 @@ export class ParticleEmitter {
 }
 
 export class Particle {
-    private halfSize: number;
-    private originalLifetime: number;
+    private readonly halfSize: number;
+    private readonly originalLifetime: number;
     private progress: number = 0;
 
-    constructor(
-        private emitter: ParticleEmitter,
+    public constructor(
+        private readonly emitter: ParticleEmitter,
         public x: number,
         public y: number,
         public vx = 0,
         public vy = 0,
         private angle = 0,
-        private angleSpeed = 0,
-        private imageOrColor: ParticleAppearance = "white",
+        private readonly angleSpeed = 0,
+        private readonly imageOrColor: ParticleAppearance = "white",
         public readonly size = 4,
         private lifetime = 1,
-        private alpha = 1
+        private readonly alpha = 1
     ) {
         this.halfSize = this.size / 2;
         this.originalLifetime = this.lifetime;
@@ -259,7 +259,8 @@ export class Particle {
         if (this.imageOrColor instanceof Object) {
             // Image
             const img = this.imageOrColor;
-            const w = ((<any>img).naturalWidth || img.width), h = ((<any>img).naturalHeight || img.height);
+            const w = img instanceof HTMLImageElement ? img.naturalWidth : img.width;
+            const h = img instanceof HTMLImageElement ? img.naturalHeight : img.height;
             const sz = Math.max(w, h);
             ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
         } else {
@@ -273,9 +274,9 @@ export class Particle {
 }
 
 export class ValueCurve {
-    private mapping: number[] = [];
+    private readonly mapping: number[] = [];
 
-    constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
+    public constructor(private readonly func: (p: number) => number, private readonly steps = 1023) {
         for (let i = 0; i <= steps; i++) {
             this.mapping[i] = func(i / steps);
         }
@@ -310,8 +311,8 @@ function trapezeFunction(v: number, v1: number = v): ((p: number) => number) {
 export const valueCurves = {
     constant: new ValueCurve((p) => 1, 1), // always 1
     linear: new ValueCurve((p) => p), // linear 0 to 1
-    trapeze: (v: number = 0.1, v1: number = v) => new ValueCurve(trapezeFunction(v, v1)), // blocky 0 to 1 to 0
-    cos: (v: number = 0.1, v1: number = v) => // smooth 0 to 1 to 0
+    trapeze: (v: number = 0.1, v1: number = v): ValueCurve => new ValueCurve(trapezeFunction(v, v1)), // blocky 0 to 1 to 0
+    cos: (v: number = 0.1, v1: number = v): ValueCurve => // smooth 0 to 1 to 0
             new ValueCurve((p) => 0.5 - 0.5 * Math.cos(Math.PI * trapezeFunction(v, v1)(p))),
     cubic: new ValueCurve((p) => 3 * p * p - 2 * p * p * p) // smooth 0 to 1
 };

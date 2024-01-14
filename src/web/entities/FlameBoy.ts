@@ -25,11 +25,11 @@ const ACCELERATION = 15;
 @entity("flameboy")
 export class FlameBoy extends ScriptableNPC {
     @asset("sprites/flameboy.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/fire/fire2.ogg")
-    private static fireAmbience: Sound;
-    private soundEmitter: SoundEmitter;
+    private static readonly fireAmbience: Sound;
+    private readonly soundEmitter: SoundEmitter;
 
     private state = FlameBoyState.VENDOR;
     private idleTimer: number | null = rndItem(IDLE_DURATION);
@@ -82,7 +82,7 @@ export class FlameBoy extends ScriptableNPC {
         return thrownStoneIntoWater || waitingForWoodDialog;
     }
 
-    private getAnimationTag (): string {
+    private getAnimationTag(): string {
         switch (this.state) {
             case FlameBoyState.VENDOR: return "idle";
             default: return "idle2";
@@ -107,13 +107,13 @@ export class FlameBoy extends ScriptableNPC {
             this.walkTimer -= dt;
         }
 
-        if (this.idleTimer && this.idleTimer <= 0 && this.walkTimer === null) {
+        if (this.idleTimer != null && this.idleTimer <= 0 && this.walkTimer === null) {
             this.walkTimer = rndItem(WALK_DURATION);
             this.idleTimer = null;
             this.move = this.autoMoveDirection;
         }
 
-        if (this.walkTimer && this.walkTimer <= 0 && this.idleTimer === null) {
+        if (this.walkTimer != null && this.walkTimer <= 0 && this.idleTimer === null) {
             this.idleTimer = rndItem(IDLE_DURATION);
             this.walkTimer = null;
             this.move = 0;

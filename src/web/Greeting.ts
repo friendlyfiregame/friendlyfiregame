@@ -13,13 +13,9 @@ export class Greeting implements GameObject {
     // Used to prevent multiple greetings, e.g. after a dialog has ended.
     private greetingAlreadyShown = false;
 
-    private speechBubble = new SpeechBubble(
-        this.scene,
-        this.npc.x,
-        this.npc.y
-    );
+    private readonly speechBubble = new SpeechBubble(this.scene, this.npc.x, this.npc.y);
 
-    constructor(private scene: GameScene, public npc: NPC, private dialogData: ScriptedDialogJSON) {
+    public constructor(private readonly scene: GameScene, public npc: NPC, private readonly dialogData: ScriptedDialogJSON) {
         this.updateMatchingData(this.campaign.states);
         this.campaign.onStatesChanged.connect(this.updateMatchingData, this);
     }
@@ -66,7 +62,7 @@ export class Greeting implements GameObject {
     private updateMatchingData(states: CampaignState[]): void {
         const matchingGreetingSelector = this.findMatchingSelectorByStates(this.dialogData.greetings, states);
 
-        if (matchingGreetingSelector) {
+        if (matchingGreetingSelector != null) {
             this.currentMatchingGreetings = this.dialogData.greetings[matchingGreetingSelector];
             this.setRandomGreeting();
         } else {
@@ -101,6 +97,6 @@ export class Greeting implements GameObject {
 }
 
 /* returns true when arr2 is contained in arr1 */
-function containsArray(arr1: any[], arr2: any[]): boolean {
+function containsArray(arr1: unknown[], arr2: unknown[]): boolean {
     return arr2.every(value => arr1.indexOf(value) !== -1);
 }

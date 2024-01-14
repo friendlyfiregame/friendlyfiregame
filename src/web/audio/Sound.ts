@@ -5,8 +5,8 @@ import { getAudioContext } from "./AudioContext";
 import { AudioManager } from "./AudioManager";
 
 export class Sound {
-    #audioManager: AudioManager;
-    #channel: SoundChannel;
+    readonly #audioManager: AudioManager;
+    readonly #channel: SoundChannel;
     private readonly gainNode: GainNode;
     private source: AudioBufferSourceNode | null = null;
     private loop: boolean = false;

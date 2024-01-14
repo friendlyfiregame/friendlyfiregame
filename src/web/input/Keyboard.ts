@@ -59,7 +59,7 @@ export class Keyboard {
         this.controllerManager.onButtonPress.emit(
             new ControllerEvent(
                 ControllerFamily.KEYBOARD, ControllerEventType.PRESS,
-                keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
+                keyToIntentMappings.get(event.code) ?? [ControllerIntent.NONE], event.repeat
             )
         );
     }
@@ -82,7 +82,7 @@ export class Keyboard {
         this.controllerManager.onButtonDown.emit(
             new ControllerEvent(
                 ControllerFamily.KEYBOARD, ControllerEventType.DOWN,
-                keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
+                keyToIntentMappings.get(event.code) ?? [ControllerIntent.NONE], event.repeat
             )
         );
     }
@@ -101,7 +101,7 @@ export class Keyboard {
         this.controllerManager.onButtonUp.emit(
             new ControllerEvent(
                 ControllerFamily.KEYBOARD, ControllerEventType.UP,
-                keyToIntentMappings.get(event.code) || [ControllerIntent.NONE], event.repeat
+                keyToIntentMappings.get(event.code) ?? [ControllerIntent.NONE], event.repeat
             )
         );
     }

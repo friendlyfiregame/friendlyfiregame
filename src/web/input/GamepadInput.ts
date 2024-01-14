@@ -69,9 +69,9 @@ intentMappings.set(GamePadButtonId.START, [ControllerIntent.PAUSE]);
 class GamepadButtonWrapper {
     public readonly index: number;
     private pressed: boolean;
-    private gamepad: GamepadWrapper;
+    private readonly gamepad: GamepadWrapper;
 
-    constructor(index: number, wrapped: GamepadButton, gamepad: GamepadWrapper) {
+    public constructor(index: number, wrapped: GamepadButton, gamepad: GamepadWrapper) {
         this.index = index;
         this.pressed = wrapped.pressed;
         this.gamepad = gamepad;
@@ -87,14 +87,14 @@ class GamepadButtonWrapper {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.DOWN,
-                        intentMappings.get(this.index) || [ControllerIntent.NONE]
+                        intentMappings.get(this.index) ?? [ControllerIntent.NONE]
                     )
                 );
             } else {
                 controllerManager.onButtonUp.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.UP,
-                        intentMappings.get(this.index) || [ControllerIntent.NONE]
+                        intentMappings.get(this.index) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -112,13 +112,13 @@ class GamepadAxisWrapper {
      * Avoid using 0.0 and 1.0 as they cannot be reached on some gamepads or
      * might lead to button flibber flubber...
      */
-    private threshold = 0.5;
+    private readonly threshold = 0.5;
 
     public readonly index: number;
     private value: number = 0.0;
-    private gamepad: GamepadWrapper;
+    private readonly gamepad: GamepadWrapper;
 
-    constructor(index: number, gamepad: GamepadWrapper) {
+    public constructor(index: number, gamepad: GamepadWrapper) {
         this.index = index;
         this.gamepad = gamepad;
     }
@@ -137,7 +137,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonUp.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.UP,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -149,7 +149,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.DOWN,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -163,7 +163,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonUp.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.UP,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -175,7 +175,7 @@ class GamepadAxisWrapper {
                 controllerManager.onButtonDown.emit(
                     new GamepadControllerEvent(
                         this.gamepad.gamepadModel, ControllerEventType.DOWN,
-                        intentMappings.get(emulatedButtonId) || [ControllerIntent.NONE]
+                        intentMappings.get(emulatedButtonId) ?? [ControllerIntent.NONE]
                     )
                 );
             }
@@ -188,22 +188,23 @@ class GamepadAxisWrapper {
  * events.
  */
 class GamepadWrapper {
-    private index: number;
-    private id: string;
-    private buttons: GamepadButtonWrapper[];
-    private axes: GamepadAxisWrapper[];
+    private readonly index: number;
+    private readonly id: string;
+    private readonly buttons: GamepadButtonWrapper[];
+    private readonly axes: GamepadAxisWrapper[];
     public gamepadModel: GamepadModel;
-    constructor(gamepad: Gamepad) {
+
+    public constructor(gamepad: Gamepad) {
         this.index = gamepad.index;
         this.id = gamepad.id;
         this.gamepadModel = GamepadModel.fromString(this.id);
-        this.buttons = new Array(gamepad.buttons.length);
+        this.buttons = new Array(gamepad.buttons.length) as GamepadButtonWrapper[];
 
         for (let i = 0; i < this.buttons.length; i++) {
             this.buttons[i] = new GamepadButtonWrapper(i, gamepad.buttons[i], this);
         }
 
-        this.axes = new Array(gamepad.axes.length);
+        this.axes = new Array(gamepad.axes.length) as GamepadAxisWrapper[];
 
         for (let i = 0; i < this.axes.length; i++) {
             this.axes[i] = new GamepadAxisWrapper(i, this);
@@ -225,9 +226,9 @@ class GamepadWrapper {
 }
 
 export class GamepadInput {
-    #gamepads: Map<string, GamepadWrapper>;
+    readonly #gamepads: Map<string, GamepadWrapper>;
 
-    constructor() {
+    public constructor() {
         this.#gamepads = new Map();
 
         // Attach listeners

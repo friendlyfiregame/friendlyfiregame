@@ -86,7 +86,7 @@ describe("Gamepad model detection", () => {
 
 describe("Default gamepad model", () => {
     it("should be 'unknown'", () => {
-        expect(DEFAULT_GAMEPAD_MODEL).not.toBeNull;
+        expect(DEFAULT_GAMEPAD_MODEL).not.toBe(null);
         expect(DEFAULT_GAMEPAD_MODEL.style).toBe(GamepadStyle.UNKNOWN);
     });
 });

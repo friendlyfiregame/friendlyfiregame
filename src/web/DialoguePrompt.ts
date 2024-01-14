@@ -5,14 +5,14 @@ import { RenderingLayer } from "./Renderer";
 
 export class DialoguePrompt {
     @asset("sprites/dialogue.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
-    private scene: GameScene;
+    private readonly scene: GameScene;
     private x: number;
     private y: number;
     private timeAlive = 0;
-    private floatAmount = 2;
-    private floatSpeed = 5;
+    private readonly floatAmount = 2;
+    private readonly floatSpeed = 5;
 
     public constructor(scene: GameScene, x: number, y: number) {
         this.scene = scene;

@@ -15,7 +15,8 @@ export enum RenderingType {
     ASEPRITE,
     RECT,
     SPEECH_BUBBLE,
-    TEXT
+    TEXT,
+    RAW
 }
 
 export enum RenderingLayer {
@@ -109,6 +110,7 @@ export type SpeechBubbleRenderingItem = BaseRenderingItem & {
     radius: number;
     offsetX: number;
     dimension: Dimension;
+    up: boolean;
 };
 
 export type TextRenderingItem = BaseRenderingItem & {
@@ -131,12 +133,19 @@ export type AsepriteRenderingItem = BaseRenderingItem & {
     time?: number;
 };
 
+export type RawRenderingItem = {
+    type: RenderingType.RAW;
+    layer: RenderingLayer;
+    draw: (ctx: CanvasRenderingContext2D) => void;
+};
+
 export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | AsepriteRenderingItem | RectRenderingItem |
-                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | FireRenderingItem | DanceRenderingItem;
+                            TextRenderingItem | SpeechBubbleRenderingItem | ParticleEmitterRenderingItem | FireRenderingItem | DanceRenderingItem |
+                            RawRenderingItem;
 
 export class Renderer {
-    private scene: GameScene;
-    private layers = LAYER_ORDER;
+    private readonly scene: GameScene;
+    private readonly layers = LAYER_ORDER;
     private queue: RenderingItem[] = [];
 
     public constructor(scene: GameScene) {
@@ -156,11 +165,13 @@ export class Renderer {
                     item.entity.drawToCanvas(ctx);
                 } else if (item.type === RenderingType.DANCE) {
                     item.dance.draw(ctx);
+                } else if (item.type === RenderingType.RAW) {
+                    item.draw(ctx);
                 } else {
                     ctx.save();
                     if (item.translation) ctx.translate(item.translation.x, item.translation.y);
                     if (item.scale) ctx.scale(item.scale.x, item.scale.y);
-                    if (item.relativeToScreen) ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    if (item.relativeToScreen === true) ctx.setTransform(1, 0, 0, 1, 0, 0);
                     if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
                     if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
@@ -172,24 +183,25 @@ export class Renderer {
                             item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
                             break;
                         case RenderingType.RECT:
-                            if (item.lineColor) {
+                            if (item.lineColor != null) {
                                 ctx.strokeStyle = item.lineColor;
-                                ctx.lineWidth = item.lineWidth || 1;
+                                ctx.lineWidth = item.lineWidth ?? 1;
                                 ctx.strokeRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                            } else if (item.fillColor) {
+                            } else if (item.fillColor != null) {
                                 ctx.fillStyle = item.fillColor;
                                 ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
                             }
                             break;
                         case RenderingType.SPEECH_BUBBLE:
                             ctx.beginPath();
-                            ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width), Math.round(item.dimension.height), item.radius, item.relativeToScreen, Math.round(item.offsetX));
+                            ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width),
+                                Math.round(item.dimension.height), item.radius, item.up, Math.round(item.offsetX));
                             ctx.fillStyle = item.fillColor;
                             ctx.fill();
                             ctx.closePath();
                             break;
                         case RenderingType.TEXT:
-                            if (item.outlineColor) {
+                            if (item.outlineColor != null) {
                                 item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
                             } else {
                                 item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
@@ -209,7 +221,7 @@ export class Renderer {
         this.queue.push(item);
     }
 
-    public addAseprite (
+    public addAseprite(
         sprite: Aseprite, animationTag: string, x: number, y: number, layer: RenderingLayer,
         direction = 1, time?: number, alpha?: number
     ): void {
@@ -230,7 +242,7 @@ export class Renderer {
             alpha,
             asset: sprite,
             animationTag,
-            time: time || this.scene.gameTime * 1000
+            time: time ?? this.scene.gameTime * 1000
         });
     }
 }

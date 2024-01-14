@@ -3,107 +3,102 @@ import { ControllerFamily } from "./ControllerFamily";
 import { ControllerIntent } from "./ControllerIntent";
 import { GamepadModel } from "./GamepadModel";
 
-const controllerFamilySymbol = Symbol("controllerFamily");
-const intentsSymbol = Symbol("intent");
-const eventTypeSymbol = Symbol("eventType");
-const repeatSymbol = Symbol("repeat");
-
 export class ControllerEvent extends Object {
-    private [controllerFamilySymbol]: ControllerFamily;
-    private [intentsSymbol]: ControllerIntent;
-    private [eventTypeSymbol]: ControllerEventType;
-    private [repeatSymbol]: boolean;
+    readonly #controllerFamily: ControllerFamily;
+    readonly #intents: ControllerIntent;
+    readonly #eventType: ControllerEventType;
+    readonly #repeat: boolean;
 
-    constructor(
+    public constructor(
         controllerFamily: ControllerFamily, eventType: ControllerEventType,
         intents: ControllerIntent[], repeat: boolean = false
     ) {
         super();
 
-        this[controllerFamilySymbol] = controllerFamily;
-        this[intentsSymbol] = intents.reduce((prev, curr) => prev | curr);
-        this[eventTypeSymbol] = eventType;
-        this[repeatSymbol] = repeat;
+        this.#controllerFamily = controllerFamily;
+        this.#intents= intents.reduce((prev, curr) => prev | curr);
+        this.#eventType = eventType;
+        this.#repeat = repeat;
     }
 
-    get controllerFamily(): ControllerFamily {
-        return this[controllerFamilySymbol];
+    public get controllerFamily(): ControllerFamily {
+        return this.#controllerFamily;
     }
 
-    get eventType(): ControllerEventType {
-        return this[eventTypeSymbol];
+    public get eventType(): ControllerEventType {
+        return this.#eventType;
     }
 
-    get repeat(): boolean {
-        return this[repeatSymbol];
+    public get repeat(): boolean {
+        return this.#repeat;
     }
 
-    get isMenuLeft(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.MENU_LEFT) === ControllerIntent.MENU_LEFT;
+    public get isMenuLeft(): boolean {
+        return (this.#intents & ControllerIntent.MENU_LEFT) !== 0;
     }
 
-    get isMenuRight(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.MENU_RIGHT) === ControllerIntent.MENU_RIGHT;
+    public get isMenuRight(): boolean {
+        return (this.#intents & ControllerIntent.MENU_RIGHT) !== 0;
     }
 
-    get isMenuUp(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.MENU_UP) === ControllerIntent.MENU_UP;
+    public get isMenuUp(): boolean {
+        return (this.#intents & ControllerIntent.MENU_UP) !== 0;
     }
 
-    get isMenuDown(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.MENU_DOWN) === ControllerIntent.MENU_DOWN;
+    public get isMenuDown(): boolean {
+        return (this.#intents & ControllerIntent.MENU_DOWN) !== 0;
     }
 
-    get isPlayerMoveLeft(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_MOVE_LEFT) === ControllerIntent.PLAYER_MOVE_LEFT;
+    public get isPlayerMoveLeft(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_MOVE_LEFT) !== 0;
     }
 
-    get isPlayerMoveRight(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_MOVE_RIGHT) === ControllerIntent.PLAYER_MOVE_RIGHT;
+    public get isPlayerMoveRight(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_MOVE_RIGHT) !== 0;
     }
 
-    get isPlayerJump(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_JUMP) === ControllerIntent.PLAYER_JUMP;
+    public get isPlayerJump(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_JUMP) !== 0;
     }
 
-    get isPlayerDrop(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_DROP) === ControllerIntent.PLAYER_DROP;
+    public get isPlayerDrop(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_DROP) !== 0;
     }
 
-    get isPlayerEnterDoor(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_ENTER_DOOR) === ControllerIntent.PLAYER_ENTER_DOOR;
+    public get isPlayerEnterDoor(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_ENTER_DOOR) !== 0;
     }
 
-    get isPlayerInteract(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_INTERACT) === ControllerIntent.PLAYER_INTERACT;
+    public get isPlayerInteract(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_INTERACT) !== 0;
     }
 
-    get isPlayerAction(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_ACTION) === ControllerIntent.PLAYER_ACTION;
+    public get isPlayerAction(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_ACTION) !== 0;
     }
 
-    get isPlayerRun(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
+    public get isPlayerRun(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_RUN) !== 0;
     }
 
-    get isPlayerDance1(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_DANCE_1) === ControllerIntent.PLAYER_DANCE_1;
+    public get isPlayerDance1(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_DANCE_1) !== 0;
     }
 
-    get isPlayerDance2(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PLAYER_DANCE_2) === ControllerIntent.PLAYER_DANCE_2;
+    public get isPlayerDance2(): boolean {
+        return (this.#intents & ControllerIntent.PLAYER_DANCE_2) !== 0;
     }
 
-    get isPause(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.PAUSE) === ControllerIntent.PAUSE;
+    public get isPause(): boolean {
+        return (this.#intents & ControllerIntent.PAUSE) !== 0;
     }
 
-    get isConfirm(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.CONFIRM) === ControllerIntent.CONFIRM;
+    public get isConfirm(): boolean {
+        return (this.#intents & ControllerIntent.CONFIRM) !== 0;
     }
 
-    get isAbort(): boolean {
-        return (this[intentsSymbol] & ControllerIntent.ABORT) === ControllerIntent.ABORT;
+    public get isAbort(): boolean {
+        return (this.#intents & ControllerIntent.ABORT) !== 0;
     }
 }
 
@@ -111,11 +106,13 @@ const gamepadModelSymbol = Symbol("gamepadModel");
 
 export class GamepadControllerEvent extends ControllerEvent {
     private [gamepadModelSymbol]: GamepadModel;
-    constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
+
+    public constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
         super(ControllerFamily.GAMEPAD, eventType, intents, repeat);
         this[gamepadModelSymbol] = gamepadModel;
     }
-    get gamepadModel(): GamepadModel {
+
+    public get gamepadModel(): GamepadModel {
         return this[gamepadModelSymbol];
     }
 }

@@ -2,7 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BgmId, FadeDirection, GameScene } from "../scenes/GameScene";
 import { BitmapFont } from "../BitmapFont";
-import { Bounds, entity } from "../Entity";
+import { Bounds, Entity, entity } from "../Entity";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
 import { CharacterAsset, VoiceAsset } from "../Campaign";
 import { Cloud } from "./Cloud";
@@ -107,22 +107,22 @@ export class Player extends PhysicsEntity {
     };
 
     @asset("sounds/feet-walking/steps_single.mp3")
-    private static walkingSound: Sound;
+    private static readonly walkingSound: Sound;
 
     @asset("sounds/gate/door_open.mp3")
-    private static enterGateSound: Sound;
+    private static readonly enterGateSound: Sound;
 
     @asset("sounds/portal/enter-portal.ogg")
-    private static enterPortalSound: Sound;
+    private static readonly enterPortalSound: Sound;
 
     @asset("sounds/gate/door_close.mp3")
-    private static leaveGateSound: Sound;
+    private static readonly leaveGateSound: Sound;
 
     @asset("sounds/jumping/squish.mp3")
-    private static bouncingSound: Sound;
+    private static readonly bouncingSound: Sound;
 
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     private lastHint = Date.now();
     private flying = false;
@@ -153,31 +153,24 @@ export class Player extends PhysicsEntity {
     private usedDoubleJump = false;
     private autoMove: AutoMove | null = null;
     public isControllable: boolean = true;
-    private showHints = false;
+    private readonly showHints = false;
     private isPettingDog = false;
     private walkingSpeed = MAX_PLAYER_SPEED;
 
     private characterAsset: CharacterAsset;
-    private voiceAsset: VoiceAsset;
+    private readonly voiceAsset: VoiceAsset;
 
     public playerConversation: PlayerConversation | null = null;
 
-    public speechBubble = new SpeechBubble(
-        this.scene,
-        this.x, this.y,
-        undefined,
-        undefined, undefined, undefined, undefined,
-        undefined,
-        true
-    );
+    public speechBubble = new SpeechBubble(this.scene, this.x, this.y, true);
 
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
     private readableTrigger?: GameObjectInfo;
-    private dustEmitter: ParticleEmitter;
-    private bounceEmitter: ParticleEmitter;
-    private doubleJumpEmitter: ParticleEmitter;
+    private readonly dustEmitter: ParticleEmitter;
+    private readonly bounceEmitter: ParticleEmitter;
+    private readonly doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
 
     public constructor(scene: GameScene, x: number, y: number) {
@@ -264,7 +257,7 @@ export class Player extends PhysicsEntity {
     }
 
     public stopAutoMove(): void {
-        if (this.autoMove?.turnAround) {
+        if (this.autoMove?.turnAround === true) {
             this.direction = this.direction * -1;
         }
 
@@ -419,7 +412,7 @@ export class Player extends PhysicsEntity {
             if (!this.flying) {
                 if (
                     this.closestNPC
-                    && this.closestNPC.isReadyForConversation()
+                    && this.closestNPC.isReadyForConversation() === true
                     && this.closestNPC.conversation
                 ) {
                     const conversation = this.closestNPC.conversation;
@@ -500,7 +493,7 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "i" && !this.carrying) {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
-                this.scene.gameObjects.push(
+                this.scene.addGameObject(
                     new Snowball(
                         this.scene,
                         this.x, this.y + this.height * 0.75,
@@ -529,9 +522,7 @@ export class Player extends PhysicsEntity {
             this.thinkBubble = null;
         }
 
-        const thinkBubble = this.thinkBubble = new SpeechBubble(
-            this.scene, this.x, this.y
-        );
+        const thinkBubble = this.thinkBubble = new SpeechBubble(this.scene, this.x, this.y);
 
         void thinkBubble.setMessage(message);
         thinkBubble.show();
@@ -598,7 +589,7 @@ export class Player extends PhysicsEntity {
      * @param gate the source the player enters
      */
     private async enterGate(gate: GameObjectInfo): Promise<void> {
-        if (gate && gate.properties.target) {
+        if (gate != null && gate.properties.target != null) {
             this.isControllable = false;
             this.moveRight = false;
             this.moveLeft = false;
@@ -610,7 +601,7 @@ export class Player extends PhysicsEntity {
             const targetBgmId = gate.properties.bgm;
 
             if (targetGate) {
-                if (gate.properties.enterSound) {
+                if (gate.properties.enterSound != null) {
                     if (gate.properties.enterSound === "portal") {
                         Player.enterPortalSound.stop();
                         Player.enterPortalSound.play();
@@ -621,11 +612,11 @@ export class Player extends PhysicsEntity {
                 }
 
                 await this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT);
-                if (targetBgmId) {
+                if (targetBgmId != null) {
                     this.scene.setActiveBgmTrack(targetBgmId as BgmId);
                 }
 
-                if (targetGate.properties.exitSound) {
+                if (targetGate.properties.exitSound != null) {
                     if (targetGate.properties.exitSound === "portal") {
                         Player.enterPortalSound.stop();
                         Player.enterPortalSound.play();
@@ -648,15 +639,29 @@ export class Player extends PhysicsEntity {
                     this.enterShadowCave();
                 }
 
-                if (targetGate.properties.exitSleepTime) {
+                if (targetGate.properties.exitSleepTime != null) {
                     await sleep(targetGate.properties.exitSleepTime * 1000);
                 }
 
-                const fadeInTime = targetGate.properties.exitFadeTime ? targetGate.properties.exitFadeTime : 0.8;
+                const fadeInTime = targetGate.properties.exitFadeTime ?? 0.8;
                 await this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN);
                 this.isControllable = true;
             }
         }
+    }
+
+    /**
+     * For debugging purposes. Teleports the player to the given entity.
+     *
+     * Example usage: `game.campaign.gameScene.player.teleportTo(game.campaign.gameScene.powerShiba)`
+     *
+     * @param entity - The game entity to teleport to.
+     */
+    public teleportTo(entity: Entity): void {
+        this.x = entity.x;
+        this.y = entity.y;
+
+        this.scene.camera.setBounds(this.getCurrentMapBounds());
     }
 
     private canJump(): boolean {
@@ -777,7 +782,7 @@ export class Player extends PhysicsEntity {
             this.closestNPC
             && !this.dance
             && !this.playerConversation
-            && this.closestNPC.isReadyForConversation()
+            && this.closestNPC.isReadyForConversation() === true
         ) {
             this.drawTooltip(this.closestNPC.getInteractionText(), ControllerAnimationTags.INTERACT);
         } else if (this.readableTrigger) {
@@ -826,9 +831,9 @@ export class Player extends PhysicsEntity {
     }
 
     public debugCollisions(): void {
-        console.log("Entities: ",this.scene.world.getEntityCollisions(this));
-        console.log("Triggers: ",this.scene.world.getTriggerCollisions(this));
-        console.log("Gates: ",this.scene.world.getGateCollisions(this));
+        console.log("Entities: ", this.scene.world.getEntityCollisions(this));
+        console.log("Triggers: ", this.scene.world.getTriggerCollisions(this));
+        console.log("Gates: ", this.scene.world.getGateCollisions(this));
     }
 
     private getReadableTrigger(): GameObjectInfo | undefined {
@@ -881,7 +886,7 @@ export class Player extends PhysicsEntity {
         if (this.playerSpriteMetadata == null) {
             this.playerSpriteMetadata = Player.playerSprites.map(sprite => {
                 const metaDataJSON = sprite.getLayer("Meta")?.data;
-                return metaDataJSON ? JSON.parse(metaDataJSON) : {};
+                return metaDataJSON != null && metaDataJSON !== "" ? JSON.parse(metaDataJSON) as PlayerSpriteMetadata : {};
             });
         }
 
@@ -894,7 +899,7 @@ export class Player extends PhysicsEntity {
         this.jumpThresholdTimer = PLAYER_JUMP_TIMING_THRESHOLD;
     }
 
-    private isOutOfBounds (): boolean {
+    private isOutOfBounds(): boolean {
         if (!this.isControllable) return false;
         const mapBounds = this.scene.camera.getBounds();
         if (!mapBounds) return false;
@@ -1241,7 +1246,7 @@ export class Player extends PhysicsEntity {
                 ) {
                     const teleportY = trigger.properties.teleportY;
 
-                    if (teleportY) {
+                    if (teleportY != null) {
                         this.y -= teleportY;
                     }
                 }
@@ -1253,7 +1258,7 @@ export class Player extends PhysicsEntity {
                 // Disable particle effects while in trigger
                 const disableParticles = trigger.properties.disableParticles;
 
-                if (disableParticles) {
+                if (disableParticles === true) {
                     this.disableParticles = true;
                 }
 
@@ -1263,7 +1268,7 @@ export class Player extends PhysicsEntity {
                     value: trigger.properties.setGlobalVal
                 };
 
-                if (globalConversationProps.key && globalConversationProps.value) {
+                if (globalConversationProps.key != null && globalConversationProps.value != null) {
                     Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
                 }
 
@@ -1273,7 +1278,7 @@ export class Player extends PhysicsEntity {
                     value: trigger.properties.setDialogValue
                 };
 
-                if (enableConversationProps.key && enableConversationProps.value) {
+                if (enableConversationProps.key != null && enableConversationProps.value != null) {
                     this.scene.game.campaign.runAction(
                         "enable", null, [enableConversationProps.key, enableConversationProps.value]
                     );

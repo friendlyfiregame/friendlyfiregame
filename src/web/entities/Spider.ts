@@ -13,10 +13,10 @@ interface SpiderSpriteMetadata {
 @entity("spider")
 export class Spider extends NPC {
     @asset("sprites/magicspider.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sprites/eyes/spider.aseprite.json")
-    private static eyes: Aseprite;
+    private static readonly eyes: Aseprite;
 
     private spriteMetadata: SpiderSpriteMetadata | null = null;
     private eyeOffsetY = 0;
@@ -37,10 +37,10 @@ export class Spider extends NPC {
     private getSpriteMetadata(): SpiderSpriteMetadata {
         if (this.spriteMetadata == null) {
             const metadata = Spider.sprite.getLayer("Meta")?.data;
-            this.spriteMetadata = metadata ? JSON.parse(metadata) : {};
+            this.spriteMetadata = metadata != null && metadata !== "" ? JSON.parse(metadata) as SpiderSpriteMetadata : {};
         }
 
-        return this.spriteMetadata || {};
+        return this.spriteMetadata ?? {};
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

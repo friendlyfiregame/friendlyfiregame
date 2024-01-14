@@ -12,7 +12,10 @@ import { Chicken } from "../entities/Chicken";
 import { Cloud } from "../entities/Cloud";
 import { ControllerEvent } from "../input/ControllerEvent";
 import { Conversation } from "../Conversation";
-import { DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_FADE_DURATION } from "../../shared/constants";
+import {
+    DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION,
+    WINDOW_ENDING_FADE_DURATION
+} from "../../shared/constants";
 import { EndScene } from "./EndScene";
 import { Fire, FireState } from "../entities/Fire";
 import { FireGfx } from "../FireGfx";
@@ -192,15 +195,15 @@ export class GameScene extends Scene<FriendlyFire> {
     ];
 
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset("sounds/ending/swell.mp3")
-    private static swell: Sound;
+    private static readonly swell: Sound;
 
     @asset("sounds/gate/wrong.ogg")
     public static wrong: Sound;
 
-    private petEndingTexts: PetEndingText[] = [
+    private readonly petEndingTexts: PetEndingText[] = [
         { label: "The sensation lacks any kind of comparison.", enter: 0.1 },
         { label: "All worldly matters seem so insignificant now.", enter: 0.2 },
         { label: "Reality around me begins to fade.", enter: 0.3 },
@@ -212,7 +215,7 @@ export class GameScene extends Scene<FriendlyFire> {
         { label: "Farewell, cruel world…", enter: 1 }
     ];
 
-    private windowEndingTexts: PetEndingText[] = [
+    private readonly windowEndingTexts: PetEndingText[] = [
         { label: "I wiped off the heavy dust layer on the glass.", enter: 0.1 },
         { label: "The surface was as cold as the corpses around me.", enter: 0.2 },
         { label: "It was hard to make out anything in the darkness on the other side…", enter: 0.3 },
@@ -268,7 +271,7 @@ export class GameScene extends Scene<FriendlyFire> {
     private frameCounter = 0;
     private framesPerSecond = 0;
     public showBounds = false;
-    private scale = 1;
+    private readonly scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
     private fpsInterval: number | null = null;
@@ -325,9 +328,10 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Portal(this, entity.x, entity.y);
                     case "window":
                         return new Window(this, entity.x, entity.y);
-                    case "player":
+                    case "player": {
                         const startingPos = this.getPlayerStartingPos();
                         return new Player(this, startingPos.x, startingPos.y);
+                    }
                     default:
                         return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
                 }
@@ -370,7 +374,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.loadApocalypse();
     }
 
-    private initNewGamePlusState (): void {
+    private initNewGamePlusState(): void {
         this.player.enableRunning(true);
         this.player.enableDoubleJump(true);
         this.player.enableMultiJump(true);
@@ -378,9 +382,9 @@ export class GameScene extends Scene<FriendlyFire> {
         this.stone.dropInWater();
     }
 
-    private getPlayerStartingPos (): { x: number, y: number } {
+    private getPlayerStartingPos(): { x: number, y: number } {
         const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
-        const defaultSpawn = spawns.find(s => !s.properties.newGamePlus);
+        const defaultSpawn = spawns.find(s => s.properties.newGamePlus !== true);
         const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);
 
         if (this.game.campaign.isNewGamePlus) {
@@ -481,7 +485,7 @@ export class GameScene extends Scene<FriendlyFire> {
         track.sound.play();
     }
 
-    private getGameObject<T>(type: new (...args: any[]) => T): T {
+    private getGameObject<Args extends unknown[], GameObject>(type: new (...args: Args) => GameObject): GameObject {
         for (const gameObject of this.gameObjects) {
             if (gameObject instanceof type) {
                 return gameObject;
@@ -884,7 +888,7 @@ export class GameScene extends Scene<FriendlyFire> {
         const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position");
 
         if (!playerTargetPos) {
-            throw new Error ("cannot initiate friendship ending because some points of interest are missing");
+            throw new Error("cannot initiate friendship ending because some points of interest are missing");
         }
 
         this.player.startAutoMove(playerTargetPos.x, true);

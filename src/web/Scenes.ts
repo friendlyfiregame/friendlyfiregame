@@ -5,13 +5,13 @@ export class Scenes<T extends Game> {
     #activeScene: Scene<T, unknown> | null = null;
     public set activeScene(scene: Scene<T, unknown> | null) {
         this.#activeScene = scene;
-        window.history.replaceState(null, "", scene?.urlFragment || "#");
+        window.history.replaceState(null, "", scene?.urlFragment ?? "#");
     }
     public get activeScene(): Scene<T, unknown> | null {
         return this.#activeScene;
     }
-    private sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
-    private scenes: Scene<T, unknown>[] = [];
+    private readonly sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
+    private readonly scenes: Scene<T, unknown>[] = [];
     private sortedScenes: Scene<T, unknown>[] = [];
 
     public constructor(public readonly game: T) {}
@@ -27,7 +27,7 @@ export class Scenes<T extends Game> {
         return scene;
     }
 
-    public async pushScene<A>(sceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
+    public async pushScene(sceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
     public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
     public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
         if (this.activeScene != null) {
@@ -79,7 +79,7 @@ export class Scenes<T extends Game> {
         return activeScene;
     }
 
-    public async setScene<A>(newSceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
+    public async setScene(newSceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
     public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
     public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
         const currentScene = this.activeScene;

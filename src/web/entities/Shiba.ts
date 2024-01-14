@@ -37,26 +37,26 @@ const HEART_PARTICLE_DELAY = 0.5;
 @entity("shiba")
 export class Shiba extends ScriptableNPC {
     @asset("sprites/shiba.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/ending/putout.mp3")
-    private static putOutSound: Sound;
+    private static readonly putOutSound: Sound;
 
     @asset("sounds/jumping/jump_neutral.ogg")
-    private static jumpSound: Sound;
+    private static readonly jumpSound: Sound;
 
     @asset("sprites/heart.png")
-    private static heartImage: HTMLImageElement;
+    private static readonly heartImage: HTMLImageElement;
 
     private state = ShibaState.ON_TREE;
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
 
-    private doubleJumpEmitter: ParticleEmitter;
-    private heartEmitter: ParticleEmitter;
+    private readonly doubleJumpEmitter: ParticleEmitter;
+    private readonly heartEmitter: ParticleEmitter;
     private minAltitude: number;
-    private jumpHeight = 1.5;
+    private readonly jumpHeight = 1.5;
     private jumpTimer = 0;
     private flyingTime = 0;
     private saidFarewell = false;
@@ -194,17 +194,17 @@ export class Shiba extends ScriptableNPC {
         return this.jumpTimer === 0;
     }
 
-    public startBeingPetted (): void {
+    public startBeingPetted(): void {
         this.isBeingPetted = true;
         const x = this.direction > 0 ? this.x + 5 : this.x - 5;
         this.heartEmitter.setPosition(x, this.y);
     }
 
-    public stopBeingPetted (): void {
+    public stopBeingPetted(): void {
         this.isBeingPetted = false;
     }
 
-    public getAnimationTag (): string {
+    public getAnimationTag(): string {
         if (this.peeing) return "peeing";
         if (this.isBeingPetted) return "petted";
         return "idle";
@@ -290,7 +290,7 @@ export class Shiba extends ScriptableNPC {
 
     public override isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
-        return (superResult && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
+        return (superResult === true && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
     }
 
     private walkToFireLogic(triggerCollisions: GameObjectInfo[]): void {
@@ -334,13 +334,13 @@ export class Shiba extends ScriptableNPC {
             this.walkTimer -= dt;
         }
 
-        if (this.idleTimer && this.idleTimer <= 0 && this.walkTimer === null) {
+        if (this.idleTimer != null && this.idleTimer <= 0 && this.walkTimer === null) {
             this.walkTimer = rndItem(WALK_DURATION);
             this.idleTimer = null;
             this.move = this.autoMoveDirection;
         }
 
-        if (this.walkTimer && this.walkTimer <= 0 && this.idleTimer === null) {
+        if (this.walkTimer != null && this.walkTimer <= 0 && this.idleTimer === null) {
             this.idleTimer = rndItem(IDLE_DURATION);
             this.walkTimer = null;
             this.move = 0;

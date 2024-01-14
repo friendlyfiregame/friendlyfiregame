@@ -12,10 +12,10 @@ import { Wood } from "./Wood";
 @entity("tree")
 export class Tree extends NPC {
     @asset("sprites/tree.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     public seed: Seed;
-    private wood: Wood;
+    private readonly wood: Wood;
 
     public constructor(scene: GameScene, x: number, y: number) {
         super(scene, x, y, 78, 140);

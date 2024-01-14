@@ -27,11 +27,30 @@ const config = {
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "rules": {
-        "@typescript-eslint/ban-types": "off",
-        "@typescript-eslint/brace-style": [ "error", "1tbs", { "allowSingleLine": true } ],
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "extendDefaults": true,
+                "types": {
+                    "Function": false,
+                    "object": false,
+                    "Object": false
+                }
+            }
+        ],
+         "@typescript-eslint/brace-style": [
+            "warn",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
+        "@typescript-eslint/comma-spacing": "warn",
+        "@typescript-eslint/default-param-last": "warn",
         "@typescript-eslint/explicit-function-return-type": [
             "warn",
             {
@@ -39,13 +58,27 @@ const config = {
                 "allowTypedFunctionExpressions": true
             }
         ],
-        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/explicit-member-accessibility": [
+            "warn", {
+                "accessibility": "explicit"
+            }
+        ],
+        "@typescript-eslint/explicit-module-boundary-types": "warn",
+        "@typescript-eslint/func-call-spacing": "warn",
+        "@typescript-eslint/no-dupe-class-members": "warn",
         "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-extra-semi": "warn",
         "@typescript-eslint/no-floating-promises": [
             "warn", { "ignoreVoid": true }
         ],
-        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-inferrable-types": [
+            "warn",
+            {
+                "ignoreParameters": true,
+                "ignoreProperties": true
+            }
+        ],
         "@typescript-eslint/no-this-alias": "off",
         "@typescript-eslint/no-misused-promises": [
             "warn",
@@ -54,13 +87,44 @@ const config = {
             }
         ],
         "@typescript-eslint/no-namespace": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-non-null-assertion": "warn",
+        "@typescript-eslint/no-unused-expressions": "warn",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "args": "none"
+            }
+        ],
+        "@typescript-eslint/no-unsafe-enum-comparison": "off",
+        "@typescript-eslint/no-useless-constructor": "warn",
+        "@typescript-eslint/prefer-nullish-coalescing": "warn",
+        "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/promise-function-async": "off",
+        "@typescript-eslint/quotes": [
+            "warn",
+            "double",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
+        ],
         "@typescript-eslint/require-await": "warn",
         "@typescript-eslint/return-await": "warn",
         "@typescript-eslint/semi": ["warn", "always"],
+        "@typescript-eslint/space-before-function-paren": [
+            "warn",
+            {
+                "named": "never",
+                "anonymous": "never",
+                "asyncArrow": "always"
+            }
+        ],
+        "@typescript-eslint/strict-boolean-expressions": "warn",
+        "@typescript-eslint/switch-exhaustiveness-check": "warn",
+        "@typescript-eslint/triple-slash-reference": "warn",
+        "@typescript-eslint/unbound-method": "off",
         "dot-location": [ "warn", "property" ],
+        "eol-last": "warn",
         "eqeqeq": [
             "warn",
             "always", {
@@ -68,21 +132,23 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
+        "key-spacing": "warn",
+        "linebreak-style": [ "warn", "unix" ],
         "max-len": [
-            "off",
+            "warn",
             {
-                "code": 120,
+                "code": 160,
                 "ignoreRegExpLiterals": true
             }
         ],
-        "no-case-declarations": "off",
+        "no-case-declarations": "warn",
         "no-constant-condition": [
             "warn",
             {
                 "checkLoops": false
             }
         ],
-        "no-extra-boolean-cast": "off",
+        "no-extra-boolean-cast": "warn",
         "no-new-wrappers": "warn",
         "no-proto": "warn",
         "no-return-assign": "warn",
@@ -96,7 +162,7 @@ const config = {
         "prefer-promise-reject-errors": "warn",
         "prefer-regex-literals": "warn",
         "quotes": [ "error", "double" ],
-        "semi": "off"
+        "semi": "warn"
     }
 };
 module.exports = config;

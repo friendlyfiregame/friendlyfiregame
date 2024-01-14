@@ -11,4 +11,5 @@ declare global {
         // See https://wicg.github.io/keyboard-lock/
         readonly keyboard: Keyboard
     }
+    let fullscreen: boolean;
 }

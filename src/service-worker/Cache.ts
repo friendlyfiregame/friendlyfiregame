@@ -2,7 +2,7 @@ import { CACHE_NAME } from "../shared/constants";
 
 export class Cache extends Object {
 
-    #name: string;
+    readonly #name: string;
     #cache?: globalThis.Cache;
 
     public get name(): string {
@@ -23,24 +23,24 @@ export class Cache extends Object {
 
     public async put(request: Request, response: Response): Promise<void> {
         await this.open();
-        return this.#cache!.put(request, response);
+        return this.#cache?.put(request, response);
     }
 
     public async putAll(resources: string[]): Promise<void> {
         await this.open();
-        return this.#cache!.addAll(resources);
+        return this.#cache?.addAll(resources);
     }
 
     public async deleteAll(): Promise<void> {
         await this.open();
-        await (await this.#cache!.keys()).reduce(async (previousValue, currentValue, currentIndex, array): Promise<boolean> => {
+        await (await this.#cache?.keys() ?? []).reduce(async (previousValue, currentValue, currentIndex, array): Promise<boolean> => {
             await previousValue;
-            return this.#cache!.delete(currentValue.url);
+            return await this.#cache?.delete(currentValue.url) ?? false;
         }, Promise.resolve(true));
     }
 
     public override toString(): string {
-        return `Cache{name=${name}}`;
+        return `Cache{name=${this.#name}}`;
     }
 
 }

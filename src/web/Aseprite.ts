@@ -135,9 +135,10 @@ export class Aseprite {
      * @return The frame index to draw.
      */
     public getTaggedFrameIndex(tag: string, time: number = now()): number {
-        const frameTag = this.frameTags[tag] || this.frameTags[this.fallbackTag];
+        const frameTag = this.frameTags[tag] ?? this.frameTags[this.fallbackTag];
         if (frameTag == null) {
-            throw new Error(`Frame tag not found in sprite '${this.source}' and fallback is not available as well. Tag: '${tag}' | FallbackTag: '${this.fallbackTag}'`);
+            throw new Error(`Frame tag not found in sprite '${this.source}' and fallback is not available as well. `
+                + `Tag: '${tag}' | FallbackTag: '${this.fallbackTag}'`);
         }
         return this.calculateFrameIndex(
             time, this.frameTagDurations[tag], frameTag.from, frameTag.to, frameTag.direction

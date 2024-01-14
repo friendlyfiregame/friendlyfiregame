@@ -26,13 +26,13 @@ const MAX_SPEED = 4;
 @entity("bird")
 export class Bird extends NPC {
     @asset("sprites/bird.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
     @asset("sounds/jumping/jump_neutral.ogg")
-    private static jumpSound: Sound;
-    private doubleJumpEmitter: ParticleEmitter;
+    private static readonly jumpSound: Sound;
+    private readonly doubleJumpEmitter: ParticleEmitter;
     private move: 0 | 1 | -1  = 1;
-    private minAltitude: number;
-    private jumpHeight = 1.5;
+    private readonly minAltitude: number;
+    private readonly jumpHeight = 1.5;
     private waitTimer = 0;
     private state = BirdState.WAITING_LEFT;
     private jumpTimer = 0;
@@ -173,7 +173,7 @@ export class Bird extends NPC {
 
     public override isReadyForConversation(): boolean | null {
         const superResult = super.isReadyForConversation();
-        return (superResult && this.isWaiting());
+        return (superResult === true && this.isWaiting());
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

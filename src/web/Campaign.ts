@@ -93,7 +93,7 @@ export class Campaign {
     public selectedVoice = VoiceAsset.FEMALE;
     public isNewGamePlus = false;
 
-    constructor(public game: Game) {}
+    public constructor(public game: Game) {}
 
     public getQuest(key: QuestKey): Quest {
         const ending = this.quests.find(ending => ending.key === key);
@@ -101,7 +101,7 @@ export class Campaign {
         return ending;
     }
 
-    public setNewGamePlus (isNewGamePlus: boolean): void {
+    public setNewGamePlus(isNewGamePlus: boolean): void {
         this.isNewGamePlus = isNewGamePlus;
     }
 
@@ -192,7 +192,7 @@ export class Campaign {
                 case "zoomout":
                     this.gameScene.camera.zoom -= 1;
                     break;
-                case "treezoom":
+                case "treezoom": {
                     const forestPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "forest");
 
                     if (forestPointer) {
@@ -206,7 +206,8 @@ export class Campaign {
                     }
 
                     break;
-                case "mountainzoom":
+                }
+                case "mountainzoom": {
                     const mountainPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "mountain");
 
                     if (mountainPointer) {
@@ -220,7 +221,8 @@ export class Campaign {
                     }
 
                     break;
-                case "riverzoom":
+                }
+                case "riverzoom": {
                     const riverPointer = this.gameScene.pointsOfInterest.find(poi => poi.name === "river");
 
                     if (riverPointer) {
@@ -234,7 +236,8 @@ export class Campaign {
                     }
 
                     break;
-                case "crazyzoom":
+                }
+                case "crazyzoom": {
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.APOCALYPSE_STARTED);
                     const duration = 12;
 
@@ -243,11 +246,12 @@ export class Campaign {
                         this.gameScene.fire.x, this.gameScene.fire.y + 15,
                         8,
                         -2 * Math.PI, valueCurves.cubic
-                    ).then(() => this.gameScene!.beginApocalypse());
+                    ).then(() => this.gameScene?.beginApocalypse());
 
                     this.gameScene.fire.conversation = null;
                     this.gameScene.fireFuryEndTime = this.gameScene.gameTime + duration + 8;
                     break;
+                }
                 case "friendshipEnding":
                     this.gameScene.beginFriendshipEnding();
                     break;
@@ -308,7 +312,7 @@ export class Campaign {
                     void this.gameScene.gameOver();
                     break;
                 case "game":
-                    this.addState(params[0] as any);
+                    this.addState(params[0] as CampaignState);
                     break;
                 case "enableRunning":
                     this.gameScene.player.enableRunning();
@@ -348,7 +352,7 @@ export class Campaign {
                     break;
                 case "dance":
                     setTimeout(() => {
-                        this.gameScene!.player.startDance(+params[0] || 1);
+                        this.gameScene?.player.startDance(+params[0] || 1);
                     }, 500);
 
                     break;
@@ -361,7 +365,7 @@ export class Campaign {
                 case "lookThroughWindow":
                     this.gameScene.beginWindowEnding();
                     break;
-                case "enable":
+                case "enable": {
                     const char = params[0], dialogName = params[1];
 
                     const npcMap: Record<string, NPC> = {
@@ -381,12 +385,13 @@ export class Campaign {
                     const targetNpc = npcMap[char];
                     const dialog = allDialogs[dialogName];
 
-                    if (targetNpc && dialog) {
+                    if (targetNpc != null && dialog != null) {
                         targetNpc.conversation = new Conversation(dialog, targetNpc);
                     }
 
                     break;
-                case "disable":
+                }
+                case "disable": {
                     const char1 = params[0];
 
                     const npcMap1: Record<string, NPC> = {
@@ -405,11 +410,12 @@ export class Campaign {
 
                     const targetNpc1 = npcMap1[char1];
 
-                    if (targetNpc1) {
+                    if (targetNpc1 != null) {
                         targetNpc1.conversation = null;
                     }
 
                     break;
+                }
             }
         }
     }

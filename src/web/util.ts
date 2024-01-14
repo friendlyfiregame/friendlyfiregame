@@ -131,12 +131,12 @@ export function isDev(): boolean {
         devMode = true;
     }
 
-    if (!!window.location.search) {
-        return !!window.location.search.substring(1).split("&").find(key => {
+    if (window.location.search !== "") {
+        return window.location.search.substring(1).split("&").find(key => {
             if (key.toLowerCase().startsWith("dev")) {
                 devMode = key.length === 3 || key.toLowerCase().endsWith("=true");
             }
-        });
+        }) != null;
     }
 
     return devMode;

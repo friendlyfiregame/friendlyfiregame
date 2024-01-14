@@ -17,7 +17,7 @@ export interface ControlTooltipArgs extends SceneNodeArgs {
 
 export class ControlTooltipNode extends SceneNode<FriendlyFire> {
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     @asset([
         "sprites/buttons_keyboard.aseprite.json",
@@ -25,8 +25,8 @@ export class ControlTooltipNode extends SceneNode<FriendlyFire> {
         "sprites/buttons_playstation.aseprite.json",
         "sprites/buttons_stadia.aseprite.json"
     ])
-    private static buttons: Aseprite[];
-    private controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
+    private static readonly buttons: Aseprite[];
+    private readonly controllerSpriteMapRecords: Record<ControllerSpriteMap, Aseprite> = {
         [ControllerSpriteMap.KEYBOARD]: ControlTooltipNode.buttons[0],
         [ControllerSpriteMap.XBOX]: ControlTooltipNode.buttons[1],
         [ControllerSpriteMap.PLAYSTATION]: ControlTooltipNode.buttons[2],

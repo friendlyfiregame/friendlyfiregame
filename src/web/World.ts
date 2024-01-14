@@ -22,25 +22,25 @@ export const validEnvironments = Object.values(Environment);
 
 export class World implements GameObject {
     @asset("maps/level.png")
-    private static foreground: HTMLImageElement;
+    private static readonly foreground: HTMLImageElement;
 
     @asset("maps/level_collision.png", {
         map: (image: HTMLImageElement) => new Uint32Array(getImageData(image).data.buffer)
     })
-    private static collisionMap: Uint32Array;
+    private static readonly collisionMap: Uint32Array;
 
     @asset([
         "maps/bg.png",
         "maps/bg2.png",
         "maps/bg3.png"
     ])
-    private static backgrounds: HTMLImageElement[];
+    private static readonly backgrounds: HTMLImageElement[];
 
-    private scene: GameScene;
+    private readonly scene: GameScene;
 
     @asset("sprites/raindrop.png")
-    private static raindrop: HTMLImageElement;
-    private rainEmitter: ParticleEmitter;
+    private static readonly raindrop: HTMLImageElement;
+    private readonly rainEmitter: ParticleEmitter;
     private raining = false;
 
     public constructor(scene: GameScene) {
@@ -51,7 +51,7 @@ export class World implements GameObject {
         );
 
         if (!rainSpawnPosition) {
-            throw new Error ("Missing 'rain_spawn_position' point in map data to place rain emitter");
+            throw new Error("Missing 'rain_spawn_position' point in map data to place rain emitter");
         }
 
         this.rainEmitter = this.scene.particles.createEmitter({
@@ -166,7 +166,7 @@ export class World implements GameObject {
 
         if (
             !validEnvironments.includes(environment)
-            || (ignore && ignore.includes(environment))
+            || (ignore != null && ignore.includes(environment))
         ) {
             return Environment.AIR;
         }
@@ -232,7 +232,7 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    public entityIsAvailableInNewGameState (newGamePlusProp?: boolean): boolean {
+    public entityIsAvailableInNewGameState(newGamePlusProp?: boolean): boolean {
         return (
             newGamePlusProp === undefined ||
             (
@@ -251,7 +251,7 @@ export class World implements GameObject {
                 sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
             );
 
-            if (colliding && !gateObject.properties.disabled && this.entityIsAvailableInNewGameState(gateObject.properties.newGamePlus)) {
+            if (colliding && gateObject.properties.disabled !== true && this.entityIsAvailableInNewGameState(gateObject.properties.newGamePlus)) {
                 collidesWith.push(gateObject);
             }
         }

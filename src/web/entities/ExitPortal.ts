@@ -9,10 +9,10 @@ enum PortalAnimationState { OFF, FADEIN, IDLE }
 @entity("exitportal")
 export class ExitPortal extends Entity {
     @asset("sprites/portal.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
 
     @asset("sounds/portal/portal.ogg")
-    private static sound: Sound;
+    private static readonly sound: Sound;
 
     private animationState = PortalAnimationState.OFF;
 
@@ -21,7 +21,7 @@ export class ExitPortal extends Entity {
         this.animator.assignSprite(ExitPortal.sprite);
     }
 
-    public activate (): void {
+    public activate(): void {
         if (this.animationState === PortalAnimationState.OFF) {
             ExitPortal.sound.play();
             this.nextAnimationState();

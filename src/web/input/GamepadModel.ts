@@ -2,7 +2,7 @@
 
 import { GamepadStyle } from "./GamepadStyle";
 
-const typemap: Map<RegExp,GamepadStyle> = new Map();
+const typemap: Map<RegExp, GamepadStyle> = new Map();
 
 /* spell-checker: disable */
 
@@ -34,10 +34,10 @@ const productAndVendorMatcher = /^.*?vendor:?\s*(?<vendorId>.{4}).*?product:?\s*
 
 export class GamepadModel {
 
-    #vendorId: number|undefined;
-    #productId: number|undefined;
+    readonly #vendorId: number|undefined;
+    readonly #productId: number|undefined;
 
-    constructor(public style: GamepadStyle, vendorId?: number|undefined, productId?: number|undefined) {
+    public constructor(public style: GamepadStyle, vendorId?: number|undefined, productId?: number|undefined) {
         this.#vendorId = vendorId;
         this.#productId = productId;
     }
@@ -65,7 +65,7 @@ export class GamepadModel {
                     vendorId = productAndVendorMatch.groups?.vendorId;
                     productId = productAndVendorMatch.groups?.productId;
                 }
-                return new GamepadModel(value, parseInt(vendorId || "-1", 16), parseInt(productId || "-1"));
+                return new GamepadModel(value, parseInt(vendorId ?? "-1", 16), parseInt(productId ?? "-1"));
             }
         }
         // Nothing matches? Well,... that's bad luck...

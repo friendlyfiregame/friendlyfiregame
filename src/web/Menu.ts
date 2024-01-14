@@ -27,10 +27,7 @@ export class MenuItem<T = null> {
     @asset("sprites/menu_selector.png")
     protected static selectorImage: HTMLImageElement;
 
-    public constructor(
-        id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number,
-        data?: T
-    ) {
+    public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, data: T | null = null ) {
         this.id = id;
         this.label = label;
         this.font = font;
@@ -38,7 +35,7 @@ export class MenuItem<T = null> {
         this.x = x;
         this.y = y;
         this.focused = false;
-        this.data = data!;
+        this.data = data as T;
     }
 
     /**
@@ -94,11 +91,11 @@ export type SliderMenuItemParams<T> = MenuItemParams<T> & {
 
 export class SliderMenuItem<T = null> extends MenuItem<T> {
     private value: number;
-    private minValue: number;
-    private maxValue: number;
-    private increment: number;
-    private rightActionCallback: (newValue: number, data: T) => void;
-    private leftActionCallback: (newValue: number, data: T) => void;
+    private readonly minValue: number;
+    private readonly maxValue: number;
+    private readonly increment: number;
+    private readonly rightActionCallback: (newValue: number, data: T) => void;
+    private readonly leftActionCallback: (newValue: number, data: T) => void;
 
     public constructor(params: SliderMenuItemParams<T>) {
         super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
@@ -110,20 +107,20 @@ export class SliderMenuItem<T = null> extends MenuItem<T> {
         this.leftActionCallback = params.leftActionCallback;
     }
 
-    public getValue (): number {
+    public getValue(): number {
         return this.value;
     }
 
-    public setValue (value: number): void {
+    public setValue(value: number): void {
         this.value = Math.min(this.maxValue, Math.max(this.minValue, value));
     }
 
-    public increaseValue (): void {
+    public increaseValue(): void {
         this.setValue(this.value + this.increment);
         this.rightActionCallback(this.value, this.data);
     }
 
-    public decreaseValue (): void {
+    public decreaseValue(): void {
         this.setValue(this.value - this.increment);
         this.leftActionCallback(this.value, this.data);
     }
@@ -156,7 +153,7 @@ export type CheckboxMenuItemParams<T> = MenuItemParams<T> & {
 
 export class CheckboxMenuItem<T = null> extends MenuItem<T> {
     private value: boolean;
-    private actionCallback: (newValue: boolean, data: T) => void;
+    private readonly actionCallback: (newValue: boolean, data: T) => void;
 
     public constructor(params: CheckboxMenuItemParams<T>) {
         super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
@@ -219,8 +216,8 @@ export class MenuList extends SceneNode<FriendlyFire> {
     @asset("sounds/interface/bass.mp3")
     public static pause: Sound;
 
-    private align: MenuAlignment;
-    private items: MenuItem[] = [];
+    private readonly align: MenuAlignment;
+    private items: MenuItem<unknown>[] = [];
     public onActivated = new Signal<string>();
     public onRightAction = new Signal<string>();
     public onLeftAction = new Signal<string>();
@@ -251,7 +248,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
      * Sets an arbitrary number of menu items to the menu list and overrides any previously added
      * items. The first available menu item will be focused automatically.
      */
-    public setItems(...items: MenuItem<any>[]): this {
+    public setItems(...items: MenuItem<unknown>[]): this {
         this.items = [...items];
         this.focusFirstItem();
         return this;
@@ -270,7 +267,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
         }
     }
 
-    private getFocusedItem(): MenuItem<any> | undefined {
+    private getFocusedItem(): MenuItem<unknown> | undefined {
         return this.items.find(item => item.focused);
     }
 
@@ -282,7 +279,7 @@ export class MenuList extends SceneNode<FriendlyFire> {
         this.items.forEach(item => { item.focused = false; });
     }
 
-    private focusItem(item: MenuItem): void {
+    private focusItem(item: MenuItem<unknown>): void {
         this.unfocusAllItems();
         item.focused = true;
     }

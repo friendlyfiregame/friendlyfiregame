@@ -48,49 +48,49 @@ export class TitleScene extends Scene<FriendlyFire> {
     public static music: Sound;
 
     @asset("images/title/layer1.aseprite.json")
-    private static titleLayer1: Aseprite;
+    private static readonly titleLayer1: Aseprite;
 
     @asset("images/title/layer2.aseprite.json")
-    private static titleLayer2: Aseprite;
+    private static readonly titleLayer2: Aseprite;
 
     @asset("images/title/island1.aseprite.json")
-    private static titleIsland1: Aseprite;
+    private static readonly titleIsland1: Aseprite;
 
     @asset("images/title/island2.aseprite.json")
-    private static titleIsland2: Aseprite;
+    private static readonly titleIsland2: Aseprite;
 
     @asset("images/title/layer3.aseprite.json")
-    private static titleLayer3: Aseprite;
+    private static readonly titleLayer3: Aseprite;
 
     @asset("images/title/person.aseprite.json")
-    private static person: Aseprite;
+    private static readonly person: Aseprite;
 
     @asset("images/logo.png")
-    private static logoImage: HTMLImageElement;
+    private static readonly logoImage: HTMLImageElement;
 
     @asset("sprites/flameicon.aseprite.json")
-    private static flameicon: Aseprite;
+    private static readonly flameicon: Aseprite;
 
     @asset("sprites/ending_cards.aseprite.json")
-    private static endingCards: Aseprite;
+    private static readonly endingCards: Aseprite;
 
     @asset(DIALOG_FONT)
-    private static font: BitmapFont;
+    private static readonly font: BitmapFont;
 
     private menu!: MenuList;
 
-    private animationDuration = 3;
+    private readonly animationDuration = 3;
 
-    private titleBasePosition = {
+    private readonly titleBasePosition = {
         x: this.game.width / 2 - TitleScene.logoImage.width / 2,
         y: 60
     };
 
-    private titleLayer1Position = { x: 0, y: 70 };
-    private titleLayer2Position = { x: 0, y: 163 };
-    private titleLayer3Position = { x: 0, y: -125 };
+    private readonly titleLayer1Position = { x: 0, y: 70 };
+    private readonly titleLayer2Position = { x: 0, y: 163 };
+    private readonly titleLayer3Position = { x: 0, y: -125 };
 
-    private menuBasePosition = {
+    private readonly menuBasePosition = {
         x: this.game.width / 2,
         y: 180,
         gap: 15,
@@ -223,7 +223,7 @@ export class TitleScene extends Scene<FriendlyFire> {
 
         this.menu = new MenuList({
             id: "menu",
-            opacity:0,
+            opacity: 0,
             align: MenuAlignment.CENTER
         }).animate({
             animator: (node, value) => node.setOpacity(value),
@@ -252,7 +252,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         }
 
         Object.values(MenuItemKey).forEach((key, index) => {
-            if (!MenuLabels[key].electronOnly || (isElectron() || window.opener)) {
+            if (MenuLabels[key].electronOnly !== true || (isElectron() || window.opener != null)) {
                 this.menu.addItems(
                     new MenuItem(
                         key,
@@ -274,7 +274,7 @@ export class TitleScene extends Scene<FriendlyFire> {
         this.rootNode.finishAnimations();
     }
 
-    public addEndingCard (index: number, key: QuestKey): AsepriteNode {
+    public addEndingCard(index: number, key: QuestKey): AsepriteNode {
         let tag = "";
         switch (key) {
             case QuestKey.A: tag = "a_"; break;

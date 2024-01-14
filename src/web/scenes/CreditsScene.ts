@@ -34,18 +34,18 @@ export class CreditsScene extends Scene<FriendlyFire> {
         "sprites/stars/star4.aseprite.json",
         "sprites/stars/star5.aseprite.json"
     ])
-    private static stars: Aseprite[];
+    private static readonly stars: Aseprite[];
 
     @asset("sprites/credits/leaf.aseprite.json")
-    private static leaf: Aseprite;
+    private static readonly leaf: Aseprite;
 
     @asset("sprites/credits/spaceship.aseprite.json")
-    private static spaceship: Aseprite;
+    private static readonly spaceship: Aseprite;
 
     @asset("sprites/credits/spaceshipsmall.aseprite.json")
-    private static spaceshipsmall: Aseprite;
+    private static readonly spaceshipsmall: Aseprite;
 
-    private starPositions: number[][] = [
+    private readonly starPositions: number[][] = [
         [318, 10],
         [288, 19],
         [260, 100],
@@ -64,27 +64,27 @@ export class CreditsScene extends Scene<FriendlyFire> {
     ];
 
     @asset("images/credits/bg.png")
-    private static backgroundImage: HTMLImageElement;
+    private static readonly backgroundImage: HTMLImageElement;
 
     @asset("images/credits/bg-space.png")
-    private static backgroundImageSpace: HTMLImageElement;
+    private static readonly backgroundImageSpace: HTMLImageElement;
 
     @asset("images/credits/overlay.png")
-    private static overlayImage: HTMLImageElement;
+    private static readonly overlayImage: HTMLImageElement;
 
     @asset("fonts/headline.font.json")
-    private static headlineFont: BitmapFont;
+    private static readonly headlineFont: BitmapFont;
 
     @asset(DIALOG_FONT)
-    private static standardFont: BitmapFont;
+    private static readonly standardFont: BitmapFont;
 
     @asset("fonts/credits.font.json")
-    private static creditsFont: BitmapFont;
+    private static readonly creditsFont: BitmapFont;
 
     @asset("appinfo.json")
-    private static appInfo: AppInfoJSON;
+    private static readonly appInfo: AppInfoJSON;
 
-    private lineSpacing = 4;
+    private readonly lineSpacing = 4;
     private targetMusic: Sound | null = null;
 
     private getCorrectBackgroundTrack(): Sound {

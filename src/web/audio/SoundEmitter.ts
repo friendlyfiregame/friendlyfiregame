@@ -9,9 +9,9 @@ import { Sound } from "./Sound";
  * Might be better to set the volume according to the camera center in the future.
  */
 export class SoundEmitter extends Entity {
-    private sound: Sound;
-    private maxVolume: number;
-    private intensity: number;
+    private readonly sound: Sound;
+    private readonly maxVolume: number;
+    private readonly intensity: number;
 
     public constructor(
         scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number
@@ -45,13 +45,13 @@ export class SoundEmitter extends Entity {
         scene: GameScene, gameObjectInfo: GameObjectInfo
     ): SoundEmitter {
         const soundId = gameObjectInfo.properties.sound;
-        const volume = gameObjectInfo.properties.volume || 1;
-        const intensity = gameObjectInfo.properties.intensity || 1;
+        const volume = gameObjectInfo.properties.volume ?? 1;
+        const intensity = gameObjectInfo.properties.intensity ?? 1;
 
-        if (soundId) {
+        if (soundId != null) {
             const sound = scene.ambientSounds[soundId as AmbientSoundId];
 
-            if (sound) {
+            if (sound != null) {
                 return new SoundEmitter(
                     scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity
                 );
