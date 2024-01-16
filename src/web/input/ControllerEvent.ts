@@ -102,17 +102,15 @@ export class ControllerEvent extends Object {
     }
 }
 
-const gamepadModelSymbol = Symbol("gamepadModel");
-
 export class GamepadControllerEvent extends ControllerEvent {
-    private [gamepadModelSymbol]: GamepadModel;
+    readonly #gamepadModel: GamepadModel;
 
     public constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
         super(ControllerFamily.GAMEPAD, eventType, intents, repeat);
-        this[gamepadModelSymbol] = gamepadModel;
+        this.#gamepadModel = gamepadModel;
     }
 
     public get gamepadModel(): GamepadModel {
-        return this[gamepadModelSymbol];
+        return this.#gamepadModel;
     }
 }

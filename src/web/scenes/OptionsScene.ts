@@ -177,10 +177,8 @@ export class OptionsScene extends Scene<FriendlyFire> {
     }
 
     public async handleMenuAction(buttonId: string): Promise<void> {
-        switch (buttonId) {
-            case MenuItemKey.FULLSCREEN:
-                await this.toggleFullscreen();
-                break;
+        if (buttonId === MenuItemKey.FULLSCREEN) {
+            await this.toggleFullscreen();
         }
     }
 

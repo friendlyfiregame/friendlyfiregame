@@ -1,5 +1,5 @@
-export {};
-
+import type { SteamworksApi } from "../../shared/SteamworksApi";
+import type { FriendlyFire } from "../../web/FriendlyFire";
 
 interface Keyboard {
     lock(keyCodes?: Iterable<DOMString>): Promise<void>;
@@ -11,5 +11,10 @@ declare global {
         // See https://wicg.github.io/keyboard-lock/
         readonly keyboard: Keyboard
     }
-    let fullscreen: boolean;
+
+    interface Window {
+        steamworks?: SteamworksApi;
+        webkitAudioContext?: AudioContext;
+        game?: FriendlyFire;
+    }
 }

@@ -109,6 +109,7 @@ export class Camera {
             // Teleport player
             this.scene.player.x = tx;
             this.scene.player.y = ty;
+            this.setBounds(this.scene.player.getCurrentMapBounds());
 
             this.scene.player.setVelocity(0, 0);
             this.zoomingOut = false;
@@ -117,16 +118,16 @@ export class Camera {
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
         const cnv = this.scene.game.canvas;
-        const cw = cnv.width;
-        const ch = cnv.height;
-        const offx = cw / 2 / this.zoom;
-        const offy = ch / 2 / this.zoom;
+        const cw = cnv.width / this.zoom;
+        const ch = cnv.height / this.zoom;
+        const offx = cw / 2;
+        const offy = ch / 2;
 
         return {
             x: x - offx,
             y: y - offy,
-            width: offx * 2,
-            height: offy * 2
+            width: cw,
+            height: ch
         };
     }
 
@@ -208,8 +209,19 @@ export class Camera {
             this.applyApocalypticShake(this.scene.fire);
         }
 
-        this.zoom = this.zoomingOut ? 0.2 : 1;
+        this.zoom = 1;
         this.rotation = 0;
+        if (this.zoomingOut) {
+            const cnv = this.scene.game.canvas;
+            const cw = cnv.width;
+            const ch = cnv.height;
+            const world = this.scene.world;
+            const w = world.getWidth();
+            const h = world.getHeight();
+            this.x = w / 2;
+            this.y = h / 2;
+            this.zoom = Math.min(cw / w, ch / h);
+        }
 
         // On top of that, apply cam focus(es)
         for (const focus of this.focuses) {
