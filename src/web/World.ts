@@ -36,6 +36,10 @@ export class World implements GameObject {
     ])
     private static readonly backgrounds: HTMLImageElement[];
 
+    /** Background displayed in the debug zoom-out mode because parallax background cannot work there. */
+    @asset("maps/bg-debug.png")
+    private static readonly debugBackground: HTMLImageElement;
+
     private readonly scene: GameScene;
 
     @asset("sprites/raindrop.png")
@@ -82,9 +86,11 @@ export class World implements GameObject {
     }
 
     public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        const camX = this.scene.camera.x;
-        const camY = this.scene.camera.y;
+        const camera = this.scene.camera;
+        const camX = camera.x;
+        const camY = camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
+        const posYMultiplier = 1 - (camY / this.getHeight() * 2);
 
         let alpha = 1;
         if (this.scene.pettingCutscene) {
@@ -103,21 +109,36 @@ export class World implements GameObject {
             alpha: alpha
         });
 
-        for (const background of World.backgrounds) {
+        if (camera.isZoomingOut()) {
+            // In debug camera zoom-out stretch a special background image because the parallax background cannot work there
+            const background = World.debugBackground;
             const bgX = this.getWidth() / background.width;
             const bgY = this.getHeight() / background.height;
-
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
                 translation: { x: camX, y: -camY },
-                position: {
-                    x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
-                    y: (-this.getHeight() + camY) / bgY
-                },
-                asset: background,
-                alpha: alpha
+                position: { x: -camX / bgX, y: (-this.getHeight() + camY) / bgY },
+                scale: { x: bgX, y: bgY },
+                asset: background
             });
+        } else {
+            for (const background of World.backgrounds) {
+                const bgX = this.getWidth() / background.width;
+                const bgY = this.getHeight() / background.height;
+
+                this.scene.renderer.add({
+                    type: RenderingType.DRAW_IMAGE,
+                    layer: RenderingLayer.TILEMAP_BACKGROUND,
+                    translation: { x: camX, y: -camY },
+                    position: {
+                        x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
+                        y: (-this.getHeight() + camY) / bgY - (-posYMultiplier * (height / 2))
+                    },
+                    asset: background,
+                    alpha: alpha
+                });
+            }
         }
     }
 

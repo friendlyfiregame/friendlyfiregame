@@ -82,7 +82,6 @@ export class Camera {
             return;
         }
         const canvas = this.scene.game.canvas;
-        const oldImageRendering = canvas.style.imageRendering;
         const teleport = (e: MouseEvent): void => {
             const rect = canvas.getBoundingClientRect();
             const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
@@ -99,7 +98,6 @@ export class Camera {
             reset();
         };
         const reset = (): void => {
-            canvas.style.imageRendering = oldImageRendering;
             this.zoomingOut = false;
             document.removeEventListener("keyup", handleKeyUp);
             canvas.removeEventListener("click", teleport);
@@ -114,7 +112,6 @@ export class Camera {
         };
         if (!e.repeat) {
             this.zoomingOut = true;
-            canvas.style.imageRendering = "auto";
             document.addEventListener("keyup", handleKeyUp);
             canvas.addEventListener("click", teleport);
         }
@@ -357,5 +354,9 @@ export class Camera {
         ctx.fillRect(0, 0, ctx.canvas.width, h);
         ctx.fillRect(0, ctx.canvas.height - h, ctx.canvas.width, h);
         ctx.restore();
+    }
+
+    public isZoomingOut(): boolean {
+        return this.zoomingOut;
     }
 }
