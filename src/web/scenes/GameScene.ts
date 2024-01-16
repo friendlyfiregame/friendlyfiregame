@@ -375,10 +375,15 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     private initNewGamePlusState(): void {
+        this.game.campaign.runAction("talkedtofire");
+        this.game.campaign.runAction("gotFireQuest");
+        this.fire.conversation?.setState("reminder");
         this.player.enableRunning(true);
         this.player.enableDoubleJump(true);
+        this.game.campaign.runAction("talkedtotree");
         this.player.enableMultiJump(true);
         this.tree.spawnSeed().bury();
+        this.tree.conversation?.setState("reminder");
         this.stone.dropInWater();
     }
 

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed positioning of conversation speech bubble. It is now always located below
   the player, even when the player is not in the screen center.
 - Fixed misplaced parallax backgrounds.
+- Fixed initial tree and fire state in NewGame+.
 
 ### Changed
 
