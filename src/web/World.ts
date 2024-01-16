@@ -85,6 +85,7 @@ export class World implements GameObject {
         const camX = this.scene.camera.x;
         const camY = this.scene.camera.y;
         const posXMultiplier = 1 - (camX / this.getWidth() * 2);
+        const posYMultiplier = 1 - (camY / this.getHeight() * 2);
 
         let alpha = 1;
         if (this.scene.pettingCutscene) {
@@ -113,7 +114,7 @@ export class World implements GameObject {
                 translation: { x: camX, y: -camY },
                 position: {
                     x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
-                    y: (-this.getHeight() + camY) / bgY
+                    y: (-this.getHeight() + camY) / bgY - (-posYMultiplier * (height / 2))
                 },
                 asset: background,
                 alpha: alpha
