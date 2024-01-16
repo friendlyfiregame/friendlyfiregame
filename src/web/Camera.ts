@@ -61,8 +61,6 @@ export class Camera {
         if (isDev()) {
             console.log("Dev mode, press “Tab” to zoom out & click somewhere to teleport there.");
             document.addEventListener("keydown", this.handleKeyDown.bind(this));
-            document.addEventListener("keyup", this.handleKeyUp.bind(this));
-            this.scene.game.canvas.addEventListener("click", this.handleClick.bind(this));
         }
 
         this.currentBarTarget = 0;
@@ -80,27 +78,13 @@ export class Camera {
     }
 
     private handleKeyDown(e: KeyboardEvent): void {
-        if (e.key === "Tab") {
-            if (!e.repeat) {
-                this.zoomingOut = true;
-            }
-
-            e.stopPropagation();
-            e.preventDefault();
+        if (e.key !== "Tab") {
+            return;
         }
-    }
-
-    private handleKeyUp(e: KeyboardEvent): void {
-        if (e.key === "Tab") {
-            this.zoomingOut = false;
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    }
-
-    private handleClick(e: MouseEvent): void {
-        if (this.zoomingOut) {
-            const rect = this.scene.game.canvas.getBoundingClientRect();
+        const canvas = this.scene.game.canvas;
+        const oldImageRendering = canvas.style.imageRendering;
+        const teleport = (e: MouseEvent): void => {
+            const rect = canvas.getBoundingClientRect();
             const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
             const px = cx / rect.width, py = cy / rect.height;
             const worldRect = this.getVisibleRect();
@@ -112,8 +96,30 @@ export class Camera {
             this.setBounds(this.scene.player.getCurrentMapBounds());
 
             this.scene.player.setVelocity(0, 0);
+            reset();
+        };
+        const reset = (): void => {
+            canvas.style.imageRendering = oldImageRendering;
             this.zoomingOut = false;
+            document.removeEventListener("keyup", handleKeyUp);
+            canvas.removeEventListener("click", teleport);
+            document.removeEventListener("keyup", handleKeyUp);
+        };
+        const handleKeyUp = (e: KeyboardEvent): void => {
+            if (e.key === "Tab") {
+                reset();
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        };
+        if (!e.repeat) {
+            this.zoomingOut = true;
+            canvas.style.imageRendering = "auto";
+            document.addEventListener("keyup", handleKeyUp);
+            canvas.addEventListener("click", teleport);
         }
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
@@ -272,6 +278,10 @@ export class Camera {
         ctx.scale(this.zoom, this.zoom);
         ctx.rotate(this.rotation);
         ctx.translate(-this.x, this.y);
+        if (this.zoomingOut) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+        }
     }
 
     public focusOn(
