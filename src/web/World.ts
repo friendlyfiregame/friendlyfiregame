@@ -42,7 +42,7 @@ export class World implements GameObject {
 
     private readonly scene: GameScene;
 
-    @asset("sprites/raindrop.png")
+    @asset("images/raindrop.png")
     private static readonly raindrop: HTMLImageElement;
     private readonly rainEmitter: ParticleEmitter;
     private raining = false;

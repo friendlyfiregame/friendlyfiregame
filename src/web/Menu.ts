@@ -24,7 +24,7 @@ export class MenuItem<T = null> {
     public focused: boolean;
     public data: T;
 
-    @asset("sprites/menu_selector.png")
+    @asset("images/menu_selector.png")
     protected static selectorImage: HTMLImageElement;
 
     public constructor(id: string, label: string, font: BitmapFont, color: "black" | "white", x: number, y: number, data: T | null = null ) {

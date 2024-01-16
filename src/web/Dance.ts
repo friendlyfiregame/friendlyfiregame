@@ -21,10 +21,10 @@ export class Dance {
     @asset("music/dancing_queen.ogg")
     private static readonly treedance_music: Sound;
 
-    @asset("sprites/dancing_ui_bar.png")
+    @asset("images/dancing_ui_bar.png")
     private static readonly bar: HTMLImageElement;
 
-    @asset("sprites/dancing_ui_indicator.png")
+    @asset("images/dancing_ui_indicator.png")
     private static readonly indicator: HTMLImageElement;
 
     @asset("sprites/dancing_ui_keys.aseprite.json")

@@ -15,7 +15,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     @asset("sprites/cloud3.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    @asset("sprites/raindrop.png")
+    @asset("images/raindrop.png")
     private static readonly raindrop: HTMLImageElement;
 
     private readonly startX: number;
