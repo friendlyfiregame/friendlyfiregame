@@ -47,22 +47,22 @@ export class TitleScene extends Scene<FriendlyFire> {
     @asset("music/cerulean-expanse.ogg")
     public static music: Sound;
 
-    @asset("images/title/layer1.aseprite.json")
+    @asset("sprites/title/layer1.aseprite.json")
     private static readonly titleLayer1: Aseprite;
 
-    @asset("images/title/layer2.aseprite.json")
+    @asset("sprites/title/layer2.aseprite.json")
     private static readonly titleLayer2: Aseprite;
 
-    @asset("images/title/island1.aseprite.json")
+    @asset("sprites/title/island1.aseprite.json")
     private static readonly titleIsland1: Aseprite;
 
-    @asset("images/title/island2.aseprite.json")
+    @asset("sprites/title/island2.aseprite.json")
     private static readonly titleIsland2: Aseprite;
 
-    @asset("images/title/layer3.aseprite.json")
+    @asset("sprites/title/layer3.aseprite.json")
     private static readonly titleLayer3: Aseprite;
 
-    @asset("images/title/person.aseprite.json")
+    @asset("sprites/title/person.aseprite.json")
     private static readonly person: Aseprite;
 
     @asset("images/logo.png")

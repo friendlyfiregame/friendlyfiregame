@@ -25,10 +25,10 @@ export enum FireState {
 
 @entity("fire")
 export class Fire extends NPC {
-    @asset("sprites/smoke.png")
+    @asset("images/smoke.png")
     private static readonly smokeImage: HTMLImageElement;
 
-    @asset("sprites/steam.png")
+    @asset("images/steam.png")
     private static readonly steamImage: HTMLImageElement;
 
     @asset("sounds/fire/fire.ogg")
