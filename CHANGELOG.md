@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the player, even when the player is not in the screen center.
 - Fixed misplaced parallax backgrounds.
 - Fixed initial tree and fire state in NewGame+.
+- Added 1 pixel margin between font colors to prevent rendering glitches.
 
 ### Changed
 
@@ -26,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added music note character to tree dialog to indicate it is singing.
 - Increased heart emitter size when petting Shiba so it is actually recognizable as
   a heart.
+- Removed beard giving part from Stone dialog because this feature was removed a
+  long time ago.
 
 ### Updated
 
