@@ -59,7 +59,7 @@ export class BitmapFont {
         const colors = Object.keys(colorMap);
         const count = colors.length;
         const w = this.canvas.width = this.sourceImage.width;
-        const h = this.charHeight;
+        const h = this.charHeight + 1;
         this.canvas.height = h * count;
         const ctx = getRenderingContext(this.canvas, "2d");
 
@@ -101,7 +101,7 @@ export class BitmapFont {
     private drawCharacter(ctx: CanvasRenderingContext2D, char: number, color: string): void {
         const colorIndex = this.colorMap[color];
         const charIndex = (typeof char === "number") ? char : this.getCharIndex(char);
-        const charX = this.charStartPoints[charIndex], charY = colorIndex * this.charHeight;
+        const charX = this.charStartPoints[charIndex], charY = colorIndex * (this.charHeight + 1);
 
         ctx.drawImage(
             this.canvas, charX, charY, this.charWidths[charIndex], this.charHeight,
