@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Prerequisites:
-# This script uses id3v2 and ffmpeg to convert the Ogg Vorbis files
+# This script uses ffmpeg to convert the Ogg Vorbis files
 # used by the game to MP3 files that can be published on Steam.
 
 source_files="${SOUNDTRACK_SOURCE_FILES:-"$(find ./assets/music -name "*.ogg")"}"
@@ -17,8 +17,8 @@ function convert_and_rename() {
         echo "Not a directory: \"${target_dir}\"" >&2
         return 1
     fi
-    trck="$(id3v2 -l "${source_file}" | grep '^TRCK' | sed 's/^TRCK.*: //' | sed 's/\/.*$//' | sed 's/\<\([0-9]\{1\}\)\>/0\1/; s/\<0*\([0-9]\{2\}\)\>/\1/')"
-    tit2="$(id3v2 -l "${source_file}" | grep '^TIT2' | sed 's/^TIT2.*: //' | tr '[:upper:]' '[:lower:]' | sed 's/[ -()]/_/g')"
+    trck=$(printf "%02d" $(ffprobe -v error -show_entries 'stream_tags=TRACK' -of default=noprint_wrappers=1 "${source_file}" | cut -d "=" -f 2))
+    tit2=$(ffprobe -v error -show_entries 'stream_tags=TITLE' -of default=noprint_wrappers=1 "${source_file}" | cut -d "=" -f 2 | tr '[:upper:]' '[:lower:]' | sed 's/[ -()]/_/g')
     target_file="${target_dir}/${trck}_${tit2}.mp3"
     if [ -f "${target_file}" ]; then
         # Target file does already exist. Delete it before we proceed.
