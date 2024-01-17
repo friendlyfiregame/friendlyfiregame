@@ -124,9 +124,21 @@ export abstract class Game {
         if (this.displayManager.isPixelPerfectEnabled()) {
             scale = Math.max(1, Math.floor(scale));
         }
-        const style = this.canvas.style;
-        style.width = width * scale + "px";
-        style.height = height * scale + "px";
+        const canvas = this.canvas;
+        const style = canvas.style;
+        if (this.displayManager.isNativeResolution()) {
+            const dpr = window.devicePixelRatio;
+            canvas.width = width * scale * dpr;
+            canvas.height = height * scale * dpr;
+            style.width = Math.round(width * scale) + "px";
+            style.height = Math.round(height * scale) + "px";
+        } else {
+            canvas.width = width;
+            canvas.height = height;
+            style.width = Math.round(width * scale) + "px";
+            style.height = Math.round(height * scale) + "px";
+        }
+
         if (this.displayManager.isImageSmoothingEnabled()) {
             style.imageRendering = "auto";
         } else {
@@ -143,8 +155,15 @@ export abstract class Game {
 
         const { ctx, width, height } = this;
         ctx.save();
-        ctx.imageSmoothingEnabled = this.displayManager.isImageSmoothingEnabled();
-        ctx.imageSmoothingQuality = "high";
+        if (this.displayManager.isNativeResolution()) {
+            ctx.scale(ctx.canvas.width / width, ctx.canvas.height / height);
+        }
+        if (this.displayManager.isImageSmoothingEnabled()) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+        } else {
+            ctx.imageSmoothingEnabled = false;
+        }
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, 0, width, height);
         this.draw(ctx, width, height);

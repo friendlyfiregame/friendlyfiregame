@@ -5,6 +5,8 @@ const PREFERENCES_DISPLAY_PIXEL_PERFECT = "display.pixelPerfect";
 const DEFAULT_PIXEL_PERFECT_VALUE = false;
 const PREFERENCES_DISPLAY_IMAGE_SMOOTHING = "display.imageSmoothing";
 const DEFAULT_IMAGE_SMOOTHING_VALUE = false;
+const PREFERENCES_DISPLAY_NATIVE_RESOLUTION = "display.nativeResolution";
+const DEFAULT_NATIVE_RESOLUTION = false;
 
 class DisplayPreferencesStore {
     public constructor() {
@@ -30,6 +32,14 @@ class DisplayPreferencesStore {
 
     public get imageSmoothing(): boolean {
         return (window.localStorage.getItem(PREFERENCES_DISPLAY_IMAGE_SMOOTHING) ?? JSON.stringify(DEFAULT_IMAGE_SMOOTHING_VALUE)) === "true";
+    }
+
+    public set nativeResolution(value: boolean) {
+        window.localStorage.setItem(PREFERENCES_DISPLAY_NATIVE_RESOLUTION, JSON.stringify(value));
+    }
+
+    public get nativeResolution(): boolean {
+        return (window.localStorage.getItem(PREFERENCES_DISPLAY_NATIVE_RESOLUTION) ?? JSON.stringify(DEFAULT_NATIVE_RESOLUTION)) === "true";
     }
 }
 
@@ -72,5 +82,14 @@ export class DisplayManager {
 
     public isImageSmoothingEnabled(): boolean {
         return this.#displayPreferencesStore.imageSmoothing;
+    }
+
+    public setNativeResolution(nativeResolution: boolean): void {
+        this.#displayPreferencesStore.nativeResolution = nativeResolution;
+        this.onChange.emit();
+    }
+
+    public isNativeResolution(): boolean {
+        return this.#displayPreferencesStore.nativeResolution;
     }
 }

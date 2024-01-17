@@ -20,6 +20,7 @@ enum MenuItemKey {
     FULLSCREEN = "fullscreen",
     PIXEL_PERFECT = "pixel-perfect",
     IMAGE_SMOOTHING = "image-smoothing",
+    NATIVE_RESOLUTION = "native-resolution",
     SFX_SLIDER = "sfxSlider",
     MUSIC_SLIDER = "musicSlider",
 }
@@ -117,6 +118,20 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     data: { displayManager: this.game.displayManager }
                 }
             ),
+            new CheckboxMenuItem(
+                {
+                    id: MenuItemKey.NATIVE_RESOLUTION,
+                    label: "Native Resolution",
+                    font: OptionsScene.font,
+                    color: "black",
+                    x: menuItemX,
+                    y: menuItemY + 60,
+                    enabled: true,
+                    initialValue: this.game.displayManager.isNativeResolution(),
+                    actionCallback: this.handleNativeResolutionChange,
+                    data: { displayManager: this.game.displayManager }
+                }
+            ),
             new SliderMenuItem(
                 {
                     id: MenuItemKey.SFX_SLIDER,
@@ -124,7 +139,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     font: OptionsScene.font,
                     color: "black",
                     x: menuItemX,
-                    y: menuItemY + 60,
+                    y: menuItemY + 80,
                     enabled: true,
                     initialValue: Math.round(this.audioManager.sfxGain * 100),
                     minValue: 0,
@@ -142,7 +157,7 @@ export class OptionsScene extends Scene<FriendlyFire> {
                     font: OptionsScene.font,
                     color: "black",
                     x: menuItemX,
-                    y: menuItemY + 80,
+                    y: menuItemY + 100,
                     enabled: true,
                     initialValue: Math.round(this.audioManager.musicGain * 100),
                     minValue: 0,
@@ -163,6 +178,10 @@ export class OptionsScene extends Scene<FriendlyFire> {
 
     private handleImageSmoothingChange(newValue: boolean, data: { displayManager: DisplayManager }): void {
         data.displayManager.setImageSmoothingEnabled(newValue);
+    }
+
+    private handleNativeResolutionChange(newValue: boolean, data: { displayManager: DisplayManager }): void {
+        data.displayManager.setNativeResolution(newValue);
     }
 
     private handleAudioSliderChange(newValue: number, data: { channel: SoundChannel, audioManager: AudioManager }): void {
