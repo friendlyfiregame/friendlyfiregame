@@ -5,6 +5,7 @@ import { Fire } from "./entities/Fire";
 import { GameScene } from "./scenes/GameScene";
 import { ParticleEmitter } from "./Particles";
 import { roundRect } from "./SpeechBubble";
+import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "../shared/constants";
 
 export enum RenderingType {
     PARTICLE_EMITTER,
@@ -171,7 +172,10 @@ export class Renderer {
                     ctx.save();
                     if (item.translation) ctx.translate(item.translation.x, item.translation.y);
                     if (item.scale) ctx.scale(item.scale.x, item.scale.y);
-                    if (item.relativeToScreen === true) ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    if (item.relativeToScreen === true) {
+                        this.scene.camera.unapplyTransform(ctx);
+                        ctx.translate(-GAME_CANVAS_WIDTH / 2, -GAME_CANVAS_HEIGHT / 2);
+                    }
                     if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
                     if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
 
