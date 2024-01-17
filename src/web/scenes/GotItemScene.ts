@@ -7,7 +7,6 @@ import { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { SlideTransition } from "../transitions/SlideTransition";
 import { Sound } from "../audio/Sound";
-import { ImageNode } from "../scene/ImageNode";
 import { Direction } from "../geom/Direction";
 import { AsepriteNode } from "../scene/AsepriteNode";
 import { SceneNode } from "../scene/SceneNode";
@@ -26,13 +25,13 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
     private static readonly sound: Sound;
 
     @asset([
-        "sprites/powerup_running.png",
-        "sprites/powerup_doublejump.png",
-        "sprites/powerup_multijump.png",
-        "sprites/powerup_raindance.png",
+        "sprites/powerup_running.aseprite.json",
+        "sprites/powerup_doublejump.aseprite.json",
+        "sprites/powerup_multijump.aseprite.json",
+        "sprites/powerup_raindance.aseprite.json",
         "sprites/powerup_friendship.aseprite.json"
     ])
-    private static readonly itemImages: (HTMLImageElement | Aseprite)[];
+    private static readonly itemImages: Aseprite[];
 
     private readonly floatAmount = 3;
     private readonly floatSpeed = 4;
@@ -111,9 +110,7 @@ export class GotItemScene extends Scene<FriendlyFire, Item> {
             animator: node => node.transform(m => m.setScale(2).translateY(Math.sin(Date.now() / 1000
                 * this.floatSpeed) * this.floatAmount)),
             duration: Infinity
-        }).appendChild(image instanceof HTMLImageElement
-            ? new ImageNode({ image, anchor: Direction.BOTTOM })
-            : new AsepriteNode({ aseprite: image, tag: "idle", anchor: Direction.BOTTOM })
+        }).appendChild(new AsepriteNode({ aseprite: image, tag: "idle", anchor: Direction.BOTTOM })
         ).appendTo(this.rootNode);
     }
 
