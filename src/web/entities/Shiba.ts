@@ -45,8 +45,8 @@ export class Shiba extends ScriptableNPC {
     @asset("sounds/jumping/jump_neutral.ogg")
     private static readonly jumpSound: Sound;
 
-    @asset("images/heart.png")
-    private static readonly heartImage: HTMLImageElement;
+    @asset("sprites/heart.aseprite.json")
+    private static readonly heartImage: Aseprite;
 
     private state = ShibaState.ON_TREE;
     private idleTimer: number | null = rndItem(IDLE_DURATION);
