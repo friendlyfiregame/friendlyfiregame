@@ -120,9 +120,9 @@ export class Camera {
     }
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
-        const cnv = this.scene.game.canvas;
-        const cw = cnv.width / this.zoom;
-        const ch = cnv.height / this.zoom;
+        const game = this.scene.game;
+        const cw = game.width / this.zoom;
+        const ch = game.height / this.zoom;
         const offx = cw / 2;
         const offy = ch / 2;
 
@@ -215,9 +215,9 @@ export class Camera {
         this.zoom = 1;
         this.rotation = 0;
         if (this.zoomingOut) {
-            const cnv = this.scene.game.canvas;
-            const cw = cnv.width;
-            const ch = cnv.height;
+            const game = this.scene.game;
+            const cw = game.width;
+            const ch = game.height;
             const world = this.scene.world;
             const w = world.getWidth();
             const h = world.getHeight();
@@ -279,6 +279,12 @@ export class Camera {
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
         }
+    }
+
+    public unapplyTransform(ctx: CanvasRenderingContext2D): void {
+        ctx.translate(this.x, -this.y);
+        ctx.rotate(-this.rotation);
+        ctx.scale(1 / this.zoom, 1 / this.zoom);
     }
 
     public focusOn(

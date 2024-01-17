@@ -271,7 +271,6 @@ export class GameScene extends Scene<FriendlyFire> {
     private frameCounter = 0;
     private framesPerSecond = 0;
     public showBounds = false;
-    private readonly scale = 1;
     private mapInfo!: MapInfo;
     public dt: number = 0;
     private fpsInterval: number | null = null;
@@ -581,10 +580,7 @@ export class GameScene extends Scene<FriendlyFire> {
         ctx.save();
 
         // Center coordinate system
-        ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
-
-        // Scale by three because everything was based on 480x300 canvas and now its three times larger
-        ctx.scale(this.scale, this.scale);
+        ctx.translate(this.game.width / 2, this.game.height / 2);
 
         // Draw stuff
         this.camera.applyTransform(ctx);
@@ -632,7 +628,7 @@ export class GameScene extends Scene<FriendlyFire> {
             GameScene.font.drawText(
                 ctx,
                 `${this.framesPerSecond} FPS`,
-                2 * this.scale, 2 * this.scale - 3,
+                2, -1,
                 "white"
             );
         }
@@ -805,7 +801,7 @@ export class GameScene extends Scene<FriendlyFire> {
             globalCompositeOperation: "color",
             alpha: 0.7 * this.apocalypseFactor,
             relativeToScreen: true,
-            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
+            dimension: { width: this.game.width, height: this.game.height }
         });
     }
 
@@ -817,7 +813,7 @@ export class GameScene extends Scene<FriendlyFire> {
             fillColor: color,
             alpha,
             relativeToScreen: true,
-            dimension: { width: ctx.canvas.width, height: ctx.canvas.height }
+            dimension: { width: this.game.width, height: this.game.height }
         });
     }
 

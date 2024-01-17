@@ -199,5 +199,8 @@ export abstract class Scene<T extends Game, A = void> {
             usedLayers >>>= 1;
             layer <<= 1;
         }
+        if (this.backgroundStyle != null) {
+            ctx.restore();
+        }
     }
 }
