@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed misplaced parallax backgrounds.
 - Fixed initial tree and fire state in NewGame+.
 - Added 1 pixel margin between font colors to prevent rendering glitches.
+- Removed ID3v2 tags from music ogg files so they work in Firefox again.
 
 ### Changed
 
