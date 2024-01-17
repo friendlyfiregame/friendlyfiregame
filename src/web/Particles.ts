@@ -2,8 +2,9 @@ import { GameScene } from "./scenes/GameScene";
 import { GRAVITY } from "../shared/constants";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { Vector2Like } from "./graphics/Vector2";
+import { Aseprite } from "./Aseprite";
 
-type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement;
+type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement | Aseprite;
 
 type NumberGenerator = () => number;
 
@@ -262,7 +263,14 @@ export class Particle {
             const w = img instanceof HTMLImageElement ? img.naturalWidth : img.width;
             const h = img instanceof HTMLImageElement ? img.naturalHeight : img.height;
             const sz = Math.max(w, h);
-            ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
+            if (img instanceof Aseprite) {
+                ctx.save();
+                ctx.scale(w / sz, h / sz);
+                img.draw(ctx, -this.halfSize, -this.halfSize);
+                ctx.restore();
+            } else {
+                ctx.drawImage(img, -this.halfSize, -this.halfSize, this.size * w / sz, this.size * h / sz);
+            }
         } else {
             // Color
             ctx.fillStyle = this.imageOrColor;
