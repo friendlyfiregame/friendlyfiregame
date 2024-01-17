@@ -45,7 +45,7 @@ export class Shiba extends ScriptableNPC {
     @asset("sounds/jumping/jump_neutral.ogg")
     private static readonly jumpSound: Sound;
 
-    @asset("sprites/heart.png")
+    @asset("images/heart.png")
     private static readonly heartImage: HTMLImageElement;
 
     private state = ShibaState.ON_TREE;
@@ -87,7 +87,7 @@ export class Shiba extends ScriptableNPC {
             offset: () => ({x: rnd(-8, 8), y: 18}),
             velocity: () => ({ x: 0, y: 5 }),
             color: () => Shiba.heartImage,
-            size: 3,
+            size: Math.max(Shiba.heartImage.width, Shiba.heartImage.height),
             gravity: {x: 0, y: 0},
             lifetime: () => rnd(1.5, 3),
             blendMode: "source-over",

@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The windows version of the app now uses a scalable icon in .ICO format to ensure
   that the look and feel of the launcher icon is as crisp as possible.
 - Added music note character to tree dialog to indicate it is singing.
+- Increased heart emitter size when petting Shiba so it is actually recognizable as
+  a heart.
 
 ### Updated
 
