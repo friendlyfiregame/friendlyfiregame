@@ -5,6 +5,7 @@ import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { ValueCurve, valueCurves } from "./Particles";
 import { Vector2Like } from "./graphics/Vector2";
+import { RenderMode } from "./DisplayManager";
 
 export interface CamFocus {
     x: number;
@@ -81,7 +82,9 @@ export class Camera {
         if (e.key !== "Tab") {
             return;
         }
+        const displayManager = this.scene.game.displayManager;
         const canvas = this.scene.game.canvas;
+        const oldRenderMode = displayManager.getRenderMode();
         const teleport = (e: MouseEvent): void => {
             const rect = canvas.getBoundingClientRect();
             const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
@@ -99,6 +102,7 @@ export class Camera {
         };
         const reset = (): void => {
             this.zoomingOut = false;
+            displayManager.setRenderMode(oldRenderMode);
             document.removeEventListener("keyup", handleKeyUp);
             canvas.removeEventListener("click", teleport);
             document.removeEventListener("keyup", handleKeyUp);
@@ -112,6 +116,7 @@ export class Camera {
         };
         if (!e.repeat) {
             this.zoomingOut = true;
+            displayManager.setRenderMode(RenderMode.NATIVE);
             document.addEventListener("keyup", handleKeyUp);
             canvas.addEventListener("click", teleport);
         }

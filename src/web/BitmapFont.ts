@@ -1,5 +1,5 @@
 import { FontJSON } from "*.font.json";
-import { DisplayManager } from "./DisplayManager";
+import { DisplayManager, RenderMode } from "./DisplayManager";
 import { getRenderingContext, loadImage } from "./graphics";
 
 const CHAR_SPACING = 1;
@@ -122,7 +122,7 @@ export class BitmapFont {
         ctx.save();
         ctx.translate(x, y);
 
-        if (!DisplayManager.getInstance().isNativeResolution()) {
+        if (DisplayManager.getInstance().getRenderMode() !== RenderMode.NATIVE) {
             // Ugly hack to correct text position to exact pixel boundary because Chrome renders broken character images
             // when exactly between two pixels (Firefox doesn't have this problem).
             if (ctx.getTransform != null) {

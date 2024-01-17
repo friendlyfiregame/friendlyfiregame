@@ -10,7 +10,7 @@ import { Scenes } from "./Scenes";
 import { CharacterSounds } from "./CharacterSounds";
 import { SteamworksApi } from "./steamworks/SteamworksApi";
 import { AudioManager } from "./audio/AudioManager";
-import { DisplayManager } from "./DisplayManager";
+import { DisplayManager, RenderMode } from "./DisplayManager";
 import { FullscreenManager } from "./display/FullscreenManager";
 
 /**
@@ -119,32 +119,27 @@ export abstract class Game {
 
     private updateCanvas(): void {
         const { width, height } = this;
+        const renderMode = this.displayManager.getRenderMode();
 
         let scale = Math.min(window.innerWidth / width, window.innerHeight / height);
-        if (this.displayManager.isPixelPerfectEnabled()) {
+        if (renderMode === RenderMode.PIXEL_PERFECT) {
             scale = Math.max(1, Math.floor(scale));
         }
         const canvas = this.canvas;
         const style = canvas.style;
-        if (this.displayManager.isNativeResolution()) {
+        if (renderMode === RenderMode.NATIVE) {
             const dpr = window.devicePixelRatio;
             canvas.width = width * scale * dpr;
             canvas.height = height * scale * dpr;
-            style.width = Math.round(width * scale) + "px";
-            style.height = Math.round(height * scale) + "px";
+            style.imageRendering = "auto";
         } else {
             canvas.width = width;
             canvas.height = height;
-            style.width = Math.round(width * scale) + "px";
-            style.height = Math.round(height * scale) + "px";
-        }
-
-        if (this.displayManager.isImageSmoothingEnabled()) {
-            style.imageRendering = "auto";
-        } else {
             style.imageRendering = "pixelated";
             style.imageRendering = "crisp-edges";
         }
+        style.width = Math.round(width * scale) + "px";
+        style.height = Math.round(height * scale) + "px";
     }
 
     private gameLoop(): void {
@@ -152,13 +147,12 @@ export abstract class Game {
         const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
         this.update(dt);
         this.lastUpdateTime = currentUpdateTime;
+        const renderMode = this.displayManager.getRenderMode();
 
         const { ctx, width, height } = this;
         ctx.save();
-        if (this.displayManager.isNativeResolution()) {
+        if (renderMode === RenderMode.NATIVE) {
             ctx.scale(ctx.canvas.width / width, ctx.canvas.height / height);
-        }
-        if (this.displayManager.isImageSmoothingEnabled()) {
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
         } else {
