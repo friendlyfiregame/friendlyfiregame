@@ -1,11 +1,11 @@
-import { default  as path } from "node:path";
+import path from "node:path";
 import { Configuration, DefinePlugin } from "webpack";
 import { Configuration as DevServerConfiguration } from "webpack-dev-server";
 
-import { default as HtmlWebpackPlugin } from "html-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
 import { typeScriptRules, svgRules } from "./webpack.rules";
-import { default as plugins } from "./webpack.plugins";
+import plugins from "./webpack.plugins";
 
 type Mode = Configuration["mode"];
 

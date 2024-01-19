@@ -1,8 +1,8 @@
 import { WebpackPluginInstance } from "webpack";
 
-import { default as CopyPlugin } from "copy-webpack-plugin";
-import { default as GenerateJsonPlugin } from "generate-json-webpack-plugin";
-import { default as ForkTsCheckerWebpackPlugin } from "fork-ts-checker-webpack-plugin";
+import CopyPlugin from "copy-webpack-plugin";
+import GenerateJsonPlugin from "generate-json-webpack-plugin";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import { GitRevisionPlugin } from "git-revision-webpack-plugin";
 
 const gitRevisionPlugin = new GitRevisionPlugin();

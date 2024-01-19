@@ -4,14 +4,14 @@
 //declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 //declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-import { default as electron } from "electron";
-import { default as ConfigStore} from "electron-store";
+import os from "node:os";
+import path from "node:path";
+import process from "node:process";
+
+import electron from "electron";
+import ConfigStore from "electron-store";
 
 import { APP_NAME, GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, STEAM_APP_ID } from "../shared/constants";
-
-import { default as process } from "node:process";
-import { default as os } from "node:os";
-import { default as path } from "node:path";
 
 type PreferencesConfigStore = ConfigStore<{
     fullscreen: boolean

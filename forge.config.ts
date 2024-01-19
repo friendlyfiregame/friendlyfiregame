@@ -1,8 +1,8 @@
-import { default as fs } from "node:fs";
-import { default  as path } from "node:path";
+import fs from "node:fs";
+import path from "node:path";
 
-import { default as semver } from "semver";
-import { default as git } from "git-rev-sync";
+import semver from "semver";
+import git from "git-rev-sync";
 
 import { ForgeConfig, ForgePlatform, ForgeArch } from "@electron-forge/shared-types";
 
@@ -20,9 +20,9 @@ import { MakerRpm } from "@electron-forge/maker-rpm";
 import { PublisherGithub } from "@electron-forge//publisher-github";
 
 // Webpack configurations
-import { default as webpackMainConfig } from "./webpack.electron-main.config";
-import { default as webpackRendererConfig } from "./webpack.electron-renderer.config";
-import { default as webpackPreloadConfig } from "./webpack.electron-preload.config";
+import webpackMainConfig from "./webpack.electron-main.config";
+import webpackRendererConfig from "./webpack.electron-renderer.config";
+import webpackPreloadConfig from "./webpack.electron-preload.config";
 
 const productName = "Friendly Fire";
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json")).toString());

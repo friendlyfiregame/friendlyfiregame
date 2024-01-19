@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { SteamworksApi } from "../shared/SteamworksApi";
+
 import type { FullscreenManager } from "../shared/FullscreenManager";
+import type { SteamworksApi } from "../shared/SteamworksApi";
 
 const steamworks: SteamworksApi = {
     available: true,
