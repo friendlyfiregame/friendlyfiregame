@@ -10,7 +10,7 @@ import { Scenes } from "./Scenes";
 import { CharacterSounds } from "./CharacterSounds";
 import { SteamworksApi } from "./steamworks/SteamworksApi";
 import { AudioManager } from "./audio/AudioManager";
-import { DisplayManager } from "./DisplayManager";
+import { DisplayManager, RenderMode } from "./DisplayManager";
 import { FullscreenManager } from "./display/FullscreenManager";
 
 /**
@@ -48,6 +48,7 @@ export abstract class Game {
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = getGameCanvas(width, height);
         this.#displayManager = DisplayManager.getInstance();
+        this.#displayManager.onChange.connect(this.updateCanvas, this);
         this.#steamworksApi = SteamworksApi.getInstance();
         this.#audioManager = AudioManager.getInstance();
         this.#fullscreenManager = FullscreenManager.getInstance();
@@ -59,11 +60,9 @@ export abstract class Game {
         style.position = "absolute";
         style.margin = "auto";
         style.left = style.top = style.right = style.bottom = "0";
-        style.imageRendering = "pixelated";
-        style.imageRendering = "crisp-edges";
         document.body.appendChild(this.canvas);
-        this.updateCanvasSize();
-        window.addEventListener("resize", () => this.updateCanvasSize());
+        this.updateCanvas();
+        window.addEventListener("resize", () => this.updateCanvas());
         window.addEventListener("pointermove", () => this.mouseMoved());
 
         // Use Alt+Enter to toggle fullscreen mode.
@@ -118,17 +117,29 @@ export abstract class Game {
         }
     }
 
-    private updateCanvasSize(): void {
+    private updateCanvas(): void {
         const { width, height } = this;
+        const renderMode = this.displayManager.getRenderMode();
 
-        const scale = Math.max(
-            1,
-            Math.floor(Math.min(window.innerWidth / width, window.innerHeight / height))
-        );
-
-        const style = this.canvas.style;
-        style.width = width * scale + "px";
-        style.height = height * scale + "px";
+        let scale = Math.min(window.innerWidth / width, window.innerHeight / height);
+        if (renderMode === RenderMode.PIXEL_PERFECT) {
+            scale = Math.max(1, Math.floor(scale));
+        }
+        const canvas = this.canvas;
+        const style = canvas.style;
+        if (renderMode === RenderMode.NATIVE) {
+            const dpr = window.devicePixelRatio;
+            canvas.width = width * scale * dpr;
+            canvas.height = height * scale * dpr;
+            style.imageRendering = "auto";
+        } else {
+            canvas.width = width;
+            canvas.height = height;
+            style.imageRendering = "pixelated";
+            style.imageRendering = "crisp-edges";
+        }
+        style.width = Math.round(width * scale) + "px";
+        style.height = Math.round(height * scale) + "px";
     }
 
     private gameLoop(): void {
@@ -136,10 +147,17 @@ export abstract class Game {
         const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
         this.update(dt);
         this.lastUpdateTime = currentUpdateTime;
+        const renderMode = this.displayManager.getRenderMode();
 
         const { ctx, width, height } = this;
         ctx.save();
-        ctx.imageSmoothingEnabled = false;
+        if (renderMode === RenderMode.NATIVE) {
+            ctx.scale(ctx.canvas.width / width, ctx.canvas.height / height);
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+        } else {
+            ctx.imageSmoothingEnabled = false;
+        }
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, 0, width, height);
         this.draw(ctx, width, height);

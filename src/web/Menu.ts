@@ -146,6 +146,125 @@ export class SliderMenuItem<T = null> extends MenuItem<T> {
     }
 }
 
+export type CheckboxMenuItemParams<T> = MenuItemParams<T> & {
+    initialValue: boolean;
+    actionCallback: (newValue: boolean, data: T) => void;
+};
+
+export class CheckboxMenuItem<T = null> extends MenuItem<T> {
+    private value: boolean;
+    private readonly actionCallback: (newValue: boolean, data: T) => void;
+
+    public constructor(params: CheckboxMenuItemParams<T>) {
+        super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
+        this.value = params.initialValue;
+        this.actionCallback = params.actionCallback;
+    }
+
+    public getValue(): boolean {
+        return this.value;
+    }
+
+    public setValue(value: boolean): void {
+        this.value = value;
+        this.actionCallback(this.value, this.data);
+    }
+
+    public toggleValue(): void {
+        this.setValue(!this.getValue());
+    }
+
+    public override draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
+        const alpha = this.enabled ? 1 : 0.35;
+        const x = this.x;
+        const y = this.y;
+
+        const text = this.label;
+        this.font.drawText(ctx, text, x, y, this.color, 0, alpha);
+
+        const valueText = this.value ? "On" : "Off";
+        const valueWidth = this.font.measureText(valueText).width;
+        this.font.drawText(ctx, valueText, x + 250 - valueWidth, y, this.color, 0, alpha);
+
+        if (this.focused) {
+            ctx.drawImage(MenuItem.selectorImage, x - 13, y + 2);
+        }
+
+        ctx.restore();
+    }
+}
+
+export type SelectMenuItemParams<V extends string, T> = MenuItemParams<T> & {
+    values: V[];
+    valueLabels: Record<V, string>;
+    initialValue: V;
+    actionCallback: (newValue: V, data: T) => void;
+};
+
+export class SelectMenuItem<V extends string, T = null> extends MenuItem<T> {
+    private readonly values: V[];
+    private readonly valueLabels: Record<V, string>;
+    private value: V;
+    private readonly actionCallback: (newValue: V, data: T) => void;
+
+    public constructor(params: SelectMenuItemParams<V, T>) {
+        super(params.id, params.label, params.font, params.color, params.x, params.y, params.data);
+        this.values = params.values;
+        this.value = params.initialValue;
+        this.valueLabels = params.valueLabels;
+        this.actionCallback = params.actionCallback;
+    }
+
+    public getValue(): V {
+        return this.value;
+    }
+
+    public setValue(value: V): void {
+        this.value = value;
+        this.actionCallback(this.value, this.data);
+    }
+
+    public cycleValue(): void {
+        const currentIndex = this.values.indexOf(this.value);
+        this.setValue(this.values[currentIndex < this.values.length - 1 ? currentIndex + 1 : 0]);
+    }
+
+    public nextValue(): void {
+        const currentIndex = this.values.indexOf(this.value);
+        if (currentIndex < this.values.length - 1) {
+            this.setValue(this.values[currentIndex + 1]);
+        }
+    }
+
+    public previousValue(): void {
+        const currentIndex = this.values.indexOf(this.value);
+        if (currentIndex > 0) {
+            this.setValue(this.values[currentIndex - 1]);
+        }
+    }
+
+    public override draw(ctx: CanvasRenderingContext2D): void {
+        ctx.save();
+        const alpha = this.enabled ? 1 : 0.35;
+        const x = this.x;
+        const y = this.y;
+
+        const text = this.label;
+        this.font.drawText(ctx, text, x, y, this.color, 0, alpha);
+
+        const valueText = this.valueLabels[this.value] ?? this.value;
+        const valueWidth = this.font.measureText(valueText).width;
+        this.font.drawText(ctx, valueText, x + 250 - valueWidth, y, this.color, 0, alpha);
+
+        if (this.focused) {
+            ctx.drawImage(MenuItem.selectorImage, x - 13, y + 2);
+        }
+
+        ctx.restore();
+    }
+}
+
 export interface MenuListArgs extends SceneNodeArgs {
     align?: MenuAlignment;
 }
@@ -279,6 +398,11 @@ export class MenuList extends SceneNode<FriendlyFire> {
             sound.stop();
             sound.play();
             this.onActivated.emit(focusedButton.id);
+            if (focusedButton instanceof CheckboxMenuItem) {
+                focusedButton.toggleValue();
+            } else if (focusedButton instanceof SelectMenuItem) {
+                focusedButton.cycleValue();
+            }
         }
     }
 
@@ -291,6 +415,8 @@ export class MenuList extends SceneNode<FriendlyFire> {
             this.onRightAction.emit(focusedButton.id);
             if (focusedButton instanceof SliderMenuItem) {
                 focusedButton.increaseValue();
+            } else if (focusedButton instanceof SelectMenuItem) {
+                focusedButton.nextValue();
             }
         }
     }
@@ -304,10 +430,11 @@ export class MenuList extends SceneNode<FriendlyFire> {
             this.onLeftAction.emit(focusedButton.id);
             if (focusedButton instanceof SliderMenuItem) {
                 focusedButton.decreaseValue();
+            } else if (focusedButton instanceof SelectMenuItem) {
+                focusedButton.previousValue();
             }
         }
     }
-
 
     public override draw(ctx: CanvasRenderingContext2D): void {
         this.items.forEach(item => {

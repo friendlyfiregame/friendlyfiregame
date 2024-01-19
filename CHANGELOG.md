@@ -30,6 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a heart.
 - Removed beard giving part from Stone dialog because this feature was removed a
   long time ago.
+- Implemented 'Render Mode' option to switch between modes 'Pixel Imperfect'
+  (Canvas is scaled up to window size) and 'Pixel Perfect' mode (Canvas size is
+  doubled, tripled, and so on, to keep all pixels the same size). 'Pixel Imperfect'
+  is the new default mode so the initial game experience doesn't show borders
+  around the canvas when window size doesn't exactly match multiple of the canvas size.
 
 ### Updated
 
