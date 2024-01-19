@@ -1,4 +1,4 @@
-import { Campaign } from "./Campaign";
+import type { Campaign } from "./Campaign";
 
 export enum QuestKey {
     A = "questA",

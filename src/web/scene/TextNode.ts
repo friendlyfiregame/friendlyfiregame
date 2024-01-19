@@ -1,6 +1,7 @@
-import { Game } from "../Game";
-import { SceneNode, SceneNodeArgs } from "./SceneNode";
-import { BitmapFont } from "../BitmapFont";
+import type { BitmapFont } from "../BitmapFont";
+import type { Game } from "../Game";
+import type { SceneNodeArgs } from "./SceneNode";
+import { SceneNode } from "./SceneNode";
 
 /**
  * Constructor arguments for {@linkcode TextNode}.

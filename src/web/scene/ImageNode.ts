@@ -1,5 +1,6 @@
-import { Game } from "../Game";
-import { SceneNode, SceneNodeArgs } from "./SceneNode";
+import type { Game } from "../Game";
+import type { SceneNodeArgs } from "./SceneNode";
+import { SceneNode } from "./SceneNode";
 
 /**
  * Constructor arguments for {@linkcode ImageNode}.

@@ -1,7 +1,7 @@
-import { ControllerEventType } from "./ControllerEventType";
+import type { ControllerEventType } from "./ControllerEventType";
 import { ControllerFamily } from "./ControllerFamily";
 import { ControllerIntent } from "./ControllerIntent";
-import { GamepadModel } from "./GamepadModel";
+import type { GamepadModel } from "./GamepadModel";
 
 export class ControllerEvent extends Object {
     readonly #controllerFamily: ControllerFamily;

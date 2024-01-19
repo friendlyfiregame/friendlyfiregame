@@ -1,10 +1,11 @@
-import { Scene } from "../Scene";
-import { Game } from "../Game";
+import type { Game } from "../Game";
 import { Direction } from "../geom/Direction";
-import { AnimationArgs, SceneNodeAnimation } from "./SceneNodeAnimation";
 import { AffineTransform } from "../graphics/AffineTransform";
 import { Polygon2 } from "../graphics/Polygon2";
 import { Vector2 } from "../graphics/Vector2";
+import type { Scene } from "../Scene";
+import type { AnimationArgs} from "./SceneNodeAnimation";
+import { SceneNodeAnimation } from "./SceneNodeAnimation";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after

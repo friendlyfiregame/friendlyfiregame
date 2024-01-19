@@ -1,16 +1,16 @@
-import { Aseprite } from "../Aseprite";
-import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
 import { DIALOG_FONT } from "../../shared/constants";
-import { easeInExpo, easeOutExpo } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
-import { Scene } from "../Scene";
-import { SlideTransition } from "../transitions/SlideTransition";
+import type { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
+import { BitmapFont } from "../BitmapFont";
+import { easeInExpo, easeOutExpo } from "../easings";
+import type { FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
+import { Scene } from "../Scene";
 import { AsepriteNode } from "../scene/AsepriteNode";
 import { SceneNode } from "../scene/SceneNode";
 import { TextNode } from "../scene/TextNode";
+import { SlideTransition } from "../transitions/SlideTransition";
 
 export enum Item { RUNNING, DOUBLEJUMP, MULTIJUMP, RAINDANCE, FRIENDSHIP }
 

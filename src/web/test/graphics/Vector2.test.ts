@@ -1,6 +1,7 @@
-import { describe, it, expect } from "@jest/globals";
-import { Vector2 } from "../../graphics/Vector2";
+import { describe, expect, it } from "@jest/globals";
+
 import { AffineTransform } from "../../graphics/AffineTransform";
+import { Vector2 } from "../../graphics/Vector2";
 
 describe("Vector2", () => {
     describe("constructor", () => {

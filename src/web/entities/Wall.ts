@@ -1,10 +1,11 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { CollidableGameObject, GameScene } from "../scenes/GameScene";
-import { entity, Entity } from "../Entity";
-import { Environment } from "../World";
+import { Entity, entity } from "../Entity";
 import { GameObjectProperties } from "../MapInfo";
 import { RenderingLayer } from "../Renderer";
+import type { CollidableGameObject} from "../scenes/GameObject";
+import { GameScene } from "../scenes/GameScene";
+import { Environment } from "../World";
 
 enum WallState { SOLID, CRUMBLED }
 

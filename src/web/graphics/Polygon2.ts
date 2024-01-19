@@ -1,5 +1,6 @@
 import { Line2 } from "./Line2";
-import { ReadonlyVector2, Vector2 } from "./Vector2";
+import type { ReadonlyVector2} from "./Vector2";
+import { Vector2 } from "./Vector2";
 
 /**
  * A polygon with any number of vertices.

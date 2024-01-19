@@ -1,19 +1,19 @@
+import { DIALOG_FONT } from "../../shared/constants";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
-import { ControllerAnimationTags } from "../input/ControllerFamily";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { ControllerManager } from "../input/ControllerManager";
-import { DIALOG_FONT } from "../../shared/constants";
 import { easeOutCubic } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
-import { Scene } from "../Scene";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { ImageNode } from "../scene/ImageNode";
-import { AsepriteNode } from "../scene/AsepriteNode";
+import type { FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
-import { TextNode } from "../scene/TextNode";
+import type { ControllerEvent } from "../input/ControllerEvent";
+import { ControllerAnimationTags } from "../input/ControllerFamily";
+import { ControllerManager } from "../input/ControllerManager";
+import { Scene } from "../Scene";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { ControlTooltipNode } from "../scene/ControlTooltipNode";
+import { ImageNode } from "../scene/ImageNode";
+import { TextNode } from "../scene/TextNode";
+import { SlideTransition } from "../transitions/SlideTransition";
 
 export class ControlsScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)

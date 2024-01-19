@@ -1,88 +1,63 @@
-import { Player } from "../entities/Player";
-import { asset } from "../Assets";
-import { Bird } from "../entities/Bird";
-import { BitmapFont } from "../BitmapFont";
-import { Bone } from "../entities/Bone";
-import { Bounds, createEntity } from "../Entity";
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
-import { Camera } from "../Camera";
-import { Campfire } from "../entities/Campfire";
-import { Caveman } from "../entities/Caveman";
-import { Chicken } from "../entities/Chicken";
-import { Cloud } from "../entities/Cloud";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { Conversation } from "../Conversation";
 import {
     DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION,
     WINDOW_ENDING_FADE_DURATION
 } from "../../shared/constants";
-import { EndScene } from "./EndScene";
+import { asset } from "../Assets";
+import { Sound } from "../audio/Sound";
+import { SoundEmitter } from "../audio/SoundEmitter";
+import { BitmapFont } from "../BitmapFont";
+import { Camera } from "../Camera";
+import { Conversation } from "../Conversation";
+import { Bird } from "../entities/Bird";
+import { Bone } from "../entities/Bone";
+import { Campfire } from "../entities/Campfire";
+import { Caveman } from "../entities/Caveman";
+import { Chicken } from "../entities/Chicken";
+import { Cloud } from "../entities/Cloud";
+import { ExitPortal } from "../entities/ExitPortal";
 import { Fire, FireState } from "../entities/Fire";
-import { FireGfx } from "../FireGfx";
 import { FlameBoy } from "../entities/FlameBoy";
-import { FriendlyFire } from "../FriendlyFire";
-import { GameObjectInfo, MapInfo } from "../MapInfo";
-import { MenuList } from "../Menu";
 import { Mimic } from "../entities/Mimic";
-import { MountainRiddle } from "../MountainRiddle";
 import { MovingPlatform } from "../entities/MovingPlatform";
-import { ParticleEmitter, Particles, valueCurves } from "../Particles";
-import { PauseScene } from "./PauseScene";
+import { Player } from "../entities/Player";
 import { Portal } from "../entities/Portal";
-import { PowerShiba } from "./PowerShiba";
-import { QuestATrigger, QuestKey } from "../Quests";
 import { Radio } from "../entities/Radio";
-import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { RiddleStone } from "../entities/RiddleStone";
-import { Scene } from "../Scene";
-import { Seed } from "../entities/Seed";
+import type { Seed } from "../entities/Seed";
 import { ShadowPresence } from "../entities/ShadowPresence";
 import { Shiba, ShibaState } from "../entities/Shiba";
 import { Skull } from "../entities/Skull";
-import { Sound } from "../audio/Sound";
-import { SoundEmitter } from "../audio/SoundEmitter";
 import { Stone } from "../entities/Stone";
 import { StoneDisciple } from "../entities/StoneDisciple";
 import { SuperThrow } from "../entities/SuperThrow";
 import { Tree } from "../entities/Tree";
-import { Wing } from "../entities/Wing";
-import { World } from "../World";
-import { ExitPortal } from "../entities/ExitPortal";
 import { Window } from "../entities/Window";
+import { Wing } from "../entities/Wing";
+import type { Bounds} from "../Entity";
+import { createEntity } from "../Entity";
+import { FireGfx } from "../FireGfx";
+import type { FriendlyFire } from "../FriendlyFire";
+import type { ControllerEvent } from "../input/ControllerEvent";
+import { type GameObjectInfo, MapInfo} from "../MapInfo";
+import { MenuList } from "../Menu";
+import { MountainRiddle } from "../MountainRiddle";
+import type { ParticleEmitter} from "../Particles";
+import { Particles, valueCurves } from "../Particles";
+import { QuestATrigger, QuestKey } from "../Quests";
+import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
+import { Scene } from "../Scene";
+import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
+import { World } from "../World";
+import { AmbientSoundId } from "./AmbientSoundId";
+import { BgmId } from "./BgmId";
+import { EndScene } from "./EndScene";
+import type { GameObject } from "./GameObject";
+import { PauseScene } from "./PauseScene";
+import { PowerShiba } from "./PowerShiba";
 
 export enum FadeDirection { FADE_IN, FADE_OUT }
 
-export interface GameObject {
-    draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
-    update(dt: number): void;
-}
-
-export interface CollidableGameObject extends GameObject {
-    collidesWith(x: number, y: number): number;
-}
-
-export function isCollidableGameObject(object: GameObject): object is CollidableGameObject  {
-    return typeof (object as CollidableGameObject).collidesWith === "function";
-}
-
-export enum BgmId {
-    OVERWORLD = "overworld",
-    INFERNO = "inferno",
-    CAVE = "cave",
-    RIDDLE = "riddle",
-    RADIO = "radio",
-    WINGS = "wings",
-    ECSTASY = "ecstasy",
-    AWAKE = "awake",
-    SHADOWGATE = "shadowgate"
-}
-
-export enum AmbientSoundId {
-    STREAM = "stream",
-    WIND = "wind",
-}
-
-export type BackgroundTrack = {
+type BackgroundTrack = {
     active: boolean;
     id: BgmId;
     sound: Sound,

@@ -1,23 +1,22 @@
-import { VirtualGamepad } from "./VirtualGamepad";
-import { VirtualGamepadEvent } from "./VirtualGamepadEvent";
-
 import svgButtonA from "../../assets/touch-controls/button-a.svg";
 import svgButtonB from "../../assets/touch-controls/button-b.svg";
-import svgButtonX from "../../assets/touch-controls/button-x.svg";
-import svgButtonY from "../../assets/touch-controls/button-y.svg";
 import svgButtonL1 from "../../assets/touch-controls/button-l1.svg";
 import svgButtonL2 from "../../assets/touch-controls/button-l2.svg";
 import svgButtonL3 from "../../assets/touch-controls/button-l3.svg";
 import svgButtonR1 from "../../assets/touch-controls/button-r1.svg";
 import svgButtonR2 from "../../assets/touch-controls/button-r2.svg";
 import svgButtonR3 from "../../assets/touch-controls/button-r3.svg";
-import svgButtonStart from "../../assets/touch-controls/button-start.svg";
-import svgButtonSelect from "../../assets/touch-controls/button-select.svg";
 import svgButtonScreenshot from "../../assets/touch-controls/button-screenshot.svg";
+import svgButtonSelect from "../../assets/touch-controls/button-select.svg";
+import svgButtonStart from "../../assets/touch-controls/button-start.svg";
 import svgButtonVendor from "../../assets/touch-controls/button-vendor.svg";
+import svgButtonX from "../../assets/touch-controls/button-x.svg";
+import svgButtonY from "../../assets/touch-controls/button-y.svg";
 import svgDPad from "../../assets/touch-controls/dpad.svg";
 import svgStickLeft from "../../assets/touch-controls/stick-left.svg";
 import svgStickRight from "../../assets/touch-controls/stick-right.svg";
+import { VirtualGamepad } from "./VirtualGamepad";
+import { VirtualGamepadEvent } from "./VirtualGamepadEvent";
 
 const domParser = new DOMParser();
 function svgElementFromString(str: string): SVGElement {

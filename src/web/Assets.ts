@@ -1,9 +1,10 @@
-import { AppInfoJSON } from "appinfo.json";
+import type { AppInfoJSON } from "appinfo.json";
+
 import { Aseprite } from "./Aseprite";
-import { BitmapFont } from "./BitmapFont";
-import { loadImage } from "./graphics";
 import { Sound } from "./audio/Sound";
 import { SoundChannel } from "./audio/SoundChannel";
+import { BitmapFont } from "./BitmapFont";
+import { loadImage } from "./graphics";
 
 const assets = new Map<string, unknown>();
 

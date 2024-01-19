@@ -1,7 +1,7 @@
-import { GameScene } from "../scenes/GameScene";
-import { PhysicsEntity } from "./PhysicsEntity";
 import { PIXEL_PER_METER } from "../../shared/constants";
 import { RenderingLayer, RenderingType } from "../Renderer";
+import type { GameScene } from "../scenes/GameScene";
+import { PhysicsEntity } from "./PhysicsEntity";
 
 export class Snowball extends PhysicsEntity {
     public constructor(scene: GameScene, x: number, y: number, velocityX: number, velocityY: number) {

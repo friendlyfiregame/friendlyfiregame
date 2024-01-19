@@ -1,4 +1,4 @@
-import type { FullscreenManager as FullscreenManager } from "../../shared/FullscreenManager";
+import type { FullscreenManager } from "../../shared/FullscreenManager";
 
 /**
  * Fullscreen management suitable for modern browsers.

@@ -1,11 +1,12 @@
-import { Bounds } from "./Entity";
-import { clamp, isDev, rnd, shiftValue } from "./util";
-import { Fire } from "./entities/Fire";
-import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer, RenderingType } from "./Renderer";
-import { ValueCurve, valueCurves } from "./Particles";
-import { Vector2Like } from "./graphics/Vector2";
 import { RenderMode } from "./DisplayManager";
+import type { Fire } from "./entities/Fire";
+import type { Bounds } from "./Entity";
+import type { Vector2Like } from "./graphics/Vector2";
+import type { ValueCurve} from "./Particles";
+import { valueCurves } from "./Particles";
+import { RenderingLayer, RenderingType } from "./Renderer";
+import type { GameScene } from "./scenes/GameScene";
+import { clamp, isDev, rnd, shiftValue } from "./util";
 
 export interface CamFocus {
     x: number;

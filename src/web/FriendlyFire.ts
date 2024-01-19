@@ -1,6 +1,6 @@
-import { isElectron } from "./util";
 import { Game } from "./Game";
 import { LoadingScene } from "./scenes/LoadingScene";
+import { isElectron } from "./util";
 
 export class FriendlyFire extends Game {
     public constructor() {

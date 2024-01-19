@@ -1,17 +1,17 @@
-import { Assets } from "./Assets";
-import { Campaign } from "./Campaign";
-import { clamp } from "./util";
-import { ControllerManager } from "./input/ControllerManager";
-import { getGameCanvas, getRenderingContext } from "./graphics";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "../shared/constants";
+import { Assets } from "./Assets";
+import { AudioManager } from "./audio/AudioManager";
+import { Campaign } from "./Campaign";
+import { CharacterSounds } from "./CharacterSounds";
+import { FullscreenManager } from "./display/FullscreenManager";
+import { DisplayManager, RenderMode } from "./DisplayManager";
+import { getGameCanvas, getRenderingContext } from "./graphics";
+import { ControllerManager } from "./input/ControllerManager";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
-import { CharacterSounds } from "./CharacterSounds";
 import { SteamworksApi } from "./steamworks/SteamworksApi";
-import { AudioManager } from "./audio/AudioManager";
-import { DisplayManager, RenderMode } from "./DisplayManager";
-import { FullscreenManager } from "./display/FullscreenManager";
+import { clamp } from "./util";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want

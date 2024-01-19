@@ -1,7 +1,7 @@
-import { FriendlyFire } from "../FriendlyFire";
+import type { FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
-import { TitleScene } from "./TitleScene";
 import { ProgressBarNode } from "../scene/ProgressBarNode";
+import { TitleScene } from "./TitleScene";
 
 export class LoadingScene extends Scene<FriendlyFire> {
     private progressBar!: ProgressBarNode;

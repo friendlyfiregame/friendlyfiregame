@@ -1,4 +1,5 @@
-import { Transition, TransitionOptions } from "../Transition";
+import type { TransitionOptions } from "../Transition";
+import { Transition } from "../Transition";
 
 export type SlideDirection = "top" | "left" | "bottom" | "right";
 

@@ -3,9 +3,9 @@ import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
 import { GameObjectProperties } from "../MapInfo";
+import { RenderingLayer, RenderingType } from "../Renderer";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer, RenderingType } from "../Renderer";
 
 @entity("sign")
 export class Sign extends NPC {

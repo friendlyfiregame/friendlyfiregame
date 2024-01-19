@@ -1,8 +1,7 @@
 import { clamp } from "../util";
-
-import { SoundChannel } from "./SoundChannel";
 import { getAudioContext } from "./AudioContext";
 import { AudioManager } from "./AudioManager";
+import { SoundChannel } from "./SoundChannel";
 
 export class Sound {
     readonly #audioManager: AudioManager;

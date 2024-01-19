@@ -1,7 +1,8 @@
-import { ControllerEvent, GamepadControllerEvent } from "./ControllerEvent";
-import { ControllerFamily, ControllerSpriteMap } from "./ControllerFamily";
-import { GamepadStyle, DEFAULT_GAMEPAD_STYLE } from "./GamepadStyle";
 import { Signal } from "../Signal";
+import type { ControllerEvent} from "./ControllerEvent";
+import { GamepadControllerEvent } from "./ControllerEvent";
+import { ControllerFamily, ControllerSpriteMap } from "./ControllerFamily";
+import { DEFAULT_GAMEPAD_STYLE, GamepadStyle } from "./GamepadStyle";
 
 export class ControllerManager {
     static readonly #INSTANCE = new ControllerManager();

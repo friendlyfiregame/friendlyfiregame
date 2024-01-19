@@ -1,9 +1,10 @@
 import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
-import { Signal } from "./Signal";
 import { Sound } from "./audio/Sound";
-import { SceneNode, SceneNodeArgs } from "./scene/SceneNode";
-import { FriendlyFire } from "./FriendlyFire";
+import type { BitmapFont } from "./BitmapFont";
+import type { FriendlyFire } from "./FriendlyFire";
+import type { SceneNodeArgs } from "./scene/SceneNode";
+import { SceneNode } from "./scene/SceneNode";
+import { Signal } from "./Signal";
 
 export enum MenuAlignment { LEFT, CENTER, RIGHT }
 

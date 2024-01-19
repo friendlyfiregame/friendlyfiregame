@@ -1,8 +1,10 @@
-import { describe, it, expect } from "@jest/globals";
 import "jest-extended";
-import { AffineTransform } from "../../graphics/AffineTransform";
-import { radians, degrees, normalizeDegrees } from "../../util";
+
+import { describe, expect, it } from "@jest/globals";
+
 import { createCanvas, getRenderingContext } from "../../graphics";
+import { AffineTransform } from "../../graphics/AffineTransform";
+import { degrees, normalizeDegrees, radians } from "../../util";
 
 describe("AffineTransform", () => {
     describe("constructor", () => {

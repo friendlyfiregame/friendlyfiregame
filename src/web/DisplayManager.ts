@@ -1,5 +1,5 @@
-import { Signal } from "./Signal";
 import { FullscreenManager } from "./display/FullscreenManager";
+import { Signal } from "./Signal";
 
 export enum RenderMode {
     PIXEL_IMPERFECT = "pixel-imperfect",

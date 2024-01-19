@@ -1,9 +1,9 @@
+import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "../shared/constants";
 import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { ConversationLine } from "./Conversation";
-import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "../shared/constants";
-import { GameScene } from "./scenes/GameScene";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import type { GameScene } from "./scenes/GameScene";
 import { sleep } from "./util";
 
 export function roundRect(

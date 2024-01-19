@@ -1,41 +1,45 @@
-import { Aseprite } from "../Aseprite";
-import { asset } from "../Assets";
-import { BgmId, FadeDirection, GameScene } from "../scenes/GameScene";
-import { BitmapFont } from "../BitmapFont";
-import { Bounds, Entity, entity } from "../Entity";
-import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
-import { CharacterAsset, VoiceAsset } from "../Campaign";
-import { Cloud } from "./Cloud";
-import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { ControllerManager } from "../input/ControllerManager";
-import { Conversation } from "../Conversation";
-import { ConversationProxy } from "../ConversationProxy";
-import { Dance } from "../Dance";
 import {
     DIALOG_FONT, DOUBLE_JUMP_COLORS, GRAVITY, MAX_PLAYER_RUNNING_SPEED, MAX_PLAYER_SPEED,
     PLAYER_ACCELERATION, PLAYER_ACCELERATION_AIR, PLAYER_BOUNCE_HEIGHT, PLAYER_CARRY_HEIGHT,
     PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
     SHORT_JUMP_GRAVITY
 } from "../../shared/constants";
-import { Environment } from "../World";
-import { GameObjectInfo } from "../MapInfo";
-import { GotItemScene, Item } from "../scenes/GotItemScene";
-import { NPC } from "./NPC";
-import { ParticleEmitter, valueCurves } from "../Particles";
-import { PhysicsEntity } from "./PhysicsEntity";
+import type { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { Sound } from "../audio/Sound";
+import { BitmapFont } from "../BitmapFont";
+import type { VoiceAsset } from "../Campaign";
+import { CharacterAsset } from "../Campaign";
+import { CharacterSounds } from "../CharacterSounds";
+import { Conversation } from "../Conversation";
+import { ConversationProxy } from "../ConversationProxy";
+import { Dance } from "../Dance";
+import type { Bounds, Entity} from "../Entity";
+import { entity } from "../Entity";
+import type { ControllerEvent } from "../input/ControllerEvent";
+import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
+import { ControllerManager } from "../input/ControllerManager";
+import type { GameObjectInfo } from "../MapInfo";
+import type { ParticleEmitter} from "../Particles";
+import { valueCurves } from "../Particles";
 import { PlayerConversation } from "../PlayerConversation";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
+import type { BgmId} from "../scenes/BgmId";
+import { FadeDirection, GameScene } from "../scenes/GameScene";
+import { GotItemScene, Item } from "../scenes/GotItemScene";
+import { SpeechBubble } from "../SpeechBubble";
+import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
+import { Environment } from "../World";
+import { Cloud } from "./Cloud";
+import { NPC } from "./NPC";
+import { PhysicsEntity } from "./PhysicsEntity";
 import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
-import { Sound } from "../audio/Sound";
-import { SpeechBubble } from "../SpeechBubble";
 import { Stone, StoneState } from "./Stone";
 import { Wall } from "./Wall";
 import { Wood, WoodState } from "./Wood";
-import { CharacterSounds } from "../CharacterSounds";
 
 const groundColors = [
     "#806057",
@@ -1512,5 +1516,13 @@ export class Player extends PhysicsEntity {
         }
 
         this.lastHint = Date.now();
+    }
+
+    protected override isJumpDown(): boolean {
+        return this.jumpDown;
+    }
+
+    protected override isPlayer(): boolean {
+        return true;
     }
 }

@@ -1,7 +1,7 @@
-import { ControllerManager } from "./ControllerManager";
-import { ControllerIntent } from "./ControllerIntent";
-import { ControllerEventType } from "./ControllerEventType";
 import { GamepadControllerEvent } from "./ControllerEvent";
+import { ControllerEventType } from "./ControllerEventType";
+import { ControllerIntent } from "./ControllerIntent";
+import { ControllerManager } from "./ControllerManager";
 import { GamepadModel } from "./GamepadModel";
 
 /**

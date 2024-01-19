@@ -1,6 +1,6 @@
-import { describe, it, expect } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 
-import { GamepadModel, DEFAULT_GAMEPAD_MODEL } from "../../input/GamepadModel";
+import { DEFAULT_GAMEPAD_MODEL, GamepadModel } from "../../input/GamepadModel";
 import { GamepadStyle } from "../../input/GamepadStyle";
 
 /* spell-checker: disable */

@@ -1,6 +1,7 @@
 import type {
     AsepriteDirection, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteJSON, AsepriteLayerJSON
 } from "*.aseprite.json";
+
 import { loadImage } from "./graphics";
 import { now } from "./util";
 

@@ -1,7 +1,6 @@
-import { Conversation } from "./Conversation";
-import { GameScene } from "./scenes/GameScene";
-import { Sound } from "./audio/Sound";
 import { asset } from "./Assets";
+import { Sound } from "./audio/Sound";
+import { Conversation } from "./Conversation";
 
 const AMOUNT_GATE_COLS = 3;
 const AMOUNT_GATE_ROWS = 5;
@@ -14,6 +13,9 @@ export class MountainRiddle {
 
     @asset("sounds/item/fanfare.mp3")
     private static readonly sound: Sound;
+
+    @asset("sounds/gate/wrong.ogg")
+    public static wrong: Sound;
 
     public constructor() {
         this.solution = this.getRandomizedSolution();
@@ -51,7 +53,7 @@ export class MountainRiddle {
         Conversation.setGlobal("gotTeleported", "true");
         this.failed = true;
         this.registerAttempt();
-        GameScene.wrong.play();
+        MountainRiddle.wrong.play();
     }
 
     public isFailed(): boolean {

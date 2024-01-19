@@ -1,11 +1,11 @@
-import { Aseprite } from "./Aseprite";
-import { BitmapFont } from "./BitmapFont";
-import { Dance } from "./Dance";
-import { Fire } from "./entities/Fire";
-import { GameScene } from "./scenes/GameScene";
-import { ParticleEmitter } from "./Particles";
-import { roundRect } from "./SpeechBubble";
 import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "../shared/constants";
+import type { Aseprite } from "./Aseprite";
+import type { BitmapFont } from "./BitmapFont";
+import type { Dance } from "./Dance";
+import type { Fire } from "./entities/Fire";
+import type { ParticleEmitter } from "./Particles";
+import type { GameScene } from "./scenes/GameScene";
+import { roundRect } from "./SpeechBubble";
 
 export enum RenderingType {
     PARTICLE_EMITTER,

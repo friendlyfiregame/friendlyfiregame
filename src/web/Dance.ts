@@ -1,12 +1,13 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { ControllerEvent } from "./input/ControllerEvent";
-import { ControllerManager } from "./input/ControllerManager";
-import { ControllerSpriteMap } from "./input/ControllerFamily";
-import { GameScene } from "./scenes/GameScene";
-import { RenderingLayer, RenderingType } from "./Renderer";
 import { Sound } from "./audio/Sound";
-import { ValueCurve, valueCurves } from "./Particles";
+import type { ControllerEvent } from "./input/ControllerEvent";
+import type { ControllerSpriteMap } from "./input/ControllerFamily";
+import { ControllerManager } from "./input/ControllerManager";
+import type { ValueCurve} from "./Particles";
+import { valueCurves } from "./Particles";
+import { RenderingLayer, RenderingType } from "./Renderer";
+import { GameScene } from "./scenes/GameScene";
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")

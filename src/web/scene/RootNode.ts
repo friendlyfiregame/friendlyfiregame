@@ -1,7 +1,7 @@
-import { Game } from "../Game";
-import { SceneNode, PostDrawHints } from "./SceneNode";
+import type { Game } from "../Game";
 import { Direction } from "../geom/Direction";
-import { Scene } from "../Scene";
+import type { Scene } from "../Scene";
+import { PostDrawHints, SceneNode } from "./SceneNode";
 
 /**
  * Function signature for updating the root node. This function is exposed to the scene through the constructor so

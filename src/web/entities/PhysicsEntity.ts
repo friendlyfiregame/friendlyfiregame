@@ -1,8 +1,7 @@
 import { DROWNING_VELOCITY, GRAVITY, PIXEL_PER_METER, TERMINAL_VELOCITY } from "../../shared/constants";
 import { Entity } from "../Entity";
+import type { GameObject } from "../scenes/GameObject";
 import { Environment } from "../World";
-import { GameObject } from "../scenes/GameScene";
-import { Player } from "./Player";
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -145,6 +144,20 @@ export abstract class PhysicsEntity extends Entity {
         }
     }
 
+    /**
+     * Overridden by Player class to indicate Player is jumping down.
+     */
+    protected isJumpDown(): boolean {
+        return false;
+    }
+
+    /**
+     * Overridden by Player class to indicate that
+     */
+    protected isPlayer(): boolean {
+        return false;
+    }
+
     public override update(dt: number): void {
         super.update(dt);
 
@@ -168,7 +181,7 @@ export abstract class PhysicsEntity extends Entity {
             const environment = world.collidesWith(
                 this.x, this.y - 1,
                 [ this ],
-                this instanceof Player && this.jumpDown ? [ Environment.PLATFORM ] : []
+                this.isJumpDown() ? [ Environment.PLATFORM ] : []
             );
 
             if (environment === Environment.AIR) {
@@ -184,7 +197,7 @@ export abstract class PhysicsEntity extends Entity {
             } else if (this.velocityY < 0) {
                 this.velocityY = 0;
 
-                if (!(this instanceof Player)) {
+                if (!(this.isPlayer())) {
                     this.velocityX = 0;
                 }
                 this.x = Math.round(this.x);

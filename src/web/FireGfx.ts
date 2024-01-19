@@ -1,6 +1,6 @@
 import { asset } from "./Assets";
-import { clamp, orientPow, rnd } from "./util";
 import { ColorGradient } from "./ColorGradient";
+import { clamp, orientPow, rnd } from "./util";
 
 export class FireGfx {
     @asset("gradients/fire.png", { map: (image: HTMLImageElement) => ColorGradient.fromImage(image) })

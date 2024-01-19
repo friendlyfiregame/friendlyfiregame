@@ -1,10 +1,10 @@
+import dialogData from "../../assets/dummy.texts.json";
+import { DIALOG_FONT } from "../../shared/constants";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
-import { DIALOG_FONT } from "../../shared/constants";
-import dialogData from "../../assets/dummy.texts.json";
 import { entity } from "../Entity";
-import { GameScene } from "../scenes/GameScene";
 import { Greeting } from "../Greeting";
+import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("tree")

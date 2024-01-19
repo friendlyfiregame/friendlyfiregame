@@ -1,8 +1,9 @@
-import { AmbientSoundId, GameScene } from "../scenes/GameScene";
-import { calculateVolume } from "../util";
 import { Entity } from "../Entity";
-import { GameObjectInfo } from "../MapInfo";
-import { Sound } from "./Sound";
+import type { GameObjectInfo } from "../MapInfo";
+import type { AmbientSoundId } from "../scenes/AmbientSoundId";
+import type { GameScene } from "../scenes/GameScene";
+import { calculateVolume } from "../util";
+import type { Sound } from "./Sound";
 
 /**
  * Sound emitters are invisible entities that emit a sound in relation to the player distance.

@@ -1,9 +1,9 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity } from "../Entity";
+import { RenderingLayer } from "../Renderer";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "../Renderer";
 
 @entity("caveman")
 export class Caveman extends NPC {

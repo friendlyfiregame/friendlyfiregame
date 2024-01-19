@@ -1,5 +1,6 @@
-import json, { MapLayerJSONType, MapObjectJSON } from "../../assets/maps/level.json";
-import { Vector2Like } from "./graphics/Vector2";
+import type { MapLayerJSONType, MapObjectJSON } from "../../assets/maps/level.json";
+import json from "../../assets/maps/level.json";
+import type { Vector2Like } from "./graphics/Vector2";
 
 export enum MapObjectType {
     ENTITY = "entity",

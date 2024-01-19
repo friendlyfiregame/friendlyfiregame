@@ -1,12 +1,13 @@
+import { PIXEL_PER_METER } from "../../shared/constants";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { CollidableGameObject, GameScene } from "../scenes/GameScene";
 import { entity } from "../Entity";
-import { Environment } from "../World";
 import { GameObjectProperties } from "../MapInfo";
-import { PhysicsEntity } from "./PhysicsEntity";
-import { PIXEL_PER_METER } from "../../shared/constants";
 import { RenderingLayer } from "../Renderer";
+import type { CollidableGameObject } from "../scenes/GameObject";
+import { GameScene } from "../scenes/GameScene";
+import { Environment } from "../World";
+import { PhysicsEntity } from "./PhysicsEntity";
 
 @entity("movingplatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {

@@ -1,14 +1,16 @@
-import { SceneNode, SceneNodeArgs } from "./SceneNode";
-import { FriendlyFire } from "../FriendlyFire";
-import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
+import { DIALOG_FONT } from "../../shared/constants";
+import type { Aseprite } from "../Aseprite";
+import { asset } from "../Assets";
+import { BitmapFont } from "../BitmapFont";
+import type { FriendlyFire } from "../FriendlyFire";
+import { Direction } from "../geom/Direction";
+import type { ControllerAnimationTags} from "../input/ControllerFamily";
+import { ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
 import { AsepriteNode } from "./AsepriteNode";
+import type { SceneNodeArgs } from "./SceneNode";
+import { SceneNode } from "./SceneNode";
 import { TextNode } from "./TextNode";
-import { asset } from "../Assets";
-import { Aseprite } from "../Aseprite";
-import { Direction } from "../geom/Direction";
-import { DIALOG_FONT } from "../../shared/constants";
-import { BitmapFont } from "../BitmapFont";
 
 export interface ControlTooltipArgs extends SceneNodeArgs {
     control: ControllerAnimationTags,

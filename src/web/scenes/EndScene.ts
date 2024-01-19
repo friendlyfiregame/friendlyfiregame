@@ -1,16 +1,16 @@
-import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
-import { ControllerFamily } from "../input/ControllerFamily";
-import { CreditsScene } from "./CreditsScene";
 import { DIALOG_FONT } from "../../shared/constants";
-import { FriendlyFire } from "../FriendlyFire";
-import { Scene } from "../Scene";
+import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
-import { ImageNode } from "../scene/ImageNode";
-import { TextNode } from "../scene/TextNode";
+import { BitmapFont } from "../BitmapFont";
 import { easeOutQuad } from "../easings";
+import type { FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
 import { GlobalState } from "../GlobalState";
+import { ControllerFamily } from "../input/ControllerFamily";
+import { Scene } from "../Scene";
+import { ImageNode } from "../scene/ImageNode";
+import { TextNode } from "../scene/TextNode";
+import { CreditsScene } from "./CreditsScene";
 
 export class EndScene extends Scene<FriendlyFire> {
     @asset(DIALOG_FONT)

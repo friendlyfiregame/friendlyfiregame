@@ -1,8 +1,8 @@
-import { ControllerEvent } from "./input/ControllerEvent";
-import { Conversation, Interaction } from "./Conversation";
+import type { Conversation, Interaction } from "./Conversation";
+import type { NPC } from "./entities/NPC";
+import type { Player } from "./entities/Player";
+import type { ControllerEvent } from "./input/ControllerEvent";
 import { MenuList } from "./Menu";
-import { NPC } from "./entities/NPC";
-import { Player } from "./entities/Player";
 
 export class PlayerConversation {
     private interaction: Interaction | null = null;

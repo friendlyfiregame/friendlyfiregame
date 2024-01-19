@@ -1,5 +1,5 @@
-import { Game } from "./Game";
-import { Scene, SceneConstructor } from "./Scene";
+import type { Game } from "./Game";
+import type { Scene, SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {
     #activeScene: Scene<T, unknown> | null = null;

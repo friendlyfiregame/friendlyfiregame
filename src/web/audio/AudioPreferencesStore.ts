@@ -1,5 +1,5 @@
 import { clamp } from "../util";
-import { MIN_GAIN_VALUE, MAX_GAIN_VALUE, DEFAULT_GAIN_VALUE } from "./constants";
+import { DEFAULT_GAIN_VALUE, MAX_GAIN_VALUE, MIN_GAIN_VALUE } from "./constants";
 
 const PREFERENCES_MUSIC_GAIN_KEY = "audio.music.gain";
 const PREFERENCES_SFX_GAIN_KEY = "audio.sfx.gain";

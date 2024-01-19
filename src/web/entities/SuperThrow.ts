@@ -1,11 +1,11 @@
+import conversation from "../../../assets/dialog/superthrow.dialog.json";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import conversation from "../../../assets/dialog/superthrow.dialog.json";
 import { entity } from "../Entity";
+import { RenderingLayer } from "../Renderer";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "../Renderer";
 
 @entity("superthrow")
 export class SuperThrow extends NPC {

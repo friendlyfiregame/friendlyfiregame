@@ -1,20 +1,21 @@
 import { AppInfoJSON } from "appinfo.json";
-import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { ControlsScene } from "./ControlsScene";
+
 import { DIALOG_FONT } from "../../shared/constants";
+import { asset } from "../Assets";
+import { Sound } from "../audio/Sound";
+import { BitmapFont } from "../BitmapFont";
 import { easeOutBounce } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
-import { isDev } from "../util";
+import type { FriendlyFire } from "../FriendlyFire";
+import { Direction } from "../geom/Direction";
+import type { ControllerEvent } from "../input/ControllerEvent";
 import { MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { Sound } from "../audio/Sound";
-import { TitleScene } from "./TitleScene";
 import { TextNode } from "../scene/TextNode";
-import { Direction } from "../geom/Direction";
+import { SlideTransition } from "../transitions/SlideTransition";
+import { isDev } from "../util";
+import { ControlsScene } from "./ControlsScene";
 import { OptionsScene } from "./OptionsScene";
+import { TitleScene } from "./TitleScene";
 
 enum MenuItemKey {
     RESUME = "resume",

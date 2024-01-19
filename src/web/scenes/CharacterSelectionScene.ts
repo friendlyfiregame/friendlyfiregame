@@ -1,24 +1,24 @@
-import { Aseprite } from "../Aseprite";
+import { DIALOG_FONT } from "../../shared/constants";
+import type { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
+import type { Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
 import { CharacterAsset, VoiceAsset } from "../Campaign";
-import { ControllerAnimationTags } from "../input/ControllerFamily";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { DIALOG_FONT } from "../../shared/constants";
 import { easeOutCubic } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
-import { GameScene } from "./GameScene";
+import type { FriendlyFire } from "../FriendlyFire";
+import { Direction } from "../geom/Direction";
+import { GlobalState } from "../GlobalState";
+import type { ControllerEvent } from "../input/ControllerEvent";
+import { ControllerAnimationTags } from "../input/ControllerFamily";
 import { MenuItem, MenuList } from "../Menu";
 import { Scene } from "../Scene";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { TitleScene } from "./TitleScene";
-import { ImageNode } from "../scene/ImageNode";
-import { Direction } from "../geom/Direction";
-import { TextNode } from "../scene/TextNode";
-import { ControlTooltipNode } from "../scene/ControlTooltipNode";
 import { AsepriteNode } from "../scene/AsepriteNode";
-import { Sound } from "../audio/Sound";
-import { GlobalState } from "../GlobalState";
+import { ControlTooltipNode } from "../scene/ControlTooltipNode";
+import { ImageNode } from "../scene/ImageNode";
+import { TextNode } from "../scene/TextNode";
+import { SlideTransition } from "../transitions/SlideTransition";
+import { GameScene } from "./GameScene";
+import { TitleScene } from "./TitleScene";
 
 enum MenuItemKey {
     CHARACTER = "character",

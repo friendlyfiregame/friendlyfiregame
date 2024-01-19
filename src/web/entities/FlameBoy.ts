@@ -1,16 +1,16 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { entity } from "../Entity";
-import { EyeType, Face, FaceModes } from "../Face";
-import { GameScene } from "../scenes/GameScene";
-import { QuestATrigger, QuestKey } from "../Quests";
-import { RenderingLayer } from "../Renderer";
 import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
-import { ScriptableNPC } from "./ScriptableNPC";
+import { entity } from "../Entity";
+import { EyeType, Face, FaceModes } from "../Face";
+import type { GameObjectInfo } from "../MapInfo";
+import { QuestATrigger, QuestKey } from "../Quests";
+import { RenderingLayer } from "../Renderer";
+import { GameScene } from "../scenes/GameScene";
 import { rndItem } from "../util";
-import { GameObjectInfo } from "../MapInfo";
-import { Wood } from "./Wood";
+import { ScriptableNPC } from "./ScriptableNPC";
+import type { Wood } from "./Wood";
 
 export enum FlameBoyState {
     VENDOR,

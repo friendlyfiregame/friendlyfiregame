@@ -1,23 +1,24 @@
 import { AppInfoJSON } from "appinfo.json";
+
+import { APP_NAME, DIALOG_FONT, GAME_CANVAS_WIDTH } from "../../shared/constants";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
+import type { Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { APP_NAME, DIALOG_FONT, GAME_CANVAS_WIDTH } from "../../shared/constants";
-import { easeOutCubic } from "../easings";
-import { FadeTransition } from "../transitions/FadeTransition";
-import { FriendlyFire } from "../FriendlyFire";
-import { isDev } from "../util";
-import { Scene } from "../Scene";
-import { Sound } from "../audio/Sound";
-import { TitleScene } from "./TitleScene";
-import { Direction } from "../geom/Direction";
-import { TextNode } from "../scene/TextNode";
-import { SceneNode } from "../scene/SceneNode";
-import { ImageNode } from "../scene/ImageNode";
-import { AsepriteNode } from "../scene/AsepriteNode";
-import { QuestKey } from "../Quests";
 import { CharacterAsset } from "../Campaign";
+import { easeOutCubic } from "../easings";
+import type { FriendlyFire } from "../FriendlyFire";
+import { Direction } from "../geom/Direction";
+import type { ControllerEvent } from "../input/ControllerEvent";
+import { QuestKey } from "../Quests";
+import { Scene } from "../Scene";
+import { AsepriteNode } from "../scene/AsepriteNode";
+import { ImageNode } from "../scene/ImageNode";
+import { SceneNode } from "../scene/SceneNode";
+import { TextNode } from "../scene/TextNode";
+import { FadeTransition } from "../transitions/FadeTransition";
+import { isDev } from "../util";
+import { TitleScene } from "./TitleScene";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([

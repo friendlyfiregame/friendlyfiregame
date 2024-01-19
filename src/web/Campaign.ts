@@ -1,8 +1,7 @@
+import type { DialogJSON } from "*.dialog.json";
+
 import caveman1 from "../../assets/dialog/caveman1.dialog.json";
 import caveman2 from "../../assets/dialog/caveman2.dialog.json";
-import { Conversation } from "./Conversation";
-import type { DialogJSON } from "*.dialog.json";
-import { FaceModes } from "./Face";
 import fire0 from "../../assets/dialog/fire0.dialog.json";
 import fire1 from "../../assets/dialog/fire1.dialog.json";
 import fire2 from "../../assets/dialog/fire2.dialog.json";
@@ -12,11 +11,7 @@ import flameboy1 from "../../assets/dialog/flameboy1.dialog.json";
 import flameboy2 from "../../assets/dialog/flameboy2.dialog.json";
 import flameboy3 from "../../assets/dialog/flameboy3.dialog.json";
 import flameboy4 from "../../assets/dialog/flameboy4.dialog.json";
-import { Game } from "./Game";
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from "./entities/NPC";
 import powershiba2 from "../../assets/dialog/powershiba2.dialog.json";
-import { Quest, QuestA, QuestATrigger, QuestB, QuestKey, QuestC, QuestD, QuestE } from "./Quests";
 import seed1 from "../../assets/dialog/seed1.dialog.json";
 import shadowpresence1 from "../../assets/dialog/shadowpresence1.dialog.json";
 import shiba1 from "../../assets/dialog/shiba1.dialog.json";
@@ -24,7 +19,6 @@ import shiba2 from "../../assets/dialog/shiba2.dialog.json";
 import shiba3 from "../../assets/dialog/shiba3.dialog.json";
 import shiba4 from "../../assets/dialog/shiba4.dialog.json";
 import shiba5 from "../../assets/dialog/shiba5.dialog.json";
-import { Signal } from "./Signal";
 import spider1 from "../../assets/dialog/spider1.dialog.json";
 import stone1 from "../../assets/dialog/stone1.dialog.json";
 import stone2 from "../../assets/dialog/stone2.dialog.json";
@@ -33,8 +27,16 @@ import stonedisciple2 from "../../assets/dialog/stonedisciple2.dialog.json";
 import tree0 from "../../assets/dialog/tree0.dialog.json";
 import tree1 from "../../assets/dialog/tree1.dialog.json";
 import tree2 from "../../assets/dialog/tree2.dialog.json";
-import { valueCurves } from "./Particles";
 import wing1 from "../../assets/dialog/wing1.dialog.json";
+import { Conversation } from "./Conversation";
+import type { NPC } from "./entities/NPC";
+import { FaceModes } from "./Face";
+import type { Game } from "./Game";
+import { valueCurves } from "./Particles";
+import type { Quest} from "./Quests";
+import { QuestA, QuestATrigger, QuestB, QuestC, QuestD, QuestE, QuestKey } from "./Quests";
+import type { GameScene } from "./scenes/GameScene";
+import { Signal } from "./Signal";
 
 export type CampaignState = "start" | "finished";
 

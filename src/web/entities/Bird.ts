@@ -1,16 +1,17 @@
+import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
+import conversation from "./../../../assets/dialog/bird.dialog.json";
 import { Aseprite } from "./../Aseprite";
 import { asset } from "./../Assets";
-import { calculateVolume, rnd, rndItem } from "./../util";
-import { Conversation } from "./../Conversation";
-import conversation from "./../../../assets/dialog/bird.dialog.json";
-import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
-import { entity } from "./../Entity";
-import { Environment } from "./../World";
-import { GameScene } from "./../scenes/GameScene";
-import { NPC } from "./NPC";
-import { ParticleEmitter, valueCurves } from "./../Particles";
-import { RenderingLayer } from "./../Renderer";
 import { Sound } from "./../audio/Sound";
+import { Conversation } from "./../Conversation";
+import { entity } from "./../Entity";
+import type { ParticleEmitter} from "./../Particles";
+import { valueCurves } from "./../Particles";
+import { RenderingLayer } from "./../Renderer";
+import { GameScene } from "./../scenes/GameScene";
+import { calculateVolume, rnd, rndItem } from "./../util";
+import { Environment } from "./../World";
+import { NPC } from "./NPC";
 
 enum BirdState {
     WAITING_LEFT,

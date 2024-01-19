@@ -1,8 +1,8 @@
-import { describe, it, expect } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 
 import { ControllerEvent } from "../../input/ControllerEvent";
-import { ControllerFamily } from "../../input/ControllerFamily";
 import { ControllerEventType } from "../../input/ControllerEventType";
+import { ControllerFamily } from "../../input/ControllerFamily";
 import { ControllerIntent } from "../../input/ControllerIntent";
 
 describe("ControllerEvent", () => {

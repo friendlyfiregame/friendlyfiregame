@@ -1,16 +1,16 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
+import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
-import { Environment } from "../World";
 import { EyeType, Face } from "../Face";
-import { GameObjectInfo } from "../MapInfo";
-import { GameScene } from "../scenes/GameScene";
-import { now } from "../util";
-import { NPC } from "./NPC";
+import type { GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { Sound } from "../audio/Sound";
+import { GameScene } from "../scenes/GameScene";
+import { now } from "../util";
+import { Environment } from "../World";
+import { NPC } from "./NPC";
 import { Wood } from "./Wood";
 
 export enum SeedState {

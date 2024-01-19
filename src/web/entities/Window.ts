@@ -1,8 +1,8 @@
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
 import { GameScene } from "../scenes/GameScene";
-import { NPC } from "./NPC";
 import conversation from "./../../../assets/dialog/window.dialog.json";
+import { NPC } from "./NPC";
 
 @entity("window")
 export class Window extends NPC {

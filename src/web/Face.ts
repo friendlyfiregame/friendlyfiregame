@@ -1,8 +1,8 @@
-import { Aseprite } from "./Aseprite";
+import type { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { GameScene } from "./scenes/GameScene";
-import { NPC } from "./entities/NPC";
+import type { NPC } from "./entities/NPC";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import type { GameScene } from "./scenes/GameScene";
 
 export enum FaceModes {
     BLINK = "blink",

@@ -1,4 +1,4 @@
-import { QuestKey } from "./Quests";
+import type { QuestKey } from "./Quests";
 
 enum GlobalStateKey {
         BEAT_GAME_ONCE = "beatGame",

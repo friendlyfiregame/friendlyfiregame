@@ -1,10 +1,11 @@
+import type { Game } from "./Game";
 import { ControllerManager } from "./input/ControllerManager";
-import { Game } from "./Game";
-import { Keyboard } from "./input/Keyboard";
-import { Scenes } from "./Scenes";
-import { Transition } from "./Transition";
-import { RootNode, UpdateRootNode, DrawRootNode } from "./scene/RootNode";
-import { SceneNode } from "./scene/SceneNode";
+import type { Keyboard } from "./input/Keyboard";
+import type { DrawRootNode, UpdateRootNode } from "./scene/RootNode";
+import {RootNode } from "./scene/RootNode";
+import type { SceneNode } from "./scene/SceneNode";
+import type { Scenes } from "./Scenes";
+import type { Transition } from "./Transition";
 
 /**
  * Constructor type of a scene.

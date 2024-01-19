@@ -1,11 +1,11 @@
+import conversation from "../../../assets/dialog/chicken.dialog.json";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import conversation from "../../../assets/dialog/chicken.dialog.json";
 import { entity } from "../Entity";
+import { RenderingLayer } from "../Renderer";
 import { GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
-import { RenderingLayer } from "../Renderer";
 
 @entity("chicken")
 export class Chicken extends NPC {

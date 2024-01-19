@@ -1,4 +1,5 @@
-import { FontJSON } from "*.font.json";
+import type { FontJSON } from "*.font.json";
+
 import { DisplayManager, RenderMode } from "./DisplayManager";
 import { getRenderingContext, loadImage } from "./graphics";
 

@@ -22,10 +22,14 @@ const config = {
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "simple-import-sort",
+      "import",
+      "deprecation"
     ],
     "extends": [
       "eslint:recommended",
+      "plugin:import/typescript",
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended",
       "plugin:@typescript-eslint/recommended-requiring-type-checking"
@@ -50,6 +54,7 @@ const config = {
             }
         ],
         "@typescript-eslint/comma-spacing": "warn",
+        "@typescript-eslint/consistent-type-imports": "warn",
         "@typescript-eslint/default-param-last": "warn",
         "@typescript-eslint/explicit-function-return-type": [
             "warn",
@@ -88,6 +93,7 @@ const config = {
         ],
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-assertion": "warn",
+        "@typescript-eslint/no-require-imports": "warn",
         "@typescript-eslint/no-unused-expressions": "warn",
         "@typescript-eslint/no-unused-vars": [
             "warn",
@@ -123,6 +129,7 @@ const config = {
         "@typescript-eslint/switch-exhaustiveness-check": "warn",
         "@typescript-eslint/triple-slash-reference": "warn",
         "@typescript-eslint/unbound-method": "off",
+        "deprecation/deprecation": "warn",
         "dot-location": [ "warn", "property" ],
         "eol-last": "warn",
         "eqeqeq": [
@@ -132,6 +139,7 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
+        "import/no-cycle": "off",
         "key-spacing": "warn",
         "linebreak-style": [ "warn", "unix" ],
         "max-len": [
@@ -148,6 +156,7 @@ const config = {
                 "checkLoops": false
             }
         ],
+        "no-duplicate-imports": [ "off", { "includeExports": true } ],
         "no-extra-boolean-cast": "warn",
         "no-new-wrappers": "warn",
         "no-proto": "warn",
@@ -159,10 +168,13 @@ const config = {
         "no-throw-literal": "warn",
         "no-unmodified-loop-condition": "warn",
         "no-useless-escape": "off",
+        "no-useless-rename": "warn",
         "prefer-promise-reject-errors": "warn",
         "prefer-regex-literals": "warn",
         "quotes": [ "error", "double" ],
-        "semi": "warn"
+        "semi": "warn",
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn"
     }
 };
 module.exports = config;

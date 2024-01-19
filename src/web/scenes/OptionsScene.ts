@@ -1,20 +1,21 @@
-import { asset } from "../Assets";
 import { DIALOG_FONT } from "../../shared/constants";
-import { easeOutCubic } from "../easings";
-import { FriendlyFire } from "../FriendlyFire";
-import { Scene } from "../Scene";
-import { SlideTransition } from "../transitions/SlideTransition";
-import { ImageNode } from "../scene/ImageNode";
-import { Direction } from "../geom/Direction";
-import { ControllerEvent } from "../input/ControllerEvent";
-import { TextNode } from "../scene/TextNode";
-import { BitmapFont } from "../BitmapFont";
-import { MenuItem, MenuList, SelectMenuItem, SliderMenuItem } from "../Menu";
-import { ControlTooltipNode } from "../scene/ControlTooltipNode";
-import { ControllerAnimationTags } from "../input/ControllerFamily";
+import { asset } from "../Assets";
 import { AudioManager } from "../audio/AudioManager";
 import { SoundChannel } from "../audio/SoundChannel";
-import { DisplayManager, RenderMode } from "../DisplayManager";
+import { BitmapFont } from "../BitmapFont";
+import type { DisplayManager} from "../DisplayManager";
+import { RenderMode } from "../DisplayManager";
+import { easeOutCubic } from "../easings";
+import type { FriendlyFire } from "../FriendlyFire";
+import { Direction } from "../geom/Direction";
+import type { ControllerEvent } from "../input/ControllerEvent";
+import { ControllerAnimationTags } from "../input/ControllerFamily";
+import { MenuItem, MenuList, SelectMenuItem, SliderMenuItem } from "../Menu";
+import { Scene } from "../Scene";
+import { ControlTooltipNode } from "../scene/ControlTooltipNode";
+import { ImageNode } from "../scene/ImageNode";
+import { TextNode } from "../scene/TextNode";
+import { SlideTransition } from "../transitions/SlideTransition";
 import { isDev } from "../util";
 
 enum MenuItemKey {
