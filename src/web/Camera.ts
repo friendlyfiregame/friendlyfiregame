@@ -82,6 +82,11 @@ export class Camera {
         if (e.key !== "Tab") {
             return;
         }
+        e.stopPropagation();
+        e.preventDefault();
+        if (e.repeat) {
+            return;
+        }
         const displayManager = this.scene.game.displayManager;
         const canvas = this.scene.game.canvas;
         const oldRenderMode = displayManager.getRenderMode();
@@ -114,14 +119,10 @@ export class Camera {
                 e.preventDefault();
             }
         };
-        if (!e.repeat) {
-            this.zoomingOut = true;
-            displayManager.setRenderMode(RenderMode.NATIVE);
-            document.addEventListener("keyup", handleKeyUp);
-            canvas.addEventListener("click", teleport);
-        }
-        e.stopPropagation();
-        e.preventDefault();
+        this.zoomingOut = true;
+        displayManager.setRenderMode(RenderMode.NATIVE);
+        document.addEventListener("keyup", handleKeyUp);
+        canvas.addEventListener("click", teleport);
     }
 
     public getVisibleRect(x = this.x, y = this.y): Rectangle {
