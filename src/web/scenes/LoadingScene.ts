@@ -1,4 +1,4 @@
-import type { FriendlyFire } from "../FriendlyFire";
+import { type FriendlyFire } from "../FriendlyFire";
 import { Scene } from "../Scene";
 import { ProgressBarNode } from "../scene/ProgressBarNode";
 import { TitleScene } from "./TitleScene";

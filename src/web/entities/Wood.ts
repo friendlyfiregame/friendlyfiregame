@@ -2,7 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { entity } from "../Entity";
-import type { GameObjectInfo } from "../MapInfo";
+import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { type GameScene } from "../scenes/GameScene";

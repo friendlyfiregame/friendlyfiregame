@@ -1,6 +1,5 @@
-import type { DialogJSON } from "*.dialog.json";
-
-import type { NPC } from "./entities/NPC";
+import { type DialogJSON } from "./Dialog";
+import { type NPC } from "./entities/NPC";
 
 export interface Interaction {
     npcLine: ConversationLine | null;

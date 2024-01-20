@@ -1,7 +1,6 @@
-import type { Easing} from "../easings";
-import {linear } from "../easings";
-import type { Game } from "../Game";
-import type { SceneNode } from "./SceneNode";
+import { type Easing, linear } from "../easings";
+import { type Game } from "../Game";
+import { type SceneNode } from "./SceneNode";
 
 /**
  * Function signature for a scene node animator. Function is called with the scene node to animate as first parameter,

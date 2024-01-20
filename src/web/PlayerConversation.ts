@@ -1,7 +1,7 @@
-import type { Conversation, Interaction } from "./Conversation";
-import type { NPC } from "./entities/NPC";
-import type { Player } from "./entities/Player";
-import type { ControllerEvent } from "./input/ControllerEvent";
+import { type Conversation, type Interaction } from "./Conversation";
+import { type NPC } from "./entities/NPC";
+import { type Player } from "./entities/Player";
+import { type ControllerEvent } from "./input/ControllerEvent";
 import { MenuList } from "./Menu";
 
 export class PlayerConversation {

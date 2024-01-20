@@ -1,6 +1,5 @@
 import { Signal } from "../Signal";
-import type { ControllerEvent} from "./ControllerEvent";
-import { GamepadControllerEvent } from "./ControllerEvent";
+import { type ControllerEvent, GamepadControllerEvent } from "./ControllerEvent";
 import { ControllerFamily, ControllerSpriteMap } from "./ControllerFamily";
 import { DEFAULT_GAMEPAD_STYLE, GamepadStyle } from "./GamepadStyle";
 

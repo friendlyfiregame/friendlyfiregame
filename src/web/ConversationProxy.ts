@@ -1,7 +1,7 @@
 import { Conversation } from "./Conversation";
 import { NPC } from "./entities/NPC";
-import type { GameObjectProperties } from "./MapInfo";
-import type { GameScene } from "./scenes/GameScene";
+import { type GameObjectProperties } from "./MapInfo";
+import { type GameScene } from "./scenes/GameScene";
 
 export class ConversationProxy extends NPC {
     public override conversation: Conversation;

@@ -1,7 +1,6 @@
-import type { Aseprite } from "../Aseprite";
-import type { Game } from "../Game";
-import type { SceneNodeArgs } from "./SceneNode";
-import { SceneNode } from "./SceneNode";
+import { type Aseprite } from "../Aseprite";
+import { type Game } from "../Game";
+import { SceneNode, type SceneNodeArgs } from "./SceneNode";
 
 /**
  * Constructor arguments for {@linkcode AsepriteNode.

@@ -1,4 +1,4 @@
-import type { VirtualGamepad } from "./VirtualGamepad";
+import { type VirtualGamepad } from "./VirtualGamepad";
 
 export class VirtualGamepadEvent extends CustomEvent<VirtualGamepad> {
     readonly #gamepad: VirtualGamepad;

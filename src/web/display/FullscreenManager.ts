@@ -1,4 +1,4 @@
-import type { FullscreenManager as IFullscreenManager } from "../../shared/FullscreenManager";
+import { type FullscreenManager as IFullscreenManager } from "../../shared/FullscreenManager";
 import { WebFullscreenManager } from "./WebFullscreenManager";
 
 export type FullscreenManager = IFullscreenManager;

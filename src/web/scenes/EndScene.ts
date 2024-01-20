@@ -3,7 +3,7 @@ import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
 import { easeOutQuad } from "../easings";
-import type { FriendlyFire } from "../FriendlyFire";
+import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
 import { GlobalState } from "../GlobalState";
 import { ControllerFamily } from "../input/ControllerFamily";

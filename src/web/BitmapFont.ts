@@ -1,9 +1,19 @@
-import type { FontJSON } from "*.font.json";
-
 import { DisplayManager, RenderMode } from "./DisplayManager";
 import { getRenderingContext, loadImage } from "./graphics";
 
 const CHAR_SPACING = 1;
+
+export interface FontJSON {
+    image: string;
+    characterHeight: number;
+    characterMapping: {
+        char: string;
+        width: number;
+        compactablePrecursors: string[];
+    }[];
+    margin: number;
+    colors: Record<string, string>;
+}
 
 export class BitmapFont {
     private readonly sourceImage: HTMLImageElement;

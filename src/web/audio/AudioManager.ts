@@ -1,7 +1,7 @@
 import { Preferences } from "../preferences/Preferences";
 import { clamp } from "../util";
 import { getAudioContext } from "./AudioContext";
-import type { AudioPreferencesStore } from "./AudioPreferencesStore";
+import { type AudioPreferencesStore } from "./AudioPreferencesStore";
 import { MAX_GAIN_VALUE, MIN_GAIN_VALUE } from "./constants";
 
 export class AudioManager {

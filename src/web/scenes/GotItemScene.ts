@@ -1,10 +1,10 @@
 import { DIALOG_FONT } from "../../shared/constants";
-import type { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
 import { easeInExpo, easeOutExpo } from "../easings";
-import type { FriendlyFire } from "../FriendlyFire";
+import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
 import { Scene } from "../Scene";
 import { AsepriteNode } from "../scene/AsepriteNode";

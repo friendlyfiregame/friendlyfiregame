@@ -1,8 +1,6 @@
-import type { MapObjectJSON } from "*/level.json";
-
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from "../shared/constants";
-import type { Bounds } from "./Entity";
-import type { GameObjectInfo } from "./MapInfo";
+import { type Bounds } from "./Entity";
+import { type GameObjectInfo, type MapObjectJSON } from "./MapInfo";
 
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {

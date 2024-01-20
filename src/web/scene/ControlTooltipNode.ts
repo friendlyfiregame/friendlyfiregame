@@ -1,15 +1,13 @@
 import { DIALOG_FONT } from "../../shared/constants";
-import type { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
-import type { FriendlyFire } from "../FriendlyFire";
+import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
-import type { ControllerAnimationTags} from "../input/ControllerFamily";
-import { ControllerSpriteMap } from "../input/ControllerFamily";
+import { type ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
 import { AsepriteNode } from "./AsepriteNode";
-import type { SceneNodeArgs } from "./SceneNode";
-import { SceneNode } from "./SceneNode";
+import { SceneNode, type SceneNodeArgs } from "./SceneNode";
 import { TextNode } from "./TextNode";
 
 export interface ControlTooltipArgs extends SceneNodeArgs {

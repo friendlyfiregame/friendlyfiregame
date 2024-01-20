@@ -3,7 +3,7 @@ import { asset } from "../Assets";
 import { Entity, entity } from "../Entity";
 import { GameObjectProperties } from "../MapInfo";
 import { RenderingLayer } from "../Renderer";
-import type { CollidableGameObject} from "../scenes/GameObject";
+import { type CollidableGameObject } from "../scenes/GameObject";
 import { type GameScene } from "../scenes/GameScene";
 import { Environment } from "../World";
 

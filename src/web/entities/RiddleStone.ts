@@ -1,9 +1,9 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity } from "../Entity";
-import type { GameObjectProperties } from "../MapInfo";
+import { type GameObjectProperties } from "../MapInfo";
 import { RenderingLayer } from "../Renderer";
-import type { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")

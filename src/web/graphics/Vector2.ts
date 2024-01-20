@@ -1,4 +1,4 @@
-import type { AffineTransform } from "./AffineTransform";
+import { type AffineTransform } from "./AffineTransform";
 
 /**
  * Minimal interface of a 2D vector.

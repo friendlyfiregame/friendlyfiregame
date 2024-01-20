@@ -4,28 +4,25 @@ import {
     PLAYER_HEIGHT, PLAYER_JUMP_HEIGHT, PLAYER_JUMP_TIMING_THRESHOLD, PLAYER_WIDTH,
     SHORT_JUMP_GRAVITY
 } from "../../shared/constants";
-import type { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
-import type { VoiceAsset } from "../Campaign";
-import { CharacterAsset } from "../Campaign";
+import { CharacterAsset, type VoiceAsset } from "../Campaign";
 import { CharacterSounds } from "../CharacterSounds";
 import { Conversation } from "../Conversation";
 import { ConversationProxy } from "../ConversationProxy";
 import { Dance } from "../Dance";
-import type { Bounds, Entity} from "../Entity";
-import { entity } from "../Entity";
-import type { ControllerEvent } from "../input/ControllerEvent";
+import { type Bounds, type Entity, entity } from "../Entity";
+import { type ControllerEvent } from "../input/ControllerEvent";
 import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
-import type { GameObjectInfo } from "../MapInfo";
-import type { ParticleEmitter} from "../Particles";
-import { valueCurves } from "../Particles";
+import { type GameObjectInfo } from "../MapInfo";
+import { type ParticleEmitter, valueCurves } from "../Particles";
 import { PlayerConversation } from "../PlayerConversation";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import type { BgmId} from "../scenes/BgmId";
+import { type BgmId } from "../scenes/BgmId";
 import { FadeDirection } from "../scenes/FadeDirection";
 import { type GameScene } from "../scenes/GameScene";
 import { GotItemScene, Item } from "../scenes/GotItemScene";

@@ -1,8 +1,8 @@
 import { GRAVITY } from "../shared/constants";
 import { Aseprite } from "./Aseprite";
-import type { Vector2Like } from "./graphics/Vector2";
+import { type Vector2Like } from "./graphics/Vector2";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import type { GameScene } from "./scenes/GameScene";
+import { type GameScene } from "./scenes/GameScene";
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement | Aseprite;
 

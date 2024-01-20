@@ -5,8 +5,7 @@ import { SoundEmitter } from "../audio/SoundEmitter";
 import { entity } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
 import { FireGfx } from "../FireGfx";
-import type { ParticleEmitter} from "../Particles";
-import { valueCurves } from "../Particles";
+import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { type GameScene } from "../scenes/GameScene";
@@ -14,7 +13,7 @@ import { rnd, rndInt, shiftValue, sleep } from "../util";
 import { FireState } from "./FireState";
 import { NPC } from "./NPC";
 import { ShibaState } from "./ShibaState";
-import type { Wood } from "./Wood";
+import { type Wood } from "./Wood";
 
 export const SHRINK_SIZE = 2;
 

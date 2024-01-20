@@ -1,8 +1,7 @@
-import type { Conversation } from "../Conversation";
+import { type Conversation } from "../Conversation";
 import { DialoguePrompt } from "../DialoguePrompt";
-import type { Face} from "../Face";
-import { FaceModes } from "../Face";
-import type { Greeting } from "../Greeting";
+import { type Face, FaceModes } from "../Face";
+import { type Greeting } from "../Greeting";
 import { SpeechBubble } from "../SpeechBubble";
 import { sleep } from "../util";
 import { PhysicsEntity } from "./PhysicsEntity";

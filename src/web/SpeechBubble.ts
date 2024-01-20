@@ -3,7 +3,7 @@ import { asset } from "./Assets";
 import { BitmapFont } from "./BitmapFont";
 import { ConversationLine } from "./Conversation";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import type { GameScene } from "./scenes/GameScene";
+import { type GameScene } from "./scenes/GameScene";
 import { sleep } from "./util";
 
 export class SpeechBubble {

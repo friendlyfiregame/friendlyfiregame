@@ -1,8 +1,8 @@
-import type { ScriptedDialogJSON } from "../../assets/dummy.texts.json";
-import type { Campaign, CampaignState } from "./Campaign";
-import type { NPC } from "./entities/NPC";
-import type { GameObject } from "./scenes/GameObject";
-import type { GameScene } from "./scenes/GameScene";
+import { type Campaign, type CampaignState } from "./Campaign";
+import { type NPC } from "./entities/NPC";
+import { type GameObject } from "./scenes/GameObject";
+import { type GameScene } from "./scenes/GameScene";
+import { type ScriptedDialogJSON } from "./ScriptedDialog";
 import { SpeechBubble } from "./SpeechBubble";
 import { rndItem } from "./util";
 

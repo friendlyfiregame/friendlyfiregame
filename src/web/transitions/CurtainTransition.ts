@@ -1,5 +1,4 @@
-import type { TransitionOptions } from "../Transition";
-import { Transition } from "../Transition";
+import { Transition, type TransitionOptions } from "../Transition";
 
 export type CurtainDirection = "horizontal" | "vertical";
 

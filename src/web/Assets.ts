@@ -1,5 +1,4 @@
-import type { AppInfoJSON } from "appinfo.json";
-
+import { type AppInfoJSON } from "./AppInfo";
 import { Aseprite } from "./Aseprite";
 import { Sound } from "./audio/Sound";
 import { SoundChannel } from "./audio/SoundChannel";

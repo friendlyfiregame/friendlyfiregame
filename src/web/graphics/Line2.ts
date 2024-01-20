@@ -1,5 +1,4 @@
-import type { ReadonlyVector2} from "./Vector2";
-import { Vector2 } from "./Vector2";
+import { type ReadonlyVector2, Vector2 } from "./Vector2";
 
 /**
  * A line connecting two vertices.

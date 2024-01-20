@@ -1,9 +1,4 @@
 declare module "appinfo.json" {
-    export interface AppInfoJSON {
-        version: string;
-        gitCommitHash: string;
-    }
-
-    const value: AppInfoJSON;
+    const value: import("../AppInfo").AppInfoJSON;
     export default value;
 }

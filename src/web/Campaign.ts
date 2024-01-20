@@ -1,5 +1,3 @@
-import type { DialogJSON } from "*.dialog.json";
-
 import caveman1 from "../../assets/dialog/caveman1.dialog.json";
 import caveman2 from "../../assets/dialog/caveman2.dialog.json";
 import fire0 from "../../assets/dialog/fire0.dialog.json";
@@ -29,13 +27,13 @@ import tree1 from "../../assets/dialog/tree1.dialog.json";
 import tree2 from "../../assets/dialog/tree2.dialog.json";
 import wing1 from "../../assets/dialog/wing1.dialog.json";
 import { Conversation } from "./Conversation";
-import type { NPC } from "./entities/NPC";
+import { type DialogJSON } from "./Dialog";
+import { type NPC } from "./entities/NPC";
 import { FaceModes } from "./Face";
-import type { Game } from "./Game";
+import { type Game } from "./Game";
 import { valueCurves } from "./Particles";
-import type { Quest} from "./Quests";
-import { QuestA, QuestATrigger, QuestB, QuestC, QuestD, QuestE, QuestKey } from "./Quests";
-import type { GameScene } from "./scenes/GameScene";
+import { type Quest, QuestA, QuestATrigger, QuestB, QuestC, QuestD, QuestE, QuestKey } from "./Quests";
+import { type GameScene } from "./scenes/GameScene";
 import { Signal } from "./Signal";
 
 export type CampaignState = "start" | "finished";

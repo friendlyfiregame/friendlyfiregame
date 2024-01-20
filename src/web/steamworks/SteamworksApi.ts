@@ -1,4 +1,4 @@
-import type { SteamworksApi as ISteamworksApi } from "../../shared/SteamworksApi";
+import { type SteamworksApi as ISteamworksApi } from "../../shared/SteamworksApi";
 
 export type SteamworksApi = ISteamworksApi;
 export namespace SteamworksApi {

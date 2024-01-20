@@ -58,7 +58,8 @@ const config = {
             "warn",
             {
                 "prefer": "type-imports",
-                "fixStyle": "inline-type-imports"
+                "fixStyle": "inline-type-imports",
+                "disallowTypeAnnotations": false
             }
         ],
         "@typescript-eslint/default-param-last": "warn",
@@ -145,7 +146,7 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
-        "import/no-cycle": "warn",
+        "import/no-cycle": "off",
         "key-spacing": "warn",
         "linebreak-style": [ "warn", "unix" ],
         "max-len": [
@@ -162,7 +163,7 @@ const config = {
                 "checkLoops": false
             }
         ],
-        "no-duplicate-imports": [ "off", { "includeExports": true } ],
+        "no-duplicate-imports": [ "warn", { "includeExports": true } ],
         "no-extra-boolean-cast": "warn",
         "no-new-wrappers": "warn",
         "no-proto": "warn",

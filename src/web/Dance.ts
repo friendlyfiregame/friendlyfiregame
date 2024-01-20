@@ -1,11 +1,10 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { Sound } from "./audio/Sound";
-import type { ControllerEvent } from "./input/ControllerEvent";
-import type { ControllerSpriteMap } from "./input/ControllerFamily";
+import { type ControllerEvent } from "./input/ControllerEvent";
+import { type ControllerSpriteMap } from "./input/ControllerFamily";
 import { ControllerManager } from "./input/ControllerManager";
-import type { ValueCurve} from "./Particles";
-import { valueCurves } from "./Particles";
+import { type ValueCurve, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { type GameScene } from "./scenes/GameScene";
 

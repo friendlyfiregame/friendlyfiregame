@@ -1,5 +1,4 @@
 declare module "*.dialog.json" {
-    export type DialogJSON = Record<string, string[]>;
-    const value: DialogJSON;
+    const value: import("../Dialog").DialogJSON;
     export default value;
 }

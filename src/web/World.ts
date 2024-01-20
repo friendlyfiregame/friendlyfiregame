@@ -1,14 +1,12 @@
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
-import type { Bounds} from "./Entity";
-import { Entity } from "./Entity";
+import { type Bounds, Entity } from "./Entity";
 import { getImageData } from "./graphics";
-import type { GameObjectInfo } from "./MapInfo";
-import type { ParticleEmitter} from "./Particles";
-import { Particles, valueCurves } from "./Particles";
+import { type GameObjectInfo } from "./MapInfo";
+import { type ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { type GameObject, isCollidableGameObject } from "./scenes/GameObject";
-import type { GameScene} from "./scenes/GameScene";
+import { type GameScene } from "./scenes/GameScene";
 import { boundsFromMapObject, rnd, rndInt } from "./util";
 
 export enum Environment {

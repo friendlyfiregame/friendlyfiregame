@@ -4,7 +4,7 @@ import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
 import { EyeType, Face } from "../Face";
-import type { GameObjectInfo } from "../MapInfo";
+import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { type GameScene } from "../scenes/GameScene";

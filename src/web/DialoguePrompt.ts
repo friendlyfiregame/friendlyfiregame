@@ -1,7 +1,7 @@
 import { Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { RenderingLayer } from "./Renderer";
-import type { GameScene } from "./scenes/GameScene";
+import { type GameScene } from "./scenes/GameScene";
 
 export class DialoguePrompt {
     @asset("sprites/dialogue.aseprite.json")

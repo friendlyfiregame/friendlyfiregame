@@ -1,5 +1,5 @@
 import { asset } from "./Assets";
-import type { Sound } from "./audio/Sound";
+import { type Sound } from "./audio/Sound";
 import { VoiceAsset } from "./Campaign";
 import { rndItem } from "./util";
 

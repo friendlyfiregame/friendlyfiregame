@@ -1,6 +1,6 @@
-import type { Game } from "../Game";
+import { type Game } from "../Game";
 import { Direction } from "../geom/Direction";
-import type { Scene } from "../Scene";
+import { type Scene } from "../Scene";
 import { PostDrawHints, SceneNode } from "./SceneNode";
 
 /**

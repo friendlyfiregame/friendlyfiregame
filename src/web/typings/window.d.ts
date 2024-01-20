@@ -1,5 +1,5 @@
-import type { SteamworksApi } from "../../shared/SteamworksApi";
-import type { FriendlyFire } from "../../web/FriendlyFire";
+import { type SteamworksApi } from "../../shared/SteamworksApi";
+import { type FriendlyFire } from "../../web/FriendlyFire";
 
 declare global {
     interface Window {

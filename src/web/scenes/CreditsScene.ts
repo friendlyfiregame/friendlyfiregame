@@ -1,15 +1,14 @@
-import { AppInfoJSON } from "appinfo.json";
-
 import { APP_NAME, DIALOG_FONT, GAME_CANVAS_WIDTH } from "../../shared/constants";
+import { type AppInfoJSON } from "../AppInfo";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import type { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
 import { CharacterAsset } from "../Campaign";
 import { easeOutCubic } from "../easings";
-import type { FriendlyFire } from "../FriendlyFire";
+import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
-import type { ControllerEvent } from "../input/ControllerEvent";
+import { type ControllerEvent } from "../input/ControllerEvent";
 import { QuestKey } from "../Quests";
 import { Scene } from "../Scene";
 import { AsepriteNode } from "../scene/AsepriteNode";

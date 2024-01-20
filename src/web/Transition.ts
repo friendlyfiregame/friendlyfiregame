@@ -1,5 +1,4 @@
-import type { Easing} from "./easings";
-import { linear } from "./easings";
+import { type Easing, linear } from "./easings";
 import { clamp } from "./util";
 
 export type TransitionType = "in" | "out";

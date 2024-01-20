@@ -1,6 +1,6 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import type { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
 
 export class Snowball extends PhysicsEntity {
