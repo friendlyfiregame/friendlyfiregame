@@ -146,7 +146,7 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
-        "import/no-cycle": "warn",
+        "import/no-cycle": "off",
         "key-spacing": "warn",
         "linebreak-style": [ "warn", "unix" ],
         "max-len": [
