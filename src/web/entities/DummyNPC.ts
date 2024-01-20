@@ -4,7 +4,7 @@ import { asset } from "../Assets";
 import { BitmapFont } from "../BitmapFont";
 import { entity } from "../Entity";
 import { Greeting } from "../Greeting";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("tree")

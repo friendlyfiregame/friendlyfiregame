@@ -3,7 +3,7 @@ import { asset } from "../Assets";
 import { entity } from "../Entity";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("wing")

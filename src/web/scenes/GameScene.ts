@@ -15,7 +15,8 @@ import { Caveman } from "../entities/Caveman";
 import { Chicken } from "../entities/Chicken";
 import { Cloud } from "../entities/Cloud";
 import { ExitPortal } from "../entities/ExitPortal";
-import { Fire, FireState } from "../entities/Fire";
+import { Fire } from "../entities/Fire";
+import { FireState } from "../entities/FireState";
 import { FlameBoy } from "../entities/FlameBoy";
 import { Mimic } from "../entities/Mimic";
 import { MovingPlatform } from "../entities/MovingPlatform";
@@ -25,7 +26,8 @@ import { Radio } from "../entities/Radio";
 import { RiddleStone } from "../entities/RiddleStone";
 import type { Seed } from "../entities/Seed";
 import { ShadowPresence } from "../entities/ShadowPresence";
-import { Shiba, ShibaState } from "../entities/Shiba";
+import { Shiba } from "../entities/Shiba";
+import { ShibaState } from "../entities/ShibaState";
 import { Skull } from "../entities/Skull";
 import { Stone } from "../entities/Stone";
 import { StoneDisciple } from "../entities/StoneDisciple";
@@ -51,11 +53,10 @@ import { World } from "../World";
 import { AmbientSoundId } from "./AmbientSoundId";
 import { BgmId } from "./BgmId";
 import { EndScene } from "./EndScene";
+import { FadeDirection } from "./FadeDirection";
 import type { GameObject } from "./GameObject";
 import { PauseScene } from "./PauseScene";
 import { PowerShiba } from "./PowerShiba";
-
-export enum FadeDirection { FADE_IN, FADE_OUT }
 
 type BackgroundTrack = {
     active: boolean;
@@ -928,5 +929,10 @@ export class GameScene extends Scene<FriendlyFire> {
     public resume(): void {
         this.resetMusicVolumes();
         this.togglePause(false);
+    }
+
+    public setBgmVolume(volume: 0): void {
+        GameScene.bgm1.setVolume(volume);
+        GameScene.bgm2.setVolume(volume);
     }
 }

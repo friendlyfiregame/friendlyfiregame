@@ -54,7 +54,13 @@ const config = {
             }
         ],
         "@typescript-eslint/comma-spacing": "warn",
-        "@typescript-eslint/consistent-type-imports": "warn",
+        "@typescript-eslint/consistent-type-imports": [
+            "warn",
+            {
+                "prefer": "type-imports",
+                "fixStyle": "inline-type-imports"
+            }
+        ],
         "@typescript-eslint/default-param-last": "warn",
         "@typescript-eslint/explicit-function-return-type": [
             "warn",
@@ -139,7 +145,7 @@ const config = {
             }
         ],
         "grouped-accessor-pairs": "warn",
-        "import/no-cycle": "off",
+        "import/no-cycle": "warn",
         "key-spacing": "warn",
         "linebreak-style": [ "warn", "unix" ],
         "max-len": [

@@ -202,3 +202,41 @@ export function normalizeRadians(angle: number): number {
 export function normalizeDegrees(degrees: number): number {
     return ((degrees % 360) + 360) % 360;
 }
+
+export function roundRect(
+    ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number,
+    up = false, tipOffset = 0
+): CanvasRenderingContext2D {
+    const halfWidth = w / 2;
+    const halfHeight = h / 2;
+    const middlePos = x + halfWidth;
+    const rightPos = x + w;
+    const bottomPos = y + h;
+
+    if (w < 2 * r) { r = halfWidth; }
+    if (h < 2 * r) { r = halfHeight; }
+
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+
+    if (up) {
+        ctx.lineTo(middlePos - 4 + tipOffset, y);
+        ctx.lineTo(middlePos + tipOffset, y - 4);
+        ctx.lineTo(middlePos + 4 + tipOffset, y);
+    }
+
+    ctx.arcTo(rightPos, y, rightPos, bottomPos, r);
+    ctx.arcTo(rightPos, bottomPos, x, bottomPos, r);
+
+    if (!up) {
+        ctx.lineTo(middlePos - 4 + tipOffset, bottomPos);
+        ctx.lineTo(middlePos + tipOffset, bottomPos + 4);
+        ctx.lineTo(middlePos + 4 + tipOffset, bottomPos);
+    }
+
+    ctx.arcTo(x, bottomPos, x, y, r);
+    ctx.arcTo(x, y, rightPos, y, r);
+    ctx.closePath();
+
+    return ctx;
+}

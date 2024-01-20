@@ -7,7 +7,7 @@ import type { ParticleEmitter} from "../Particles";
 import { valueCurves } from "../Particles";
 import { RenderingLayer } from "../Renderer";
 import type { CollidableGameObject} from "../scenes/GameObject";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { rnd, rndInt, timedRnd } from "../util";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";

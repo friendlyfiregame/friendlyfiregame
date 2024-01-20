@@ -2,7 +2,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 
 @entity("radio")
 export class Radio extends Entity {

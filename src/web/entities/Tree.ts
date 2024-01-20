@@ -4,7 +4,7 @@ import { entity } from "../Entity";
 import { EyeType, Face } from "../Face";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { Seed } from "./Seed";
 import { Wood } from "./Wood";

@@ -4,7 +4,7 @@ import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }

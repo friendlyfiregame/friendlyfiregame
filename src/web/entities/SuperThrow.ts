@@ -4,7 +4,7 @@ import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("superthrow")

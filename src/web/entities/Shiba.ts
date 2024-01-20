@@ -12,24 +12,17 @@ import type { ParticleEmitter} from "../Particles";
 import { valueCurves } from "../Particles";
 import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { calculateVolume, rnd, rndItem } from "../util";
 import { Environment } from "../World";
-import { FireState, SHRINK_SIZE } from "./Fire";
+import { SHRINK_SIZE } from "./Fire";
+import { FireState } from "./FireState";
 import { ScriptableNPC } from "./ScriptableNPC";
+import { ShibaState } from "./ShibaState";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
 const ACCELERATION = 15;
-
-export enum ShibaState {
-    ON_TREE,
-    FLYING_AWAY,
-    ON_MOUNTAIN,
-    GOING_TO_FIRE,
-    KILLING_FIRE,
-    FIRE_KILLED
-}
 
 const FLYING_DURATION = 8;
 const JUMP_INTERVAL = 0.3;

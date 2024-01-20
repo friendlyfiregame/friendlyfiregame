@@ -9,20 +9,14 @@ import type { ParticleEmitter} from "../Particles";
 import { valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { rnd, rndInt, shiftValue, sleep } from "../util";
+import { FireState } from "./FireState";
 import { NPC } from "./NPC";
-import { ShibaState } from "./Shiba";
+import { ShibaState } from "./ShibaState";
 import type { Wood } from "./Wood";
 
 export const SHRINK_SIZE = 2;
-
-export enum FireState {
-    IDLE,
-    ANGRY,
-    BEING_PUT_OUT,
-    PUT_OUT
-}
 
 @entity("fire")
 export class Fire extends NPC {

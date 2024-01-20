@@ -6,7 +6,7 @@ import { Conversation } from "../Conversation";
 import { NPC } from "../entities/NPC";
 import { entity } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "./GameScene";
+import { type GameScene } from "./GameScene";
 
 export enum PowerShibaState {
     IN_CLOUDS,

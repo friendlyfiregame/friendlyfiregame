@@ -7,7 +7,7 @@ import { EyeType, Face, FaceModes } from "../Face";
 import type { GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { rndItem } from "../util";
 import { ScriptableNPC } from "./ScriptableNPC";
 import type { Wood } from "./Wood";

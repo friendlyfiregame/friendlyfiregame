@@ -7,7 +7,7 @@ import type { GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import type { CollidableGameObject} from "../scenes/GameObject";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { now } from "../util";
 import { Environment } from "../World";
 import { NPC } from "./NPC";

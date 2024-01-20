@@ -7,7 +7,7 @@ import { ControllerManager } from "./input/ControllerManager";
 import type { ValueCurve} from "./Particles";
 import { valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
-import { GameScene } from "./scenes/GameScene";
+import { type GameScene } from "./scenes/GameScene";
 
 export class Dance {
     @asset("sounds/dancing/success.mp3")
@@ -241,15 +241,13 @@ export class Dance {
             if (this.musicIndex === 0 && !Dance.treedance_music.isPlaying()) {
                 Dance.treedance_music.setVolume(0.8);
                 Dance.treedance_music.play();
-                GameScene.bgm1.setVolume(0);
-                GameScene.bgm2.setVolume(0);
+                this.scene.setBgmVolume(0);
             }
 
             if (this.musicIndex === 1 && !Dance.raindance_music.isPlaying()) {
                 Dance.raindance_music.setVolume(0.8);
                 Dance.raindance_music.play();
-                GameScene.bgm1.setVolume(0);
-                GameScene.bgm2.setVolume(0);
+                this.scene.setBgmVolume(0);
             }
         }
     }

@@ -8,7 +8,7 @@ import { entity } from "./../Entity";
 import type { ParticleEmitter} from "./../Particles";
 import { valueCurves } from "./../Particles";
 import { RenderingLayer } from "./../Renderer";
-import { GameScene } from "./../scenes/GameScene";
+import { type GameScene } from "./../scenes/GameScene";
 import { calculateVolume, rnd, rndItem } from "./../util";
 import { Environment } from "./../World";
 import { NPC } from "./NPC";

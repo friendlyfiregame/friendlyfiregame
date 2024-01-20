@@ -4,7 +4,7 @@ import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 

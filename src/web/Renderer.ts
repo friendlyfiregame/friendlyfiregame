@@ -5,7 +5,7 @@ import type { Dance } from "./Dance";
 import type { Fire } from "./entities/Fire";
 import type { ParticleEmitter } from "./Particles";
 import type { GameScene } from "./scenes/GameScene";
-import { roundRect } from "./SpeechBubble";
+import { roundRect } from "./util";
 
 export enum RenderingType {
     PARTICLE_EMITTER,

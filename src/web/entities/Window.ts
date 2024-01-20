@@ -1,6 +1,6 @@
 import { Conversation } from "../Conversation";
 import { entity } from "../Entity";
-import { GameScene } from "../scenes/GameScene";
+import { type GameScene } from "../scenes/GameScene";
 import conversation from "./../../../assets/dialog/window.dialog.json";
 import { NPC } from "./NPC";
 
