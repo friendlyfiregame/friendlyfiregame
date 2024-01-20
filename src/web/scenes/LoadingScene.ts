@@ -17,9 +17,13 @@ export class LoadingScene extends Scene<FriendlyFire> {
         this.rootNode.clear();
     }
 
-    public override async activate(): Promise<void> {
+    public override activate(): void {
+        void this.loadAssets();
+    }
+
+    private async loadAssets(): Promise<void> {
         await this.game.assets.load(this.updateProgress.bind(this));
-        void this.game.scenes.setScene(TitleScene);
+        await this.game.scenes.setScene(TitleScene);
     }
 
     private updateProgress(total: number, loaded: number): void {

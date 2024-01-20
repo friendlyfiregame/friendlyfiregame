@@ -17,6 +17,7 @@ import { SceneNode } from "../scene/SceneNode";
 import { TextNode } from "../scene/TextNode";
 import { FadeTransition } from "../transitions/FadeTransition";
 import { isDev } from "../util";
+import { TitleScene } from "./TitleScene";
 
 export class CreditsScene extends Scene<FriendlyFire> {
     @asset([
@@ -303,7 +304,11 @@ export class CreditsScene extends Scene<FriendlyFire> {
     }
 
     private async handleButtonDown(event: ControllerEvent): Promise<void> {
-        await this.game.scenes.popScene();
+        if (this.scenes.getPreviousScene() instanceof TitleScene) {
+            await this.game.scenes.popScene();
+        } else {
+            await this.scenes.setScene(TitleScene);
+        }
     }
 
     private addTitle(credits: SceneNode, y: number, x: number): number {

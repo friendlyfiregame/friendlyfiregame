@@ -13,7 +13,7 @@ import { type Transition } from "./Transition";
  * @param A - Optional scene argument type. A value of this type must be specified when setting or pushing a scene.
  *            Defaults to no argument (void type)
  */
-export type SceneConstructor<T extends Game, A = void> = new (game: T) => Scene<T, A>;
+export type SceneConstructor<T extends Game = Game, A = void> = new (game: T) => Scene<T, A>;
 
 /**
  * Abstract base class of a scene.

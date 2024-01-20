@@ -55,6 +55,7 @@ import { FadeDirection } from "./FadeDirection";
 import { type GameObject } from "./GameObject";
 import { PauseScene } from "./PauseScene";
 import { PowerShiba } from "./PowerShiba";
+import { TitleScene } from "./TitleScene";
 
 type BackgroundTrack = {
     active: boolean;
@@ -496,7 +497,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
 
         if (event.isPause) {
-            await this.scenes.pushScene(PauseScene);
+            await this.scenes.pushScene(PauseScene, TitleScene);
         }
     }
 
