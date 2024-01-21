@@ -66,11 +66,6 @@ const drowningThoughts = [
     { message: "Argh!", duration: 1000 }
 ];
 
-export enum Gender {
-    FEMALE = 0,
-    MALE = 1
-}
-
 /** The number of seconds until player gets a hint. */
 const HINT_TIMEOUT = 90;
 

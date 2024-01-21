@@ -17,7 +17,6 @@ import shiba2 from "../../assets/dialog/shiba2.dialog.json";
 import shiba3 from "../../assets/dialog/shiba3.dialog.json";
 import shiba4 from "../../assets/dialog/shiba4.dialog.json";
 import shiba5 from "../../assets/dialog/shiba5.dialog.json";
-import spider1 from "../../assets/dialog/spider1.dialog.json";
 import stone1 from "../../assets/dialog/stone1.dialog.json";
 import stone2 from "../../assets/dialog/stone2.dialog.json";
 import stonedisciple1 from "../../assets/dialog/stonedisciple1.dialog.json";
@@ -60,7 +59,6 @@ const allDialogs: Record<string, DialogJSON> = {
     "shiba4": shiba4,
     "shiba5": shiba5,
     "powershiba2": powershiba2,
-    "spider1": spider1,
     "flameboy1": flameboy1,
     "flameboy2": flameboy2,
     "flameboy3": flameboy3,
@@ -135,7 +133,6 @@ export class Campaign {
         this.runAction("enable", null, ["stonedisciple", "stonedisciple1"]);
         this.runAction("enable", null, ["flameboy", "flameboy1"]);
         this.runAction("enable", null, ["wing", "wing1"]);
-        this.runAction("enable", null, ["spider", "spider1"]);
         this.runAction("enable", null, ["shadowpresence", "shadowpresence1"]);
     }
 
