@@ -1,92 +1,20 @@
+import { Direction, type Frame, type FrameTag, type Layer, type SpriteSheet } from "@kayahr/aseprite";
+
 import { loadImage } from "./graphics";
 import { now } from "./util";
-
-export type AsepriteFormat = "I8" | "RGBA8888";
-export type AsepriteBlendMode = "normal" | "darken" | "multiply" | "color_burn" | "lighten" | "screen"
-    | "color_dodge" | "addition" | "overlay" | "soft_light" | "hard_light" | "difference" | "exclusion"
-    | "subtract" | "divide" | "hue" | "saturation" | "color" | "luminosity";
-export type AsepriteDirection = "forward" | "reverse" | "pingpong";
-
-export interface AsepriteSizeJSON {
-    w: number;
-    h: number;
-}
-
-export interface AsepritePointJSON {
-    x: number;
-    y: number;
-}
-
-export interface AsepriteRectJSON extends AsepriteSizeJSON, AsepritePointJSON {}
-
-export interface AsepriteLayerJSON {
-    name: string;
-    opacity?: number;
-    blendMode?: AsepriteBlendMode;
-    color?: string;
-    data?: string;
-    group?: string;
-}
-
-export interface AsepriteFrameTagJSON {
-    name: string;
-    from: number;
-    to: number;
-    direction: AsepriteDirection;
-}
-
-export interface AsepriteSliceKeyJSON {
-    frame: number;
-    bounds: AsepriteRectJSON;
-    center: AsepriteRectJSON;
-    pivot: AsepritePointJSON;
-}
-
-export interface AsepriteSliceJSON {
-    name: string;
-    color: string;
-    keys: AsepriteSliceKeyJSON[];
-}
-
-export interface AsepriteMetaJSON {
-    app: string;
-    version: string;
-    image: string;
-    format: AsepriteFormat;
-    size: AsepriteSizeJSON;
-    scale: string;
-    frameTags?: AsepriteFrameTagJSON[];
-    layers?: AsepriteLayerJSON[];
-    slices?: AsepriteSliceJSON[];
-}
-
-export interface AsepriteFrameJSON {
-    filename?: string;
-    frame: AsepriteRectJSON;
-    rotated: boolean;
-    trimmed: boolean;
-    spriteSourceSize: AsepriteRectJSON;
-    sourceSize: AsepriteSizeJSON;
-    duration: number;
-}
-
-export interface AsepriteJSON {
-    frames: Record<string, AsepriteFrameJSON> | AsepriteFrameJSON[];
-    meta: AsepriteMetaJSON;
-}
 
 /**
  * Sprite implementation which uses the Aseprite JSON format. Use the static asynchronous {@linkcode load()} method to load the
  * sprite and then use {@linkcode draw()} or {@linkcode drawTag()} to draw the sprite animation.
  */
 export class Aseprite {
-    private readonly frames: AsepriteFrameJSON[];
-    private readonly frameTags: Record<string, AsepriteFrameTagJSON> = {};
+    private readonly frames: Frame[];
+    private readonly frameTags: Record<string, FrameTag> = {};
     private readonly frameTagDurations: Record<string, number> = {};
     private readonly duration: number;
     private readonly fallbackTag = "idle";
 
-    private constructor(private readonly source: string, private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
+    private constructor(private readonly source: string, private readonly json: SpriteSheet, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
         this.duration = this.frames.reduce((duration, frame) => duration + frame.duration, 0);
 
@@ -109,7 +37,7 @@ export class Aseprite {
      * @return The loaded sprite.
      */
     public static async load(source: string): Promise<Aseprite> {
-        const json = await (await fetch(source)).json() as AsepriteJSON;
+        const json = await (await fetch(source)).json() as SpriteSheet;
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.meta.image, baseURL));
 
@@ -136,16 +64,16 @@ export class Aseprite {
 
     private calculateFrameIndex(
         time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
-        direction: AsepriteDirection = "forward"
+        direction = Direction.Forward
     ): number {
-        let delta = direction === "reverse" ? -1 : 1;
+        let delta = direction === Direction.Reverse ? -1 : 1;
 
-        if (direction === "pingpong") {
+        if (direction === Direction.PingPong) {
             duration = duration * 2 - this.frames[from].duration - this.frames[to].duration;
         }
 
         let frameTime = time % duration;
-        let frameIndex = direction === "reverse" ? to : from;
+        let frameIndex = direction === Direction.Reverse ? to : from;
 
         while (
             (
@@ -263,7 +191,7 @@ export class Aseprite {
      * @param name - The layer name.
      * @return The found layer. Null if none.
      */
-    public getLayer(name: string): AsepriteLayerJSON | null {
+    public getLayer(name: string): Layer | null {
         return this.json.meta.layers?.find(layer => layer.name === name) ?? null;
     }
 }
