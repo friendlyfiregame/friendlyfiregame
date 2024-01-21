@@ -1,8 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("caveman")
@@ -10,8 +9,8 @@ export class Caveman extends NPC {
     @asset("sprites/caveman.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 18, 24);
+    public constructor(args: EntityArgs) {
+        super({ width: 18, height: 24, ...args });
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

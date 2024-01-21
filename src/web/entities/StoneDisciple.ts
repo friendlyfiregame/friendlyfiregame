@@ -1,10 +1,9 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("stonedisciple")
@@ -12,11 +11,11 @@ export class StoneDisciple extends NPC {
     @asset("sprites/stonedisciple.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 32, 26);
+    public constructor(args: EntityArgs) {
+        super({ width: 32, height: 26, ...args });
         this.direction = -1;
         this.lookAtPlayer = true;
-        this.face = new Face(scene, this, EyeType.STONEDISCIPLE, 0, 0);
+        this.face = new Face(this.scene, this, EyeType.STONEDISCIPLE, 0, 0);
     }
 
     protected override showDialoguePrompt(): boolean {

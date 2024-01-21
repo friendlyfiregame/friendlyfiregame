@@ -3,8 +3,7 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
-import { type GameScene } from "../scenes/GameScene";
+import { entity, type EntityArgs } from "../Entity";
 import { NPC } from "./NPC";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
@@ -19,8 +18,8 @@ export class Mimic extends NPC {
 
     private state = MimicState.SLEEPING;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 46, 24);
+    public constructor(args: EntityArgs) {
+        super({ width: 46, height: 24, ...args });
         this.lookAtPlayer = false;
         this.direction = 1;
         this.conversation = new Conversation(conversation, this);

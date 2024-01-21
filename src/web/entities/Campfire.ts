@@ -1,16 +1,15 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Entity, entity } from "../Entity";
+import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 
 @entity("campfire")
 export class Campfire extends Entity {
     @asset("sprites/campfire.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 14, 28, false);
+    public constructor(args: EntityArgs) {
+        super({ width: 14, height: 28, isTrigger: false, ...args });
     }
 
     public draw(): void {

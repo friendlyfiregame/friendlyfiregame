@@ -11,9 +11,8 @@ import { BitmapFont } from "../BitmapFont";
 import { CharacterAsset, type VoiceAsset } from "../Campaign";
 import { CharacterSounds } from "../CharacterSounds";
 import { Conversation } from "../Conversation";
-import { ConversationProxy } from "../ConversationProxy";
 import { Dance } from "../Dance";
-import { type Bounds, type Entity, entity } from "../Entity";
+import { type Bounds, type Entity, entity, type EntityArgs } from "../Entity";
 import { type ControllerEvent } from "../input/ControllerEvent";
 import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
@@ -24,12 +23,12 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { type BgmId } from "../scenes/BgmId";
 import { FadeDirection } from "../scenes/FadeDirection";
-import { type GameScene } from "../scenes/GameScene";
 import { GotItemScene, Item } from "../scenes/GotItemScene";
 import { SpeechBubble } from "../SpeechBubble";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
 import { Environment } from "../World";
 import { Cloud } from "./Cloud";
+import { ConversationProxy } from "./ConversationProxy";
 import { NPC } from "./NPC";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Seed, SeedState } from "./Seed";
@@ -170,8 +169,8 @@ export class Player extends PhysicsEntity {
     private readonly doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+    public constructor(args: EntityArgs) {
+        super({ width: PLAYER_WIDTH, height: PLAYER_HEIGHT, ...args });
 
         this.isControllable = false;
         this.setFloating(true);
@@ -427,9 +426,12 @@ export class Player extends PhysicsEntity {
                         this, this.closestNPC, conversation, autoMove
                     );
                 } else if (this.readableTrigger) {
-                    const proxy = new ConversationProxy(
-                        this.scene, this.x, this.y, this.readableTrigger.properties
-                    );
+                    const proxy = new ConversationProxy({
+                        scene: this.scene,
+                        x: this.x,
+                        y: this.y,
+                        properties: this.readableTrigger.properties
+                    });
 
                     this.playerConversation = new PlayerConversation(
                         this, proxy, proxy.conversation, false
@@ -491,12 +493,13 @@ export class Player extends PhysicsEntity {
                 this.carry(this.scene.tree.seed.spawnWood());
             } else if (event.key === "t") {
                 this.scene.addGameObject(
-                    new Snowball(
-                        this.scene,
-                        this.x, this.y + this.height * 0.75,
-                        20 * this.direction,
-                        10
-                    )
+                    new Snowball({
+                        scene: this.scene,
+                        x: this.x,
+                        y: this.y + this.height * 0.75,
+                        velocityX: 20 * this.direction,
+                        velocityY: 10
+                    })
                 );
 
                 CharacterSounds.playRandomCharacterSound("throw", this.voiceAsset);

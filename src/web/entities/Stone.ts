@@ -1,13 +1,12 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
 import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { type CollidableGameObject } from "../scenes/GameObject";
-import { type GameScene } from "../scenes/GameScene";
 import { now } from "../util";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
@@ -30,11 +29,11 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public state: StoneState = StoneState.DEFAULT;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 26, 50);
+    public constructor(args: EntityArgs) {
+        super({ width: 26, height: 50, ...args });
 
         this.direction = -1;
-        this.face = new Face(scene, this, EyeType.STONE, 0, 21);
+        this.face = new Face(this.scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
         this.carryHeight = 16;
 

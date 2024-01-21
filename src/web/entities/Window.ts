@@ -1,6 +1,5 @@
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
-import { type GameScene } from "../scenes/GameScene";
+import { entity, type EntityArgs } from "../Entity";
 import conversation from "./../../../assets/dialog/window.dialog.json";
 import { NPC } from "./NPC";
 
@@ -8,8 +7,8 @@ import { NPC } from "./NPC";
 export class Window extends NPC {
     public override conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 16, 16);
+    public constructor(args: EntityArgs) {
+        super({ width: 16, height: 16, ...args });
         this.conversation = new Conversation(conversation, this);
     }
 

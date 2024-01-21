@@ -1,11 +1,10 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { now } from "../util";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -26,8 +25,8 @@ export class Wood extends PhysicsEntity {
 
     public state = WoodState.FREE;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 26, 16);
+    public constructor(args: EntityArgs) {
+        super({ width: 26, height: 16, ...args });
 
         const floatingPosition = this.scene.pointsOfInterest.find(
             poi => poi.name === "recover_floating_position"

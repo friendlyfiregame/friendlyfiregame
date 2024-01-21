@@ -5,13 +5,12 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { FaceModes } from "../Face";
 import { type GameObjectInfo } from "../MapInfo";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { calculateVolume, rnd, rndItem } from "../util";
 import { Environment } from "../World";
 import { SHRINK_SIZE } from "./Fire";
@@ -57,10 +56,10 @@ export class Shiba extends ScriptableNPC {
     public isBeingPetted = false;
     private nextHeartParticle = HEART_PARTICLE_DELAY;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 28, 24);
+    public constructor(args: EntityArgs) {
+        super({ width: 28, height: 24, ...args });
 
-        this.minAltitude = y;
+        this.minAltitude = this.y;
         this.conversation = new Conversation(conversation, this);
         this.setMaxVelocity(2);
         this.conversation = new Conversation(shiba1, this);
@@ -313,7 +312,7 @@ export class Shiba extends ScriptableNPC {
         if (triggerCollisions.length > 0) {
             const event = triggerCollisions.find(t => t.name === "shiba_action");
 
-            if (event && event.properties.velocity) {
+            if (event != null && event.properties.velocity != null) {
                 this.autoMoveDirection = event.properties.velocity > 0 ? 1 : -1;
                 this.move = this.autoMoveDirection;
             }

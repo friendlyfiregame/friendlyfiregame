@@ -2,10 +2,9 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 enum AnimationTag {
@@ -24,11 +23,18 @@ export class ShadowPresence extends NPC {
 
     private isNearPlayer = false;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 12, 46);
+    public constructor(args: EntityArgs) {
+        super({ width: 12, height: 46, ...args });
         this.direction = -1;
         this.lookAtPlayer = false;
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, ShadowPresence.caveAmbience, 0.3, 1);
+        this.soundEmitter = new SoundEmitter({
+            scene: this.scene,
+            x: this.x,
+            y: this.y,
+            sound: ShadowPresence.caveAmbience,
+            maxVolume: 0.3,
+            intensity: 1
+        });
     }
 
     protected override showDialoguePrompt(): boolean {

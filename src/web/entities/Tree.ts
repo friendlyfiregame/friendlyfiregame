@@ -1,10 +1,9 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 import { Seed } from "./Seed";
 import { Wood } from "./Wood";
@@ -17,12 +16,12 @@ export class Tree extends NPC {
     public seed: Seed;
     private readonly wood: Wood;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 78, 140);
+    public constructor(args: EntityArgs) {
+        super({ width: 78, height: 140, ...args });
 
-        this.face = new Face(scene, this, EyeType.TREE, 5, 94);
-        this.seed = new Seed(scene, x, y);
-        this.wood = new Wood(scene, x, y);
+        this.face = new Face(this.scene, this, EyeType.TREE, 5, 94);
+        this.seed = new Seed({ scene: this.scene, x: this.x, y: this.y });
+        this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
 
         this.startDialog();
     }

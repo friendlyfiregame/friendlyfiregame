@@ -1,15 +1,14 @@
-import { Conversation } from "./Conversation";
-import { NPC } from "./entities/NPC";
-import { type GameObjectProperties } from "./MapInfo";
-import { type GameScene } from "./scenes/GameScene";
+import { Conversation } from "../Conversation";
+import { type EntityArgs } from "../Entity";
+import { NPC } from "./NPC";
 
 export class ConversationProxy extends NPC {
     public override conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16);
+    public constructor(args: EntityArgs) {
+        super({ width: 16, height: 16, ...args });
 
-        this.conversation = this.generateConversation(this.prepareContent(properties.content));
+        this.conversation = this.generateConversation(this.prepareContent(this.properties.content));
         this.scene.addGameObject(this);
     }
 

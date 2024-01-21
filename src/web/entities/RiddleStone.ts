@@ -1,21 +1,20 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Entity } from "../Entity";
-import { type GameObjectProperties } from "../MapInfo";
+import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 
+@entity("riddlestone")
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")
     private static readonly sprite: Aseprite;
     private readonly col: number;
     private readonly row: number;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16, false);
+    public constructor(args: EntityArgs) {
+        super({ width: 16, height: 16,  isTrigger: false, ...args });
 
-        this.col = properties.col ?? 0;
-        this.row = properties.row ?? 0;
+        this.col = this.properties?.col ?? 0;
+        this.row = this.properties?.row ?? 0;
     }
 
     public draw(): void {

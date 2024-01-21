@@ -1,10 +1,8 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Entity, entity } from "../Entity";
-import { GameObjectProperties } from "../MapInfo";
+import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
 import { type CollidableGameObject } from "../scenes/GameObject";
-import { type GameScene } from "../scenes/GameScene";
 import { Environment } from "../World";
 
 enum WallState { SOLID, CRUMBLED }
@@ -16,14 +14,14 @@ export class Wall extends Entity implements CollidableGameObject {
     public readonly identifier: string;
     private state = WallState.SOLID;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 24, 72, false);
+    public constructor(args: EntityArgs) {
+        super({ width: 24, height: 72, isTrigger: false, ...args });
 
-        if (properties.identifier == null) {
+        if (this.properties.identifier == null) {
             throw new Error("Cannot create Wall entity with no identifier property");
         }
 
-        this.identifier = properties.identifier;
+        this.identifier = this.properties.identifier;
     }
 
     public draw(): void {

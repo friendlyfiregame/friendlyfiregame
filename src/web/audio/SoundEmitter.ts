@@ -1,9 +1,15 @@
-import { Entity } from "../Entity";
+import { Entity, type EntityArgs } from "../Entity";
 import { type GameObjectInfo } from "../MapInfo";
 import { type AmbientSoundId } from "../scenes/AmbientSoundId";
 import { type GameScene } from "../scenes/GameScene";
 import { calculateVolume } from "../util";
 import { type Sound } from "./Sound";
+
+export interface SoundEmitterArgs extends EntityArgs {
+    sound: Sound;
+    maxVolume: number;
+    intensity: number;
+}
 
 /**
  * Sound emitters are invisible entities that emit a sound in relation to the player distance.
@@ -14,10 +20,8 @@ export class SoundEmitter extends Entity {
     private readonly maxVolume: number;
     private readonly intensity: number;
 
-    public constructor(
-        scene: GameScene, x: number, y: number, sound: Sound, maxVolume: number, intensity: number
-    ) {
-        super(scene, x, y, 1, 1);
+    public constructor({ sound, maxVolume, intensity, ...args }: SoundEmitterArgs) {
+        super({ width: 1, height: 1, ...args });
 
         this.sound = sound;
         this.maxVolume = maxVolume;
@@ -53,9 +57,14 @@ export class SoundEmitter extends Entity {
             const sound = scene.ambientSounds[soundId as AmbientSoundId];
 
             if (sound != null) {
-                return new SoundEmitter(
-                    scene, gameObjectInfo.x, gameObjectInfo.y, sound, volume, intensity
-                );
+                return new SoundEmitter({
+                    scene,
+                    x: gameObjectInfo.x,
+                    y: gameObjectInfo.y,
+                    sound,
+                    maxVolume: volume,
+                    intensity
+                });
             } else {
                 throw new Error(
                     `Cannot create sound emitter because '${soundId}' is not a valid ambient sound ID.`

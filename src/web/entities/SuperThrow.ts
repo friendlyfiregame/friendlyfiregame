@@ -2,9 +2,8 @@ import conversation from "../../../assets/dialog/superthrow.dialog.json";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("superthrow")
@@ -14,8 +13,8 @@ export class SuperThrow extends NPC {
     private readonly floatAmount = 4;
     private readonly floatSpeed = 2;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 18, 22);
+    public constructor(args: EntityArgs) {
+        super({ width: 18, height: 22, ...args });
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }

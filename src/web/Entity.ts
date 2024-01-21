@@ -17,7 +17,7 @@ export type Bounds = {
     height: number;
 };
 
-type EntityConstructor = new (scene: GameScene, x: number, y: number, properties: GameObjectProperties) => Entity;
+type EntityConstructor = new (args: EntityArgs) => Entity;
 
 const entities = new Map<string, EntityConstructor>();
 
@@ -27,30 +27,46 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(
-    name: string, scene: GameScene, x: number, y: number, properties: GameObjectProperties
-): Entity {
+export function createEntity(name: string, args: EntityArgs): Entity {
     const constructor = entities.get(name);
 
     if (!constructor) {
         throw new Error("Entity not found: " + name);
     }
 
-    return new constructor(scene, x, y, properties);
+    return new constructor(args);
+}
+
+export interface EntityArgs {
+    scene: GameScene;
+    x: number;
+    y: number;
+    width?: number;
+    height?: number;
+    isTrigger?: boolean;
+    properties?: GameObjectProperties;
 }
 
 export abstract class Entity implements GameObject {
     protected timeAlive = 0;
     protected animator = new Animator(this);
+    public readonly scene: GameScene;
+    public x: number;
+    public y: number;
+    public width: number;
+    public height: number;
+    public isTrigger: boolean;
+    public readonly properties: GameObjectProperties;
 
-    public constructor(
-        public scene: GameScene,
-        public x: number,
-        public y: number,
-        public width = 0,
-        public height = 0,
-        public isTrigger = true
-    ) {}
+    public constructor({ scene, x, y, width = 0, height = 0, isTrigger = true, properties = {} }: EntityArgs) {
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.isTrigger = isTrigger;
+        this.properties = properties;
+    }
 
     public abstract draw(ctx: CanvasRenderingContext2D): void;
 

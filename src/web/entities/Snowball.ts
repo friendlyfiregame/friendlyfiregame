@@ -1,13 +1,12 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
+import { entity } from "../Entity";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
-import { PhysicsEntity } from "./PhysicsEntity";
+import { PhysicsEntity, type PhysicsEntityArgs } from "./PhysicsEntity";
 
+@entity("snowball")
 export class Snowball extends PhysicsEntity {
-    public constructor(scene: GameScene, x: number, y: number, velocityX: number, velocityY: number) {
-        super(scene, x, y, 0.25 * PIXEL_PER_METER, 0.25 * PIXEL_PER_METER);
-
-        this.setVelocity(velocityX, velocityY);
+    public constructor(args: PhysicsEntityArgs) {
+        super({ width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER, ...args });
     }
 
     public draw(): void {

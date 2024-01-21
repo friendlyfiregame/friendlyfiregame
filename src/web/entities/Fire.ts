@@ -2,13 +2,12 @@ import { PIXEL_PER_METER } from "../../shared/constants";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
 import { FireGfx } from "../FireGfx";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { rnd, rndInt, shiftValue, sleep } from "../util";
 import { FireState } from "./FireState";
 import { NPC } from "./NPC";
@@ -52,10 +51,17 @@ export class Fire extends NPC {
     private readonly smokeEmitter: ParticleEmitter;
     private readonly steamEmitter: ParticleEmitter;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 1.5 * PIXEL_PER_METER, 1.85 * PIXEL_PER_METER);
+    public constructor(args: EntityArgs) {
+        super({ width: 1.5 * PIXEL_PER_METER, height: 1.85 * PIXEL_PER_METER, ...args });
 
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, Fire.fireAmbience, 0.7, 0.2);
+        this.soundEmitter = new SoundEmitter({
+            scene: this.scene,
+            x: this.x,
+            y: this.y,
+            sound: Fire.fireAmbience,
+            maxVolume: 0.7,
+            intensity: 0.2
+        });
 
         this.smokeEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
@@ -101,7 +107,7 @@ export class Fire extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
-        this.face = new Face(scene, this, EyeType.STANDARD, 0, 6);
+        this.face = new Face(this.scene, this, EyeType.STANDARD, 0, 6);
     }
 
     public override showDialoguePrompt(): boolean {

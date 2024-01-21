@@ -2,9 +2,8 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 
@@ -16,8 +15,8 @@ export class Bone extends PhysicsEntity {
     @asset("sounds/throwing/success.mp3")
     private static readonly successSound: Sound;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 20, 10);
+    public constructor(args: EntityArgs) {
+        super({ width: 20, height: 10, ...args });
     }
 
     public draw(): void {

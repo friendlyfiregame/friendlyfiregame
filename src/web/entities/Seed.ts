@@ -2,12 +2,11 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
 import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { now } from "../util";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
@@ -32,10 +31,10 @@ export class Seed extends NPC {
     private readonly wood: Wood;
     private readonly floatingPosition: GameObjectInfo;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 24, 24);
-        this.wood = new Wood(scene, x, y);
-        this.face = new Face(scene, this, EyeType.STANDARD, 0, 8);
+    public constructor(args: EntityArgs) {
+        super({ width: 24, height: 24, ...args });
+        this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
+        this.face = new Face(this.scene, this, EyeType.STANDARD, 0, 8);
 
         const floatingPosition = this.scene.pointsOfInterest.find(poi => poi.name === "recover_floating_position");
 

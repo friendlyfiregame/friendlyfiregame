@@ -2,9 +2,8 @@ import conversation from "../../../assets/dialog/chicken.dialog.json";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("chicken")
@@ -12,9 +11,8 @@ export class Chicken extends NPC {
     @asset("sprites/chicken.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 24, 18);
-
+    public constructor(args: EntityArgs) {
+        super({ width: 24, height: 18, ...args });
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }

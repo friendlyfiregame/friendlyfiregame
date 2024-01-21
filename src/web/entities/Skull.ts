@@ -1,8 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { PhysicsEntity } from "./PhysicsEntity";
 
 @entity("skull")
@@ -10,8 +9,8 @@ export class Skull extends PhysicsEntity {
     @asset("sprites/skull.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 16, 16);
+    public constructor(args: EntityArgs) {
+        super({ width: 16, height: 16, ...args });
     }
 
     public draw(): void {

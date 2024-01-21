@@ -1,11 +1,9 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { entity } from "../Entity";
-import { GameObjectProperties } from "../MapInfo";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
 import { type CollidableGameObject } from "../scenes/GameObject";
-import { type GameScene } from "../scenes/GameScene";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 
@@ -20,23 +18,27 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     private readonly targetY: number;
     private readonly velocity: number;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 68, 12);
+    public constructor(args: EntityArgs) {
+        super({ width: 68, height: 12, ...args });
         this.setFloating(true);
+        const { x, y, properties } = this;
+        const direction = properties?.direction;
+        const distance = properties?.distance ?? 0;
+        const velocity = properties?.velocity ?? 0;
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
-        this.velocity = properties.velocity / PIXEL_PER_METER;
-        if (properties.direction === "right") {
-            this.targetX = x + properties.distance;
+        this.velocity = velocity / PIXEL_PER_METER;
+        if (direction === "right") {
+            this.targetX = x + distance;
             this.setVelocityX(this.velocity);
-        } else if (properties.direction === "left") {
-            this.targetX = x - properties.distance;
+        } else if (direction === "left") {
+            this.targetX = x - distance;
             this.setVelocityX(-this.velocity);
-        } else if (properties.direction === "up") {
-            this.targetY = y + properties.distance;
+        } else if (direction === "up") {
+            this.targetY = y + distance;
             this.setVelocityY(this.velocity);
-        } else if (properties.direction === "down") {
-            this.targetY = y - properties.distance;
+        } else if (direction === "down") {
+            this.targetY = y - distance;
             this.setVelocityY(-this.velocity);
         }
     }

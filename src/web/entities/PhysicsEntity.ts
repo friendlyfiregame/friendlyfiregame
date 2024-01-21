@@ -1,7 +1,14 @@
 import { DROWNING_VELOCITY, GRAVITY, PIXEL_PER_METER, TERMINAL_VELOCITY } from "../../shared/constants";
-import { Entity } from "../Entity";
+import { Entity, type EntityArgs } from "../Entity";
 import { type GameObject } from "../scenes/GameObject";
 import { Environment } from "../World";
+
+export interface PhysicsEntityArgs extends EntityArgs {
+    velocityX?: number;
+    velocityY?: number;
+    maxVelocityX?: number;
+    maxVelocityY?: number;
+}
 
 export abstract class PhysicsEntity extends Entity {
     private velocityX = 0;
@@ -16,6 +23,14 @@ export abstract class PhysicsEntity extends Entity {
     public carryHeight = this.height;
 
     protected lastGroundPosition = { x: 0, y: 0 };
+
+    public constructor({ velocityX = 0, velocityY = 0, maxVelocityX = Infinity, maxVelocityY = Infinity, ...args }: PhysicsEntityArgs) {
+        super(args);
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
+        this.maxVelocityX = velocityX;
+        this.maxVelocityY = velocityY;
+    }
 
     public setFloating(floating: boolean): void {
         this.floating = floating;

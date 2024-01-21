@@ -22,6 +22,7 @@ import { Mimic } from "../entities/Mimic";
 import { MovingPlatform } from "../entities/MovingPlatform";
 import { Player } from "../entities/Player";
 import { Portal } from "../entities/Portal";
+import { PowerShiba } from "../entities/PowerShiba";
 import { Radio } from "../entities/Radio";
 import { RiddleStone } from "../entities/RiddleStone";
 import { type Seed } from "../entities/Seed";
@@ -54,7 +55,6 @@ import { EndScene } from "./EndScene";
 import { FadeDirection } from "./FadeDirection";
 import { type GameObject } from "./GameObject";
 import { PauseScene } from "./PauseScene";
-import { PowerShiba } from "./PowerShiba";
 import { TitleScene } from "./TitleScene";
 
 type BackgroundTrack = {
@@ -285,29 +285,29 @@ export class GameScene extends Scene<FriendlyFire> {
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
                     case "riddlestone":
-                        return new RiddleStone(this, entity.x, entity.y, entity.properties);
+                        return new RiddleStone({ scene: this, x: entity.x, y: entity.y, properties: entity.properties });
                     case "campfire":
-                        return new Campfire(this, entity.x, entity.y);
+                        return new Campfire({ scene: this, x: entity.x, y: entity.y });
                     case "radio":
-                        return new Radio(this, entity.x, entity.y);
+                        return new Radio({ scene: this, x: entity.x, y: entity.y });
                     case "movingplatform":
-                        return new MovingPlatform(this, entity.x, entity.y, entity.properties);
+                        return new MovingPlatform({ scene: this, x: entity.x, y: entity.y, properties: entity.properties });
                     case "skull":
-                        return new Skull(this, entity.x, entity.y);
+                        return new Skull({ scene: this, x: entity.x, y: entity.y });
                     case "chicken":
-                        return new Chicken(this, entity.x, entity.y);
+                        return new Chicken({ scene: this, x: entity.x, y: entity.y });
                     case "superthrow":
-                        return new SuperThrow(this, entity.x, entity.y);
+                        return new SuperThrow({ scene: this, x: entity.x, y: entity.y });
                     case "portal":
-                        return new Portal(this, entity.x, entity.y);
+                        return new Portal({ scene: this, x: entity.x, y: entity.y });
                     case "window":
-                        return new Window(this, entity.x, entity.y);
+                        return new Window({ scene: this, x: entity.x, y: entity.y });
                     case "player": {
                         const startingPos = this.getPlayerStartingPos();
-                        return new Player(this, startingPos.x, startingPos.y);
+                        return new Player({ scene: this, x: startingPos.x, y: startingPos.y });
                     }
                     default:
-                        return createEntity(entity.name, this, entity.x, entity.y, entity.properties);
+                        return createEntity(entity.name, { scene: this, x: entity.x, y: entity.y, properties: entity.properties });
                 }
             })
         ];
@@ -880,16 +880,16 @@ export class GameScene extends Scene<FriendlyFire> {
 
         if (bossPosition && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {
-                const cloud = new Cloud(
-                    this,
-                    pos.x, pos.y,
-                    {
+                const cloud = new Cloud({
+                    scene: this,
+                    x: pos.x,
+                    y: pos.y,
+                    properties: {
                         velocity: 0,
                         distance: 1
                     },
-                    true
-                );
-
+                    canRain: true
+                });
                 this.gameObjects.push(cloud);
             });
 

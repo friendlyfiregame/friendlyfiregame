@@ -3,10 +3,9 @@ import powershiba3 from "../../../assets/dialog/powershiba3.dialog.json";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import { NPC } from "../entities/NPC";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "./GameScene";
+import { NPC } from "./NPC";
 
 export enum PowerShibaState {
     IN_CLOUDS,
@@ -23,8 +22,8 @@ export class PowerShiba extends NPC {
     private floatAmount = 4;
     private floatSpeed = 2;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 22, 22);
+    public constructor(args: EntityArgs) {
+        super({ width: 22, height: 22, ...args });
         this.conversation = new Conversation(powershiba1, this);
     }
 

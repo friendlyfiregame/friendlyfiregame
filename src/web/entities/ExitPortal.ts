@@ -1,8 +1,7 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
-import { Entity, entity } from "../Entity";
-import { type GameScene } from "../scenes/GameScene";
+import { Entity, entity, type EntityArgs } from "../Entity";
 
 enum PortalAnimationState { OFF, FADEIN, IDLE }
 
@@ -16,8 +15,8 @@ export class ExitPortal extends Entity {
 
     private animationState = PortalAnimationState.OFF;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 32, 50, false);
+    public constructor(args: EntityArgs) {
+        super({ width: 32, height: 50, isTrigger: false, ...args });
         this.animator.assignSprite(ExitPortal.sprite);
     }
 

@@ -58,8 +58,8 @@ export enum MapObjectType {
 }
 export interface GameObjectProperties {
     direction?: "up" | "down" | "left" | "right";
-    distance: number;
-    velocity: number;
+    distance?: number;
+    velocity?: number;
     target?: string;
     duration?: number;
     teleportY?: number;

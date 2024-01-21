@@ -4,10 +4,9 @@ import { Aseprite } from "./../Aseprite";
 import { asset } from "./../Assets";
 import { Sound } from "./../audio/Sound";
 import { Conversation } from "./../Conversation";
-import { entity } from "./../Entity";
+import { entity, EntityArgs } from "./../Entity";
 import { type ParticleEmitter, valueCurves } from "./../Particles";
 import { RenderingLayer } from "./../Renderer";
-import { type GameScene } from "./../scenes/GameScene";
 import { calculateVolume, rnd, rndItem } from "./../util";
 import { Environment } from "./../World";
 import { NPC } from "./NPC";
@@ -37,9 +36,9 @@ export class Bird extends NPC {
     private state = BirdState.WAITING_LEFT;
     private jumpTimer = 0;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 28, 24);
-        this.minAltitude = y;
+    public constructor(args: EntityArgs) {
+        super({ width: 28, height: 24, ...args });
+        this.minAltitude = args.y;
         this.conversation = new Conversation(conversation, this);
 
         this.doubleJumpEmitter = this.scene.particles.createEmitter({

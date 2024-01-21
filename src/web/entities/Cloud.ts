@@ -1,15 +1,17 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { entity } from "../Entity";
-import { GameObjectProperties } from "../MapInfo";
+import { entity, type EntityArgs } from "../Entity";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { RenderingLayer } from "../Renderer";
 import { type CollidableGameObject } from "../scenes/GameObject";
-import { type GameScene } from "../scenes/GameScene";
 import { rnd, rndInt, timedRnd } from "../util";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
+
+export interface CloudArgs extends EntityArgs {
+    canRain?: boolean;
+}
 
 @entity("cloud")
 export class Cloud extends PhysicsEntity implements CollidableGameObject {
@@ -29,25 +31,31 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
     private raining = 0;
     private readonly isRainCloud;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties, canRain = false) {
-        super(scene, x, y, 74, 5);
+    public constructor({ canRain = false, ...args }: CloudArgs) {
+        super({ width: 74, height: 5, ...args });
         this.setFloating(true);
+        const { x, y, properties } = this;
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
         this.isRainCloud = canRain;
-        this.velocity = properties.velocity / PIXEL_PER_METER;
 
-        if (properties.direction === "right") {
-            this.targetX = x + properties.distance;
+        const velocity = properties?.velocity ?? 0;
+        const distance = properties?.distance ?? 0;
+        const direction = properties?.direction;
+
+        this.velocity = velocity / PIXEL_PER_METER;
+
+        if (direction === "right") {
+            this.targetX = x + distance;
             this.setVelocityX(this.velocity);
-        } else if (properties.direction === "left") {
-            this.targetX = x - properties.distance;
+        } else if (direction === "left") {
+            this.targetX = x - distance;
             this.setVelocityX(-this.velocity);
-        } else if (properties.direction === "up") {
-            this.targetY = y + properties.distance;
+        } else if (direction === "up") {
+            this.targetY = y + distance;
             this.setVelocityY(this.velocity);
-        } else if (properties.direction === "down") {
-            this.targetY = y - properties.distance;
+        } else if (direction === "down") {
+            this.targetY = y - distance;
             this.setVelocityY(-this.velocity);
         }
 

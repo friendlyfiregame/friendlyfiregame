@@ -1,10 +1,8 @@
 import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
-import { entity } from "../Entity";
-import { GameObjectProperties } from "../MapInfo";
+import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer, RenderingType } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { NPC } from "./NPC";
 
 @entity("sign")
@@ -13,9 +11,9 @@ export class Sign extends NPC {
     private static readonly sprite: Aseprite;
     public override conversation: Conversation;
 
-    public constructor(scene: GameScene, x: number, y: number, properties: GameObjectProperties) {
-        super(scene, x, y, 16, 16);
-        this.conversation = this.generateConversation(this.prepareContent(properties.content));
+    public constructor(args: EntityArgs) {
+        super({ width: 16, height: 16, ...args });
+        this.conversation = this.generateConversation(this.prepareContent(this.properties.content));
     }
 
     private prepareContent(content?: string): string[] {

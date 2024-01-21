@@ -2,12 +2,11 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
-import { entity } from "../Entity";
+import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
 import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { type GameScene } from "../scenes/GameScene";
 import { rndItem } from "../util";
 import { ScriptableNPC } from "./ScriptableNPC";
 import { type Wood } from "./Wood";
@@ -36,13 +35,20 @@ export class FlameBoy extends ScriptableNPC {
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y, 26, 54);
+    public constructor(args: EntityArgs) {
+        super({ width: 26, height: 54, ...args });
         this.setMaxVelocity(3);
-        this.face = new Face(scene, this, EyeType.FLAMEBOY, 0, 5);
+        this.face = new Face(this.scene, this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED;
         this.face.setMode(this.defaultFaceMode);
-        this.soundEmitter = new SoundEmitter(this.scene, this.x, this.y, FlameBoy.fireAmbience, 0.7, 0.2);
+        this.soundEmitter = new SoundEmitter({
+            scene: this.scene,
+            x: this.x,
+            y: this.y,
+            sound: FlameBoy.fireAmbience,
+            maxVolume: 0.7,
+            intensity: 0.2
+        });
     }
 
     public setState(state: FlameBoyState): void {
@@ -93,7 +99,7 @@ export class FlameBoy extends ScriptableNPC {
         if (triggerCollisions.length > 0) {
             const event = triggerCollisions.find(t => t.name === "flameboy_action");
 
-            if (event && event.properties.velocity) {
+            if (event != null && event.properties.velocity != null) {
                 this.autoMoveDirection = event.properties.velocity > 0 ? 1 : -1;
                 this.move = this.autoMoveDirection;
             }
