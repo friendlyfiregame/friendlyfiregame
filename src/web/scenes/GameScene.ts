@@ -285,7 +285,7 @@ export class GameScene extends Scene<FriendlyFire> {
             ...this.mapInfo.getEntities().map(entity => {
                 switch (entity.name) {
                     case "riddlestone":
-                        return new RiddleStone({ scene: this, x: entity.x, y: entity.y, properties: entity.properties });
+                        return new RiddleStone({ scene: this, x: entity.x, y: entity.y, ...entity.properties });
                     case "campfire":
                         return new Campfire({ scene: this, x: entity.x, y: entity.y });
                     case "radio":
