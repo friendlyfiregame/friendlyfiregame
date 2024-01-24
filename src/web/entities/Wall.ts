@@ -7,6 +7,10 @@ import { Environment } from "../World";
 
 enum WallState { SOLID, CRUMBLED }
 
+export interface WallArgs extends EntityArgs {
+    identifier?: string;
+}
+
 @entity("wall")
 export class Wall extends Entity implements CollidableGameObject {
     @asset("sprites/wall.aseprite.json")
@@ -14,14 +18,14 @@ export class Wall extends Entity implements CollidableGameObject {
     public readonly identifier: string;
     private state = WallState.SOLID;
 
-    public constructor(args: EntityArgs) {
+    public constructor({ identifier, ...args }: WallArgs) {
         super({ width: 24, height: 72, isTrigger: false, ...args });
 
-        if (this.properties.identifier == null) {
+        if (identifier == null) {
             throw new Error("Cannot create Wall entity with no identifier property");
         }
 
-        this.identifier = this.properties.identifier;
+        this.identifier = identifier;
     }
 
     public draw(): void {

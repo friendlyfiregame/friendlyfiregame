@@ -56,16 +56,14 @@ export abstract class Entity implements GameObject {
     public width: number;
     public height: number;
     public isTrigger: boolean;
-    public readonly properties: GameObjectProperties;
 
-    public constructor({ scene, x, y, width = 0, height = 0, isTrigger = true, properties = {} }: EntityArgs) {
+    public constructor({ scene, x, y, width = 0, height = 0, isTrigger = true }: EntityArgs) {
         this.scene = scene;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.isTrigger = isTrigger;
-        this.properties = properties;
     }
 
     public abstract draw(ctx: CanvasRenderingContext2D): void;

@@ -307,7 +307,7 @@ export class GameScene extends Scene<FriendlyFire> {
                         return new Player({ scene: this, x: startingPos.x, y: startingPos.y });
                     }
                     default:
-                        return createEntity(entity.name, { scene: this, x: entity.x, y: entity.y, properties: entity.properties, ...entity.properties });
+                        return createEntity(entity.name, { scene: this, x: entity.x, y: entity.y, ...entity.properties });
                 }
             })
         ];
