@@ -2,13 +2,17 @@ import { Conversation } from "../Conversation";
 import { type EntityArgs } from "../Entity";
 import { NPC } from "./NPC";
 
+export interface ConversationProxyArgs extends EntityArgs {
+    content?: string;
+}
+
 export class ConversationProxy extends NPC {
     public override conversation: Conversation;
 
-    public constructor(args: EntityArgs) {
+    public constructor({ content, ...args }: ConversationProxyArgs) {
         super({ width: 16, height: 16, ...args });
 
-        this.conversation = this.generateConversation(this.prepareContent(this.properties.content));
+        this.conversation = this.generateConversation(this.prepareContent(content));
         this.scene.addGameObject(this);
     }
 

@@ -5,15 +5,19 @@ import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { NPC } from "./NPC";
 
+export interface SignArgs extends EntityArgs {
+    content?: string;
+}
+
 @entity("sign")
 export class Sign extends NPC {
     @asset("sprites/sign.aseprite.json")
     private static readonly sprite: Aseprite;
     public override conversation: Conversation;
 
-    public constructor(args: EntityArgs) {
+    public constructor({ content, ...args }: SignArgs) {
         super({ width: 16, height: 16, ...args });
-        this.conversation = this.generateConversation(this.prepareContent(this.properties.content));
+        this.conversation = this.generateConversation(this.prepareContent(content));
     }
 
     private prepareContent(content?: string): string[] {

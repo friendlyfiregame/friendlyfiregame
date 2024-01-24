@@ -430,7 +430,7 @@ export class Player extends PhysicsEntity {
                         scene: this.scene,
                         x: this.x,
                         y: this.y,
-                        properties: this.readableTrigger.properties
+                        content: this.readableTrigger.properties.content
                     });
 
                     this.playerConversation = new PlayerConversation(
