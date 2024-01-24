@@ -213,8 +213,6 @@ export class Shiba extends ScriptableNPC {
             );
         }
 
-        if (this.scene.showBounds) this.drawBounds();
-
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }

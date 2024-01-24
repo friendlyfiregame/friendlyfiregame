@@ -42,10 +42,6 @@ export class Portal extends Entity {
                 this.animator.play("empty", 1);
                 break;
         }
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public override update(dt: number): void {

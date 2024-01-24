@@ -175,10 +175,6 @@ export class Fire extends NPC {
         }
 
         this.speechBubble.draw(ctx);
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public override update(dt: number): void {

@@ -59,10 +59,6 @@ export class Sign extends NPC {
             time: this.scene.gameTime * 1000
         });
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.speechBubble.draw(ctx);
     }
 

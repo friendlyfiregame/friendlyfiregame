@@ -37,7 +37,7 @@ import { Stone } from "../entities/Stone";
 import { StoneDisciple } from "../entities/StoneDisciple";
 import { Tree } from "../entities/Tree";
 import { Wing } from "../entities/Wing";
-import { type Bounds, createEntity  } from "../Entity";
+import { type Bounds, createEntity, Entity  } from "../Entity";
 import { FireGfx } from "../FireGfx";
 import { type FriendlyFire } from "../FriendlyFire";
 import { type ControllerEvent } from "../input/ControllerEvent";
@@ -607,6 +607,12 @@ export class GameScene extends Scene<FriendlyFire> {
 
     private addAllDebugBoundsToRenderingQueue(): void {
         if (this.showBounds) {
+            for (const obj of this.gameObjects) {
+                if (obj instanceof Entity) {
+                    this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
+                }
+            }
+
             // Draw trigger bounds for collisions
             for (const obj of this.triggerObjects) {
                 const bounds = boundsFromMapObject(obj);

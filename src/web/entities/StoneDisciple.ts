@@ -40,10 +40,6 @@ export class StoneDisciple extends NPC {
 
         this.drawFace(ctx, false);
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }

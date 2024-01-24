@@ -78,10 +78,6 @@ export class Seed extends NPC {
             undefined
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         if (this.state === SeedState.GROWN) {
             this.drawFace(ctx);
         }

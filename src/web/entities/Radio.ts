@@ -14,10 +14,6 @@ export class Radio extends Entity {
 
     public draw(): void {
         this.scene.renderer.addAseprite(Radio.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public override update(): void {}

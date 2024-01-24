@@ -21,10 +21,6 @@ export class Bone extends PhysicsEntity {
 
     public draw(): void {
         this.scene.renderer.addAseprite(Bone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public isCarried(): boolean {

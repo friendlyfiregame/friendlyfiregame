@@ -17,9 +17,6 @@ export class Window extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
         this.speechBubble.draw(ctx);
     }
 

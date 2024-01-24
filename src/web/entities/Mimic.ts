@@ -43,10 +43,6 @@ export class Mimic extends NPC {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         switch (this.state) {
             case MimicState.SLEEPING:
                 this.animator.play("sleeping", this.direction);

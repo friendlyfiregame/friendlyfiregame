@@ -68,10 +68,6 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.drawFace(ctx, false);
 
         if (this.showDialoguePrompt()) {

@@ -26,7 +26,5 @@ export class Snowball extends PhysicsEntity {
                 ctx.restore();
             }
         });
-
-        if (this.scene.showBounds) this.drawBounds();
     }
 }

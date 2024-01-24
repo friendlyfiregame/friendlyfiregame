@@ -43,10 +43,6 @@ export class Tree extends NPC {
     public draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.drawFace(ctx);
 
         if (this.showDialoguePrompt()) {

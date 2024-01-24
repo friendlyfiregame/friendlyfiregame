@@ -67,10 +67,6 @@ export class ShadowPresence extends NPC {
             time: this.scene.gameTime * 1000
         });
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }

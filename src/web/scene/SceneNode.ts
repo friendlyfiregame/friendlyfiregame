@@ -12,13 +12,7 @@ import { type AnimationArgs, SceneNodeAnimation } from "./SceneNodeAnimation";
  */
 export enum PostDrawHints {
     /** As long as this hint is present the scene must be continuously redrawn to keep animations running. */
-    CONTINUE_DRAWING = 1,
-
-    /**
-     * When this flag is set then at least one node has the showBounds flag set to true. The root node already
-     * handles this flag by drawing the bounds when this hint is present.
-     */
-    DRAW_BOUNDS = 2
+    CONTINUE_DRAWING = 1
 }
 
 /**
@@ -62,9 +56,6 @@ export interface SceneNodeArgs {
 
     /** Optional initial layer (0-31) to put the node onto. Defaults to 0. */
     layer?: number;
-
-    /** Optional initial showBounds flag. Set to true to show bounds around the node for debugging purposes. */
-    showBounds?: boolean;
 }
 
 /**
@@ -148,9 +139,6 @@ export class SceneNode<T extends Game = Game> {
      */
     private opacity: number;
 
-    /** Set to true to show bounds. Useful for debugging. */
-    private showBounds: boolean;
-
     /**
      * The layer this node is drawn on. Internal representation is stored in `2^n` while setter and getter works
      * with `n` instead. This is because the layering system internally works with fast bit masks.
@@ -161,7 +149,7 @@ export class SceneNode<T extends Game = Game> {
      * Creates a new scene node with the given initial settings.
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
-            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = 0 }: SceneNodeArgs = {}) {
+            childAnchor = Direction.CENTER, opacity = 1, layer = 0 }: SceneNodeArgs = {}) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -170,7 +158,6 @@ export class SceneNode<T extends Game = Game> {
         this.opacity = opacity;
         this.anchor = anchor;
         this.childAnchor = childAnchor;
-        this.showBounds = showBounds;
         this.layer = 1 << layer;
     }
 
@@ -949,28 +936,6 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Enables or disables showing node bounds. This may be useful for debugging.
-     *
-     * @param showBounds - True to enable showing node bounds, false to disable it.
-     */
-    public setShowBounds(showBounds: boolean): this {
-        if(showBounds !== this.showBounds) {
-            this.showBounds = showBounds;
-            this.invalidate();
-        }
-        return this;
-    }
-
-    /**
-     * Returns true if node bounds are currently shown for debugging purposes.
-     *
-     * @return True if node bounds are shown, false if not.
-     */
-    public isShowBounds(): boolean {
-        return this.showBounds;
-    }
-
-    /**
      * Returns the layer of this node.
      *
      * @return The node's layer (0-31).
@@ -1079,35 +1044,6 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Recursively draws the bounds for this node and alls its child nodes as long as the {@linkcode showBounds()} for the node
-     * is set to `true`.
-     *
-     * @param ctx - The rendering context.
-     * @return this
-     */
-    protected drawBounds(ctx: CanvasRenderingContext2D): this {
-        if (this.showBounds) {
-            const bounds = this.getBoundsPolygon();
-            ctx.save();
-            this.sceneTransformation.setCanvasTransform(ctx);
-            ctx.beginPath();
-            bounds.draw(ctx);
-            ctx.clip();
-            ctx.save();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = "red";
-            ctx.stroke();
-            ctx.setLineDash([4, 4]);
-            ctx.strokeStyle = "white";
-            ctx.lineDashOffset = Math.round(Date.now() / 100) % 8;
-            ctx.stroke();
-            ctx.restore();
-            ctx.restore();
-        }
-        return this.forEachChild(child => child.drawBounds(ctx));
-    }
-
-    /**
      * Draws this scene node and its child nodes recursively
      *
      * @param ctx    - The rendering context.
@@ -1141,7 +1077,7 @@ export class SceneNode<T extends Game = Game> {
             }
         }
         ctx.restore();
-        return this.showBounds ? flags | PostDrawHints.DRAW_BOUNDS | PostDrawHints.CONTINUE_DRAWING : flags;
+        return flags;
     }
 
     /**

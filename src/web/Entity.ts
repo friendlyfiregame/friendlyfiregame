@@ -1,6 +1,5 @@
 import { Animator } from "./Animator";
 import { type GameObjectProperties } from "./MapInfo";
-import { RenderingLayer, RenderingType } from "./Renderer";
 import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
 
@@ -132,22 +131,6 @@ export abstract class Entity implements GameObject {
         const x = this.x - (this.width / 2) - margin;
         const y = this.y - -this.height + margin;
         return { x, y, width, height };
-    }
-
-    protected drawBounds(): void {
-        this.scene.renderer.add({
-            type: RenderingType.RECT,
-            layer: RenderingLayer.DEBUG,
-            position: {
-                x: this.getBounds().x,
-                y: -this.getBounds().y
-            },
-            lineColor: "red",
-            dimension: {
-               width: this.getBounds().width,
-               height: this.getBounds().height
-            }
-        });
     }
 
     /**

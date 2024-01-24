@@ -38,10 +38,6 @@ export class Wing extends NPC {
             RenderingLayer.ENTITIES
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }

@@ -38,10 +38,6 @@ export class SuperThrow extends NPC {
             this.direction
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.speechBubble.draw(ctx);
     }
 

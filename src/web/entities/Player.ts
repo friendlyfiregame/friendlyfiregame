@@ -774,10 +774,6 @@ export class Player extends PhysicsEntity {
             this.direction
         );
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         if (
             this.closestNPC
             && !this.dance

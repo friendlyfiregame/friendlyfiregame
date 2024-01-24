@@ -138,10 +138,6 @@ export class FlameBoy extends ScriptableNPC {
             );
         }
 
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.drawFace(ctx, false);
 
         if (this.thinkBubble) {

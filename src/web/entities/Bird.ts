@@ -182,7 +182,6 @@ export class Bird extends NPC {
         }
 
         this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction, undefined, alpha);
-        if (this.scene.showBounds) this.drawBounds();
         this.speechBubble.draw(ctx);
     }
 

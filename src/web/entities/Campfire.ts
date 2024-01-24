@@ -19,10 +19,6 @@ export class Campfire extends Entity {
             this.x, this.y - 2,
             RenderingLayer.ENTITIES
         );
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
     }
 
     public override update(): void {}

@@ -33,11 +33,6 @@ export class Chicken extends NPC {
             RenderingLayer.ENTITIES,
             this.direction
         );
-
-        if (this.scene.showBounds) {
-            this.drawBounds();
-        }
-
         this.speechBubble.draw(ctx);
     }
 

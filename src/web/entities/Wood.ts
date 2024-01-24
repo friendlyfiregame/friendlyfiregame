@@ -46,8 +46,6 @@ export class Wood extends PhysicsEntity {
 
     public draw(): void {
         this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
-        if (this.scene.showBounds) this.drawBounds();
     }
 
     public isCarried(): boolean {
