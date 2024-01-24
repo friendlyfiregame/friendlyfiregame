@@ -1,3 +1,13 @@
+import "../entities/RiddleStone";
+import "../entities/MovingPlatform";
+import "../entities/Campfire";
+import "../entities/Radio";
+import "../entities/Skull";
+import "../entities/Chicken";
+import "../entities/SuperThrow";
+import "../entities/Portal";
+import "../entities/Window";
+
 import {
     DIALOG_FONT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, PETTING_ENDING_FADE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION,
     WINDOW_ENDING_FADE_DURATION
@@ -10,31 +20,22 @@ import { Camera } from "../Camera";
 import { Conversation } from "../Conversation";
 import { Bird } from "../entities/Bird";
 import { Bone } from "../entities/Bone";
-import { Campfire } from "../entities/Campfire";
 import { Caveman } from "../entities/Caveman";
-import { Chicken } from "../entities/Chicken";
 import { Cloud } from "../entities/Cloud";
 import { ExitPortal } from "../entities/ExitPortal";
 import { Fire } from "../entities/Fire";
 import { FireState } from "../entities/FireState";
 import { FlameBoy } from "../entities/FlameBoy";
 import { Mimic } from "../entities/Mimic";
-import { MovingPlatform } from "../entities/MovingPlatform";
 import { Player } from "../entities/Player";
-import { Portal } from "../entities/Portal";
 import { PowerShiba } from "../entities/PowerShiba";
-import { Radio } from "../entities/Radio";
-import { RiddleStone } from "../entities/RiddleStone";
 import { type Seed } from "../entities/Seed";
 import { ShadowPresence } from "../entities/ShadowPresence";
 import { Shiba } from "../entities/Shiba";
 import { ShibaState } from "../entities/ShibaState";
-import { Skull } from "../entities/Skull";
 import { Stone } from "../entities/Stone";
 import { StoneDisciple } from "../entities/StoneDisciple";
-import { SuperThrow } from "../entities/SuperThrow";
 import { Tree } from "../entities/Tree";
-import { Window } from "../entities/Window";
 import { Wing } from "../entities/Wing";
 import { type Bounds, createEntity  } from "../Entity";
 import { FireGfx } from "../FireGfx";
@@ -277,38 +278,15 @@ export class GameScene extends Scene<FriendlyFire> {
         this.windowCutsceneTime = 0;
         this.windowEndingTriggered = false;
         Conversation.resetGlobals();
-
         this.gameObjects = [
             this.world = new World(this),
             this.particles,
             ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
-                switch (entity.name) {
-                    case "riddlestone":
-                        return new RiddleStone({ scene: this, x: entity.x, y: entity.y, ...entity.properties });
-                    case "campfire":
-                        return new Campfire({ scene: this, x: entity.x, y: entity.y });
-                    case "radio":
-                        return new Radio({ scene: this, x: entity.x, y: entity.y });
-                    case "movingplatform":
-                        return new MovingPlatform({ scene: this, x: entity.x, y: entity.y, ...entity.properties });
-                    case "skull":
-                        return new Skull({ scene: this, x: entity.x, y: entity.y });
-                    case "chicken":
-                        return new Chicken({ scene: this, x: entity.x, y: entity.y });
-                    case "superthrow":
-                        return new SuperThrow({ scene: this, x: entity.x, y: entity.y });
-                    case "portal":
-                        return new Portal({ scene: this, x: entity.x, y: entity.y });
-                    case "window":
-                        return new Window({ scene: this, x: entity.x, y: entity.y });
-                    case "player": {
-                        const startingPos = this.getPlayerStartingPos();
-                        return new Player({ scene: this, x: startingPos.x, y: startingPos.y });
-                    }
-                    default:
-                        return createEntity(entity.name, { scene: this, x: entity.x, y: entity.y, ...entity.properties });
+                if (entity.name === "player") {
+                    entity = { ...entity, ...this.getPlayerStartingPos() };
                 }
+                return createEntity(entity.name, { scene: this, x: entity.x, y: entity.y, ...entity.properties });
             })
         ];
 
