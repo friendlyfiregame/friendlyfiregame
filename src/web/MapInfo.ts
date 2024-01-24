@@ -57,8 +57,6 @@ export enum MapObjectType {
     SOUND = "sound"
 }
 export interface GameObjectProperties {
-    direction?: "up" | "down" | "left" | "right";
-    distance?: number;
     velocity?: number;
     target?: string;
     duration?: number;
@@ -69,8 +67,6 @@ export interface GameObjectProperties {
     setDialogEntity?: string;
     setDialogValue?: string;
     content?: string;
-    enterFadeTime?: number;
-    enterSleepTime?: number;
     enterSound?: string;
     exitFadeTime?: number;
     exitSleepTime?: number;

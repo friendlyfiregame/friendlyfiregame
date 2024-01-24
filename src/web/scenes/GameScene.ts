@@ -291,7 +291,7 @@ export class GameScene extends Scene<FriendlyFire> {
                     case "radio":
                         return new Radio({ scene: this, x: entity.x, y: entity.y });
                     case "movingplatform":
-                        return new MovingPlatform({ scene: this, x: entity.x, y: entity.y, properties: entity.properties });
+                        return new MovingPlatform({ scene: this, x: entity.x, y: entity.y, ...entity.properties });
                     case "skull":
                         return new Skull({ scene: this, x: entity.x, y: entity.y });
                     case "chicken":
@@ -884,10 +884,6 @@ export class GameScene extends Scene<FriendlyFire> {
                     scene: this,
                     x: pos.x,
                     y: pos.y,
-                    properties: {
-                        velocity: 0,
-                        distance: 1
-                    },
                     canRain: true
                 });
                 this.gameObjects.push(cloud);

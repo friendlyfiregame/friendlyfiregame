@@ -7,6 +7,21 @@ import { type CollidableGameObject } from "../scenes/GameObject";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 
+/** Platform movement direction. */
+export type CloudDirection = "up" | "down" | "right" | "left";
+
+/** Moving platform entity constructor arguments */
+export interface MovingEntityArgs extends EntityArgs {
+    /** Initial movement direction of the platform. Defaults to "up". */
+    direction?: CloudDirection;
+
+    /** Platform movement velocity. Defaults to 0. */
+    velocity?: number;
+
+    /** How far the platform moves before it changes movement into opposite direction. Defaults to 0. */
+    distance?: number;
+}
+
 @entity("movingplatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {
     @asset("sprites/stoneplatform.aseprite.json")
@@ -18,13 +33,10 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     private readonly targetY: number;
     private readonly velocity: number;
 
-    public constructor(args: EntityArgs) {
+    public constructor({ direction = "up",  velocity = 0, distance = 0, ...args }: MovingEntityArgs) {
         super({ width: 68, height: 12, ...args });
         this.setFloating(true);
-        const { x, y, properties } = this;
-        const direction = properties?.direction;
-        const distance = properties?.distance ?? 0;
-        const velocity = properties?.velocity ?? 0;
+        const { x, y } = this;
         this.startX = this.targetX = x;
         this.startY = this.targetY = y;
         this.velocity = velocity / PIXEL_PER_METER;

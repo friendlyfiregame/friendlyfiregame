@@ -4,28 +4,23 @@ import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { RenderingLayer } from "../Renderer";
-import { type CollidableGameObject } from "../scenes/GameObject";
 import { rnd, rndInt, timedRnd } from "../util";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 
+/** Cloud entity constructor arguments */
 export interface CloudArgs extends EntityArgs {
+    /** Set to true to allow the cloud to rain. Defaults to false. */
     canRain?: boolean;
 }
 
 @entity("cloud")
-export class Cloud extends PhysicsEntity implements CollidableGameObject {
+export class Cloud extends PhysicsEntity {
     @asset("sprites/cloud3.aseprite.json")
     private static readonly sprite: Aseprite;
 
     @asset("images/raindrop.png")
     private static readonly raindrop: HTMLImageElement;
-
-    private readonly startX: number;
-    private readonly startY: number;
-    private readonly targetX: number;
-    private readonly targetY: number;
-    private readonly velocity: number;
 
     private readonly rainEmitter: ParticleEmitter;
     private raining = 0;
@@ -33,32 +28,7 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
 
     public constructor({ canRain = false, ...args }: CloudArgs) {
         super({ width: 74, height: 5, ...args });
-        this.setFloating(true);
-        const { x, y, properties } = this;
-        this.startX = this.targetX = x;
-        this.startY = this.targetY = y;
         this.isRainCloud = canRain;
-
-        const velocity = properties?.velocity ?? 0;
-        const distance = properties?.distance ?? 0;
-        const direction = properties?.direction;
-
-        this.velocity = velocity / PIXEL_PER_METER;
-
-        if (direction === "right") {
-            this.targetX = x + distance;
-            this.setVelocityX(this.velocity);
-        } else if (direction === "left") {
-            this.targetX = x - distance;
-            this.setVelocityX(-this.velocity);
-        } else if (direction === "up") {
-            this.targetY = y + distance;
-            this.setVelocityY(this.velocity);
-        } else if (direction === "down") {
-            this.targetY = y - distance;
-            this.setVelocityY(-this.velocity);
-        }
-
         this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
             offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
@@ -98,30 +68,6 @@ export class Cloud extends PhysicsEntity implements CollidableGameObject {
 
     public override update(dt: number): void {
         super.update(dt);
-
-        if (this.getVelocityY() > 0) {
-            if (this.y >= Math.max(this.startY, this.targetY)) {
-                this.y = Math.max(this.startY, this.targetY);
-                this.setVelocityY(-this.velocity);
-            }
-        } else if (this.getVelocityY() < 0) {
-            if (this.y <= Math.min(this.startY, this.targetY)) {
-                this.y = Math.min(this.startY, this.targetY);
-                this.setVelocityY(this.velocity);
-            }
-        }
-
-        if (this.getVelocityX() > 0) {
-            if (this.x >= Math.max(this.targetX, this.startX)) {
-                this.x = Math.max(this.targetX, this.startX);
-                this.setVelocityX(-this.velocity);
-            }
-        } else if (this.getVelocityX() < 0) {
-            if (this.x <= Math.min(this.startX, this.targetX)) {
-                this.x = Math.min(this.startX, this.targetX);
-                this.setVelocityX(this.velocity);
-            }
-        }
 
         if (this.raining) {
             this.raining -= dt;
