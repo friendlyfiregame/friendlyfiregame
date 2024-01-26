@@ -1,3 +1,6 @@
+.POSIX:
+
+
 SRC=$(wildcard *.aseprite */*.aseprite)
 IMAGES=$(SRC:.aseprite=.png)
 DATA=$(SRC:.aseprite=.aseprite.json)
@@ -19,3 +22,6 @@ all: $(IMAGES)
 
 clean:
 	$(RM) $(IMAGES) $(DATA)
+
+
+.PHONY: all clean
