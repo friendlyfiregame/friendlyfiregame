@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- A screenshot of the title screen has been added and linked to the web app manifest
+  to keep up with latest development efforts of progressive web apps (PWAs).
+
 ## [2.8.0] - 2024-01-26
 
 ### Fixed

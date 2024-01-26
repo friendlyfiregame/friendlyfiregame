@@ -81,5 +81,13 @@
             "type": "image/png"
         }
     ],
+    "screenshots": [
+        {
+            "src": "assets/screenshots/title.webp",
+            "sizes": "1920x1080",
+            "type": "image/webp",
+            "label": "Title screen"
+        }
+    ],
     "prefer_related_applications": false
 }
