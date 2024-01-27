@@ -4,10 +4,11 @@ import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
-import { type GameObjectInfo } from "../MapInfo";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { FlameBoyAction } from "../triggers/FlameBoyAction";
 import { rndItem } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { ScriptableNPC } from "./ScriptableNPC";
 import { type Wood } from "./Wood";
 
@@ -95,14 +96,10 @@ export class FlameBoy extends ScriptableNPC {
         }
     }
 
-    private walkRandomly(triggerCollisions: GameObjectInfo[], dt: number): void {
-        if (triggerCollisions.length > 0) {
-            const event = triggerCollisions.find(t => t.name === "flameboy_action");
-
-            if (event != null && event.properties.velocity != null) {
-                this.autoMoveDirection = event.properties.velocity > 0 ? 1 : -1;
-                this.move = this.autoMoveDirection;
-            }
+    private walkRandomly(dt: number, action?: FlameBoyAction): void {
+        if (action != null && action.velocity != null) {
+            this.autoMoveDirection = action.velocity > 0 ? 1 : -1;
+            this.move = this.autoMoveDirection;
         }
 
         if (this.idleTimer !== null && this.idleTimer >= 0) {
@@ -127,7 +124,7 @@ export class FlameBoy extends ScriptableNPC {
     }
 
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         if (this.move === 0) {
             this.scene.renderer.addAseprite(
                 FlameBoy.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
@@ -154,14 +151,14 @@ export class FlameBoy extends ScriptableNPC {
     public override update(dt: number): void {
         super.update(dt);
 
-        // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        // Flame Boy action triggers
+        const actions = this.scene.world.getEntityCollisions(this).filter(isInstanceOf(FlameBoyAction));
 
         if (this.hasActiveConversation()) {
             this.move = 0;
         } else {
             if (this.state === FlameBoyState.IDLE) {
-                this.walkRandomly(triggerCollisions, dt);
+                this.walkRandomly(dt, actions[0]);
             }
         }
 

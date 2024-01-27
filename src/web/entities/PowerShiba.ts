@@ -60,7 +60,7 @@ export class PowerShiba extends NPC {
         void this.think("Oh… I remember…", 3000);
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(

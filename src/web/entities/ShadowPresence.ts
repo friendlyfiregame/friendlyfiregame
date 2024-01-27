@@ -49,7 +49,7 @@ export class ShadowPresence extends NPC {
         );
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         const scale = this.direction < 0 ? { x: -1, y: 1 } : undefined;
         const animationTag = this.isNearPlayer ? AnimationTag.IDLE : AnimationTag.INVISIBLE;
 

@@ -13,7 +13,7 @@ export class Caveman extends NPC {
         super({ width: 18, height: 24, ...args });
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(
             Caveman.sprite,
             "idle",

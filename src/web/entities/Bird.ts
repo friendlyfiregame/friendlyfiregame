@@ -1,4 +1,7 @@
 import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
+import { BirdNestLeft } from "../triggers/BirdNestLeft";
+import { BirdNestRight } from "../triggers/BirdNestRight";
+import { isInstanceOf } from "../util/predicates";
 import conversation from "./../../../assets/dialog/bird.dialog.json";
 import { Aseprite } from "./../Aseprite";
 import { asset } from "./../Assets";
@@ -175,7 +178,7 @@ export class Bird extends NPC {
         return (superResult === true && this.isWaiting());
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         let alpha: number | undefined;
         if (this.scene.pettingCutscene) {
             alpha = Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION));
@@ -188,9 +191,6 @@ export class Bird extends NPC {
     public override update(dt: number): void {
         super.update(dt);
         this.move = 0;
-
-        // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         if (this.jumpTimer > 0) {
             this.jumpTimer -= dt;
@@ -213,11 +213,14 @@ export class Bird extends NPC {
                 this.jump();
             }
 
-            if (this.state === BirdState.FLYING_RIGHT && triggerCollisions.length > 0 && triggerCollisions.find(t => t.name === "bird_nest_right")) {
+            // Triggers
+            const triggerCollisions = this.scene.world.getEntityCollisions(this);
+
+            if (this.state === BirdState.FLYING_RIGHT && triggerCollisions.length > 0 && triggerCollisions.find(isInstanceOf(BirdNestRight))) {
                 this.nextState();
             }
 
-            if (this.state === BirdState.FLYING_LEFT && triggerCollisions.length > 0 && triggerCollisions.find(t => t.name === "bird_nest_left")) {
+            if (this.state === BirdState.FLYING_LEFT && triggerCollisions.length > 0 && triggerCollisions.find(isInstanceOf(BirdNestLeft))) {
                 this.nextState();
             }
         }

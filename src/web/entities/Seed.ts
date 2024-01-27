@@ -69,7 +69,7 @@ export class Seed extends NPC {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(
             Seed.sprite,
             this.getSpriteTag(),

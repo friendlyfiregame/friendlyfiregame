@@ -158,7 +158,7 @@ export class Fire extends NPC {
         ctx.restore();
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible) {
             return;
         }

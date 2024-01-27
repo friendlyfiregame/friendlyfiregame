@@ -48,6 +48,7 @@ import { type ParticleEmitter, Particles, valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
+import { createTrigger, Trigger } from "../triggers/Trigger";
 import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { World } from "../World";
 import { AmbientSoundId } from "./AmbientSoundId";
@@ -209,7 +210,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameObjects: GameObject[] = [];
     public soundEmitters: SoundEmitter[] = [];
     public pointsOfInterest: GameObjectInfo[] = [];
-    public triggerObjects: GameObjectInfo[] = [];
     public boundObjects: GameObjectInfo[] = [];
     public gateObjects: GameObjectInfo[] = [];
     public paused = false;
@@ -261,7 +261,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.mapInfo = new MapInfo();
         this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
         this.pointsOfInterest = this.mapInfo.getPointers();
-        this.triggerObjects = this.mapInfo.getTriggerObjects();
         this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
 
@@ -282,6 +281,16 @@ export class GameScene extends Scene<FriendlyFire> {
             this.world = new World(this),
             this.particles,
             ...this.soundEmitters,
+            ...this.mapInfo.getTriggerObjects().map(trigger => {
+                return createTrigger(trigger.name, {
+                    scene: this,
+                    x: trigger.x + trigger.width / 2,
+                    y: trigger.y - trigger.height,
+                    width: trigger.width,
+                    height: trigger.height,
+                    ...trigger.properties
+                });
+            }),
             ...this.mapInfo.getEntities().map(entity => {
                 if (entity.name === "player") {
                     entity = { ...entity, ...this.getPlayerStartingPos() };
@@ -609,14 +618,12 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.showBounds) {
             for (const obj of this.gameObjects) {
                 if (obj instanceof Entity) {
-                    this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
+                    if (obj instanceof Trigger) {
+                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
+                    } else {
+                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "blue");
+                    }
                 }
-            }
-
-            // Draw trigger bounds for collisions
-            for (const obj of this.triggerObjects) {
-                const bounds = boundsFromMapObject(obj);
-                this.addSingleDebugBoundsToRenderingQueue(bounds, "blue");
             }
 
             for (const obj of this.boundObjects) {

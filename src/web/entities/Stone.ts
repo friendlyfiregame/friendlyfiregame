@@ -59,7 +59,7 @@ export class Stone extends NPC implements CollidableGameObject {
         );
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(
             Stone.sprite,
             "idle",

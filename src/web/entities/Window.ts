@@ -16,7 +16,7 @@ export class Window extends NPC {
         return "Check window";
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.speechBubble.draw(ctx);
     }
 

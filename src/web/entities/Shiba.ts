@@ -7,11 +7,13 @@ import { Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { FaceModes } from "../Face";
-import { type GameObjectInfo } from "../MapInfo";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { ShibaAction } from "../triggers/ShibaAction";
+import { ShibaStop } from "../triggers/ShibaStop";
 import { calculateVolume, rnd, rndItem } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { SHRINK_SIZE } from "./Fire";
 import { FireState } from "./FireState";
@@ -202,7 +204,7 @@ export class Shiba extends ScriptableNPC {
         return "idle";
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         if (this.move === 0) {
             this.scene.renderer.addAseprite(
                 Shiba.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
@@ -244,18 +246,20 @@ export class Shiba extends ScriptableNPC {
             this.heartEmitter.update(dt);
         }
 
-        // Triggers
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
+        // Shiba action triggers
+        const collisions = this.scene.world.getEntityCollisions(this);
+        const action = collisions.find(isInstanceOf(ShibaAction));
+        const stop = collisions.find(isInstanceOf(ShibaStop)) != null;
 
         if (this.hasActiveConversation() || this.isBeingPetted) {
             this.move = 0;
         } else {
             if (this.state === ShibaState.ON_TREE) {
-                this.onTreeUpdateLogic(triggerCollisions, dt);
+                this.onTreeUpdateLogic(dt, action);
             } else if (this.state === ShibaState.FLYING_AWAY) {
                 this.flyingAwayUpdateLogic(dt);
             } else if (this.state === ShibaState.GOING_TO_FIRE) {
-                this.walkToFireLogic(triggerCollisions);
+                this.walkToFireLogic(stop);
             }
         }
 
@@ -283,7 +287,7 @@ export class Shiba extends ScriptableNPC {
         return (superResult === true && this.state !== ShibaState.FLYING_AWAY && !this.isBeingPetted);
     }
 
-    private walkToFireLogic(triggerCollisions: GameObjectInfo[]): void {
+    private walkToFireLogic(stop: boolean): void {
         this.move = -1;
 
         if (
@@ -297,23 +301,15 @@ export class Shiba extends ScriptableNPC {
             this.jump();
         }
 
-        if (triggerCollisions.length > 0) {
-            const event = triggerCollisions.find(t => t.name === "shiba_stop");
-
-            if (event) {
-                this.nextState();
-            }
+        if (stop) {
+            this.nextState();
         }
     }
 
-    private onTreeUpdateLogic(triggerCollisions: GameObjectInfo[], dt: number): void {
-        if (triggerCollisions.length > 0) {
-            const event = triggerCollisions.find(t => t.name === "shiba_action");
-
-            if (event != null && event.properties.velocity != null) {
-                this.autoMoveDirection = event.properties.velocity > 0 ? 1 : -1;
-                this.move = this.autoMoveDirection;
-            }
+    private onTreeUpdateLogic(dt: number, action?: ShibaAction): void {
+        if (action != null && action.velocity != null) {
+            this.autoMoveDirection = action.velocity > 0 ? 1 : -1;
+            this.move = this.autoMoveDirection;
         }
 
         if (this.idleTimer !== null && this.idleTimer >= 0) {

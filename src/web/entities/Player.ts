@@ -25,7 +25,16 @@ import { type BgmId } from "../scenes/BgmId";
 import { FadeDirection } from "../scenes/FadeDirection";
 import { GotItemScene, Item } from "../scenes/GotItemScene";
 import { SpeechBubble } from "../SpeechBubble";
+import { FinishMountainRiddle } from "../triggers/FinishMountainRiddle";
+import { MountainGate } from "../triggers/MountainGate";
+import { NoEmitTrigger } from "../triggers/NoEmitTrigger";
+import { RaincloudSky } from "../triggers/RaincloudSky";
+import { Readable } from "../triggers/Readable";
+import { ResetMountain } from "../triggers/ResetMountain";
+import { Teleporter } from "../triggers/Teleporter";
+import { Trigger } from "../triggers/Trigger";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { Cloud } from "./Cloud";
 import { ConversationProxy } from "./ConversationProxy";
@@ -163,7 +172,7 @@ export class Player extends PhysicsEntity {
     public thinkBubble: SpeechBubble | null = null;
 
     private closestNPC: NPC | null = null;
-    private readableTrigger?: GameObjectInfo;
+    private readableTrigger: Readable | null = null;
     private readonly dustEmitter: ParticleEmitter;
     private readonly bounceEmitter: ParticleEmitter;
     private readonly doubleJumpEmitter: ParticleEmitter;
@@ -430,7 +439,7 @@ export class Player extends PhysicsEntity {
                         scene: this.scene,
                         x: this.x,
                         y: this.y,
-                        content: this.readableTrigger.properties.content
+                        content: this.readableTrigger.content
                     });
 
                     this.playerConversation = new PlayerConversation(
@@ -750,7 +759,7 @@ export class Player extends PhysicsEntity {
         });
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         if (!this.visible) {
             return;
         }
@@ -828,15 +837,11 @@ export class Player extends PhysicsEntity {
 
     public debugCollisions(): void {
         console.log("Entities: ", this.scene.world.getEntityCollisions(this));
-        console.log("Triggers: ", this.scene.world.getTriggerCollisions(this));
         console.log("Gates: ", this.scene.world.getGateCollisions(this));
     }
 
-    private getReadableTrigger(): GameObjectInfo | undefined {
-        const triggers = this.scene.world.getTriggerCollisions(this);
-        if (triggers.length === 0) return undefined;
-
-        return triggers.find(t => t.name === "readable");
+    private getReadableTrigger(): Readable | null {
+        return this.scene.world.getEntityCollisions(this).find(isInstanceOf(Readable)) ?? null;
     }
 
     private canDanceToMakeRain(): boolean {
@@ -846,7 +851,7 @@ export class Player extends PhysicsEntity {
 
         return (
             (
-                this.isCollidingWithTrigger("raincloud_sky")
+                this.isCollidingWithTrigger(RaincloudSky)
                 && !this.scene.world.isRaining()
                 && this.carrying === null
                 && !this.scene.apocalypse
@@ -910,7 +915,6 @@ export class Player extends PhysicsEntity {
 
     public override update(dt: number): void {
         super.update(dt);
-        const triggerCollisions = this.scene.world.getTriggerCollisions(this);
 
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
@@ -1203,7 +1207,7 @@ export class Player extends PhysicsEntity {
                         }
                     }
 
-                    if (this.isCollidingWithTrigger("raincloud_sky")) {
+                    if (this.isCollidingWithTrigger(RaincloudSky)) {
                         this.scene.world.startRain();
                     }
                 }
@@ -1219,67 +1223,42 @@ export class Player extends PhysicsEntity {
         }
 
         // Logic from triggers
-        if (triggerCollisions.length > 0) {
-            triggerCollisions.forEach(trigger => {
-                // Handle MountainRiddle logic
-                if (trigger.name === "reset_mountain") {
-                    this.scene.mountainRiddle.resetRiddle();
+        for (const trigger of this.scene.world.getEntityCollisions(this).filter(isInstanceOf(Trigger))) {
+            if (trigger instanceof ResetMountain) {
+                this.scene.mountainRiddle.resetRiddle();
+            } else if (trigger instanceof MountainGate) {
+                this.scene.mountainRiddle.checkGate(trigger.col, trigger.row);
+            } else if (trigger instanceof Teleporter) {
+                if (this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
+                    this.y -= trigger.teleportY;
                 }
+            } else if (trigger instanceof FinishMountainRiddle) {
+                this.scene.mountainRiddle.clearRiddle();
+            } else if (trigger instanceof NoEmitTrigger && trigger.disableParticles) {
+                this.disableParticles = true;
+            }
 
-                if (trigger.name === "mountaingate") {
-                    const row = trigger.properties.row;
-                    const col = trigger.properties.col;
+            // Set Global Conversation Variables from map triggers
+            const globalConversationProps = {
+                key: trigger.setGlobalKey,
+                value: trigger.setGlobalVal
+            };
 
-                    if (col != null && row != null) {
-                        this.scene.mountainRiddle.checkGate(col, row);
-                    }
-                }
+            if (globalConversationProps.key != null && globalConversationProps.value != null) {
+                Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
+            }
 
-                if (
-                    trigger.name === "teleporter"
-                    && this.scene.mountainRiddle.isFailed()
-                    && !this.scene.mountainRiddle.isCleared()
-                ) {
-                    const teleportY = trigger.properties.teleportY;
+            // Enable Conversation Trees from map triggers
+            const enableConversationProps = {
+                key: trigger.setDialogEntity,
+                value: trigger.setDialogValue
+            };
 
-                    if (teleportY != null) {
-                        this.y -= teleportY;
-                    }
-                }
-
-                if (trigger.name === "finish_mountain_riddle") {
-                    this.scene.mountainRiddle.clearRiddle();
-                }
-
-                // Disable particle effects while in trigger
-                const disableParticles = trigger.properties.disableParticles;
-
-                if (disableParticles === true) {
-                    this.disableParticles = true;
-                }
-
-                // Set Global Conversation Variables from map triggers
-                const globalConversationProps = {
-                    key: trigger.properties.setGlobalKey,
-                    value: trigger.properties.setGlobalVal
-                };
-
-                if (globalConversationProps.key != null && globalConversationProps.value != null) {
-                    Conversation.setGlobal(globalConversationProps.key, globalConversationProps.value);
-                }
-
-                // Enable Conversion Trees from map triggers
-                const enableConversationProps = {
-                    key: trigger.properties.setDialogEntity,
-                    value: trigger.properties.setDialogValue
-                };
-
-                if (enableConversationProps.key != null && enableConversationProps.value != null) {
-                    this.scene.game.campaign.runAction(
-                        "enable", null, [enableConversationProps.key, enableConversationProps.value]
-                    );
-                }
-            });
+            if (enableConversationProps.key != null && enableConversationProps.value != null) {
+                this.scene.game.campaign.runAction(
+                    "enable", null, [enableConversationProps.key, enableConversationProps.value]
+                );
+            }
         }
     }
 

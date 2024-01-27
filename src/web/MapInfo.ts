@@ -57,28 +57,16 @@ export enum MapObjectType {
     SOUND = "sound"
 }
 export interface GameObjectProperties {
-    velocity?: number;
     target?: string;
-    duration?: number;
-    teleportY?: number;
-    disableParticles?: boolean;
-    setGlobalKey?: string;
-    setGlobalVal?: string;
-    setDialogEntity?: string;
-    setDialogValue?: string;
-    content?: string;
     enterSound?: string;
     exitFadeTime?: number;
     exitSleepTime?: number;
     exitSound?: string;
     bgm?: string;
     disabled?: boolean;
-    identifier?: string;
     intensity?: number;
     volume?: number;
     sound?: string;
-    col?: number;
-    row?: number;
     newGamePlus?: boolean;
 }
 

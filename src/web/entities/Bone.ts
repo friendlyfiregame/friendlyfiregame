@@ -19,7 +19,7 @@ export class Bone extends PhysicsEntity {
         super({ width: 20, height: 10, ...args });
     }
 
-    public draw(): void {
+    public override draw(): void {
         this.scene.renderer.addAseprite(Bone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
     }
 

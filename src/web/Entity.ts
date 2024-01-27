@@ -1,7 +1,9 @@
 import { Animator } from "./Animator";
-import { type GameObjectProperties } from "./MapInfo";
 import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
+import { type Trigger } from "./triggers/Trigger";
+import { isInstanceOf } from "./util/predicates";
+import { type Constructor } from "./util/types";
 
 export interface EntityDistance {
     source: Entity;
@@ -40,32 +42,39 @@ export interface EntityArgs {
     scene: GameScene;
     x: number;
     y: number;
+    name?: string | null;
     width?: number;
     height?: number;
     isTrigger?: boolean;
-    properties?: GameObjectProperties;
+    newGamePlus?: boolean | null;
 }
 
-export abstract class Entity implements GameObject {
+export class Entity implements GameObject {
     protected timeAlive = 0;
     protected animator = new Animator(this);
     public readonly scene: GameScene;
+    public readonly name: string | null;
+    public readonly newGamePlus: boolean | null;
     public x: number;
     public y: number;
     public width: number;
     public height: number;
     public isTrigger: boolean;
 
-    public constructor({ scene, x, y, width = 0, height = 0, isTrigger = true }: EntityArgs) {
+    public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null }: EntityArgs) {
         this.scene = scene;
+        this.name = name;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.isTrigger = isTrigger;
+        this.newGamePlus = newGamePlus;
     }
 
-    public abstract draw(ctx: CanvasRenderingContext2D): void;
+    public draw(ctx: CanvasRenderingContext2D): void {
+        // Nothing to draw
+    }
 
     public update(dt: number): void {
         this.timeAlive += dt;
@@ -137,14 +146,8 @@ export abstract class Entity implements GameObject {
      * Checks wether this entity is currently colliding with the provided named trigger.
      * @param triggerName the trigger name to check against.
      */
-    protected isCollidingWithTrigger(triggerName: string): boolean {
-        const collisions = this.scene.world.getTriggerCollisions(this);
-
-        if (collisions.length === 0) {
-            return false;
-        }
-
-        return collisions.findIndex(o => o.name === triggerName) > -1;
+    protected isCollidingWithTrigger(trigger: Constructor<Trigger>): boolean {
+        return this.scene.world.getEntityCollisions(this).find(isInstanceOf(trigger)) != null;
     }
 
     public remove(): void {

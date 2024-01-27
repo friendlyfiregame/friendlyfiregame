@@ -208,9 +208,7 @@ export class World implements GameObject {
      * @return                - An array containing all entities that collide with the source
      *                          entity.
      */
-    public getEntityCollisions(
-        sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []
-    ): Entity[] {
+    public getEntityCollisions(sourceEntity: Entity, margin = 0, ignoreEntities: Entity[] = []): Entity[] {
         const collidesWith: Entity[] = [];
 
         for (const gameObject of this.scene.gameObjects) {
@@ -225,7 +223,7 @@ export class World implements GameObject {
                     sourceEntity.getBounds(margin), gameObject.getBounds(margin)
                 );
 
-                if (colliding) {
+                if (colliding && (gameObject.newGamePlus == null || gameObject.newGamePlus === this.scene.game.campaign.isNewGamePlus)) {
                     collidesWith.push(gameObject);
                 }
             }
@@ -234,27 +232,7 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    /**
-     * Returns all triggers that do collide with the provided entity
-     * @param sourceEntity Entity to check collisions against trigger boxes
-     */
-    public getTriggerCollisions(sourceEntity: Entity): GameObjectInfo[] {
-        const collidesWith: GameObjectInfo[] = [];
-
-        for (const triggerObject of this.scene.triggerObjects) {
-            const colliding = this.boundingBoxesCollide(
-                sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
-            );
-
-            if (colliding && this.entityIsAvailableInNewGameState(triggerObject.properties.newGamePlus)) {
-                collidesWith.push(triggerObject);
-            }
-        }
-
-        return collidesWith;
-    }
-
-    public entityIsAvailableInNewGameState(newGamePlusProp?: boolean): boolean {
+    private entityIsAvailableInNewGameState(newGamePlusProp?: boolean): boolean {
         return (
             newGamePlusProp === undefined ||
             (

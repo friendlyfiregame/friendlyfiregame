@@ -45,7 +45,7 @@ export class Sign extends NPC {
         return new Conversation(json, this);
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,

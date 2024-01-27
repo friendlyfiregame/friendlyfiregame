@@ -25,7 +25,7 @@ export class RiddleStone extends Entity {
         this.row = row;
     }
 
-    public draw(): void {
+    public override draw(): void {
         if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
             this.scene.renderer.addAseprite(RiddleStone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
         }

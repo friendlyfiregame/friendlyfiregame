@@ -25,7 +25,7 @@ export class Chicken extends NPC {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public override draw(ctx: CanvasRenderingContext2D): void {
         this.scene.renderer.addAseprite(
             Chicken.sprite,
             "idle",

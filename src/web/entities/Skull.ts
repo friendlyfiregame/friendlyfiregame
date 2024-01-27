@@ -13,7 +13,7 @@ export class Skull extends PhysicsEntity {
         super({ width: 16, height: 16, ...args });
     }
 
-    public draw(): void {
+    public override draw(): void {
         this.scene.renderer.addAseprite(Skull.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
     }
 

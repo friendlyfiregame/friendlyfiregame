@@ -31,7 +31,7 @@ export class ExitPortal extends Entity {
         this.animationState++;
     }
 
-    public draw(): void {
+    public override draw(): void {
         switch (this.animationState) {
             case PortalAnimationState.OFF:
                 this.animator.play("empty", 1);
