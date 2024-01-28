@@ -1,41 +1,49 @@
 { "frames": {
    "gamepad_selection 0.aseprite": {
-    "frame": { "x": 1, "y": 1, "w": 66, "h": 19 },
+    "frame": { "x": 1, "y": 1, "w": 67, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 1, "w": 66, "h": 19 },
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
    "gamepad_selection 1.aseprite": {
-    "frame": { "x": 69, "y": 1, "w": 66, "h": 19 },
+    "frame": { "x": 70, "y": 1, "w": 67, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 1, "w": 66, "h": 19 },
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
    "gamepad_selection 2.aseprite": {
-    "frame": { "x": 137, "y": 1, "w": 66, "h": 19 },
+    "frame": { "x": 139, "y": 1, "w": 67, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 1, "w": 66, "h": 19 },
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
    "gamepad_selection 3.aseprite": {
-    "frame": { "x": 205, "y": 1, "w": 66, "h": 19 },
+    "frame": { "x": 208, "y": 1, "w": 67, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 1, "w": 66, "h": 19 },
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
    "gamepad_selection 4.aseprite": {
-    "frame": { "x": 273, "y": 1, "w": 66, "h": 19 },
+    "frame": { "x": 277, "y": 1, "w": 67, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 1, "y": 1, "w": 66, "h": 19 },
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "sourceSize": { "w": 68, "h": 20 },
+    "duration": 100
+   },
+   "gamepad_selection 5.aseprite": {
+    "frame": { "x": 346, "y": 1, "w": 67, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    }
@@ -45,14 +53,15 @@
   "version": "1.3.2-x64",
   "image": "gamepad_selection.png",
   "format": "RGBA8888",
-  "size": { "w": 340, "h": 21 },
+  "size": { "w": 414, "h": 21 },
   "scale": "1",
   "frameTags": [
    { "name": "xbox", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
    { "name": "playstation", "from": 1, "to": 1, "direction": "forward", "color": "#000000ff" },
    { "name": "stadia", "from": 2, "to": 2, "direction": "forward", "color": "#000000ff" },
-   { "name": "steamdeck", "from": 3, "to": 3, "direction": "forward", "color": "#000000ff" },
-   { "name": "autodetect", "from": 4, "to": 4, "direction": "forward", "color": "#000000ff" }
+   { "name": "snes", "from": 3, "to": 3, "direction": "forward", "color": "#000000ff" },
+   { "name": "steamdeck", "from": 4, "to": 4, "direction": "forward", "color": "#000000ff" },
+   { "name": "autodetect", "from": 5, "to": 5, "direction": "forward", "color": "#000000ff" }
   ],
   "layers": [
    { "name": "Controllers", "opacity": 255, "blendMode": "normal" },
