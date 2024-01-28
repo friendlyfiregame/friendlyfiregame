@@ -101,6 +101,7 @@
   },
   "dependencies": {
     "@kayahr/aseprite": "^1.0.0",
+    "@kayahr/tiled": "^0.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "steamworks.js": "^0.3.1",
