@@ -59,7 +59,7 @@ export class Fire extends NPC {
             x: this.x,
             y: this.y,
             sound: Fire.fireAmbience,
-            maxVolume: 0.7,
+            volume: 0.7,
             intensity: 0.2
         });
 

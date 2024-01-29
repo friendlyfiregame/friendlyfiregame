@@ -18,9 +18,6 @@ export interface GameObjectProperties {
     exitSound?: string;
     bgm?: string;
     disabled?: boolean;
-    intensity?: number;
-    volume?: number;
-    sound?: string;
     newGamePlus?: boolean;
 }
 
@@ -63,12 +60,9 @@ export class MapInfo {
         return [
             ...this.getGameObjectInfos(MapObjectType.ENTITY),
             ...this.getGameObjectInfos(MapObjectType.TRIGGER),
-            ...this.getGameObjectInfos(MapObjectType.BOUNDS)
+            ...this.getGameObjectInfos(MapObjectType.BOUNDS),
+            ...this.getGameObjectInfos(MapObjectType.SOUND)
         ];
-    }
-
-    public getSounds(): GameObjectInfo[] {
-        return this.getGameObjectInfos(MapObjectType.SOUND);
     }
 
     public getPointers(): GameObjectInfo[] {

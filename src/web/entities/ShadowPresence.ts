@@ -32,7 +32,7 @@ export class ShadowPresence extends NPC {
             x: this.x,
             y: this.y,
             sound: ShadowPresence.caveAmbience,
-            maxVolume: 0.3,
+            volume: 0.3,
             intensity: 1
         });
     }

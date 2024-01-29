@@ -47,7 +47,7 @@ export class FlameBoy extends ScriptableNPC {
             x: this.x,
             y: this.y,
             sound: FlameBoy.fireAmbience,
-            maxVolume: 0.7,
+            volume: 0.7,
             intensity: 0.2
         });
     }

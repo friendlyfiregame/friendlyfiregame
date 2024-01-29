@@ -14,7 +14,6 @@ import {
 } from "../../shared/constants";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
-import { SoundEmitter } from "../audio/SoundEmitter";
 import { BitmapFont } from "../BitmapFont";
 import { Camera } from "../Camera";
 import { CameraBounds } from "../CameraBounds";
@@ -209,7 +208,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    public soundEmitters: SoundEmitter[] = [];
     public pointsOfInterest: GameObjectInfo[] = [];
     public gateObjects: GameObjectInfo[] = [];
     public paused = false;
@@ -259,7 +257,6 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public override setup(): void {
         this.mapInfo = new MapInfo();
-        this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
         this.pointsOfInterest = this.mapInfo.getPointers();
         this.gateObjects = this.mapInfo.getGateObjects();
 
@@ -279,7 +276,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.gameObjects = [
             this.world = new World(this),
             this.particles,
-            ...this.soundEmitters,
             ...this.mapInfo.getEntities().map(entity => {
                 if (entity.name === "player") {
                     entity = { ...entity, ...this.getPlayerStartingPos() };
