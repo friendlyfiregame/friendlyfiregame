@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed clouds physics in apocalypse. They were not meant to fall down to the ground...
+
 ### Added
 
 - A screenshot of the title screen has been added and linked to the web app manifest
