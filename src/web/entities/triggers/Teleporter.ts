@@ -1,10 +1,11 @@
-import { Trigger, trigger, type TriggerArgs } from "./Trigger";
+import { entity } from "../../Entity";
+import { Trigger, type TriggerArgs } from "./Trigger";
 
 export interface TeleporterArgs extends TriggerArgs {
     teleportY?: number;
 }
 
-@trigger("teleporter")
+@entity("teleporter")
 export class Teleporter extends Trigger {
     public readonly teleportY: number;
 

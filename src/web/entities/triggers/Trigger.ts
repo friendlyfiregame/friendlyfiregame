@@ -1,23 +1,4 @@
-import { Entity, type EntityArgs } from "../Entity";
-import { type Constructor } from "../util/types";
-
-const triggers = new Map<string, Constructor<Trigger>>();
-
-export function trigger(name: string): (target: Constructor<Trigger>) => void {
-    return (type: Constructor<Trigger>) => {
-        triggers.set(name, type);
-    };
-}
-
-export function createTrigger(name: string, args: TriggerArgs): Trigger {
-    const constructor = triggers.get(name);
-
-    if (!constructor) {
-        throw new Error("Trigger not found: " + name);
-    }
-
-    return new constructor(args);
-}
+import { Entity, type EntityArgs } from "../../Entity";
 
 export interface TriggerArgs extends EntityArgs {
     setGlobalKey?: string | null;

@@ -19,7 +19,7 @@ export class Wall extends Entity implements CollidableGameObject {
     private state = WallState.SOLID;
 
     public constructor({ identifier, ...args }: WallArgs) {
-        super({ width: 24, height: 72, isTrigger: false, ...args });
+        super({ ...args, width: 24, height: 72, isTrigger: false });
 
         if (identifier == null) {
             throw new Error("Cannot create Wall entity with no identifier property");

@@ -20,7 +20,7 @@ export class RiddleStone extends Entity {
     private readonly row: number;
 
     public constructor({ col = 0, row = 0, ...args }: RiddleStoneArgs) {
-        super({ width: 16, height: 16,  isTrigger: false, ...args });
+        super({ ...args, width: 16, height: 16,  isTrigger: false });
         this.col = col;
         this.row = row;
     }

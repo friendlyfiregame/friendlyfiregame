@@ -10,7 +10,7 @@ export class Caveman extends NPC {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ width: 18, height: 24, ...args });
+        super({ ...args, width: 18, height: 24 });
     }
 
     public override draw(ctx: CanvasRenderingContext2D): void {

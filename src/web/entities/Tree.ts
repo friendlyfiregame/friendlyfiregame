@@ -17,7 +17,7 @@ export class Tree extends NPC {
     private readonly wood: Wood;
 
     public constructor(args: EntityArgs) {
-        super({ width: 78, height: 140, ...args });
+        super({ ...args, width: 78, height: 140 });
 
         this.face = new Face(this.scene, this, EyeType.TREE, 5, 94);
         this.seed = new Seed({ scene: this.scene, x: this.x, y: this.y });

@@ -16,7 +16,7 @@ export class Bone extends PhysicsEntity {
     private static readonly successSound: Sound;
 
     public constructor(args: EntityArgs) {
-        super({ width: 20, height: 10, ...args });
+        super({ ...args, width: 20, height: 10 });
     }
 
     public override draw(): void {

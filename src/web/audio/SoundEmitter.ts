@@ -21,7 +21,7 @@ export class SoundEmitter extends Entity {
     private readonly intensity: number;
 
     public constructor({ sound, maxVolume, intensity, ...args }: SoundEmitterArgs) {
-        super({ width: 1, height: 1, ...args });
+        super({ ...args, width: 1, height: 1 });
 
         this.sound = sound;
         this.maxVolume = maxVolume;

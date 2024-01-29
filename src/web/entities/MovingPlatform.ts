@@ -34,7 +34,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     private readonly velocity: number;
 
     public constructor({ direction = "up",  velocity = 0, distance = 0, ...args }: MovingEntityArgs) {
-        super({ width: 68, height: 12, ...args });
+        super({ ...args, width: 68, height: 12 });
         this.setFloating(true);
         const { x, y } = this;
         this.startX = this.targetX = x;

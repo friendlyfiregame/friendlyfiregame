@@ -1,10 +1,11 @@
-import { Trigger, trigger, type TriggerArgs } from "./Trigger";
+import { entity } from "../../Entity";
+import { Trigger, type TriggerArgs } from "./Trigger";
 
 export interface ShibaActionArgs extends TriggerArgs {
     velocity?: number | null;
 }
 
-@trigger("shiba_action")
+@entity("shiba_action")
 export class ShibaAction extends Trigger {
     public readonly velocity: number | null;
 

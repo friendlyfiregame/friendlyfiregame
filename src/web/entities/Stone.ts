@@ -30,7 +30,7 @@ export class Stone extends NPC implements CollidableGameObject {
     public state: StoneState = StoneState.DEFAULT;
 
     public constructor(args: EntityArgs) {
-        super({ width: 26, height: 50, ...args });
+        super({ ...args, width: 26, height: 50 });
 
         this.direction = -1;
         this.face = new Face(this.scene, this, EyeType.STONE, 0, 21);

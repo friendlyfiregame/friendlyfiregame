@@ -25,14 +25,6 @@ import { type BgmId } from "../scenes/BgmId";
 import { FadeDirection } from "../scenes/FadeDirection";
 import { GotItemScene, Item } from "../scenes/GotItemScene";
 import { SpeechBubble } from "../SpeechBubble";
-import { FinishMountainRiddle } from "../triggers/FinishMountainRiddle";
-import { MountainGate } from "../triggers/MountainGate";
-import { NoEmitTrigger } from "../triggers/NoEmitTrigger";
-import { RaincloudSky } from "../triggers/RaincloudSky";
-import { Readable } from "../triggers/Readable";
-import { ResetMountain } from "../triggers/ResetMountain";
-import { Teleporter } from "../triggers/Teleporter";
-import { Trigger } from "../triggers/Trigger";
 import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
 import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
@@ -44,6 +36,14 @@ import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
 import { Stone, StoneState } from "./Stone";
+import { FinishMountainRiddle } from "./triggers/FinishMountainRiddle";
+import { MountainGate } from "./triggers/MountainGate";
+import { NoEmitTrigger } from "./triggers/NoEmitTrigger";
+import { RaincloudSky } from "./triggers/RaincloudSky";
+import { Readable } from "./triggers/Readable";
+import { ResetMountain } from "./triggers/ResetMountain";
+import { Teleporter } from "./triggers/Teleporter";
+import { Trigger } from "./triggers/Trigger";
 import { Wall } from "./Wall";
 import { Wood, WoodState } from "./Wood";
 
@@ -179,7 +179,7 @@ export class Player extends PhysicsEntity {
     private disableParticles = false;
 
     public constructor(args: EntityArgs) {
-        super({ width: PLAYER_WIDTH, height: PLAYER_HEIGHT, ...args });
+        super({ ...args, width: PLAYER_WIDTH, height: PLAYER_HEIGHT });
 
         this.isControllable = false;
         this.setFloating(true);

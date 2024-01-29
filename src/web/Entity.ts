@@ -1,7 +1,7 @@
 import { Animator } from "./Animator";
+import { type Trigger } from "./entities/triggers/Trigger";
 import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
-import { type Trigger } from "./triggers/Trigger";
 import { isInstanceOf } from "./util/predicates";
 import { type Constructor } from "./util/types";
 

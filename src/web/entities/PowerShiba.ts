@@ -23,7 +23,7 @@ export class PowerShiba extends NPC {
     private floatSpeed = 2;
 
     public constructor(args: EntityArgs) {
-        super({ width: 22, height: 22, ...args });
+        super({ ...args, width: 22, height: 22 });
         this.conversation = new Conversation(powershiba1, this);
     }
 

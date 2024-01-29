@@ -36,6 +36,7 @@ import { ShibaState } from "../entities/ShibaState";
 import { Stone } from "../entities/Stone";
 import { StoneDisciple } from "../entities/StoneDisciple";
 import { Tree } from "../entities/Tree";
+import { Trigger } from "../entities/triggers/Trigger";
 import { Wing } from "../entities/Wing";
 import { type Bounds, createEntity, Entity  } from "../Entity";
 import { FireGfx } from "../FireGfx";
@@ -48,7 +49,6 @@ import { type ParticleEmitter, Particles, valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
-import { createTrigger, Trigger } from "../triggers/Trigger";
 import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { World } from "../World";
 import { AmbientSoundId } from "./AmbientSoundId";
@@ -281,21 +281,18 @@ export class GameScene extends Scene<FriendlyFire> {
             this.world = new World(this),
             this.particles,
             ...this.soundEmitters,
-            ...this.mapInfo.getTriggerObjects().map(trigger => {
-                return createTrigger(trigger.name, {
-                    scene: this,
-                    x: trigger.x + trigger.width / 2,
-                    y: trigger.y - trigger.height,
-                    width: trigger.width,
-                    height: trigger.height,
-                    ...trigger.properties
-                });
-            }),
             ...this.mapInfo.getEntities().map(entity => {
                 if (entity.name === "player") {
                     entity = { ...entity, ...this.getPlayerStartingPos() };
                 }
-                return createEntity(entity.name, { scene: this, x: entity.x, y: entity.y, ...entity.properties });
+                return createEntity(entity.name, {
+                    scene: this,
+                    x: entity.x + entity.width / 2,
+                    y: entity.y - entity.height,
+                    width: entity.width,
+                    height: entity.height,
+                    ...entity.properties
+                });
             })
         ];
 

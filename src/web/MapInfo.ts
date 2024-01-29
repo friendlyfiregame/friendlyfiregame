@@ -60,7 +60,10 @@ export class MapInfo {
     }
 
     public getEntities(): GameObjectInfo[] {
-        return this.getGameObjectInfos(MapObjectType.ENTITY);
+        return [
+            ...this.getGameObjectInfos(MapObjectType.ENTITY),
+            ...this.getGameObjectInfos(MapObjectType.TRIGGER)
+        ];
     }
 
     public getSounds(): GameObjectInfo[] {
@@ -69,10 +72,6 @@ export class MapInfo {
 
     public getPointers(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.POINTER);
-    }
-
-    public getTriggerObjects(): GameObjectInfo[] {
-        return this.getGameObjectInfos(MapObjectType.TRIGGER);
     }
 
     public getBoundObjects(): GameObjectInfo[] {

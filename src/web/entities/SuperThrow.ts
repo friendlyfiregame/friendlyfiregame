@@ -14,7 +14,7 @@ export class SuperThrow extends NPC {
     private readonly floatSpeed = 2;
 
     public constructor(args: EntityArgs) {
-        super({ width: 18, height: 22, ...args });
+        super({ ...args, width: 18, height: 22 });
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }

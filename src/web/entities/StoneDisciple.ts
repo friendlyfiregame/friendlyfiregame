@@ -12,7 +12,7 @@ export class StoneDisciple extends NPC {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ width: 32, height: 26, ...args });
+        super({ ...args, width: 32, height: 26 });
         this.direction = -1;
         this.lookAtPlayer = true;
         this.face = new Face(this.scene, this, EyeType.STONEDISCIPLE, 0, 0);

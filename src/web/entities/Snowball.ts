@@ -6,7 +6,7 @@ import { PhysicsEntity, type PhysicsEntityArgs } from "./PhysicsEntity";
 @entity("snowball")
 export class Snowball extends PhysicsEntity {
     public constructor(args: PhysicsEntityArgs) {
-        super({ width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER, ...args });
+        super({ ...args, width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER });
     }
 
     public override draw(): void {

@@ -52,7 +52,7 @@ export class Fire extends NPC {
     private readonly steamEmitter: ParticleEmitter;
 
     public constructor(args: EntityArgs) {
-        super({ width: 1.5 * PIXEL_PER_METER, height: 1.85 * PIXEL_PER_METER, ...args });
+        super({ ...args, width: 1.5 * PIXEL_PER_METER, height: 1.85 * PIXEL_PER_METER });
 
         this.soundEmitter = new SoundEmitter({
             scene: this.scene,

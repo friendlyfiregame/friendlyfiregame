@@ -19,7 +19,7 @@ export class Mimic extends NPC {
     private state = MimicState.SLEEPING;
 
     public constructor(args: EntityArgs) {
-        super({ width: 46, height: 24, ...args });
+        super({ ...args, width: 46, height: 24 });
         this.lookAtPlayer = false;
         this.direction = 1;
         this.conversation = new Conversation(conversation, this);

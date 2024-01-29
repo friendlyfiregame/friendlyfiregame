@@ -10,8 +10,6 @@ import { FaceModes } from "../Face";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { ShibaAction } from "../triggers/ShibaAction";
-import { ShibaStop } from "../triggers/ShibaStop";
 import { calculateVolume, rnd, rndItem } from "../util";
 import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
@@ -19,6 +17,8 @@ import { SHRINK_SIZE } from "./Fire";
 import { FireState } from "./FireState";
 import { ScriptableNPC } from "./ScriptableNPC";
 import { ShibaState } from "./ShibaState";
+import { ShibaAction } from "./triggers/ShibaAction";
+import { ShibaStop } from "./triggers/ShibaStop";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -59,7 +59,7 @@ export class Shiba extends ScriptableNPC {
     private nextHeartParticle = HEART_PARTICLE_DELAY;
 
     public constructor(args: EntityArgs) {
-        super({ width: 28, height: 24, ...args });
+        super({ ...args, width: 28, height: 24 });
 
         this.minAltitude = this.y;
         this.conversation = new Conversation(conversation, this);

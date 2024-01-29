@@ -14,7 +14,7 @@ export class Wing extends NPC {
     private readonly floatSpeed = 2;
 
     public constructor(args: EntityArgs) {
-        super({ width: 24, height: 24, ...args });
+        super({ ...args, width: 24, height: 24 });
     }
 
     protected override showDialoguePrompt(): boolean {

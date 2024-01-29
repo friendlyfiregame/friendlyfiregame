@@ -27,7 +27,7 @@ export class Cloud extends PhysicsEntity {
     private readonly isRainCloud;
 
     public constructor({ canRain = false, ...args }: CloudArgs) {
-        super({ width: 74, height: 5, ...args });
+        super({ ...args, width: 74, height: 5 });
         this.isRainCloud = canRain;
         this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},

@@ -8,7 +8,7 @@ export class Window extends NPC {
     public override conversation: Conversation;
 
     public constructor(args: EntityArgs) {
-        super({ width: 16, height: 16, ...args });
+        super({ ...args, width: 16, height: 16 });
         this.conversation = new Conversation(conversation, this);
     }
 

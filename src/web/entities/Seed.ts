@@ -32,7 +32,7 @@ export class Seed extends NPC {
     private readonly floatingPosition: GameObjectInfo;
 
     public constructor(args: EntityArgs) {
-        super({ width: 24, height: 24, ...args });
+        super({ ...args, width: 24, height: 24 });
         this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
         this.face = new Face(this.scene, this, EyeType.STANDARD, 0, 8);
 

@@ -24,7 +24,7 @@ export class ShadowPresence extends NPC {
     private isNearPlayer = false;
 
     public constructor(args: EntityArgs) {
-        super({ width: 12, height: 46, ...args });
+        super({ ...args, width: 12, height: 46,  });
         this.direction = -1;
         this.lookAtPlayer = false;
         this.soundEmitter = new SoundEmitter({

@@ -10,7 +10,7 @@ export class Skull extends PhysicsEntity {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ width: 16, height: 16, ...args });
+        super({ ...args, width: 16, height: 16 });
     }
 
     public override draw(): void {

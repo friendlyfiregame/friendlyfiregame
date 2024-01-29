@@ -10,7 +10,7 @@ export class ConversationProxy extends NPC {
     public override conversation: Conversation;
 
     public constructor({ content, ...args }: ConversationProxyArgs) {
-        super({ width: 16, height: 16, ...args });
+        super({ ...args, width: 16, height: 16 });
 
         this.conversation = this.generateConversation(this.prepareContent(content));
         this.scene.addGameObject(this);

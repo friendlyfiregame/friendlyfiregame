@@ -1,11 +1,12 @@
-import { Trigger, trigger, type TriggerArgs } from "./Trigger";
+import { entity } from "../../Entity";
+import { Trigger, type TriggerArgs } from "./Trigger";
 
 export interface MountainGateArgs extends TriggerArgs {
     row?: number;
     col?: number;
 }
 
-@trigger("mountaingate")
+@entity("mountaingate")
 export class MountainGate extends Trigger {
     public readonly row: number;
     public readonly col: number;

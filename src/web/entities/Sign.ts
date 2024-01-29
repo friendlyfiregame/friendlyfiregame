@@ -16,7 +16,7 @@ export class Sign extends NPC {
     public override conversation: Conversation;
 
     public constructor({ content, ...args }: SignArgs) {
-        super({ width: 16, height: 16, ...args });
+        super({ ...args, width: 16, height: 16 });
         this.conversation = this.generateConversation(this.prepareContent(content));
     }
 

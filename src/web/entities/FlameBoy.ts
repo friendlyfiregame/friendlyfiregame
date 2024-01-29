@@ -6,10 +6,10 @@ import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
-import { FlameBoyAction } from "../triggers/FlameBoyAction";
 import { rndItem } from "../util";
 import { isInstanceOf } from "../util/predicates";
 import { ScriptableNPC } from "./ScriptableNPC";
+import { FlameBoyAction } from "./triggers/FlameBoyAction";
 import { type Wood } from "./Wood";
 
 export enum FlameBoyState {
@@ -37,7 +37,7 @@ export class FlameBoy extends ScriptableNPC {
     private autoMoveDirection: 1 | -1 = 1;
 
     public constructor(args: EntityArgs) {
-        super({ width: 26, height: 54, ...args });
+        super({ ...args, width: 26, height: 54 });
         this.setMaxVelocity(3);
         this.face = new Face(this.scene, this, EyeType.FLAMEBOY, 0, 5);
         this.defaultFaceMode = FaceModes.BORED;

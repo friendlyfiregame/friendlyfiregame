@@ -1,10 +1,11 @@
-import { Trigger, trigger, type TriggerArgs } from "./Trigger";
+import { entity } from "../../Entity";
+import { Trigger, type TriggerArgs } from "./Trigger";
 
 export interface ReadableArgs extends TriggerArgs {
     content?: string;
 }
 
-@trigger("readable")
+@entity("readable")
 export class Readable extends Trigger {
     public readonly content: string;
 

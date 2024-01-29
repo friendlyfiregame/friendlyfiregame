@@ -12,7 +12,7 @@ export class Chicken extends NPC {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ width: 24, height: 18, ...args });
+        super({ ...args, width: 24, height: 18 });
         this.lookAtPlayer = false;
         this.conversation = new Conversation(conversation, this);
     }

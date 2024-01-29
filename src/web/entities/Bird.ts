@@ -1,6 +1,4 @@
 import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
-import { BirdNestLeft } from "../triggers/BirdNestLeft";
-import { BirdNestRight } from "../triggers/BirdNestRight";
 import { isInstanceOf } from "../util/predicates";
 import conversation from "./../../../assets/dialog/bird.dialog.json";
 import { Aseprite } from "./../Aseprite";
@@ -13,6 +11,8 @@ import { RenderingLayer } from "./../Renderer";
 import { calculateVolume, rnd, rndItem } from "./../util";
 import { Environment } from "./../World";
 import { NPC } from "./NPC";
+import { BirdNestLeft } from "./triggers/BirdNestLeft";
+import { BirdNestRight } from "./triggers/BirdNestRight";
 
 enum BirdState {
     WAITING_LEFT,
@@ -40,7 +40,7 @@ export class Bird extends NPC {
     private jumpTimer = 0;
 
     public constructor(args: EntityArgs) {
-        super({ width: 28, height: 24, ...args });
+        super({ ...args, width: 28, height: 24 });
         this.minAltitude = args.y;
         this.conversation = new Conversation(conversation, this);
 

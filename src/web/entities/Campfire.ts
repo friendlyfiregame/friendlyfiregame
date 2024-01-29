@@ -9,7 +9,7 @@ export class Campfire extends Entity {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ width: 14, height: 28, isTrigger: false, ...args });
+        super({ ...args, width: 14, height: 28, isTrigger: false });
     }
 
     public override draw(): void {
