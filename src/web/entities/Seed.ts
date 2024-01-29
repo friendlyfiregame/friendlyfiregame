@@ -8,11 +8,9 @@ import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { now } from "../util";
-import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
-import { RecoverFloatingPosition } from "./pointers/RecoverFloatingPosition";
-import { SeedPosition } from "./pointers/SeedPosition";
+import { Pointer } from "./Pointer";
 import { Wood } from "./Wood";
 
 export enum SeedState {
@@ -42,7 +40,7 @@ export class Seed extends NPC {
     }
 
     public override setup(): void {
-        const floatingPosition = this.scene.gameObjects.find(isInstanceOf(RecoverFloatingPosition));
+        const floatingPosition = this.scene.findEntity(Pointer, "recover_floating_position");
         if (!floatingPosition) {
             throw new Error("Could not find “recover_floating_position” point of interest in game scene.");
         }
@@ -55,7 +53,7 @@ export class Seed extends NPC {
     }
 
     public bury(): void {
-        const seedPosition = this.scene.gameObjects.find(isInstanceOf(SeedPosition));
+        const seedPosition = this.scene.findEntity(Pointer, "seedposition");
         if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 
         this.x = seedPosition.x;
@@ -123,7 +121,7 @@ export class Seed extends NPC {
                 !this.isCarried()
                 && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
             ) {
-                const seedPosition = this.scene.gameObjects.find(isInstanceOf(SeedPosition));
+                const seedPosition = this.scene.findEntity(Pointer, "seedposition");
 
                 if (!seedPosition) throw new Error("Seed position is missing in points of interest array");
 

@@ -29,16 +29,13 @@ import { Conversation } from "./Conversation";
 import { type DialogJSON } from "./Dialog";
 import { Gate } from "./entities/Gate";
 import { type NPC } from "./entities/NPC";
-import { Forest } from "./entities/pointers/Forest";
-import { Mountain } from "./entities/pointers/Mountain";
-import { River } from "./entities/pointers/River";
+import { Pointer } from "./entities/Pointer";
 import { FaceModes } from "./Face";
 import { type Game } from "./Game";
 import { valueCurves } from "./Particles";
 import { type Quest, QuestA, QuestATrigger, QuestB, QuestC, QuestD, QuestE, QuestKey } from "./Quests";
 import { type GameScene } from "./scenes/GameScene";
 import { Signal } from "./Signal";
-import { isInstanceOf } from "./util/predicates";
 
 export type CampaignState = "start" | "finished";
 
@@ -195,7 +192,7 @@ export class Campaign {
                     this.gameScene.camera.zoom -= 1;
                     break;
                 case "treezoom": {
-                    const forestPointer = this.gameScene.gameObjects.find(isInstanceOf(Forest));
+                    const forestPointer = this.gameScene.findEntity(Pointer, "forest");
 
                     if (forestPointer) {
                         void this.gameScene.camera.focusOn(
@@ -210,7 +207,7 @@ export class Campaign {
                     break;
                 }
                 case "mountainzoom": {
-                    const mountainPointer = this.gameScene.gameObjects.find(isInstanceOf(Mountain));
+                    const mountainPointer = this.gameScene.findEntity(Pointer, "mountain");
 
                     if (mountainPointer) {
                         void this.gameScene.camera.focusOn(
@@ -225,7 +222,7 @@ export class Campaign {
                     break;
                 }
                 case "riverzoom": {
-                    const riverPointer = this.gameScene.gameObjects.find(isInstanceOf(River));
+                    const riverPointer = this.gameScene.findEntity(Pointer, "river");
 
                     if (riverPointer) {
                         void this.gameScene.camera.focusOn(

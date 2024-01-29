@@ -8,10 +8,9 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { type CollidableGameObject } from "../scenes/GameObject";
 import { now } from "../util";
-import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
-import { StoneFloatingPosition } from "./pointers/StoneFloatingPosition";
+import { Pointer } from "./Pointer";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -41,7 +40,7 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public override setup(): void {
-        const floatingPosition = this.scene.gameObjects.find(isInstanceOf(StoneFloatingPosition));
+        const floatingPosition = this.scene.findEntity(Pointer, "stone_floating_position");
         if (!floatingPosition) {
             throw new Error("Could not find \"stone_floating_position\" point of interest in game scene");
         }

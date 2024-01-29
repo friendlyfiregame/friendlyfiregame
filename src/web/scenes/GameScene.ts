@@ -16,10 +16,10 @@ import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { BitmapFont } from "../BitmapFont";
 import { Camera } from "../Camera";
-import { CameraBounds } from "../CameraBounds";
 import { Conversation } from "../Conversation";
 import { Bird } from "../entities/Bird";
 import { Bone } from "../entities/Bone";
+import { CameraBounds } from "../entities/CameraBounds";
 import { Caveman } from "../entities/Caveman";
 import { Cloud } from "../entities/Cloud";
 import { ExitPortal } from "../entities/ExitPortal";
@@ -29,10 +29,7 @@ import { FlameBoy } from "../entities/FlameBoy";
 import { Gate } from "../entities/Gate";
 import { Mimic } from "../entities/Mimic";
 import { Player } from "../entities/Player";
-import { BossCloud } from "../entities/pointers/BossCloud";
-import { BossSpawn } from "../entities/pointers/BossSpawn";
-import { FriendshipPlayerPosition } from "../entities/pointers/FriendshipPlayerPosition";
-import { WindowZoomTarget } from "../entities/pointers/WindowZoomTarget";
+import { Pointer } from "../entities/Pointer";
 import { PowerShiba } from "../entities/PowerShiba";
 import { type Seed } from "../entities/Seed";
 import { ShadowPresence } from "../entities/ShadowPresence";
@@ -55,7 +52,6 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
 import { clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
-import { isInstanceOf } from "../util/predicates";
 import { type Constructor } from "../util/types";
 import { World } from "../World";
 import { AmbientSoundId } from "./AmbientSoundId";
@@ -347,6 +343,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public addGameObject(object: GameObject): void {
+        object.setup?.();
         // Insert new item right before the player so player is always in front
         this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, object);
     }
@@ -366,6 +363,16 @@ export class GameScene extends Scene<FriendlyFire> {
             }
         }
         return null;
+    }
+
+    public findEntities<T extends Entity>(type: Constructor<T>, name?: string): T[] {
+        const entities: T[] = [];
+        for (const entity of this.gameObjects) {
+            if (entity instanceof type && (name == null || entity.name === name)) {
+                entities.push(entity);
+            }
+        }
+        return entities;
     }
 
     public getBackgroundTrack(id: BgmId): BackgroundTrack {
@@ -785,7 +792,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackDirection = FadeDirection.FADE_OUT;
         this.fadeToBlackStartTime = this.gameTime + WINDOW_ENDING_CUTSCENE_DURATION;
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (WINDOW_ENDING_FADE_DURATION);
-        const target = this.gameObjects.find(isInstanceOf(WindowZoomTarget));
+        const target = this.findEntity(Pointer, "windowzoomtarget");
         if (target) {
             void this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
         }
@@ -823,7 +830,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.gameObjects.find(isInstanceOf(FriendshipPlayerPosition));
+        const playerTargetPos = this.findEntity(Pointer, "friendship_player_position");
 
         if (!playerTargetPos) {
             throw new Error("cannot initiate friendship ending because some points of interest are missing");
@@ -837,8 +844,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.apocalypse = true;
         this.world.stopRain();
 
-        const bossPosition = this.gameObjects.find(isInstanceOf(BossSpawn));
-        const cloudPositions = this.gameObjects.filter(isInstanceOf(BossCloud));
+        const bossPosition = this.findEntity(Pointer, "boss_spawn");
+        const cloudPositions = this.findEntities(Pointer, "bosscloud");
 
         if (bossPosition && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {

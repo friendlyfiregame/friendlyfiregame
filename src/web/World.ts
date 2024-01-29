@@ -1,8 +1,8 @@
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
-import { CameraBounds } from "./CameraBounds";
+import { CameraBounds } from "./entities/CameraBounds";
 import { Gate } from "./entities/Gate";
-import { RainSpawnPosition } from "./entities/pointers/RainSpawnPosition";
+import { Pointer } from "./entities/Pointer";
 import { type Bounds, Entity } from "./Entity";
 import { getImageData } from "./graphics";
 import { type ParticleEmitter, Particles, valueCurves } from "./Particles";
@@ -56,7 +56,7 @@ export class World implements GameObject {
     }
 
     public setup(): Promise<void> | void {
-        const rainSpawnPosition = this.scene.gameObjects.find(isInstanceOf(RainSpawnPosition));
+        const rainSpawnPosition = this.scene.findEntity(Pointer, "rain_spawn_position");
 
         if (!rainSpawnPosition) {
             throw new Error("Missing 'rain_spawn_position' point in map data to place rain emitter");

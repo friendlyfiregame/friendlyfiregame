@@ -32,9 +32,7 @@ import { ConversationProxy } from "./ConversationProxy";
 import { Gate } from "./Gate";
 import { NPC } from "./NPC";
 import { PhysicsEntity } from "./PhysicsEntity";
-import { BossSpawn } from "./pointers/BossSpawn";
-import { PlayerResetPosition } from "./pointers/PlayerResetPosition";
-import { PlayerSpawn } from "./pointers/PlayerSpawn";
+import { Pointer } from "./Pointer";
 import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
@@ -248,7 +246,7 @@ export class Player extends PhysicsEntity {
     }
 
     private getPlayerStartingPos(): { x: number, y: number } {
-        const spawns = this.scene.gameObjects.filter(isInstanceOf(PlayerSpawn));
+        const spawns = this.scene.findEntities(Pointer, "player_spawn");
         const defaultSpawn = spawns.find(s => s.newGamePlus !== true);
         const newGamePlusSpawn = spawns.find(s => s.newGamePlus === true);
 
@@ -941,8 +939,8 @@ export class Player extends PhysicsEntity {
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
             const pos = this.scene.apocalypse ?
-                this.scene.gameObjects.find(isInstanceOf(BossSpawn)) :
-                this.scene.gameObjects.find(isInstanceOf(PlayerResetPosition));
+                this.scene.findEntity(Pointer, "boss_spawn") :
+                this.scene.findEntity(Pointer, "player_reset_position");
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
@@ -1199,7 +1197,7 @@ export class Player extends PhysicsEntity {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
 
                         // Camera focus to boss for each triggered rain cloud
-                        const bossPointer = this.scene.gameObjects.find(isInstanceOf(BossSpawn));
+                        const bossPointer = this.scene.findEntity(Pointer, "boss_spawn");
 
                         if (bossPointer) {
                             void this.scene.camera.focusOn(

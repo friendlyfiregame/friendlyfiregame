@@ -6,10 +6,9 @@ import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { now } from "../util";
-import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
-import { RecoverFloatingPosition } from "./pointers/RecoverFloatingPosition";
+import { Pointer } from "./Pointer";
 
 export enum WoodState {
     FREE = 0,
@@ -32,7 +31,8 @@ export class Wood extends PhysicsEntity {
     }
 
     public override setup(): void {
-        const floatingPosition = this.scene.gameObjects.find(isInstanceOf(RecoverFloatingPosition));
+        const floatingPosition = this.scene.findEntity(Pointer, "recover_floating_position");
+        console.log(floatingPosition);
         if (!floatingPosition) {
             throw new Error("Could not find \"recover_floating_position\" point of interest in game scene.");
         }

@@ -15,8 +15,7 @@ import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { SHRINK_SIZE } from "./Fire";
 import { FireState } from "./FireState";
-import { FriendshipShibaSpawn } from "./pointers/FriendshipShibaSpawn";
-import { ShibaMountainSpawn } from "./pointers/ShibaMountainSpawn";
+import { Pointer } from "./Pointer";
 import { ScriptableNPC } from "./ScriptableNPC";
 import { ShibaState } from "./ShibaState";
 import { ShibaAction } from "./triggers/ShibaAction";
@@ -109,7 +108,7 @@ export class Shiba extends ScriptableNPC {
         } else if (this.state === ShibaState.ON_MOUNTAIN) {
             this.move = 0;
 
-            const spawn = this.scene.gameObjects.find(isInstanceOf(ShibaMountainSpawn));
+            const spawn = this.scene.findEntity(Pointer, "shiba_mountain_spawn");
 
             if (!spawn) throw new Error("Shiba mountain spawn missing");
             this.x = spawn.x;
@@ -119,7 +118,7 @@ export class Shiba extends ScriptableNPC {
         } else if (this.state === ShibaState.GOING_TO_FIRE) {
             this.scene.camera.setCinematicBar(1);
 
-            const shibaSpawnPos = this.scene.gameObjects.find(isInstanceOf(FriendshipShibaSpawn));
+            const shibaSpawnPos = this.scene.findEntity(Pointer, "friendship_shiba_spawn");
 
             this.lookAtPlayer = false;
             this.setMaxVelocity(2);

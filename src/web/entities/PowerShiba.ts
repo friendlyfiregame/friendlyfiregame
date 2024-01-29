@@ -5,9 +5,8 @@ import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
-import { isInstanceOf } from "../util/predicates";
 import { NPC } from "./NPC";
-import { PowerShibaMountainSpawn } from "./pointers/PowerShibaMountainSpawn";
+import { Pointer } from "./Pointer";
 
 export enum PowerShibaState {
     IN_CLOUDS,
@@ -33,7 +32,7 @@ export class PowerShiba extends NPC {
         this.state++;
 
         if (this.state === PowerShibaState.ON_MOUNTAIN) {
-            const spawn = this.scene.gameObjects.find(isInstanceOf(PowerShibaMountainSpawn));
+            const spawn = this.scene.findEntity(Pointer, "powershiba_mountain_spawn");
 
             if (!spawn) throw new Error("PowerShiba mountain spawn missing");
 
