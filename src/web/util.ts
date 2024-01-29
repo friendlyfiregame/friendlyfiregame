@@ -1,6 +1,6 @@
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from "../shared/constants";
 import { type Bounds } from "./Entity";
-import { type GameObjectInfo, type MapObjectJSON } from "./MapInfo";
+import { type GameObjectInfo } from "./MapInfo";
 
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {
@@ -99,7 +99,7 @@ export function shuffle<T>(array: T[]): T[] {
     return array;
 }
 
-export function boundsFromMapObject(o: MapObjectJSON | GameObjectInfo, margin = 0): Bounds {
+export function boundsFromMapObject(o: GameObjectInfo, margin = 0): Bounds {
     const width = o.width + (margin * 2);
     const height = o.height + (margin * 2);
     const x = o.x - margin;
