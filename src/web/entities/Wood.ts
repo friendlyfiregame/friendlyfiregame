@@ -2,12 +2,14 @@ import { Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { entity, type EntityArgs } from "../Entity";
-import { type GameObjectInfo } from "../MapInfo";
+import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { now } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
+import { RecoverFloatingPosition } from "./pointers/RecoverFloatingPosition";
 
 export enum WoodState {
     FREE = 0,
@@ -21,21 +23,19 @@ export class Wood extends PhysicsEntity {
 
     @asset("sounds/throwing/success.mp3")
     private static readonly successSound: Sound;
-    private readonly floatingPosition: GameObjectInfo;
+    private floatingPosition: ReadonlyVector2Like = new Vector2();
 
     public state = WoodState.FREE;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 26, height: 16 });
+    }
 
-        const floatingPosition = this.scene.pointsOfInterest.find(
-            poi => poi.name === "recover_floating_position"
-        );
-
+    public override setup(): void {
+        const floatingPosition = this.scene.gameObjects.find(isInstanceOf(RecoverFloatingPosition));
         if (!floatingPosition) {
             throw new Error("Could not find \"recover_floating_position\" point of interest in game scene.");
         }
-
         this.floatingPosition = floatingPosition;
     }
 

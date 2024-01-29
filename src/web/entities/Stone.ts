@@ -3,13 +3,15 @@ import { asset } from "../Assets";
 import { Sound } from "../audio/Sound";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
-import { type GameObjectInfo } from "../MapInfo";
+import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { type CollidableGameObject } from "../scenes/GameObject";
 import { now } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
+import { StoneFloatingPosition } from "./pointers/StoneFloatingPosition";
 
 export enum StoneState {
     DEFAULT = 0,
@@ -25,7 +27,7 @@ export class Stone extends NPC implements CollidableGameObject {
     @asset("sounds/throwing/success.mp3")
     private static readonly successSound: Sound;
 
-    private readonly floatingPosition: GameObjectInfo;
+    private floatingPosition: ReadonlyVector2Like = new Vector2();
 
     public state: StoneState = StoneState.DEFAULT;
 
@@ -36,15 +38,13 @@ export class Stone extends NPC implements CollidableGameObject {
         this.face = new Face(this.scene, this, EyeType.STONE, 0, 21);
         this.lookAtPlayer = false;
         this.carryHeight = 16;
+    }
 
-        const floatingPosition = this.scene.pointsOfInterest.find(
-            poi => poi.name === "stone_floating_position"
-        );
-
+    public override setup(): void {
+        const floatingPosition = this.scene.gameObjects.find(isInstanceOf(StoneFloatingPosition));
         if (!floatingPosition) {
             throw new Error("Could not find \"stone_floating_position\" point of interest in game scene");
         }
-
         this.floatingPosition = floatingPosition;
     }
 

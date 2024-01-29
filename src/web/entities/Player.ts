@@ -32,6 +32,9 @@ import { Cloud } from "./Cloud";
 import { ConversationProxy } from "./ConversationProxy";
 import { NPC } from "./NPC";
 import { PhysicsEntity } from "./PhysicsEntity";
+import { BossSpawn } from "./pointers/BossSpawn";
+import { PlayerResetPosition } from "./pointers/PlayerResetPosition";
+import { PlayerSpawn } from "./pointers/PlayerSpawn";
 import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
@@ -236,6 +239,26 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
+    }
+
+    public override setup(): void {
+        const startPos = this.getPlayerStartingPos();
+        this.x = startPos.x;
+        this.y = startPos.y;
+    }
+
+    private getPlayerStartingPos(): { x: number, y: number } {
+        const spawns = this.scene.gameObjects.filter(isInstanceOf(PlayerSpawn));
+        const defaultSpawn = spawns.find(s => s.newGamePlus !== true);
+        const newGamePlusSpawn = spawns.find(s => s.newGamePlus === true);
+
+        if (this.scene.game.campaign.isNewGamePlus) {
+            if (!newGamePlusSpawn) throw new Error("Missing new game plus spawn point for player");
+            return { x: newGamePlusSpawn.x, y: newGamePlusSpawn.y };
+        } else {
+            if (!defaultSpawn) throw new Error("Missing default spawn point for player");
+            return { x: defaultSpawn.x, y: defaultSpawn.y };
+        }
     }
 
     public getControllable(): boolean {
@@ -919,8 +942,8 @@ export class Player extends PhysicsEntity {
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
             const pos = this.scene.apocalypse ?
-                this.scene.pointsOfInterest.find(poi => poi.name === "boss_spawn") :
-                this.scene.pointsOfInterest.find(poi => poi.name === "player_reset_position");
+                this.scene.gameObjects.find(isInstanceOf(BossSpawn)) :
+                this.scene.gameObjects.find(isInstanceOf(PlayerResetPosition));
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
@@ -1177,9 +1200,7 @@ export class Player extends PhysicsEntity {
                         ground.startRain(this.scene.apocalypse ? Infinity : 15);
 
                         // Camera focus to boss for each triggered rain cloud
-                        const bossPointer = this.scene.pointsOfInterest.find(
-                            poi => poi.name === "boss_spawn"
-                        );
+                        const bossPointer = this.scene.gameObjects.find(isInstanceOf(BossSpawn));
 
                         if (bossPointer) {
                             void this.scene.camera.focusOn(

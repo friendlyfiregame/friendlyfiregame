@@ -1,6 +1,7 @@
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
 import { CameraBounds } from "./CameraBounds";
+import { RainSpawnPosition } from "./entities/pointers/RainSpawnPosition";
 import { type Bounds, Entity } from "./Entity";
 import { getImageData } from "./graphics";
 import { type GameObjectInfo } from "./MapInfo";
@@ -47,15 +48,15 @@ export class World implements GameObject {
 
     @asset("images/raindrop.png")
     private static readonly raindrop: HTMLImageElement;
-    private readonly rainEmitter: ParticleEmitter;
+    private rainEmitter: ParticleEmitter | null = null;
     private raining = false;
 
     public constructor(scene: GameScene) {
         this.scene = scene;
+    }
 
-        const rainSpawnPosition = this.scene.pointsOfInterest.find(
-            o => o.name === "rain_spawn_position"
-        );
+    public setup(): Promise<void> | void {
+        const rainSpawnPosition = this.scene.gameObjects.find(isInstanceOf(RainSpawnPosition));
 
         if (!rainSpawnPosition) {
             throw new Error("Missing 'rain_spawn_position' point in map data to place rain emitter");
@@ -84,7 +85,7 @@ export class World implements GameObject {
 
     public update(): void {
         if (this.raining) {
-            this.rainEmitter.emit(rndInt(1, 4));
+            this.rainEmitter?.emit(rndInt(1, 4));
         }
     }
 

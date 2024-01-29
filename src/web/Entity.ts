@@ -72,6 +72,10 @@ export class Entity implements GameObject {
         this.newGamePlus = newGamePlus;
     }
 
+    public setup(): Promise<void> | void {
+        // Nothing to setup
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         // Nothing to draw
     }

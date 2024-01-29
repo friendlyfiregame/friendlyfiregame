@@ -56,17 +56,15 @@ export class MapInfo {
         }));
     }
 
+    // TODO Simplify this when all entities are handled equally.
     public getEntities(): GameObjectInfo[] {
         return [
             ...this.getGameObjectInfos(MapObjectType.ENTITY),
             ...this.getGameObjectInfos(MapObjectType.TRIGGER),
             ...this.getGameObjectInfos(MapObjectType.BOUNDS),
-            ...this.getGameObjectInfos(MapObjectType.SOUND)
+            ...this.getGameObjectInfos(MapObjectType.SOUND),
+            ...this.getGameObjectInfos(MapObjectType.POINTER)
         ];
-    }
-
-    public getPointers(): GameObjectInfo[] {
-        return this.getGameObjectInfos(MapObjectType.POINTER);
     }
 
     public getGateObjects(): GameObjectInfo[] {

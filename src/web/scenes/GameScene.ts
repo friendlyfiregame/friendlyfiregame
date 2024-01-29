@@ -28,6 +28,10 @@ import { FireState } from "../entities/FireState";
 import { FlameBoy } from "../entities/FlameBoy";
 import { Mimic } from "../entities/Mimic";
 import { Player } from "../entities/Player";
+import { BossCloud } from "../entities/pointers/BossCloud";
+import { BossSpawn } from "../entities/pointers/BossSpawn";
+import { FriendshipPlayerPosition } from "../entities/pointers/FriendshipPlayerPosition";
+import { WindowZoomTarget } from "../entities/pointers/WindowZoomTarget";
 import { PowerShiba } from "../entities/PowerShiba";
 import { type Seed } from "../entities/Seed";
 import { ShadowPresence } from "../entities/ShadowPresence";
@@ -50,6 +54,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
 import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { World } from "../World";
 import { AmbientSoundId } from "./AmbientSoundId";
 import { BgmId } from "./BgmId";
@@ -208,7 +213,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    public pointsOfInterest: GameObjectInfo[] = [];
     public gateObjects: GameObjectInfo[] = [];
     public paused = false;
     public world!: World;
@@ -257,7 +261,6 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public override setup(): void {
         this.mapInfo = new MapInfo();
-        this.pointsOfInterest = this.mapInfo.getPointers();
         this.gateObjects = this.mapInfo.getGateObjects();
 
         this.gameTime = 0;
@@ -277,9 +280,6 @@ export class GameScene extends Scene<FriendlyFire> {
             this.world = new World(this),
             this.particles,
             ...this.mapInfo.getEntities().map(entity => {
-                if (entity.name === "player") {
-                    entity = { ...entity, ...this.getPlayerStartingPos() };
-                }
                 return createEntity(entity.name, {
                     scene: this,
                     x: entity.x + entity.width / 2,
@@ -290,6 +290,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 });
             })
         ];
+        this.gameObjects.forEach(obj => obj.setup?.());
 
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
@@ -338,20 +339,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.tree.spawnSeed().bury();
         this.tree.conversation?.setState("reminder");
         this.stone.dropInWater();
-    }
-
-    private getPlayerStartingPos(): { x: number, y: number } {
-        const spawns = this.pointsOfInterest.filter(i => i.name === "player_spawn");
-        const defaultSpawn = spawns.find(s => s.properties.newGamePlus !== true);
-        const newGamePlusSpawn = spawns.find(s => s.properties.newGamePlus);
-
-        if (this.game.campaign.isNewGamePlus) {
-            if (!newGamePlusSpawn) throw new Error("Missing new game plus spawn point for player");
-            return { x: newGamePlusSpawn.x, y: newGamePlusSpawn.y };
-        } else {
-            if (!defaultSpawn) throw new Error("Missing default spawn point for player");
-            return { x: defaultSpawn.x, y: defaultSpawn.y };
-        }
     }
 
     public override cleanup(): void {
@@ -803,7 +790,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.fadeToBlackDirection = FadeDirection.FADE_OUT;
         this.fadeToBlackStartTime = this.gameTime + WINDOW_ENDING_CUTSCENE_DURATION;
         this.fadeToBlackEndTime = this.fadeToBlackStartTime + (WINDOW_ENDING_FADE_DURATION);
-        const target = this.pointsOfInterest.find(poi => poi.name === "windowzoomtarget");
+        const target = this.gameObjects.find(isInstanceOf(WindowZoomTarget));
         if (target) {
             void this.camera.focusOn(WINDOW_ENDING_CUTSCENE_DURATION + PETTING_ENDING_FADE_DURATION, target.x, this.camera.y, 1, 0, valueCurves.cubic);
         }
@@ -841,7 +828,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.shiba.setState(ShibaState.ON_MOUNTAIN);
         this.shiba.nextState();
 
-        const playerTargetPos = this.pointsOfInterest.find(poi => poi.name === "friendship_player_position");
+        const playerTargetPos = this.gameObjects.find(isInstanceOf(FriendshipPlayerPosition));
 
         if (!playerTargetPos) {
             throw new Error("cannot initiate friendship ending because some points of interest are missing");
@@ -855,8 +842,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.apocalypse = true;
         this.world.stopRain();
 
-        const bossPosition = this.pointsOfInterest.find(poi => poi.name === "boss_spawn");
-        const cloudPositions = this.pointsOfInterest.filter(poi => poi.name === "bosscloud");
+        const bossPosition = this.gameObjects.find(isInstanceOf(BossSpawn));
+        const cloudPositions = this.gameObjects.filter(isInstanceOf(BossCloud));
 
         if (bossPosition && cloudPositions.length > 0) {
             cloudPositions.forEach(pos => {
