@@ -29,7 +29,7 @@ import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { Cloud } from "./Cloud";
 import { ConversationProxy } from "./ConversationProxy";
-import { Gate } from "./gates/Gate";
+import { Gate } from "./Gate";
 import { NPC } from "./NPC";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { BossSpawn } from "./pointers/BossSpawn";

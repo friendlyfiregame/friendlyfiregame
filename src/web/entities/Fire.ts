@@ -10,7 +10,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { rnd, rndInt, shiftValue, sleep } from "../util";
 import { FireState } from "./FireState";
-import { ShadowGateDoor1 } from "./gates/ShadowGateDoor1";
+import { Gate } from "./Gate";
 import { NPC } from "./NPC";
 import { ShibaState } from "./ShibaState";
 import { type Wood } from "./Wood";
@@ -245,7 +245,7 @@ export class Fire extends NPC {
     public async feed(wood: Wood): Promise<void> {
         wood.remove();
 
-        this.scene.setGateDisabled(ShadowGateDoor1, false);
+        this.scene.findEntity(Gate, "shadowgate_door_1")?.enable();
 
         // Handle end of the world
         this.state = FireState.ANGRY;

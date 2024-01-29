@@ -28,14 +28,14 @@ export function entity(name: string): (target: EntityConstructor) => void {
     };
 }
 
-export function createEntity(name: string, args: EntityArgs): Entity {
-    const constructor = entities.get(name);
+export function createEntity(name: string, type: string, args: EntityArgs): Entity {
+    const constructor = entities.get(name) ?? entities.get(type);
 
     if (!constructor) {
-        throw new Error("Entity not found: " + name);
+        throw new Error(`No entity with name '${name}' or '${type}' found`);
     }
 
-    return new constructor(args);
+    return new constructor({ ...args, name });
 }
 
 export interface EntityArgs {

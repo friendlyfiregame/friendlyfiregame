@@ -26,7 +26,7 @@ import { ExitPortal } from "../entities/ExitPortal";
 import { Fire } from "../entities/Fire";
 import { FireState } from "../entities/FireState";
 import { FlameBoy } from "../entities/FlameBoy";
-import { Gate } from "../entities/gates/Gate";
+import { Gate } from "../entities/Gate";
 import { Mimic } from "../entities/Mimic";
 import { Player } from "../entities/Player";
 import { BossCloud } from "../entities/pointers/BossCloud";
@@ -279,9 +279,8 @@ export class GameScene extends Scene<FriendlyFire> {
             this.world = new World(this),
             this.particles,
             ...this.mapInfo.getEntities().map(entity => {
-                return createEntity(entity.name, {
+                return createEntity(entity.name, entity.type, {
                     scene: this,
-                    name: entity.name,
                     x: entity.x + entity.width / 2,
                     y: entity.y - entity.height,
                     width: entity.width,
@@ -360,14 +359,13 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-
-    public setGateDisabled(type: Constructor<Gate>, disabled: boolean): void {
-        const gate = this.gameObjects.find(isInstanceOf(type));
-        if (!gate) {
-            console.error(`cannot set disabled status of gate '${type.constructor.name}' because it does not exist`);
-            return;
+    public findEntity<T extends Entity>(type: Constructor<T>, name?: string): T | null {
+        for (const entity of this.gameObjects) {
+            if (entity instanceof type && (name == null || entity.name === name)) {
+                return entity;
+            }
         }
-        gate.disabled = disabled;
+        return null;
     }
 
     public getBackgroundTrack(id: BgmId): BackgroundTrack {

@@ -1,7 +1,7 @@
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
 import { CameraBounds } from "./CameraBounds";
-import { Gate } from "./entities/gates/Gate";
+import { Gate } from "./entities/Gate";
 import { RainSpawnPosition } from "./entities/pointers/RainSpawnPosition";
 import { type Bounds, Entity } from "./Entity";
 import { getImageData } from "./graphics";
