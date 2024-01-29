@@ -5,12 +5,6 @@ import { type GameScene } from "./scenes/GameScene";
 import { isInstanceOf } from "./util/predicates";
 import { type Constructor } from "./util/types";
 
-export interface EntityDistance {
-    source: Entity;
-    target: Entity;
-    distance: number;
-}
-
 export type Bounds = {
     x: number;
     y: number;
@@ -93,49 +87,6 @@ export class Entity implements GameObject {
 
     public get distanceToPlayer(): number {
         return this.distanceTo(this.scene.player);
-    }
-
-    protected getClosestEntityInRange(range: number): Entity | null {
-        const sortedEntityDistances = this.getEntitiesInRange(range).sort(
-            (a, b ) => { return a.distance - b.distance; }
-        );
-
-        if (sortedEntityDistances[0] != null) {
-            return sortedEntityDistances[0].target;
-        } else {
-            return null;
-        }
-    }
-
-    protected getEntitiesInRange(range: number): EntityDistance[] {
-        const entitiesInRange: EntityDistance[] = [];
-
-        this.scene.gameObjects.forEach(gameObject => {
-            if (gameObject instanceof Entity && gameObject !== this) {
-                const distance = this.distanceTo(gameObject);
-
-                if (distance < range) {
-                    entitiesInRange.push({source: this, target: gameObject, distance});
-                }
-            }
-        });
-
-        return entitiesInRange;
-    }
-
-    protected getClosestEntity(): Entity {
-        const entitiesInRange: EntityDistance[] = [];
-
-        this.scene.gameObjects.forEach(gameObject => {
-            if (gameObject instanceof Entity && gameObject !== this) {
-                const distance = this.distanceTo(gameObject);
-                entitiesInRange.push({source: this, target: gameObject, distance});
-            }
-        });
-
-        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; });
-
-        return entitiesInRange[0].target;
     }
 
     public getBounds(margin = 0): Bounds {

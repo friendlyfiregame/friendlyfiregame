@@ -9,7 +9,7 @@ import { PhysicsEntity } from "./PhysicsEntity";
 // Seconds NPC can't be talked to after a conversation has ended
 const PAUSE_AFTER_CONVERSATION = 1.5;
 
-export abstract class NPC extends PhysicsEntity {
+export class NPC extends PhysicsEntity {
     public direction = 1;
     public face: Face | null = null;
     public defaultFaceMode = FaceModes.NEUTRAL;

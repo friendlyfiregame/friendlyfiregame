@@ -88,6 +88,11 @@ type AutoMove = {
     turnAround: boolean;
 };
 
+interface NPCDistance {
+    target: NPC;
+    distance: number;
+}
+
 @entity("player")
 export class Player extends PhysicsEntity {
     @asset([
@@ -933,6 +938,20 @@ export class Player extends PhysicsEntity {
         });
     }
 
+    private getClosestNPC(): NPC | null {
+        const entitiesInRange: NPCDistance[] = [];
+
+        this.scene.findEntities(NPC).forEach(npc => {
+            const distance = this.distanceTo(npc);
+            entitiesInRange.push({ target: npc, distance});
+        });
+
+        entitiesInRange.sort((a, b ) => { return a.distance - b.distance; });
+
+        return entitiesInRange[0].target;
+    }
+
+
     public override update(dt: number): void {
         super.update(dt);
 
@@ -1125,12 +1144,12 @@ export class Player extends PhysicsEntity {
         // collide with the player with an added 5 px of margin. If there are multiple NPCs
         // colliding, the closest one will be chosen.
         this.closestNPC = null;
-        const entities = this.scene.world.getEntityCollisions(this, 5);
+        const entities = this.scene.world.getEntityCollisions(this, 5).filter(isInstanceOf(NPC));
 
         if (entities.length > 0) {
-            const closestEntity = entities.length > 1 ? this.getClosestEntity() : entities[0];
+            const closestEntity = entities.length > 1 ? this.getClosestNPC() : entities[0];
 
-            if (closestEntity instanceof NPC) {
+            if (closestEntity != null) {
                 this.closestNPC = closestEntity;
             }
         }
