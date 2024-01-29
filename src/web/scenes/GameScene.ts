@@ -275,8 +275,9 @@ export class GameScene extends Scene<FriendlyFire> {
             this.world = new World(this),
             this.particles,
             ...this.mapInfo.getEntities().map(entity => {
-                return createEntity(entity.name, entity.type, {
+                return createEntity(entity.type, {
                     scene: this,
+                    name: entity.name,
                     x: entity.x + entity.width / 2,
                     y: entity.y - entity.height,
                     width: entity.width,
