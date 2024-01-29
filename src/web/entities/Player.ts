@@ -16,7 +16,6 @@ import { type Bounds, type Entity, entity, type EntityArgs } from "../Entity";
 import { type ControllerEvent } from "../input/ControllerEvent";
 import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
-import { type GameObjectInfo } from "../MapInfo";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { PlayerConversation } from "../PlayerConversation";
 import { QuestATrigger, QuestKey } from "../Quests";
@@ -30,6 +29,7 @@ import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { Cloud } from "./Cloud";
 import { ConversationProxy } from "./ConversationProxy";
+import { Gate } from "./gates/Gate";
 import { NPC } from "./NPC";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { BossSpawn } from "./pointers/BossSpawn";
@@ -620,65 +620,64 @@ export class Player extends PhysicsEntity {
      * Also sets the camera bounds to the target position
      * @param gate the source the player enters
      */
-    private async enterGate(gate: GameObjectInfo): Promise<void> {
-        if (gate != null && gate.properties.target != null) {
+    private async enterGate(gate: Gate): Promise<void> {
+        if (gate != null && gate.target != null) {
             this.isControllable = false;
             this.moveRight = false;
             this.moveLeft = false;
 
-            const targetGate = this.scene.gateObjects.find(
-                target => target.name === gate.properties.target
-            );
+            const targetGate = this.scene.gameObjects.filter(isInstanceOf(Gate)).find(target => target.name === gate.target);
 
-            const targetBgmId = gate.properties.bgm;
+            const targetBgmId = gate.bgm;
 
-            if (targetGate) {
-                if (gate.properties.enterSound != null) {
-                    if (gate.properties.enterSound === "portal") {
-                        Player.enterPortalSound.stop();
-                        Player.enterPortalSound.play();
-                    }
-                } else {
-                    Player.enterGateSound.stop();
-                    Player.enterGateSound.play();
-                }
-
-                await this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT);
-                if (targetBgmId != null) {
-                    this.scene.setActiveBgmTrack(targetBgmId as BgmId);
-                }
-
-                if (targetGate.properties.exitSound != null) {
-                    if (targetGate.properties.exitSound === "portal") {
-                        Player.enterPortalSound.stop();
-                        Player.enterPortalSound.play();
-                    }
-                } else {
-                    Player.leaveGateSound.stop();
-                    Player.leaveGateSound.play();
-                }
-
-                this.x = targetGate.x + (targetGate.width / 2);
-                this.y = targetGate.y - targetGate.height;
-
-                this.scene.camera.setBounds(this.getCurrentCameraBounds());
-
-                if (targetGate.name === "exitportaldoor_2") {
-                    this.switchToReality();
-                }
-
-                if (targetGate.name === "shadowgate_door_2") {
-                    this.enterShadowCave();
-                }
-
-                if (targetGate.properties.exitSleepTime != null) {
-                    await sleep(targetGate.properties.exitSleepTime * 1000);
-                }
-
-                const fadeInTime = targetGate.properties.exitFadeTime ?? 0.8;
-                await this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN);
-                this.isControllable = true;
+            if (targetGate == null) {
+                throw new Error(`Target gate '${gate.target}' not found`);
             }
+            if (gate.enterSound != null) {
+                if (gate.enterSound === "portal") {
+                    Player.enterPortalSound.stop();
+                    Player.enterPortalSound.play();
+                }
+            } else {
+                Player.enterGateSound.stop();
+                Player.enterGateSound.play();
+            }
+
+            await this.scene.fadeToBlack(0.8, FadeDirection.FADE_OUT);
+            if (targetBgmId != null) {
+                this.scene.setActiveBgmTrack(targetBgmId as BgmId);
+            }
+
+            if (targetGate.exitSound != null) {
+                if (targetGate.exitSound === "portal") {
+                    Player.enterPortalSound.stop();
+                    Player.enterPortalSound.play();
+                }
+            } else {
+                Player.leaveGateSound.stop();
+                Player.leaveGateSound.play();
+            }
+
+            this.x = targetGate.x + (targetGate.width / 2);
+            this.y = targetGate.y - targetGate.height;
+
+            this.scene.camera.setBounds(this.getCurrentCameraBounds());
+
+            if (targetGate.name === "exitportaldoor_2") {
+                this.switchToReality();
+            }
+
+            if (targetGate.name === "shadowgate_door_2") {
+                this.enterShadowCave();
+            }
+
+            if (targetGate.exitSleepTime != null) {
+                await sleep(targetGate.exitSleepTime * 1000);
+            }
+
+            const fadeInTime = targetGate.exitFadeTime ?? 0.8;
+            await this.scene.fadeToBlack(fadeInTime, FadeDirection.FADE_IN);
+            this.isControllable = true;
         }
     }
 

@@ -26,6 +26,7 @@ import { ExitPortal } from "../entities/ExitPortal";
 import { Fire } from "../entities/Fire";
 import { FireState } from "../entities/FireState";
 import { FlameBoy } from "../entities/FlameBoy";
+import { Gate } from "../entities/gates/Gate";
 import { Mimic } from "../entities/Mimic";
 import { Player } from "../entities/Player";
 import { BossCloud } from "../entities/pointers/BossCloud";
@@ -46,15 +47,16 @@ import { type Bounds, createEntity, Entity  } from "../Entity";
 import { FireGfx } from "../FireGfx";
 import { type FriendlyFire } from "../FriendlyFire";
 import { type ControllerEvent } from "../input/ControllerEvent";
-import { type GameObjectInfo, MapInfo} from "../MapInfo";
+import { MapInfo} from "../MapInfo";
 import { MenuList } from "../Menu";
 import { MountainRiddle } from "../MountainRiddle";
 import { type ParticleEmitter, Particles, valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
-import { boundsFromMapObject, clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
+import { clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { isInstanceOf } from "../util/predicates";
+import { type Constructor } from "../util/types";
 import { World } from "../World";
 import { AmbientSoundId } from "./AmbientSoundId";
 import { BgmId } from "./BgmId";
@@ -213,7 +215,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameTime = 0;
 
     public gameObjects: GameObject[] = [];
-    public gateObjects: GameObjectInfo[] = [];
     public paused = false;
     public world!: World;
     public camera!: Camera;
@@ -261,8 +262,6 @@ export class GameScene extends Scene<FriendlyFire> {
 
     public override setup(): void {
         this.mapInfo = new MapInfo();
-        this.gateObjects = this.mapInfo.getGateObjects();
-
         this.gameTime = 0;
         this.fadeToBlackEndTime = 0;
         this.fadeToBlackStartTime = 0;
@@ -282,6 +281,7 @@ export class GameScene extends Scene<FriendlyFire> {
             ...this.mapInfo.getEntities().map(entity => {
                 return createEntity(entity.name, {
                     scene: this,
+                    name: entity.name,
                     x: entity.x + entity.width / 2,
                     y: entity.y - entity.height,
                     width: entity.width,
@@ -361,13 +361,13 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
 
-    public setGateDisabled(gateId: string, disabled: boolean): void {
-        const gate = this.gateObjects.find(o => o.name === gateId);
+    public setGateDisabled(type: Constructor<Gate>, disabled: boolean): void {
+        const gate = this.gameObjects.find(isInstanceOf(type));
         if (!gate) {
-            console.error(`cannot set disabled status of gate '${gateId}' because it does not exist`);
+            console.error(`cannot set disabled status of gate '${type.constructor.name}' because it does not exist`);
             return;
         }
-        gate.properties.disabled = disabled;
+        gate.disabled = disabled;
     }
 
     public getBackgroundTrack(id: BgmId): BackgroundTrack {
@@ -601,15 +601,12 @@ export class GameScene extends Scene<FriendlyFire> {
                         this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
                     } else if (obj instanceof CameraBounds) {
                         this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "yellow");
+                    } else if (obj instanceof Gate) {
+                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "green");
                     } else {
                         this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "blue");
                     }
                 }
-            }
-
-            for (const obj of this.gateObjects) {
-                const bounds = boundsFromMapObject(obj);
-                this.addSingleDebugBoundsToRenderingQueue(bounds, "green");
             }
         }
     }

@@ -1,15 +1,15 @@
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
 import { CameraBounds } from "./CameraBounds";
+import { Gate } from "./entities/gates/Gate";
 import { RainSpawnPosition } from "./entities/pointers/RainSpawnPosition";
 import { type Bounds, Entity } from "./Entity";
 import { getImageData } from "./graphics";
-import { type GameObjectInfo } from "./MapInfo";
 import { type ParticleEmitter, Particles, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { type GameObject, isCollidableGameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
-import { boundsFromMapObject, rnd, rndInt } from "./util";
+import { rnd, rndInt } from "./util";
 import { isInstanceOf } from "./util/predicates";
 
 export enum Environment {
@@ -235,9 +235,9 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    private entityIsAvailableInNewGameState(newGamePlusProp?: boolean): boolean {
+    private entityIsAvailableInNewGameState(newGamePlusProp: boolean | null = null): boolean {
         return (
-            newGamePlusProp === undefined ||
+            newGamePlusProp == null ||
             (
                 newGamePlusProp === false && !this.scene.game.campaign.isNewGamePlus ||
                 newGamePlusProp === true && this.scene.game.campaign.isNewGamePlus
@@ -245,17 +245,17 @@ export class World implements GameObject {
         );
     }
 
-    public getGateCollisions(sourceEntity: Entity): GameObjectInfo[] {
-        const collidesWith: GameObjectInfo[] = [];
+    public getGateCollisions(sourceEntity: Entity): Gate[] {
+        const collidesWith: Gate[] = [];
 
 
-        for (const gateObject of this.scene.gateObjects) {
+        for (const gate of this.scene.gameObjects.filter(isInstanceOf(Gate))) {
             const colliding = this.boundingBoxesCollide(
-                sourceEntity.getBounds(), boundsFromMapObject(gateObject, 0)
+                sourceEntity.getBounds(), gate.getBounds()
             );
 
-            if (colliding && gateObject.properties.disabled !== true && this.entityIsAvailableInNewGameState(gateObject.properties.newGamePlus)) {
-                collidesWith.push(gateObject);
+            if (colliding && gate.disabled !== true && this.entityIsAvailableInNewGameState(gate.newGamePlus)) {
+                collidesWith.push(gate);
             }
         }
 

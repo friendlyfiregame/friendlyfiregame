@@ -27,6 +27,7 @@ import tree2 from "../../assets/dialog/tree2.dialog.json";
 import wing1 from "../../assets/dialog/wing1.dialog.json";
 import { Conversation } from "./Conversation";
 import { type DialogJSON } from "./Dialog";
+import { ExitPortalDoor1 } from "./entities/gates/ExitPortalDoor1";
 import { type NPC } from "./entities/NPC";
 import { Forest } from "./entities/pointers/Forest";
 import { Mountain } from "./entities/pointers/Mountain";
@@ -265,7 +266,7 @@ export class Campaign {
                     break;
                 case "giveWoodToFlameboy":
                     Conversation.setGlobal("gaveWoodToFlameboy", "true");
-                    this.gameScene.setGateDisabled("exitportaldoor_1", false);
+                    this.gameScene.setGateDisabled(ExitPortalDoor1, false);
                     this.gameScene.player.removeMultiJump();
                     this.gameScene.removeGameObject(this.gameScene.fire);
                     this.gameScene.removeGameObject(this.gameScene.shiba);
