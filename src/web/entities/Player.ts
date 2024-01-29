@@ -37,12 +37,9 @@ import { Seed, SeedState } from "./Seed";
 import { Sign } from "./Sign";
 import { Snowball } from "./Snowball";
 import { Stone, StoneState } from "./Stone";
-import { FinishMountainRiddle } from "./triggers/FinishMountainRiddle";
 import { MountainGate } from "./triggers/MountainGate";
 import { NoEmitTrigger } from "./triggers/NoEmitTrigger";
-import { RaincloudSky } from "./triggers/RaincloudSky";
 import { Readable } from "./triggers/Readable";
-import { ResetMountain } from "./triggers/ResetMountain";
 import { Teleporter } from "./triggers/Teleporter";
 import { Trigger } from "./triggers/Trigger";
 import { Wall } from "./Wall";
@@ -876,7 +873,7 @@ export class Player extends PhysicsEntity {
 
         return (
             (
-                this.isCollidingWithTrigger(RaincloudSky)
+                this.isCollidingWithTrigger("raincloud_sky")
                 && !this.scene.world.isRaining()
                 && this.carrying === null
                 && !this.scene.apocalypse
@@ -1244,7 +1241,7 @@ export class Player extends PhysicsEntity {
                         }
                     }
 
-                    if (this.isCollidingWithTrigger(RaincloudSky)) {
+                    if (this.isCollidingWithTrigger("raincloud_sky")) {
                         this.scene.world.startRain();
                     }
                 }
@@ -1261,7 +1258,7 @@ export class Player extends PhysicsEntity {
 
         // Logic from triggers
         for (const trigger of this.scene.world.getEntityCollisions(this).filter(isInstanceOf(Trigger))) {
-            if (trigger instanceof ResetMountain) {
+            if (trigger.name === "reset_mountain") {
                 this.scene.mountainRiddle.resetRiddle();
             } else if (trigger instanceof MountainGate) {
                 this.scene.mountainRiddle.checkGate(trigger.col, trigger.row);
@@ -1269,7 +1266,7 @@ export class Player extends PhysicsEntity {
                 if (this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
                     this.y -= trigger.teleportY;
                 }
-            } else if (trigger instanceof FinishMountainRiddle) {
+            } else if (trigger.name === "finish_mountain_riddle") {
                 this.scene.mountainRiddle.clearRiddle();
             } else if (trigger instanceof NoEmitTrigger && trigger.disableParticles) {
                 this.disableParticles = true;

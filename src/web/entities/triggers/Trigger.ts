@@ -1,4 +1,4 @@
-import { Entity, type EntityArgs } from "../../Entity";
+import { Entity, entity, type EntityArgs } from "../../Entity";
 
 export interface TriggerArgs extends EntityArgs {
     setGlobalKey?: string | null;
@@ -7,6 +7,7 @@ export interface TriggerArgs extends EntityArgs {
     setDialogValue?: string | null;
 }
 
+@entity("trigger")
 export class Trigger extends Entity {
     public readonly setGlobalKey: string | null;
     public readonly setGlobalVal: string | null;
@@ -20,7 +21,7 @@ export class Trigger extends Entity {
         setDialogValue = null,
         ...args
     }: TriggerArgs) {
-        super({ isTrigger: true, ... args });
+        super({ ...args, isTrigger: true });
         this.setGlobalKey = setGlobalKey;
         this.setGlobalVal = setGlobalVal;
         this.setDialogEntity = setDialogEntity;

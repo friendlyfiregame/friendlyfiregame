@@ -2,7 +2,7 @@ import { Animator } from "./Animator";
 import { type Trigger } from "./entities/triggers/Trigger";
 import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
-import { isInstanceOf } from "./util/predicates";
+import { isEntityName, isInstanceOf } from "./util/predicates";
 import { type Constructor } from "./util/types";
 
 export type Bounds = {
@@ -99,10 +99,11 @@ export class Entity implements GameObject {
 
     /**
      * Checks wether this entity is currently colliding with the provided named trigger.
-     * @param triggerName the trigger name to check against.
+     *
+     * @param trigger - the trigger class or name to check against.
      */
-    protected isCollidingWithTrigger(trigger: Constructor<Trigger>): boolean {
-        return this.scene.world.getEntityCollisions(this).find(isInstanceOf(trigger)) != null;
+    protected isCollidingWithTrigger(trigger: Constructor<Trigger> | string): boolean {
+        return this.scene.world.getEntityCollisions(this).find(typeof trigger === "string" ? isEntityName(trigger) : isInstanceOf(trigger)) != null;
     }
 
     public remove(): void {

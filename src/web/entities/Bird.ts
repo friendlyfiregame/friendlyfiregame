@@ -1,5 +1,5 @@
 import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
-import { isInstanceOf } from "../util/predicates";
+import { isEntityName } from "../util/predicates";
 import conversation from "./../../../assets/dialog/bird.dialog.json";
 import { Aseprite } from "./../Aseprite";
 import { asset } from "./../Assets";
@@ -11,8 +11,6 @@ import { RenderingLayer } from "./../Renderer";
 import { calculateVolume, rnd, rndItem } from "./../util";
 import { Environment } from "./../World";
 import { NPC } from "./NPC";
-import { BirdNestLeft } from "./triggers/BirdNestLeft";
-import { BirdNestRight } from "./triggers/BirdNestRight";
 
 enum BirdState {
     WAITING_LEFT,
@@ -216,11 +214,11 @@ export class Bird extends NPC {
             // Triggers
             const triggerCollisions = this.scene.world.getEntityCollisions(this);
 
-            if (this.state === BirdState.FLYING_RIGHT && triggerCollisions.length > 0 && triggerCollisions.find(isInstanceOf(BirdNestRight))) {
+            if (this.state === BirdState.FLYING_RIGHT && triggerCollisions.length > 0 && triggerCollisions.find(isEntityName("bird_nest_right"))) {
                 this.nextState();
             }
 
-            if (this.state === BirdState.FLYING_LEFT && triggerCollisions.length > 0 && triggerCollisions.find(isInstanceOf(BirdNestLeft))) {
+            if (this.state === BirdState.FLYING_LEFT && triggerCollisions.length > 0 && triggerCollisions.find(isEntityName("bird_nest_left"))) {
                 this.nextState();
             }
         }

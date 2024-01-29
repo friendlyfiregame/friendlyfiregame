@@ -7,9 +7,9 @@ import { EyeType, Face, FaceModes } from "../Face";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { rndItem } from "../util";
-import { isInstanceOf } from "../util/predicates";
+import { isEntityName, isInstanceOf } from "../util/predicates";
 import { ScriptableNPC } from "./ScriptableNPC";
-import { FlameBoyAction } from "./triggers/FlameBoyAction";
+import { DirectionTrigger } from "./triggers/DirectionTrigger";
 import { type Wood } from "./Wood";
 
 export enum FlameBoyState {
@@ -96,9 +96,9 @@ export class FlameBoy extends ScriptableNPC {
         }
     }
 
-    private walkRandomly(dt: number, action?: FlameBoyAction): void {
-        if (action != null && action.velocity != null) {
-            this.autoMoveDirection = action.velocity > 0 ? 1 : -1;
+    private walkRandomly(dt: number, action?: DirectionTrigger): void {
+        if (action != null && action.direction != null) {
+            this.autoMoveDirection = action.direction > 0 ? 1 : -1;
             this.move = this.autoMoveDirection;
         }
 
@@ -152,7 +152,7 @@ export class FlameBoy extends ScriptableNPC {
         super.update(dt);
 
         // Flame Boy action triggers
-        const actions = this.scene.world.getEntityCollisions(this).filter(isInstanceOf(FlameBoyAction));
+        const actions = this.scene.world.getEntityCollisions(this).filter(isInstanceOf(DirectionTrigger)).filter(isEntityName("flameboy_action"));
 
         if (this.hasActiveConversation()) {
             this.move = 0;

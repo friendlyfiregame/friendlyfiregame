@@ -11,15 +11,14 @@ import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { calculateVolume, rnd, rndItem } from "../util";
-import { isInstanceOf } from "../util/predicates";
+import { isEntityName, isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { SHRINK_SIZE } from "./Fire";
 import { FireState } from "./FireState";
 import { Pointer } from "./Pointer";
 import { ScriptableNPC } from "./ScriptableNPC";
 import { ShibaState } from "./ShibaState";
-import { ShibaAction } from "./triggers/ShibaAction";
-import { ShibaStop } from "./triggers/ShibaStop";
+import { DirectionTrigger } from "./triggers/DirectionTrigger";
 
 const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [0.5, 1, 1.2, 1.5];
@@ -245,8 +244,8 @@ export class Shiba extends ScriptableNPC {
 
         // Shiba action triggers
         const collisions = this.scene.world.getEntityCollisions(this);
-        const action = collisions.find(isInstanceOf(ShibaAction));
-        const stop = collisions.find(isInstanceOf(ShibaStop)) != null;
+        const action = collisions.filter(isInstanceOf(DirectionTrigger)).find(isEntityName("shiba_action"));
+        const stop = collisions.find(isEntityName("shiba_stop")) != null;
 
         if (this.hasActiveConversation() || this.isBeingPetted) {
             this.move = 0;
@@ -303,9 +302,9 @@ export class Shiba extends ScriptableNPC {
         }
     }
 
-    private onTreeUpdateLogic(dt: number, action?: ShibaAction): void {
-        if (action != null && action.velocity != null) {
-            this.autoMoveDirection = action.velocity > 0 ? 1 : -1;
+    private onTreeUpdateLogic(dt: number, action?: DirectionTrigger): void {
+        if (action != null && action.direction != null) {
+            this.autoMoveDirection = action.direction > 0 ? 1 : -1;
             this.move = this.autoMoveDirection;
         }
 
