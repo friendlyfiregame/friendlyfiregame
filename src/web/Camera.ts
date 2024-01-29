@@ -100,7 +100,7 @@ export class Camera {
             // Teleport player
             this.scene.player.x = tx;
             this.scene.player.y = ty;
-            this.setBounds(this.scene.player.getCurrentMapBounds());
+            this.setBounds(this.scene.player.getCurrentCameraBounds());
 
             this.scene.player.setVelocity(0, 0);
             reset();

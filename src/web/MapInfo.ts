@@ -62,7 +62,8 @@ export class MapInfo {
     public getEntities(): GameObjectInfo[] {
         return [
             ...this.getGameObjectInfos(MapObjectType.ENTITY),
-            ...this.getGameObjectInfos(MapObjectType.TRIGGER)
+            ...this.getGameObjectInfos(MapObjectType.TRIGGER),
+            ...this.getGameObjectInfos(MapObjectType.BOUNDS)
         ];
     }
 
@@ -72,10 +73,6 @@ export class MapInfo {
 
     public getPointers(): GameObjectInfo[] {
         return this.getGameObjectInfos(MapObjectType.POINTER);
-    }
-
-    public getBoundObjects(): GameObjectInfo[] {
-        return this.getGameObjectInfos(MapObjectType.BOUNDS);
     }
 
     public getGateObjects(): GameObjectInfo[] {

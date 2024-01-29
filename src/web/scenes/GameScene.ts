@@ -17,6 +17,7 @@ import { Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
 import { BitmapFont } from "../BitmapFont";
 import { Camera } from "../Camera";
+import { CameraBounds } from "../CameraBounds";
 import { Conversation } from "../Conversation";
 import { Bird } from "../entities/Bird";
 import { Bone } from "../entities/Bone";
@@ -210,7 +211,6 @@ export class GameScene extends Scene<FriendlyFire> {
     public gameObjects: GameObject[] = [];
     public soundEmitters: SoundEmitter[] = [];
     public pointsOfInterest: GameObjectInfo[] = [];
-    public boundObjects: GameObjectInfo[] = [];
     public gateObjects: GameObjectInfo[] = [];
     public paused = false;
     public world!: World;
@@ -261,7 +261,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.mapInfo = new MapInfo();
         this.soundEmitters = this.mapInfo.getSounds().map(o => SoundEmitter.fromGameObjectInfo(this, o));
         this.pointsOfInterest = this.mapInfo.getPointers();
-        this.boundObjects = this.mapInfo.getBoundObjects();
         this.gateObjects = this.mapInfo.getGateObjects();
 
         this.gameTime = 0;
@@ -313,7 +312,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.exitPortal = this.getGameObject(ExitPortal);
 
         this.camera = new Camera(this, this.player);
-        this.camera.setBounds(this.player.getCurrentMapBounds());
+        this.camera.setBounds(this.player.getCurrentCameraBounds());
 
         this.fpsInterval = window.setInterval(() => {
             this.framesPerSecond = this.frameCounter;
@@ -617,15 +616,12 @@ export class GameScene extends Scene<FriendlyFire> {
                 if (obj instanceof Entity) {
                     if (obj instanceof Trigger) {
                         this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
+                    } else if (obj instanceof CameraBounds) {
+                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "yellow");
                     } else {
                         this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "blue");
                     }
                 }
-            }
-
-            for (const obj of this.boundObjects) {
-                const bounds = boundsFromMapObject(obj);
-                this.addSingleDebugBoundsToRenderingQueue(bounds, "yellow");
             }
 
             for (const obj of this.gateObjects) {
@@ -886,7 +882,7 @@ export class GameScene extends Scene<FriendlyFire> {
             this.fire.x = bossPosition.x;
             this.fire.y = bossPosition.y;
 
-            this.camera.setBounds(this.player.getCurrentMapBounds());
+            this.camera.setBounds(this.player.getCurrentCameraBounds());
 
             // Some helpful thoughts
             await sleep(9000);

@@ -25,7 +25,7 @@ import { type BgmId } from "../scenes/BgmId";
 import { FadeDirection } from "../scenes/FadeDirection";
 import { GotItemScene, Item } from "../scenes/GotItemScene";
 import { SpeechBubble } from "../SpeechBubble";
-import { boundsFromMapObject, isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
+import { isDev, rnd, rndInt, rndItem, sleep, timedRnd } from "../util";
 import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { Cloud } from "./Cloud";
@@ -638,7 +638,7 @@ export class Player extends PhysicsEntity {
                 this.x = targetGate.x + (targetGate.width / 2);
                 this.y = targetGate.y - targetGate.height;
 
-                this.scene.camera.setBounds(this.getCurrentMapBounds());
+                this.scene.camera.setBounds(this.getCurrentCameraBounds());
 
                 if (targetGate.name === "exitportaldoor_2") {
                     this.switchToReality();
@@ -670,7 +670,7 @@ export class Player extends PhysicsEntity {
         this.x = entity.x;
         this.y = entity.y;
 
-        this.scene.camera.setBounds(this.getCurrentMapBounds());
+        this.scene.camera.setBounds(this.getCurrentCameraBounds());
     }
 
     private canJump(): boolean {
@@ -871,10 +871,10 @@ export class Player extends PhysicsEntity {
     /**
      * Returns the bounds of the map area the player currently resides in
      */
-    public getCurrentMapBounds(): Bounds | undefined {
+    public getCurrentCameraBounds(): Bounds | undefined {
         const collisions = this.scene.world.getCameraBounds(this);
         if (collisions.length === 0) return undefined;
-        return boundsFromMapObject(collisions[0]);
+        return collisions[0].getBounds();
     }
 
     private respawn(): void {
@@ -924,7 +924,7 @@ export class Player extends PhysicsEntity {
             if (pos) {
                 this.x = pos.x;
                 this.y = pos.y;
-                this.scene.camera.setBounds(this.getCurrentMapBounds());
+                this.scene.camera.setBounds(this.getCurrentCameraBounds());
             }
         }
 

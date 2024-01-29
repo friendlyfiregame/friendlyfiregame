@@ -1,5 +1,6 @@
 import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
+import { CameraBounds } from "./CameraBounds";
 import { type Bounds, Entity } from "./Entity";
 import { getImageData } from "./graphics";
 import { type GameObjectInfo } from "./MapInfo";
@@ -8,6 +9,7 @@ import { RenderingLayer, RenderingType } from "./Renderer";
 import { type GameObject, isCollidableGameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
 import { boundsFromMapObject, rnd, rndInt } from "./util";
+import { isInstanceOf } from "./util/predicates";
 
 export enum Environment {
     AIR = 0,
@@ -259,16 +261,16 @@ export class World implements GameObject {
         return collidesWith;
     }
 
-    public getCameraBounds(sourceEntity: Entity): GameObjectInfo[] {
-        const collidesWith: GameObjectInfo[] = [];
+    public getCameraBounds(sourceEntity: Entity): CameraBounds[] {
+        const collidesWith: CameraBounds[] = [];
 
-        for (const triggerObject of this.scene.boundObjects) {
+        for (const cameraBounds of this.scene.gameObjects.filter(isInstanceOf(CameraBounds))) {
             const colliding = this.boundingBoxesCollide(
-                sourceEntity.getBounds(), boundsFromMapObject(triggerObject)
+                sourceEntity.getBounds(), cameraBounds.getBounds()
             );
 
             if (colliding) {
-                collidesWith.push(triggerObject);
+                collidesWith.push(cameraBounds);
             }
         }
 
