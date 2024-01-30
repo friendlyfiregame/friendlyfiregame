@@ -1,4 +1,5 @@
 {
+    "type": "variable-width",
     "image": "credits.png",
     "characterHeight": 9,
     "characterMapping": [

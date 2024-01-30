@@ -3,16 +3,29 @@ import { getRenderingContext, loadImage } from "./graphics";
 
 const CHAR_SPACING = 1;
 
-export interface FontJSON {
-    image: string;
-    characterHeight: number;
-    characterMapping: {
-        char: string;
-        width: number;
-        compactablePrecursors: string[];
+interface AnyFontJSON {
+    readonly type: "fixed-width" | "variable-width";
+    readonly image: string;
+    readonly characterHeight: number;
+    readonly margin: number;
+    readonly colors: Record<string, string>;
+    readonly characterMapping: {
+        readonly char: string;
     }[];
-    margin: number;
-    colors: Record<string, string>;
+}
+
+export interface FixedWidthFontJSON extends AnyFontJSON {
+    readonly type: "fixed-width";
+    readonly characterWidth: number;
+}
+
+export interface VariableWidthFontJSON extends AnyFontJSON {
+    readonly type: "variable-width";
+    readonly characterMapping: {
+        readonly char: string;
+        readonly width: number;
+        readonly compactablePrecursors: string[];
+    }[];
 }
 
 export class BitmapFont {
@@ -56,12 +69,31 @@ export class BitmapFont {
      * @return The loaded sprite.
      */
     public static async load(source: string): Promise<BitmapFont> {
-        const json = await (await fetch(source)).json() as FontJSON;
+        const json = await (await fetch(source)).json() as AnyFontJSON;
         const baseURL = new URL(source, location.href);
         const image = await loadImage(new URL(json.image, baseURL));
+        switch (json.type) {
+            case "variable-width":
+                return BitmapFont.#loadVariableWidthFont(json as VariableWidthFontJSON, image);
+            case "fixed-width":
+                return BitmapFont.#loadFixedWidthFont(json as FixedWidthFontJSON, image);
+            default:
+                throw new Error(`Font loading not yet implemented, type="${json.type as string}"`);
+        }
+    }
+
+    static #loadVariableWidthFont(json: VariableWidthFontJSON, image: HTMLImageElement): BitmapFont {
         const characters = json.characterMapping.map(charDef => charDef.char).join("");
         const widths = json.characterMapping.map(charDef => charDef.width);
         const compactablePrecursors = json.characterMapping.map(charDef => charDef.compactablePrecursors ?? []);
+
+        return new BitmapFont(image, json.colors, characters, json.characterHeight, widths, compactablePrecursors, json.margin);
+    }
+
+    static #loadFixedWidthFont(json: FixedWidthFontJSON, image: HTMLImageElement): BitmapFont {
+        const characters = json.characterMapping.map(charDef => charDef.char).join("");
+        const widths = json.characterMapping.map(() => json.characterWidth);
+        const compactablePrecursors = json.characterMapping.map(charDef => []);
 
         return new BitmapFont(image, json.colors, characters, json.characterHeight, widths, compactablePrecursors, json.margin);
     }

@@ -1,4 +1,5 @@
 {
+    "type": "variable-width",
     "image": "pixcelsior.png",
     "characterHeight": 12,
     "characterMapping": [

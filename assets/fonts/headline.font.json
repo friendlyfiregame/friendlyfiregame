@@ -1,4 +1,5 @@
 {
+    "type": "variable-width",
     "image": "headline.png",
     "characterHeight": 14,
     "characterMapping": [

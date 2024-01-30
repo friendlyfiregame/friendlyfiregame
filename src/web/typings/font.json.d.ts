@@ -1,4 +1,5 @@
+import type { FixedWidthFontJSON, VariableWidthFontJSON } from "../BitmapFont";
 declare module "*.font.json" {
-    const value: import("../BitmapFont").FontJSON;
+    const value: FixedWidthFontJSON | VariableWidthFontJSON;
     export default value;
 }
