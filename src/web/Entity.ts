@@ -45,7 +45,7 @@ export interface EntityArgs {
 
 export class Entity implements GameObject {
     protected timeAlive = 0;
-    protected animator = new Animator(this);
+    protected readonly animator = new Animator(this);
     public readonly scene: GameScene;
     public readonly name: string | null;
     public readonly newGamePlus: boolean | null;
@@ -53,7 +53,7 @@ export class Entity implements GameObject {
     public y: number;
     public width: number;
     public height: number;
-    public isTrigger: boolean;
+    public readonly isTrigger: boolean;
 
     public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null }: EntityArgs) {
         this.scene = scene;

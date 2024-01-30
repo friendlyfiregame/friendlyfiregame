@@ -21,7 +21,7 @@ export class Trigger extends Entity {
         setDialogValue = null,
         ...args
     }: TriggerArgs) {
-        super({ ...args, isTrigger: true });
+        super(args);
         this.setGlobalKey = setGlobalKey;
         this.setGlobalVal = setGlobalVal;
         this.setDialogEntity = setDialogEntity;

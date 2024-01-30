@@ -10,7 +10,7 @@ export class DirectionTrigger extends Trigger {
     public readonly direction: number | null;
 
     public constructor({ direction = null, ...args }: DirectionTriggerArgs) {
-        super({ ...args, isTrigger: true });
+        super(args);
         this.direction = direction;
     }
 }
