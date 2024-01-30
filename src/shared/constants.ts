@@ -73,7 +73,7 @@ export const PLAYER_WIDTH = 0.5 * PIXEL_PER_METER;
 export const PLAYER_CARRY_HEIGHT = 4;
 
 /** Fonts */
-export const DIALOG_FONT = "fonts/pixcelsior.font.json";
+export const DIALOG_FONT = "fonts/starchild.font.json";
 
 /** Total duration in seconds until dog petting ending occurs */
 export const PETTING_ENDING_CUTSCENE_DURATION = 135;
