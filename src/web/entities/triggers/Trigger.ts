@@ -7,7 +7,7 @@ export interface TriggerArgs extends EntityArgs {
     setDialogValue?: string | null;
 }
 
-@entity("trigger")
+@entity("Trigger")
 export class Trigger extends Entity {
     public readonly setGlobalKey: string | null;
     public readonly setGlobalVal: string | null;

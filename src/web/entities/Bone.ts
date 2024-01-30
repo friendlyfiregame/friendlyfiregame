@@ -7,7 +7,7 @@ import { RenderingLayer } from "../Renderer";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 
-@entity("bone")
+@entity("Bone")
 export class Bone extends PhysicsEntity {
     @asset("sprites/bone.aseprite.json")
     private static readonly sprite: Aseprite;

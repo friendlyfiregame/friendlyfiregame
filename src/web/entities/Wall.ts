@@ -11,7 +11,7 @@ export interface WallArgs extends EntityArgs {
     identifier?: string;
 }
 
-@entity("wall")
+@entity("Wall")
 export class Wall extends Entity implements CollidableGameObject {
     @asset("sprites/wall.aseprite.json")
     private static readonly sprite: Aseprite;

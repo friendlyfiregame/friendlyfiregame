@@ -15,7 +15,7 @@ export enum WoodState {
     SWIMMING = 1
 }
 
-@entity("wood")
+@entity("Wood")
 export class Wood extends PhysicsEntity {
     @asset("sprites/wood.aseprite.json")
     private static readonly sprite: Aseprite;

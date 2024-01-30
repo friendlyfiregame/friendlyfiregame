@@ -22,7 +22,7 @@ export interface MovingEntityArgs extends EntityArgs {
     distance?: number;
 }
 
-@entity("movingplatform")
+@entity("MovingPlatform")
 export class MovingPlatform extends PhysicsEntity implements CollidableGameObject {
     @asset("sprites/stoneplatform.aseprite.json")
     private static readonly sprite: Aseprite;

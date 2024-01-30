@@ -12,7 +12,7 @@ enum AnimationTag {
     IDLE = "idle"
 }
 
-@entity("shadowpresence")
+@entity("ShadowPresence")
 export class ShadowPresence extends NPC {
     @asset("sprites/shadowpresence.aseprite.json")
     private static readonly sprite: Aseprite;

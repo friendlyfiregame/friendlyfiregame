@@ -13,7 +13,7 @@ export interface SoundEmitterArgs extends EntityArgs {
  * Sound emitters are invisible entities that emit a sound in relation to the player distance.
  * Might be better to set the volume according to the camera center in the future.
  */
-@entity("sound")
+@entity("SoundEmitter")
 export class SoundEmitter extends Entity {
     private readonly sound: Sound;
     private readonly volume: number;

@@ -3,7 +3,7 @@ import { entity } from "../Entity";
 import { RenderingLayer, RenderingType } from "../Renderer";
 import { PhysicsEntity, type PhysicsEntityArgs } from "./PhysicsEntity";
 
-@entity("snowball")
+@entity("Snowball")
 export class Snowball extends PhysicsEntity {
     public constructor(args: PhysicsEntityArgs) {
         super({ ...args, width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER });

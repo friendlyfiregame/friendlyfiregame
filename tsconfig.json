@@ -5,7 +5,7 @@
         "allowSyntheticDefaultImports": true,
         "declaration": true,
         "downlevelIteration": true,
-        "emitDecoratorMetadata": true,
+        "emitDecoratorMetadata": false,
         "esModuleInterop": true,
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,

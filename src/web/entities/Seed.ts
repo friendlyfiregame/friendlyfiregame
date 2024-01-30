@@ -20,7 +20,7 @@ export enum SeedState {
     GROWN = 3
 }
 
-@entity("seed")
+@entity("Seed")
 export class Seed extends NPC {
     @asset("sprites/seed.aseprite.json")
     private static readonly sprite: Aseprite;

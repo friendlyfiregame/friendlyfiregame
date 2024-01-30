@@ -1,4 +1,4 @@
 import { Entity, entity } from "../Entity";
 
-@entity("bounds")
+@entity("CameraBounds")
 export class CameraBounds extends Entity {}

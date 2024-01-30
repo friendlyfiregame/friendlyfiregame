@@ -5,7 +5,7 @@ export interface ReadableArgs extends TriggerArgs {
     content?: string;
 }
 
-@entity("readable")
+@entity("Readable")
 export class Readable extends Trigger {
     public readonly content: string;
 

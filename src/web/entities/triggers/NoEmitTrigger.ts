@@ -5,7 +5,7 @@ export interface NoEmitTriggerArgs extends TriggerArgs {
     disableParticles?: boolean;
 }
 
-@entity("no_emit_trigger")
+@entity("NoEmitTrigger")
 export class NoEmitTrigger extends Trigger {
     public readonly disableParticles: boolean;
 

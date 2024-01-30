@@ -23,7 +23,7 @@ const WAITING_TIME = 5;
 const JUMP_INTERVAL = 0.3;
 const MAX_SPEED = 4;
 
-@entity("bird")
+@entity("Bird")
 export class Bird extends NPC {
     @asset("sprites/bird.aseprite.json")
     private static readonly sprite: Aseprite;

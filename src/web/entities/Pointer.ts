@@ -1,4 +1,4 @@
 import { Entity, entity } from "../Entity";
 
-@entity("pointer")
+@entity("Pointer")
 export class Pointer extends Entity {}

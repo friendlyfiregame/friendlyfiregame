@@ -28,7 +28,7 @@ const FLYING_DURATION = 8;
 const JUMP_INTERVAL = 0.3;
 const HEART_PARTICLE_DELAY = 0.5;
 
-@entity("shiba")
+@entity("Shiba")
 export class Shiba extends ScriptableNPC {
     @asset("sprites/shiba.aseprite.json")
     private static readonly sprite: Aseprite;

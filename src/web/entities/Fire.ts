@@ -17,7 +17,7 @@ import { type Wood } from "./Wood";
 
 export const SHRINK_SIZE = 2;
 
-@entity("fire")
+@entity("Fire")
 export class Fire extends NPC {
     @asset("images/smoke.png")
     private static readonly smokeImage: HTMLImageElement;

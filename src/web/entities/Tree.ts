@@ -8,7 +8,7 @@ import { NPC } from "./NPC";
 import { Seed } from "./Seed";
 import { Wood } from "./Wood";
 
-@entity("tree")
+@entity("Tree")
 export class Tree extends NPC {
     @asset("sprites/tree.aseprite.json")
     private static readonly sprite: Aseprite;

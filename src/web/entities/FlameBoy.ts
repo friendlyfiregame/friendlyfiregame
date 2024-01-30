@@ -22,7 +22,7 @@ const IDLE_DURATION = [2, 3, 4];
 const WALK_DURATION = [1, 1.5, 2];
 const ACCELERATION = 15;
 
-@entity("flameboy")
+@entity("FlameBoy")
 export class FlameBoy extends ScriptableNPC {
     @asset("sprites/flameboy.aseprite.json")
     private static readonly sprite: Aseprite;

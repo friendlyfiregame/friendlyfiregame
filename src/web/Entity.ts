@@ -12,11 +12,11 @@ export type Bounds = {
     height: number;
 };
 
-type EntityConstructor = new (args: EntityArgs) => Entity;
+type EntityConstructor = Function & (new (args: EntityArgs) => Entity);
 
 const entities = new Map<string, EntityConstructor>();
 
-export function entity(name: string): (target: EntityConstructor) => void {
+export function entity(name: string): (type: EntityConstructor) => void {
     return (type: EntityConstructor) => {
         entities.set(name, type);
     };

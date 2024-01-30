@@ -18,7 +18,7 @@ export enum StoneState {
     FLOATING = 2
 }
 
-@entity("stone")
+@entity("Stone")
 export class Stone extends NPC implements CollidableGameObject {
     @asset("sprites/stone.aseprite.json")
     private static readonly sprite: Aseprite;

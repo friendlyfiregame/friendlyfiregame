@@ -90,7 +90,7 @@ interface NPCDistance {
     distance: number;
 }
 
-@entity("player")
+@entity("Player")
 export class Player extends PhysicsEntity {
     @asset([
         "sprites/pc/female.aseprite.json",

@@ -3,7 +3,7 @@ import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
 
-@entity("radio")
+@entity("Radio")
 export class Radio extends Entity {
     @asset("sprites/radio.aseprite.json")
     private static readonly sprite: Aseprite;

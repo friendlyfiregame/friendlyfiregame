@@ -5,7 +5,7 @@ export interface DirectionTriggerArgs extends TriggerArgs {
     direction?: number | null;
 }
 
-@entity("direction_trigger")
+@entity("DirectionTrigger")
 export class DirectionTrigger extends Trigger {
     public readonly direction: number | null;
 

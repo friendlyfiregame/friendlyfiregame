@@ -10,7 +10,7 @@ export interface GateArgs extends EntityArgs {
     exitFadeTime?: number | null;
 }
 
-@entity("gate")
+@entity("Gate")
 export class Gate extends Entity {
     #disabled: boolean;
     public readonly target: string | null;

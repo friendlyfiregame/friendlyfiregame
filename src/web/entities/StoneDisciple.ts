@@ -6,7 +6,7 @@ import { EyeType, Face } from "../Face";
 import { RenderingLayer } from "../Renderer";
 import { NPC } from "./NPC";
 
-@entity("stonedisciple")
+@entity("StoneDisciple")
 export class StoneDisciple extends NPC {
     @asset("sprites/stonedisciple.aseprite.json")
     private static readonly sprite: Aseprite;

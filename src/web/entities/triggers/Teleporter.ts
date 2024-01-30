@@ -5,7 +5,7 @@ export interface TeleporterArgs extends TriggerArgs {
     teleportY?: number;
 }
 
-@entity("teleporter")
+@entity("Teleporter")
 export class Teleporter extends Trigger {
     public readonly teleportY: number;
 

@@ -8,7 +8,7 @@ import { NPC } from "./NPC";
 
 enum MimicState { SLEEPING, OPEN_UP, IDLE }
 
-@entity("mimic")
+@entity("Mimic")
 export class Mimic extends NPC {
     @asset("sprites/mimic.aseprite.json")
     private static readonly sprite: Aseprite;

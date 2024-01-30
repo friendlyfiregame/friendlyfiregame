@@ -5,7 +5,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { NPC } from "./NPC";
 
-@entity("wing")
+@entity("Wing")
 export class Wing extends NPC {
     @asset("sprites/wing.aseprite.json")
     private static readonly sprite: Aseprite;

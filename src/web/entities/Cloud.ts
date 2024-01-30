@@ -14,7 +14,7 @@ export interface CloudArgs extends EntityArgs {
     canRain?: boolean;
 }
 
-@entity("cloud")
+@entity("Cloud")
 export class Cloud extends PhysicsEntity {
     @asset("sprites/cloud3.aseprite.json")
     private static readonly sprite: Aseprite;

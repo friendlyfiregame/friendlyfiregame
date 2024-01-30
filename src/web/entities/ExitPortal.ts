@@ -5,7 +5,7 @@ import { Entity, entity, type EntityArgs } from "../Entity";
 
 enum PortalAnimationState { OFF, FADEIN, IDLE }
 
-@entity("exitportal")
+@entity("ExitPortal")
 export class ExitPortal extends Entity {
     @asset("sprites/portal.aseprite.json")
     private static readonly sprite: Aseprite;

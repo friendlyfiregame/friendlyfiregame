@@ -6,7 +6,7 @@ import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
 import { NPC } from "./NPC";
 
-@entity("chicken")
+@entity("Chicken")
 export class Chicken extends NPC {
     @asset("sprites/chicken.aseprite.json")
     private static readonly sprite: Aseprite;

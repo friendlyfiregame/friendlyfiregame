@@ -6,7 +6,7 @@ import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
 import { NPC } from "./NPC";
 
-@entity("superthrow")
+@entity("SuperThrow")
 export class SuperThrow extends NPC {
     @asset("sprites/superthrow.aseprite.json")
     private static readonly sprite: Aseprite;

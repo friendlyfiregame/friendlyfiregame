@@ -6,7 +6,7 @@ export interface MountainGateArgs extends TriggerArgs {
     col?: number;
 }
 
-@entity("mountaingate")
+@entity("MountainGate")
 export class MountainGate extends Trigger {
     public readonly row: number;
     public readonly col: number;

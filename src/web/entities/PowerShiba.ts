@@ -14,7 +14,7 @@ export enum PowerShibaState {
     CONSUMED
 }
 
-@entity("powershiba")
+@entity("PowerShiba")
 export class PowerShiba extends NPC {
     @asset("sprites/powershiba.aseprite.json")
     private static readonly sprite: Aseprite;

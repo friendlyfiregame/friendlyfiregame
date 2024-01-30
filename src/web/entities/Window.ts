@@ -3,7 +3,7 @@ import { entity, type EntityArgs } from "../Entity";
 import conversation from "./../../../assets/dialog/window.dialog.json";
 import { NPC } from "./NPC";
 
-@entity("window")
+@entity("Window")
 export class Window extends NPC {
     public override conversation: Conversation;
 

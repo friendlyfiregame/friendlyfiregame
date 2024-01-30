@@ -4,7 +4,7 @@ import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
 import { PhysicsEntity } from "./PhysicsEntity";
 
-@entity("skull")
+@entity("Skull")
 export class Skull extends PhysicsEntity {
     @asset("sprites/skull.aseprite.json")
     private static readonly sprite: Aseprite;

@@ -12,7 +12,7 @@ export interface RiddleStoneArgs extends EntityArgs {
     row?: number;
 }
 
-@entity("riddlestone")
+@entity("RiddleStone")
 export class RiddleStone extends Entity {
     @asset("sprites/riddlestone.aseprite.json")
     private static readonly sprite: Aseprite;

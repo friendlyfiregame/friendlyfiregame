@@ -9,7 +9,7 @@ export interface SignArgs extends EntityArgs {
     content?: string;
 }
 
-@entity("sign")
+@entity("Sign")
 export class Sign extends NPC {
     @asset("sprites/sign.aseprite.json")
     private static readonly sprite: Aseprite;
