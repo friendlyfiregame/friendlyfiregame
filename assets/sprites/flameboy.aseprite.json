@@ -1,0 +1,182 @@
+{ "frames": [
+   {
+    "filename": "flameboy 0.aseprite",
+    "frame": { "x": 51, "y": 1, "w": 23, "h": 44 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 2, "w": 23, "h": 44 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 1.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 23, "h": 45 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 23, "h": 45 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 2.aseprite",
+    "frame": { "x": 76, "y": 47, "w": 23, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 6, "w": 23, "h": 40 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 3.aseprite",
+    "frame": { "x": 51, "y": 47, "w": 23, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 4, "w": 23, "h": 42 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 4.aseprite",
+    "frame": { "x": 76, "y": 1, "w": 23, "h": 44 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 2, "w": 23, "h": 44 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 5.aseprite",
+    "frame": { "x": 26, "y": 1, "w": 23, "h": 45 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 23, "h": 45 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 6.aseprite",
+    "frame": { "x": 75, "y": 133, "w": 15, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 5, "w": 15, "h": 41 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 7.aseprite",
+    "frame": { "x": 76, "y": 89, "w": 16, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 4, "w": 16, "h": 42 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 8.aseprite",
+    "frame": { "x": 1, "y": 129, "w": 17, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 17, "h": 37 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 9.aseprite",
+    "frame": { "x": 1, "y": 48, "w": 18, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 7, "w": 18, "h": 39 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 10.aseprite",
+    "frame": { "x": 21, "y": 48, "w": 17, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 5, "w": 17, "h": 41 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 11.aseprite",
+    "frame": { "x": 21, "y": 91, "w": 16, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 4, "w": 16, "h": 42 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 12.aseprite",
+    "frame": { "x": 39, "y": 134, "w": 15, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 5, "w": 15, "h": 41 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 13.aseprite",
+    "frame": { "x": 39, "y": 91, "w": 16, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 5, "w": 16, "h": 41 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 14.aseprite",
+    "frame": { "x": 1, "y": 129, "w": 17, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 17, "h": 37 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 15.aseprite",
+    "frame": { "x": 1, "y": 89, "w": 18, "h": 38 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 8, "w": 18, "h": 38 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 16.aseprite",
+    "frame": { "x": 21, "y": 48, "w": 17, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 5, "w": 17, "h": 41 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   },
+   {
+    "filename": "flameboy 17.aseprite",
+    "frame": { "x": 57, "y": 91, "w": 16, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 5, "w": 16, "h": 41 },
+    "sourceSize": { "w": 24, "h": 46 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "flameboy.png",
+  "format": "RGBA8888",
+  "size": { "w": 100, "h": 176 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 5, "direction": "forward", "color": "#000000ff" },
+   { "name": "idle2", "from": 6, "to": 11, "direction": "forward", "color": "#000000ff" },
+   { "name": "walk", "from": 12, "to": 15, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "base", "opacity": 255, "blendMode": "normal" },
+   { "name": "legs", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

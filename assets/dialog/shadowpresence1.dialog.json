@@ -1,0 +1,82 @@
+{
+    "entry": [
+        "Greetings, human!",
+        "[not $gotFireQuest]You might wanna talk to the flame first.",
+        "[not $gotFireQuest]My hands are tied until then.",
+        "►[$gotFireQuest]Oh my god, what are you? @what",
+        "►I can't handle this darkness.",
+        "[not $gotFireQuest]Sure, no hard feelings. @entry !end",
+        "[$gotFireQuest]Sure, come around again if you're ready. @entry !end"
+    ],
+    "what": [
+        "[$ismale]No need to soil your pants.",
+        "[not $ismale]No need to soil your skirt.",
+        "Ever had the feeling someone was watching you from a dark corner at home?",
+        "Or you're being followed at night but no one is there when you turn around?",
+        "That's probably me, or one of my coworkers.",
+        "But I'm on my break right now. It's nice to have a chat every once in a while. @visited"
+    ],
+    "visited": [
+        "[visited]Welcome back, friend!",
+        "►[not taught]Any idea how to get over that bridge? @bridge",
+        "►[not darkness]Why are you surrounded by darkness? @darkness",
+        "►[darkness]Can I still come by later? @comebye",
+        "►[not pokemon]Are you playing on your phone? @pokemon",
+        "►[taught]How does the running work again? @running",
+        "►I'll get going. !set visited",
+        "Sure, keep up the good work. @visited !end"
+    ],
+    "darkness": [
+        "Makes me feel at ease.",
+        "I don't really like daylight, let alone fire.",
+        "This also serves as a gateway home. You can totally come by later if you have nothing better to do. !set darkness",
+        "►I'm kinda in the middle of something right now. @middleofsomething",
+        "►Sure, maybe later. @maybelater"
+    ],
+    "middleofsomething": [
+        "Too bad. I could use someone to play games with.",
+        "If you change your mind, you can always just slip through here. I have no other plans today after work.",
+        "►I'll think about it. @visited"
+    ],
+    "maybelater": [
+        "Awesome!",
+        "Just slip through this gateway when you're ready. I'll be home later this evening.",
+        "►I'll update my appointment schedule. @visited"
+    ],
+    "comebye": [
+        "Yes! My shift is almost over for today. Just head right through later and we can play some games",
+        "►Sounds like a plan. @visited"
+    ],
+    "bridge": [
+        "That bridge is pretty busted, isn't it? !set visited",
+        "You can easily vault over the gap if you gain enough speed.",
+        "►I can only walk. I'm too slow.",
+        "That's not a problem. I can teach you how to run.",
+        "It's a pleasure seeing people run anyway.",
+        "►How does it work?",
+        "Close your eyes and envision that unique feeling.",
+        "The creeping anxiety you feel on an empty walkway at night.",
+        "Someone is behind you. Cold sweat oozes from your skin.",
+        "You can almost feel the dark presence crawling up your spine.",
+        "Your irrational fear swells up and blossoms to a beautiful raging panic!",
+        "…or in other words: Just hold your run button. Fairly easy. !enableRunning !set taught",
+        "►Awesome!",
+        "Have fun with your new ability. @visited !end"
+    ],
+    "running": [
+        "Just remember that one feeling, that creeping anxiety at night.",
+        "Someone is behind you. You can almost feel the cold presence on your skin.",
+        "The fear swells up and bursts out as raging panic. Beautiful!",
+        "…or in other words: just hold the run button. Fairly easy.",
+        "►Thanks!",
+        "See you around. @visited !end"
+    ],
+    "pokemon": [
+        "Yeah, I'm hooked on Pokémon GO since last year.",
+        "This bridge used to be a popular poke-stop, but the folks around here stopped playing.",
+        "I might be the last one playing. Finishing raids like this is nearly impossible.",
+        "►Can't you just stop playing as well?",
+        "I already invested so much time and effort... how could I stop now?",
+        "►Suit yourself. !set pokemon @visited"
+    ]
+}

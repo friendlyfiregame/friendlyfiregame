@@ -1,0 +1,54 @@
+{ "frames": [
+   {
+    "filename": "chicken 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
+    "duration": 175
+   },
+   {
+    "filename": "chicken 1.aseprite",
+    "frame": { "x": 26, "y": 1, "w": 23, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
+    "duration": 175
+   },
+   {
+    "filename": "chicken 2.aseprite",
+    "frame": { "x": 1, "y": 20, "w": 23, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
+    "duration": 175
+   },
+   {
+    "filename": "chicken 3.aseprite",
+    "frame": { "x": 26, "y": 20, "w": 23, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 23, "h": 17 },
+    "sourceSize": { "w": 24, "h": 18 },
+    "duration": 175
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "chicken.png",
+  "format": "RGBA8888",
+  "size": { "w": 50, "h": 38 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 3, "direction": "pingpong", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 3", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 2", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}
