@@ -1404,7 +1404,7 @@
                          "value":true
                         }],
                  "rotation":0,
-                 "type":"Trigger",
+                 "type":"NoEmitTrigger",
                  "visible":true,
                  "width":384,
                  "x":3216,
