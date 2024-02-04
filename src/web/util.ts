@@ -96,7 +96,7 @@ export function isDev(): boolean {
     let devMode = false;
 
     // Legacy behavior.
-    if (window.location.port === "8001") {
+    if (window.location.port === "8000") {
         devMode = true;
     }
 

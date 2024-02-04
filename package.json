@@ -36,7 +36,7 @@
     "dist": "webpack",
     "start": "run-s start:dev",
     "start:dev": "webpack serve --mode=development --config-name=web --config-name=service-worker",
-    "start:prod": "http-server ./dist -b -p 8001",
+    "start:prod": "http-server ./dist -b -p 8000",
     "package": "electron-forge package",
     "package:darwin-x64": "electron-forge package --platform=darwin --arch=x64",
     "package:darwin-arm64": "electron-forge package --platform=darwin --arch=arm64",
