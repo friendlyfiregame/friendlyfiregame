@@ -1,5 +1,8 @@
 import { Animator } from "./Animator";
 import { type Trigger } from "./entities/triggers/Trigger";
+import { type Game } from "./Game";
+import { Direction } from "./geom/Direction";
+import { SceneNode } from "./scene/SceneNode";
 import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
 import { isEntityName, isInstanceOf } from "./util/predicates";
@@ -44,32 +47,25 @@ export interface EntityArgs {
     newGamePlus?: boolean | null;
 }
 
-export class Entity implements GameObject {
+export class Entity extends SceneNode<Game> implements GameObject {
     protected timeAlive = 0;
     protected readonly animator = new Animator(this);
-    public readonly scene: GameScene;
+    public override scene: GameScene;
     public readonly name: string | null;
     public readonly newGamePlus: boolean | null;
-    public x: number;
-    public y: number;
-    public width: number;
-    public height: number;
     public readonly isTrigger: boolean;
     private readonly reversed: boolean;
 
     public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null, reversed = false }: EntityArgs) {
+        super({ x, y, width, height, anchor: reversed ? Direction.BOTTOM : Direction.TOP_LEFT });
         this.scene = scene;
         this.name = name;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
         this.isTrigger = isTrigger;
         this.newGamePlus = newGamePlus;
         this.reversed = reversed;
     }
 
-    public activate(): Promise<void> | void {
+    public setup(): void {
         // Nothing to setup
     }
 
@@ -77,8 +73,9 @@ export class Entity implements GameObject {
         // Nothing to draw
     }
 
-    public update(dt: number): void {
+    public override update(dt: number): void {
         this.timeAlive += dt;
+        super.update(dt);
     }
 
     public distanceTo(entity: Entity): number {
@@ -109,7 +106,8 @@ export class Entity implements GameObject {
         return this.scene.world.getEntityCollisions(this).find(typeof trigger === "string" ? isEntityName(trigger) : isInstanceOf(trigger)) != null;
     }
 
-    public remove(): void {
+    public override remove(): this {
         this.scene.removeGameObject(this);
+        return super.remove();
     }
 }

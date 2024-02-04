@@ -52,6 +52,7 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
 import { RendererNode } from "../scene/RendererNode";
+import { SceneNode } from "../scene/SceneNode";
 import { clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { type Constructor } from "../util/types";
 import { World } from "../World";
@@ -284,7 +285,12 @@ export class GameScene extends Scene<FriendlyFire> {
                 });
             })
         ];
-        this.gameObjects.forEach(obj => obj.activate?.());
+        this.gameObjects.forEach(obj => {
+            obj.setup?.();
+            if (obj instanceof SceneNode) {
+                this.rootNode.appendChild(obj);
+            }
+        });
 
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
@@ -333,7 +339,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public addGameObject(object: GameObject): void {
-        object.activate?.();
+        object.setup?.();
         // Insert new item right before the player so player is always in front
         this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, object);
     }
@@ -483,9 +489,12 @@ export class GameScene extends Scene<FriendlyFire> {
         this.dt = dt;
         this.gameTime += dt;
 
+        // TODO Get rid of this when renderer-to-scene-node migration is complete
         this.renderer.clear();
         for (const obj of this.gameObjects) {
-            obj.update(dt);
+            if (!(obj instanceof SceneNode)) {
+                obj.update(dt);
+            }
         }
 
         this.camera.update(dt, this.gameTime);

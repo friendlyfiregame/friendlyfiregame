@@ -39,7 +39,7 @@ export class Seed extends NPC {
 
     }
 
-    public override activate(): void {
+    public override setup(): void {
         const floatingPosition = this.scene.findEntity(Pointer, "recover_floating_position");
         if (!floatingPosition) {
             throw new Error("Could not find “recover_floating_position” point of interest in game scene.");

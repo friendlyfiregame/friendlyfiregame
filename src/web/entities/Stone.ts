@@ -39,7 +39,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.carryHeight = 16;
     }
 
-    public override activate(): void {
+    public override setup(): void {
         const floatingPosition = this.scene.findEntity(Pointer, "stone_floating_position");
         if (!floatingPosition) {
             throw new Error("Could not find \"stone_floating_position\" point of interest in game scene");

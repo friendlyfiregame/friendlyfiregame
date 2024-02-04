@@ -241,7 +241,7 @@ export class Player extends PhysicsEntity {
         });
     }
 
-    public override activate(): void {
+    public override setup(): void {
         const startPos = this.getPlayerStartingPos();
         this.x = startPos.x;
         this.y = startPos.y;
