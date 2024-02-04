@@ -1,6 +1,6 @@
 export interface GameObject {
-    setup?(): void;
-    render(): void;
+    activate?(): void;
+    render?(): void;
     update(dt: number): void;
 }
 

@@ -284,7 +284,7 @@ export class GameScene extends Scene<FriendlyFire> {
                 });
             })
         ];
-        this.gameObjects.forEach(obj => obj.setup?.());
+        this.gameObjects.forEach(obj => obj.activate?.());
 
         this.player = this.getGameObject(Player);
         this.fire = this.getGameObject(Fire);
@@ -333,7 +333,7 @@ export class GameScene extends Scene<FriendlyFire> {
     }
 
     public addGameObject(object: GameObject): void {
-        object.setup?.();
+        object.activate?.();
         // Insert new item right before the player so player is always in front
         this.gameObjects.splice(this.gameObjects.indexOf(this.player) - 1, 0, object);
     }
@@ -514,7 +514,7 @@ export class GameScene extends Scene<FriendlyFire> {
         }
 
         for (const obj of this.gameObjects) {
-            obj.render();
+            obj.render?.();
         }
 
         // Add all particle emitters to rendering queue

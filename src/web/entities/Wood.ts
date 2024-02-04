@@ -30,7 +30,7 @@ export class Wood extends PhysicsEntity {
         super({ ...args, width: 26, height: 16, reversed: true });
     }
 
-    public override setup(): void {
+    public override activate(): void {
         const floatingPosition = this.scene.findEntity(Pointer, "recover_floating_position");
         console.log(floatingPosition);
         if (!floatingPosition) {

@@ -20,7 +20,7 @@ export class ExitPortal extends Entity {
         this.animator.assignSprite(ExitPortal.sprite);
     }
 
-    public activate(): void {
+    public enable(): void {
         if (this.animationState === PortalAnimationState.OFF) {
             ExitPortal.sound.play();
             this.nextAnimationState();

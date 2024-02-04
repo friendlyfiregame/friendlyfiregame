@@ -69,7 +69,7 @@ export class Entity implements GameObject {
         this.reversed = reversed;
     }
 
-    public setup(): Promise<void> | void {
+    public activate(): Promise<void> | void {
         // Nothing to setup
     }
 

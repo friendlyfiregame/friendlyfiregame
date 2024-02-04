@@ -55,7 +55,7 @@ export class World implements GameObject {
         this.scene = scene;
     }
 
-    public setup(): Promise<void> | void {
+    public activate(): Promise<void> | void {
         const rainSpawnPosition = this.scene.findEntity(Pointer, "rain_spawn_position");
 
         if (!rainSpawnPosition) {

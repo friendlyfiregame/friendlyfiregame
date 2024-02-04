@@ -255,7 +255,7 @@ export class Campaign {
                     this.gameScene.beginFriendshipEnding();
                     break;
                 case "activatefireportal":
-                    this.gameScene.exitPortal.activate();
+                    this.gameScene.exitPortal.enable();
                     this.gameScene.flameboy.nextState();
                     break;
                 case "talkedtofire":
