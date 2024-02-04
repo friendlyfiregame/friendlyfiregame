@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { entity, type EntityArgs } from "../Entity";
 import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
@@ -27,7 +27,7 @@ export class Wood extends PhysicsEntity {
     public state = WoodState.FREE;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 26, height: 16 });
+        super({ ...args, width: 26, height: 16, reversed: true });
     }
 
     public override setup(): void {
@@ -59,7 +59,7 @@ export class Wood extends PhysicsEntity {
             const diffX = this.floatingPosition.x - this.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.x += moveX * dt;
-            this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
+            this.setVelocityY(-Math.abs(((now() % 2000) - 1000) / 1000) + 0.5);
         }
 
         if (this.state === WoodState.FREE || this.state === WoodState.SWIMMING) {
@@ -77,7 +77,7 @@ export class Wood extends PhysicsEntity {
                 this.state = WoodState.SWIMMING;
                 this.setVelocity(0, 0);
                 this.setFloating(true);
-                this.y = this.floatingPosition.y + 8;
+                this.y = this.floatingPosition.y - 8;
             }
         }
 

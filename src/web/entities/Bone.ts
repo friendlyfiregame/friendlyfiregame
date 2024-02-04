@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
@@ -16,7 +16,7 @@ export class Bone extends PhysicsEntity {
     private static readonly successSound: Sound;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 20, height: 10 });
+        super({ ...args, width: 20, height: 10, reversed: true });
     }
 
     public override draw(): void {
@@ -36,9 +36,9 @@ export class Bone extends PhysicsEntity {
             player.carry(this);
         }
 
-        if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER) {
+        if (!this.isCarried() && this.scene.world.collidesWith(this.x, this.y + 5) === Environment.WATER) {
             const vx = this.getVelocityX();
-            this.setVelocity(vx, 10);
+            this.setVelocity(vx, -10);
         }
 
         if (Conversation.getGlobals()["$gotBoneQuest"] && !this.isCarried() && this.distanceTo(this.scene.powerShiba) < 20) {

@@ -6,8 +6,8 @@ import {
 } from "../../shared/constants";
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
-import { BitmapFont } from "../BitmapFont";
+import { type Sound } from "../audio/Sound";
+import { type BitmapFont } from "../BitmapFont";
 import { CharacterAsset, type VoiceAsset } from "../Campaign";
 import { CharacterSounds } from "../CharacterSounds";
 import { Conversation } from "../Conversation";
@@ -182,7 +182,7 @@ export class Player extends PhysicsEntity {
     private disableParticles = false;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: PLAYER_WIDTH, height: PLAYER_HEIGHT });
+        super({ ...args, width: PLAYER_WIDTH, height: PLAYER_HEIGHT, reversed: true });
 
         this.isControllable = false;
         this.setFloating(true);
@@ -212,30 +212,30 @@ export class Player extends PhysicsEntity {
 
         this.dustEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
+            velocity: () => ({ x: rnd(-1, 1) * 26, y: -rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
             size: rnd(1, 2),
-            gravity: {x: 0, y: -100},
+            gravity: {x: 0, y: 100},
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
         this.bounceEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(0.7, 1) * 60 }),
+            velocity: () => ({ x: rnd(-1, 1) * 90, y: -rnd(0.7, 1) * 60 }),
             color: () => rndItem(bounceColors),
             size: rnd(1.5, 3),
-            gravity: {x: 0, y: -120},
+            gravity: {x: 0, y: 120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
         this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
+            velocity: () => ({ x: rnd(-1, 1) * 90, y: -rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1.5, 3),
-            gravity: {x: 0, y: -120},
+            gravity: {x: 0, y: 120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
@@ -489,9 +489,9 @@ export class Player extends PhysicsEntity {
         }
 
         if (this.carrying instanceof Stone) {
-            this.carrying.setVelocity(10 * this.direction, 10);
+            this.carrying.setVelocity(10 * this.direction, -10);
         } else {
-            this.carrying.setVelocity(5 * this.direction, 5);
+            this.carrying.setVelocity(5 * this.direction, -5);
         }
 
         this.height = PLAYER_HEIGHT;
@@ -528,9 +528,9 @@ export class Player extends PhysicsEntity {
                     new Snowball({
                         scene: this.scene,
                         x: this.x,
-                        y: this.y + this.height * 0.75,
+                        y: this.y - this.height * 0.75,
                         velocityX: 20 * this.direction,
-                        velocityY: 10
+                        velocityY: -10
                     })
                 );
 
@@ -573,7 +573,7 @@ export class Player extends PhysicsEntity {
                 case 1:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        this.x, this.y + 25,
                         100,
                         "  1 1 2 2 1 2 1 3",
                         undefined,
@@ -586,7 +586,7 @@ export class Player extends PhysicsEntity {
                 case 2:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        this.x, this.y + 25,
                         192,
                         "1   2   1 1 2 2 121 212 121 212 3    ",
                         undefined,
@@ -596,7 +596,7 @@ export class Player extends PhysicsEntity {
                 case 3:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        this.x, this.y + 25,
                         192,
                         "112 221 312 123 2121121 111 222 3    ",
                         undefined,
@@ -606,7 +606,7 @@ export class Player extends PhysicsEntity {
                 default:
                     this.dance = new Dance(
                         this.scene,
-                        this.x, this.y - 25,
+                        this.x, this.y + 25,
                         192,
                         "3"
                     );
@@ -658,8 +658,8 @@ export class Player extends PhysicsEntity {
                 Player.leaveGateSound.play();
             }
 
-            this.x = targetGate.x + (targetGate.width / 2);
-            this.y = targetGate.y - targetGate.height;
+            this.x = targetGate.x;
+            this.y = targetGate.y + targetGate.height;
 
             this.scene.camera.setBounds(this.getCurrentCameraBounds());
 
@@ -711,13 +711,13 @@ export class Player extends PhysicsEntity {
     private jump(): void {
         if (this.drowning > 0) return;
 
-        this.setVelocityY(Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
+        this.setVelocityY(-Math.sqrt(2 * PLAYER_JUMP_HEIGHT * GRAVITY));
         CharacterSounds.playRandomCharacterSound("jump", this.voiceAsset);
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
             if (!this.disableParticles && this.visible) {
-                this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+                this.doubleJumpEmitter.setPosition(this.x, this.y - 20);
                 this.doubleJumpEmitter.emit(20);
             }
         }
@@ -753,7 +753,7 @@ export class Player extends PhysicsEntity {
         const gap = 6;
         const offsetY = 12;
         const textPositionX = Math.round(Math.round(this.x) - ((measure.width - this.controllerSpriteMapRecords[controllerSprite].width + gap) / 2));
-        const textPositionY = -this.y + offsetY;
+        const textPositionY = this.y + offsetY;
 
 
         this.scene.renderer.add({
@@ -800,7 +800,7 @@ export class Player extends PhysicsEntity {
         this.scene.renderer.addAseprite(
             sprite,
             animation,
-            this.x, this.y - 1,
+            this.x, this.y + 1,
             RenderingLayer.PLAYER,
             this.direction
         );
@@ -841,7 +841,7 @@ export class Player extends PhysicsEntity {
             && (
                 this.direction === -1
                 && this.scene.world.collidesWith(
-                    this.x - 30, this.y - 20
+                    this.x - 30, this.y + 20
                 ) === Environment.WATER
             )
         );
@@ -901,7 +901,7 @@ export class Player extends PhysicsEntity {
 
     private respawn(): void {
         this.x = this.lastGroundPosition.x;
-        this.y = this.lastGroundPosition.y + 10;
+        this.y = this.lastGroundPosition.y - 10;
         this.setVelocity(0, 0);
     }
 
@@ -929,7 +929,7 @@ export class Player extends PhysicsEntity {
 
         return !this.scene.world.boundingBoxesCollide(this.getBounds(), {
             x: mapBounds.x + 4,
-            y: mapBounds.y - 4,
+            y: mapBounds.y + 4,
             width: mapBounds.width - 8,
             height: mapBounds.height - 8
         });
@@ -995,7 +995,7 @@ export class Player extends PhysicsEntity {
 
             const carryOffsetFrames = this.getPlayerSpriteMetadata()[this.characterAsset].carryOffsetFrames ?? [];
             const offset = carryOffsetFrames.includes(currentFrameIndex + 1) ? 0 : -1;
-            this.carrying.y = this.y + (this.height - this.carrying.carryHeight) - offset;
+            this.carrying.y = this.y - (this.height - this.carrying.carryHeight) + offset;
 
             if (this.carrying instanceof Stone) {
                 this.carrying.direction = this.direction;
@@ -1011,7 +1011,7 @@ export class Player extends PhysicsEntity {
             }
 
             if (this.carrying instanceof Stone) {
-                this.carrying.setVelocity(-2, 10);
+                this.carrying.setVelocity(-2, -10);
                 this.carrying = null;
             }
 
@@ -1106,14 +1106,14 @@ export class Player extends PhysicsEntity {
             this.flying = false;
             this.resetJumps();
         } else {
-            if (this.getVelocityY() > 0) {
+            if (this.getVelocityY() < 0) {
                 this.animation = "jump";
                 this.flying = true;
             } else if (
                 isDrowning
                 || (
-                    this.getVelocityY() < 0
-                    && this.y - world.getGround(this.x, this.y) > 10
+                    this.getVelocityY() > 0
+                    && world.getGround(this.x, this.y) - this.y > 10
                 )
             ) {
                 if (this.jumpThresholdTimer < 0 || this.usedJump) {
@@ -1173,7 +1173,7 @@ export class Player extends PhysicsEntity {
         // Bounce
         if (
             this.scene.world.collidesWith(
-                this.x, this.y - 2,
+                this.x, this.y + 2,
                 [ this ]
             ) === Environment.BOUNCE
         ) {
@@ -1200,7 +1200,7 @@ export class Player extends PhysicsEntity {
                 }
             }
 
-            this.dance.setPosition(this.x, this.y - 16);
+            this.dance.setPosition(this.x, this.y + 16);
             const done = this.dance.update();
 
             if (done) {
@@ -1218,7 +1218,7 @@ export class Player extends PhysicsEntity {
                         if (bossPointer) {
                             void this.scene.camera.focusOn(
                                 3,
-                                bossPointer.x, bossPointer.y + 60,
+                                bossPointer.x, bossPointer.y - 60,
                                 1,
                                 0,
                                 valueCurves.cos(0.35)
@@ -1264,7 +1264,7 @@ export class Player extends PhysicsEntity {
                 this.scene.mountainRiddle.checkGate(trigger.col, trigger.row);
             } else if (trigger instanceof Teleporter) {
                 if (this.scene.mountainRiddle.isFailed() && !this.scene.mountainRiddle.isCleared()) {
-                    this.y -= trigger.teleportY;
+                    this.y += trigger.teleportY;
                 }
             } else if (trigger.name === "finish_mountain_riddle") {
                 this.scene.mountainRiddle.clearRiddle();
@@ -1296,107 +1296,19 @@ export class Player extends PhysicsEntity {
         }
     }
 
-
-    /**
-     * If given coordinate collides with the world then the first free y coordinate above is
-     * returned. This can be used to unstuck an object after a new position was set.
-     *
-     * @param x - X coordinate of current position.
-     * @param y - Y coordinate of current position.
-     * @return The Y coordinate of the ground below the given coordinate.
-     */
-    private pullOutOfGround(): number {
-        let pulled = 0, col = 0;
-
-        if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
-            const height = world.getHeight();
-
-            col = world.collidesWith(
-                this.x, this.y,
-                [ this ],
-                this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ]
-            );
-
-            while (this.y < height && col) {
-                pulled++;
-                this.y++;
-                col = world.collidesWith(this.x, this.y);
-            }
-        }
-
-        return pulled;
+    protected override getCollisionIgnores(): Environment[] {
+        return this.jumpDown ? [ Environment.PLATFORM, Environment.WATER ] : [ Environment.WATER ];
     }
 
     private bounce(): void {
-        this.setVelocityY(Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
+        this.setVelocityY(-Math.sqrt(2 * PLAYER_BOUNCE_HEIGHT * GRAVITY));
         // Nice bouncy particles
-        this.bounceEmitter.setPosition(this.x, this.y - 12);
+        this.bounceEmitter.setPosition(this.x, this.y + 12);
         this.bounceEmitter.emit(20);
         this.dustEmitter.clear();
 
         Player.bouncingSound.stop();
         Player.bouncingSound.play();
-    }
-
-    /**
-     * If given coordinate collides with the world then the first free y coordinate above is
-     * returned. This can be used to unstuck an object after a new position was set.
-     *
-     * @param x - X coordinate of current position.
-     * @param y - Y coordinate of current position.
-     * @return The Y coordinate of the ground below the given coordinate.
-     */
-    private pullOutOfCeiling(): number {
-        let pulled = 0;
-        const world = this.scene.world;
-
-        while (
-            this.y > 0
-            && world.collidesWith(
-                this.x, this.y + this.height,
-                [ this ],
-                [ Environment.PLATFORM, Environment.WATER ]
-            )
-        ) {
-            pulled++;
-            this.y--;
-        }
-
-        return pulled;
-    }
-
-    private pullOutOfWall(): number {
-        let pulled = 0;
-        const world = this.scene.world;
-
-        if (this.getVelocityX() > 0) {
-            while (
-                world.collidesWithVerticalLine(
-                    this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2,
-                    [ this ],
-                    [ Environment.PLATFORM, Environment.WATER ]
-                )
-            ) {
-                this.x--;
-                pulled++;
-            }
-        } else {
-            while (
-                world.collidesWithVerticalLine(
-                    this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2,
-                    [ this ],
-                    [ Environment.PLATFORM, Environment.WATER ]
-                )
-            ) {
-                this.x++;
-                pulled++;
-            }
-        }
-
-        return pulled;
     }
 
     protected override updatePosition(newX: number, newY: number): void {
@@ -1414,7 +1326,7 @@ export class Player extends PhysicsEntity {
     }
 
     protected override getGravity(): number {
-        if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() > 0) {
+        if (this.flying && this.jumpKeyPressed === false && this.getVelocityY() < 0) {
             return SHORT_JUMP_GRAVITY;
         } else {
             return GRAVITY;
@@ -1462,7 +1374,7 @@ export class Player extends PhysicsEntity {
                 object.state = WoodState.FREE;
             }
             object.x = this.x;
-            object.y = this.y + this.height;
+            object.y = this.y - this.height;
             object.setVelocity(0, 0);
         }
     }

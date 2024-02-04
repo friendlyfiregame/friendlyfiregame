@@ -1,6 +1,6 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
@@ -66,11 +66,11 @@ export class Fire extends NPC {
 
         this.smokeEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: rnd(2) * this.intensity }),
-            velocity: () => ({ x: rnd(-1, 1) * 15, y: 4 + rnd(3) }),
+            offset: () => ({ x: rnd(-1, 1) * 3 * this.intensity, y: -rnd(2) * this.intensity }),
+            velocity: () => ({ x: rnd(-1, 1) * 15, y: -4 - rnd(3) }),
             color: () => Fire.smokeImage,
             size: () => rndInt(24, 32),
-            gravity: {x: 0, y: 8},
+            gravity: {x: 0, y: -8},
             lifetime: () => rnd(5, 8),
             alpha: () => rnd(0.2, 0.45),
             angleSpeed: () => rnd(-1, 1) * 1.5,
@@ -82,10 +82,10 @@ export class Fire extends NPC {
         this.steamEmitter = this.scene.particles.createEmitter({
             position: {x: this.x + 10, y: this.y},
             offset: () => ({ x: rnd(-1, 1) * 3, y: 0 }),
-            velocity: () => ({ x: rnd(-1, 2) * 5, y: 50 + rnd(3) }),
+            velocity: () => ({ x: rnd(-1, 2) * 5, y: -50 - rnd(3) }),
             color: () => Fire.steamImage,
             size: () => rndInt(12, 18),
-            gravity: {x: 0, y: 8},
+            gravity: {x: 0, y: -8},
             lifetime: () => rnd(1, 3),
             alpha: () => rnd(0.5, 0.8),
             angleSpeed: () => rnd(-1, 1) * 3,
@@ -98,17 +98,17 @@ export class Fire extends NPC {
 
         this.sparkEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 30, y: rnd(50, 100) }),
+            velocity: () => ({ x: rnd(-1, 1) * 30, y: -rnd(50, 100) }),
             color: () => FireGfx.gradient.getCss(rnd() ** 0.5),
             size: 2,
-            gravity: {x: 0, y: -100},
+            gravity: {x: 0, y: 100},
             lifetime: () => rnd(1, 1.5),
             blendMode: "screen",
             alpha: () => rnd(0.3, 1),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
-        this.face = new Face(this.scene, this, EyeType.STANDARD, 0, 6);
+        this.face = new Face(this.scene, this, EyeType.STANDARD, 0, -6);
     }
 
     public override showDialoguePrompt(): boolean {
@@ -152,7 +152,7 @@ export class Fire extends NPC {
 
     public drawToCanvas(ctx: CanvasRenderingContext2D): void {
         ctx.save();
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.x, this.y);
         ctx.scale(this.intensity / 5, this.intensity / 5);
         this.fireGfx.draw(ctx, 0, 0);
 
@@ -236,7 +236,7 @@ export class Fire extends NPC {
         }
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x, this.y + 32);
+            this.dialoguePrompt.update(dt, this.x, this.y - 32);
         }
 
         this.speechBubble.update(this.x, this.y);

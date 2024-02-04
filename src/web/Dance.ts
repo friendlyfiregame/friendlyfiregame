@@ -1,6 +1,6 @@
-import { Aseprite } from "./Aseprite";
+import { type Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
-import { Sound } from "./audio/Sound";
+import { type Sound } from "./audio/Sound";
 import { type ControllerEvent } from "./input/ControllerEvent";
 import { type ControllerSpriteMap } from "./input/ControllerFamily";
 import { ControllerManager } from "./input/ControllerManager";
@@ -268,7 +268,7 @@ export class Dance {
     public draw(ctx: CanvasRenderingContext2D): void {
         const controller: ControllerSpriteMap = ControllerManager.getInstance().controllerSprite;
         ctx.save();
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.x, this.y);
 
         // Key Bar
         const w = 100;

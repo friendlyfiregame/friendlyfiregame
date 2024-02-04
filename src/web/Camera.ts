@@ -92,10 +92,13 @@ export class Camera {
         const oldRenderMode = displayManager.getRenderMode();
         const teleport = (e: MouseEvent): void => {
             const rect = canvas.getBoundingClientRect();
-            const cx = e.clientX - rect.x, cy = e.clientY - rect.y;
-            const px = cx / rect.width, py = cy / rect.height;
+            const cx = e.clientX - rect.x;
+            const cy = e.clientY - rect.y;
+            const px = cx / rect.width;
+            const py = cy / rect.height;
             const worldRect = this.getVisibleRect();
-            const tx = worldRect.x + px * worldRect.width, ty = worldRect.y + (1 - py) * worldRect.height;
+            const tx = worldRect.x + px * worldRect.width;
+            const ty = worldRect.y + py * worldRect.height;
 
             // Teleport player
             this.scene.player.x = tx;
@@ -158,7 +161,7 @@ export class Camera {
     private getBaseCameraTarget(): { x: number, y: number } {
         // Base position always on target (player)
         let xTarget = this.target.x;
-        let yTarget = this.target.y + 30;
+        let yTarget = this.target.y - 30;
 
         if (this.bounds) {
             const targetVisibleRect = this.getVisibleRect(xTarget, yTarget);
@@ -166,8 +169,8 @@ export class Camera {
             const overBounds: OverBoundData = {
                 left: (targetVisibleRect.x < this.bounds.x),
                 right: (targetVisibleRect.x + targetVisibleRect.width) > (this.bounds.x + this.bounds.width),
-                top: (targetVisibleRect.y + targetVisibleRect.height) > this.bounds.y,
-                bottom: targetVisibleRect.y < (this.bounds.y - this.bounds.height)
+                top: (targetVisibleRect.y < this.bounds.y),
+                bottom: (targetVisibleRect.y + targetVisibleRect.height) > (this.bounds.y + this.bounds.height)
             };
 
             // Bound clip left / right
@@ -186,15 +189,15 @@ export class Camera {
 
             // Bound clip top / bottom
             if (targetVisibleRect.height >= this.bounds.height) {
-                const visibleCenterY = (targetVisibleRect.y + targetVisibleRect.height) - targetVisibleRect.height / 2;
-                const boundCenterY = this.bounds.y - this.bounds.height / 2;
+                const visibleCenterY = targetVisibleRect.y + targetVisibleRect.height / 2;
+                const boundCenterY = this.bounds.y + this.bounds.height / 2;
                 const diff = boundCenterY - visibleCenterY;
                 yTarget += diff;
             } else if (overBounds.top) {
-                const diff = this.bounds.y - (targetVisibleRect.y + targetVisibleRect.height);
+                const diff = this.bounds.y - targetVisibleRect.y;
                 yTarget += diff;
             } else if (overBounds.bottom) {
-                const diff = (this.bounds.y - this.bounds.height) - targetVisibleRect.y;
+                const diff = (this.bounds.y + this.bounds.height) - (targetVisibleRect.y + targetVisibleRect.height);
                 yTarget += diff;
             }
         }
@@ -280,7 +283,7 @@ export class Camera {
     public applyTransform(ctx: CanvasRenderingContext2D): void {
         ctx.scale(this.zoom, this.zoom);
         ctx.rotate(this.rotation);
-        ctx.translate(-this.x, this.y);
+        ctx.translate(-this.x, -this.y);
         if (this.zoomingOut) {
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
@@ -288,7 +291,7 @@ export class Camera {
     }
 
     public unapplyTransform(ctx: CanvasRenderingContext2D): void {
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.x, this.y);
         ctx.rotate(-this.rotation);
         ctx.scale(1 / this.zoom, 1 / this.zoom);
     }

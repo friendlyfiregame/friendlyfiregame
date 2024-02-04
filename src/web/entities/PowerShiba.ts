@@ -1,6 +1,6 @@
 import powershiba1 from "../../../assets/dialog/powershiba1.dialog.json";
 import powershiba3 from "../../../assets/dialog/powershiba3.dialog.json";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
@@ -65,7 +65,7 @@ export class PowerShiba extends NPC {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(
-            PowerShiba.sprite, "idle", this.x, this.y - floatOffsetY,
+            PowerShiba.sprite, "idle", this.x, this.y + floatOffsetY,
             RenderingLayer.ENTITIES
         );
 
@@ -82,7 +82,7 @@ export class PowerShiba extends NPC {
 
     public override update(dt: number): void {
         super.update(dt);
-        this.dialoguePrompt.update(dt, this.x, this.y + 16);
+        this.dialoguePrompt.update(dt, this.x, this.y - 16);
         this.speechBubble.update(this.x, this.y);
 
         if (this.thinkBubble) {

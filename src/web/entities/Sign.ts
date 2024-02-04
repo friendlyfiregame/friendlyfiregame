@@ -49,7 +49,7 @@ export class Sign extends NPC {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
+            translation: { x: this.x, y: this.y },
             position: {
                 x: -Sign.sprite.width >> 1,
                 y: -Sign.sprite.height

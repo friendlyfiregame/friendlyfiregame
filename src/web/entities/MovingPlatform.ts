@@ -1,5 +1,5 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
@@ -34,7 +34,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
     private readonly velocity: number;
 
     public constructor({ direction = "up",  velocity = 0, distance = 0, ...args }: MovingEntityArgs) {
-        super({ ...args, width: 68, height: 12 });
+        super({ ...args, width: 68, height: 12, reversed: true });
         this.setFloating(true);
         const { x, y } = this;
         this.startX = this.targetX = x;
@@ -47,11 +47,11 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
             this.targetX = x - distance;
             this.setVelocityX(-this.velocity);
         } else if (direction === "up") {
-            this.targetY = y + distance;
-            this.setVelocityY(this.velocity);
-        } else if (direction === "down") {
             this.targetY = y - distance;
             this.setVelocityY(-this.velocity);
+        } else if (direction === "down") {
+            this.targetY = y + distance;
+            this.setVelocityY(this.velocity);
         }
     }
 
@@ -91,8 +91,8 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         if (
             x >= this.x - this.width / 2
             && x <= this.x + this.width / 2
-            && y >= this.y
-            && y <= this.y + this.height
+            && y >= this.y - this.height
+            && y <= this.y
         ) {
             return Environment.PLATFORM;
         }

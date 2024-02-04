@@ -1,4 +1,3 @@
-import { Environment } from "../World";
 import { NPC } from "./NPC";
 
 export abstract class ScriptableNPC extends NPC {
@@ -16,76 +15,6 @@ export abstract class ScriptableNPC extends NPC {
         if (this.pullOutOfWall() !== 0) {
             this.setVelocityX(0);
         }
-    }
-
-    private pullOutOfGround(): number {
-        let pulled = 0, col = 0;
-
-        if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
-            const height = world.getHeight();
-            col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
-
-            while (this.y < height && col) {
-                pulled++;
-                this.y++;
-                col = world.collidesWith(this.x, this.y);
-            }
-        }
-
-        return pulled;
-    }
-
-    private pullOutOfCeiling(): number {
-        let pulled = 0;
-        const world = this.scene.world;
-
-        while (
-            this.y > 0
-            && world.collidesWith(
-                this.x, this.y + this.height,
-                [ this ],
-                [ Environment.PLATFORM, Environment.WATER ]
-            )
-        ) {
-            pulled++;
-            this.y--;
-        }
-
-        return pulled;
-    }
-
-    private pullOutOfWall(): number {
-        let pulled = 0;
-        const world = this.scene.world;
-
-        if (this.getVelocityX() > 0) {
-            while (
-                world.collidesWithVerticalLine(
-                    this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2,
-                    [ this ],
-                    [ Environment.PLATFORM, Environment.WATER ]
-                )
-            ) {
-                this.x--;
-                pulled++;
-            }
-        } else {
-            while (
-                world.collidesWithVerticalLine(
-                    this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2,
-                    [ this ],
-                    [ Environment.PLATFORM, Environment.WATER ]
-                )
-            ) {
-                this.x++;
-                pulled++;
-            }
-        }
-
-        return pulled;
     }
 
     public override update(dt: number): void {

@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
@@ -19,7 +19,7 @@ export class Wall extends Entity implements CollidableGameObject {
     private state = WallState.SOLID;
 
     public constructor({ identifier, ...args }: WallArgs) {
-        super({ ...args, width: 24, height: 72, isTrigger: false });
+        super({ ...args, width: 24, height: 72, isTrigger: false, reversed: true });
 
         if (identifier == null) {
             throw new Error("Cannot create Wall entity with no identifier property");
@@ -44,8 +44,8 @@ export class Wall extends Entity implements CollidableGameObject {
             this.state === WallState.SOLID
             && x >= this.x - this.width / 2
             && x <= this.x + this.width / 2
-            && y >= this.y
-            && y <= this.y + this.height
+            && y >= this.y - this.height
+            && y <= this.y
         ) {
             return Environment.SOLID;
         }

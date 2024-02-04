@@ -38,7 +38,7 @@ export const GRAVITY = 35;
 export const SHORT_JUMP_GRAVITY = 70;
 
 /** Drowning velocity in meters per second. */
-export const DROWNING_VELOCITY = -1;
+export const DROWNING_VELOCITY = 1;
 
 /** Maximum movement speed of the player in m/s */
 export const MAX_PLAYER_SPEED = 5;
@@ -59,7 +59,7 @@ export const PLAYER_JUMP_HEIGHT = 3.75;
 export const PLAYER_BOUNCE_HEIGHT = 10;
 
 /** Terminal velocity in m/s */
-export const TERMINAL_VELOCITY = -30;
+export const TERMINAL_VELOCITY = 30;
 
 /** Threshold in seconds for allowing a jump after entering falling state */
 export const PLAYER_JUMP_TIMING_THRESHOLD = 0.1;

@@ -1,5 +1,5 @@
 import conversation from "../../../assets/dialog/superthrow.dialog.json";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
@@ -33,7 +33,7 @@ export class SuperThrow extends NPC {
         this.scene.renderer.addAseprite(
             SuperThrow.sprite,
             "idle",
-            this.x, this.y - floatOffsetY,
+            this.x, this.y + floatOffsetY,
             RenderingLayer.ENTITIES,
             this.direction
         );

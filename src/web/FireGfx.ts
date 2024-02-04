@@ -179,6 +179,6 @@ export class FireGfx {
 
     public draw(ctx: CanvasRenderingContext2D, x = 0, y = 0): void {
         const img = this.getImage();
-        ctx.drawImage(img, x - img.width / 2, -y - img.height);
+        ctx.drawImage(img, x - img.width / 2, y - img.height);
     }
 }

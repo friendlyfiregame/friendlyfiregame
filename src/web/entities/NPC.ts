@@ -4,7 +4,7 @@ import { type Face, FaceModes } from "../Face";
 import { type Greeting } from "../Greeting";
 import { SpeechBubble } from "../SpeechBubble";
 import { sleep } from "../util";
-import { PhysicsEntity } from "./PhysicsEntity";
+import { PhysicsEntity, type PhysicsEntityArgs } from "./PhysicsEntity";
 
 // Seconds NPC can't be talked to after a conversation has ended
 const PAUSE_AFTER_CONVERSATION = 1.5;
@@ -21,6 +21,10 @@ export class NPC extends PhysicsEntity {
     public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
     private lastEndedConversation = -Infinity;
     protected met = false;
+
+    public constructor(args: PhysicsEntityArgs) {
+        super({ ...args, reversed: true });
+    }
 
     protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {
         if (this.face) {

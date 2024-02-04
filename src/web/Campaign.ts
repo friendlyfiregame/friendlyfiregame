@@ -242,7 +242,7 @@ export class Campaign {
 
                     void this.gameScene.camera.focusOn(
                         duration,
-                        this.gameScene.fire.x, this.gameScene.fire.y + 15,
+                        this.gameScene.fire.x, this.gameScene.fire.y - 15,
                         8,
                         -2 * Math.PI, valueCurves.cubic
                     ).then(() => this.gameScene?.beginApocalypse());

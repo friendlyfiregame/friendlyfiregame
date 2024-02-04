@@ -16,7 +16,7 @@ export class ExitPortal extends Entity {
     private animationState = PortalAnimationState.OFF;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 32, height: 50, isTrigger: false });
+        super({ ...args, width: 32, height: 50, isTrigger: false, reversed: true });
         this.animator.assignSprite(ExitPortal.sprite);
     }
 

@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
@@ -9,14 +9,14 @@ export class Campfire extends Entity {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 14, height: 28, isTrigger: false });
+        super({ ...args, width: 14, height: 28, isTrigger: false, reversed: true });
     }
 
     public override draw(): void {
         this.scene.renderer.addAseprite(
             Campfire.sprite,
             "idle",
-            this.x, this.y - 2,
+            this.x, this.y + 2,
             RenderingLayer.ENTITIES
         );
     }

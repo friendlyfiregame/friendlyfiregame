@@ -16,7 +16,7 @@ export class Portal extends Entity {
     private animationState = PortalAnimationState.WAITING;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 32, height: 50, isTrigger: false });
+        super({ ...args, width: 32, height: 50, isTrigger: false, reversed: true });
         this.animator.assignSprite(Portal.sprite);
     }
 

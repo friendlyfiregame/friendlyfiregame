@@ -14,11 +14,10 @@ export interface GameObjectInfo {
 
 export class MapInfo {
     public getEntities(): GameObjectInfo[] {
-        const mapHeight = json.height * json.tileheight;
         return json.layers.filter(isObjectGroup).flatMap(layer => layer.objects).map(object => ({
             name: object.name ?? "",
             x: object.x,
-            y: mapHeight - object.y,
+            y: object.y,
             type: object.type ?? "",
             width: object.width ?? 0,
             height: object.height ?? 0,

@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
@@ -39,7 +39,7 @@ export class FlameBoy extends ScriptableNPC {
     public constructor(args: EntityArgs) {
         super({ ...args, width: 26, height: 54 });
         this.setMaxVelocity(3);
-        this.face = new Face(this.scene, this, EyeType.FLAMEBOY, 0, 5);
+        this.face = new Face(this.scene, this, EyeType.FLAMEBOY, 0, -5);
         this.defaultFaceMode = FaceModes.BORED;
         this.face.setMode(this.defaultFaceMode);
         this.soundEmitter = new SoundEmitter({
@@ -71,7 +71,7 @@ export class FlameBoy extends ScriptableNPC {
         this.state++;
         if (this.state === FlameBoyState.WAITING_FOR_DIALOG) {
             this.defaultFaceMode = FaceModes.NEUTRAL;
-            this.face = new Face(this.scene, this, EyeType.FLAMEBOY2, 0, 2);
+            this.face = new Face(this.scene, this, EyeType.FLAMEBOY2, 0, -2);
         }
     }
 
@@ -177,7 +177,7 @@ export class FlameBoy extends ScriptableNPC {
             this.thinkBubble.update(this.x, this.y);
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 32);
+        this.dialoguePrompt.update(dt, this.x, this.y - 32);
         this.speechBubble.update(this.x, this.y);
         this.soundEmitter.update();
     }

@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
 import { entity, type EntityArgs } from "../Entity";
 import { QuestATrigger, QuestKey } from "../Quests";
@@ -56,7 +56,7 @@ export class ShadowPresence extends NPC {
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
             layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: -this.y },
+            translation: { x: this.x, y: this.y },
             position: {
                 x: -ShadowPresence.sprite.width >> 1,
                 y: -ShadowPresence.sprite.height
@@ -85,8 +85,8 @@ export class ShadowPresence extends NPC {
         super.update(dt);
 
         this.checkPlayerDistance();
-        this.dialoguePrompt.update(dt, this.x, this.y + 48);
-        this.speechBubble.update(this.x, this.y + 12);
+        this.dialoguePrompt.update(dt, this.x, this.y - 48);
+        this.speechBubble.update(this.x, this.y - 12);
         this.soundEmitter.update();
     }
 }

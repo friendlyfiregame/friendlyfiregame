@@ -1,15 +1,14 @@
 import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
 import { isEntityName } from "../util/predicates";
 import conversation from "./../../../assets/dialog/bird.dialog.json";
-import { Aseprite } from "./../Aseprite";
+import { type Aseprite } from "./../Aseprite";
 import { asset } from "./../Assets";
-import { Sound } from "./../audio/Sound";
+import { type Sound } from "./../audio/Sound";
 import { Conversation } from "./../Conversation";
-import { entity, EntityArgs } from "./../Entity";
+import { entity, type EntityArgs } from "./../Entity";
 import { type ParticleEmitter, valueCurves } from "./../Particles";
 import { RenderingLayer } from "./../Renderer";
 import { calculateVolume, rnd, rndItem } from "./../util";
-import { Environment } from "./../World";
 import { NPC } from "./NPC";
 
 enum BirdState {
@@ -44,10 +43,10 @@ export class Bird extends NPC {
 
         this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
+            velocity: () => ({ x: rnd(-1, 1) * 90, y: -rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1, 2),
-            gravity: {x: 0, y: -120},
+            gravity: {x: 0, y: 120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
@@ -60,8 +59,8 @@ export class Bird extends NPC {
 
     protected jump(): void {
         this.jumpTimer = JUMP_INTERVAL;
-        this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+        this.setVelocityY(-Math.sqrt(2 * this.jumpHeight * GRAVITY));
+        this.doubleJumpEmitter.setPosition(this.x, this.y - 20);
 
         if (!this.scene.pettingCutscene) {
             this.doubleJumpEmitter.emit(20);
@@ -91,76 +90,6 @@ export class Bird extends NPC {
         if (this.pullOutOfWall() !== 0) {
             this.setVelocityX(0);
         }
-    }
-
-    private pullOutOfGround(): number {
-        let pulled = 0, col = 0;
-
-        if (this.getVelocityY() <= 0) {
-            const world = this.scene.world;
-            const height = world.getHeight();
-            col = world.collidesWith(this.x, this.y, [ this ], [ Environment.WATER ]);
-
-            while (this.y < height && col) {
-                pulled++;
-                this.y++;
-                col = world.collidesWith(this.x, this.y);
-            }
-        }
-
-        return pulled;
-    }
-
-    private pullOutOfCeiling(): number {
-        let pulled = 0;
-        const world = this.scene.world;
-
-        while (
-            this.y > 0
-            && world.collidesWith(
-                this.x, this.y + this.height,
-                [ this ],
-                [ Environment.PLATFORM, Environment.WATER ]
-            )
-        ) {
-            pulled++;
-            this.y--;
-        }
-
-        return pulled;
-    }
-
-    private pullOutOfWall(): number {
-        let pulled = 0;
-        const world = this.scene.world;
-
-        if (this.getVelocityX() > 0) {
-            while (
-                world.collidesWithVerticalLine(
-                    this.x + this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2,
-                    [ this ],
-                    [ Environment.PLATFORM, Environment.WATER ]
-                )
-            ) {
-                this.x--;
-                pulled++;
-            }
-        } else {
-            while (
-                world.collidesWithVerticalLine(
-                    this.x - this.width / 2, this.y + this.height * 3 / 4,
-                    this.height / 2,
-                    [ this ],
-                    [ Environment.PLATFORM, Environment.WATER ]
-                )
-            ) {
-                this.x++;
-                pulled++;
-            }
-        }
-
-        return pulled;
     }
 
     private nextState(): void {
@@ -207,7 +136,7 @@ export class Bird extends NPC {
 
         if (this.state === BirdState.FLYING_RIGHT || this.state === BirdState.FLYING_LEFT) {
             this.move = this.state === BirdState.FLYING_RIGHT ? 1 : -1;
-            if (this.y < this.minAltitude && this.canJump()) {
+            if (this.y > this.minAltitude && this.canJump()) {
                 this.jump();
             }
 

@@ -1,5 +1,5 @@
 import { PIXEL_PER_METER } from "../../shared/constants";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { type ParticleEmitter, valueCurves } from "../Particles";
@@ -27,19 +27,19 @@ export class Cloud extends PhysicsEntity {
     private readonly isRainCloud;
 
     public constructor({ canRain = false, ...args }: CloudArgs) {
-        super({ ...args, width: 74, height: 5 });
+        super({ ...args, width: 74, height: 5, reversed: true });
         this.setFloating(true);
         this.isRainCloud = canRain;
         this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
+            offset: () => ({x: rnd(-1, 1) * 26, y: -rnd(-1, 1) * 5}),
             velocity: () => ({
                 x: this.getVelocityX() * PIXEL_PER_METER + rnd(-1, 1) * 5,
-                y: this.getVelocityY() * PIXEL_PER_METER - rnd(50, 80)
+                y: -this.getVelocityY() * PIXEL_PER_METER + rnd(50, 80)
             }),
             color: () => Cloud.raindrop,
             size: 4,
-            gravity: {x: 0, y: -100},
+            gravity: {x: 0, y: 100},
             lifetime: () => rnd(0.7, 1.2),
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
@@ -88,8 +88,8 @@ export class Cloud extends PhysicsEntity {
         if (
             x >= this.x - this.width / 2
             && x <= this.x + this.width / 2
-            && y >= this.y
-            && y <= this.y + this.height
+            && y >= this.y - this.height
+            && y <= this.y
         ) {
             return Environment.PLATFORM;
         }

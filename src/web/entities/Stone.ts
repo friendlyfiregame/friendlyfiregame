@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
 import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
@@ -34,7 +34,7 @@ export class Stone extends NPC implements CollidableGameObject {
         super({ ...args, width: 26, height: 50 });
 
         this.direction = -1;
-        this.face = new Face(this.scene, this, EyeType.STONE, 0, 21);
+        this.face = new Face(this.scene, this, EyeType.STONE, 0, -21);
         this.lookAtPlayer = false;
         this.carryHeight = 16;
     }
@@ -62,7 +62,7 @@ export class Stone extends NPC implements CollidableGameObject {
         this.scene.renderer.addAseprite(
             Stone.sprite,
             "idle",
-            this.x, this.y - 1,
+            this.x, this.y + 1,
             RenderingLayer.ENTITIES,
             this.direction
         );
@@ -81,7 +81,7 @@ export class Stone extends NPC implements CollidableGameObject {
 
         if (this.state === StoneState.DEFAULT) {
             if (
-                this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                this.scene.world.collidesWith(this.x, this.y + 5) === Environment.WATER
             ) {
                 this.scene.game.campaign.getQuest(QuestKey.A).trigger(
                     QuestATrigger.THROWN_STONE_INTO_WATER
@@ -106,14 +106,14 @@ export class Stone extends NPC implements CollidableGameObject {
                 this.state = StoneState.FLOATING;
             }
 
-            this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
+            this.setVelocityY(-Math.abs(((now() % 2000) - 1000) / 1000) + 0.5);
         } else if (this.state === StoneState.FLOATING) {
             this.x = this.floatingPosition.x;
             this.direction = -1;
-            this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
+            this.setVelocityY(-Math.abs(((now() % 2000) - 1000) / 1000) + 0.5);
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 48);
+        this.dialoguePrompt.update(dt, this.x, this.y - 48);
         this.speechBubble.update(this.x, this.y);
     }
 
@@ -122,8 +122,8 @@ export class Stone extends NPC implements CollidableGameObject {
             if (
                 x >= this.x - this.width / 2
                 && x <= this.x + this.width / 2
-                && y >= this.y
-                && y <= this.y + this.height
+                && y >= this.y - this.height
+                && y <= this.y
             ) {
                 return Environment.SOLID;
             }

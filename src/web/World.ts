@@ -64,11 +64,11 @@ export class World implements GameObject {
 
         this.rainEmitter = this.scene.particles.createEmitter({
             position: {x: rainSpawnPosition.x, y: rainSpawnPosition.y},
-            offset: () => ({x: rnd(-1, 1) * 26, y: rnd(-1, 1) * 5}),
-            velocity: () => ({ x: rnd(-1, 1) * 5, y: -rnd(50, 80) }),
+            offset: () => ({x: rnd(-1, 1) * 26, y: -rnd(-1, 1) * 5}),
+            velocity: () => ({ x: rnd(-1, 1) * 5, y: rnd(50, 80) }),
             color: () => World.raindrop,
             size: 4,
-            gravity: {x: 0, y: -100},
+            gravity: {x: 0, y: 100},
             lifetime: () => 3,
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
@@ -107,8 +107,8 @@ export class World implements GameObject {
         this.scene.renderer.add({
             type: RenderingType.DRAW_IMAGE,
             layer: RenderingLayer.TILEMAP_MAP,
-            translation: { x: camX, y: -camY },
-            position: { x: -camX, y: -this.getHeight() + camY },
+            translation: { x: camX, y: camY },
+            position: { x: -camX, y: -camY },
             asset: World.foreground,
             alpha: alpha
         });
@@ -121,8 +121,8 @@ export class World implements GameObject {
             this.scene.renderer.add({
                 type: RenderingType.DRAW_IMAGE,
                 layer: RenderingLayer.TILEMAP_BACKGROUND,
-                translation: { x: camX, y: -camY },
-                position: { x: -camX / bgX, y: (-this.getHeight() + camY) / bgY },
+                translation: { x: camX, y: camY },
+                position: { x: -camX / bgX, y: -camY / bgY },
                 scale: { x: bgX, y: bgY },
                 asset: background
             });
@@ -134,10 +134,10 @@ export class World implements GameObject {
                 this.scene.renderer.add({
                     type: RenderingType.DRAW_IMAGE,
                     layer: RenderingLayer.TILEMAP_BACKGROUND,
-                    translation: { x: camX, y: -camY },
+                    translation: { x: camX, y: camY },
                     position: {
                         x: (-camX / bgX) + (-posXMultiplier * (width / 2)),
-                        y: (-this.getHeight() + camY) / bgY - (-posYMultiplier * (height / 2))
+                        y: (-camY / bgY) + (-posYMultiplier * (height / 2))
                     },
                     asset: background,
                     alpha: alpha
@@ -147,7 +147,7 @@ export class World implements GameObject {
     }
 
     public getEnvironment(x: number, y: number): Environment {
-        const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+        const index = Math.round(y) * this.getWidth() + Math.round(x);
 
         if (index < 0 || index >= World.collisionMap.length) {
             return Environment.AIR;
@@ -164,9 +164,7 @@ export class World implements GameObject {
      * @return 0 if no collision. Anything else is a specific collision type (actually an RGBA color
      *         which has specific meaning which isn't defined yet).
      */
-    public collidesWith(
-        x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []
-    ): number {
+    public collidesWith(x: number, y: number, ignoreObjects: GameObject[] = [], ignore: Environment[] = []): number {
         for (const gameObject of this.scene.gameObjects) {
             if (
                 gameObject !== this
@@ -181,7 +179,7 @@ export class World implements GameObject {
             }
         }
 
-        const index = (this.getHeight() - 1 - Math.round(y)) * this.getWidth() + Math.round(x);
+        const index = Math.round(y) * this.getWidth() + Math.round(x);
 
         if (index < 0 || index >= World.collisionMap.length) {
             return 0;
@@ -286,8 +284,8 @@ export class World implements GameObject {
      */
     public boundingBoxesCollide(box1: Bounds, box2: Bounds): boolean {
         return !(
-            ((box1.y - box1.height) > (box2.y)) ||
-            (box1.y < (box2.y - box2.height)) ||
+            ((box1.y + box1.height) < box2.y) ||
+            (box1.y > (box2.y + box2.height)) ||
             ((box1.x + box1.width) < box2.x) ||
             (box1.x > (box2.x + box2.width))
         );
@@ -326,7 +324,7 @@ export class World implements GameObject {
     ): number {
         for (let i = 0; i < height; i++) {
             const collision = this.collidesWith(
-                x, y - i, ignoreObjects, ignore
+                x, y + i, ignoreObjects, ignore
             );
 
             if (collision) {
@@ -348,9 +346,9 @@ export class World implements GameObject {
         x: number, y: number, ignoreObjects?: GameObject[], ignore?: Environment[]
     ): number {
         while (
-            y > 0 && !this.collidesWith(x, y, ignoreObjects, ignore)
+            y < this.getHeight() && !this.collidesWith(x, y, ignoreObjects, ignore)
         ) {
-            y--;
+            y++;
         }
 
         return y;

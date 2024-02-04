@@ -1,4 +1,4 @@
-import { Aseprite } from "./Aseprite";
+import { type Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
 import { RenderingLayer } from "./Renderer";
 import { type GameScene } from "./scenes/GameScene";

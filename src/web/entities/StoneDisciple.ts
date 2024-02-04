@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
@@ -50,7 +50,7 @@ export class StoneDisciple extends NPC {
     public override update(dt: number): void {
         super.update(dt);
 
-        this.dialoguePrompt.update(dt, this.x, this.y + this.height);
+        this.dialoguePrompt.update(dt, this.x, this.y - this.height);
         this.speechBubble.update(this.x, this.y);
     }
 }

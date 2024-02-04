@@ -6,7 +6,7 @@ import { PhysicsEntity, type PhysicsEntityArgs } from "./PhysicsEntity";
 @entity("Snowball")
 export class Snowball extends PhysicsEntity {
     public constructor(args: PhysicsEntityArgs) {
-        super({ ...args, width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER });
+        super({ ...args, width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER, reversed: true });
     }
 
     public override draw(): void {
@@ -16,11 +16,11 @@ export class Snowball extends PhysicsEntity {
             draw: (ctx: CanvasRenderingContext2D) => {
                 ctx.save();
                 ctx.beginPath();
-                ctx.translate(this.x, -this.y);
+                ctx.translate(this.x, this.y - this.height);
                 ctx.strokeStyle = "black";
                 ctx.fillStyle = "white";
                 ctx.beginPath();
-                ctx.arc(0, -this.height / 2, this.width / 2, 0, Math.PI * 2, false);
+                ctx.arc(0, this.height / 2, this.width / 2, 0, Math.PI * 2, false);
                 ctx.fill();
                 ctx.stroke();
                 ctx.restore();

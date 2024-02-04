@@ -40,6 +40,7 @@ export interface EntityArgs {
     width?: number;
     height?: number;
     isTrigger?: boolean;
+    reversed?: boolean;
     newGamePlus?: boolean | null;
 }
 
@@ -54,8 +55,9 @@ export class Entity implements GameObject {
     public width: number;
     public height: number;
     public readonly isTrigger: boolean;
+    private readonly reversed: boolean;
 
-    public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null }: EntityArgs) {
+    public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null, reversed = false }: EntityArgs) {
         this.scene = scene;
         this.name = name;
         this.x = x;
@@ -64,6 +66,7 @@ export class Entity implements GameObject {
         this.height = height;
         this.isTrigger = isTrigger;
         this.newGamePlus = newGamePlus;
+        this.reversed = reversed;
     }
 
     public setup(): Promise<void> | void {
@@ -93,7 +96,7 @@ export class Entity implements GameObject {
         const width = this.width + (margin * 2);
         const height = this.height + (margin * 2);
         const x = this.x - (this.width / 2) - margin;
-        const y = this.y - -this.height + margin;
+        const y = this.y - (this.reversed ? this.height : 0) - margin;
         return { x, y, width, height };
     }
 

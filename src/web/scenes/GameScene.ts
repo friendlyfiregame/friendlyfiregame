@@ -13,8 +13,8 @@ import {
     WINDOW_ENDING_FADE_DURATION
 } from "../../shared/constants";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
-import { BitmapFont } from "../BitmapFont";
+import { type Sound } from "../audio/Sound";
+import { type BitmapFont } from "../BitmapFont";
 import { Camera } from "../Camera";
 import { Conversation } from "../Conversation";
 import { Bird } from "../entities/Bird";
@@ -279,7 +279,7 @@ export class GameScene extends Scene<FriendlyFire> {
                     scene: this,
                     name: entity.name,
                     x: entity.x + entity.width / 2,
-                    y: entity.y - entity.height,
+                    y: entity.y,
                     width: entity.width,
                     height: entity.height,
                     ...entity.properties
@@ -589,7 +589,7 @@ export class GameScene extends Scene<FriendlyFire> {
             layer: RenderingLayer.DEBUG,
             position: {
                 x: bounds.x,
-                y: -bounds.y
+                y: bounds.y
             },
             lineColor: color,
             dimension: {
@@ -602,16 +602,14 @@ export class GameScene extends Scene<FriendlyFire> {
     private addAllDebugBoundsToRenderingQueue(): void {
         if (this.showBounds) {
             for (const obj of this.gameObjects) {
-                if (obj instanceof Entity) {
-                    if (obj instanceof Trigger) {
-                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
-                    } else if (obj instanceof CameraBounds) {
-                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "yellow");
-                    } else if (obj instanceof Gate) {
-                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "green");
-                    } else {
-                        this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "blue");
-                    }
+                if (obj instanceof Trigger) {
+                    this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "blue");
+                } else if (obj instanceof CameraBounds) {
+                    this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "yellow");
+                } else if (obj instanceof Gate) {
+                    this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "green");
+                } else if (obj instanceof Entity) {
+                    this.addSingleDebugBoundsToRenderingQueue(obj.getBounds(), "red");
                 }
             }
         }
@@ -767,7 +765,7 @@ export class GameScene extends Scene<FriendlyFire> {
 
         this.fireEmitter = this.particles.createEmitter({
             position: {x: this.player.x, y: this.player.y},
-            offset: () => ({x: rnd(-1, 1) * 300, y: 200}),
+            offset: () => ({x: rnd(-1, 1) * 300, y: -200}),
             velocity: () => ({ x: 0, y: -25}),
             color: () => rndItem(this.fireEffects).getImage(),
             size: () => rnd(16, 32),
@@ -778,7 +776,7 @@ export class GameScene extends Scene<FriendlyFire> {
             alphaCurve: valueCurves.cos(0.2, 0.1),
             update: particle => {
                 if (
-                    this.world.collidesWith(particle.x, particle.y - particle.size / 4)
+                    this.world.collidesWith(particle.x, particle.y + particle.size / 4)
                 ) {
                     particle.vx = 0;
                     particle.vy = 0;

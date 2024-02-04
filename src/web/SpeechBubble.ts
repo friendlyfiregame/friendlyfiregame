@@ -1,6 +1,6 @@
 import { DIALOG_FONT, GAME_CANVAS_WIDTH } from "../shared/constants";
 import { asset } from "./Assets";
-import { BitmapFont } from "./BitmapFont";
+import { type BitmapFont } from "./BitmapFont";
 import { ConversationLine } from "./Conversation";
 import { RenderingLayer, RenderingType } from "./Renderer";
 import { type GameScene } from "./scenes/GameScene";
@@ -17,7 +17,7 @@ export class SpeechBubble {
     private readonly fontSize = SpeechBubble.font.charHeight;
     private readonly lineHeight = this.fontSize;
     private height = 0;
-    private readonly offset = { x: 0, y: 40 };
+    private readonly offset = { x: 0, y: -40 };
     private readonly messageVelocity = 20;
 
     private x: number;
@@ -140,7 +140,7 @@ export class SpeechBubble {
         posX -= offsetX;
 
         const bubbleXPos = posX - Math.round(this.longestLine / 2) - this.paddingLeft;
-        const bubbleYPos = this.up ? -posY + 45 : (-posY - this.height);
+        const bubbleYPos = this.up ? posY + 45 : (posY - this.height);
 
         this.scene.renderer.add({
             type: RenderingType.SPEECH_BUBBLE,

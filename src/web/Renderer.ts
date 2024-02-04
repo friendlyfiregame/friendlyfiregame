@@ -234,13 +234,10 @@ export class Renderer {
         this.add({
             type: RenderingType.ASEPRITE,
             layer,
-            translation: {
-                x: x,
-                y: -y
-            },
+            translation: { x, y },
             position: {
                 x: -sprite.width >> 1,
-                y: -sprite.height
+                y: -sprite.height + 1
             },
             scale,
             alpha,

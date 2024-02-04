@@ -251,7 +251,7 @@ export class Particle {
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.globalAlpha = this.alpha * this.emitter.alphaCurve.get(this.progress);
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.x, this.y);
 
         if (this.angle) {
             ctx.rotate(this.angle);

@@ -116,7 +116,7 @@ export abstract class PhysicsEntity extends Entity {
                 return env;
             }
 
-            env = this.checkCollision(x + i, y + this.height, ignore);
+            env = this.checkCollision(x + i, y - this.height, ignore);
 
             if (env !== Environment.AIR) {
                 return env;
@@ -124,13 +124,13 @@ export abstract class PhysicsEntity extends Entity {
         }
 
         for (let i = 0; i < this.height; i++) {
-            let env = this.checkCollision(x - this.width / 2, y + i, ignore);
+            let env = this.checkCollision(x - this.width / 2, y - i, ignore);
 
             if (env !== Environment.AIR) {
                 return env;
             }
 
-            env = this.checkCollision(x + this.width / 2, y + i, ignore);
+            env = this.checkCollision(x + this.width / 2, y - i, ignore);
 
             if (env !== Environment.AIR) {
                 return env;
@@ -177,7 +177,7 @@ export abstract class PhysicsEntity extends Entity {
         super.update(dt);
 
         const world = this.scene.world;
-        const ground = world.getObjectAt(this.x, this.y - 5, [ this ]);
+        const ground = world.getObjectAt(this.x, this.y + 5, [ this ]);
 
         if (ground instanceof PhysicsEntity) {
             this.x += ground.getVelocityX() * PIXEL_PER_METER * dt;
@@ -194,22 +194,22 @@ export abstract class PhysicsEntity extends Entity {
         // Object dropping down when there is no ground below
         if (!this.floating) {
             const environment = world.collidesWith(
-                this.x, this.y - 1,
+                this.x, this.y + 1,
                 [ this ],
                 this.isJumpDown() ? [ Environment.PLATFORM ] : []
             );
 
             if (environment === Environment.AIR) {
-                this.velocityY -= this.getGravity() * dt;
+                this.velocityY += this.getGravity() * dt;
 
                 // Apply terminal velocity to falling entities
-                if (this.velocityY < 0) {
-                    this.velocityY = Math.max(this.velocityY, TERMINAL_VELOCITY);
+                if (this.velocityY > 0) {
+                    this.velocityY = Math.min(this.velocityY, TERMINAL_VELOCITY);
                 }
             } else if (environment === Environment.WATER) {
                 this.velocityY = DROWNING_VELOCITY;
                 this.velocityX = 0;
-            } else if (this.velocityY < 0) {
+            } else if (this.velocityY > 0) {
                 this.velocityY = 0;
 
                 if (!(this.isPlayer())) {
@@ -231,5 +231,87 @@ export abstract class PhysicsEntity extends Entity {
 
     public getGround(): GameObject | null {
         return this.ground;
+    }
+
+    protected getCollisionIgnores(): Environment[] {
+        return [ Environment.WATER ];
+    }
+
+    /**
+     * If given coordinate collides with the world then the first free y coordinate above is
+     * returned. This can be used to unstuck an object after a new position was set.
+     *
+     * @param x - X coordinate of current position.
+     * @param y - Y coordinate of current position.
+     * @return The Y coordinate of the ground below the given coordinate.
+     */
+    protected pullOutOfGround(): number {
+        let pulled = 0, col = 0;
+
+        if (this.getVelocityY() >= 0) {
+            const world = this.scene.world;
+            col = world.collidesWith(this.x, this.y, [ this ], this.getCollisionIgnores());
+            while (this.y > 0 && col) {
+                pulled++;
+                this.y--;
+                col = world.collidesWith(this.x, this.y, [ this ], this.getCollisionIgnores());
+            }
+        }
+
+        return pulled;
+    }
+
+    /**
+     * If given coordinate collides with the world then the first free y coordinate above is
+     * returned. This can be used to unstuck an object after a new position was set.
+     *
+     * @param x - X coordinate of current position.
+     * @param y - Y coordinate of current position.
+     * @return The Y coordinate of the ground below the given coordinate.
+     */
+    protected pullOutOfCeiling(): number {
+        let pulled = 0;
+        const world = this.scene.world;
+        const height = world.getHeight();
+
+        while (this.y < height && world.collidesWith(this.x, this.y - this.height, [ this ], [ Environment.PLATFORM, Environment.WATER ])) {
+            pulled++;
+            this.y++;
+        }
+
+        return pulled;
+    }
+
+    protected pullOutOfWall(): number {
+        let pulled = 0;
+        const world = this.scene.world;
+
+        if (this.getVelocityX() > 0) {
+            while (
+                world.collidesWithVerticalLine(
+                    this.x + this.width / 2, this.y - this.height * 3 / 4,
+                    this.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
+                this.x--;
+                pulled++;
+            }
+        } else if (this.getVelocityX() < 0) {
+            while (
+                world.collidesWithVerticalLine(
+                    this.x - this.width / 2, this.y - this.height * 3 / 4,
+                    this.height / 2,
+                    [ this ],
+                    [ Environment.PLATFORM, Environment.WATER ]
+                )
+            ) {
+                this.x++;
+                pulled++;
+            }
+        }
+
+        return pulled;
     }
 }

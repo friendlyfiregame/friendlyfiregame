@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { QuestATrigger, QuestKey } from "../Quests";
@@ -34,7 +34,7 @@ export class Wing extends NPC {
         this.scene.renderer.addAseprite(
             Wing.sprite,
             "idle",
-            this.x, this.y - floatOffsetY,
+            this.x, this.y + floatOffsetY,
             RenderingLayer.ENTITIES
         );
 
@@ -48,7 +48,7 @@ export class Wing extends NPC {
     public override update(dt: number): void {
         super.update(dt);
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 16);
+        this.dialoguePrompt.update(dt, this.x, this.y - 16);
         this.speechBubble.update(this.x, this.y);
     }
 }

@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
@@ -19,7 +19,7 @@ export class Tree extends NPC {
     public constructor(args: EntityArgs) {
         super({ ...args, width: 78, height: 140 });
 
-        this.face = new Face(this.scene, this, EyeType.TREE, 5, 94);
+        this.face = new Face(this.scene, this, EyeType.TREE, 5, -94);
         this.seed = new Seed({ scene: this.scene, x: this.x, y: this.y });
         this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
 
@@ -56,7 +56,7 @@ export class Tree extends NPC {
         super.update(dt);
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x + 4, this.y + 128);
+            this.dialoguePrompt.update(dt, this.x + 4, this.y - 128);
         }
     }
 
@@ -71,7 +71,7 @@ export class Tree extends NPC {
 
         this.seed.resetState();
         this.seed.x = this.x;
-        this.seed.y = this.y + this.height / 2;
+        this.seed.y = this.y - this.height / 2;
         this.seed.setVelocity(5, 0);
 
         return this.seed;
@@ -84,7 +84,7 @@ export class Tree extends NPC {
 
         this.wood.resetState();
         this.wood.x = this.x;
-        this.wood.y = this.y + this.height / 2;
+        this.wood.y = this.y - this.height / 2;
         this.wood.setVelocity(5, 0);
 
         return this.wood;

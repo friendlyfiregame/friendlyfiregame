@@ -42,7 +42,7 @@ export class Face {
         private readonly owner: NPC,
         private readonly eyeType: EyeType,
         private readonly offX = 0,
-        private offY = 20
+        private offY = -20
     ) {}
 
     public setMode(mode: FaceModes): void {
@@ -66,7 +66,7 @@ export class Face {
             },
             translation: {
                 x: this.owner.x + this.offX,
-                y: -this.owner.y - this.offY
+                y: this.owner.y + this.offY
             },
             position: {
                 x: -sprite.width >> 1,

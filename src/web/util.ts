@@ -1,6 +1,4 @@
 import { METER_PER_PIXEL, SOUND_INTENSITY_MULTIPLIER } from "../shared/constants";
-import { type Bounds } from "./Entity";
-import { type GameObjectInfo } from "./MapInfo";
 
 export function rnd(minOrMax = 1, max?: number): number {
     if (max != null) {
@@ -81,34 +79,6 @@ export async function sleep(ms = 0): Promise<void> {
 }
 
 /**
- * Inplace array shuffling.
- * @param array The array.
- * @return The same array. But shuffled.
- */
-export function shuffle<T>(array: T[]): T[] {
-    for (let i = 1; i < array.length; i++) {
-        const j = Math.floor(Math.random() * (i + 1));
-
-        if (i !== j) {
-            const tmp = array[i];
-            array[i] = array[j];
-            array[j] = tmp;
-        }
-    }
-
-    return array;
-}
-
-export function boundsFromMapObject(o: GameObjectInfo, margin = 0): Bounds {
-    const width = o.width + (margin * 2);
-    const height = o.height + (margin * 2);
-    const x = o.x - margin;
-    const y = o.y + margin;
-
-    return { x, y, width, height };
-}
-
-/**
  * Checks if the app is currently running inside of an Electron shell instance.
  *
  * @returns `true` if running inside an Electron shell, `false` otherwise.
@@ -126,7 +96,7 @@ export function isDev(): boolean {
     let devMode = false;
 
     // Legacy behavior.
-    if (window.location.port === "8000") {
+    if (window.location.port === "8001") {
         devMode = true;
     }
 
@@ -178,17 +148,6 @@ export function radians(degrees: number): number {
  */
 export function degrees(radians: number): number {
     return radians * RAD_TO_DEG;
-}
-
-/**
- * Normalizes an angle in radians so it is between 0 (inclusive) and 2*PI (exclusive).
- *
- * @param angle - The angle to normalize.
- * @return The normalized angle.
- */
-export function normalizeRadians(angle: number): number {
-    const pi2 = Math.PI * 2;
-    return ((angle % pi2) + pi2) % pi2;
 }
 
 /**

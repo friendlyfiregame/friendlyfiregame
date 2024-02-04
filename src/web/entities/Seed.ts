@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
@@ -35,7 +35,7 @@ export class Seed extends NPC {
     public constructor(args: EntityArgs) {
         super({ ...args, width: 24, height: 24 });
         this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
-        this.face = new Face(this.scene, this, EyeType.STANDARD, 0, 8);
+        this.face = new Face(this.scene, this, EyeType.STANDARD, 0, -8);
 
     }
 
@@ -75,7 +75,7 @@ export class Seed extends NPC {
         this.scene.renderer.addAseprite(
             Seed.sprite,
             this.getSpriteTag(),
-            this.x, this.y - 1,
+            this.x, this.y + 1,
             RenderingLayer.ENTITIES,
             undefined
         );
@@ -108,7 +108,7 @@ export class Seed extends NPC {
             const diffX = this.floatingPosition.x - this.x;
             const moveX = Math.min(20, Math.abs(diffX)) * Math.sign(diffX);
             this.x += moveX * dt;
-            this.setVelocityY(Math.abs(((now() % 2000) - 1000) / 1000) - 0.5);
+            this.setVelocityY(-Math.abs(((now() % 2000) - 1000) / 1000) + 0.5);
         }
 
         if (this.state === SeedState.FREE || this.state === SeedState.SWIMMING) {
@@ -119,7 +119,7 @@ export class Seed extends NPC {
             }
             if (
                 !this.isCarried()
-                && this.scene.world.collidesWith(this.x, this.y - 8) === Environment.SOIL
+                && this.scene.world.collidesWith(this.x, this.y + 8) === Environment.SOIL
             ) {
                 const seedPosition = this.scene.findEntity(Pointer, "seedposition");
 
@@ -138,7 +138,7 @@ export class Seed extends NPC {
             if (
                 !this.isCarried()
                 && this.state !== SeedState.SWIMMING
-                && this.scene.world.collidesWith(this.x, this.y - 5) === Environment.WATER
+                && this.scene.world.collidesWith(this.x, this.y + 5) === Environment.WATER
             ) {
                 this.state = SeedState.SWIMMING;
                 this.setVelocity(0, 0);
@@ -161,8 +161,8 @@ export class Seed extends NPC {
             this.scene.addGameObject(this.wood);
         }
         this.wood.x = this.x;
-        this.wood.y = this.y + this.height / 2;
-        this.wood.setVelocity(-5, 0);
+        this.wood.y = this.y - this.height / 2;
+        this.wood.setVelocity(5, 0);
 
         return this.wood;
     }

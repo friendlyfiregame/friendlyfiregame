@@ -1,9 +1,9 @@
 import conversation from "../../../assets/dialog/bird.dialog.json";
 import shiba1 from "../../../assets/dialog/shiba1.dialog.json";
 import { DOUBLE_JUMP_COLORS, GRAVITY } from "../../shared/constants";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { FaceModes } from "../Face";
@@ -68,18 +68,18 @@ export class Shiba extends ScriptableNPC {
 
         this.doubleJumpEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            velocity: () => ({ x: rnd(-1, 1) * 90, y: rnd(-1, 0) * 100 }),
+            velocity: () => ({ x: rnd(-1, 1) * 90, y: -rnd(-1, 0) * 100 }),
             color: () => rndItem(DOUBLE_JUMP_COLORS),
             size: rnd(1, 2),
-            gravity: {x: 0, y: -120},
+            gravity: {x: 0, y: 120},
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
 
         this.heartEmitter = this.scene.particles.createEmitter({
             position: {x: this.x, y: this.y},
-            offset: () => ({x: rnd(-8, 8), y: 18}),
-            velocity: () => ({ x: 0, y: 5 }),
+            offset: () => ({x: rnd(-8, 8), y: -18}),
+            velocity: () => ({ x: 0, y: -5 }),
             color: () => Shiba.heartImage,
             size: Math.max(Shiba.heartImage.width, Shiba.heartImage.height),
             gravity: {x: 0, y: 0},
@@ -167,8 +167,8 @@ export class Shiba extends ScriptableNPC {
 
     protected jump(): void {
         this.jumpTimer = JUMP_INTERVAL;
-        this.setVelocityY(Math.sqrt(2 * this.jumpHeight * GRAVITY));
-        this.doubleJumpEmitter.setPosition(this.x, this.y + 20);
+        this.setVelocityY(-Math.sqrt(2 * this.jumpHeight * GRAVITY));
+        this.doubleJumpEmitter.setPosition(this.x, this.y - 20);
         this.doubleJumpEmitter.emit(20);
 
         const vol = calculateVolume(this.distanceToPlayer, 0.4);
@@ -270,7 +270,7 @@ export class Shiba extends ScriptableNPC {
             }
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y + 20);
+        this.dialoguePrompt.update(dt, this.x, this.y - 20);
         this.speechBubble.update(this.x, this.y);
 
         if (this.thinkBubble) {
@@ -288,7 +288,7 @@ export class Shiba extends ScriptableNPC {
 
         if (
             this.scene.world.collidesWithVerticalLine(
-                this.x - (this.width / 2), this.y + this.height,
+                this.x - (this.width / 2), this.y - this.height,
                 this.height,
                 [ this ],
                 [ Environment.PLATFORM, Environment.WATER ]

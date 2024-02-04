@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
@@ -10,7 +10,7 @@ export class Skull extends PhysicsEntity {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 16, height: 16 });
+        super({ ...args, width: 16, height: 16, reversed: true });
     }
 
     public override draw(): void {

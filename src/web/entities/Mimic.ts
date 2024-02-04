@@ -1,7 +1,7 @@
 import conversation from "../../../assets/dialog/mimic.dialog.json";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { NPC } from "./NPC";
