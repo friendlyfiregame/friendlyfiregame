@@ -40,16 +40,16 @@ export class Tree extends NPC {
         );
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
 
-        this.drawFace(ctx);
+        this.drawFace();
 
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

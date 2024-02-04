@@ -27,7 +27,7 @@ export class SuperThrow extends NPC {
         }
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(
@@ -38,7 +38,7 @@ export class SuperThrow extends NPC {
             this.direction
         );
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

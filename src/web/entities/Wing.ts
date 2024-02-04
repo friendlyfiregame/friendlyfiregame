@@ -28,7 +28,7 @@ export class Wing extends NPC {
         );
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(
@@ -42,7 +42,7 @@ export class Wing extends NPC {
             this.drawDialoguePrompt();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

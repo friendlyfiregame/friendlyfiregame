@@ -55,7 +55,7 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
         }
     }
 
-    public override draw(): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(MovingPlatform.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS);
     }
 

@@ -12,7 +12,7 @@ export class Campfire extends Entity {
         super({ ...args, width: 14, height: 28, isTrigger: false, reversed: true });
     }
 
-    public override draw(): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(
             Campfire.sprite,
             "idle",

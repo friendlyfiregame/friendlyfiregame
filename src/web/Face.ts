@@ -53,7 +53,7 @@ export class Face {
         this.offY = offY;
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public draw(): void {
         const sprite = Face.sprites[this.eyeType];
 
         this.scene.renderer.add({

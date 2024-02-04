@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";
@@ -13,7 +13,7 @@ export class Caveman extends NPC {
         super({ ...args, width: 18, height: 24 });
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(
             Caveman.sprite,
             "idle",
@@ -21,7 +21,7 @@ export class Caveman extends NPC {
             RenderingLayer.ENTITIES,
             this.direction
         );
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

@@ -58,7 +58,7 @@ export class Stone extends NPC implements CollidableGameObject {
         );
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(
             Stone.sprite,
             "idle",
@@ -67,13 +67,13 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction
         );
 
-        this.drawFace(ctx, false);
+        this.drawFace(false);
 
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

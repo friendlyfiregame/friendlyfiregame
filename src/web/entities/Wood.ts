@@ -44,7 +44,7 @@ export class Wood extends PhysicsEntity {
         this.state = WoodState.FREE;
     }
 
-    public override draw(): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
     }
 

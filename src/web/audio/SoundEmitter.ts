@@ -39,7 +39,7 @@ export class SoundEmitter extends Entity {
         this.intensity = intensity;
     }
 
-    public override draw(): void {
+    public override render(): void {
         // Intentionally left empty.
     }
 

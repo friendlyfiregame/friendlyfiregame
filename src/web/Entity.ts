@@ -73,7 +73,7 @@ export class Entity implements GameObject {
         // Nothing to setup
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         // Nothing to draw
     }
 

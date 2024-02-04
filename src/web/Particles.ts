@@ -2,6 +2,7 @@ import { GRAVITY } from "../shared/constants";
 import { Aseprite } from "./Aseprite";
 import { type Vector2Like } from "./graphics/Vector2";
 import { RenderingLayer, RenderingType } from "./Renderer";
+import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
 
 type ParticleAppearance = string | HTMLImageElement | HTMLCanvasElement | Aseprite;
@@ -32,7 +33,7 @@ export interface ParticleEmitterArguments {
     update?: (p: Particle) => void;
 }
 
-export class Particles {
+export class Particles implements GameObject {
     private readonly scene: GameScene;
     private readonly emitters: ParticleEmitter[] = [];
 
@@ -56,7 +57,7 @@ export class Particles {
     }
 
     // Direct drawing of particles is deactivated since it's handled via rendering engine
-    public draw(ctx: CanvasRenderingContext2D): void {}
+    public render(): void {}
 
     public addEmitter(emitter: ParticleEmitter): void {
         this.emitters.push(emitter);

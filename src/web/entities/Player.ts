@@ -781,7 +781,7 @@ export class Player extends PhysicsEntity {
         });
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         if (!this.visible) {
             return;
         }
@@ -828,10 +828,10 @@ export class Player extends PhysicsEntity {
             this.dance.addDanceToRenderQueue();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
 
         if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
+            this.thinkBubble.draw();
         }
     }
 

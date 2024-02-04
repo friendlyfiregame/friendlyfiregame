@@ -200,7 +200,7 @@ export class Shiba extends ScriptableNPC {
         return "idle";
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         if (this.move === 0) {
             this.scene.renderer.addAseprite(
                 Shiba.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
@@ -216,10 +216,10 @@ export class Shiba extends ScriptableNPC {
         }
 
         if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
+            this.thinkBubble.draw();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override showDialoguePrompt(): boolean {

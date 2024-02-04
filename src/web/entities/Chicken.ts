@@ -1,5 +1,5 @@
 import conversation from "../../../assets/dialog/chicken.dialog.json";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
@@ -25,7 +25,7 @@ export class Chicken extends NPC {
         }
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(
             Chicken.sprite,
             "idle",
@@ -33,7 +33,7 @@ export class Chicken extends NPC {
             RenderingLayer.ENTITIES,
             this.direction
         );
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

@@ -159,23 +159,23 @@ export class Fire extends NPC {
         ctx.restore();
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         if (!this.isVisible) {
             return;
         }
 
         this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this });
-        this.drawFace(ctx);
+        this.drawFace();
 
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }
 
         if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
+            this.thinkBubble.draw();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

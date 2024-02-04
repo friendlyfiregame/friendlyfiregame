@@ -124,7 +124,7 @@ export class FlameBoy extends ScriptableNPC {
     }
 
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         if (this.move === 0) {
             this.scene.renderer.addAseprite(
                 FlameBoy.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
@@ -135,17 +135,17 @@ export class FlameBoy extends ScriptableNPC {
             );
         }
 
-        this.drawFace(ctx, false);
+        this.drawFace(false);
 
         if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
+            this.thinkBubble.draw();
         }
 
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

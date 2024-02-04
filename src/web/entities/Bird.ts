@@ -105,14 +105,14 @@ export class Bird extends NPC {
         return (superResult === true && this.isWaiting());
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         let alpha: number | undefined;
         if (this.scene.pettingCutscene) {
             alpha = Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION));
         }
 
         this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction, undefined, alpha);
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

@@ -42,7 +42,7 @@ export class Mimic extends NPC {
         }
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         switch (this.state) {
             case MimicState.SLEEPING:
                 this.animator.play("sleeping", this.direction);
@@ -55,7 +55,7 @@ export class Mimic extends NPC {
                 break;
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

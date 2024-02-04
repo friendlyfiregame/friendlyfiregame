@@ -9,7 +9,7 @@ export class Snowball extends PhysicsEntity {
         super({ ...args, width: 0.25 * PIXEL_PER_METER, height: 0.25 * PIXEL_PER_METER, reversed: true });
     }
 
-    public override draw(): void {
+    public override render(): void {
         this.scene.renderer.add({
             type: RenderingType.RAW,
             layer: RenderingLayer.ENTITIES,

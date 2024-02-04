@@ -71,7 +71,7 @@ export class Seed extends NPC {
         }
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(
             Seed.sprite,
             this.getSpriteTag(),
@@ -81,10 +81,10 @@ export class Seed extends NPC {
         );
 
         if (this.state === SeedState.GROWN) {
-            this.drawFace(ctx);
+            this.drawFace();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public isCarried(): boolean {

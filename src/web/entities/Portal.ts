@@ -24,7 +24,7 @@ export class Portal extends Entity {
         this.animationState++;
     }
 
-    public override draw(): void {
+    public override render(): void {
         switch (this.animationState) {
             case PortalAnimationState.WAITING:
                 this.animator.play("empty", 1);

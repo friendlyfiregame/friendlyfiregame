@@ -109,7 +109,7 @@ export class SpeechBubble {
         this.height = (this.content.length - 1) * this.lineHeight + this.fontSize + this.paddingVertical;
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public draw(): void {
         if (
             !this.isVisible
             || !this.hasContent()

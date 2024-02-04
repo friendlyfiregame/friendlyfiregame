@@ -533,7 +533,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera.applyTransform(ctx);
 
         for (const obj of this.gameObjects) {
-            obj.draw(ctx, width, height);
+            obj.render();
         }
 
         // Add all particle emitters to rendering queue

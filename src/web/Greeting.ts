@@ -29,9 +29,9 @@ export class Greeting implements GameObject {
         return this.scene.game.campaign;
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    public render(): void {
         if (this.greetingActive) {
-            this.speechBubble.draw(ctx);
+            this.speechBubble.draw();
         }
     }
 

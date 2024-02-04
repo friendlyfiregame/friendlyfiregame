@@ -12,7 +12,7 @@ export class Radio extends Entity {
         super({ width: 24, height: 24, ...args, isTrigger: false });
     }
 
-    public override draw(): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(Radio.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
     }
 

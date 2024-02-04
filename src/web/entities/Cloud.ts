@@ -58,7 +58,7 @@ export class Cloud extends PhysicsEntity {
         return this.isRainCloud;
     }
 
-    public override draw(): void {
+    public override render(): void {
         this.scene.renderer.addAseprite(
             Cloud.sprite,
             "idle",

@@ -1,6 +1,6 @@
 export interface GameObject {
     setup?(): void;
-    draw(ctx: CanvasRenderingContext2D, width: number, height: number): void;
+    render(): void;
     update(dt: number): void;
 }
 

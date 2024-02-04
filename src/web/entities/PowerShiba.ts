@@ -61,7 +61,7 @@ export class PowerShiba extends NPC {
         void this.think("Oh… I remember…", 3000);
     }
 
-    public override draw(ctx: CanvasRenderingContext2D): void {
+    public override render(): void {
         const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
 
         this.scene.renderer.addAseprite(
@@ -74,10 +74,10 @@ export class PowerShiba extends NPC {
         }
 
         if (this.thinkBubble) {
-            this.thinkBubble.draw(ctx);
+            this.thinkBubble.draw();
         }
 
-        this.speechBubble.draw(ctx);
+        this.speechBubble.draw();
     }
 
     public override update(dt: number): void {

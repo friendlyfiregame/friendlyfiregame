@@ -1,4 +1,4 @@
-import { PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
+import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH, PETTING_ENDING_CUTSCENE_DURATION, WINDOW_ENDING_CUTSCENE_DURATION } from "../shared/constants";
 import { asset } from "./Assets";
 import { CameraBounds } from "./entities/CameraBounds";
 import { Gate } from "./entities/Gate";
@@ -89,7 +89,9 @@ export class World implements GameObject {
         }
     }
 
-    public draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+    public render(): void {
+        const width = GAME_CANVAS_WIDTH;
+        const height = GAME_CANVAS_HEIGHT;
         const camera = this.scene.camera;
         const camX = camera.x;
         const camY = camera.y;

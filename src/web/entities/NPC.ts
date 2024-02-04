@@ -26,16 +26,16 @@ export class NPC extends PhysicsEntity {
         super({ ...args, reversed: true });
     }
 
-    protected drawFace(ctx: CanvasRenderingContext2D, lookAtPlayer = true): void {
+    protected drawFace(lookAtPlayer = true): void {
         if (this.face) {
             // Look at player
             if (lookAtPlayer) {
                 const dx = this.scene.player.x - this.x;
                 this.face.toggleDirection((dx > 0) ? 1 : -1);
-                this.face.draw(ctx);
+                this.face.draw();
             } else {
                 this.face.setDirection(this.direction);
-                this.face.draw(ctx);
+                this.face.draw();
             }
         }
     }
@@ -82,8 +82,8 @@ export class NPC extends PhysicsEntity {
         this.dialoguePrompt.draw();
     }
 
-    protected drawGreeting(ctx: CanvasRenderingContext2D): void {
-        this.greeting?.draw(ctx);
+    protected drawGreeting(): void {
+        this.greeting?.render();
     }
 
     protected updateGreeting(): void {
