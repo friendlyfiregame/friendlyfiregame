@@ -138,71 +138,79 @@ export class Renderer {
         this.scene = scene;
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
-        for (const layer of Object.values(RenderingLayer)) {
-            const itemsInLayer = this.queue.filter(item => item.layer === layer);
-
-            itemsInLayer.forEach(item => {
-                if (item.type === RenderingType.BLACK_BARS) {
-                    this.scene.camera.drawBars(ctx);
-                } else if (item.type === RenderingType.PARTICLE_EMITTER) {
-                    item.emitter.draw(ctx);
-                } else if (item.type === RenderingType.FIRE) {
-                    item.entity.drawToCanvas(ctx);
-                } else if (item.type === RenderingType.DANCE) {
-                    item.dance.draw(ctx);
-                } else if (item.type === RenderingType.RAW) {
-                    item.draw(ctx);
-                } else {
-                    ctx.save();
-                    if (item.translation) ctx.translate(item.translation.x, item.translation.y);
-                    if (item.scale) ctx.scale(item.scale.x, item.scale.y);
-                    if (item.relativeToScreen === true) {
-                        this.scene.camera.unapplyTransform(ctx);
-                        ctx.translate(-GAME_CANVAS_WIDTH / 2, -GAME_CANVAS_HEIGHT / 2);
-                    }
-                    if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
-                    if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
-
-                    switch (item.type) {
-                        case RenderingType.DRAW_IMAGE:
-                            ctx.drawImage(item.asset, item.position.x, item.position.y);
-                            break;
-                        case RenderingType.ASEPRITE:
-                            item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
-                            break;
-                        case RenderingType.RECT:
-                            if (item.lineColor != null) {
-                                ctx.strokeStyle = item.lineColor;
-                                ctx.lineWidth = item.lineWidth ?? 1;
-                                ctx.strokeRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                            } else if (item.fillColor != null) {
-                                ctx.fillStyle = item.fillColor;
-                                ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
-                            }
-                            break;
-                        case RenderingType.SPEECH_BUBBLE:
-                            ctx.beginPath();
-                            ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width),
-                                Math.round(item.dimension.height), item.radius, item.up, Math.round(item.offsetX));
-                            ctx.fillStyle = item.fillColor;
-                            ctx.fill();
-                            ctx.closePath();
-                            break;
-                        case RenderingType.TEXT:
-                            if (item.outlineColor != null) {
-                                item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
-                            } else {
-                                item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
-                            }
-                            break;
-                    }
-
-                    ctx.restore();
-                }
-            });
+    public getLayers(): number {
+        let layers = 0;
+        for (const item of this.queue) {
+            layers |= (1 << item.layer);
         }
+        return layers;
+    }
 
+    public drawLayer(ctx: CanvasRenderingContext2D, layer: number): void {
+        const layerIndex = Math.log2(layer);
+        const itemsInLayer = this.queue.filter(item => item.layer === layerIndex);
+        itemsInLayer.forEach(item => {
+            if (item.type === RenderingType.BLACK_BARS) {
+                this.scene.camera.drawBars(ctx);
+            } else if (item.type === RenderingType.PARTICLE_EMITTER) {
+                item.emitter.draw(ctx);
+            } else if (item.type === RenderingType.FIRE) {
+                item.entity.drawToCanvas(ctx);
+            } else if (item.type === RenderingType.DANCE) {
+                item.dance.draw(ctx);
+            } else if (item.type === RenderingType.RAW) {
+                item.draw(ctx);
+            } else {
+                ctx.save();
+                if (item.translation) ctx.translate(item.translation.x, item.translation.y);
+                if (item.scale) ctx.scale(item.scale.x, item.scale.y);
+                if (item.relativeToScreen === true) {
+                    this.scene.camera.unapplyTransform(ctx);
+                    ctx.translate(-GAME_CANVAS_WIDTH / 2, -GAME_CANVAS_HEIGHT / 2);
+                }
+                if (item.globalCompositeOperation) ctx.globalCompositeOperation = item.globalCompositeOperation;
+                if (item.alpha !== undefined) ctx.globalAlpha = item.alpha;
+
+                switch (item.type) {
+                    case RenderingType.DRAW_IMAGE:
+                        ctx.drawImage(item.asset, item.position.x, item.position.y);
+                        break;
+                    case RenderingType.ASEPRITE:
+                        item.asset.drawTag(ctx, item.animationTag, item.position.x, item.position.y, item.time);
+                        break;
+                    case RenderingType.RECT:
+                        if (item.lineColor != null) {
+                            ctx.strokeStyle = item.lineColor;
+                            ctx.lineWidth = item.lineWidth ?? 1;
+                            ctx.strokeRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
+                        } else if (item.fillColor != null) {
+                            ctx.fillStyle = item.fillColor;
+                            ctx.fillRect(item.position.x, item.position.y, item.dimension.width, item.dimension.height);
+                        }
+                        break;
+                    case RenderingType.SPEECH_BUBBLE:
+                        ctx.beginPath();
+                        ctx = roundRect(ctx, Math.round(item.position.x), Math.round(item.position.y), Math.round(item.dimension.width),
+                            Math.round(item.dimension.height), item.radius, item.up, Math.round(item.offsetX));
+                        ctx.fillStyle = item.fillColor;
+                        ctx.fill();
+                        ctx.closePath();
+                        break;
+                    case RenderingType.TEXT:
+                        if (item.outlineColor != null) {
+                            item.asset.drawTextWithOutline(ctx, item.text, item.position.x, item.position.y, item.textColor, item.outlineColor);
+                        } else {
+                            item.asset.drawText(ctx, item.text, item.position.x, item.position.y, item.textColor);
+                        }
+                        break;
+                }
+
+                ctx.restore();
+            }
+        });
+    }
+
+    public clear(): void {
         this.queue = [];
     }
 

@@ -1,6 +1,6 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
+import { type Sound } from "../audio/Sound";
 import { Entity, entity, type EntityArgs } from "../Entity";
 
 enum PortalAnimationState { OFF, FADEIN, IDLE }

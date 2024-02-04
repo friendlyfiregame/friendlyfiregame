@@ -51,6 +51,7 @@ import { type ParticleEmitter, Particles, valueCurves } from "../Particles";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { Renderer, RenderingLayer, RenderingType } from "../Renderer";
 import { Scene } from "../Scene";
+import { RendererNode } from "../scene/RendererNode";
 import { clamp, isDev, rnd, rndItem, sleep, timedRnd } from "../util";
 import { type Constructor } from "../util/types";
 import { World } from "../World";
@@ -314,6 +315,8 @@ export class GameScene extends Scene<FriendlyFire> {
 
         Conversation.setGlobal("devmode", isDev() + "");
         this.loadApocalypse();
+
+        this.rootNode.appendChild(new RendererNode(this));
     }
 
     private initNewGamePlusState(): void {
@@ -480,6 +483,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.dt = dt;
         this.gameTime += dt;
 
+        this.renderer.clear();
         for (const obj of this.gameObjects) {
             obj.update(dt);
         }
@@ -487,7 +491,8 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera.update(dt, this.gameTime);
 
         if (this.fadeToBlackEndTime > this.gameTime) {
-            let fade = (this.gameTime - this.fadeToBlackStartTime) / (this.fadeToBlackEndTime - this.fadeToBlackStartTime);
+            let fade = (this.gameTime - this.fadeToBlackStartTime) / (this.fadeToBlackEndTime
+                - this.fadeToBlackStartTime);
 
             if (this.fadeToBlackDirection === FadeDirection.FADE_IN) {
                 fade = 1 - fade;
@@ -507,16 +512,6 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.windowCutscene) {
             this.updateWindowEndingCutscene(dt);
         }
-    }
-
-    public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-        ctx.save();
-
-        // Center coordinate system
-        ctx.translate(this.game.width / 2, this.game.height / 2);
-
-        // Draw stuff
-        this.camera.applyTransform(ctx);
 
         for (const obj of this.gameObjects) {
             obj.render();
@@ -535,24 +530,35 @@ export class GameScene extends Scene<FriendlyFire> {
             const diff = this.fireFuryEndTime - this.gameTime;
             const p = diff / 16;
             const fade = valueCurves.trapeze(0.4).get(p);
-            this.drawFade(ctx, fade, "black");
+            this.renderFade(fade, "black");
         }
 
         if (this.apocalypse) {
-            this.drawApocalypseOverlay(ctx);
+            this.renderApocalypseOverlay();
         }
 
         // Gate Fade
         if (this.fadeToBlackFactor > 0) {
             this.fadeActiveBackgroundTrack(this.fadeToBlackFactor, true);
-            this.drawFade(ctx, this.fadeToBlackFactor, "black");
+            this.renderFade(this.fadeToBlackFactor, "black");
         }
 
         // Cinematic bars
         this.camera.addCinematicBarsToRenderer();
 
-        // Draw stuff from Rendering queue
-        this.renderer.draw(ctx);
+        super.update(dt);
+    }
+
+    public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
+        ctx.save();
+
+        // Center coordinate system
+        ctx.translate(this.game.width / 2, this.game.height / 2);
+
+        // Draw stuff
+        this.camera.applyTransform(ctx);
+
+        super.draw(ctx, width, height);
 
         ctx.restore();
     }
@@ -573,7 +579,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    private addAllDebugBoundsToRenderingQueue(): void {
+    public addAllDebugBoundsToRenderingQueue(): void {
         if (this.showBounds) {
             for (const obj of this.gameObjects) {
                 if (obj instanceof Trigger) {
@@ -650,10 +656,6 @@ export class GameScene extends Scene<FriendlyFire> {
         }
     }
 
-    private updateFriendshipEndingCutscene(dt: number): void {
-        this.camera.setCinematicBar(1);
-    }
-
     private updateWindowEndingCutscene(dt: number): void {
         this.windowCutsceneTime += dt;
         if (!this.windowEndingTriggered && this.windowCutsceneTime > WINDOW_ENDING_CUTSCENE_DURATION + WINDOW_ENDING_FADE_DURATION) {
@@ -677,6 +679,10 @@ export class GameScene extends Scene<FriendlyFire> {
                 });
             }
         });
+    }
+
+    private updateFriendshipEndingCutscene(dt: number): void {
+        this.camera.setCinematicBar(1);
     }
 
     private updatePettingEndingCutscene(dt: number): void {
@@ -706,7 +712,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    private drawApocalypseOverlay(ctx: CanvasRenderingContext2D): void {
+    public renderApocalypseOverlay(): void {
         this.updateApocalypse();
         this.camera.setCinematicBar(this.apocalypseFactor);
 
@@ -722,7 +728,7 @@ export class GameScene extends Scene<FriendlyFire> {
         });
     }
 
-    private drawFade(ctx: CanvasRenderingContext2D, alpha: number, color = "black"): void {
+    public renderFade(alpha: number, color = "black"): void {
         this.renderer.add({
             type: RenderingType.RECT,
             layer: RenderingLayer.FULLSCREEN_FX,

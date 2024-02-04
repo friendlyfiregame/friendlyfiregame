@@ -1,9 +1,9 @@
 import { APP_NAME, DIALOG_FONT, GAME_CANVAS_WIDTH } from "../../shared/constants";
 import { type AppInfoJSON } from "../AppInfo";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { type Sound } from "../audio/Sound";
-import { BitmapFont } from "../BitmapFont";
+import { type BitmapFont } from "../BitmapFont";
 import { CharacterAsset } from "../Campaign";
 import { easeOutCubic } from "../easings";
 import { type FriendlyFire } from "../FriendlyFire";

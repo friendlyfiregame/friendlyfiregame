@@ -1,5 +1,5 @@
 import { asset } from "./Assets";
-import { Sound } from "./audio/Sound";
+import { type Sound } from "./audio/Sound";
 import { Conversation } from "./Conversation";
 
 const AMOUNT_GATE_COLS = 3;

@@ -2,7 +2,7 @@ import { DIALOG_FONT } from "../../shared/constants";
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { type Sound } from "../audio/Sound";
-import { BitmapFont } from "../BitmapFont";
+import { type BitmapFont } from "../BitmapFont";
 import { CharacterAsset, VoiceAsset } from "../Campaign";
 import { easeOutCubic } from "../easings";
 import { type FriendlyFire } from "../FriendlyFire";

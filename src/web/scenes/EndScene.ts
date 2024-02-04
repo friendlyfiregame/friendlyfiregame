@@ -1,7 +1,7 @@
 import { DIALOG_FONT } from "../../shared/constants";
 import { asset } from "../Assets";
-import { Sound } from "../audio/Sound";
-import { BitmapFont } from "../BitmapFont";
+import { type Sound } from "../audio/Sound";
+import { type BitmapFont } from "../BitmapFont";
 import { easeOutQuad } from "../easings";
 import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";

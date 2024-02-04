@@ -1,7 +1,7 @@
 import { DIALOG_FONT } from "../../shared/constants";
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
+import { type BitmapFont } from "../BitmapFont";
 import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
 import { type ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";

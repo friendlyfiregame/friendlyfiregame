@@ -1,4 +1,4 @@
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
 import { RenderingLayer } from "../Renderer";

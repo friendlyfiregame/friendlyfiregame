@@ -1,5 +1,5 @@
 import { asset } from "./Assets";
-import { Sound } from "./audio/Sound";
+import { type Sound } from "./audio/Sound";
 import { type BitmapFont } from "./BitmapFont";
 import { type FriendlyFire } from "./FriendlyFire";
 import { SceneNode, type SceneNodeArgs } from "./scene/SceneNode";

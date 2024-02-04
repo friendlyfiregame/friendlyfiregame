@@ -1,7 +1,7 @@
 import { DIALOG_FONT } from "../../shared/constants";
-import { Aseprite } from "../Aseprite";
+import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
-import { BitmapFont } from "../BitmapFont";
+import { type BitmapFont } from "../BitmapFont";
 import { easeOutCubic } from "../easings";
 import { type FriendlyFire } from "../FriendlyFire";
 import { Direction } from "../geom/Direction";
