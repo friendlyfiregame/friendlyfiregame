@@ -1,6 +1,7 @@
-import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "../shared/constants";
-import { Assets } from "./Assets";
+import { DIALOG_FONT, GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "../shared/constants";
+import { asset, Assets } from "./Assets";
 import { AudioManager } from "./audio/AudioManager";
+import { type BitmapFont } from "./BitmapFont";
 import { Campaign } from "./Campaign";
 import { CharacterSounds } from "./CharacterSounds";
 import { FullscreenManager } from "./display/FullscreenManager";
@@ -11,7 +12,7 @@ import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./Scenes";
 import { SteamworksApi } from "./steamworks/SteamworksApi";
-import { clamp } from "./util";
+import { clamp, isDev } from "./util";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -39,11 +40,16 @@ export abstract class Game {
     private gameLoopId: number | null = null;
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
+    private frameCounter = 0;
+    private framesPerSecond = 0;
 
     readonly #displayManager: DisplayManager;
     readonly #steamworksApi: SteamworksApi | null;
     readonly #audioManager: AudioManager;
     readonly #fullscreenManager: FullscreenManager;
+
+    @asset(DIALOG_FONT)
+    private static readonly font: BitmapFont;
 
     public constructor(public readonly width: number = GAME_CANVAS_WIDTH, public readonly height: number = GAME_CANVAS_HEIGHT) {
         const canvas = this.canvas = getGameCanvas(width, height);
@@ -84,6 +90,12 @@ export abstract class Game {
             }
         });
 
+        if (isDev()) {
+            window.setInterval(() => {
+                this.framesPerSecond = this.frameCounter;
+                this.frameCounter = 0;
+            }, 1000);
+        }
     }
 
     public get displayManager(): DisplayManager {
@@ -178,6 +190,17 @@ export abstract class Game {
 
     protected draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         this.scenes.draw(ctx, width, height);
+
+        // Display FPS counter
+        if (isDev()) {
+            Game.font?.drawText(
+                ctx,
+                `${this.framesPerSecond} FPS`,
+                2, -1,
+                "white"
+            );
+            this.frameCounter++;
+        }
     }
 
     public start(): void {

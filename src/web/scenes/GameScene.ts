@@ -243,12 +243,9 @@ export class GameScene extends Scene<FriendlyFire> {
     private apocalypseFactor = 1;
     private fireEffects: FireGfx[] = [];
     private fireEmitter!: ParticleEmitter;
-    private frameCounter = 0;
-    private framesPerSecond = 0;
     public showBounds = false;
     private mapInfo!: MapInfo;
     public dt: number = 0;
-    private fpsInterval: number | null = null;
     private fadeToBlackEndTime = 0;
     private fadeToBlackStartTime = 0;
     private fadeToBlackFactor = 0;
@@ -307,11 +304,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.camera = new Camera(this, this.player);
         this.camera.setBounds(this.player.getCurrentCameraBounds());
 
-        this.fpsInterval = window.setInterval(() => {
-            this.framesPerSecond = this.frameCounter;
-            this.frameCounter = 0;
-        }, 1000);
-
         this.game.campaign.begin(this);
 
         if (this.game.campaign.isNewGamePlus) {
@@ -335,12 +327,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.tree.spawnSeed().bury();
         this.tree.conversation?.setState("reminder");
         this.stone.dropInWater();
-    }
-
-    public override cleanup(): void {
-        if (this.fpsInterval != null) {
-            window.clearInterval(this.fpsInterval);
-        }
     }
 
     public addGameObject(object: GameObject): void {
@@ -569,18 +555,6 @@ export class GameScene extends Scene<FriendlyFire> {
         this.renderer.draw(ctx);
 
         ctx.restore();
-
-        // Display FPS counter
-        if (isDev()) {
-            GameScene.font.drawText(
-                ctx,
-                `${this.framesPerSecond} FPS`,
-                2, -1,
-                "white"
-            );
-        }
-
-        this.frameCounter++;
     }
 
     private addSingleDebugBoundsToRenderingQueue(bounds: Bounds, color: string): void {
