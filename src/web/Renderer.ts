@@ -21,32 +21,18 @@ export enum RenderingType {
 }
 
 export enum RenderingLayer {
-    DEBUG = "debug",
-    FULLSCREEN_FX = "fullscreenFX",
-    UI = "ui",
-    BLACK_BARS = "blackBars",
-    TILEMAP_FOREGROUND = "tilemapForeground",
-    PLAYER = "player",
-    ENTITIES = "entities",
-    PLATFORMS = "platforms",
-    TILEMAP_MAP = "tilemapMap",
-    TILEMAP_BACKGROUND = "tilemapBackground",
-    PARTICLES = "particles"
+    TILEMAP_BACKGROUND,
+    TILEMAP_MAP,
+    PLATFORMS,
+    PARTICLES,
+    ENTITIES,
+    PLAYER,
+    TILEMAP_FOREGROUND,
+    BLACK_BARS,
+    UI,
+    FULLSCREEN_FX,
+    DEBUG
 }
-
-export const LAYER_ORDER: RenderingLayer[] = [
-    RenderingLayer.DEBUG,
-    RenderingLayer.FULLSCREEN_FX,
-    RenderingLayer.UI,
-    RenderingLayer.BLACK_BARS,
-    RenderingLayer.TILEMAP_FOREGROUND,
-    RenderingLayer.PLAYER,
-    RenderingLayer.ENTITIES,
-    RenderingLayer.PARTICLES,
-    RenderingLayer.PLATFORMS,
-    RenderingLayer.TILEMAP_MAP,
-    RenderingLayer.TILEMAP_BACKGROUND,
-];
 
 export type Coordinates = {
     x: number;
@@ -146,7 +132,6 @@ export type RenderingItem = BlackBarsRenderingItem | DrawImageRenderingItem | As
 
 export class Renderer {
     private readonly scene: GameScene;
-    private readonly layers = LAYER_ORDER;
     private queue: RenderingItem[] = [];
 
     public constructor(scene: GameScene) {
@@ -154,7 +139,7 @@ export class Renderer {
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
-        [...this.layers].reverse().forEach(layer => {
+        for (const layer of Object.values(RenderingLayer)) {
             const itemsInLayer = this.queue.filter(item => item.layer === layer);
 
             itemsInLayer.forEach(item => {
@@ -216,7 +201,7 @@ export class Renderer {
                     ctx.restore();
                 }
             });
-        });
+        }
 
         this.queue = [];
     }
