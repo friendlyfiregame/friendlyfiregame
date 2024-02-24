@@ -9,17 +9,17 @@ export class Campfire extends Entity {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 14, height: 28, isTrigger: false, reversed: true });
+        super({
+            ...args,
+            width: 14,
+            height: 32,
+            isTrigger: false,
+            reversed: true,
+            layer: RenderingLayer.ENTITIES,
+        });
     }
 
-    public override render(): void {
-        this.scene.renderer.addAseprite(
-            Campfire.sprite,
-            "idle",
-            this.x, this.y + 2,
-            RenderingLayer.ENTITIES
-        );
+    public override draw(ctx: CanvasRenderingContext2D): void {
+        Campfire.sprite.drawTag(ctx, "idle", 0, 2, this.scene.gameTime * 1000);
     }
-
-    public override update(): void {}
 }
