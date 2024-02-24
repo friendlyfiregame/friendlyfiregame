@@ -57,7 +57,7 @@ export class Entity extends SceneNode<Game> implements GameObject {
     private readonly reversed: boolean;
 
     public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null, reversed = false, ...args }: EntityArgs) {
-        super({ ...args, x, y, width, height, anchor: reversed ? Direction.BOTTOM : Direction.TOP_LEFT });
+        super({ ...args, x, y, width, height, anchor: reversed ? Direction.BOTTOM : Direction.TOP_LEFT, childAnchor: Direction.BOTTOM });
         this.scene = scene;
         this.name = name;
         this.isTrigger = isTrigger;

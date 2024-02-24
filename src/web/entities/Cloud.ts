@@ -2,8 +2,10 @@ import { PIXEL_PER_METER } from "../../shared/constants";
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { rnd, rndInt, timedRnd } from "../util";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -27,7 +29,12 @@ export class Cloud extends PhysicsEntity {
     private readonly isRainCloud;
 
     public constructor({ canRain = false, ...args }: CloudArgs) {
-        super({ ...args, width: 74, height: 5, reversed: true });
+        super({
+            ...args,
+            width: 74,
+            height: 5,
+            reversed: true
+        });
         this.setFloating(true);
         this.isRainCloud = canRain;
         this.rainEmitter = this.scene.particles.createEmitter({
@@ -44,6 +51,12 @@ export class Cloud extends PhysicsEntity {
             alpha: 0.6,
             alphaCurve: valueCurves.linear.invert()
         });
+        this.appendChild(new AsepriteNode({
+            aseprite: Cloud.sprite,
+            layer: RenderingLayer.PLATFORMS,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }));
     }
 
     public startRain(time: number = Infinity): void {
@@ -56,15 +69,6 @@ export class Cloud extends PhysicsEntity {
 
     public canRain(): boolean {
         return this.isRainCloud;
-    }
-
-    public override render(): void {
-        this.scene.renderer.addAseprite(
-            Cloud.sprite,
-            "idle",
-            this.x, this.y,
-            RenderingLayer.PLATFORMS
-        );
     }
 
     public override update(dt: number): void {
