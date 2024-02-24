@@ -1,7 +1,9 @@
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 
 @entity("Campfire")
 export class Campfire extends Entity {
@@ -11,15 +13,16 @@ export class Campfire extends Entity {
     public constructor(args: EntityArgs) {
         super({
             ...args,
-            width: 14,
-            height: 32,
+            width: Campfire.sprite.width,
+            height: Campfire.sprite.height,
             isTrigger: false,
-            reversed: true,
-            layer: RenderingLayer.ENTITIES,
+            reversed: true
         });
-    }
-
-    public override draw(ctx: CanvasRenderingContext2D): void {
-        Campfire.sprite.drawTag(ctx, "idle", 0, 2, this.scene.gameTime * 1000);
+        this.appendChild(new AsepriteNode({
+            aseprite: Campfire.sprite,
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 2
+        }));
     }
 }
