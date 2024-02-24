@@ -2,7 +2,7 @@ import { Animator } from "./Animator";
 import { type Trigger } from "./entities/triggers/Trigger";
 import { type Game } from "./Game";
 import { Direction } from "./geom/Direction";
-import { SceneNode } from "./scene/SceneNode";
+import { SceneNode, type SceneNodeArgs } from "./scene/SceneNode";
 import { type GameObject } from "./scenes/GameObject";
 import { type GameScene } from "./scenes/GameScene";
 import { isEntityName, isInstanceOf } from "./util/predicates";
@@ -35,7 +35,7 @@ export function createEntity(type: string, args: EntityArgs): Entity {
     return new constructor({ ...args });
 }
 
-export interface EntityArgs {
+export interface EntityArgs extends SceneNodeArgs {
     scene: GameScene;
     x: number;
     y: number;
@@ -56,8 +56,8 @@ export class Entity extends SceneNode<Game> implements GameObject {
     public readonly isTrigger: boolean;
     private readonly reversed: boolean;
 
-    public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null, reversed = false }: EntityArgs) {
-        super({ x, y, width, height, anchor: reversed ? Direction.BOTTOM : Direction.TOP_LEFT });
+    public constructor({ scene, name = null, x, y, width = 0, height = 0, isTrigger = true, newGamePlus = null, reversed = false, ...args }: EntityArgs) {
+        super({ ...args, x, y, width, height, anchor: reversed ? Direction.BOTTOM : Direction.TOP_LEFT });
         this.scene = scene;
         this.name = name;
         this.isTrigger = isTrigger;
