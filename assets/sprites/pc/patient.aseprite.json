@@ -56,7 +56,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "patient.png",
   "format": "I8",
   "size": { "w": 42, "h": 69 },
@@ -70,6 +70,8 @@
    { "name": "Legs", "opacity": 255, "blendMode": "normal" },
    { "name": "Body", "opacity": 255, "blendMode": "normal" },
    { "name": "Head", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }

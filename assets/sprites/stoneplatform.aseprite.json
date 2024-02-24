@@ -11,7 +11,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "stoneplatform.png",
   "format": "I8",
   "size": { "w": 70, "h": 15 },
@@ -22,6 +22,8 @@
   "layers": [
    { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" },
    { "name": "Snow", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }

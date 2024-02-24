@@ -1,59 +1,65 @@
-{ "frames": {
-   "gamepad_selection 0.aseprite": {
-    "frame": { "x": 1, "y": 1, "w": 67, "h": 19 },
+{ "frames": [
+   {
+    "filename": "gamepad_selection 0.aseprite",
+    "frame": { "x": 65, "y": 22, "w": 28, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 28, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
-   "gamepad_selection 1.aseprite": {
-    "frame": { "x": 70, "y": 1, "w": 67, "h": 19 },
+   {
+    "filename": "gamepad_selection 1.aseprite",
+    "frame": { "x": 1, "y": 22, "w": 30, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 30, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
-   "gamepad_selection 2.aseprite": {
-    "frame": { "x": 139, "y": 1, "w": 67, "h": 19 },
+   {
+    "filename": "gamepad_selection 2.aseprite",
+    "frame": { "x": 33, "y": 22, "w": 30, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 30, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
-   "gamepad_selection 3.aseprite": {
-    "frame": { "x": 208, "y": 1, "w": 67, "h": 19 },
+   {
+    "filename": "gamepad_selection 3.aseprite",
+    "frame": { "x": 95, "y": 22, "w": 31, "h": 15 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "spriteSourceSize": { "x": 0, "y": 4, "w": 31, "h": 15 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
-   "gamepad_selection 4.aseprite": {
-    "frame": { "x": 277, "y": 1, "w": 67, "h": 19 },
+   {
+    "filename": "gamepad_selection 4.aseprite",
+    "frame": { "x": 69, "y": 1, "w": 44, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 44, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    },
-   "gamepad_selection 5.aseprite": {
-    "frame": { "x": 346, "y": 1, "w": 67, "h": 19 },
+   {
+    "filename": "gamepad_selection 5.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 66, "h": 19 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 0, "y": 1, "w": 67, "h": 19 },
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 66, "h": 19 },
     "sourceSize": { "w": 68, "h": 20 },
     "duration": 100
    }
- },
+ ],
  "meta": {
-  "app": "https://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.4-x64",
   "image": "gamepad_selection.png",
   "format": "RGBA8888",
-  "size": { "w": 414, "h": 21 },
+  "size": { "w": 127, "h": 42 },
   "scale": "1",
   "frameTags": [
    { "name": "xbox", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },

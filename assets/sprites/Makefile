@@ -13,6 +13,7 @@ ASEPRITE=aseprite \
 	--extrude \
 	--list-tags \
 	--list-layers \
+	--list-slices \
 	--trim
 
 %.png: %.aseprite Makefile

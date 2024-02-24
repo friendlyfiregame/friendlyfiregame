@@ -1,4 +1,4 @@
-import { Direction, type Frame, type FrameTag, type Layer, type SpriteSheet } from "@kayahr/aseprite";
+import { Direction, type Frame, type FrameTag, type Layer, type Rectangle, type SpriteSheet } from "@kayahr/aseprite";
 
 import { loadImage } from "./graphics";
 import { now } from "./util";
@@ -13,6 +13,7 @@ export class Aseprite {
     private readonly frameTagDurations: Record<string, number> = {};
     private readonly duration: number;
     private readonly fallbackTag = "idle";
+    public readonly bounds: Rectangle | null;
 
     private constructor(private readonly source: string, private readonly json: SpriteSheet, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
@@ -28,6 +29,7 @@ export class Aseprite {
             this.frameTags[frameTag.name] = frameTag;
             this.frameTagDurations[frameTag.name] = duration;
         }
+        this.bounds = json.meta.slices?.find(slice => slice.name === "bounds")?.keys[0]?.bounds ?? null;
     }
 
     /**

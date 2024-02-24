@@ -29,7 +29,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "cloud3.png",
   "format": "I8",
   "size": { "w": 156, "h": 52 },
@@ -39,6 +39,9 @@
   ],
   "layers": [
    { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+   { "name": "bounds", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 4, "y": 19, "w": 74, "h": 5 } }] }
   ]
  }
 }

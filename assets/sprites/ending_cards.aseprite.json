@@ -92,7 +92,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "ending_cards.png",
   "format": "RGBA8888",
   "size": { "w": 184, "h": 96 },
@@ -115,6 +115,8 @@
    { "name": "image layer 2", "opacity": 255, "blendMode": "normal" },
    { "name": "key", "opacity": 255, "blendMode": "normal" },
    { "name": "frame", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }

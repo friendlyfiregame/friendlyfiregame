@@ -182,7 +182,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "shiba.png",
   "format": "I8",
   "size": { "w": 145, "h": 95 },
@@ -196,6 +196,8 @@
   "layers": [
    { "name": "dog", "opacity": 255, "blendMode": "normal" },
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }

@@ -155,7 +155,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "mimic.png",
   "format": "I8",
   "size": { "w": 176, "h": 97 },
@@ -170,6 +170,8 @@
    { "name": "lid", "opacity": 255, "blendMode": "normal" },
    { "name": "teeth", "opacity": 255, "blendMode": "normal" },
    { "name": "tongue", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }

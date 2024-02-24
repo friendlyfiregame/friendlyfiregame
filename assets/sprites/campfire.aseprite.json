@@ -56,7 +56,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "campfire.png",
   "format": "RGBA8888",
   "size": { "w": 43, "h": 64 },
@@ -69,6 +69,8 @@
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" },
    { "name": "Layer 2", "opacity": 255, "blendMode": "normal" },
    { "name": "Layer 4", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }

@@ -29,7 +29,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.3.2-x64",
+  "version": "1.3.4-x64",
   "image": "controls_gamepad.png",
   "format": "RGBA8888",
   "size": { "w": 72, "h": 270 },
@@ -43,6 +43,8 @@
    { "name": "base", "opacity": 255, "blendMode": "normal" },
    { "name": "special", "opacity": 255, "blendMode": "normal" },
    { "name": "buttons", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
   ]
  }
 }
