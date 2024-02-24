@@ -12,7 +12,7 @@ import { CharacterAsset, type VoiceAsset } from "../Campaign";
 import { CharacterSounds } from "../CharacterSounds";
 import { Conversation } from "../Conversation";
 import { Dance } from "../Dance";
-import { type Bounds, type Entity, entity, type EntityArgs } from "../Entity";
+import { type Bounds, Entity, entity, type EntityArgs } from "../Entity";
 import { type ControllerEvent } from "../input/ControllerEvent";
 import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
@@ -543,6 +543,11 @@ export class Player extends PhysicsEntity {
                 void this.think("I can do everything now.", 1500);
             } else if (event.key === "m") {
                 this.scene.showBounds = !this.scene.showBounds;
+                this.scene.rootNode.forEachDescendant(node => {
+                    if (node instanceof Entity) {
+                        node.setShowBounds(!node.isShowBounds());
+                    }
+                });
                 void this.think("Toggling bounds.", 1500);
             }
         }

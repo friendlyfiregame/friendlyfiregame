@@ -7,6 +7,7 @@ import { CharacterSounds } from "./CharacterSounds";
 import { FullscreenManager } from "./display/FullscreenManager";
 import { DisplayManager, RenderMode } from "./DisplayManager";
 import { getGameCanvas, getRenderingContext } from "./graphics";
+import { AffineTransform } from "./graphics/AffineTransform";
 import { ControllerManager } from "./input/ControllerManager";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
@@ -154,11 +155,9 @@ export abstract class Game {
         style.height = Math.round(height * scale) + "px";
     }
 
+    private readonly rootTransform = new AffineTransform();
+
     private gameLoop(): void {
-        const currentUpdateTime = performance.now();
-        const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
-        this.update(dt);
-        this.lastUpdateTime = currentUpdateTime;
         const renderMode = this.displayManager.getRenderMode();
 
         const { ctx, width, height } = this;
@@ -172,7 +171,14 @@ export abstract class Game {
         }
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, 0, width, height);
+
+        this.rootTransform.setFromCanvas(ctx);
+        const currentUpdateTime = performance.now();
+        const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
+        this.update(dt, this.rootTransform);
+        this.lastUpdateTime = currentUpdateTime;
         this.draw(ctx, width, height);
+
         ctx.restore();
 
         this.nextFrame();
@@ -182,10 +188,10 @@ export abstract class Game {
         this.gameLoopId = requestAnimationFrame(this.gameLoopCallback);
     }
 
-    protected update(dt: number): void {
+    protected update(dt: number, rootTransform?: AffineTransform): void {
         this.gamepad.update();
         this.updateMouse(dt);
-        this.scenes.update(dt);
+        this.scenes.update(dt, rootTransform);
     }
 
     protected draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {

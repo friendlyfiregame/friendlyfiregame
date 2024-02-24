@@ -43,6 +43,7 @@ import { Wing } from "../entities/Wing";
 import { type Bounds, createEntity, Entity  } from "../Entity";
 import { FireGfx } from "../FireGfx";
 import { type FriendlyFire } from "../FriendlyFire";
+import type { AffineTransform } from "../graphics/AffineTransform";
 import { type ControllerEvent } from "../input/ControllerEvent";
 import { MapInfo} from "../MapInfo";
 import { MenuList } from "../Menu";
@@ -481,7 +482,7 @@ export class GameScene extends Scene<FriendlyFire> {
         return !this.paused;
     }
 
-    public override update(dt: number): void {
+    public override update(dt: number, rootTransform: AffineTransform): void {
         if (this.paused) {
             dt = 0;
         }
@@ -562,7 +563,7 @@ export class GameScene extends Scene<FriendlyFire> {
         // Cinematic bars
         this.camera.addCinematicBarsToRenderer();
 
-        super.update(dt);
+        super.update(dt, rootTransform);
     }
 
     public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {

@@ -450,4 +450,20 @@ export class AffineTransform {
         ctx.setTransform(this.m11, this.m12, this.m21, this.m22, this.dx, this.dy);
         return this;
     }
+
+    /**
+     * Sets the transformation from the given canvas context.
+     *
+     * @param ctx - The 2D canvas rendering context to copy the transformation from.
+     */
+    public setFromCanvas(ctx: CanvasRenderingContext2D): this {
+        const m = ctx.getTransform();
+        this.m11 = m.a;
+        this.m12 = m.b;
+        this.m21 = m.c;
+        this.m22 = m.d;
+        this.dx = m.e;
+        this.dy = m.f;
+        return this;
+    }
 }

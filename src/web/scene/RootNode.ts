@@ -1,5 +1,6 @@
 import { type Game } from "../Game";
 import { Direction } from "../geom/Direction";
+import type { AffineTransform } from "../graphics/AffineTransform";
 import { type Scene } from "../Scene";
 import { PostDrawHints, SceneNode } from "./SceneNode";
 
@@ -7,7 +8,7 @@ import { PostDrawHints, SceneNode } from "./SceneNode";
  * Function signature for updating the root node. This function is exposed to the scene through the constructor so
  * the scene can call it but no one else can by accident.
  */
-export type UpdateRootNode = (dt: number) => number;
+export type UpdateRootNode = (dt: number, rootTransform?: AffineTransform) => number;
 
 /**
  * Function signature for drawing the root node.
@@ -21,6 +22,8 @@ export type DrawRootNode = (ctx: CanvasRenderingContext2D, layer: number, width:
  * @param T - Optional owner game class.
  */
 export class RootNode<T extends Game = Game> extends SceneNode<T> {
+    protected override scene: Scene<T, unknown>;
+
     /**
      * Creates a new root scene node for the given scene. Functions for updating and drawing the root node (and its
      * child nodes) is exposed to the scene through the second parameter. Only the scene can use these exposed

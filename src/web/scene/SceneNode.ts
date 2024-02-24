@@ -1016,10 +1016,11 @@ export class SceneNode<T extends Game = Game> {
     /**
      * Updates this node and its child nodes recursively.
      *
-     * @param dt - The time in seconds since the last update.
+     * @param dt            - The time in seconds since the last update.
+     * @param rootTransform - Optional root transformation to initialize sceneTransformation with when node has no parent.
      * @return Bit mask with used layers.
      */
-    protected updateAll(dt: number): number {
+    protected updateAll(dt: number, rootTransform?: AffineTransform): number {
         // Update this node and run animations
         const postUpdate = this.update(dt);
         this.updateAnimations(dt);
@@ -1033,7 +1034,11 @@ export class SceneNode<T extends Game = Game> {
                 (Direction.getY(parent.childAnchor) + 1) / 2 * parent.height
             );
         } else {
-            this.sceneTransformation.reset();
+            if (rootTransform != null) {
+                this.sceneTransformation.setMatrix(rootTransform);
+            } else {
+                this.sceneTransformation.reset();
+            }
         }
         this.sceneTransformation.translate(this.x, this.y);
         this.sceneTransformation.mul(this.transformation);

@@ -1,4 +1,5 @@
 import { type Game } from "./Game";
+import type { AffineTransform } from "./graphics/AffineTransform";
 import { type Scene, type SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {
@@ -131,10 +132,10 @@ export class Scenes<T extends Game> {
         });
     }
 
-    public update(dt: number): void {
+    public update(dt: number, rootTransform?: AffineTransform): void {
         this.sortedScenes.forEach(scene => {
             scene.currentTransition?.update(dt);
-            scene.update(dt);
+            scene.update(dt, rootTransform);
         });
     }
 

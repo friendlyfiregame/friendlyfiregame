@@ -1,4 +1,5 @@
 import { type Game } from "./Game";
+import type { AffineTransform } from "./graphics/AffineTransform";
 import { ControllerManager } from "./input/ControllerManager";
 import { type Keyboard } from "./input/Keyboard";
 import { type DrawRootNode, RootNode, type UpdateRootNode } from "./scene/RootNode";
@@ -171,8 +172,8 @@ export abstract class Scene<T extends Game, A = void> {
      * scene graph then make sure to call the super method in your overwritten method or the scene graph will not be
      * updated.
      */
-    public update(dt: number): void {
-        this.usedLayers = this.updateRootNode(dt);
+    public update(dt: number, rootTransform?: AffineTransform): void {
+        this.usedLayers = this.updateRootNode(dt, rootTransform);
     }
 
     /**
