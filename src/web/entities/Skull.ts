@@ -1,7 +1,9 @@
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { PhysicsEntity } from "./PhysicsEntity";
 
 @entity("Skull")
@@ -12,11 +14,16 @@ export class Skull extends PhysicsEntity {
     public constructor(args: EntityArgs) {
         super({
             ...args,
-            width: 16,
-            height: 16,
-            reversed: true,
-            layer: RenderingLayer.ENTITIES
+            width: Skull.sprite.width,
+            height: Skull.sprite.height,
+            reversed: true
         });
+        this.appendChild(new AsepriteNode({
+            aseprite: Skull.sprite,
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }));
     }
 
     public isCarried(): boolean {
@@ -31,9 +38,5 @@ export class Skull extends PhysicsEntity {
         if (!this.isCarried() && this.distanceTo(player) < 20) {
             player.carry(this);
         }
-    }
-
-    public override draw(ctx: CanvasRenderingContext2D): void {
-        Skull.sprite.drawTag(ctx, "idle", 0, 1, this.scene.gameTime * 1000);
     }
 }
