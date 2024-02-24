@@ -16,11 +16,13 @@ export class Bone extends PhysicsEntity {
     private static readonly successSound: Sound;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 20, height: 10, reversed: true });
-    }
-
-    public override render(): void {
-        this.scene.renderer.addAseprite(Bone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        super({
+            ...args,
+            width: 20,
+            height: 10,
+            reversed: true,
+            layer: RenderingLayer.ENTITIES
+        });
     }
 
     public isCarried(): boolean {
@@ -46,5 +48,9 @@ export class Bone extends PhysicsEntity {
             this.scene.powerShiba.feed();
             this.scene.removeGameObject(this);
         }
+    }
+
+    public override draw(ctx: CanvasRenderingContext2D): void {
+        Bone.sprite.drawTag(ctx, "idle", 0, 1, this.scene.gameTime * 1000);
     }
 }
