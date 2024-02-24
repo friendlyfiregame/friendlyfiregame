@@ -552,6 +552,13 @@ export class GameScene extends Scene<FriendlyFire> {
             this.renderFade(this.fadeToBlackFactor, "black");
         }
 
+        this.rootNode.transform(m => {
+            // Center coordinate system
+            m.setTranslation(this.game.width / 2, this.game.height / 2);
+            this.camera.applyTransform(m);
+        });
+
+
         // Cinematic bars
         this.camera.addCinematicBarsToRenderer();
 
@@ -561,11 +568,8 @@ export class GameScene extends Scene<FriendlyFire> {
     public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
         ctx.save();
 
-        // Center coordinate system
-        ctx.translate(this.game.width / 2, this.game.height / 2);
-
-        // Draw stuff
-        this.camera.applyTransform(ctx);
+        // Draw camera stuff
+        this.camera.draw(ctx);
 
         super.draw(ctx, width, height);
 

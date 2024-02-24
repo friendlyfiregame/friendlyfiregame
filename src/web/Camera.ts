@@ -1,6 +1,7 @@
 import { RenderMode } from "./DisplayManager";
 import { type Fire } from "./entities/Fire";
 import { type Bounds } from "./Entity";
+import type { AffineTransform } from "./graphics/AffineTransform";
 import { type Vector2Like } from "./graphics/Vector2";
 import { type ValueCurve, valueCurves } from "./Particles";
 import { RenderingLayer, RenderingType } from "./Renderer";
@@ -280,10 +281,13 @@ export class Camera {
         return this.focuses.reduce((a, b) => Math.max(a, b.force), 0);
     }
 
-    public applyTransform(ctx: CanvasRenderingContext2D): void {
-        ctx.scale(this.zoom, this.zoom);
-        ctx.rotate(this.rotation);
-        ctx.translate(-this.x, -this.y);
+    public applyTransform(m: AffineTransform): void {
+        m.scale(this.zoom, this.zoom);
+        m.rotate(this.rotation);
+        m.translate(-this.x, -this.y);
+    }
+
+    public draw(ctx: CanvasRenderingContext2D): void {
         if (this.zoomingOut) {
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
