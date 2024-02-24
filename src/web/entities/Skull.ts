@@ -10,11 +10,13 @@ export class Skull extends PhysicsEntity {
     private static readonly sprite: Aseprite;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 16, height: 16, reversed: true });
-    }
-
-    public override render(): void {
-        this.scene.renderer.addAseprite(Skull.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
+        super({
+            ...args,
+            width: 16,
+            height: 16,
+            reversed: true,
+            layer: RenderingLayer.ENTITIES
+        });
     }
 
     public isCarried(): boolean {
@@ -29,5 +31,9 @@ export class Skull extends PhysicsEntity {
         if (!this.isCarried() && this.distanceTo(player) < 20) {
             player.carry(this);
         }
+    }
+
+    public override draw(ctx: CanvasRenderingContext2D): void {
+        Skull.sprite.drawTag(ctx, "idle", 0, 1, this.scene.gameTime * 1000);
     }
 }
