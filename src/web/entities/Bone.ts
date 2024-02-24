@@ -3,7 +3,9 @@ import { asset } from "../Assets";
 import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 
@@ -18,11 +20,16 @@ export class Bone extends PhysicsEntity {
     public constructor(args: EntityArgs) {
         super({
             ...args,
-            width: 20,
-            height: 10,
-            reversed: true,
-            layer: RenderingLayer.ENTITIES
+            width: Bone.sprite.width,
+            height: Bone.sprite.height,
+            reversed: true
         });
+        this.appendChild(new AsepriteNode({
+            aseprite: Bone.sprite,
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }));
     }
 
     public isCarried(): boolean {
@@ -48,9 +55,5 @@ export class Bone extends PhysicsEntity {
             this.scene.powerShiba.feed();
             this.scene.removeGameObject(this);
         }
-    }
-
-    public override draw(ctx: CanvasRenderingContext2D): void {
-        Bone.sprite.drawTag(ctx, "idle", 0, 1, this.scene.gameTime * 1000);
     }
 }
