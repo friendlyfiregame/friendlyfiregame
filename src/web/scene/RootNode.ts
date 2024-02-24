@@ -48,7 +48,6 @@ export class RootNode<T extends Game = Game> extends SceneNode<T> {
             PostDrawHints {
         const flags = this.drawAll(ctx, layer, width, height);
         if ((flags & PostDrawHints.DRAW_BOUNDS) !== 0) {
-            console.log("Show bounds");
             this.drawBounds(ctx);
         }
         return flags;
