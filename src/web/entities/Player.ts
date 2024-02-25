@@ -504,7 +504,7 @@ export class Player extends PhysicsEntity {
             this.carrying.setVelocity(5 * this.direction, -5);
         }
 
-        this.height = PLAYER_HEIGHT;
+        this.setHeight(PLAYER_HEIGHT);
         this.carrying = null;
 
         CharacterSounds.playRandomCharacterSound("throw", this.voiceAsset);
@@ -1343,7 +1343,7 @@ export class Player extends PhysicsEntity {
 
     public carry(object: PhysicsEntity): void {
         if (!this.carrying) {
-            this.height = PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT;
+            this.setHeight(PLAYER_HEIGHT + object.carryHeight + PLAYER_CARRY_HEIGHT);
 
             if (
                 object instanceof Seed
