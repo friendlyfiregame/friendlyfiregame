@@ -2,7 +2,9 @@ import { PIXEL_PER_METER } from "../../shared/constants";
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { type CollidableGameObject } from "../scenes/GameObject";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
@@ -53,10 +55,12 @@ export class MovingPlatform extends PhysicsEntity implements CollidableGameObjec
             this.targetY = y + distance;
             this.setVelocityY(this.velocity);
         }
-    }
-
-    public override render(): void {
-        this.scene.renderer.addAseprite(MovingPlatform.sprite, "idle", this.x, this.y, RenderingLayer.PLATFORMS);
+        this.appendChild(new AsepriteNode({
+            aseprite: MovingPlatform.sprite,
+            tag: "idle",
+            layer: RenderingLayer.PLATFORMS,
+            anchor: Direction.BOTTOM
+        }));
     }
 
     public override update(dt: number): void {
