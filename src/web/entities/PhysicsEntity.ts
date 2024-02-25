@@ -173,8 +173,15 @@ export abstract class PhysicsEntity extends Entity {
         return false;
     }
 
+    protected isPhysicsEnabled(): boolean {
+        return true;
+    }
+
     public override update(dt: number): void {
         super.update(dt);
+        if (!this.isPhysicsEnabled()) {
+            return;
+        }
 
         const world = this.scene.world;
         const ground = world.getObjectAt(this.x, this.y + 5, [ this ]);

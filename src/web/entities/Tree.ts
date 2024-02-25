@@ -6,7 +6,6 @@ import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { NPC } from "./NPC";
 import { Seed } from "./Seed";
-import { Wood } from "./Wood";
 
 @entity("Tree")
 export class Tree extends NPC {
@@ -14,14 +13,12 @@ export class Tree extends NPC {
     private static readonly sprite: Aseprite;
 
     public seed: Seed;
-    private readonly wood: Wood;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 78, height: 140 });
 
         this.face = new Face(this.scene, this, EyeType.TREE, 5, -94);
         this.seed = new Seed({ scene: this.scene, x: this.x, y: this.y });
-        this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
 
         this.startDialog();
     }
@@ -75,18 +72,5 @@ export class Tree extends NPC {
         this.seed.setVelocity(5, 0);
 
         return this.seed;
-    }
-
-    public spawnWood(): Wood {
-        if (!this.scene.gameObjects.includes(this.wood)) {
-            this.scene.addGameObject(this.wood);
-        }
-
-        this.wood.resetState();
-        this.wood.x = this.x;
-        this.wood.y = this.y - this.height / 2;
-        this.wood.setVelocity(5, 0);
-
-        return this.wood;
     }
 }

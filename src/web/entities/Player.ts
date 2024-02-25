@@ -532,7 +532,7 @@ export class Player extends PhysicsEntity {
             } else if (event.key === "u" && !this.carrying) {
                 this.carry(this.scene.bone);
             } else if (event.key === "i" && !this.carrying) {
-                this.carry(this.scene.tree.seed.spawnWood());
+                this.carry(Wood.spawn(this.scene.tree.seed));
             } else if (event.key === "t") {
                 this.scene.addGameObject(
                     new Snowball({

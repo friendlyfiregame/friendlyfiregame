@@ -1,11 +1,14 @@
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { type Sound } from "../audio/Sound";
-import { entity, type EntityArgs } from "../Entity";
+import { type Entity, entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { now } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { PhysicsEntity } from "./PhysicsEntity";
 import { Pointer } from "./Pointer";
@@ -27,12 +30,42 @@ export class Wood extends PhysicsEntity {
     public state = WoodState.FREE;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: 26, height: 16, reversed: true });
+        super({
+            ...args,
+            width: Wood.sprite.width,
+            height: Wood.sprite.height,
+            reversed: true
+        });
+        this.appendChild(new AsepriteNode({
+            aseprite: Wood.sprite,
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            hidden: true
+        }));
+    }
+
+    public static spawn(target: Entity): Wood {
+        const scene = target.scene;
+        let wood = scene.rootNode.findDescendant(isInstanceOf(Wood)) as Wood | null;
+        if (wood == null) {
+            wood = new Wood({
+                scene,
+                x: target.x,
+                y: target.y - target.height / 2,
+            });
+        } else {
+            wood.x = target.x;
+            wood.y = target.y - target.height / 2;
+        }
+        wood.resetState();
+        wood.setVelocity(5, 0);
+        scene.addGameObject(wood);
+        scene.rootNode.appendChild(wood);
+        return wood;
     }
 
     public override setup(): void {
         const floatingPosition = this.scene.findEntity(Pointer, "recover_floating_position");
-        console.log(floatingPosition);
         if (!floatingPosition) {
             throw new Error("Could not find \"recover_floating_position\" point of interest in game scene.");
         }
@@ -50,6 +83,10 @@ export class Wood extends PhysicsEntity {
 
     public isCarried(): boolean {
         return this.scene.player.isCarrying(this);
+    }
+
+    protected override isPhysicsEnabled(): boolean {
+        return !this.isCarried();
     }
 
     public override update(dt: number): void {

@@ -30,6 +30,7 @@ import { type DialogJSON } from "./Dialog";
 import { Gate } from "./entities/Gate";
 import { type NPC } from "./entities/NPC";
 import { Pointer } from "./entities/Pointer";
+import { Wood } from "./entities/Wood";
 import { FaceModes } from "./Face";
 import { type Game } from "./Game";
 import { valueCurves } from "./Particles";
@@ -331,7 +332,7 @@ export class Campaign {
                     break;
                 case "spawnwood":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TREE_DROPPED_WOOD);
-                    this.gameScene.tree.spawnWood();
+                    Wood.spawn(this.gameScene.tree);
                     break;
                 case "talkedToStone":
                     if (this.getQuest(QuestKey.A).getHighestTriggerIndex() === QuestATrigger.PLANTED_SEED) {

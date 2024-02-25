@@ -11,7 +11,6 @@ import { now } from "../util";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
 import { Pointer } from "./Pointer";
-import { Wood } from "./Wood";
 
 export enum SeedState {
     FREE = 0,
@@ -29,12 +28,10 @@ export class Seed extends NPC {
     private static readonly successSound: Sound;
 
     public state = SeedState.FREE;
-    private readonly wood: Wood;
     private floatingPosition: ReadonlyVector2Like = new Vector2();
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 24, height: 24 });
-        this.wood = new Wood({ scene: this.scene, x: this.x, y: this.y });
         this.face = new Face(this.scene, this, EyeType.STANDARD, 0, -8);
 
     }
@@ -154,17 +151,6 @@ export class Seed extends NPC {
         }
 
         this.speechBubble.update(this.x, this.y);
-    }
-
-    public spawnWood(): Wood {
-        if (!this.scene.gameObjects.includes(this.wood)) {
-            this.scene.addGameObject(this.wood);
-        }
-        this.wood.x = this.x;
-        this.wood.y = this.y - this.height / 2;
-        this.wood.setVelocity(5, 0);
-
-        return this.wood;
     }
 
     public startDialog(): void {}
