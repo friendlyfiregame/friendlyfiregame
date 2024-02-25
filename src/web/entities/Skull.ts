@@ -30,6 +30,10 @@ export class Skull extends PhysicsEntity {
         return this.scene.player.isCarrying(this);
     }
 
+    protected override isPhysicsEnabled(): boolean {
+        return !this.isCarried();
+    }
+
     public override update(dt: number): void {
         super.update(dt);
 

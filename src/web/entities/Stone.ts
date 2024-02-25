@@ -136,6 +136,10 @@ export class Stone extends NPC implements CollidableGameObject {
         return this.scene.player.isCarrying(this);
     }
 
+    protected override isPhysicsEnabled(): boolean {
+        return !this.isCarried();
+    }
+
     public pickUp(): void {
         this.face?.setMode(FaceModes.AMUSED);
         this.scene.player.carry(this);
