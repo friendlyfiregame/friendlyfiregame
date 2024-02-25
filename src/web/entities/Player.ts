@@ -141,7 +141,6 @@ export class Player extends PhysicsEntity {
     public animation = "idle";
     private moveLeft: boolean = false;
     private moveRight: boolean = false;
-    private visible = false;
 
     private running: boolean = false;
 
@@ -185,7 +184,7 @@ export class Player extends PhysicsEntity {
     private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
-        super({ ...args, width: PLAYER_WIDTH, height: PLAYER_HEIGHT, reversed: true });
+        super({ ...args, width: PLAYER_WIDTH, height: PLAYER_HEIGHT, reversed: true, hidden: true });
 
         this.isControllable = false;
         this.setFloating(true);
@@ -197,7 +196,7 @@ export class Player extends PhysicsEntity {
 
         setTimeout(() => {
             this.isControllable = true;
-            this.visible = true;
+            this.show();
             this.setFloating(false);
         }, 2200);
 
@@ -732,7 +731,7 @@ export class Player extends PhysicsEntity {
 
         if (this.flying && this.usedJump) {
             this.usedDoubleJump = true;
-            if (!this.disableParticles && this.visible) {
+            if (!this.disableParticles && this.isVisible()) {
                 this.doubleJumpEmitter.setPosition(this.x, this.y - 20);
                 this.doubleJumpEmitter.emit(20);
             }
@@ -798,7 +797,7 @@ export class Player extends PhysicsEntity {
     }
 
     public override render(): void {
-        if (!this.visible) {
+        if (this.isHidden()) {
             return;
         }
 
@@ -1165,7 +1164,7 @@ export class Player extends PhysicsEntity {
         this.readableTrigger = this.getReadableTrigger();
 
         // Spawn random dust particles while walking
-        if (!this.disableParticles && this.visible) {
+        if (!this.disableParticles && this.isVisible()) {
             if (!this.flying && (Math.abs(this.getVelocityX()) > 1 || wasFlying)) {
                 if (timedRnd(dt, 0.2) || wasFlying) {
                     this.dustEmitter.setPosition(this.x, this.y);

@@ -44,8 +44,6 @@ export class Fire extends NPC {
     private readonly averageParticleDelay = 0.1;
     private readonly averageSteamDelay = 0.05;
 
-    private isVisible = true;
-
     private readonly fireGfx = new FireGfx();
 
     private readonly sparkEmitter: ParticleEmitter;
@@ -128,7 +126,7 @@ export class Fire extends NPC {
     }
 
     public isRendered(): boolean {
-        return this.isVisible;
+        return this.isVisible();
     }
 
     public isAngry(): boolean {
@@ -160,7 +158,7 @@ export class Fire extends NPC {
     }
 
     public override render(): void {
-        if (!this.isVisible) {
+        if (this.isHidden()) {
             return;
         }
 
@@ -198,11 +196,11 @@ export class Fire extends NPC {
         }
 
         if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
-            this.isVisible = false;
+            this.show();
             return;
         }
 
-        this.isVisible = true;
+        this.hide();
 
         if (!this.isBeingPutOut() && !this.isPutOut()) {
             let particleChance = dt - rnd() * this.averageParticleDelay;
@@ -231,7 +229,7 @@ export class Fire extends NPC {
             }
         }
 
-        if (this.isVisible) {
+        if (this.isVisible()) {
             this.fireGfx.update();
         }
 

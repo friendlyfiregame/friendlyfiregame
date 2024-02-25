@@ -11,6 +11,9 @@ import { type AnimationArgs, SceneNodeAnimation } from "./SceneNodeAnimation";
  * drawing like requesting continuous drawing because of running animations.
  */
 export enum PostDrawHints {
+    /** Scene has finished drawing and does not need to be redrawn. */
+    DRAWING_FINISHED = 0,
+
     /** As long as this hint is present the scene must be continuously redrawn to keep animations running. */
     CONTINUE_DRAWING = 1,
 
@@ -65,6 +68,9 @@ export interface SceneNodeArgs {
 
     /** Optional initial showBounds flag. Set to true to show bounds around the node for debugging purposes. */
     showBounds?: boolean;
+
+    /** Optional initial hidden flag. Set to true to hide the node. */
+    hidden?: boolean;
 }
 
 /**
@@ -157,11 +163,14 @@ export class SceneNode<T extends Game = Game> {
      */
     private layer: number;
 
+    /** True if node is hidden, false if not. A hidden node also hides all its child nodes. */
+    private hidden: boolean;
+
     /**
      * Creates a new scene node with the given initial settings.
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
-            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = 0 }: SceneNodeArgs = {}) {
+            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = 0, hidden = false }: SceneNodeArgs = {}) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -172,6 +181,7 @@ export class SceneNode<T extends Game = Game> {
         this.childAnchor = childAnchor;
         this.showBounds = showBounds;
         this.layer = 1 << layer;
+        this.hidden = hidden;
     }
 
     /**
@@ -363,6 +373,60 @@ export class SceneNode<T extends Game = Game> {
             return 1;
         }
         return Math.max(0, Math.min(1, (this.parent?.getEffectiveOpacity() ?? 1) * this.opacity));
+    }
+
+    /**
+     * Shows or hides this node.
+     *
+     * @param hidden - True to hide the node, false to show it.
+     */
+    public setHidden(hidden: boolean): this {
+        if (hidden !== this.hidden) {
+            this.hidden = hidden;
+            this.invalidate();
+        }
+        return this;
+    }
+
+    /**
+     * Shows or hides this node.
+     *
+     * @param visible - True to show the node, false to hide it.
+     */
+    public setVisible(visible: boolean): this {
+        return this.setHidden(!visible);
+    }
+
+    /**
+     * Checks if node is hidden.
+     *
+     * @return True if node is hidden, false if not.
+     */
+    public isHidden(): boolean {
+        return this.hidden;
+    }
+
+    /**
+     * Checks if node is visible.
+     *
+     * @return True if node is visible, false if not.
+     */
+    public isVisible(): boolean {
+        return !this.hidden;
+    }
+
+    /**
+     * Hides this node.
+     */
+    public hide(): this {
+        return this.setHidden(true);
+    }
+
+    /**
+     * Show this node.
+     */
+    public show(): this {
+        return this.setHidden(false);
     }
 
     /**
@@ -1122,6 +1186,10 @@ export class SceneNode<T extends Game = Game> {
      * @return Hints which suggests further actions after drawing.
      */
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
+        if (this.hidden) {
+            return PostDrawHints.DRAWING_FINISHED;
+        }
+
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
         ctx.translate(this.x, this.y);
@@ -1158,8 +1226,7 @@ export class SceneNode<T extends Game = Game> {
      * @param height - The scene height.
      * @return Hints which suggests further actions after drawing.
      */
-    protected drawChildren(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number):
-            PostDrawHints {
+    protected drawChildren(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
         let flags = 0;
         this.forEachChild(child => {
             flags |= child.drawAll(ctx, layer, width, height);
