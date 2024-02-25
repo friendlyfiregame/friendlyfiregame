@@ -13,6 +13,7 @@ import { CharacterSounds } from "../CharacterSounds";
 import { Conversation } from "../Conversation";
 import { Dance } from "../Dance";
 import { type Bounds, Entity, entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { type ControllerEvent } from "../input/ControllerEvent";
 import { ControllerAnimationTags, ControllerSpriteMap } from "../input/ControllerFamily";
 import { ControllerManager } from "../input/ControllerManager";
@@ -20,6 +21,7 @@ import { type ParticleEmitter, valueCurves } from "../Particles";
 import { PlayerConversation } from "../PlayerConversation";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer, RenderingType } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { type BgmId } from "../scenes/BgmId";
 import { FadeDirection } from "../scenes/FadeDirection";
 import { GotItemScene, Item } from "../scenes/GotItemScene";
@@ -180,6 +182,7 @@ export class Player extends PhysicsEntity {
     private readonly bounceEmitter: ParticleEmitter;
     private readonly doubleJumpEmitter: ParticleEmitter;
     private disableParticles = false;
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: PLAYER_WIDTH, height: PLAYER_HEIGHT, reversed: true });
@@ -239,6 +242,14 @@ export class Player extends PhysicsEntity {
             lifetime: () => rnd(0.4, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
+
+        this.asepriteNode = new AsepriteNode({
+            aseprite: Player.playerSprites[this.characterAsset],
+            layer: RenderingLayer.PLAYER,
+            anchor: Direction.BOTTOM,
+            y: 2
+        });
+        this.appendChild(this.asepriteNode);
     }
 
     public override setup(): void {
@@ -791,7 +802,6 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        const sprite = Player.playerSprites[this.characterAsset];
         let animation = this.animation;
 
         // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
@@ -801,14 +811,6 @@ export class Player extends PhysicsEntity {
         ) {
             animation = animation + "-carry";
         }
-
-        this.scene.renderer.addAseprite(
-            sprite,
-            animation,
-            this.x, this.y + 1,
-            RenderingLayer.PLAYER,
-            this.direction
-        );
 
         if (
             this.closestNPC
@@ -956,6 +958,9 @@ export class Player extends PhysicsEntity {
 
     public override update(dt: number): void {
         super.update(dt);
+
+        this.asepriteNode.transform(m => m.setScale(this.direction > 0 ? 1 : -1, 1));
+        this.asepriteNode.setTag(this.animation);
 
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
