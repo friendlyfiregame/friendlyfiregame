@@ -2,7 +2,9 @@ import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
-import { RenderingLayer, RenderingType } from "../Renderer";
+import { Direction } from "../geom/Direction";
+import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { NPC } from "./NPC";
 
 export interface SignArgs extends EntityArgs {
@@ -16,8 +18,15 @@ export class Sign extends NPC {
     public override conversation: Conversation;
 
     public constructor({ content, ...args }: SignArgs) {
-        super({ ...args, width: 16, height: 16 });
+        super({ ...args, width: Sign.sprite.width, height: Sign.sprite.height });
         this.conversation = this.generateConversation(this.prepareContent(content));
+        this.appendChild(new AsepriteNode({
+            aseprite: Sign.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            x: -1
+        }));
     }
 
     private prepareContent(content?: string): string[] {
@@ -46,19 +55,6 @@ export class Sign extends NPC {
     }
 
     public override render(): void {
-        this.scene.renderer.add({
-            type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
-            translation: { x: this.x, y: this.y },
-            position: {
-                x: -Sign.sprite.width >> 1,
-                y: -Sign.sprite.height
-            },
-            asset: Sign.sprite,
-            animationTag: "idle",
-            time: this.scene.gameTime * 1000
-        });
-
         this.speechBubble.draw();
     }
 
