@@ -5,20 +5,16 @@ import { EyeType, Face } from "../Face";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
 import { NPC } from "./NPC";
-import { Seed } from "./Seed";
 
 @entity("Tree")
 export class Tree extends NPC {
     @asset("sprites/tree.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    public seed: Seed;
-
     public constructor(args: EntityArgs) {
         super({ ...args, width: 78, height: 140 });
 
         this.face = new Face(this.scene, this, EyeType.TREE, 5, -94);
-        this.seed = new Seed({ scene: this.scene, x: this.x, y: this.y });
 
         this.startDialog();
     }
