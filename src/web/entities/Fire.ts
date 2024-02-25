@@ -196,11 +196,11 @@ export class Fire extends NPC {
         }
 
         if (!this.scene.camera.isPointVisible(this.x, this.y, 200)) {
-            this.show();
+            this.hide();
             return;
         }
 
-        this.hide();
+        this.show();
 
         if (!this.isBeingPutOut() && !this.isPutOut()) {
             let particleChance = dt - rnd() * this.averageParticleDelay;
