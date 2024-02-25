@@ -3,9 +3,11 @@ import { asset } from "../Assets";
 import { type Sound } from "../audio/Sound";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
+import { Direction } from "../geom/Direction";
 import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { type CollidableGameObject } from "../scenes/GameObject";
 import { now } from "../util";
 import { Environment } from "../World";
@@ -30,6 +32,8 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public state: StoneState = StoneState.DEFAULT;
 
+    private readonly asepriteNode: AsepriteNode;
+
     public constructor(args: EntityArgs) {
         super({ ...args, width: 26, height: 50 });
 
@@ -37,6 +41,14 @@ export class Stone extends NPC implements CollidableGameObject {
         this.face = new Face(this.scene, this, EyeType.STONE, 0, -21);
         this.lookAtPlayer = false;
         this.carryHeight = 16;
+
+        this.appendChild(this.asepriteNode = new AsepriteNode({
+            aseprite: Stone.sprite,
+            tag: "idle",
+            y: 1,
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM
+        }));
     }
 
     public override setup(): void {
@@ -59,14 +71,6 @@ export class Stone extends NPC implements CollidableGameObject {
     }
 
     public override render(): void {
-        this.scene.renderer.addAseprite(
-            Stone.sprite,
-            "idle",
-            this.x, this.y + 1,
-            RenderingLayer.ENTITIES,
-            this.direction
-        );
-
         this.drawFace(false);
 
         if (this.showDialoguePrompt()) {
@@ -112,6 +116,8 @@ export class Stone extends NPC implements CollidableGameObject {
             this.direction = -1;
             this.setVelocityY(-Math.abs(((now() % 2000) - 1000) / 1000) + 0.5);
         }
+
+        this.asepriteNode.transform(m => m.setScale(this.direction, 1));
 
         this.dialoguePrompt.update(dt, this.x, this.y - 48);
         this.speechBubble.update(this.x, this.y);
