@@ -60,17 +60,4 @@ export class Tree extends NPC {
     public startDialog(): void {
         this.speechBubble.update(this.x, this.y);
     }
-
-    public spawnSeed(): Seed {
-        if (!this.scene.gameObjects.includes(this.seed)) {
-            this.scene.addGameObject(this.seed);
-        }
-
-        this.seed.resetState();
-        this.seed.x = this.x;
-        this.seed.y = this.y - this.height / 2;
-        this.seed.setVelocity(5, 0);
-
-        return this.seed;
-    }
 }

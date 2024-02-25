@@ -2,12 +2,15 @@ import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
-import { entity, type EntityArgs } from "../Entity";
+import { type Entity, entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
+import { Direction } from "../geom/Direction";
 import { type ReadonlyVector2Like, Vector2 } from "../graphics/Vector2";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { now } from "../util";
+import { isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
 import { NPC } from "./NPC";
 import { Pointer } from "./Pointer";
@@ -29,11 +32,39 @@ export class Seed extends NPC {
 
     public state = SeedState.FREE;
     private floatingPosition: ReadonlyVector2Like = new Vector2();
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 24, height: 24 });
         this.face = new Face(this.scene, this, EyeType.STANDARD, 0, -8);
+        this.asepriteNode = new AsepriteNode({
+            aseprite: Seed.sprite,
+            tag: this.getSpriteTag(),
+            anchor: Direction.BOTTOM,
+            layer: RenderingLayer.ENTITIES,
+            y: 1,
+        });
+        this.appendChild(this.asepriteNode);
+    }
 
+    public static spawn(target: Entity): Seed {
+        const scene = target.scene;
+        let seed = scene.rootNode.findDescendant(isInstanceOf(Seed)) as Seed | null;
+        if (seed == null) {
+            seed = new Seed({
+                scene,
+                x: target.x,
+                y: target.y - target.height / 2,
+            });
+        } else {
+            seed.x = target.x;
+            seed.y = target.y - target.height / 2;
+        }
+        seed.resetState();
+        seed.setVelocity(5, 0);
+        scene.addGameObject(seed);
+        scene.rootNode.appendChild(seed);
+        return seed;
     }
 
     public override setup(): void {
@@ -69,14 +100,6 @@ export class Seed extends NPC {
     }
 
     public override render(): void {
-        this.scene.renderer.addAseprite(
-            Seed.sprite,
-            this.getSpriteTag(),
-            this.x, this.y + 1,
-            RenderingLayer.ENTITIES,
-            undefined
-        );
-
         if (this.state === SeedState.GROWN) {
             this.drawFace();
         }
@@ -86,6 +109,10 @@ export class Seed extends NPC {
 
     public isCarried(): boolean {
         return this.scene.player.isCarrying(this);
+    }
+
+    protected override isPhysicsEnabled(): boolean {
+        return !this.isCarried();
     }
 
     public grow(): void {
@@ -100,6 +127,8 @@ export class Seed extends NPC {
 
     public override update(dt: number): void {
         super.update(dt);
+
+        this.asepriteNode.setTag(this.getSpriteTag());
 
         if (this.state === SeedState.SWIMMING) {
             const diffX = this.floatingPosition.x - this.x;

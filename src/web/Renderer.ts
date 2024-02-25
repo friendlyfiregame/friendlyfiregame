@@ -26,6 +26,7 @@ export enum RenderingLayer {
     PLATFORMS,
     PARTICLES,
     ENTITIES,
+    FACES,
     PLAYER,
     TILEMAP_FOREGROUND,
     BLACK_BARS,

@@ -31,7 +31,7 @@ import { Mimic } from "../entities/Mimic";
 import { Player } from "../entities/Player";
 import { Pointer } from "../entities/Pointer";
 import { PowerShiba } from "../entities/PowerShiba";
-import { type Seed } from "../entities/Seed";
+import { Seed } from "../entities/Seed";
 import { ShadowPresence } from "../entities/ShadowPresence";
 import { Shiba } from "../entities/Shiba";
 import { ShibaState } from "../entities/ShibaState";
@@ -334,7 +334,7 @@ export class GameScene extends Scene<FriendlyFire> {
         this.player.enableDoubleJump(true);
         this.game.campaign.runAction("talkedtotree");
         this.player.enableMultiJump(true);
-        this.tree.spawnSeed().bury();
+        Seed.spawn(this.tree).bury();
         this.tree.conversation?.setState("reminder");
         this.stone.dropInWater();
     }

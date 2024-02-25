@@ -58,7 +58,7 @@ export class Face {
 
         this.scene.renderer.add({
             type: RenderingType.ASEPRITE,
-            layer: RenderingLayer.ENTITIES,
+            layer: RenderingLayer.FACES,
             asset: sprite,
             scale: {
                 x: this.direction,

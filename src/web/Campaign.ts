@@ -30,6 +30,7 @@ import { type DialogJSON } from "./Dialog";
 import { Gate } from "./entities/Gate";
 import { type NPC } from "./entities/NPC";
 import { Pointer } from "./entities/Pointer";
+import { Seed } from "./entities/Seed";
 import { Wood } from "./entities/Wood";
 import { FaceModes } from "./Face";
 import { type Game } from "./Game";
@@ -328,7 +329,7 @@ export class Campaign {
                     this.gameScene.player.enableFriendship();
                     break;
                 case "spawnseed":
-                    this.gameScene.tree.spawnSeed();
+                    Seed.spawn(this.gameScene.tree);
                     break;
                 case "spawnwood":
                     this.getQuest(QuestKey.A).trigger(QuestATrigger.TREE_DROPPED_WOOD);
