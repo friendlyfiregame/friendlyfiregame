@@ -1,4 +1,111 @@
 /**
+ * Readonly interface for [[AffineTransform]].
+ */
+export interface ReadonlyAffineTransform {
+    /** The horizontal scaling. A value of 1 results in no scaling. */
+    readonly m11: number;
+
+    /** The vertical skewing. */
+    readonly m12: number;
+
+    /** The horizontal skewing. */
+    readonly m21: number;
+
+    /** The vertical scaling. A value of 1 results in no scaling. */
+    readonly m22: number;
+
+    /** The horizontal translation (moving). */
+    readonly dx: number;
+
+    /** The vertical translation (moving). */
+    readonly dy: number;
+
+    /**
+     * Returns a clone of this matrix.
+     *
+     * @return The cloned matrix.
+     */
+    clone(): AffineTransform;
+
+    /**
+     * Converts this matrix into a DOM matrix.
+     *
+     * @return The created DOM matrix.
+     */
+    toDOMMatrix(): DOMMatrix;
+
+    /**
+     * Returns a human-readable string representation of the matrix.
+     *
+     * @return The human-readable string representation of the matrix.
+     */
+    toString(): string;
+
+    /**
+     * Checks if matrix is identity.
+     *
+     * @return True if identity, false if not.
+     */
+    isIdentity(): boolean;
+
+    /**
+     * Returns the determinant of this matrix.
+     *
+     * @return The determinant of this matrix.
+     */
+    getDeterminant(): number;
+
+    /**
+     * Returns the X translation of the matrix.
+     *
+     * @return The X translation.
+     */
+    getTranslationX(): number;
+
+    /**
+     * Returns the Y translation of the matrix.
+     *
+     * @return The Y translation.
+     */
+    getTranslationY(): number;
+
+    /**
+     * Returns the X scale factor of the matrix.
+     *
+     * @return The X scale factor of the matrix.
+     */
+    getScaleX(): number;
+
+    /**
+     * Returns the Y scale factor of the matrix.
+     *
+     * @return The Y scale factor of the matrix.
+     */
+    getScaleY(): number;
+
+    /**
+     * Returns the rotation of this matrix in radians.
+     *
+     * @return The rotation angle in radians.
+     */
+    getRotation(): number;
+
+    /**
+     * Transforms the given 2D canvas rendering context.
+     *
+     * @param ctx - The 2D canvas rendering context to transform.
+     */
+    transformCanvas(ctx: CanvasRenderingContext2D): this;
+
+    /**
+     * Sets the transformation of the given 2D canvas rendering context.
+     *
+     * @param ctx - The 2D canvas rendering context to set the transformation on.
+     */
+    setCanvasTransform(ctx: CanvasRenderingContext2D): this;
+}
+
+/**
  * Affine transformation matrix. It behaves like a 3x3 matrix where the third row is always assumed to be 0 0 1.
  * This matrix is useful for 2D transformations and is compatible to the transformations done in a Canvas for example.
  */
@@ -98,7 +205,7 @@ export class AffineTransform {
      *
      * @param matrix - The matrix to copy the component values from.
      */
-    public setMatrix(matrix: AffineTransform): this {
+    public setMatrix(matrix: ReadonlyAffineTransform): this {
         this.m11 = matrix.m11;
         this.m12 = matrix.m12;
         this.m21 = matrix.m21;

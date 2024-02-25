@@ -1,4 +1,4 @@
-import { type AffineTransform } from "./AffineTransform";
+import { type ReadonlyAffineTransform } from "./AffineTransform";
 
 /**
  * Minimal interface of a 2D vector.
@@ -206,7 +206,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param matrix - The matrix to multiply this vector with.
      */
-    public mul(arg: AffineTransform): this {
+    public mul(arg: ReadonlyAffineTransform): this {
         const x = this.x;
         const y = this.y;
         this.x = x * arg.m11 + y * arg.m21 + arg.dx;
@@ -219,7 +219,7 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
      *
      * @param matrix - The matrix to divide this vector by.
      */
-    public div(arg: AffineTransform): this {
+    public div(arg: ReadonlyAffineTransform): this {
         const b11 = arg.m11, b12 = arg.m12;
         const b21 = arg.m21, b22 = arg.m22;
         const x = this.x;

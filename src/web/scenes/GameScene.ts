@@ -486,6 +486,7 @@ export class GameScene extends Scene<FriendlyFire> {
         if (this.paused) {
             dt = 0;
         }
+        super.update(dt, rootTransform);
 
         this.dt = dt;
         this.gameTime += dt;
@@ -559,11 +560,8 @@ export class GameScene extends Scene<FriendlyFire> {
             this.camera.applyTransform(m);
         });
 
-
         // Cinematic bars
         this.camera.addCinematicBarsToRenderer();
-
-        super.update(dt, rootTransform);
     }
 
     public override draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
