@@ -39,8 +39,7 @@ export class Wood extends PhysicsEntity {
         this.appendChild(new AsepriteNode({
             aseprite: Wood.sprite,
             layer: RenderingLayer.ENTITIES,
-            anchor: Direction.BOTTOM,
-            hidden: true
+            anchor: Direction.BOTTOM
         }));
     }
 
@@ -75,10 +74,6 @@ export class Wood extends PhysicsEntity {
     public resetState(): void {
         this.setFloating(false);
         this.state = WoodState.FREE;
-    }
-
-    public override render(): void {
-        this.scene.renderer.addAseprite(Wood.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
     }
 
     public isCarried(): boolean {
