@@ -801,16 +801,6 @@ export class Player extends PhysicsEntity {
             return;
         }
 
-        let animation = this.animation;
-
-        // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
-        if (
-            this.carrying
-            && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")
-        ) {
-            animation = animation + "-carry";
-        }
-
         if (
             this.closestNPC
             && !this.dance
@@ -958,8 +948,17 @@ export class Player extends PhysicsEntity {
     public override update(dt: number): void {
         super.update(dt);
 
+        let animation = this.animation;
+        // TODO: Implement animation state concept instead of `animation === "idle" || animation === "walk" || …`
+        if (
+            this.carrying
+            && (animation === "idle" || animation === "walk" || animation === "jump" || animation === "fall")
+        ) {
+            animation = animation + "-carry";
+        }
+
         this.asepriteNode.transform(m => m.setScale(this.direction > 0 ? 1 : -1, 1));
-        this.asepriteNode.setTag(this.animation);
+        this.asepriteNode.setTag(animation);
 
         // Check if the player left the current map bounds and teleport him back to a valid position.
         if (this.isOutOfBounds()) {
