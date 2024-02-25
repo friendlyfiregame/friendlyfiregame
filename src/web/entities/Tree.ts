@@ -2,8 +2,10 @@ import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
+import { Direction } from "../geom/Direction";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { NPC } from "./NPC";
 
 @entity("Tree")
@@ -15,6 +17,13 @@ export class Tree extends NPC {
         super({ ...args, width: 78, height: 140 });
 
         this.face = new Face(this.scene, this, EyeType.TREE, 5, -94);
+
+        this.appendChild(new AsepriteNode({
+            aseprite: Tree.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM
+        }));
 
         this.startDialog();
     }
@@ -34,8 +43,6 @@ export class Tree extends NPC {
     }
 
     public override render(): void {
-        this.scene.renderer.addAseprite(Tree.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-
         this.drawFace();
 
         if (this.showDialoguePrompt()) {
