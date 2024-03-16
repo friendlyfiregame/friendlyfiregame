@@ -3,20 +3,30 @@ import { asset } from "../Assets";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face } from "../Face";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { NPC } from "./NPC";
 
 @entity("StoneDisciple")
 export class StoneDisciple extends NPC {
     @asset("sprites/stonedisciple.aseprite.json")
     private static readonly sprite: Aseprite;
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 32, height: 26 });
         this.direction = -1;
         this.lookAtPlayer = true;
         this.face = new Face(this.scene, this, EyeType.STONEDISCIPLE, 0, 0);
-    }
+       this.asepriteNode = new AsepriteNode({
+            aseprite: StoneDisciple.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }).appendTo(this);
+     }
 
     protected override showDialoguePrompt(): boolean {
         if (!super.showDialoguePrompt()) {
@@ -34,10 +44,6 @@ export class StoneDisciple extends NPC {
     }
 
     public override render(): void {
-        this.scene.renderer.addAseprite(
-            StoneDisciple.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction
-        );
-
         this.drawFace(false);
 
         if (this.showDialoguePrompt()) {
@@ -52,5 +58,6 @@ export class StoneDisciple extends NPC {
 
         this.dialoguePrompt.update(dt, this.x, this.y - this.height);
         this.speechBubble.update(this.x, this.y);
+        this.asepriteNode.transform(m => m.setScale(this.direction, 1));
     }
 }
