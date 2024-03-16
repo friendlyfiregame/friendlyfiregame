@@ -1,7 +1,9 @@
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 
 /** Riddle stone constructor arguments. */
 export interface RiddleStoneArgs extends EntityArgs {
@@ -23,13 +25,15 @@ export class RiddleStone extends Entity {
         super({ ...args, width: 16, height: 16, isTrigger: false, reversed: true });
         this.col = col;
         this.row = row;
+        this.appendChild(new AsepriteNode({
+            aseprite: RiddleStone.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+        }));
     }
 
-    public override render(): void {
-        if (this.scene.mountainRiddle.isCorrectGate(this.col, this.row)) {
-            this.scene.renderer.addAseprite(RiddleStone.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES);
-        }
+    public override update(): void {
+        this.setVisible(this.scene.mountainRiddle.isCorrectGate(this.col, this.row));
     }
-
-    public override update(): void {}
 }
