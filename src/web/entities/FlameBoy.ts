@@ -4,8 +4,10 @@ import { type Sound } from "../audio/Sound";
 import { SoundEmitter } from "../audio/SoundEmitter";
 import { entity, type EntityArgs } from "../Entity";
 import { EyeType, Face, FaceModes } from "../Face";
+import { Direction } from "../geom/Direction";
 import { QuestATrigger, QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { rndItem } from "../util";
 import { isEntityName, isInstanceOf } from "../util/predicates";
 import { ScriptableNPC } from "./ScriptableNPC";
@@ -35,6 +37,7 @@ export class FlameBoy extends ScriptableNPC {
     private idleTimer: number | null = rndItem(IDLE_DURATION);
     private walkTimer: number | null = null;
     private autoMoveDirection: 1 | -1 = 1;
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 26, height: 54 });
@@ -50,6 +53,13 @@ export class FlameBoy extends ScriptableNPC {
             volume: 0.7,
             intensity: 0.2
         });
+        this.asepriteNode = new AsepriteNode({
+            aseprite: FlameBoy.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }).appendTo(this);
     }
 
     public setState(state: FlameBoyState): void {
@@ -90,9 +100,13 @@ export class FlameBoy extends ScriptableNPC {
     }
 
     private getAnimationTag(): string {
-        switch (this.state) {
-            case FlameBoyState.VENDOR: return "idle";
-            default: return "idle2";
+        if (this.move === 0) {
+            switch (this.state) {
+                case FlameBoyState.VENDOR: return "idle";
+                default: return "idle2";
+            }
+        } else {
+            return "walk";
         }
     }
 
@@ -123,18 +137,7 @@ export class FlameBoy extends ScriptableNPC {
         }
     }
 
-
     public override render(): void {
-        if (this.move === 0) {
-            this.scene.renderer.addAseprite(
-                FlameBoy.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
-            );
-        } else {
-            this.scene.renderer.addAseprite(
-                FlameBoy.sprite, "walk", this.x, this.y, RenderingLayer.ENTITIES, this.direction
-            );
-        }
-
         this.drawFace(false);
 
         if (this.thinkBubble) {
@@ -180,5 +183,8 @@ export class FlameBoy extends ScriptableNPC {
         this.dialoguePrompt.update(dt, this.x, this.y - 32);
         this.speechBubble.update(this.x, this.y);
         this.soundEmitter.update();
+
+        this.asepriteNode.setTag(this.getAnimationTag());
+        this.asepriteNode.transform(m => m.setScale(this.direction, 1));
     }
 }

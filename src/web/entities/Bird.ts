@@ -59,7 +59,6 @@ export class Bird extends NPC {
             tag: "idle",
             layer: RenderingLayer.ENTITIES,
             anchor: Direction.BOTTOM,
-            x: 10,
             y: 1
         }).appendTo(this);
     }
