@@ -37,6 +37,8 @@ type OverBoundData = {
     bottom: boolean;
 };
 
+let keyDownHandler: ((e: KeyboardEvent) => void) | null = null;
+
 export class Camera {
     public x = 0;
     public y = 0;
@@ -62,7 +64,11 @@ export class Camera {
 
         if (isDev()) {
             console.log("Dev mode, press “Tab” to zoom out & click somewhere to teleport there.");
-            document.addEventListener("keydown", this.handleKeyDown.bind(this));
+            if (keyDownHandler != null) {
+                document.removeEventListener("keydown", keyDownHandler);
+            }
+            keyDownHandler = this.handleKeyDown.bind(this);
+            document.addEventListener("keydown", keyDownHandler);
         }
 
         this.currentBarTarget = 0;
@@ -114,7 +120,6 @@ export class Camera {
             displayManager.setRenderMode(oldRenderMode);
             document.removeEventListener("keyup", handleKeyUp);
             canvas.removeEventListener("click", teleport);
-            document.removeEventListener("keyup", handleKeyUp);
         };
         const handleKeyUp = (e: KeyboardEvent): void => {
             if (e.key === "Tab") {
