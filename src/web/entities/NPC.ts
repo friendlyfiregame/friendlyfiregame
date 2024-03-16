@@ -18,7 +18,7 @@ export class NPC extends PhysicsEntity {
     public thinkBubble: SpeechBubble | null = null;
     public speechBubble = new SpeechBubble(this.scene, this.x, this.y);
     public lookAtPlayer = true;
-    public dialoguePrompt = new DialoguePrompt(this.scene, this.x, this.y);
+    public dialoguePrompt = new DialoguePrompt({ scene: this.scene, x: 0, y: 0 }).appendTo(this);
     private lastEndedConversation = -Infinity;
     protected met = false;
 
@@ -76,10 +76,6 @@ export class NPC extends PhysicsEntity {
         }
 
         return true;
-    }
-
-    protected drawDialoguePrompt(): void {
-        this.dialoguePrompt.draw();
     }
 
     protected drawGreeting(): void {

@@ -216,10 +216,6 @@ export class Shiba extends ScriptableNPC {
     }
 
     public override render(): void {
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         if (this.thinkBubble) {
             this.thinkBubble.draw();
         }
@@ -275,7 +271,11 @@ export class Shiba extends ScriptableNPC {
             }
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y - 20);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.setY(-20).show();
+        } else {
+            this.dialoguePrompt.hide();
+        }
         this.speechBubble.update(this.x, this.y);
 
         if (this.thinkBubble) {

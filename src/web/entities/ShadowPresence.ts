@@ -67,10 +67,6 @@ export class ShadowPresence extends NPC {
             time: this.scene.gameTime * 1000
         });
 
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         this.speechBubble.draw();
     }
 
@@ -85,7 +81,11 @@ export class ShadowPresence extends NPC {
         super.update(dt);
 
         this.checkPlayerDistance();
-        this.dialoguePrompt.update(dt, this.x, this.y - 48);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.setY(-48).show();
+        } else {
+            this.dialoguePrompt.hide();
+        }
         this.speechBubble.update(this.x, this.y - 12);
         this.soundEmitter.update();
     }

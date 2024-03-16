@@ -72,11 +72,6 @@ export class Stone extends NPC implements CollidableGameObject {
 
     public override render(): void {
         this.drawFace(false);
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         this.speechBubble.draw();
     }
 
@@ -119,7 +114,11 @@ export class Stone extends NPC implements CollidableGameObject {
 
         this.asepriteNode.transform(m => m.setScale(this.direction, 1));
 
-        this.dialoguePrompt.update(dt, this.x, this.y - 48);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.setY(-48).show();
+        } else {
+            this.dialoguePrompt.hide();
+        }
         this.speechBubble.update(this.x, this.y);
     }
 

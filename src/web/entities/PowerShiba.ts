@@ -71,10 +71,6 @@ export class PowerShiba extends NPC {
     }
 
     public override render(): void {
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         if (this.thinkBubble) {
             this.thinkBubble.draw();
         }
@@ -85,7 +81,11 @@ export class PowerShiba extends NPC {
     public override update(dt: number): void {
         super.update(dt);
         this.asepriteNode.setY(Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount + 1);
-        this.dialoguePrompt.update(dt, this.x, this.y - 16);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.setY(-16).show();
+        } else {
+            this.dialoguePrompt.hide();
+        }
         this.speechBubble.update(this.x, this.y);
 
         if (this.thinkBubble) {

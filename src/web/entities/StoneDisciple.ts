@@ -45,18 +45,17 @@ export class StoneDisciple extends NPC {
 
     public override render(): void {
         this.drawFace(false);
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         this.speechBubble.draw();
     }
 
     public override update(dt: number): void {
         super.update(dt);
 
-        this.dialoguePrompt.update(dt, this.x, this.y - this.height);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.setY(-this.height).show();
+        } else {
+            this.dialoguePrompt.hide();
+        }
         this.speechBubble.update(this.x, this.y);
         this.asepriteNode.transform(m => m.setScale(this.direction, 1));
     }

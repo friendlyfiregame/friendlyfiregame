@@ -44,11 +44,6 @@ export class Tree extends NPC {
 
     public override render(): void {
         this.drawFace();
-
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         this.speechBubble.draw();
     }
 
@@ -56,7 +51,9 @@ export class Tree extends NPC {
         super.update(dt);
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x + 4, this.y - 128);
+            this.dialoguePrompt.setX(4).setY(-128).show();
+        } else {
+            this.dialoguePrompt.hide();
         }
     }
 

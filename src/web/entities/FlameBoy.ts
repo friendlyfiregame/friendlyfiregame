@@ -144,10 +144,6 @@ export class FlameBoy extends ScriptableNPC {
             this.thinkBubble.draw();
         }
 
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         this.speechBubble.draw();
     }
 
@@ -180,7 +176,11 @@ export class FlameBoy extends ScriptableNPC {
             this.thinkBubble.update(this.x, this.y);
         }
 
-        this.dialoguePrompt.update(dt, this.x, this.y - 32);
+        if (this.showDialoguePrompt()) {
+            this.dialoguePrompt.setY(-32).show();
+        } else {
+            this.dialoguePrompt.hide();
+        }
         this.speechBubble.update(this.x, this.y);
         this.soundEmitter.update();
 

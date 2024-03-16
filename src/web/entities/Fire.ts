@@ -165,10 +165,6 @@ export class Fire extends NPC {
         this.scene.renderer.add({ type: RenderingType.FIRE, layer: RenderingLayer.ENTITIES, entity: this });
         this.drawFace();
 
-        if (this.showDialoguePrompt()) {
-            this.drawDialoguePrompt();
-        }
-
         if (this.thinkBubble) {
             this.thinkBubble.draw();
         }
@@ -234,7 +230,9 @@ export class Fire extends NPC {
         }
 
         if (this.showDialoguePrompt()) {
-            this.dialoguePrompt.update(dt, this.x, this.y - 32);
+            this.dialoguePrompt.setY(-32).show();
+        } else {
+            this.dialoguePrompt.hide();
         }
 
         this.speechBubble.update(this.x, this.y);

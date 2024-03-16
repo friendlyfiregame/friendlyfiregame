@@ -1,39 +1,30 @@
 import { type Aseprite } from "./Aseprite";
 import { asset } from "./Assets";
+import { Entity, type EntityArgs } from "./Entity";
+import { Direction } from "./geom/Direction";
 import { RenderingLayer } from "./Renderer";
-import { type GameScene } from "./scenes/GameScene";
+import { AsepriteNode } from "./scene/AsepriteNode";
 
-export class DialoguePrompt {
+export class DialoguePrompt extends Entity {
     @asset("sprites/dialogue.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    private readonly scene: GameScene;
-    private x: number;
-    private y: number;
-    private timeAlive = 0;
     private readonly floatAmount = 2;
     private readonly floatSpeed = 5;
+    private readonly asepriteNode: AsepriteNode;
 
-    public constructor(scene: GameScene, x: number, y: number) {
-        this.scene = scene;
-        this.x = x;
-        this.y = y;
+    public constructor(args: EntityArgs) {
+        super({ hidden: true, ...args });
+        this.asepriteNode = new AsepriteNode({
+            aseprite: DialoguePrompt.sprite,
+            tag: "idle",
+            layer: RenderingLayer.UI,
+            anchor: Direction.BOTTOM
+        }).appendTo(this);
     }
 
-    public draw(): void {
-        const floatOffsetY = Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount;
-
-        this.scene.renderer.addAseprite(
-            DialoguePrompt.sprite,
-            "idle",
-            this.x, this.y - floatOffsetY,
-            RenderingLayer.ENTITIES
-        );
-    }
-
-    public update(dt: number, anchorX: number, anchorY: number): void {
-        this.timeAlive += dt;
-        this.x = anchorX;
-        this.y = anchorY;
+    public override update(dt: number): void {
+        super.update(dt);
+        this.asepriteNode.setY(1 - Math.sin(this.timeAlive * this.floatSpeed) * this.floatAmount);
     }
 }
