@@ -1,4 +1,6 @@
 import { DOUBLE_JUMP_COLORS, GRAVITY, PETTING_ENDING_CUTSCENE_DURATION, PLAYER_ACCELERATION_AIR } from "../../shared/constants";
+import { Direction } from "../geom/Direction";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { isEntityName } from "../util/predicates";
 import conversation from "./../../../assets/dialog/bird.dialog.json";
 import { type Aseprite } from "./../Aseprite";
@@ -35,6 +37,7 @@ export class Bird extends NPC {
     private waitTimer = 0;
     private state = BirdState.WAITING_LEFT;
     private jumpTimer = 0;
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 28, height: 24 });
@@ -51,6 +54,14 @@ export class Bird extends NPC {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         });
         this.setMaxVelocity(MAX_SPEED);
+        this.asepriteNode = new AsepriteNode({
+            aseprite: Bird.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            x: 10,
+            y: 1
+        }).appendTo(this);
     }
 
     private isWaiting(): boolean {
@@ -106,12 +117,6 @@ export class Bird extends NPC {
     }
 
     public override render(): void {
-        let alpha: number | undefined;
-        if (this.scene.pettingCutscene) {
-            alpha = Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION));
-        }
-
-        this.scene.renderer.addAseprite(Bird.sprite, "idle", this.x, this.y, RenderingLayer.ENTITIES, this.direction, undefined, alpha);
         this.speechBubble.draw();
     }
 
@@ -163,6 +168,10 @@ export class Bird extends NPC {
                 this.decelerateX(-PLAYER_ACCELERATION_AIR * dt);
             }
         }
+        if (this.scene.pettingCutscene) {
+            this.asepriteNode.setOpacity(Math.max(0, 1 - (this.scene.pettingCutsceneTime / PETTING_ENDING_CUTSCENE_DURATION)));
+        }
+        this.asepriteNode.transform(m => m.setScale(this.direction, 1));
 
         this.speechBubble.update(this.x, this.y);
     }
