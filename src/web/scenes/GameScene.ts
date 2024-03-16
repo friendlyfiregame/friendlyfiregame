@@ -257,6 +257,7 @@ export class GameScene extends Scene<FriendlyFire> {
     public readonly mountainRiddle = new MountainRiddle();
 
     public override setup(): void {
+        console.log("Game setup");
         this.mapInfo = new MapInfo();
         this.gameTime = 0;
         this.fadeToBlackEndTime = 0;

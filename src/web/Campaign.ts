@@ -89,7 +89,7 @@ export class Campaign {
         new QuestD(this),
         new QuestE(this)
     ];
-    public gameScene?: GameScene | undefined;
+    private gameScene?: GameScene | undefined;
 
     public selectedCharacter = CharacterAsset.FEMALE;
     public selectedVoice = VoiceAsset.FEMALE;
