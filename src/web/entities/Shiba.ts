@@ -7,9 +7,11 @@ import { type Sound } from "../audio/Sound";
 import { Conversation } from "../Conversation";
 import { entity, type EntityArgs } from "../Entity";
 import { FaceModes } from "../Face";
+import { Direction } from "../geom/Direction";
 import { type ParticleEmitter, valueCurves } from "../Particles";
 import { QuestKey } from "../Quests";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { calculateVolume, rnd, rndItem } from "../util";
 import { isEntityName, isInstanceOf } from "../util/predicates";
 import { Environment } from "../World";
@@ -57,6 +59,7 @@ export class Shiba extends ScriptableNPC {
     public peeing = false;
     public isBeingPetted = false;
     private nextHeartParticle = HEART_PARTICLE_DELAY;
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor(args: EntityArgs) {
         super({ ...args, width: 28, height: 24 });
@@ -87,6 +90,14 @@ export class Shiba extends ScriptableNPC {
             blendMode: "source-over",
             alphaCurve: valueCurves.cos(0.1, 0.5),
         });
+
+        this.asepriteNode = new AsepriteNode({
+            aseprite: Shiba.sprite,
+            tag: "idle",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }).appendTo(this);
     }
 
     public setState(state: ShibaState): void {
@@ -195,22 +206,16 @@ export class Shiba extends ScriptableNPC {
     }
 
     public getAnimationTag(): string {
-        if (this.peeing) return "peeing";
-        if (this.isBeingPetted) return "petted";
-        return "idle";
+        if (this.move === 0) {
+            if (this.peeing) return "peeing";
+            if (this.isBeingPetted) return "petted";
+            return "idle";
+        } else {
+            return "walk";
+        }
     }
 
     public override render(): void {
-        if (this.move === 0) {
-            this.scene.renderer.addAseprite(
-                Shiba.sprite, this.getAnimationTag(), this.x, this.y, RenderingLayer.ENTITIES, this.direction
-            );
-        } else {
-            this.scene.renderer.addAseprite(
-                Shiba.sprite, "walk", this.x, this.y, RenderingLayer.ENTITIES, this.direction
-            );
-        }
-
         if (this.showDialoguePrompt()) {
             this.drawDialoguePrompt();
         }
@@ -276,6 +281,9 @@ export class Shiba extends ScriptableNPC {
         if (this.thinkBubble) {
             this.thinkBubble.update(this.x, this.y);
         }
+
+        this.asepriteNode.setTag(this.getAnimationTag());
+        this.asepriteNode.transform(m => m.setScale(this.direction, 1));
     }
 
     public override isReadyForConversation(): boolean | null {
