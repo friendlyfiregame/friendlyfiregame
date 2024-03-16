@@ -1,7 +1,9 @@
 import { type Aseprite } from "../Aseprite";
 import { asset } from "../Assets";
 import { Entity, entity, type EntityArgs } from "../Entity";
+import { Direction } from "../geom/Direction";
 import { RenderingLayer } from "../Renderer";
+import { AsepriteNode } from "../scene/AsepriteNode";
 import { type CollidableGameObject } from "../scenes/GameObject";
 import { Environment } from "../World";
 
@@ -17,26 +19,28 @@ export class Wall extends Entity implements CollidableGameObject {
     private static readonly sprite: Aseprite;
     public readonly identifier: string;
     private state = WallState.SOLID;
+    private readonly asepriteNode: AsepriteNode;
 
     public constructor({ identifier, ...args }: WallArgs) {
         super({ ...args, width: 24, height: 72, isTrigger: false, reversed: true });
-
         if (identifier == null) {
             throw new Error("Cannot create Wall entity with no identifier property");
         }
-
         this.identifier = identifier;
-    }
-
-    public override render(): void {
-        const animationTag = this.state === WallState.SOLID ? "solid" : "crumbled";
-        this.scene.renderer.addAseprite(Wall.sprite, animationTag, this.x, this.y, RenderingLayer.ENTITIES);
+        this.asepriteNode = new AsepriteNode({
+            aseprite: Wall.sprite,
+            tag: "solid",
+            layer: RenderingLayer.ENTITIES,
+            anchor: Direction.BOTTOM,
+            y: 1
+        }).appendTo(this);
     }
 
     public override update(): void {}
 
     public crumble(): void {
         this.state = WallState.CRUMBLED;
+        this.asepriteNode.setTag("crumbled");
     }
 
     public collidesWith(x: number, y: number): number {

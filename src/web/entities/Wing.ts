@@ -23,7 +23,6 @@ export class Wing extends NPC {
             layer: RenderingLayer.ENTITIES,
             anchor: Direction.BOTTOM
         }).appendTo(this);
-
     }
 
     protected override showDialoguePrompt(): boolean {
