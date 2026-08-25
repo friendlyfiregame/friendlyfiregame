@@ -15,13 +15,13 @@ export class VirtualGamepad extends Object implements Gamepad {
         super();
         this.#index = initArgs.index;
         this.#connected = true;
-        this.#timestamp = Date.now();
+        this.#timestamp = performance.now();
         this.#axes = Array(4) as number[];
         for (let i = 0; i < this.#axes.length; i++) {
             this.#axes[i] = 0.0;
         }
 
-        this.#buttons = Array(17) as Button[];
+        this.#buttons = Array(18) as Button[];
         for (let i = 0; i < this.#buttons.length; i++) {
             this.#buttons[i] = {
                 pressed: false,
@@ -32,17 +32,43 @@ export class VirtualGamepad extends Object implements Gamepad {
     }
 
     public pressButton(index: number): void {
-        this.#timestamp = Date.now();
+        if (index < 0 || index >= this.#buttons.length) {
+            return;
+        }
+        this.#timestamp = performance.now();
         this.#buttons[index].pressed = true;
-        this.#buttons[index].touched = false;
-        this.#buttons[index].value = 1;
+        this.#buttons[index].touched = true;
+        this.#buttons[index].value = 1.0;
     }
 
     public releaseButton(index: number): void {
-        this.#timestamp = Date.now();
+        if (index < 0 || index >= this.#buttons.length) {
+            return;
+        }
+        this.#timestamp = performance.now();
         this.#buttons[index].pressed = false;
         this.#buttons[index].touched = false;
-        this.#buttons[index].value = 0;
+        this.#buttons[index].value = 0.0;
+    }
+
+    public setAxis(index: number, value: number): void {
+        if (index < 0 || index >= this.#axes.length) {
+            return;
+        }
+        this.#timestamp = performance.now();
+        this.#axes[index] = value;
+    }
+
+    public reset(): void {
+        this.#timestamp = performance.now();
+        for (let i = 0; i < this.#axes.length; i++) {
+            this.#axes[i] = 0.0;
+        }
+        for (let i = 0; i < this.#buttons.length; i++) {
+            this.#buttons[i].pressed = false;
+            this.#buttons[i].touched = false;
+            this.#buttons[i].value = 0.0;
+        }
     }
 
     public get axes(): number[] {
@@ -77,8 +103,9 @@ export class VirtualGamepad extends Object implements Gamepad {
         return this.#timestamp;
     }
 
-    public get vibrationActuator(): null {
-        return null;
+    public get vibrationActuator(): GamepadHapticActuator {
+        return null as unknown as GamepadHapticActuator;
     }
 
 }
+

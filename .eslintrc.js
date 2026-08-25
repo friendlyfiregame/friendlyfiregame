@@ -22,10 +22,7 @@ const config = {
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
-      "@typescript-eslint",
-      "simple-import-sort",
-      "import",
-      "deprecation"
+      "@typescript-eslint"
     ],
     "extends": [
       "eslint:recommended",
@@ -136,7 +133,6 @@ const config = {
         "@typescript-eslint/switch-exhaustiveness-check": "warn",
         "@typescript-eslint/triple-slash-reference": "warn",
         "@typescript-eslint/unbound-method": "off",
-        "deprecation/deprecation": "warn",
         "dot-location": [ "warn", "property" ],
         "eol-last": "warn",
         "eqeqeq": [
@@ -179,9 +175,7 @@ const config = {
         "prefer-promise-reject-errors": "warn",
         "prefer-regex-literals": "warn",
         "quotes": [ "error", "double" ],
-        "semi": "warn",
-        "simple-import-sort/imports": "warn",
-        "simple-import-sort/exports": "warn"
+        "semi": "warn"
     }
 };
 module.exports = config;

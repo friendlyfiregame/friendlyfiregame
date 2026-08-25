@@ -8,7 +8,10 @@ const config: Config = {
       testEnvironment: "@kayahr/jest-electron-runner/environment",
       testMatch: [
         "<rootDir>/lib/web/test/**/*.test.js"
-      ]
+      ],
+      moduleNameMapper: {
+        "\\.svg$": "<rootDir>/src/web/test/mocks/svgMock.js"
+      }
     }
   ],
   collectCoverageFrom: [

@@ -3,7 +3,7 @@ import { type VirtualGamepad } from "./VirtualGamepad";
 export class VirtualGamepadEvent extends CustomEvent<VirtualGamepad> {
     readonly #gamepad: VirtualGamepad;
     public constructor(type: "gamepadconnected" | "gamepaddisconnected", gamepad: VirtualGamepad) {
-        super(type, { detail: gamepad });
+        super(type, { detail: gamepad, bubbles: true, cancelable: true });
         this.#gamepad = gamepad;
     }
     public override get detail(): VirtualGamepad {
