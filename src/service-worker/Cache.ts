@@ -1,5 +1,7 @@
 import { CACHE_NAME } from "../shared/constants";
 
+const DEFAULT_CACHE_NAME = `friendlyfire-${process.env["VERSION"] ?? CACHE_NAME}`;
+
 export class Cache extends Object {
 
     readonly #name: string;
@@ -9,7 +11,7 @@ export class Cache extends Object {
         return this.#name;
     }
 
-    public constructor(name: string = CACHE_NAME) {
+    public constructor(name: string = DEFAULT_CACHE_NAME) {
         super();
         this.#name = name;
     }
@@ -33,10 +35,8 @@ export class Cache extends Object {
 
     public async deleteAll(): Promise<void> {
         await this.open();
-        await (await this.#cache?.keys() ?? []).reduce(async (previousValue, currentValue, currentIndex, array): Promise<boolean> => {
-            await previousValue;
-            return await this.#cache?.delete(currentValue.url) ?? false;
-        }, Promise.resolve(true));
+        const keys = await this.#cache?.keys() ?? [];
+        await Promise.all(keys.map((key) => this.#cache?.delete(key)));
     }
 
     public override toString(): string {

@@ -54,7 +54,20 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-    event.waitUntil(cache.open());
+    event.waitUntil(
+        (async () => {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map((name) => {
+                    if (name !== cache.name) {
+                        return caches.delete(name);
+                    }
+                    return Promise.resolve(false);
+                })
+            );
+            await self.clients.claim();
+        })()
+    );
 });
 
 /**
@@ -62,17 +75,49 @@ self.addEventListener("activate", (event) => {
  */
 const IGNORE_URL_PATTERN = /^(?<prefix>.+)\.(?<hot_update_marker>hot-update)\.(?<suffix>.+)$/;
 
+/**
+ * Strategy: Network-first for navigation requests and HTML/JS bundle files so updates are immediately noticed.
+ * Strategy: Cache-first for images, audio, and static asset files.
+ */
 async function fetchAndCache(request: Request): Promise<Response> {
+    const url = new URL(request.url);
 
-    let response = await caches.match(request);
-    if (response === undefined) {
-        response = await fetch(request);
-        // Skip cross-origin requests and URLs that should never be cached.
-        if (response.ok && request.url.startsWith(self.location.origin) && request.url.match(IGNORE_URL_PATTERN) == null) {
-            await cache.put(request, response.clone());
-        }
+    // Skip cross-origin requests and hot updates
+    if (!request.url.startsWith(self.location.origin) || request.url.match(IGNORE_URL_PATTERN) != null) {
+        return fetch(request);
     }
-    return response;
+
+    const isAppShellRequest =
+        request.mode === "navigate" ||
+        url.pathname.endsWith(".html") ||
+        url.pathname.endsWith(".js") ||
+        url.pathname.endsWith(".css") ||
+        url.pathname.endsWith(".webmanifest");
+
+    if (isAppShellRequest) {
+        try {
+            const networkResponse = await fetch(request);
+            if (networkResponse.ok) {
+                await cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+        } catch {
+            const cachedResponse = await caches.match(request);
+            if (cachedResponse !== undefined) {
+                return cachedResponse;
+            }
+            throw new Error("Network request failed and no cached response available.");
+        }
+    } else {
+        let response = await caches.match(request);
+        if (response === undefined) {
+            response = await fetch(request);
+            if (response.ok) {
+                await cache.put(request, response.clone());
+            }
+        }
+        return response;
+    }
 }
 
 self.addEventListener("fetch", (event) => {

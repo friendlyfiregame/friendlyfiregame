@@ -20,7 +20,7 @@ function presentUpdateAvailable(serviceWorker: ServiceWorker): void {
 /**
  * This promise must be fulfilled prior to the initialization of the application itself.
  */
-let prelaunchTask: Promise<unknown> = Promise.resolve();
+const prelaunchTask: Promise<unknown> = Promise.resolve();
 
 //#region Service Worker Initialization
 if (!isElectron()) {
@@ -36,7 +36,6 @@ if (!isElectron()) {
     }
 
     if (process.env["MODE"] === "production" && "serviceWorker" in navigator) {
-        prelaunchTask = navigator.serviceWorker.ready;
         let isReloading = false;
         window.addEventListener("load", async () => {
             try {
@@ -46,14 +45,14 @@ if (!isElectron()) {
                 }
 
                 // We wait for an UpdateFoundEvent, which is fired anytime a new service worker is acquired
-                registration.addEventListener("updatefound", function(updateFoundEvent) {
+                registration.addEventListener("updatefound", function() {
                     // Ignore the event if this is our first service worker and thus not an update
                     if (registration.active === null) {
                         return;
                     }
 
                     // Listen for any state changes on the new service worker
-                    registration.installing?.addEventListener("statechange", function(stateChangeEvent) {
+                    registration.installing?.addEventListener("statechange", function() {
                         // Wait for the service worker to enter the installed state (aka waiting)
                         if (this.state !== "installed") {
                             return;
@@ -67,10 +66,8 @@ if (!isElectron()) {
                 });
 
                 // We wait for a ControllerEvent, which is fired when the document acquires a new service worker
-                navigator.serviceWorker.addEventListener("controllerchange", async function(controllerChangeEvent) {
-
-                    // We delay our code until the new service worker is activated
-                    await this.ready;
+                navigator.serviceWorker.addEventListener("controllerchange", async function() {
+                    await navigator.serviceWorker.ready;
 
                     // Reload the window
                     if (!isReloading) {

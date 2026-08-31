@@ -116,6 +116,13 @@ export default (
             extensions: [".ts", "..."]
         },
         devtool,
+        plugins: [
+            new DefinePlugin({
+                "process.env": {
+                    "VERSION": JSON.stringify(process.env.npm_package_version ?? "v1")
+                }
+            })
+        ],
         module: {
             rules: typeScriptRules()
         }
