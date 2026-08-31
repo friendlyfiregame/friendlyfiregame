@@ -291,6 +291,7 @@ export class TouchGamepad extends HTMLElement {
 
 
         window.addEventListener("resize", this.#onWindowResize);
+        window.visualViewport?.addEventListener("resize", this.#onWindowResize);
         if (typeof ResizeObserver !== "undefined") {
             this.#resizeObserver = new ResizeObserver(() => {
                 this.updateLayout();
@@ -304,6 +305,7 @@ export class TouchGamepad extends HTMLElement {
     public disconnectedCallback(): void {
 
         window.removeEventListener("resize", this.#onWindowResize);
+        window.visualViewport?.removeEventListener("resize", this.#onWindowResize);
 
         if (this.#inactivityTimer !== null) {
             window.clearTimeout(this.#inactivityTimer);

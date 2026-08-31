@@ -63,6 +63,7 @@ export abstract class Game {
         document.body.appendChild(this.canvas);
         this.updateCanvas();
         window.addEventListener("resize", () => this.updateCanvas());
+        window.visualViewport?.addEventListener("resize", () => this.updateCanvas());
         window.addEventListener("pointermove", () => this.mouseMoved());
 
         // Use Alt+Enter to toggle fullscreen mode.
@@ -121,7 +122,9 @@ export abstract class Game {
         const { width, height } = this;
         const renderMode = this.displayManager.getRenderMode();
 
-        let scale = Math.min(window.innerWidth / width, window.innerHeight / height);
+        const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+        let scale = Math.min(viewportWidth / width, viewportHeight / height);
         if (renderMode === RenderMode.PIXEL_PERFECT) {
             scale = Math.max(1, Math.floor(scale));
         }
