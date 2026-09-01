@@ -1,0 +1,26 @@
+{ "frames": [
+   {
+    "filename": "bone.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 19, "h": 9 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 19, "h": 9 },
+    "sourceSize": { "w": 20, "h": 10 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "bone.png",
+  "format": "I8",
+  "size": { "w": 21, "h": 11 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

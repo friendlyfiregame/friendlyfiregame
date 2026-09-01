@@ -1,0 +1,201 @@
+{ "frames": [
+   {
+    "filename": "shiba 0.aseprite",
+    "frame": { "x": 1, "y": 51, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 1.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 2.aseprite",
+    "frame": { "x": 30, "y": 1, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 3.aseprite",
+    "frame": { "x": 30, "y": 26, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 4.aseprite",
+    "frame": { "x": 58, "y": 26, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 5.aseprite",
+    "frame": { "x": 86, "y": 26, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 6.aseprite",
+    "frame": { "x": 113, "y": 51, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 7.aseprite",
+    "frame": { "x": 85, "y": 51, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 8.aseprite",
+    "frame": { "x": 58, "y": 26, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 9.aseprite",
+    "frame": { "x": 114, "y": 26, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 1, "w": 26, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 10.aseprite",
+    "frame": { "x": 29, "y": 51, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 11.aseprite",
+    "frame": { "x": 57, "y": 51, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 22 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 125
+   },
+   {
+    "filename": "shiba 12.aseprite",
+    "frame": { "x": 1, "y": 26, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 13.aseprite",
+    "frame": { "x": 117, "y": 1, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 14.aseprite",
+    "frame": { "x": 88, "y": 1, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 15.aseprite",
+    "frame": { "x": 59, "y": 1, "w": 27, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 1, "w": 27, "h": 23 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "shiba 16.aseprite",
+    "frame": { "x": 87, "y": 75, "w": 26, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 5, "w": 26, "h": 19 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 80
+   },
+   {
+    "filename": "shiba 17.aseprite",
+    "frame": { "x": 29, "y": 75, "w": 27, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 5, "w": 27, "h": 19 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 80
+   },
+   {
+    "filename": "shiba 18.aseprite",
+    "frame": { "x": 58, "y": 75, "w": 27, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 5, "w": 27, "h": 19 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 80
+   },
+   {
+    "filename": "shiba 19.aseprite",
+    "frame": { "x": 115, "y": 75, "w": 26, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 5, "w": 26, "h": 19 },
+    "sourceSize": { "w": 30, "h": 24 },
+    "duration": 80
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "shiba.png",
+  "format": "I8",
+  "size": { "w": 145, "h": 95 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 3, "direction": "forward", "color": "#000000ff" },
+   { "name": "walk", "from": 4, "to": 11, "direction": "forward", "color": "#000000ff" },
+   { "name": "peeing", "from": 12, "to": 15, "direction": "forward", "color": "#000000ff" },
+   { "name": "petted", "from": 16, "to": 19, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "dog", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

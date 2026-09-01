@@ -1,0 +1,62 @@
+{ "frames": [
+   {
+    "filename": "island2 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 55, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 55, "h": 20 },
+    "sourceSize": { "w": 57, "h": 24 },
+    "duration": 800
+   },
+   {
+    "filename": "island2 1.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 55, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 55, "h": 20 },
+    "sourceSize": { "w": 57, "h": 24 },
+    "duration": 400
+   },
+   {
+    "filename": "island2 2.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 55, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 2, "w": 55, "h": 20 },
+    "sourceSize": { "w": 57, "h": 24 },
+    "duration": 300
+   },
+   {
+    "filename": "island2 3.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 55, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 3, "w": 55, "h": 20 },
+    "sourceSize": { "w": 57, "h": 24 },
+    "duration": 400
+   },
+   {
+    "filename": "island2 4.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 55, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 4, "w": 55, "h": 20 },
+    "sourceSize": { "w": 57, "h": 24 },
+    "duration": 800
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "island2.png",
+  "format": "RGBA8888",
+  "size": { "w": 57, "h": 22 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 4, "direction": "pingpong", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

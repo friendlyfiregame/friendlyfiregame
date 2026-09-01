@@ -1,0 +1,87 @@
+{ "frames": [
+   {
+    "filename": "buttons_stadia 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "buttons_stadia 1.aseprite",
+    "frame": { "x": 17, "y": 1, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "buttons_stadia 2.aseprite",
+    "frame": { "x": 33, "y": 1, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "buttons_stadia 3.aseprite",
+    "frame": { "x": 1, "y": 17, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "buttons_stadia 4.aseprite",
+    "frame": { "x": 17, "y": 17, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "buttons_stadia 5.aseprite",
+    "frame": { "x": 1, "y": 33, "w": 14, "h": 12 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 1, "w": 14, "h": 12 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "buttons_stadia 6.aseprite",
+    "frame": { "x": 33, "y": 17, "w": 14, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 14, "h": 14 },
+    "sourceSize": { "w": 14, "h": 14 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.2-x64",
+  "image": "buttons_stadia.png",
+  "format": "RGBA8888",
+  "size": { "w": 48, "h": 46 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "jump", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "confirm", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "back", "from": 1, "to": 1, "direction": "forward", "color": "#000000ff" },
+   { "name": "interact", "from": 3, "to": 3, "direction": "forward", "color": "#000000ff" },
+   { "name": "up", "from": 4, "to": 4, "direction": "forward", "color": "#000000ff" },
+   { "name": "action", "from": 5, "to": 5, "direction": "forward", "color": "#000000ff" },
+   { "name": "pause", "from": 6, "to": 6, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Button base", "opacity": 255, "blendMode": "normal" },
+   { "name": "Label", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}
