@@ -105,11 +105,11 @@ jobs:
           target_os: linux
           target_arch: arm64
           experimental: true
-        - runner: macos-12
+        - runner: macos-26-intel
           target_os: darwin
           target_arch: x64
           experimental: false
-        - runner: macos-12
+        - runner: macos-26
           target_os: darwin
           target_arch: arm64
           experimental: true
