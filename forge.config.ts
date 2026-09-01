@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import semver from "semver";
-import git from "git-rev-sync";
+import { Git } from "@nice-labs/git-rev";
 
 import { ForgeConfig, ForgePlatform, ForgeArch } from "@electron-forge/shared-types";
 
@@ -54,7 +54,7 @@ const config: ForgeConfig = {
         appVersion: appVersion,
         appBundleId: "com.friendlyfiregame",
         appCategoryType: "public.app-category.games",
-        buildVersion: `${appVersion}+build-${git.short()}`,
+        buildVersion: `${appVersion}+build-${new Git().commitHash(6)}`,
         darwinDarkModeSupport: true,
         name: "friendlyfiregame",
         executableName: "friendlyfiregame"

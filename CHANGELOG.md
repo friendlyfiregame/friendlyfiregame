@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [2.9.1] - 2026-08-31
+
+### Fixed
+
+- Technical issues with the dependency tree of the game have been fixed.
+  The previous release wasn't able to properly pass our QA pipelines due to
+  failing unit tests.
+
+### Updated
+
+- The Desktop apps are now based on Electron v33.0.1.
+  As always, a new Electron runtime should offer improved performance, security and
+  bug fixes, that may or may not be visible or even useful to end users.
 
 ## [2.9.0] - 2026-08-31
 
